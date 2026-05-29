@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DEVICES, MODES } from './deviceProfiles'
-import { APPS } from './appRegistry'
+import { APPS, WAIKE_LEARNING } from './appRegistry'
 
 export default function App() {
   const [device, setDevice] = useState(DEVICES[0])
@@ -19,6 +19,12 @@ export default function App() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginTop: 16 }}>
         {APPS.map(app => (
           <button key={app} style={{ padding: 24, borderRadius: 12, border: '1px solid #ccc', cursor: 'pointer' }}>{app}</button>
+        ))}
+      </div>
+      <h2 style={{ marginTop: 24 }}>WAIKE + gunnchAI3k Learning</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12 }}>
+        {WAIKE_LEARNING.map(item => (
+          <button key={item} style={{ padding: 16, borderRadius: 10, border: '1px solid #9cf', background: '#f0f8ff', cursor: 'pointer' }}>{item}</button>
         ))}
       </div>
       <div style={{ marginTop: 24, padding: 16, background: '#f5f5f5', borderRadius: 8 }}>
