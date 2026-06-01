@@ -1,20 +1,8 @@
-# Video Walkthrough — gunnchOS Device OS
+# Video Walkthrough Script
 
-## Opening (30s)
-Affordable, school-ready edge OS layer for Gary and 7GC — **research prototype**, not shipping product.
+See also [video_walkthrough_script.md](video_walkthrough_script.md) if present.
 
-## Code tour
-- `src/gunnchos_launcher/mode_manager.py` — modes
-- `seven_gc_bridge.py` — 7GC export
-- `research_measurement_mode.py` — Edge-IO path
-
-## Launcher demo
-```bash
-cd apps/launcher_mock && npm run dev
-```
-
-## Diagrams
-`docs/diagrams/device_mode_state_machine.mmd`, `launcher_component_diagram.mmd`
-
-## Close
-Field validation and certification are future work.
+1. Problem in plain English (30s)
+2. Run `make e2e` (60s)
+3. Show output — label as smoke only (30s)
+4. What would make this final (30s)
