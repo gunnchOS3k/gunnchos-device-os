@@ -6,6 +6,8 @@ test:
 	$(PY) pytest -q
 
 e2e:
+	@mkdir -p results/campus_device_modes
+	python3 scripts/generate_all_campus_mode_reports.py
 	@mkdir -p results/e2e
 	$(PY) pytest -q 2>&1 | tee results/e2e/e2e_terminal_output.txt
 	$(PY) python3 scripts/generate_device_os_e2e.py
