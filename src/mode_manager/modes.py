@@ -1,0 +1,1 @@
+MODES = ["school", "developer", "play", "research_measurement", "fleet_admin", "accessibility", "low_bandwidth", "offline_learning", "crisis_privacy", "community_kiosk", "repair_diagnostics", "gunnchai_tutor", "waike_lesson", "edge_io_measurement", "seven_gc_export", "airan_lab", "beam_lab", "ntn_lab"]
