@@ -22,3 +22,8 @@ jobs:
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
       - name: Run tests
         run: pytest -q tests/ || pytest -q
+      - name: Access risk intelligence smoke
+        run: |
+          python security/access-risk/attack_path_model.py
+          python security/access-risk/least_privilege_recommender.py
+          pytest -q tests/test_access_risk_model.py

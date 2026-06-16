@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "lab": "gunnchOS Access Risk Intelligence",
+  "identities": [
+    {
+      "id": "student_user",
+      "display_name": "Student User",
+      "role": "student",
+      "trust_level": "standard",
+      "device_binding": "console_device",
+      "session_type": "interactive",
+      "approval_required": false
+    },
+    {
+      "id": "educator_admin",
+      "display_name": "Educator Admin",
+      "role": "educator",
+      "trust_level": "elevated",
+      "device_binding": "admin_console",
+      "session_type": "interactive",
+      "approval_required": false
+    },
+    {
+      "id": "service_agent",
+      "display_name": "Service Agent",
+      "role": "automation",
+      "trust_level": "privileged",
+      "device_binding": "console_device",
+      "session_type": "service",
+      "approval_required": true
+    },
+    {
+      "id": "research_operator",
+      "display_name": "Research Operator",
+      "role": "research",
+      "trust_level": "elevated",
+      "device_binding": "admin_console",
+      "session_type": "batch",
+      "approval_required": true
+    },
+    {
+      "id": "public_demo_guest",
+      "display_name": "Public Demo Guest",
+      "role": "guest",
+      "trust_level": "untrusted",
+      "device_binding": "public_demo_app",
+      "session_type": "ephemeral",
+      "approval_required": false
+    }
+  ]
+}

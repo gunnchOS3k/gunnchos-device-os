@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "lab": "gunnchOS Access Risk Intelligence",
+  "bindings": [
+    {
+      "identity": "student_user",
+      "resource": "console_device",
+      "permission": "use",
+      "scope": "assigned_lessons",
+      "risk_tags": []
+    },
+    {
+      "identity": "student_user",
+      "resource": "student_learning_records",
+      "permission": "read",
+      "scope": "self_only",
+      "risk_tags": []
+    },
+    {
+      "identity": "educator_admin",
+      "resource": "admin_console",
+      "permission": "administer",
+      "scope": "classroom",
+      "risk_tags": []
+    },
+    {
+      "identity": "educator_admin",
+      "resource": "student_learning_records",
+      "permission": "export",
+      "scope": "bulk_all_students",
+      "risk_tags": ["educator_over_export", "bulk_pii_exfiltration"]
+    },
+    {
+      "identity": "service_agent",
+      "resource": "console_device",
+      "permission": "maintain",
+      "scope": "fleet",
+      "risk_tags": []
+    },
+    {
+      "identity": "service_agent",
+      "resource": "student_user",
+      "permission": "impersonate",
+      "scope": "support_sessions",
+      "risk_tags": ["service_agent_impersonate", "identity_takeover"]
+    },
+    {
+      "identity": "research_operator",
+      "resource": "telemetry_bucket",
+      "permission": "read",
+      "scope": "deidentified_cohorts",
+      "risk_tags": []
+    },
+    {
+      "identity": "research_operator",
+      "resource": "model_config",
+      "permission": "write",
+      "scope": "experiment_profiles",
+      "approval_gate": false,
+      "risk_tags": ["model_config_without_approval", "policy_drift"]
+    },
+    {
+      "identity": "public_demo_guest",
+      "resource": "public_demo_app",
+      "permission": "use",
+      "scope": "sandbox",
+      "risk_tags": []
+    },
+    {
+      "identity": "public_demo_guest",
+      "resource": "telemetry_bucket",
+      "permission": "read",
+      "scope": "aggregate_metrics",
+      "risk_tags": ["guest_to_telemetry", "cross_zone_leakage"]
+    }
+  ]
+}
