@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "lab": "gunnchOS Access Risk Intelligence",
+  "resources": [
+    {
+      "id": "console_device",
+      "display_name": "Console Device",
+      "type": "device",
+      "sensitivity": "medium",
+      "data_class": "operational",
+      "zone": "classroom_edge"
+    },
+    {
+      "id": "student_learning_records",
+      "display_name": "Student Learning Records",
+      "type": "data_store",
+      "sensitivity": "high",
+      "data_class": "student_pii",
+      "zone": "school_tenant"
+    },
+    {
+      "id": "telemetry_bucket",
+      "display_name": "Telemetry Bucket",
+      "type": "telemetry",
+      "sensitivity": "high",
+      "data_class": "usage_metrics",
+      "zone": "fleet_ops"
+    },
+    {
+      "id": "model_config",
+      "display_name": "Model Configuration",
+      "type": "config",
+      "sensitivity": "critical",
+      "data_class": "ml_policy",
+      "zone": "research_control_plane"
+    },
+    {
+      "id": "admin_console",
+      "display_name": "Admin Console",
+      "type": "application",
+      "sensitivity": "high",
+      "data_class": "admin_surface",
+      "zone": "school_tenant"
+    },
+    {
+      "id": "public_demo_app",
+      "display_name": "Public Demo App",
+      "type": "application",
+      "sensitivity": "low",
+      "data_class": "public_sandbox",
+      "zone": "demo_isolation"
+    }
+  ]
+}

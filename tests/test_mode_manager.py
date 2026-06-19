@@ -1,10 +1,8 @@
-from gunnchos_launcher.mode_manager import switch_mode, validate_mode
+from gunnchos_device_os.mode_manager import get_mode_policy, MODES
 
+def test_modes_count():
+    assert len(MODES) == 6
 
-def test_switch_school():
-    r = switch_mode("student_14_5", "school")
-    assert "WAIKE Classroom" in r["allowed_apps"]
-
-
-def test_validate_mode():
-    assert validate_mode("fleet_admin")
+def test_school_blocks_steam():
+    p = get_mode_policy("School")
+    assert "steam" in p["blocked_apps"]
