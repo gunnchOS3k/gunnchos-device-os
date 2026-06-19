@@ -21,7 +21,12 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
       - name: Run tests
-        run: pytest -q tests/ || pytest -q
+        run: |
+          PYTHONPATH=.:src pytest -q tests/
+      - name: EVT-1 OS alpha demo
+        run: |
+          PYTHONPATH=. python3 scripts/run_device_os_demo.py
+          test -f results/device_os_evt1_demo_output.json
       - name: Access risk intelligence smoke
         run: |
           python security/access-risk/attack_path_model.py

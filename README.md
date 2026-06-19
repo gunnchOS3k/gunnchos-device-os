@@ -184,3 +184,25 @@ Full table: [quality/READINESS_GATE_TABLE.md](quality/READINESS_GATE_TABLE.md)
 ## Wireless engineering alignment
 
 See [docs/WIRELESS_ENGINEERING_ALIGNMENT.md](docs/WIRELESS_ENGINEERING_ALIGNMENT.md).
+
+
+---
+
+## EVT-1 OS alpha (this pass)
+
+**Status:** EVT-1 alpha prototype — **not** a shipping OS.
+
+```bash
+pip install -r requirements.txt
+PYTHONPATH=. pytest -q tests/test_mode_manager.py tests/test_policy_engine.py tests/test_device_profiles.py
+python3 scripts/run_device_os_demo.py
+```
+
+Demo output: [results/device_os_evt1_demo_output.json](results/device_os_evt1_demo_output.json)
+
+| Real today | Mock / prototype | Not claimed |
+|------------|------------------|-------------|
+| `gunnchos_device_os` Python model | Steam/WSL detect, update server | Finished OS, secure boot, production MDM |
+| Mode/profile/policy tests | Media DRM routes | Certified hardware |
+
+Hardware contract: [docs/HARDWARE_SOFTWARE_CONTRACT.md](docs/HARDWARE_SOFTWARE_CONTRACT.md)
