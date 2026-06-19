@@ -42,20 +42,18 @@ This repo is currently **concept / EVT-0 or alpha scaffold**. Existing `gunnchos
 | `.github/workflows/ci.yml` | present | Extend for EVT-1 demo + PYTHONPATH |
 | `scripts/check_required_files.py` | present | Portfolio hardening |
 
-## Gaps addressed this pass
+## Gaps addressed (PRD §5.2 full module list)
 
-| Gap | EVT-1 action |
-|-----|----------------|
-| Installable OS path | `scripts/build_os_alpha_bundle.py` mock bundle |
-| Steam integration | `steam_integration.py` mock detect/launch |
-| WSL/dev tools | `wsl_dev_tools.py` + PowerShell install scripts |
-| Media/streaming | `media_apps.py` browser-route mocks |
-| Updater | `updater.py` signed manifest mock |
-| Rollback | `rollback.py` known-good version mock |
-| Secure boot story | docs only — not implemented |
-| Fleet management | `FLEET_MANAGEMENT_ROADMAP.md` |
-| Hardware abstraction | `hardware_abstraction.py` device profiles |
-| Device profiles | Student14, HandheldHybrid, DSXLCoder, WearableArenaKit |
+| Module | Path |
+|--------|------|
+| Launcher | `gunnchos_device_os/launcher.py` |
+| Parental controls | `gunnchos_device_os/parental_controls.py` |
+| Device health | `gunnchos_device_os/device_health.py` |
+| Input mapper | `gunnchos_device_os/input_mapper.py` |
+| WAIKE / gunnchAI3k | `waike_integration.py` · `gunnchai_integration.py` |
+| Coder mode (DS-XL) | `mode_manager.py` |
+| community_partner profile | `profile_manager.py` |
+| Full PRD acceptance | `docs/EVT1_OS_ACCEPTANCE_CRITERIA.md` |
 
 ## Not claimed
 

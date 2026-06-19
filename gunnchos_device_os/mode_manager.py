@@ -1,7 +1,7 @@
 """EVT-1 mode manager — prototype policy bundles."""
 from __future__ import annotations
 
-MODES = ("School", "Developer", "Play", "Media", "Research Measurement", "Admin")
+MODES = ("School", "Developer", "Coder", "Play", "Media", "Research Measurement", "Admin")
 
 MODE_POLICIES: dict[str, dict] = {
     "School": {
@@ -16,6 +16,15 @@ MODE_POLICIES: dict[str, dict] = {
     "Developer": {
         "allowed_apps": ["vscode", "terminal", "wsl_ubuntu", "browser", "gunnchai3k"],
         "blocked_apps": ["steam"],
+        "telemetry": "aggregated_opt_in",
+        "network": "standard",
+        "update": "user_prompt",
+        "child_safety": "standard",
+        "performance": "balanced",
+    },
+    "Coder": {
+        "allowed_apps": ["vscode", "terminal", "browser", "waike_offline", "gunnchai3k"],
+        "blocked_apps": ["steam", "netflix", "hulu"],
         "telemetry": "aggregated_opt_in",
         "network": "standard",
         "update": "user_prompt",

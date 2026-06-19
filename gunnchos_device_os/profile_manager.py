@@ -3,7 +3,7 @@ from __future__ import annotations
 
 PROFILES = (
     "student", "parent_guardian", "educator", "developer",
-    "admin", "research_operator", "guest",
+    "admin", "research_operator", "guest", "community_partner",
 )
 
 PROFILE_DEFAULTS: dict[str, dict] = {
@@ -14,6 +14,7 @@ PROFILE_DEFAULTS: dict[str, dict] = {
     "admin": {"default_mode": "Admin", "can_switch_to": list(__import__("gunnchos_device_os.mode_manager", fromlist=["MODES"]).MODES)},
     "research_operator": {"default_mode": "Research Measurement", "can_switch_to": ["Research Measurement", "Developer"]},
     "guest": {"default_mode": "School", "can_switch_to": ["School"]},
+    "community_partner": {"default_mode": "School", "can_switch_to": ["School", "Admin", "Research Measurement"]},
 }
 
 
