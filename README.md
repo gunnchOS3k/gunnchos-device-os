@@ -202,7 +202,8 @@ Demo output: [results/device_os_evt1_demo_output.json](results/device_os_evt1_de
 
 | Real today | Mock / prototype | Not claimed |
 |------------|------------------|-------------|
-| `gunnchos_device_os` Python model | Steam/WSL detect, update server | Finished OS, secure boot, production MDM |
-| Mode/profile/policy tests | Media DRM routes | Certified hardware |
+| Full PRD-aligned `gunnchos_device_os` (21 modules) | Steam/WSL detect, update server, secure boot | Finished OS, certified secure boot, production MDM |
+| 7 modes incl. Coder · 8 profiles | Media DRM routes · device health metrics | Shipping console OS |
+| Mode/profile/policy tests + demo JSON | Installable signed image | Steam/media licensing |
 
 Hardware contract: [docs/HARDWARE_SOFTWARE_CONTRACT.md](docs/HARDWARE_SOFTWARE_CONTRACT.md)

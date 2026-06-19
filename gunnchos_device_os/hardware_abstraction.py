@@ -5,7 +5,7 @@ DEVICE_PROFILES: dict[str, dict] = {
     "Student14": {
         "displays": 1, "controllers": False, "keyboard": True, "battery": "large",
         "dock": True, "thermal": "laptop", "storage": "nvme_512gb_min", "ram_gb": 16,
-        "modes": ["School", "Developer", "Play", "Media", "Research Measurement", "Admin"],
+        "modes": ["School", "Developer", "Coder", "Play", "Media", "Research Measurement", "Admin"],
     },
     "HandheldHybrid": {
         "displays": 1, "controllers": True, "keyboard": False, "battery": "handheld",
@@ -15,7 +15,7 @@ DEVICE_PROFILES: dict[str, dict] = {
     "DSXLCoder": {
         "displays": 2, "controllers": True, "keyboard": "optional_snap", "battery": "clamshell",
         "dock": False, "thermal": "passive_preferred", "storage": "emmc_or_nvme_256gb_min", "ram_gb": 8,
-        "modes": ["School", "Developer"],
+        "modes": ["School", "Coder", "Developer"],
     },
     "WearableArenaKit": {
         "displays": 0, "controllers": True, "keyboard": False, "battery": "wearable",
