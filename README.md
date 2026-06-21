@@ -4,6 +4,24 @@ Operating system / software layer for **gunnchOS** modular consoles (research sc
 
 > Not a shipping OS image. Launcher mock demonstrates UX contracts.
 
+This is a user-focused OS alpha package and launcher/customization framework. It is not yet a finished shipping OS image.
+
+## User-focused gunnchOS experience
+
+gunnchOS is designed to scale from scooter to spaceship: simple enough for a first-time learner, flexible enough for creators, and powerful enough for developers and researchers.
+
+Start here:
+- [docs/USER_FOCUSED_OS_ARCHITECTURE.md](docs/USER_FOCUSED_OS_ARCHITECTURE.md)
+- [docs/SCOOTER_TO_SPACESHIP_MODEL.md](docs/SCOOTER_TO_SPACESHIP_MODEL.md)
+- [docs/PREK_TO_POSTDOC_USE_CASES.md](docs/PREK_TO_POSTDOC_USE_CASES.md)
+- [docs/ACCESSIBILITY_AND_INCLUSION.md](docs/ACCESSIBILITY_AND_INCLUSION.md)
+- [demo/user_focused_os_walkthrough.md](demo/user_focused_os_walkthrough.md)
+
+Run the demo:
+```bash
+python scripts/run_user_focused_os_demo.py
+```
+
 ## Modes
 
 School, Developer, Play, Research Measurement — plus parental controls and privacy-preserving telemetry stubs.

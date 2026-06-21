@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DEVICES, MODES, DEVICE_ID_MAP, MODE_ID_MAP } from './deviceProfiles'
 import { APPS } from './appRegistry'
+import UserFocusedView from './user-focused/UserFocusedView'
 
 const CAMPUSES = ['Gary', 'Ghana', 'Guyana', 'Gaza', 'Geelong', 'Graham Land', 'Germany'] as const
 const CAMPUS_BLURBS: Record<string, { mode: string; privacy: string; waike: string; edge: string }> = {
@@ -21,6 +22,7 @@ const MOCK_TELEMETRY = {
 }
 
 export default function App() {
+  const [view, setView] = useState<'fleet' | 'user-focused'>('fleet')
   const [device, setDevice] = useState(DEVICES[0])
   const [mode, setMode] = useState(MODES[0])
   const [campus, setCampus] = useState<string>(CAMPUSES[0])
@@ -28,10 +30,38 @@ export default function App() {
   const deviceId = DEVICE_ID_MAP[device]
   const modeId = MODE_ID_MAP[mode]
 
+  if (view === 'user-focused') {
+    return (
+      <div>
+        <button
+          type="button"
+          aria-label="Switch to fleet launcher view"
+          onClick={() => setView('fleet')}
+          style={{ position: 'fixed', top: 12, right: 12, zIndex: 10, padding: '8px 12px', borderRadius: 8, border: '1px solid #3c4043', background: '#1a2332', color: '#fff', cursor: 'pointer' }}
+        >
+          Fleet view
+        </button>
+        <UserFocusedView />
+      </div>
+    )
+  }
+
   return (
     <div style={{ fontFamily: 'system-ui', padding: 24, maxWidth: 1100, margin: '0 auto', background: '#0f1419', color: '#e8eaed', minHeight: '100vh' }}>
-      <h1 style={{ margin: 0 }}>gunnchOS Launcher</h1>
-      <p style={{ color: '#9aa0a6' }}>IMT-2030-aligned research prototype · Not certified 6G hardware · Synthetic telemetry</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <h1 style={{ margin: 0 }}>gunnchOS Launcher</h1>
+          <p style={{ color: '#9aa0a6' }}>IMT-2030-aligned research prototype · Not certified 6G hardware · Synthetic telemetry</p>
+        </div>
+        <button
+          type="button"
+          aria-label="Switch to user-focused experience"
+          onClick={() => setView('user-focused')}
+          style={{ padding: '10px 16px', minHeight: 44, borderRadius: 8, border: 'none', background: '#4a9eff', color: '#000', cursor: 'pointer', fontWeight: 600 }}
+        >
+          Your device (scooter → spaceship)
+        </button>
+      </div>
 
       <section style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 16 }}>
         <label>7GC Campus <select value={campus} onChange={e => setCampus(e.target.value)}>{CAMPUSES.map(c => <option key={c}>{c}</option>)}</select></label>

@@ -1,0 +1,121 @@
+cases:
+  cannot_read_yet:
+    user_message: No problem — we'll use pictures and voice instead of lots of text.
+    safe_fallback: scooter
+    technical_log: edge_case:cannot_read_yet profile={profile_id}
+    next_action: enable_voice_and_icon_navigation
+  cannot_type:
+    user_message: You can speak or tap choices instead of typing.
+    safe_fallback: scooter
+    technical_log: edge_case:cannot_type input_blocked=true
+    next_action: enable_voice_input_and_on_screen_keyboard
+  low_vision:
+    user_message: We'll enlarge text and boost contrast for easier reading.
+    safe_fallback: scooter
+    technical_log: edge_case:low_vision theme=large_text
+    next_action: apply_high_contrast_large_text_theme
+  motor_limitations:
+    user_message: Let's switch to a input method that works better for you.
+    safe_fallback: scooter
+    technical_log: edge_case:motor_limitations switch_access={enabled}
+    next_action: enable_switch_or_voice_navigation
+  offline:
+    user_message: You're offline — cached lessons and notes are still available.
+    safe_fallback: offline
+    technical_log: edge_case:offline network_status=down
+    next_action: switch_to_offline_preset
+  public_shared_device:
+    user_message: This is a shared device — your session will stay private and clear when you log out.
+    safe_fallback: library
+    technical_log: edge_case:public_shared_device kiosk=true
+    next_action: start_ephemeral_library_session
+  overwhelmed:
+    user_message: Let's simplify the screen and hide extra choices for now.
+    safe_fallback: scooter
+    technical_log: edge_case:overwhelmed complexity_reduced=true
+    next_action: reduce_home_screen_and_enable_focus_mode
+  no_ai:
+    user_message: AI tutoring is turned off — you can still use offline lessons and books.
+    safe_fallback: offline
+    technical_log: edge_case:no_ai gunnchai_disabled=true
+    next_action: disable_ai_features_keep_offline_lessons
+  no_telemetry:
+    user_message: We won't send usage data — everything stays on this device.
+    safe_fallback: scooter
+    technical_log: edge_case:no_telemetry consent=denied
+    next_action: disable_telemetry_exports
+  only_games:
+    user_message: Game mode is ready — we'll keep non-game apps out of the way.
+    safe_fallback: arcade
+    technical_log: edge_case:only_games intent=gaming
+    next_action: switch_to_arcade_preset
+  only_school:
+    user_message: School mode keeps learning apps front and center.
+    safe_fallback: classroom
+    technical_log: edge_case:only_school intent=education
+    next_action: switch_to_classroom_preset
+  hardcore_developer:
+    user_message: Power tools unlocked — customize freely and proceed with care.
+    safe_fallback: spaceship
+    technical_log: edge_case:hardcore_developer customization=power_user
+    next_action: switch_to_spaceship_preset
+  child_to_adult_switch:
+    user_message: Your profile is growing up — we'll adjust controls and privacy for your age.
+    safe_fallback: bicycle
+    technical_log: edge_case:child_to_adult_switch from={old_band} to={new_band}
+    next_action: migrate_profile_age_band
+  guardian_lockout:
+    user_message: Guardian approval is needed before continuing.
+    safe_fallback: guardian
+    technical_log: edge_case:guardian_lockout user={profile_id} action={blocked_action}
+    next_action: prompt_guardian_approval
+  lost_device:
+    user_message: If this device is lost, use Find Device or contact your administrator.
+    safe_fallback: guardian
+    technical_log: edge_case:lost_device report_id={report_id}
+    next_action: show_remote_lock_instructions
+  corrupted_profile:
+    user_message: Your profile had a problem — we've restored safe defaults.
+    safe_fallback: scooter
+    technical_log: edge_case:corrupted_profile backup={backup_id} error={error_code}
+    next_action: restore_last_known_good_profile
+  first_boot_failure:
+    user_message: Setup didn't finish — let's try again with a simpler path.
+    safe_fallback: scooter
+    technical_log: edge_case:first_boot_failure stage={boot_stage} error={error_code}
+    next_action: restart_onboarding_safe_mode
+  storage_almost_full:
+    user_message: Storage is almost full — we'll help you free space for updates.
+    safe_fallback: offline
+    technical_log: edge_case:storage_almost_full free_bytes={free_bytes}
+    next_action: open_storage_cleanup_wizard
+  battery_low:
+    user_message: Battery is low — switching to power-saving mode.
+    safe_fallback: offline
+    technical_log: edge_case:battery_low percent={battery_percent}
+    next_action: enable_battery_saver_profile
+  app_launch_failure:
+    user_message: That app didn't start — here are alternatives that should work.
+    safe_fallback: scooter
+    technical_log: edge_case:app_launch_failure app={app_id} error={error_code}
+    next_action: suggest_fallback_apps
+  unsafe_app_request:
+    user_message: That app isn't allowed in your current mode.
+    safe_fallback: guardian
+    technical_log: edge_case:unsafe_app_request app={app_id} mode={journey_preset}
+    next_action: block_and_notify_guardian_if_minor
+  media_app_unsupported:
+    user_message: This media service opens best in the browser on your device.
+    safe_fallback: car
+    technical_log: edge_case:media_app_unsupported app={app_id} route=browser
+    next_action: open_browser_route_instead
+  steam_unavailable:
+    user_message: Steam isn't available here — try placeholder games or check install status.
+    safe_fallback: arcade
+    technical_log: edge_case:steam_unavailable detected={steam_detected}
+    next_action: show_placeholder_games_and_install_guide
+  wsl_unavailable:
+    user_message: Linux tools aren't ready yet — we'll use local terminals and guides instead.
+    safe_fallback: workshop
+    technical_log: edge_case:wsl_unavailable wsl_detected={wsl_detected}
+    next_action: show_wsl_setup_checklist

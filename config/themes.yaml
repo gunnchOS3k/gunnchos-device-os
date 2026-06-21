@@ -1,0 +1,159 @@
+themes:
+  default:
+    font_scale: 1.0
+    contrast_mode: standard
+    color_tokens:
+      background: '#0f1419'
+      surface: '#1a2332'
+      primary: '#4da3ff'
+      text: '#e8eef5'
+      accent: '#7dd3a8'
+    motion_level: normal
+    icon_size: medium
+    reading_density: comfortable
+    accessibility_notes:
+    - Balanced defaults suitable for most users.
+  high_contrast:
+    font_scale: 1.1
+    contrast_mode: high
+    color_tokens:
+      background: '#000000'
+      surface: '#1a1a1a'
+      primary: '#ffff00'
+      text: '#ffffff'
+      accent: '#00ffff'
+    motion_level: reduced
+    icon_size: large
+    reading_density: spacious
+    accessibility_notes:
+    - WCAG-friendly contrast ratios.
+    - Avoid thin font weights.
+  low_light:
+    font_scale: 1.0
+    contrast_mode: low_light
+    color_tokens:
+      background: '#0a0a0f'
+      surface: '#14141f'
+      primary: '#8ab4ff'
+      text: '#c8d0dc'
+      accent: '#6b9e78'
+    motion_level: reduced
+    icon_size: medium
+    reading_density: comfortable
+    accessibility_notes:
+    - Reduced blue light for evening use.
+    - Dimmed accent colors.
+  dyslexia_friendly:
+    font_scale: 1.15
+    contrast_mode: soft_high
+    color_tokens:
+      background: '#faf6ef'
+      surface: '#fffdf8'
+      primary: '#2d5a27'
+      text: '#1a1a1a'
+      accent: '#5a7d9a'
+    motion_level: minimal
+    icon_size: large
+    reading_density: spacious
+    accessibility_notes:
+    - OpenDyslexic-style font stack recommended.
+    - Increased letter and line spacing.
+  large_text:
+    font_scale: 1.35
+    contrast_mode: standard
+    color_tokens:
+      background: '#0f1419'
+      surface: '#1a2332'
+      primary: '#4da3ff'
+      text: '#e8eef5'
+      accent: '#7dd3a8'
+    motion_level: normal
+    icon_size: large
+    reading_density: spacious
+    accessibility_notes:
+    - Scales UI text and icons for low vision users.
+  artist_canvas:
+    font_scale: 1.0
+    contrast_mode: neutral_gray
+    color_tokens:
+      background: '#2b2b2b'
+      surface: '#3a3a3a'
+      primary: '#ff6b6b'
+      text: '#f0f0f0'
+      accent: '#ffd93d'
+    motion_level: minimal
+    icon_size: medium
+    reading_density: compact
+    accessibility_notes:
+    - Neutral gray backdrop reduces color distraction while creating.
+  writer_focus:
+    font_scale: 1.05
+    contrast_mode: paper
+    color_tokens:
+      background: '#f5f0e8'
+      surface: '#fffef9'
+      primary: '#3d3d3d'
+      text: '#1a1a1a'
+      accent: '#8b6914'
+    motion_level: minimal
+    icon_size: small
+    reading_density: comfortable
+    accessibility_notes:
+    - Paper-like palette for long-form writing sessions.
+  musician_studio:
+    font_scale: 1.0
+    contrast_mode: dark_studio
+    color_tokens:
+      background: '#121218'
+      surface: '#1e1e28'
+      primary: '#b388ff'
+      text: '#e0e0e8'
+      accent: '#ff80ab'
+    motion_level: reduced
+    icon_size: medium
+    reading_density: compact
+    accessibility_notes:
+    - Low-glare dark theme suited for audio control surfaces.
+  gamer_arcade:
+    font_scale: 1.0
+    contrast_mode: vivid
+    color_tokens:
+      background: '#0d0221'
+      surface: '#1a0a3e'
+      primary: '#00f5d4'
+      text: '#ffffff'
+      accent: '#ff006e'
+    motion_level: normal
+    icon_size: large
+    reading_density: compact
+    accessibility_notes:
+    - High-saturation accents; pair with reduced_motion if needed.
+  researcher_terminal:
+    font_scale: 0.95
+    contrast_mode: terminal
+    color_tokens:
+      background: '#0c0c0c'
+      surface: '#161616'
+      primary: '#33ff33'
+      text: '#cccccc'
+      accent: '#ffb000'
+    motion_level: minimal
+    icon_size: small
+    reading_density: compact
+    accessibility_notes:
+    - Monospace-friendly density for logs and datasets.
+  kid_safe:
+    font_scale: 1.25
+    contrast_mode: bright_friendly
+    color_tokens:
+      background: '#e8f4fc'
+      surface: '#ffffff'
+      primary: '#ff6b35'
+      text: '#2d3436'
+      accent: '#00b894'
+    motion_level: reduced
+    icon_size: large
+    reading_density: spacious
+    accessibility_notes:
+    - Large touch targets and cheerful palette for young learners.
+    - Guardian controls recommended.

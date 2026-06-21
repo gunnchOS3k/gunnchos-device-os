@@ -1,0 +1,483 @@
+personas:
+  pre_k_learner:
+    default_journey_preset: scooter
+    default_apps:
+    - waike_offline
+    - scaly_wings_edu
+    - placeholder_story_time
+    default_widgets:
+    - focus_timer
+    - guardian_summary
+    age_band: pre_k
+    privacy_level: strict
+    guardian_required: true
+    blocked_apps:
+    - steam
+    - browser
+    - youtube
+    - netflix
+    - vscode
+    - terminal
+    onboarding_copy: Let's explore colors, sounds, and stories together — tap a big picture to begin.
+    recommended_next_step: Start a picture story with a grown-up nearby.
+    default_app_pack: learn_pack
+    default_workspace: homework_desk
+    customization_level: simple
+  early_reader:
+    default_journey_preset: scooter
+    default_apps:
+    - waike_offline
+    - gunnchai3k
+    - scaly_wings_edu
+    - placeholder_phonics_app
+    default_widgets:
+    - reading_list
+    - focus_timer
+    age_band: elementary
+    privacy_level: strict
+    guardian_required: true
+    blocked_apps:
+    - steam
+    - terminal
+    - vscode
+    - wsl_ubuntu
+    - netflix
+    onboarding_copy: Welcome, reader! Pick a story or lesson and learn at your own pace.
+    recommended_next_step: Open WAIKE Offline and finish one short lesson.
+    default_app_pack: learn_pack
+    default_workspace: homework_desk
+    customization_level: simple
+  middle_school_explorer:
+    default_journey_preset: bicycle
+    default_apps:
+    - waike_offline
+    - gunnchai3k
+    - browser
+    - scaly_wings_edu
+    default_widgets:
+    - homework_tracker
+    - calendar_widget
+    age_band: middle_school
+    privacy_level: school_safe
+    guardian_required: false
+    blocked_apps:
+    - steam
+    - wsl_ubuntu
+    onboarding_copy: Explore science, coding basics, and creative projects with guided tools.
+    recommended_next_step: Try a WAIKE lab and save your notes.
+    default_app_pack: learn_pack
+    default_workspace: homework_desk
+    customization_level: guided
+  high_school_student:
+    default_journey_preset: car
+    default_apps:
+    - browser
+    - waike_offline
+    - gunnchai3k
+    - vscode
+    - placeholder_notes
+    default_widgets:
+    - homework_tracker
+    - calendar_widget
+    - focus_timer
+    age_band: high_school
+    privacy_level: standard
+    guardian_required: false
+    blocked_apps:
+    - steam
+    onboarding_copy: Balance homework, coding classes, tutoring, and safe media in one place.
+    recommended_next_step: Pin your classes and open today's assignment folder.
+    default_app_pack: learn_pack
+    default_workspace: homework_desk
+    customization_level: guided
+  college_non_stem_student:
+    default_journey_preset: car
+    default_apps:
+    - browser
+    - placeholder_writer
+    - placeholder_slides
+    - gunnchai3k
+    - placeholder_notes
+    default_widgets:
+    - calendar_widget
+    - reading_list
+    - focus_timer
+    age_band: undergraduate
+    privacy_level: standard
+    guardian_required: false
+    blocked_apps:
+    - steam
+    onboarding_copy: Write, research, present, and stream with affordable reliability.
+    recommended_next_step: Set up your essay studio workspace.
+    default_app_pack: write_pack
+    default_workspace: essay_studio
+    customization_level: full
+  college_cs_stem_student:
+    default_journey_preset: workshop
+    default_apps:
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    - browser
+    - gunnchai3k
+    - placeholder_git_client
+    default_widgets:
+    - git_status
+    - homework_tracker
+    - terminal_sessions
+    age_band: undergraduate
+    privacy_level: standard
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Build software with VS Code, Git, Python, and Linux tooling where available.
+    recommended_next_step: Clone your first repo and run the starter test suite.
+    default_app_pack: cs_student_pack
+    default_workspace: coding_lab
+    customization_level: full
+  graduate_researcher:
+    default_journey_preset: laboratory
+    default_apps:
+    - vscode
+    - terminal
+    - field_measurement
+    - edge_io
+    - browser
+    - gunnchai3k
+    default_widgets:
+    - lab_notes
+    - dataset_status
+    - experiment_timer
+    age_band: graduate
+    privacy_level: research_strict
+    guardian_required: false
+    blocked_apps:
+    - steam
+    - netflix
+    onboarding_copy: Run reproducible experiments with measurement tools and strict privacy defaults.
+    recommended_next_step: Create a research bench workspace for your current project.
+    default_app_pack: research_pack
+    default_workspace: research_bench
+    customization_level: full
+  postdoctoral_researcher:
+    default_journey_preset: spaceship
+    default_apps:
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    - field_measurement
+    - edge_io
+    - browser
+    default_widgets:
+    - lab_notes
+    - git_status
+    - telemetry_consent
+    age_band: postdoc
+    privacy_level: research_strict
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Advanced research workflows with full tooling, exports, and customization.
+    recommended_next_step: Import your lab profile and connect measurement nodes.
+    default_app_pack: research_pack
+    default_workspace: research_bench
+    customization_level: power_user
+  parent_guardian:
+    default_journey_preset: guardian
+    default_apps:
+    - placeholder_family_hub
+    - browser
+    - waike_offline
+    - gunnchai3k
+    default_widgets:
+    - guardian_summary
+    - screen_time
+    - approved_apps
+    age_band: adult
+    privacy_level: family_strict
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Manage approvals, screen time, and safe learning paths for your household.
+    recommended_next_step: Review guardian controls and approve starter apps.
+    default_app_pack: offline_essentials_pack
+    default_workspace: guardian_dashboard
+    customization_level: guided
+  teacher_mentor:
+    default_journey_preset: classroom
+    default_apps:
+    - placeholder_classroom_hub
+    - waike_offline
+    - gunnchai3k
+    - browser
+    default_widgets:
+    - lesson_deploy
+    - student_roster
+    - assignment_tracker
+    age_band: adult
+    privacy_level: classroom_aggregate
+    guardian_required: false
+    blocked_apps:
+    - steam
+    - netflix
+    onboarding_copy: Deploy lessons, monitor progress, and keep students safely on task.
+    recommended_next_step: Import your class roster and publish the first lesson pack.
+    default_app_pack: learn_pack
+    default_workspace: teacher_console
+    customization_level: guided
+  artist:
+    default_journey_preset: studio
+    default_apps:
+    - placeholder_art_canvas
+    - browser
+    - gunnchai3k
+    - placeholder_reference_library
+    default_widgets:
+    - project_shelf
+    - color_palette
+    - focus_timer
+    age_band: adult
+    privacy_level: creator_local
+    guardian_required: false
+    blocked_apps:
+    - steam
+    onboarding_copy: Sketch, paint, and iterate in a calm studio with local-first saves.
+    recommended_next_step: Open the art table workspace and start a new canvas.
+    default_app_pack: art_pack
+    default_workspace: art_table
+    customization_level: full
+  writer:
+    default_journey_preset: studio
+    default_apps:
+    - placeholder_writer
+    - browser
+    - gunnchai3k
+    - placeholder_notes
+    default_widgets:
+    - reading_list
+    - word_count
+    - focus_timer
+    age_band: adult
+    privacy_level: creator_local
+    guardian_required: false
+    blocked_apps:
+    - steam
+    onboarding_copy: Draft essays, stories, and scripts with distraction-free focus tools.
+    recommended_next_step: Open essay studio and set a writing session timer.
+    default_app_pack: write_pack
+    default_workspace: essay_studio
+    customization_level: full
+  musician:
+    default_journey_preset: studio
+    default_apps:
+    - placeholder_daw
+    - placeholder_metronome
+    - browser
+    - gunnchai3k
+    default_widgets:
+    - music_now_playing
+    - project_shelf
+    - focus_timer
+    age_band: adult
+    privacy_level: creator_local
+    guardian_required: false
+    blocked_apps:
+    - steam
+    onboarding_copy: Compose, record, and practice in a studio tuned for audio workflows.
+    recommended_next_step: Create a new track in the music studio workspace.
+    default_app_pack: music_pack
+    default_workspace: music_studio
+    customization_level: full
+  gamer:
+    default_journey_preset: arcade
+    default_apps:
+    - steam
+    - scaly_wings
+    - edgegesture
+    - browser
+    default_widgets:
+    - game_library
+    - controller_battery
+    - playtime_timer
+    age_band: high_school
+    privacy_level: gaming_standard
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Jump into controller-first gaming with library and playtime tools up front.
+    recommended_next_step: Connect your controller and browse your game library.
+    default_app_pack: game_pack
+    default_workspace: game_room
+    customization_level: guided
+  game_developer:
+    default_journey_preset: workshop
+    default_apps:
+    - placeholder_game_engine
+    - vscode
+    - terminal
+    - browser
+    - placeholder_asset_pipeline
+    default_widgets:
+    - build_status
+    - git_status
+    - project_shelf
+    age_band: adult
+    privacy_level: developer_local
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Prototype games with engine tools, code editors, and asset pipelines.
+    recommended_next_step: Open the game room workspace and load the starter jam template.
+    default_app_pack: game_dev_pack
+    default_workspace: game_room
+    customization_level: full
+  software_engineer:
+    default_journey_preset: workshop
+    default_apps:
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    - browser
+    - placeholder_git_client
+    default_widgets:
+    - git_status
+    - terminal_sessions
+    - build_status
+    age_band: adult
+    privacy_level: developer_local
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Ship software with professional dev tools and sensible performance defaults.
+    recommended_next_step: Set up coding lab and open your main repository.
+    default_app_pack: cs_student_pack
+    default_workspace: coding_lab
+    customization_level: power_user
+  hardware_engineer:
+    default_journey_preset: workshop
+    default_apps:
+    - placeholder_circuit_lab
+    - placeholder_firmware_ide
+    - terminal
+    - vscode
+    - browser
+    default_widgets:
+    - build_status
+    - hardware_probe
+    - project_shelf
+    age_band: adult
+    privacy_level: developer_local
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Design circuits, flash firmware, and bench-test hardware projects.
+    recommended_next_step: Open hardware bench and connect your development board.
+    default_app_pack: hardware_maker_pack
+    default_workspace: hardware_bench
+    customization_level: power_user
+  cybersecurity_learner:
+    default_journey_preset: laboratory
+    default_apps:
+    - placeholder_security_lab
+    - terminal
+    - vscode
+    - browser
+    - gunnchai3k
+    default_widgets:
+    - lab_notes
+    - network_map
+    - focus_timer
+    age_band: undergraduate
+    privacy_level: research_strict
+    guardian_required: false
+    blocked_apps:
+    - steam
+    - netflix
+    onboarding_copy: Practice defensive security in isolated labs with ethical guardrails.
+    recommended_next_step: Start the intro security lab in a sandboxed environment.
+    default_app_pack: cybersecurity_pack
+    default_workspace: coding_lab
+    customization_level: full
+  wireless_6g_researcher:
+    default_journey_preset: spaceship
+    default_apps:
+    - field_measurement
+    - edge_io
+    - vscode
+    - terminal
+    - browser
+    - gunnchai3k
+    default_widgets:
+    - lab_notes
+    - dataset_status
+    - telemetry_consent
+    age_band: graduate
+    privacy_level: research_strict
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Measure wireless systems with research-grade tools and export-safe telemetry.
+    recommended_next_step: Connect an edge measurement node and run the smoke test.
+    default_app_pack: stem_lab_pack
+    default_workspace: research_bench
+    customization_level: power_user
+  library_community_user:
+    default_journey_preset: library
+    default_apps:
+    - browser
+    - waike_offline
+    - gunnchai3k
+    - placeholder_catalog_reader
+    default_widgets:
+    - catalog_search
+    - session_timer
+    - accessibility_help
+    age_band: adult
+    privacy_level: public_kiosk
+    guardian_required: false
+    blocked_apps:
+    - steam
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    onboarding_copy: Browse community resources in a calm kiosk with ephemeral sessions.
+    recommended_next_step: Search the catalog and start a timed learning session.
+    default_app_pack: community_library_pack
+    default_workspace: library_kiosk
+    customization_level: simple
+  accessibility_first_user:
+    default_journey_preset: scooter
+    default_apps:
+    - waike_offline
+    - gunnchai3k
+    - browser
+    - placeholder_voice_nav
+    default_widgets:
+    - accessibility_help
+    - focus_timer
+    - reading_list
+    age_band: adult
+    privacy_level: strict
+    guardian_required: false
+    blocked_apps: []
+    onboarding_copy: Your device starts with accessibility-first defaults — adjust anything, anytime.
+    recommended_next_step: Review accessibility settings and pick your preferred input method.
+    default_app_pack: accessibility_essentials_pack
+    default_workspace: homework_desk
+    customization_level: guided
+  low_bandwidth_offline_user:
+    default_journey_preset: offline
+    default_apps:
+    - waike_offline
+    - gunnchai3k
+    - placeholder_offline_reader
+    - placeholder_offline_notes
+    default_widgets:
+    - offline_lessons
+    - download_queue
+    - sync_status
+    age_band: adult
+    privacy_level: offline_local
+    guardian_required: false
+    blocked_apps:
+    - steam
+    - netflix
+    - hulu
+    - youtube
+    onboarding_copy: Learn and create without relying on a steady network connection.
+    recommended_next_step: Download lesson packs while you have connectivity.
+    default_app_pack: offline_essentials_pack
+    default_workspace: offline_backpack
+    customization_level: simple

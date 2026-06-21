@@ -1,0 +1,329 @@
+presets:
+  scooter:
+    home_screen_layout: large_tiles_single_column
+    allowed_apps:
+    - waike_offline
+    - gunnchai3k
+    - browser
+    - scaly_wings_edu
+    blocked_apps:
+    - steam
+    - terminal
+    - vscode
+    - wsl_ubuntu
+    - netflix
+    - hulu
+    default_accessibility_settings:
+      large_text: true
+      simplified_language: true
+      reduced_motion: true
+    recommended_widgets:
+    - focus_timer
+    - offline_lessons
+    - guardian_summary
+    data_privacy_policy: strict_minimal_collection
+    performance_profile: battery_saver
+    onboarding_text: Welcome aboard your scooter journey — big buttons, gentle guidance, and safe defaults.
+    exit_paths:
+    - bicycle
+    - guardian
+    - offline
+  bicycle:
+    home_screen_layout: two_column_guided
+    allowed_apps:
+    - waike_offline
+    - gunnchai3k
+    - browser
+    - scaly_wings_edu
+    - youtube
+    blocked_apps:
+    - steam
+    - terminal
+    - wsl_ubuntu
+    default_accessibility_settings:
+      simplified_language: true
+      focus_mode: true
+    recommended_widgets:
+    - homework_tracker
+    - reading_list
+    - calendar_widget
+    data_privacy_policy: school_safe_aggregate_opt_in
+    performance_profile: balanced
+    onboarding_text: Your bicycle journey adds a little speed — explore lessons, reading, and guided practice.
+    exit_paths:
+    - car
+    - classroom
+    - scooter
+  car:
+    home_screen_layout: grid_standard
+    allowed_apps:
+    - browser
+    - vscode
+    - terminal
+    - waike_offline
+    - gunnchai3k
+    - youtube
+    - netflix
+    blocked_apps:
+    - steam
+    default_accessibility_settings: {}
+    recommended_widgets:
+    - calendar_widget
+    - homework_tracker
+    - focus_timer
+    data_privacy_policy: standard_with_consent
+    performance_profile: balanced
+    onboarding_text: Car mode balances school, work, and everyday productivity with sensible guardrails.
+    exit_paths:
+    - workshop
+    - studio
+    - bicycle
+    - classroom
+  studio:
+    home_screen_layout: creative_canvas
+    allowed_apps:
+    - browser
+    - gunnchai3k
+    - placeholder_daw
+    - placeholder_art_canvas
+    - placeholder_writer
+    blocked_apps:
+    - steam
+    - wsl_ubuntu
+    default_accessibility_settings:
+      reduced_motion: true
+      focus_mode: true
+    recommended_widgets:
+    - music_now_playing
+    - project_shelf
+    - focus_timer
+    data_privacy_policy: creator_local_first
+    performance_profile: creative_boost
+    onboarding_text: Studio mode clears distractions so you can write, draw, compose, and publish.
+    exit_paths:
+    - car
+    - arcade
+    - workshop
+  arcade:
+    home_screen_layout: controller_first_grid
+    allowed_apps:
+    - steam
+    - scaly_wings
+    - edgegesture
+    - browser
+    - youtube
+    blocked_apps:
+    - vscode
+    - wsl_ubuntu
+    - field_measurement
+    default_accessibility_settings:
+      controller_navigation: true
+      audio_cues: true
+    recommended_widgets:
+    - game_library
+    - controller_battery
+    - playtime_timer
+    data_privacy_policy: gaming_standard_with_parental_controls
+    performance_profile: performance
+    onboarding_text: Arcade mode puts games up front with controller-friendly navigation and playtime tools.
+    exit_paths:
+    - workshop
+    - car
+    - guardian
+  workshop:
+    home_screen_layout: developer_dock
+    allowed_apps:
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    - browser
+    - gunnchai3k
+    - placeholder_game_engine
+    blocked_apps:
+    - netflix
+    - hulu
+    default_accessibility_settings:
+      keyboard_navigation: true
+      focus_mode: true
+    recommended_widgets:
+    - git_status
+    - build_status
+    - terminal_sessions
+    data_privacy_policy: developer_local_with_opt_in_sync
+    performance_profile: compute_boost
+    onboarding_text: Workshop mode is your maker bench — code, build games, and iterate with full tools.
+    exit_paths:
+    - laboratory
+    - spaceship
+    - car
+    - arcade
+  laboratory:
+    home_screen_layout: research_dashboard
+    allowed_apps:
+    - vscode
+    - terminal
+    - field_measurement
+    - edge_io
+    - browser
+    - gunnchai3k
+    - wsl_ubuntu
+    blocked_apps:
+    - steam
+    - netflix
+    - hulu
+    default_accessibility_settings:
+      keyboard_navigation: true
+      screen_reader_labels: true
+    recommended_widgets:
+    - lab_notes
+    - dataset_status
+    - experiment_timer
+    data_privacy_policy: research_strict_no_raw_capture
+    performance_profile: measurement_stable
+    onboarding_text: Laboratory mode supports careful experiments, datasets, and reproducible research workflows.
+    exit_paths:
+    - spaceship
+    - workshop
+    - classroom
+  spaceship:
+    home_screen_layout: power_user_multipanel
+    allowed_apps:
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    - field_measurement
+    - edge_io
+    - browser
+    - gunnchai3k
+    - steam
+    blocked_apps: []
+    default_accessibility_settings:
+      keyboard_navigation: true
+    recommended_widgets:
+    - git_status
+    - lab_notes
+    - system_health
+    - telemetry_consent
+    data_privacy_policy: power_user_full_control
+    performance_profile: maximum
+    onboarding_text: Spaceship mode unlocks advanced layouts, deep tooling, and full customization for experts.
+    exit_paths:
+    - laboratory
+    - workshop
+    - car
+  guardian:
+    home_screen_layout: guardian_console
+    allowed_apps:
+    - browser
+    - waike_offline
+    - gunnchai3k
+    - scaly_wings_edu
+    - placeholder_family_hub
+    blocked_apps:
+    - steam
+    - terminal
+    - vscode
+    - wsl_ubuntu
+    - netflix
+    - hulu
+    - youtube
+    default_accessibility_settings:
+      simplified_language: true
+      large_text: true
+      focus_mode: true
+    recommended_widgets:
+    - guardian_summary
+    - screen_time
+    - approved_apps
+    data_privacy_policy: family_strict_no_surveillance
+    performance_profile: battery_saver
+    onboarding_text: Guardian mode keeps young learners safe with approvals, time limits, and calm defaults.
+    exit_paths:
+    - scooter
+    - bicycle
+    - classroom
+  classroom:
+    home_screen_layout: teacher_roster_grid
+    allowed_apps:
+    - waike_offline
+    - gunnchai3k
+    - browser
+    - scaly_wings_edu
+    - placeholder_classroom_hub
+    blocked_apps:
+    - steam
+    - netflix
+    - hulu
+    - wsl_ubuntu
+    default_accessibility_settings:
+      simplified_language: true
+      captions_preference: always
+    recommended_widgets:
+    - lesson_deploy
+    - student_roster
+    - assignment_tracker
+    data_privacy_policy: classroom_aggregate_only
+    performance_profile: balanced
+    onboarding_text: Classroom mode helps teachers deploy lessons, monitor progress, and keep students on task.
+    exit_paths:
+    - bicycle
+    - car
+    - library
+  library:
+    home_screen_layout: kiosk_simple
+    allowed_apps:
+    - browser
+    - waike_offline
+    - gunnchai3k
+    - placeholder_catalog_reader
+    blocked_apps:
+    - steam
+    - vscode
+    - terminal
+    - wsl_ubuntu
+    - netflix
+    - hulu
+    default_accessibility_settings:
+      reduced_motion: true
+      focus_mode: true
+      large_text: true
+    recommended_widgets:
+    - catalog_search
+    - session_timer
+    - accessibility_help
+    data_privacy_policy: public_kiosk_ephemeral_sessions
+    performance_profile: efficiency
+    onboarding_text: Library mode offers a calm kiosk experience for community learning and reference.
+    exit_paths:
+    - offline
+    - scooter
+    - bicycle
+  offline:
+    home_screen_layout: offline_essentials
+    allowed_apps:
+    - waike_offline
+    - gunnchai3k
+    - placeholder_offline_reader
+    - placeholder_offline_notes
+    blocked_apps:
+    - steam
+    - netflix
+    - hulu
+    - youtube
+    - vscode
+    - wsl_ubuntu
+    default_accessibility_settings:
+      simplified_language: true
+      reduced_motion: true
+      focus_mode: true
+    recommended_widgets:
+    - offline_lessons
+    - download_queue
+    - sync_status
+    data_privacy_policy: offline_local_only
+    performance_profile: battery_saver
+    onboarding_text: Offline mode keeps learning and creating available without a network connection.
+    exit_paths:
+    - scooter
+    - bicycle
+    - library
