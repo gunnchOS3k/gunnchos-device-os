@@ -1,0 +1,84 @@
+package_types:
+  - web_app
+  - python_project
+  - game_project
+  - lesson_pack
+  - media_project
+  - edge_measurement_task
+  - research_notebook
+
+transport_methods:
+  local_wifi:
+    safety_policy:
+      requires_user_consent: true
+      requires_target_trust_prompt: true
+      guardian_approval_for_child: true
+      no_silent_deploy: true
+      no_private_data_default: true
+      signed_bundle_placeholder: true
+  usb_c:
+    safety_policy:
+      requires_user_consent: true
+      requires_target_trust_prompt: true
+      guardian_approval_for_child: true
+      no_silent_deploy: true
+      no_private_data_default: true
+      signed_bundle_placeholder: true
+  local_folder_export:
+    safety_policy:
+      requires_user_consent: true
+      requires_target_trust_prompt: false
+      guardian_approval_for_child: true
+      no_silent_deploy: true
+      no_private_data_default: true
+      signed_bundle_placeholder: false
+  qr_pairing_placeholder:
+    safety_policy:
+      requires_user_consent: true
+      requires_target_trust_prompt: true
+      guardian_approval_for_child: true
+      no_silent_deploy: true
+      no_private_data_default: true
+      signed_bundle_placeholder: true
+  offline_export_bundle:
+    safety_policy:
+      requires_user_consent: true
+      requires_target_trust_prompt: false
+      guardian_approval_for_child: true
+      no_silent_deploy: true
+      no_private_data_default: true
+      signed_bundle_placeholder: true
+
+deploy_targets:
+  student_14_5:
+    display_name: Student 14.5
+    allowed_package_types: [web_app, python_project, lesson_pack, media_project, research_notebook]
+    allowed_transports: [local_wifi, usb_c, local_folder_export, offline_export_bundle]
+    guardian_restrictions: true
+    school_restrictions: true
+  handheld_hybrid:
+    display_name: Handheld Hybrid
+    allowed_package_types: [web_app, python_project, game_project, lesson_pack, media_project]
+    allowed_transports: [local_wifi, usb_c, qr_pairing_placeholder, offline_export_bundle]
+    guardian_restrictions: true
+    school_restrictions: true
+  ds_xl_local_preview:
+    display_name: DS-XL Local Preview
+    allowed_package_types: [web_app, python_project, game_project, lesson_pack, media_project, edge_measurement_task, research_notebook]
+    allowed_transports: [local_folder_export]
+    guardian_restrictions: false
+    school_restrictions: false
+  classroom_library_shared:
+    display_name: Classroom / Library Shared Device
+    allowed_package_types: [lesson_pack, web_app, media_project]
+    allowed_transports: [local_wifi, offline_export_bundle]
+    guardian_restrictions: true
+    school_restrictions: true
+  wearables_arena_placeholder:
+    display_name: Wearables / Arena (future)
+    allowed_package_types: [lesson_pack, game_project]
+    allowed_transports: [qr_pairing_placeholder, offline_export_bundle]
+    guardian_restrictions: true
+    school_restrictions: true
+
+source_device: ds_xl_coder

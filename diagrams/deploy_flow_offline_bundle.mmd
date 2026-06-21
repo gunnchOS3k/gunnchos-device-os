@@ -1,0 +1,14 @@
+flowchart TD
+    A[Developer builds on DS-XL] --> B[Export offline_export_bundle ZIP]
+    B --> C{User consent?}
+    C -->|No| Z[Abort - nothing copied]
+    C -->|Yes| D{Guardian required?}
+    D -->|Yes| E{Guardian approved?}
+    E -->|No| Z
+    E -->|Yes| F[Copy ZIP to USB drive or school share]
+    D -->|No| F
+    F --> G[Target imports bundle]
+    G --> H{Signature placeholder OK?}
+    H -->|No| I[Reject install]
+    H -->|Yes| J[Install to workspace]
+    J --> K[Offer rollback / delete package]

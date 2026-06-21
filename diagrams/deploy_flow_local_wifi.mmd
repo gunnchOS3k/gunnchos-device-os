@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant Dev as Developer
+    participant DSXL as DS-XL Coder
+    participant User as User
+    participant Guard as Guardian
+    participant Target as Target Device
+
+    Dev->>DSXL: Build package
+    DSXL->>Target: mDNS discover (placeholder)
+    DSXL->>User: Show package summary
+    User->>DSXL: Consent confirm
+    alt guardian_restrictions
+        DSXL->>Guard: Approval request
+        Guard->>DSXL: Approve / Deny
+    end
+    DSXL->>Target: Trust prompt
+    Target->>User: Accept from DS-XL?
+    User->>Target: Accept
+    DSXL->>DSXL: deploy_package(local_wifi)
+    Note over DSXL,Target: signed_bundle_placeholder verify
+    Target->>Target: Install package
+    Target->>User: Success + rollback option

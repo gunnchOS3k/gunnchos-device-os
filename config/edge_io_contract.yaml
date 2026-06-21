@@ -1,0 +1,38 @@
+integration:
+  repo: edge-io-measurement-node
+  contract_version: "0.1-alpha"
+
+session:
+  requires_consent: true
+  requires_research_operator: true
+  local_only_default: true
+  user_can_stop: true
+  no_silent_background: true
+  no_private_packet_payloads: true
+  export_formats: [csv, json]
+
+metrics:
+  - timestamp
+  - device_profile
+  - network_type
+  - signal_metadata_placeholder
+  - latency_ms_placeholder
+  - packet_loss_aggregate_placeholder
+  - device_temperature_placeholder
+  - battery_level_placeholder
+  - location_optional_off_by_default
+  - notes
+
+failure_modes:
+  consent_denied:
+    user_message: "Measurement stopped. No data was collected."
+    safe_fallback: local_only
+    next_action: return_to_launcher
+  edge_io_unavailable:
+    user_message: "Field measurement app is not available right now."
+    safe_fallback: offline_mode
+    next_action: retry_or_cancel
+  export_failed:
+    user_message: "Export did not complete. Your local session is still saved."
+    safe_fallback: local_only
+    next_action: retry_export

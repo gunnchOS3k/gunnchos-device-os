@@ -1,0 +1,38 @@
+age_bands:
+  pre_k:
+    screen_time_minutes: 30
+    content_filter: strict
+    app_approval: true
+    mode_approval: true
+    play_window: { start: "10:00", end: "11:00" }
+  elementary:
+    screen_time_minutes: 60
+    content_filter: strict
+    app_approval: true
+    mode_approval: true
+    play_window: { start: "15:00", end: "17:00" }
+  middle_school:
+    screen_time_minutes: 90
+    content_filter: moderate
+    app_approval: true
+    mode_approval: true
+    play_window: { start: "15:00", end: "19:00" }
+  high_school:
+    screen_time_minutes: 120
+    content_filter: moderate
+    app_approval: false
+    mode_approval: false
+    play_window: { start: "15:00", end: "21:00" }
+
+defaults:
+  privacy_safe_telemetry: true
+  private_content_inspection: false
+  emergency_unlock_path: guardian_pin_or_biometric
+  audit_log: placeholder
+  shared_device_support: true
+  school_library_profile_safety: true
+
+media_caution:
+  strict: [steam, netflix, hulu, unapproved_chat]
+  moderate: [netflix, hulu]
+  light: []

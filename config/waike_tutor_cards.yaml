@@ -1,0 +1,89 @@
+tutor_cards:
+  scooter_letters:
+    card_id: scooter_letters
+    audience: pre_k
+    mode: Scooter
+    learning_goal: letter recognition
+    prompt: "Let's find the letter A together!"
+    student_task: Tap the big letter A on the screen.
+    reflection_question: "Can you find another A near you?"
+    safety_privacy_note: No camera or microphone required.
+    offline_option: true
+    output_artifact: letter_trace_placeholder
+  school_wireless_basics:
+    card_id: school_wireless_basics
+    audience: high_school
+    mode: School
+    learning_goal: understand wireless basics
+    prompt: "What happens when your device connects to Wi-Fi?"
+    student_task: Draw a simple home network with phone, router, and internet cloud.
+    reflection_question: "What would change if the internet went offline?"
+    safety_privacy_note: Do not share passwords or personal network details.
+    offline_option: true
+    output_artifact: network_sketch.md
+  studio_story_seed:
+    card_id: studio_story_seed
+    audience: writer
+    mode: Studio
+    learning_goal: creative writing warm-up
+    prompt: "Describe a place you feel safe using three senses."
+    student_task: Write 100 words about that place.
+    reflection_question: "Which sense was easiest to describe?"
+    safety_privacy_note: Keep personal details optional.
+    offline_option: true
+    output_artifact: story_draft.md
+  workshop_first_script:
+    card_id: workshop_first_script
+    audience: cs_student
+    mode: Workshop
+    learning_goal: first Python program
+    prompt: "Every coder starts with hello world."
+    student_task: Run a hello world script and change the greeting.
+    reflection_question: "What would you want your program to do next?"
+    safety_privacy_note: Do not paste secrets into shared terminals.
+    offline_option: true
+    output_artifact: hello.py
+  lab_field_measurement:
+    card_id: lab_field_measurement
+    audience: researcher
+    mode: Laboratory
+    learning_goal: ethical field measurement
+    prompt: "Good research starts with consent and clear notes."
+    student_task: Start a mock measurement session and export CSV metadata only.
+    reflection_question: "What data should never leave this device?"
+    safety_privacy_note: No private packet capture. Location off by default.
+    offline_option: false
+    output_artifact: measurement_export.csv
+  guardian_screen_balance:
+    card_id: guardian_screen_balance
+    audience: parent
+    mode: Guardian
+    learning_goal: healthy screen balance
+    prompt: "Balance learning, play, and rest."
+    student_task: Review today's allowed apps with a guardian.
+    reflection_question: "Did you have time away from the screen?"
+    safety_privacy_note: Guardian controls are a stub — not production enforcement.
+    offline_option: true
+    output_artifact: screen_balance_checklist.md
+  offline_reading_pack:
+    card_id: offline_reading_pack
+    audience: library
+    mode: Offline
+    learning_goal: offline reading continuity
+    prompt: "You can keep learning without internet."
+    student_task: Open an offline lesson and complete one section.
+    reflection_question: "What synced when you went back online?"
+    safety_privacy_note: Shared device — do not save personal accounts.
+    offline_option: true
+    output_artifact: lesson_progress.json
+  gunnchai_reflection:
+    card_id: gunnchai_reflection
+    audience: middle_school
+    mode: School
+    learning_goal: metacognition via tutor
+    prompt: "gunnchAI3k tutor — What did you learn today?"
+    student_task: Answer the tutor reflection prompt in three sentences.
+    reflection_question: "What would you teach a friend about this topic?"
+    safety_privacy_note: Tutor uses privacy-safe prompts; no private message inspection.
+    offline_option: true
+    output_artifact: reflection.txt

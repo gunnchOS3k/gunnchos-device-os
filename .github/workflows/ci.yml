@@ -30,11 +30,20 @@ jobs:
       - name: User-focused OS alpha demo and validation
         run: |
           PYTHONPATH=. python3 scripts/run_user_focused_os_demo.py
+          PYTHONPATH=. python3 scripts/run_mode_policy_demo.py
+          PYTHONPATH=. python3 scripts/run_deploy_contract_demo.py
+          PYTHONPATH=. python3 scripts/run_privacy_security_demo.py
+          PYTHONPATH=. python3 scripts/run_edge_io_contract_demo.py
+          PYTHONPATH=. python3 scripts/run_waike_integration_demo.py
+          PYTHONPATH=. python3 scripts/run_guardian_policy_demo.py
           PYTHONPATH=. python3 scripts/validate_user_focused_os.py
           PYTHONPATH=. python3 scripts/validate_accessibility_coverage.py
           PYTHONPATH=. python3 scripts/validate_persona_coverage.py
           PYTHONPATH=. python3 scripts/validate_edge_case_coverage.py
+          PYTHONPATH=. python3 scripts/validate_issue_closure.py
           test -f results/user_focused_os_demo_output.json
+          test -f results/mode_policy_demo_output.json
+          test -f results/ds_xl_deploy_demo_output.json
       - name: Access risk intelligence smoke
         run: |
           python security/access-risk/attack_path_model.py

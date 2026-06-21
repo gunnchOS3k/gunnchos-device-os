@@ -1,0 +1,70 @@
+student_tasks:
+  prek_safe_task:
+    audience: pre_k
+    mode: Scooter
+    task: Tap colors and shapes in the learning app.
+    output: color_match_score
+    offline: true
+  elementary_task:
+    audience: elementary
+    mode: Bicycle
+    task: Complete one offline WAIKE reading section.
+    output: reading_progress
+    offline: true
+  middle_school_task:
+    audience: middle_school
+    mode: School
+    task: Build a simple circuit diagram in the lesson app.
+    output: circuit_diagram.png
+    offline: true
+  high_school_task:
+    audience: high_school
+    mode: Car
+    task: Write a short essay draft with citations placeholder.
+    output: essay_draft.md
+    offline: true
+  college_task:
+    audience: college
+    mode: Workshop
+    task: Clone a starter repo and run tests locally.
+    output: test_results.txt
+    offline: true
+  creator_task:
+    audience: artist
+    mode: Studio
+    task: Create a mood board for a creative project.
+    output: mood_board.canvas
+    offline: true
+  game_dev_task:
+    audience: game_developer
+    mode: Workshop
+    task: Prototype one level mechanic in the game dev pack.
+    output: level_prototype.json
+    offline: true
+  hardware_maker_task:
+    audience: hardware_engineer
+    mode: Workshop
+    task: Document a sensor wiring plan for a maker project.
+    output: wiring_plan.md
+    offline: true
+  research_measurement_task:
+    audience: researcher
+    mode: Laboratory
+    task: Run a consent-gated Edge-IO mock session and export metadata.
+    output: measurement_export.json
+    offline: false
+  community_library_task:
+    audience: library
+    mode: Library
+    task: Complete a public-access lesson without signing in.
+    output: anonymous_progress_token
+    offline: true
+
+mode_pathways:
+  Scooter: beginner_learning
+  School: structured_lessons
+  Studio: creative_projects
+  Workshop: coding_game_jam
+  Laboratory: research_measurement
+  Guardian: youth_safety
+  Offline: low_bandwidth_access
