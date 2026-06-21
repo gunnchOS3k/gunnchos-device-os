@@ -1,0 +1,23 @@
+evidence:
+  student_14_5:
+    required: [boot_log, display_input_dvt, battery_thermal_dvt, accessibility_uat]
+    current: [profile_manifest, simulated_boot, compatibility_demo]
+    status: simulated
+    blocking: true
+  handheld_hybrid:
+    required: [boot_log, controller_mapping_test, battery_gaming_profile, steam_route_dry_run]
+    current: [profile_manifest, simulated_boot]
+    status: simulated
+    blocking: true
+  ds_xl_coder:
+    required: [dual_screen_boot, deploy_wifi_test, deploy_usbc_test]
+    current: [profile_manifest, deploy_contract_demo]
+    status: simulated
+    blocking: true
+  wearables_arena_set:
+    required: [arena_marshal_mode_test, haptic_safety_test, child_supervision_uat]
+    current: [profile_manifest, marshal_rejection_demo]
+    status: simulated
+    blocking: true
+
+claim_boundary: All evidence is profile-based until real hardware validation completes.

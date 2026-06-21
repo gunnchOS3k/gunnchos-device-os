@@ -1,0 +1,80 @@
+device_id: handheld_hybrid
+display_name: Handheld Hybrid
+display:
+  size_inches: 8.4
+  resolution: "1920x1200"
+  touch: true
+  external_display: true
+input:
+  keyboard: dock_optional
+  touch: true
+  controller: true
+  stylus: false
+audio:
+  speakers: true
+  haptic: true
+camera_mic:
+  webcam: false
+  mic: true
+network:
+  wifi: wifi_6e
+  offline_capable: true
+storage:
+  class: nvme
+  min_gb: 512
+memory:
+  ram_gb: 12
+battery:
+  class: portable_extended
+thermal:
+  class: active_cooling
+  throttle_policy: gaming_balanced
+ports:
+  - usb_c
+  - gamepad_usb
+dock:
+  supported: true
+  usb_c_dp_alt_mode: true
+  tv_mode: true
+sensors:
+  - imu_placeholder
+controller:
+  supported: true
+  hid_gamepad: true
+keyboard:
+  built_in: false
+  dock_optional: true
+touch:
+  supported: true
+accessibility:
+  screen_reader_labels: true
+  controller_navigation: true
+  high_contrast_default: false
+supported_modes: [School, Play, Media, Studio, Arcade, Guardian, Library, Offline]
+supported_journey_presets: [scooter, bicycle, arcade, car, studio, offline, library]
+supported_app_packs: [learn_pack, game_pack, music_pack, offline_essentials_pack]
+developer_features:
+  wsl_path: false
+  light_coding: true
+gaming_media_features:
+  steam_path: true
+  controller_first: true
+  media_browser: true
+creator_features:
+  light_studio: true
+research_features:
+  limited_measurement: true
+school_library_features:
+  community_kiosk: true
+guardian_features:
+  play_time_window: true
+offline_features:
+  offline_games: true
+  offline_lessons: true
+known_gaps:
+  - steam_compatibility_not_certified
+  - battery_validation_pending
+hardware_repo_source_paths:
+  - gunnchos-hardware-industrial-design/mechanical_correctness/device_mechanical_targets.json#handheld_hybrid
+  - gunnchos-hardware-industrial-design/docs/OS_HARDWARE_CONTRACT.md
+claim_boundary: Profile mirror — not physical hardware validation

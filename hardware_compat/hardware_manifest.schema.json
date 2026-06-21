@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "gunnchOS Hardware Manifest",
+  "type": "object",
+  "required": [
+    "device_id", "display", "input", "network", "storage", "memory",
+    "battery", "thermal", "accessibility", "supported_modes",
+    "supported_journey_presets", "supported_app_packs", "claim_boundary"
+  ],
+  "properties": {
+    "device_id": { "type": "string" },
+    "display_name": { "type": "string" },
+    "claim_boundary": { "type": "string" },
+    "hardware_repo_source_paths": { "type": "array", "items": { "type": "string" } }
+  }
+}

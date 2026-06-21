@@ -1,0 +1,85 @@
+device_id: student_14_5
+display_name: Student 14.5
+display:
+  size_inches: 14.5
+  resolution: "1920x1200"
+  touch: true
+  external_display: true
+input:
+  keyboard: true
+  touch: true
+  controller: false
+  stylus: true
+audio:
+  speakers: true
+  headphone_jack: true
+camera_mic:
+  webcam: true
+  mic: true
+  privacy_shutter_placeholder: true
+network:
+  wifi: wifi_6e
+  ethernet_dock_optional: true
+  offline_capable: true
+storage:
+  class: nvme
+  min_gb: 256
+memory:
+  ram_gb: 8
+battery:
+  class: school_day
+  school_day_target: true
+thermal:
+  class: passive_fanless
+  throttle_policy: balanced
+ports:
+  - usb_c
+  - usb_a
+  - headphone
+dock:
+  supported: true
+  usb_c_dp_alt_mode: true
+sensors:
+  - ambient_light_placeholder
+controller:
+  supported: false
+keyboard:
+  built_in: true
+touch:
+  supported: true
+accessibility:
+  screen_reader_labels: true
+  keyboard_navigation: true
+  high_contrast_default: false
+supported_modes: [School, Developer, Play, Media, Studio, Workshop, Laboratory, Guardian, Library, Offline, Admin]
+supported_journey_presets: [scooter, bicycle, car, studio, workshop, laboratory, guardian, classroom, library, offline, spaceship]
+supported_app_packs: [learn_pack, write_pack, cs_student_pack, stem_lab_pack, research_pack, offline_essentials_pack]
+developer_features:
+  wsl_path: true
+  vscode_path: true
+  deploy_target: true
+gaming_media_features:
+  steam_path: true
+  media_browser: true
+creator_features:
+  writer_studio: true
+  art_table: true
+research_features:
+  edge_io_companion: true
+  laboratory_mode: true
+school_library_features:
+  classroom_mode: true
+  library_kiosk: true
+guardian_features:
+  guardian_mode: true
+offline_features:
+  offline_lessons: true
+  offline_writing: true
+known_gaps:
+  - physical_thermal_validation_pending
+  - hlk_not_run
+hardware_repo_source_paths:
+  - gunnchos-hardware-industrial-design/mechanical_correctness/device_mechanical_targets.json#student_14
+  - gunnchos-hardware-industrial-design/docs/OS_HARDWARE_CONTRACT.md
+  - gunnchos-hardware-industrial-design/product/PRD_GUNNCHOS_MODULAR_CONSOLE_ECOSYSTEM.md
+claim_boundary: Profile mirror — not physical hardware validation

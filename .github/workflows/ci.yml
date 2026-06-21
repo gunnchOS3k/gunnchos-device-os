@@ -30,10 +30,16 @@ jobs:
           PYTHONPATH=. python3 scripts/run_waike_integration_demo.py
           PYTHONPATH=. python3 scripts/run_guardian_policy_demo.py
           PYTHONPATH=. python3 scripts/run_device_os_demo.py
+          PYTHONPATH=. python3 scripts/run_hardware_compatibility_demo.py
+          PYTHONPATH=. python3 scripts/run_hardware_boot_readiness_demo.py
+          PYTHONPATH=. python3 scripts/run_device_specific_mode_demo.py
           test -f results/user_focused_os_demo_output.json
           test -f results/mode_policy_demo_output.json
           test -f results/ds_xl_deploy_demo_output.json
           test -f results/device_os_evt1_demo_output.json
+          test -f results/hardware_compatibility_demo_output.json
+          test -f results/hardware_boot_readiness_demo_output.json
+          test -f results/device_specific_mode_demo_output.json
       - name: Validate OS alpha and shippable package
         run: |
           PYTHONPATH=. python3 scripts/validate_user_focused_os.py
@@ -45,6 +51,9 @@ jobs:
           PYTHONPATH=. python3 scripts/validate_release_gates.py
           PYTHONPATH=. python3 scripts/validate_release_artifacts.py
           PYTHONPATH=. python3 scripts/validate_qa_package.py
+          PYTHONPATH=. python3 scripts/validate_hardware_manifests.py
+          PYTHONPATH=. python3 scripts/validate_hardware_compatibility.py
+          PYTHONPATH=. python3 scripts/validate_hardware_release_evidence.py
       - name: Run tests
         run: |
           PYTHONPATH=.:src pytest -q tests/
