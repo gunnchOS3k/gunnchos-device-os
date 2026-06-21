@@ -1,0 +1,11 @@
+features:
+  school_mode: {requires: [display, input, storage]}
+  developer_mode: {requires: [ram_gb_min: 8, storage_gb_min: 256]}
+  wsl_path: {requires: [wsl_capable: true, ram_gb_min: 16]}
+  steam_path: {requires: [steam_capable: true]}
+  media_mode: {requires: [display, audio]}
+  studio_mode: {requires: [ram_gb_min: 8, display]}
+  laboratory_mode: {requires: [network, consent]}
+  offline_mode: {requires: [storage]}
+  dock_external_display: {requires: [dock_dp_alt_mode]}
+  accessibility: {requires: [input, display]}
