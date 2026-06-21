@@ -54,6 +54,12 @@ jobs:
           test -f results/firmware_contract_sync_report.json
           PYTHONPATH=. python3 scripts/validate_firmware_compat.py
           PYTHONPATH=. python3 scripts/validate_cross_repo_firmware_bridge.py
+      - name: Component runtime simulation
+        run: |
+          python3 hardware_component_runtime/scripts/sync_component_stacks.py --use-fixtures
+          python3 hardware_component_runtime/scripts/simulate_os_on_component_stack.py
+          python3 hardware_component_runtime/scripts/validate_component_runtime.py
+          PYTHONPATH=. python3 scripts/validate_no_stale_not_implemented_language.py
       - name: Validate OS alpha and shippable package
         run: |
           PYTHONPATH=. python3 scripts/validate_user_focused_os.py
