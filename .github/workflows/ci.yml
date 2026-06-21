@@ -40,6 +40,20 @@ jobs:
           test -f results/hardware_compatibility_demo_output.json
           test -f results/hardware_boot_readiness_demo_output.json
           test -f results/device_specific_mode_demo_output.json
+      - name: Firmware compatibility sync and demos
+        run: |
+          PYTHONPATH=. python3 cross_repo_firmware_bridge/sync_firmware_contracts.py \
+            --hardware-repo ../gunnchos-hardware-industrial-design || \
+          PYTHONPATH=. python3 cross_repo_firmware_bridge/sync_firmware_contracts.py
+          PYTHONPATH=. python3 scripts/run_firmware_probe_demo.py
+          PYTHONPATH=. python3 scripts/run_firmware_compatibility_demo.py
+          PYTHONPATH=. python3 scripts/run_capsule_update_client_demo.py
+          test -f results/firmware_probe_demo_output.json
+          test -f results/firmware_compatibility_demo_output.json
+          test -f results/capsule_update_client_demo_output.json
+          test -f results/firmware_contract_sync_report.json
+          PYTHONPATH=. python3 scripts/validate_firmware_compat.py
+          PYTHONPATH=. python3 scripts/validate_cross_repo_firmware_bridge.py
       - name: Validate OS alpha and shippable package
         run: |
           PYTHONPATH=. python3 scripts/validate_user_focused_os.py

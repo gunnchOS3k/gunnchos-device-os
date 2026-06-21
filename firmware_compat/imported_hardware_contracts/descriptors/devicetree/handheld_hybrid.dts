@@ -1,0 +1,47 @@
+/*
+ * Prototype descriptor for firmware/OS compatibility harness.
+Not validated on physical hardware.
+ */
+/dts-v1/;
+
+/ {
+    compatible = "gunnchos,handheld-hybrid-harness", "gunnchos,compat-harness";
+    model = "GunnchOS Handheld Hybrid Harness";
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    display: display-controller {
+        compatible = "gunnchos,display-stub";
+        status = "okay";
+    };
+
+    input: input-controller {
+        compatible = "gunnchos,input-stub";
+        status = "okay";
+    };
+
+    battery: smart-battery {
+        compatible = "gunnchos,battery-stub";
+        status = "okay";
+    };
+
+    thermal: thermal-zone {
+        compatible = "gunnchos,thermal-stub";
+        status = "okay";
+    };
+
+    storage: storage-controller {
+        compatible = "gunnchos,storage-stub";
+        status = "okay";
+    };
+
+    network: network-controller {
+        compatible = "gunnchos,wifi-stub";
+        status = "okay";
+    };
+    dock: dock-controller {
+        compatible = "gunnchos,dock-stub";
+        status = "okay";
+        external-display;
+    };
+};

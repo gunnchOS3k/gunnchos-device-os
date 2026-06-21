@@ -30,6 +30,9 @@ python scripts/run_guardian_policy_demo.py
 python scripts/run_hardware_compatibility_demo.py
 python scripts/run_hardware_boot_readiness_demo.py
 python scripts/run_device_specific_mode_demo.py
+python scripts/run_firmware_probe_demo.py
+python scripts/run_firmware_compatibility_demo.py
+python scripts/run_capsule_update_client_demo.py
 ```
 
 ## Validations
@@ -44,8 +47,25 @@ python scripts/validate_qa_package.py
 python scripts/validate_hardware_manifests.py
 python scripts/validate_hardware_compatibility.py
 python scripts/validate_hardware_release_evidence.py
+python scripts/validate_firmware_compat.py
+python scripts/validate_cross_repo_firmware_bridge.py
 pytest -q
 ```
+
+## Firmware compatibility track
+
+gunnchos-device-os mirrors firmware manifests and interface contracts from [gunnchos-hardware-industrial-design](https://github.com/gunnchOS3k/gunnchos-hardware-industrial-design) and validates host-side firmware compatibility in a harness.
+
+Start here:
+- [firmware_compat/README.md](firmware_compat/README.md)
+- [firmware_compat/CLAIM_BOUNDARY.md](firmware_compat/CLAIM_BOUNDARY.md)
+- [cross_repo_firmware_bridge/README.md](cross_repo_firmware_bridge/README.md)
+- [results/REAL_FIRMWARE_COMPATIBILITY_IMPLEMENTATION_REPORT.md](results/REAL_FIRMWARE_COMPATIBILITY_IMPLEMENTATION_REPORT.md)
+
+Current status:
+- Firmware compatibility harness exists (host/emulated probes and contract sync).
+- Capsule update client is simulation-only (never flashes real firmware).
+- Implemented in firmware compatibility harness / OS firmware probe / cross-repo contract sync. Physical-board validation remains pending.
 
 ## Hardware compatibility track
 

@@ -1,0 +1,61 @@
+device_id: handheld_hybrid
+device_name: Handheld Hybrid
+firmware_target: gunnchos_compat_harness_v1
+firmware_version: 0.1.0-harness
+boot_model: uefi_standard_boot
+supported_boot_paths:
+- uefi_standard_boot
+- recovery_boot
+- safe_mode_boot
+hardware_interfaces:
+  display:
+    internal: true
+    external: true
+  input:
+    keyboard: true
+    touch: true
+    controller: true
+  battery:
+    smart_battery_stub: true
+  thermal:
+    thermal_zone_stub: true
+  storage:
+    nvme_or_emmc: true
+  network:
+    wifi_stub: true
+  dock:
+    supported: true
+  external_display:
+    usb_c_alt_mode_stub: true
+  sensors:
+    imu: true
+    haptic: false
+firmware_variables:
+  boot_order: Boot0001
+  firmware_version: 0.1.0-harness
+  device_profile: handheld_hybrid
+  recovery_requested: false
+  capsule_update_pending: false
+capsule_update:
+  supported: true
+  simulated_only: true
+  version_format: semver+build
+  rollback_policy: keep_previous_capsule_simulated
+descriptor_sources:
+  acpi: firmware/descriptors/acpi/handheld_hybrid_dsdt.dsl
+  devicetree: firmware/descriptors/devicetree/handheld_hybrid.dts
+os_compatibility:
+  required_os_profile: handheld_hybrid
+  supported_modes:
+  - School
+  - Play
+  - Media
+  - Studio
+  - Arcade
+  - Guardian
+  - Library
+  - Offline
+  unsupported_modes:
+  - Admin
+claim_boundary: "Harness manifest \u2014 emulation/host validation only; physical-board\
+  \ validation pending."
