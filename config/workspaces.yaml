@@ -1,0 +1,273 @@
+workspaces:
+  homework_desk:
+    app_layout:
+    - waike_offline
+    - gunnchai3k
+    - browser
+    - placeholder_notes
+    widgets:
+    - homework_tracker
+    - calendar_widget
+    - focus_timer
+    files_folders:
+    - School/Today
+    - School/Archive
+    - Downloads
+    quick_actions:
+    - open_today_folder
+    - start_focus_session
+    - ask_tutor
+    focus_settings:
+      distraction_shield: true
+      notification_level: urgent_only
+      session_minutes: 25
+    save_export_flow: autosave_to_school_folder_then_optional_cloud_sync
+  essay_studio:
+    app_layout:
+    - placeholder_writer
+    - placeholder_notes
+    - browser
+    - gunnchai3k
+    widgets:
+    - word_count
+    - reading_list
+    - focus_timer
+    files_folders:
+    - Writing/Drafts
+    - Writing/Research
+    - Writing/Final
+    quick_actions:
+    - new_draft
+    - export_pdf
+    - start_citation_capture
+    focus_settings:
+      distraction_shield: true
+      notification_level: silent
+      session_minutes: 45
+    save_export_flow: versioned_drafts_with_pdf_export
+  music_studio:
+    app_layout:
+    - placeholder_daw
+    - placeholder_metronome
+    - browser
+    widgets:
+    - music_now_playing
+    - project_shelf
+    - focus_timer
+    files_folders:
+    - Music/Projects
+    - Music/Samples
+    - Music/Exports
+    quick_actions:
+    - new_track
+    - toggle_metronome
+    - export_mixdown
+    focus_settings:
+      distraction_shield: true
+      notification_level: silent
+      session_minutes: 60
+    save_export_flow: project_autosave_with_wav_export
+  art_table:
+    app_layout:
+    - placeholder_art_canvas
+    - placeholder_reference_library
+    - browser
+    widgets:
+    - project_shelf
+    - color_palette
+    - focus_timer
+    files_folders:
+    - Art/Sketches
+    - Art/References
+    - Art/Exports
+    quick_actions:
+    - new_canvas
+    - import_reference
+    - export_png
+    focus_settings:
+      distraction_shield: true
+      notification_level: silent
+      session_minutes: 40
+    save_export_flow: layered_project_save_with_png_export
+  coding_lab:
+    app_layout:
+    - vscode
+    - terminal
+    - browser
+    - placeholder_git_client
+    widgets:
+    - git_status
+    - terminal_sessions
+    - build_status
+    files_folders:
+    - Code/Repos
+    - Code/Snippets
+    - Code/Logs
+    quick_actions:
+    - open_main_repo
+    - run_tests
+    - open_terminal
+    focus_settings:
+      distraction_shield: true
+      notification_level: build_only
+      session_minutes: 50
+    save_export_flow: git_commit_push_with_local_backup
+  game_room:
+    app_layout:
+    - steam
+    - scaly_wings
+    - placeholder_game_engine
+    - browser
+    widgets:
+    - game_library
+    - controller_battery
+    - playtime_timer
+    files_folders:
+    - Games/Saves
+    - Games/Projects
+    - Games/Screenshots
+    quick_actions:
+    - launch_last_game
+    - pair_controller
+    - open_game_project
+    focus_settings:
+      distraction_shield: false
+      notification_level: normal
+      session_minutes: 0
+    save_export_flow: cloud_save_where_licensed_else_local
+  research_bench:
+    app_layout:
+    - vscode
+    - terminal
+    - field_measurement
+    - edge_io
+    - browser
+    widgets:
+    - lab_notes
+    - dataset_status
+    - experiment_timer
+    files_folders:
+    - Research/Experiments
+    - Research/Datasets
+    - Research/Notes
+    quick_actions:
+    - new_experiment_log
+    - run_measurement_smoke
+    - export_redacted_dataset
+    focus_settings:
+      distraction_shield: true
+      notification_level: measurement_alerts
+      session_minutes: 90
+    save_export_flow: reproducible_bundle_export_with_privacy_filter
+  hardware_bench:
+    app_layout:
+    - placeholder_circuit_lab
+    - placeholder_firmware_ide
+    - terminal
+    - vscode
+    widgets:
+    - hardware_probe
+    - build_status
+    - project_shelf
+    files_folders:
+    - Hardware/Schematics
+    - Hardware/Firmware
+    - Hardware/Logs
+    quick_actions:
+    - flash_firmware
+    - open_schematic
+    - run_serial_monitor
+    focus_settings:
+      distraction_shield: true
+      notification_level: hardware_alerts
+      session_minutes: 60
+    save_export_flow: firmware_binary_and_schematic_bundle
+  teacher_console:
+    app_layout:
+    - placeholder_classroom_hub
+    - waike_offline
+    - gunnchai3k
+    - browser
+    widgets:
+    - lesson_deploy
+    - student_roster
+    - assignment_tracker
+    files_folders:
+    - Class/Lessons
+    - Class/Rosters
+    - Class/Reports
+    quick_actions:
+    - deploy_lesson
+    - view_roster
+    - export_aggregate_report
+    focus_settings:
+      distraction_shield: false
+      notification_level: class_alerts
+      session_minutes: 0
+    save_export_flow: lesson_pack_deploy_with_aggregate_export
+  guardian_dashboard:
+    app_layout:
+    - placeholder_family_hub
+    - browser
+    - waike_offline
+    widgets:
+    - guardian_summary
+    - screen_time
+    - approved_apps
+    files_folders:
+    - Family/Profiles
+    - Family/Approvals
+    - Family/Reports
+    quick_actions:
+    - review_requests
+    - set_screen_time
+    - approve_app
+    focus_settings:
+      distraction_shield: false
+      notification_level: guardian_alerts
+      session_minutes: 0
+    save_export_flow: policy_sync_to_child_profiles
+  library_kiosk:
+    app_layout:
+    - browser
+    - waike_offline
+    - placeholder_catalog_reader
+    widgets:
+    - catalog_search
+    - session_timer
+    - accessibility_help
+    files_folders:
+    - Kiosk/Session
+    - Kiosk/Downloads
+    quick_actions:
+    - search_catalog
+    - start_session
+    - end_session_logout
+    focus_settings:
+      distraction_shield: true
+      notification_level: session_only
+      session_minutes: 30
+    save_export_flow: ephemeral_session_clear_on_logout
+  offline_backpack:
+    app_layout:
+    - waike_offline
+    - gunnchai3k
+    - placeholder_offline_reader
+    - placeholder_offline_notes
+    widgets:
+    - offline_lessons
+    - download_queue
+    - sync_status
+    files_folders:
+    - Offline/Lessons
+    - Offline/Notes
+    - Offline/Queue
+    quick_actions:
+    - open_downloaded_lesson
+    - queue_sync
+    - new_offline_note
+    focus_settings:
+      distraction_shield: true
+      notification_level: sync_only
+      session_minutes: 30
+    save_export_flow: local_only_until_sync_available

@@ -27,6 +27,14 @@ jobs:
         run: |
           PYTHONPATH=. python3 scripts/run_device_os_demo.py
           test -f results/device_os_evt1_demo_output.json
+      - name: User-focused OS alpha demo and validation
+        run: |
+          PYTHONPATH=. python3 scripts/run_user_focused_os_demo.py
+          PYTHONPATH=. python3 scripts/validate_user_focused_os.py
+          PYTHONPATH=. python3 scripts/validate_accessibility_coverage.py
+          PYTHONPATH=. python3 scripts/validate_persona_coverage.py
+          PYTHONPATH=. python3 scripts/validate_edge_case_coverage.py
+          test -f results/user_focused_os_demo_output.json
       - name: Access risk intelligence smoke
         run: |
           python security/access-risk/attack_path_model.py
