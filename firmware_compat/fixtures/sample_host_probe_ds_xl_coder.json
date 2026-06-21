@@ -1,0 +1,157 @@
+{
+  "device_id": "ds_xl_coder",
+  "host_os": "darwin",
+  "host_environment": false,
+  "profile_source": "fixture",
+  "fixture_path": "firmware_compat/fixtures/sample_host_probe_ds_xl_coder.json",
+  "probe_version": "0.1.0-harness",
+  "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation.",
+  "timestamp": "2026-06-21T21:59:34.339849+00:00",
+  "probes": {
+    "uefi": {
+      "status": "pass",
+      "simulated": true,
+      "message": "UEFI indicators from explicit fixture/profile",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "use_fixture": true,
+        "source": "fixture"
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "acpi": {
+      "status": "pass",
+      "simulated": true,
+      "message": "ACPI descriptor referenced via fixture",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "source": "fixture"
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "devicetree": {
+      "status": "pass",
+      "simulated": true,
+      "message": "DeviceTree descriptor referenced via fixture",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "source": "fixture"
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "display": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Display expectations from fixture/profile",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "profile_display": {
+          "size_inches": 7.0,
+          "resolution": "1280x720",
+          "dual_screen": true,
+          "touch": true,
+          "external_display": true
+        },
+        "source": "fixture"
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "dock": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Dock expectations from fixture/profile",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "profile_dock_supported": true,
+        "source": "fixture",
+        "dock_attached": true
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "battery": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Battery status from fixture/smart_battery_stub",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "source": "fixture",
+        "smart_battery_stub": true
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "thermal": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Thermal zones from fixture/thermal_zone_stub",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "source": "fixture",
+        "thermal_zone_stub": true
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "input": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Input expectations from fixture/profile",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "profile_input": {
+          "keyboard": true,
+          "touch": true,
+          "controller": false
+        },
+        "source": "fixture"
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "storage": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Storage expectations from fixture/profile",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "profile_storage": {
+          "class": "nvme",
+          "min_gb": 1024
+        },
+        "source": "fixture"
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    },
+    "network": {
+      "status": "pass",
+      "simulated": true,
+      "message": "Network expectations from fixture/profile",
+      "host_os": "darwin",
+      "indicators": {
+        "host_os": "darwin",
+        "device_id": "ds_xl_coder",
+        "profile_network": {
+          "wifi": "wifi_6e",
+          "offline_capable": true
+        },
+        "source": "fixture",
+        "wifi_stub": true
+      },
+      "claim_boundary": "Host-side firmware probe \u2014 not physical gunnchOS hardware validation."
+    }
+  }
+}

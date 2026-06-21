@@ -27,6 +27,8 @@ Last updated: 2026-06-21
 | Simulated boot readiness | complete | not hardware boot |
 | Boot readiness docs | complete | T1 open |
 | Hardware release docs | complete | evidence empty |
+| Firmware compatibility harness | complete | host/emulated only |
+| Cross-repo firmware contract sync | complete | fallback to imported copies |
 | Audit + gap analysis | complete | Phase 1 |
 | Cross-repo traceability | complete | Phase 11 |
 | DVT execution | not_started | hardware repo |
@@ -66,6 +68,9 @@ Last updated: 2026-06-21
 - Compatibility engine enforces documented mode/input rules in software
 - Simulated boot readiness passes for valid profiles
 - Documentation and traceability exist for hardware compatibility pass
+- Firmware compatibility harness runs host probes and contract checks (physical-board validation pending)
+
+Implemented in firmware compatibility harness / OS firmware probe / cross-repo contract sync. Physical-board validation remains pending.
 
 ---
 

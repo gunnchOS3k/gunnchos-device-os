@@ -101,3 +101,9 @@ Before GA: signed report per SKU with test logs attached to [../release_artifact
 ## Claim boundary
 
 Hardware compatibility **requirements** are defined from software contracts. The repo does **not** claim hardware-validated release or that all dimensions are proven on physical devices.
+
+**Firmware track:** Implemented in firmware compatibility harness / OS firmware probe / cross-repo contract sync. Physical-board validation remains pending.
+
+See also:
+- [../firmware_compat/README.md](../firmware_compat/README.md)
+- [../firmware_compat/CLAIM_BOUNDARY.md](../firmware_compat/CLAIM_BOUNDARY.md)

@@ -1,0 +1,21 @@
+interface_id: docking_external_display
+capabilities:
+  usb_c_alt_mode_required: true
+  hotplug_event_required: true
+  external_display_modes:
+  - mirror
+  - extend
+  - presentation
+os_events:
+- dock_connected
+- dock_disconnected
+- external_display_connected
+- external_display_disconnected
+fallbacks:
+  no_dp_alt_mode: Use internal display and show dock compatibility warning.
+  hotplug_failed: Prompt user to reconnect dock and log technical diagnostic.
+evidence:
+  implemented_in_contract: true
+  descriptor_stub_exists: true
+  qemu_simulated: true
+  physical_hardware_validated: false

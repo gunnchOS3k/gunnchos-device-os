@@ -13,6 +13,7 @@
 | **Installable image** | Install/uninstall/upgrade on reference hardware | Documented only | **not_started** | Yes (for RC+) | Release eng |
 | **Update / rollback** | Signed manifest pipeline + rollback drill log | `updater.py`/`rollback.py` mocks | **in_progress** | Yes (for RC+) | Release eng |
 | **Hardware compatibility** | Per-SKU physical test report | Profile manifests, compatibility engine, simulated boot readiness, demo JSON (`hardware_compat/`) | **evidence_exists** (simulated only) | Yes (for hardware-compatible release claim) | HW + OS |
+| **Firmware compatibility harness** | Host probe + contract sync + capsule simulation | `firmware_compat/`, `cross_repo_firmware_bridge/`, demo JSON | **evidence_exists** (harness only) | Yes (for firmware-compatible release claim) | HW + OS |
 | **Accessibility conformance** | Validation report on hardware | Contract docs + mock labels | **not_started** | Yes (for GA a11y claims) | UX + QA |
 | **Security review** | Completed checklist + threat model sign-off | Partial threat model | **in_progress** | Yes (for RC+) | Security |
 | **GA release** | GA gate artifacts + UAT + support runbooks | **Not met** | **not_started** | Yes (for GA claim) | Release |
