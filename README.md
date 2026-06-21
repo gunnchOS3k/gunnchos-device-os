@@ -32,8 +32,38 @@ python scripts/run_guardian_policy_demo.py
 ```bash
 python scripts/validate_user_focused_os.py
 python scripts/validate_issue_closure.py
+python scripts/validate_shippable_requirements.py
+python scripts/validate_release_gates.py
+python scripts/validate_release_artifacts.py
+python scripts/validate_qa_package.py
 pytest -q
 ```
+
+## Shippable OS track
+
+This repo now includes a shippable OS requirements package and release-gate model.
+
+Start here:
+- [requirements/SHIPPABLE_OS_REQUIREMENTS.md](requirements/SHIPPABLE_OS_REQUIREMENTS.md)
+- [release_gates/RELEASE_GATE_MATRIX.md](release_gates/RELEASE_GATE_MATRIX.md)
+- [release_artifacts/ARTIFACT_MANIFEST_REQUIRED.md](release_artifacts/ARTIFACT_MANIFEST_REQUIRED.md)
+- [qa/QA_MASTER_TEST_PLAN.md](qa/QA_MASTER_TEST_PLAN.md)
+- [roadmap/SHIPPABLE_OS_ROADMAP.md](roadmap/SHIPPABLE_OS_ROADMAP.md)
+
+Current status:
+- User-focused OS alpha exists.
+- Issue backlog OS alpha exists.
+- Shippable requirements exist.
+- Installable image is not yet proven.
+- GA release is not claimed.
+- Finished shipping OS is not claimed.
+
+CI order (clean checkout):
+1. Generate demo outputs
+2. Run validators
+3. Run pytest
+
+See [docs/CI_FAILURE_ANALYSIS.md](docs/CI_FAILURE_ANALYSIS.md).
 
 ## Launcher mock
 

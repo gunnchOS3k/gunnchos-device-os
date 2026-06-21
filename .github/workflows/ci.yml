@@ -20,14 +20,7 @@ jobs:
           pip install pytest pyyaml
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-      - name: Run tests
-        run: |
-          PYTHONPATH=.:src pytest -q tests/
-      - name: EVT-1 OS alpha demo
-        run: |
-          PYTHONPATH=. python3 scripts/run_device_os_demo.py
-          test -f results/device_os_evt1_demo_output.json
-      - name: User-focused OS alpha demo and validation
+      - name: Generate demo outputs
         run: |
           PYTHONPATH=. python3 scripts/run_user_focused_os_demo.py
           PYTHONPATH=. python3 scripts/run_mode_policy_demo.py
@@ -36,14 +29,25 @@ jobs:
           PYTHONPATH=. python3 scripts/run_edge_io_contract_demo.py
           PYTHONPATH=. python3 scripts/run_waike_integration_demo.py
           PYTHONPATH=. python3 scripts/run_guardian_policy_demo.py
+          PYTHONPATH=. python3 scripts/run_device_os_demo.py
+          test -f results/user_focused_os_demo_output.json
+          test -f results/mode_policy_demo_output.json
+          test -f results/ds_xl_deploy_demo_output.json
+          test -f results/device_os_evt1_demo_output.json
+      - name: Validate OS alpha and shippable package
+        run: |
           PYTHONPATH=. python3 scripts/validate_user_focused_os.py
           PYTHONPATH=. python3 scripts/validate_accessibility_coverage.py
           PYTHONPATH=. python3 scripts/validate_persona_coverage.py
           PYTHONPATH=. python3 scripts/validate_edge_case_coverage.py
           PYTHONPATH=. python3 scripts/validate_issue_closure.py
-          test -f results/user_focused_os_demo_output.json
-          test -f results/mode_policy_demo_output.json
-          test -f results/ds_xl_deploy_demo_output.json
+          PYTHONPATH=. python3 scripts/validate_shippable_requirements.py
+          PYTHONPATH=. python3 scripts/validate_release_gates.py
+          PYTHONPATH=. python3 scripts/validate_release_artifacts.py
+          PYTHONPATH=. python3 scripts/validate_qa_package.py
+      - name: Run tests
+        run: |
+          PYTHONPATH=.:src pytest -q tests/
       - name: Access risk intelligence smoke
         run: |
           python security/access-risk/attack_path_model.py
