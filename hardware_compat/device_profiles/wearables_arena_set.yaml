@@ -1,0 +1,78 @@
+device_id: wearables_arena_set
+display_name: Wearables / Arena Set
+display:
+  size_class: wearable_or_arena
+  resolution: variable
+  touch: true
+  external_display: false
+input:
+  keyboard: false
+  touch: true
+  controller: true
+  gesture: true
+  voice_placeholder: true
+audio:
+  speakers: true
+  haptic: true
+camera_mic:
+  webcam: false
+  mic: arena_marshal_only
+network:
+  wifi: wifi_6
+  offline_capable: true
+storage:
+  class: emmc
+  min_gb: 64
+memory:
+  ram_gb: 4
+battery:
+  class: wearable_short_cycle
+thermal:
+  class: strict_throttle
+  throttle_policy: arena_safe
+ports:
+  - usb_c_charge
+dock:
+  supported: false
+sensors:
+  - haptic
+  - motion_placeholder
+controller:
+  supported: true
+  arena_controls: true
+keyboard:
+  built_in: false
+touch:
+  supported: true
+accessibility:
+  audio_cues: true
+  haptic_cues: true
+  simplified_language: true
+supported_modes: [Play, School, Offline, Library, Admin]
+supported_journey_presets: [scooter, bicycle, arcade, guardian, offline]
+supported_app_packs: [learn_pack, game_pack, accessibility_essentials_pack, offline_essentials_pack]
+developer_features:
+  wsl_path: false
+  unrestricted_developer: false
+gaming_media_features:
+  venue_arcade: true
+  marshal_controls_required: true
+creator_features:
+  haptic_learning: true
+research_features:
+  arena_research_placeholder: true
+school_library_features:
+  supervised_session: true
+guardian_features:
+  marshal_mode: true
+  child_supervision_required: true
+offline_features:
+  offline_lessons: true
+  offline_arena_games: true
+known_gaps:
+  - arena_safety_rules_not_field_validated
+  - no_wsl_workstation
+hardware_repo_source_paths:
+  - gunnchos-hardware-industrial-design/mechanical_correctness/device_mechanical_targets.json#wearables_arena_set
+  - gunnchos-hardware-industrial-design/docs/OS_HARDWARE_CONTRACT.md
+claim_boundary: Profile mirror — not physical hardware validation

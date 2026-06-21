@@ -1,0 +1,11 @@
+presets:
+  scooter: { all_devices: true }
+  bicycle: { all_devices: true }
+  car: { exclude: [wearables_arena_set] }
+  studio: { exclude: [] }
+  arcade: { require_controller_optional: [handheld_hybrid, wearables_arena_set] }
+  workshop: { exclude: [wearables_arena_set] }
+  laboratory: { exclude: [wearables_arena_set] }
+  spaceship: { exclude: [wearables_arena_set, handheld_hybrid] }
+  guardian: { all_devices: true }
+  offline: { all_devices: true }

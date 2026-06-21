@@ -14,6 +14,8 @@ A user-focused operating system alpha and launcher/customization framework for g
 - [docs/PRIVACY_SECURITY_MODEL.md](docs/PRIVACY_SECURITY_MODEL.md)
 - [docs/WAIKE_INTEGRATION.md](docs/WAIKE_INTEGRATION.md)
 - [docs/ISSUE_CLOSURE_MATRIX.md](docs/ISSUE_CLOSURE_MATRIX.md)
+- [hardware_compat/HARDWARE_COMPATIBILITY_CONTRACT.md](hardware_compat/HARDWARE_COMPATIBILITY_CONTRACT.md)
+- [docs/HARDWARE_OS_TRACEABILITY.md](docs/HARDWARE_OS_TRACEABILITY.md)
 
 ## Run demos
 
@@ -25,6 +27,9 @@ python scripts/run_privacy_security_demo.py
 python scripts/run_edge_io_contract_demo.py
 python scripts/run_waike_integration_demo.py
 python scripts/run_guardian_policy_demo.py
+python scripts/run_hardware_compatibility_demo.py
+python scripts/run_hardware_boot_readiness_demo.py
+python scripts/run_device_specific_mode_demo.py
 ```
 
 ## Validations
@@ -36,8 +41,26 @@ python scripts/validate_shippable_requirements.py
 python scripts/validate_release_gates.py
 python scripts/validate_release_artifacts.py
 python scripts/validate_qa_package.py
+python scripts/validate_hardware_manifests.py
+python scripts/validate_hardware_compatibility.py
+python scripts/validate_hardware_release_evidence.py
 pytest -q
 ```
+
+## Hardware compatibility track
+
+gunnchos-device-os mirrors device families from [gunnchos-hardware-industrial-design](https://github.com/gunnchOS3k/gunnchos-hardware-industrial-design) and validates profile-based OS compatibility.
+
+Start here:
+- [hardware_compat/README.md](hardware_compat/README.md)
+- [hardware_compat/HARDWARE_CLAIM_BOUNDARY.md](hardware_compat/HARDWARE_CLAIM_BOUNDARY.md)
+- [docs/HARDWARE_REPO_INTEGRATION.md](docs/HARDWARE_REPO_INTEGRATION.md)
+- [hardware_release/HARDWARE_COMPATIBILITY_EVIDENCE_MATRIX.md](hardware_release/HARDWARE_COMPATIBILITY_EVIDENCE_MATRIX.md)
+
+Current status:
+- Hardware-aware OS alpha exists (simulated detection).
+- Four device profiles: Student 14.5, Handheld Hybrid, DS-XL Coder, Wearables/Arena Set.
+- Physical hardware boot and HLK-style validation **not proven**.
 
 ## Shippable OS track
 

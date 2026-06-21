@@ -1,0 +1,13 @@
+packs:
+  learn_pack: { min_ram_gb: 4, min_storage_gb: 32 }
+  write_pack: { min_ram_gb: 4, min_storage_gb: 32 }
+  cs_student_pack: { min_ram_gb: 8, min_storage_gb: 128 }
+  game_dev_pack: { min_ram_gb: 8, min_storage_gb: 256 }
+  research_pack: { min_ram_gb: 8, min_storage_gb: 128 }
+  game_pack: { min_ram_gb: 4, min_storage_gb: 64, controller_recommended: true }
+
+device_support:
+  student_14_5: [learn_pack, write_pack, cs_student_pack, research_pack, offline_essentials_pack]
+  handheld_hybrid: [learn_pack, game_pack, music_pack, offline_essentials_pack]
+  ds_xl_coder: [cs_student_pack, game_dev_pack, learn_pack, research_pack]
+  wearables_arena_set: [learn_pack, game_pack, accessibility_essentials_pack]

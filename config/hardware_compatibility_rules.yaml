@@ -1,0 +1,23 @@
+rules:
+  simulated_only: true
+  real_hardware_required_for_release: true
+  hlk_required_for_certification_claims: true
+
+blocked_combinations:
+  - device: wearables_arena_set
+    mode: Developer
+    fallback: marshal_controlled_arcade
+  - device: wearables_arena_set
+    feature: wsl_path
+    fallback: scooter
+
+app_pack_overrides:
+  wearables_arena_set: [learn_pack, game_pack, accessibility_essentials_pack]
+  handheld_hybrid: [game_pack, learn_pack, music_pack]
+
+evidence_before_hardware_compatible_release:
+  - real_hardware_boot_log
+  - dvt_software_hardware_integration
+  - battery_thermal_lab_report
+  - accessibility_uat_report
+  - hlk_or_equivalent_future_path

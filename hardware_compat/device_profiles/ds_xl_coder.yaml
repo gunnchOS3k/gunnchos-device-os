@@ -1,0 +1,76 @@
+device_id: ds_xl_coder
+display_name: DS-XL Coder
+display:
+  size_inches: 7.0
+  resolution: "1280x720"
+  dual_screen: true
+  touch: true
+  external_display: true
+input:
+  keyboard: true
+  touch: true
+  controller: false
+audio:
+  speakers: true
+camera_mic:
+  webcam: false
+  mic: true
+network:
+  wifi: wifi_6e
+  offline_capable: true
+storage:
+  class: nvme
+  min_gb: 1024
+memory:
+  ram_gb: 16
+battery:
+  class: workstation_portable
+thermal:
+  class: active_cooling
+  throttle_policy: developer
+ports:
+  - usb_c
+  - usb_c_host
+dock:
+  supported: true
+  deploy_source: true
+sensors: []
+controller:
+  supported: false
+keyboard:
+  built_in: true
+touch:
+  supported: true
+  dual_screen_touch: true
+accessibility:
+  screen_reader_labels: true
+  keyboard_navigation: true
+supported_modes: [Developer, Coder, Workshop, Laboratory, School, Offline, Admin]
+supported_journey_presets: [workshop, laboratory, spaceship, bicycle, offline]
+supported_app_packs: [cs_student_pack, game_dev_pack, learn_pack, research_pack, offline_essentials_pack]
+developer_features:
+  wsl_path: true
+  vscode_path: true
+  deploy_source: true
+  local_preview: true
+  dual_screen_workflow: true
+gaming_media_features:
+  game_dev_preview: true
+creator_features:
+  coding_lessons: true
+research_features:
+  research_notebook_authoring: true
+school_library_features:
+  classroom_coding: true
+  library_lesson_deploy: true
+guardian_features:
+  deploy_approval: true
+offline_features:
+  offline_coding: true
+  offline_lessons: true
+known_gaps:
+  - dual_screen_os_shell_not_proven_on_hardware
+hardware_repo_source_paths:
+  - gunnchos-hardware-industrial-design/mechanical_correctness/device_mechanical_targets.json#ds_xl_coder
+  - gunnchos-hardware-industrial-design/docs/OS_HARDWARE_CONTRACT.md
+claim_boundary: Profile mirror — not physical hardware validation
