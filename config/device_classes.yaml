@@ -1,0 +1,100 @@
+device_classes:
+  student_14_5:
+    device_id: student_14_5
+    display_name: Student 14.5
+    display_profile: { size_inches: 14.5, resolution: "1920x1200", ppi: 157 }
+    input_methods: [keyboard, touch, stylus]
+    keyboard_support: true
+    controller_support: false
+    touch_support: true
+    dock_support: true
+    storage_class: nvme_256gb
+    ram_target_gb: 8
+    performance_class: balanced
+    battery_class: school_day
+    thermal_class: passive_fanless
+    supported_journey_presets: [scooter, bicycle, car, studio, guardian, classroom, library, offline]
+    supported_modes: [School, Developer, Play, Media, Studio, Guardian, Library, Offline, Admin]
+    supported_app_packs: [learn_pack, write_pack, cs_student_pack, offline_essentials_pack]
+    accessibility_defaults: { large_text: false, high_contrast: false, screen_reader_labels: true }
+    offline_capabilities: [offline_lessons, offline_writing, offline_coding]
+    deploy_role: target
+    hardware_contract_assumptions: [wifi_6e, usb_c_dock, tpm2_target]
+    primary_audience: K-12 and college students
+    main_workflows: [homework, essays, coding intro, research reading]
+    input_style: keyboard + touch
+
+  handheld_hybrid:
+    device_id: handheld_hybrid
+    display_name: Handheld Hybrid
+    display_profile: { size_inches: 8.4, resolution: "1920x1200", ppi: 270 }
+    input_methods: [touch, controller, keyboard_dock]
+    keyboard_support: dock_optional
+    controller_support: true
+    touch_support: true
+    dock_support: true
+    storage_class: nvme_512gb
+    ram_target_gb: 12
+    performance_class: gaming_balanced
+    battery_class: portable_extended
+    thermal_class: active_cooling
+    supported_journey_presets: [scooter, bicycle, car, arcade, workshop, offline]
+    supported_modes: [School, Play, Developer, Media, Workshop, Offline, Admin]
+    supported_app_packs: [learn_pack, game_pack, cs_student_pack, offline_essentials_pack]
+    accessibility_defaults: { controller_navigation: true, touch_navigation: true, large_text: false }
+    offline_capabilities: [offline_lessons, offline_games, offline_coding]
+    deploy_role: target
+    hardware_contract_assumptions: [wifi_6e, usb_c, gamepad_hid]
+    primary_audience: Middle school through gamer/creator
+    main_workflows: [portable learning, gaming, maker projects]
+    input_style: controller-first or touch
+
+  ds_xl_coder:
+    device_id: ds_xl_coder
+    display_name: DS-XL Coder
+    display_profile: { size_inches: 15.6, resolution: "2560x1600", ppi: 189 }
+    input_methods: [keyboard, touch, external_display]
+    keyboard_support: true
+    controller_support: false
+    touch_support: true
+    dock_support: true
+    storage_class: nvme_1tb
+    ram_target_gb: 16
+    performance_class: developer
+    battery_class: workstation_portable
+    thermal_class: active_cooling
+    supported_journey_presets: [workshop, laboratory, spaceship, car, offline]
+    supported_modes: [Developer, Coder, Workshop, Laboratory, Research Measurement, Admin]
+    supported_app_packs: [cs_student_pack, game_dev_pack, research_pack, stem_lab_pack]
+    accessibility_defaults: { keyboard_navigation: true, focus_mode: true }
+    offline_capabilities: [offline_coding, offline_research_notebooks]
+    deploy_role: source_and_target
+    hardware_contract_assumptions: [wifi_6e, usb_c_host, wsl_capable_host]
+    primary_audience: CS students, developers, researchers
+    main_workflows: [coding, deploy source, research measurement]
+    input_style: keyboard-first
+
+  wearables_arena_set:
+    device_id: wearables_arena_set
+    display_name: Wearables / Arena Set
+    display_profile: { size_class: wearable_or_arena, resolution: variable }
+    input_methods: [touch, gesture, controller, voice_placeholder]
+    keyboard_support: false
+    controller_support: true
+    touch_support: true
+    dock_support: false
+    storage_class: emmc_64gb
+    ram_target_gb: 4
+    performance_class: edge_light
+    battery_class: wearable_short_cycle
+    thermal_class: strict_throttle
+    supported_journey_presets: [scooter, bicycle, arcade, offline]
+    supported_modes: [Play, School, Offline, Library]
+    supported_app_packs: [learn_pack, game_pack, accessibility_essentials_pack]
+    accessibility_defaults: { audio_cues: true, haptic_cues: true, simplified_language: true }
+    offline_capabilities: [offline_lessons, offline_games]
+    deploy_role: future_target_placeholder
+    hardware_contract_assumptions: [bluetooth_le, low_power_wifi]
+    primary_audience: Pre-K exploration, arena events, future wearable pilots
+    main_workflows: [guided play, arena demos, accessibility-first micro tasks]
+    input_style: touch and gesture

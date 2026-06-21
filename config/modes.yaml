@@ -1,0 +1,138 @@
+modes:
+  School:
+    allowed_apps: [browser, waike_offline, gunnchai3k, scaly_wings_edu]
+    blocked_apps: [steam, netflix, hulu, vscode, terminal]
+    telemetry: aggregated_opt_in
+    network: filtered
+    update: admin_scheduled
+    child_safety: strict
+    performance: school
+    simplified_home: true
+    focus_mode: true
+    offline_lessons: true
+    guardian_hooks: true
+    teacher_policy_hooks: true
+    no_invasive_surveillance: true
+    privacy_safe_telemetry: true
+    accessibility_defaults: { simplified_language: true, focus_mode: true }
+  Developer:
+    allowed_apps: [vscode, terminal, wsl_ubuntu, browser, gunnchai3k, git_placeholder]
+    blocked_apps: [steam]
+    telemetry: aggregated_opt_in
+    network: standard
+    update: user_prompt
+    child_safety: standard
+    performance: balanced
+    wsl_path: true
+    git_github_path: true
+    local_project_folders: true
+    package_dependency_warning: true
+    advanced_settings: true
+    rollback_safe_reset: true
+  Coder:
+    allowed_apps: [vscode, terminal, browser, waike_offline, gunnchai3k]
+    blocked_apps: [steam, netflix, hulu]
+    telemetry: aggregated_opt_in
+    network: standard
+    update: user_prompt
+    child_safety: standard
+    performance: balanced
+  Research Measurement:
+    allowed_apps: [field_measurement, edge_io, browser]
+    blocked_apps: [steam, netflix]
+    telemetry: research_opt_in_only
+    network: standard
+    update: admin_scheduled
+    child_safety: strict
+    performance: balanced
+    edge_io_integration: true
+    consent_prompts: true
+    local_only_logging: true
+    no_private_packet_capture: true
+    export_formats: [csv, json]
+    research_operator_profile: true
+    field_measurement_workflow: true
+  Play:
+    allowed_apps: [steam, scaly_wings, edgegesture, browser]
+    blocked_apps: []
+    telemetry: minimal
+    network: standard
+    update: user_prompt
+    child_safety: standard
+    performance: gaming
+  Media:
+    allowed_apps: [browser, youtube, netflix, hulu]
+    blocked_apps: [steam, vscode]
+    telemetry: minimal
+    network: standard
+    update: user_prompt
+    child_safety: standard
+    performance: balanced
+  Studio:
+    allowed_apps: [write_placeholder, sketch_placeholder, music_notes_placeholder, browser]
+    blocked_apps: [steam, terminal]
+    telemetry: local_diagnostics
+    network: standard
+    update: user_prompt
+    child_safety: standard
+    performance: creative
+  Workshop:
+    allowed_apps: [vscode, terminal, hardware_lab_placeholder, browser]
+    blocked_apps: [netflix, hulu]
+    telemetry: aggregated_opt_in
+    network: standard
+    update: user_prompt
+    child_safety: standard
+    performance: developer
+  Laboratory:
+    allowed_apps: [field_measurement, edge_io, research_notebook_placeholder, browser]
+    blocked_apps: [steam, netflix]
+    telemetry: research_opt_in_only
+    network: standard
+    update: admin_scheduled
+    child_safety: strict
+    performance: balanced
+  Guardian:
+    allowed_apps: [browser, waike_offline, gunnchai3k, scaly_wings_edu]
+    blocked_apps: [steam, netflix, hulu, vscode, terminal]
+    telemetry: none
+    network: filtered
+    update: admin_scheduled
+    child_safety: strict
+    performance: school
+  Library:
+    allowed_apps: [browser, waike_offline, gunnchai3k]
+    blocked_apps: [steam, vscode, terminal]
+    telemetry: none
+    network: filtered
+    update: admin_scheduled
+    child_safety: strict
+    performance: school
+  Offline:
+    allowed_apps: [waike_offline, write_placeholder, sketch_placeholder, scaly_wings_edu]
+    blocked_apps: [steam, netflix, hulu]
+    telemetry: none
+    network: offline_only
+    update: deferred
+    child_safety: standard
+    performance: low_power
+  Admin:
+    allowed_apps: [browser, terminal, vscode, steam]
+    blocked_apps: []
+    telemetry: audit_only
+    network: standard
+    update: immediate
+    child_safety: admin_override
+    performance: balanced
+
+transition_rules:
+  child_to_unrestricted:
+    requires_guardian_approval: true
+    blocked_without_approval: [Developer, Admin, Workshop, Laboratory, Spaceship]
+  school_library_silent_admin:
+    blocked_transitions: [Admin, Developer]
+    requires_explicit_consent: true
+  research_no_private_payload:
+    blocked_data: [private_packet_capture, message_content, keystroke_logging]
+  telemetry_requires_consent:
+    modes_requiring_consent: [Research Measurement, Laboratory, Developer]

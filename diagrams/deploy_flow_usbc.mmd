@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant Dev as Developer
+    participant DSXL as DS-XL Coder
+    participant User as User
+    participant Guard as Guardian
+    participant Target as Target Device
+
+    Dev->>DSXL: Connect USB-C cable
+    DSXL->>Target: Detect attached device
+    DSXL->>User: Show package summary
+    User->>DSXL: Consent confirm
+    alt guardian_restrictions
+        DSXL->>Guard: Approval request
+        Guard->>DSXL: Approve / Deny
+    end
+    Target->>User: Trust prompt on target screen
+    User->>Target: Accept
+    DSXL->>DSXL: deploy_package(usb_c)
+    DSXL->>Target: Transfer bundle (future MTP)
+    Note over DSXL,Target: signed_bundle_placeholder verify
+    Target->>Target: Install package
+    Target->>User: Success + rollback option

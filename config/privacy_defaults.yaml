@@ -1,0 +1,50 @@
+privacy_levels: [minimal, standard, strict, youth_safe, research]
+
+telemetry_categories:
+  none: No telemetry collected
+  local_diagnostics: Local-only diagnostic logs
+  aggregate_usage: Aggregated opt-in usage metrics
+  research_measurement_metadata: Research session metadata with consent
+  crash_reports_placeholder: Crash report placeholder with consent
+
+consent_states:
+  - not_asked
+  - denied
+  - local_only
+  - opt_in_aggregate
+  - opt_in_research
+
+defaults:
+  child_profile:
+    privacy_level: youth_safe
+    consent_state: denied
+    telemetry_category: none
+    local_only_mode: true
+  school_mode:
+    privacy_level: strict
+    consent_state: local_only
+    telemetry_category: aggregate_usage
+    local_only_mode: false
+  library_mode:
+    privacy_level: strict
+    consent_state: denied
+    telemetry_category: none
+    local_only_mode: true
+  research_measurement:
+    privacy_level: research
+    consent_state: not_asked
+    telemetry_category: research_measurement_metadata
+    requires_explicit_consent: true
+  adult_default:
+    privacy_level: standard
+    consent_state: not_asked
+    telemetry_category: local_diagnostics
+    local_only_mode: false
+
+data_minimization:
+  no_private_payload: true
+  no_hidden_telemetry: true
+  no_keystroke_logging: true
+  no_message_content: true
+  export_path: user_data_export_placeholder
+  delete_path: user_data_delete_placeholder

@@ -1,7 +1,7 @@
 from gunnchos_device_os.mode_manager import get_mode_policy, MODES
 
 def test_modes_count():
-    assert len(MODES) == 7
+    assert len(MODES) >= 12
 
 def test_school_blocks_steam():
     p = get_mode_policy("School")
