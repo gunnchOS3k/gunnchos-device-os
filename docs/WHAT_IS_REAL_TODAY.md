@@ -7,17 +7,20 @@
 - `gunnchos_device_os` Python policy package
 - `config/modes.yaml` mode policies
 - `gunnchos_device_os/media_apps.py` structured media metadata
-- `scripts/export_launcher_contract.py` policy export
-- `apps/launcher_mock` React shell (Phase 0 + Phase 1)
-- Vitest frontend smoke tests (`npm test`)
-- Media policy pytest (`tests/test_media_policy.py`)
+- `scripts/export_launcher_contract.py` + `scripts/check_launcher_contract_fresh.py`
+- `apps/launcher_mock` React shell (Phase 0–2A)
+- Vitest frontend tests (`npm test`) — 25+ tests
+- Media + launcher contract pytest
+- **File Manager v1** — browser localStorage workspace (`FileManager.tsx`)
+- **Notes app v1** — browser localStorage (`NotesApp.tsx`)
+- **Settings persistence** — display/privacy/network subset (`settingsStore.ts`)
 - Linux container prototype (`os_build/linux_desktop/`)
+- CI runs contract export, pytest, frontend build/test
 
 ## Prototype / mock (honest labels)
 
 - Browser/PWA hub — mock frames, no live iframe
-- File manager — mock folders
-- Settings — mock toggles
+- Settings — system stats (storage/RAM/Wi-Fi) still mock labels
 - Media Mode playback — browser route prototypes, not certified streaming
 - Local media player — placeholder
 - AI assistant panel — UI shell only

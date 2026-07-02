@@ -4,10 +4,11 @@ import { GUNNCH_APPS, CAMPUS_DOCK_IDS, getApp, GunnchApp } from '../data/gunnchA
 import { StudentProfile } from '../data/studentProfile'
 import AppIcon from '../components/AppIcon'
 import BrowserPwaHub from './BrowserPwaHub'
-import FileManagerMock from './FileManagerMock'
+import FileManager from './FileManager'
+import NotesApp from './NotesApp'
 import SettingsPanel from './SettingsPanel'
 
-export type CampusView = 'home' | 'browser' | 'files' | 'settings' | 'app'
+export type CampusView = 'home' | 'browser' | 'files' | 'notes' | 'settings' | 'app'
 
 interface CampusModeProps {
   profile: StudentProfile
@@ -46,6 +47,10 @@ export default function CampusMode({ profile, onEnterGameMode, onEnterMediaMode,
       setView('files')
       return
     }
+    if (appId === 'notes') {
+      setView('notes')
+      return
+    }
     if (appId === 'settings') {
       setView('settings')
       return
@@ -68,7 +73,8 @@ export default function CampusMode({ profile, onEnterGameMode, onEnterMediaMode,
   }
 
   if (view === 'browser') return <BrowserPwaHub onBack={goHome} />
-  if (view === 'files') return <FileManagerMock onBack={goHome} />
+  if (view === 'files') return <FileManager onBack={goHome} />
+  if (view === 'notes') return <NotesApp onBack={goHome} />
   if (view === 'settings') {
     return (
       <SettingsPanel profile={profile} onBack={goHome} onResetOnboarding={onResetOnboarding} />

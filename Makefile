@@ -1,11 +1,18 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
-	export-launcher-contract diagrams e2e smoke
+	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke
 
-PY := PYTHONPATH=src
+PY := PYTHONPATH=src:.
 
 test:
-	$(PY) pytest -q
+	pytest -q
+
+validate-full:
+	bash scripts/run_full_validation.sh
+
+check-launcher-contract:
+	python3 scripts/export_launcher_contract.py
+	python3 scripts/check_launcher_contract_fresh.py
 
 validate-configs:
 	python3 scripts/validate_configs.py
@@ -20,12 +27,11 @@ generate-sbom:
 generate-update-report:
 	python3 scripts/generate_update_report.py
 
-build-launcher:
-	python3 scripts/export_launcher_contract.py
-	cd apps/launcher_mock && npm run build
-
 export-launcher-contract:
 	python3 scripts/export_launcher_contract.py
+
+build-launcher: export-launcher-contract
+	cd apps/launcher_mock && npm run build
 
 generate-campus-modes:
 	python3 scripts/generate_all_campus_mode_reports.py

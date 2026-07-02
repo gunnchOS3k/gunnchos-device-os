@@ -21,20 +21,20 @@
 
 ### Track A — Policy & CI (P0)
 
-| Task | Deliverable | Retires |
-|------|-------------|---------|
-| Automate contract export in CI | `Makefile` + `.github/workflows/ci.yml` run `export_launcher_contract.py` before launcher build | Manual export step |
-| Unified test gate | CI job: pytest + `npm test` in one required check | Partial coverage gap |
-| Shell policy enforcement | Read `launcherContract.json` modes; block disallowed app launches in UI | Guardian/school stubs (partial) |
+| Task | Deliverable | Retires | Status |
+|------|-------------|---------|--------|
+| Automate contract export in CI | `Makefile` + `.github/workflows/ci.yml` run `export_launcher_contract.py` before launcher build | Manual export step | **Done (Phase 2A)** |
+| Unified test gate | CI job: pytest + `npm test` in one required check | Partial coverage gap | **Done (Phase 2A)** |
+| Shell policy enforcement | Read `launcherContract.json` modes; block disallowed app launches in UI | Guardian/school stubs (partial) | Planned |
 
 ### Track B — Campus essentials (P0)
 
-| Task | Deliverable | Retires |
-|------|-------------|---------|
-| Real file manager v1 | FS-backed list/create/delete in Downloads scope | `FileManagerMock.tsx` |
-| Real notes app v1 | IndexedDB or FS markdown notes | Missing notes |
-| Real browser open behavior | `window.open` or webview delegate with URL from contract | Browser hub mock frame |
-| Settings persistence | Write profile + settings to localStorage → FS JSON | Settings mock values |
+| Task | Deliverable | Retires | Status |
+|------|-------------|---------|--------|
+| Real file manager v1 | Browser localStorage workspace CRUD | `FileManagerMock.tsx` | **Done (Phase 2A)** |
+| Real notes app v1 | localStorage notes with search/pin | Missing notes | **Done (Phase 2A)** |
+| Real browser open behavior | `window.open` or webview delegate with URL from contract | Browser hub mock frame | Planned |
+| Settings persistence | Write profile + settings to localStorage | Settings mock values | **Partial (Phase 2A)** |
 
 ### Track C — Media (P0)
 
@@ -65,10 +65,10 @@
 
 Phase 2 is **complete** when:
 
-- [ ] `export_launcher_contract.py` runs in CI before every launcher build
-- [ ] `pytest` + `npm test` both required in CI
-- [ ] File manager reads/writes real files in a scoped directory
-- [ ] Notes app creates and persists at least one note
+- [x] `export_launcher_contract.py` runs in CI before every launcher build *(Phase 2A)*
+- [x] `pytest` + `npm test` both required in CI *(Phase 2A)*
+- [x] File manager creates/edits/persists files in browser workspace *(Phase 2A prototype)*
+- [x] Notes app creates and persists at least one note *(Phase 2A)*
 - [ ] Browser/PWA opens real URLs (not mock frame only)
 - [ ] Local media plays a user-selected non-DRM file
 - [ ] Game Mode launches at least one real game build
