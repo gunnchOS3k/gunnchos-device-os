@@ -26,7 +26,22 @@ docker compose -f os_build/linux_desktop/docker-compose.yml up --build
 # → http://localhost:8080
 ```
 
-See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md).
+See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [docs/PHASE2_PLAN.md](docs/PHASE2_PLAN.md), [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md).
+
+## Operational status (honest)
+
+**GunnchOS is not a finished shipping OS.** Phase 0–1 provide a runnable shell prototype with policy framework and tests.
+
+| Category | Real today | Prototype today | Mock today | Missing for beta | Missing for GA |
+|----------|------------|-----------------|------------|------------------|----------------|
+| **Shell & modes** | First boot, Campus/Game/Media UI, Vitest smoke | Mode switching, dock | App launches, game launch | Policy enforcement in shell | Full a11y on hardware |
+| **Policy** | Python modes, media metadata, contract export | Guardian/school in config | Shell enforcement | CI auto-export | Kernel enforcement |
+| **Productivity** | PWA list, contract apps | — | File manager, browser frame, settings | Real FS, notes, PDF, webview | Cloud sync |
+| **Media** | DRM disclaimers, Media Mode UI | YouTube external link | Netflix/Hulu playback, local player | Local video, webview YouTube | Service certification |
+| **Games** | Game metadata, Game Mode UI | — | Launch (mock) | One real game build | Three vertical slices |
+| **Platform** | Docker prototype, SBOM scripts | HW compat (simulated) | Updater, rollback | Installable image | Production OTA |
+
+Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) · Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) · Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md)
 
 ---
 
