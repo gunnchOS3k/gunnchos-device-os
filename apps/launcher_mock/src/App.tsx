@@ -1,123 +1,72 @@
 import { useState } from 'react'
-import { DEVICES, MODES, DEVICE_ID_MAP, MODE_ID_MAP } from './deviceProfiles'
-import { APPS } from './appRegistry'
+import GunnchOSShell from './shell/GunnchOSShell'
 import UserFocusedView from './user-focused/UserFocusedView'
+import FleetView from './FleetView'
 
-const CAMPUSES = ['Gary', 'Ghana', 'Guyana', 'Gaza', 'Geelong', 'Graham Land', 'Germany'] as const
-const CAMPUS_BLURBS: Record<string, { mode: string; privacy: string; waike: string; edge: string }> = {
-  Gary: { mode: 'school / community', privacy: 'aggregate telemetry', waike: 'youth builder track', edge: 'library kiosk safe' },
-  Ghana: { mode: 'low-bandwidth research', privacy: 'mobile-money hygiene', waike: 'workforce track', edge: 'solar hub aggregate' },
-  Guyana: { mode: 'hinterland resilience', privacy: 'community-governed data', waike: 'e-government navigator', edge: 'flood-mode restrictions' },
-  Gaza: { mode: 'crisis privacy', privacy: 'no location tracking', waike: 'remote education continuity', edge: 'remote-first only' },
-  Geelong: { mode: 'accessibility-first', privacy: 'a11y checks enabled', waike: 'creative-tech studio', edge: 'inclusive metrics' },
-  'Graham Land': { mode: 'offline science', privacy: 'no human monitoring', waike: 'polar operator track', edge: 'delay simulation' },
-  Germany: { mode: 'privacy lab', privacy: 'GDPR-minimized', waike: 'Industry 4.0 apprentice', edge: 'audit-friendly exports' },
-}
-
-const MOCK_TELEMETRY = {
-  latency_ms: 12.5,
-  jitter_ms: 1.2,
-  packet_loss_pct: 0.05,
-  qos: 'urllc_strict',
-}
+type DevView = 'gunnchos' | 'fleet' | 'user-focused'
 
 export default function App() {
-  const [view, setView] = useState<'fleet' | 'user-focused'>('fleet')
-  const [device, setDevice] = useState(DEVICES[0])
-  const [mode, setMode] = useState(MODES[0])
-  const [campus, setCampus] = useState<string>(CAMPUSES[0])
-  const campusInfo = CAMPUS_BLURBS[campus] ?? CAMPUS_BLURBS.Gary
-  const deviceId = DEVICE_ID_MAP[device]
-  const modeId = MODE_ID_MAP[mode]
+  const [devView, setDevView] = useState<DevView>('gunnchos')
 
-  if (view === 'user-focused') {
+  if (devView === 'gunnchos') {
+    return (
+      <GunnchOSShell
+        devMode
+        onOpenDevTools={() => setDevView('fleet')}
+      />
+    )
+  }
+
+  if (devView === 'user-focused') {
     return (
       <div>
-        <button
-          type="button"
-          aria-label="Switch to fleet launcher view"
-          onClick={() => setView('fleet')}
-          style={{ position: 'fixed', top: 12, right: 12, zIndex: 10, padding: '8px 12px', borderRadius: 8, border: '1px solid #3c4043', background: '#1a2332', color: '#fff', cursor: 'pointer' }}
-        >
-          Fleet view
-        </button>
+        <DevBar current="user-focused" onSwitch={setDevView} />
         <UserFocusedView />
       </div>
     )
   }
 
   return (
-    <div style={{ fontFamily: 'system-ui', padding: 24, maxWidth: 1100, margin: '0 auto', background: '#0f1419', color: '#e8eaed', minHeight: '100vh' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1 style={{ margin: 0 }}>gunnchOS Launcher</h1>
-          <p style={{ color: '#9aa0a6' }}>IMT-2030-aligned research prototype · Not certified 6G hardware · Synthetic telemetry</p>
-        </div>
-        <button
-          type="button"
-          aria-label="Switch to user-focused experience"
-          onClick={() => setView('user-focused')}
-          style={{ padding: '10px 16px', minHeight: 44, borderRadius: 8, border: 'none', background: '#4a9eff', color: '#000', cursor: 'pointer', fontWeight: 600 }}
-        >
-          Your device (scooter → spaceship)
-        </button>
-      </div>
-
-      <section style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 16 }}>
-        <label>7GC Campus <select value={campus} onChange={e => setCampus(e.target.value)}>{CAMPUSES.map(c => <option key={c}>{c}</option>)}</select></label>
-        <label>Device <select value={device} onChange={e => setDevice(e.target.value)}>{DEVICES.map(d => <option key={d}>{d}</option>)}</select></label>
-        <label>Mode <select value={mode} onChange={e => setMode(e.target.value)}>{MODES.map(m => <option key={m}>{m}</option>)}</select></label>
-      </section>
-      <div style={{ marginTop: 12, padding: 12, background: '#1a2332', borderRadius: 10, fontSize: 13 }}>
-        <strong>{campus}</strong> — recommended: {campusInfo.mode} · {campusInfo.privacy} · WAIKE: {campusInfo.waike} · Edge-IO: {campusInfo.edge} · 7GC export (smoke)
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 20 }}>
-        {APPS.map(app => (
-          <button key={app} style={{ padding: 16, borderRadius: 12, border: '1px solid #3c4043', background: '#1a2332', color: '#fff', cursor: 'pointer' }}>{app}</button>
-        ))}
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 20 }}>
-        <Panel title="Telemetry (mock)">
-          <p>Device ID: {deviceId}</p>
-          <p>Latency: {MOCK_TELEMETRY.latency_ms} ms · Jitter: {MOCK_TELEMETRY.jitter_ms} ms</p>
-          <p>Packet loss: {MOCK_TELEMETRY.packet_loss_pct}% · QoS: {modeId === 'play' ? 'urllc_strict' : 'balanced'}</p>
-        </Panel>
-        <Panel title="Privacy">
-          <p>Opt-in: active · No PII · Tier: synthetic_a</p>
-          <p>Aligns with edge-io-measurement-node contract (research)</p>
-        </Panel>
-        <Panel title="Security / boot">
-          <p>Secure boot: target · TPM2: target · Fleet lock: {modeId === 'school' || modeId === 'fleet_admin' ? 'on' : 'off'}</p>
-        </Panel>
-        <Panel title="Fleet / school">
-          <p>Enrolled: 120 · Online: 98 · Policy: fleet-v0-mock</p>
-        </Panel>
-        <Panel title="Research links">
-          <p>7GC export · Edge-IO session · AI-RAN / Beam / NTN labs</p>
-          <p>Mode: {modeId}</p>
-        </Panel>
-        <Panel title="Deploy (DS-XL → device)">
-          <p>Source: ds_xl_coder → Target: {deviceId}</p>
-          <button style={btnStyle}>Deploy build-once package (mock)</button>
-        </Panel>
-      </div>
-
-      <p style={{ marginTop: 24, fontSize: 13, color: '#9aa0a6' }}>
-        Offline-ready ✓ · Wi-Fi 6E/7 stepping stone · Private 5G/6G modular roadmap — not operational 6G claims
-      </p>
+    <div>
+      <DevBar current="fleet" onSwitch={setDevView} />
+      <FleetView />
     </div>
   )
 }
 
-function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+function DevBar({ current, onSwitch }: { current: DevView; onSwitch: (v: DevView) => void }) {
   return (
-    <div style={{ padding: 14, background: '#1e2a3a', borderRadius: 10, border: '1px solid #2d3a4d' }}>
-      <h3 style={{ margin: '0 0 8px', fontSize: 14 }}>{title}</h3>
-      <div style={{ fontSize: 13 }}>{children}</div>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 999,
+      display: 'flex',
+      gap: 8,
+      padding: '6px 12px',
+      background: '#1a1a2e',
+      borderBottom: '1px solid #333',
+      fontSize: 12,
+    }}>
+      <span style={{ color: '#888', alignSelf: 'center' }}>Dev views:</span>
+      {(['gunnchos', 'fleet', 'user-focused'] as DevView[]).map(v => (
+        <button
+          key={v}
+          type="button"
+          onClick={() => onSwitch(v)}
+          style={{
+            padding: '4px 10px',
+            borderRadius: 4,
+            border: current === v ? '1px solid #4a9eff' : '1px solid #444',
+            background: current === v ? '#1e3a5f' : '#222',
+            color: '#fff',
+            cursor: 'pointer',
+          }}
+        >
+          {v}
+        </button>
+      ))}
     </div>
   )
 }
-
-const btnStyle: React.CSSProperties = { marginTop: 8, padding: '8px 12px', borderRadius: 8, border: 'none', background: '#4a9eff', color: '#000', cursor: 'pointer' }

@@ -1,8 +1,28 @@
 # gunnchos-device-os
 
-A user-focused operating system alpha and launcher/customization framework for gunnchOS modular student devices.
+**GunnchOS** — an education-first, creator-first, gamer-first operating system for affordable handheld devices.
 
-> This repository is a device OS alpha and launcher/customization framework. It is not a finished shipping OS image.
+> Phase 0 prototype shell is runnable today. This is not yet a bootable shipping OS image.
+
+## Phase 0 — Run GunnchOS now
+
+```bash
+cd apps/launcher_mock && npm install && npm run dev
+# → http://localhost:5173 — first boot wizard → Campus Mode → Game Mode
+```
+
+Linux container prototype:
+
+```bash
+docker compose -f os_build/linux_desktop/docker-compose.yml up --build
+# → http://localhost:8080
+```
+
+See [docs/PHASE0.md](docs/PHASE0.md) and [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md).
+
+---
+
+A user-focused operating system alpha and launcher/customization framework for gunnchOS modular student devices.
 
 ## Start here
 
