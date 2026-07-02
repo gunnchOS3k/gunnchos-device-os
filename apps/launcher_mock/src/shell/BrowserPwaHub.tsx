@@ -2,15 +2,16 @@ import { useState } from 'react'
 import { theme } from '../styles/gunnchosTheme'
 import { PWA_TARGETS } from '../data/pwaTargets'
 import AppIcon from '../components/AppIcon'
+import { launchApp, pwaTargetToLaunchTarget, type AppLaunchResult } from '../services/appLaunchService'
 
 interface BrowserPwaHubProps {
   onBack: () => void
+  deploymentMode?: string
 }
 
-export default function BrowserPwaHub({ onBack }: BrowserPwaHubProps) {
+export default function BrowserPwaHub({ onBack, deploymentMode = 'Media' }: BrowserPwaHubProps) {
   const [query, setQuery] = useState('')
-  const [activeUrl, setActiveUrl] = useState<string | null>(null)
-  const [activeTitle, setActiveTitle] = useState('')
+  const [lastResult, setLastResult] = useState<AppLaunchResult | null>(null)
 
   const filtered = PWA_TARGETS.filter(t =>
     !query || t.name.toLowerCase().includes(query.toLowerCase()) || t.category.toLowerCase().includes(query.toLowerCase()),
@@ -20,47 +21,47 @@ export default function BrowserPwaHub({ onBack }: BrowserPwaHubProps) {
   const rest = filtered.filter(t => !t.pinned)
   const categories = [...new Set(rest.map(t => t.category))]
 
-  const openTarget = (name: string, url: string) => {
-    setActiveTitle(name)
-    setActiveUrl(url)
-  }
-
-  if (activeUrl) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <header style={header}>
-          <button type="button" onClick={() => setActiveUrl(null)} style={backBtn}>
-            <AppIcon name="back" size={20} /> Back
-          </button>
-          <span style={{ fontWeight: 600 }}>{activeTitle}</span>
-          <span style={{ fontSize: 12, color: theme.textMuted }}>PWA · Mock frame</span>
-        </header>
-        <div style={browserFrame}>
-          <div style={urlBar}>{activeUrl}</div>
-          <div style={mockPage}>
-            <AppIcon name="browser" size={48} color={theme.accent} />
-            <h2 style={{ margin: '16px 0 8px' }}>{activeTitle}</h2>
-            <p style={{ color: theme.textMuted, maxWidth: 400, textAlign: 'center' }}>
-              In production, this loads the real web app in a Chrome-compatible browser shell.
-              Phase 0 mock — no live iframe for security in dev.
-            </p>
-            <a href={activeUrl} target="_blank" rel="noreferrer" style={extLink}>
-              Open in new tab ↗
-            </a>
-          </div>
-        </div>
-      </div>
-    )
+  const openTarget = (id: string) => {
+    const target = PWA_TARGETS.find(t => t.id === id)
+    if (!target) return
+    const result = launchApp(pwaTargetToLaunchTarget(target), deploymentMode)
+    setLastResult(result)
   }
 
   return (
-    <div style={{ padding: 24, height: '100%', overflow: 'auto' }}>
+    <div style={{ padding: 24, height: '100%', overflow: 'auto' }} data-testid="browser-pwa-hub">
       <header style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
         <button type="button" onClick={onBack} style={backBtn}>
           <AppIcon name="back" size={20} /> Campus
         </button>
         <h1 style={{ margin: 0, fontSize: 22 }}>Browser & PWA Hub</h1>
       </header>
+
+      <p style={{ fontSize: 13, color: theme.textMuted, margin: '0 0 16px' }}>
+        Opens real web apps in a new browser tab. Not a production browser shell — external browser route prototype.
+      </p>
+
+      {lastResult && (
+        <div
+          data-testid="launch-result"
+          style={{
+            marginBottom: 16,
+            padding: 12,
+            borderRadius: theme.radius,
+            border: `1px solid ${lastResult.status === 'launched' ? theme.accent : theme.warning}`,
+            background: theme.surfaceRaised,
+            fontSize: 13,
+          }}
+        >
+          <strong>{lastResult.status.replace(/_/g, ' ')}</strong>
+          <p style={{ margin: '4px 0 0', color: theme.textMuted }}>{lastResult.message}</p>
+          {lastResult.openedUrl?.startsWith('http') && (
+            <a href={lastResult.openedUrl} target="_blank" rel="noreferrer" style={{ color: theme.accent }}>
+              Open link ↗
+            </a>
+          )}
+        </div>
+      )}
 
       <div style={searchWrap}>
         <AppIcon name="search" size={20} color={theme.textMuted} />
@@ -101,16 +102,17 @@ function AppGrid({
   items,
   onOpen,
 }: {
-  items: { name: string; url: string }[]
-  onOpen: (name: string, url: string) => void
+  items: { id: string; name: string; url: string }[]
+  onOpen: (id: string) => void
 }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10 }}>
       {items.map(item => (
         <button
-          key={item.name}
+          key={item.id}
           type="button"
-          onClick={() => onOpen(item.name, item.url)}
+          data-testid={`pwa-launch-${item.id}`}
+          onClick={() => onOpen(item.id)}
           style={tile}
         >
           <AppIcon name="browser" size={32} color={theme.accent} />
@@ -131,42 +133,6 @@ const backBtn: React.CSSProperties = {
   background: theme.surfaceRaised,
   color: theme.text,
   cursor: 'pointer',
-}
-
-const header: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 16,
-  padding: '12px 16px',
-  borderBottom: `1px solid ${theme.border}`,
-  background: theme.surface,
-}
-
-const browserFrame: React.CSSProperties = { flex: 1, display: 'flex', flexDirection: 'column' }
-
-const urlBar: React.CSSProperties = {
-  padding: '8px 16px',
-  background: theme.surfaceRaised,
-  fontSize: 13,
-  color: theme.textMuted,
-  borderBottom: `1px solid ${theme.border}`,
-}
-
-const mockPage: React.CSSProperties = {
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 32,
-  background: theme.bg,
-}
-
-const extLink: React.CSSProperties = {
-  marginTop: 16,
-  color: theme.accent,
-  textDecoration: 'none',
-  fontWeight: 600,
 }
 
 const searchWrap: React.CSSProperties = {

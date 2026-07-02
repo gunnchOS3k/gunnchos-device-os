@@ -1,0 +1,26 @@
+import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import GameMode from './GameMode'
+
+describe('GameMode launch adapter', () => {
+  it('renders first-party games without Launch mock copy', () => {
+    render(<GameMode onExit={() => {}} />)
+    expect(screen.getByText(/Anime Aggressors/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Launch \(mock\)/i)).not.toBeInTheDocument()
+  })
+
+  it('shows launch readiness checklist', () => {
+    render(<GameMode onExit={() => {}} />)
+    fireEvent.click(screen.getByText(/Anime Aggressors/i))
+    expect(screen.getByTestId('game-launch-panel')).toBeInTheDocument()
+    expect(screen.getByTestId('launch-readiness-checklist')).toBeInTheDocument()
+    expect(screen.getByTestId('game-readiness')).toHaveTextContent(/playable web build/i)
+  })
+
+  it('launches anime-aggressors web build from Game Mode', () => {
+    render(<GameMode onExit={() => {}} />)
+    fireEvent.click(screen.getByText(/Anime Aggressors/i))
+    expect(screen.getByTestId('game-readiness')).toHaveTextContent(/playable web build/i)
+    expect(screen.getByTestId('game-launch-button')).not.toBeDisabled()
+  })
+})
