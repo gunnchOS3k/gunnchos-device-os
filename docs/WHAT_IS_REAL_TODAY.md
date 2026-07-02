@@ -16,10 +16,11 @@
 - **Settings persistence** — display/privacy/network subset (`settingsStore.ts`)
 - Linux container prototype (`os_build/linux_desktop/`)
 - CI runs contract export, pytest, frontend build/test
+- **Browser/PWA open behavior** — `appLaunchService.ts` opens real URLs in new tab (`BrowserPwaHub.tsx`)
 
 ## Prototype / mock (honest labels)
 
-- Browser/PWA hub — mock frames, no live iframe
+- Browser/PWA hub — external tab route prototype; no embedded browser shell
 - Settings — system stats (storage/RAM/Wi-Fi) still mock labels
 - Media Mode playback — browser route prototypes, not certified streaming
 - Local media player — placeholder
