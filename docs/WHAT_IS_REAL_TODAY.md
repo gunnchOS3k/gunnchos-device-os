@@ -1,6 +1,6 @@
 # What Is Real Today
 
-**Last updated:** Phase 3 rebase after PR #35 merge (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 4G foot racing & earth species web slices (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
@@ -15,7 +15,7 @@
   - **Does not** persist media blobs across refresh
   - **Does not** handle DRM streaming
   - **Not** a production OS media library
-- **Game launch adapter** + **Anime Aggressors web vertical slice**
+- **Game launch adapter** + **first-party web vertical slices** (Anime Aggressors, Foot Racing, Earth Species)
 - **Shell policy enforcement** — `policyEnforcementService.ts` (not production MDM)
 - **Settings persistence** — theme, a11y, offline, AI privacy toggles
 - **Beta gate dashboard** — `beta_gate/beta_gate_status.yaml` + validator
@@ -33,7 +33,7 @@
 - Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
 - Bootable image — container/OS-layer track only
 - Hardware — no physical device validation
-- Games — Anime Aggressors slice only; Foot Racing / Earth Species not connected
+- Games — all three first-party titles are web vertical slices only; not full games or native builds
 - AI assistant — UI shell only
 - Settings — system stats (storage/RAM/Wi-Fi) still mock labels
 

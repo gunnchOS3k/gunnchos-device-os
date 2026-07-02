@@ -26,9 +26,24 @@ describe('gameLaunchService', () => {
     expect(openWindow).toHaveBeenCalledWith('/games/anime-aggressors-web/index.html')
   })
 
-  it('returns native_build_pending for foot-racing', () => {
-    const result = launchGame('foot-racing', 'Play')
-    expect(result.status).toBe('native_build_pending')
+  it('foot-racing is playable_web_build with valid path', () => {
+    const meta = getGameLaunchMeta('foot-racing')
+    expect(meta?.readiness).toBe('playable_web_build')
+    expect(meta?.webBuildPath).toBe('/games/foot-racing-web/index.html')
+    const openWindow = vi.fn(() => ({}) as Window)
+    const result = launchGame('foot-racing', 'Play', openWindow)
+    expect(result.status).toBe('launched')
+    expect(openWindow).toHaveBeenCalledWith('/games/foot-racing-web/index.html')
+  })
+
+  it('earth-species is playable_web_build with valid path', () => {
+    const meta = getGameLaunchMeta('earth-species')
+    expect(meta?.readiness).toBe('playable_web_build')
+    expect(meta?.webBuildPath).toBe('/games/earth-species-web/index.html')
+    const openWindow = vi.fn(() => ({}) as Window)
+    const result = launchGame('earth-species', 'Play', openWindow)
+    expect(result.status).toBe('launched')
+    expect(openWindow).toHaveBeenCalledWith('/games/earth-species-web/index.html')
   })
 
   it('includes launch readiness checklist fields', () => {

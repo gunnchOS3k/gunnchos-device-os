@@ -95,9 +95,9 @@
 
 | Field | Detail |
 |-------|--------|
-| **Status** | **Partially retired (Phase 2D)** — `gameLaunchService.ts` + `GameLaunchPanel.tsx` |
-| **Still prototype** | No native sandbox; playable web build pending Phase 2E |
-| **Location** | `gameLaunchService.ts`, `GameMode.tsx`, `GameLaunchPanel.tsx` |
+| **Status** | **Partially retired (Phase 2D/2E/4G)** — `gameLaunchService.ts` + `GameLaunchPanel.tsx` |
+| **Still prototype** | No native sandbox; all three first-party titles are web vertical slices |
+| **Location** | `gameLaunchService.ts`, `GameMode.tsx`, `GameLaunchPanel.tsx`, `games/*-web/` |
 
 ### Steam/gaming path mock
 
