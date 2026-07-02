@@ -1,0 +1,26 @@
+{
+  "product": "GunnchOS",
+  "channel": "prototype",
+  "version": "0.2.0-alpha",
+  "build_id": "local-dev",
+  "artifact_types": {
+    "container_kiosk": {
+      "status": "prototype",
+      "bootable": false
+    },
+    "installable_os_image": {
+      "status": "not_built",
+      "bootable": false
+    }
+  },
+  "components": {
+    "launcher_shell": "apps/launcher_mock",
+    "policy_package": "gunnchos_device_os",
+    "image_prototype": "os_build/image_prototype"
+  },
+  "claims": {
+    "beta": false,
+    "ga": false,
+    "hardware_validated": false
+  }
+}

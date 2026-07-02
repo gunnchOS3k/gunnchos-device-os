@@ -15,6 +15,7 @@
 - **Notes app v1** — browser localStorage (`NotesApp.tsx`)
 - **Settings persistence** — display/privacy/network subset (`settingsStore.ts`)
 - Linux container prototype (`os_build/linux_desktop/`)
+- **Image prototype track** — kiosk packaging scripts (`os_build/image_prototype/`) — not bootable OS
 - CI runs contract export, pytest, frontend build/test
 - **Browser/PWA open behavior** — `appLaunchService.ts` opens real URLs in new tab (`BrowserPwaHub.tsx`)
 
