@@ -182,6 +182,53 @@ items:
     owner_area: release
     target_stage: beta
 
+  streaming_certification:
+    status: prototype
+    evidence_paths:
+      - streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml
+      - streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md
+      - streaming_certification/CDM_READINESS_CHECKLIST.md
+      - streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md
+      - docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md
+    tests:
+      - scripts/validate_streaming_certification_tracker.py
+      - tests/test_streaming_certification.py
+    blocker: Widevine/CDM not integrated; no per-service playback validation; no partner certification
+    owner_area: media
+    target_stage: beta
+
+  secure_boot:
+    status: prototype
+    evidence_paths:
+      - security/secure_boot/ARCHITECTURE.md
+      - security/secure_boot/KEY_HIERARCHY.md
+      - security/secure_boot/CLAIM_BOUNDARY.md
+      - security/secure_boot/SECURE_BOOT_CHECKLIST.md
+      - scripts/generate_dev_signing_keys.sh
+      - scripts/sign_release_manifest.py
+      - scripts/verify_release_manifest.py
+      - docs/PHASE4D_SECURE_BOOT_MDM.md
+    tests:
+      - tests/test_secure_boot_mdm.py
+    blocker: Architecture + dev signing only — not production secure boot on hardware
+    owner_area: platform
+    target_stage: beta
+
+  production_mdm:
+    status: prototype
+    evidence_paths:
+      - mdm/policy_schema.yaml
+      - mdm/sample_policies/
+      - mdm/enrollment_profile.example.json
+      - mdm/device_policy_agent.py
+      - mdm/CLAIM_BOUNDARY.md
+      - docs/PHASE4D_SECURE_BOOT_MDM.md
+    tests:
+      - tests/test_secure_boot_mdm.py
+    blocker: Schema + local agent prototype — not production MDM deployed
+    owner_area: fleet
+    target_stage: beta
+
 p0_items:
   - ci
   - contract_export
