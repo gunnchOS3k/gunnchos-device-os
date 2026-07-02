@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { theme } from '../styles/gunnchosTheme'
 import { FIRST_PARTY_GAMES } from '../data/firstPartyGames'
 import AppIcon from '../components/AppIcon'
+import GameLaunchPanel from './GameLaunchPanel'
+import { getGameLaunchMeta, launchGame, type GameLaunchResult } from '../services/gameLaunchService'
 
 interface GameModeProps {
   onExit: () => void
@@ -14,14 +16,16 @@ export default function GameMode({ onExit }: GameModeProps) {
   const [profile, setProfile] = useState<PerfProfile>('balanced')
   const [showOverlay, setShowOverlay] = useState(false)
   const [controllerConnected] = useState(true)
+  const [launchResult, setLaunchResult] = useState<GameLaunchResult | null>(null)
 
   const game = FIRST_PARTY_GAMES.find(g => g.id === selected)
+  const launchMeta = selected ? getGameLaunchMeta(selected) : undefined
 
-  if (game) {
+  if (game && launchMeta) {
     return (
       <div style={gameShell}>
         <div style={{ ...gameHero, borderColor: game.accent }}>
-          <button type="button" onClick={() => setSelected(null)} style={backBtn}>
+          <button type="button" onClick={() => { setSelected(null); setLaunchResult(null) }} style={backBtn}>
             <AppIcon name="back" size={20} /> Library
           </button>
           <div style={{ textAlign: 'center', flex: 1 }}>
@@ -32,24 +36,21 @@ export default function GameMode({ onExit }: GameModeProps) {
         </div>
 
         <div style={playArea}>
-          <div style={{ ...playCard, borderColor: game.accent }}>
-            <AppIcon name="game" size={64} color={game.accent} />
-            <h2 style={{ margin: '20px 0 8px' }}>Prototype Launch</h2>
-            <p style={{ color: theme.textMuted, maxWidth: 420, textAlign: 'center', lineHeight: 1.5 }}>
-              {game.description}
-            </p>
-            <div style={badgeRow}>
-              <Badge label={`${game.fpsTarget} FPS target`} />
-              {game.offline && <Badge label="Offline play" />}
-              {game.supportsController && <Badge label="Controller" />}
-              {game.supportsTouch && <Badge label="Touch" />}
-            </div>
-            <button type="button" style={{ ...launchBtn, background: game.accent }}>
-              Launch (mock)
-            </button>
-            <p style={{ fontSize: 12, color: theme.textMuted, marginTop: 12 }}>
-              Vertical slice in Phase 4 · Save sync · Tournament mode coming
-            </p>
+          <GameLaunchPanel
+            meta={launchMeta}
+            lastResult={launchResult}
+            accent={game.accent}
+            onBack={() => setSelected(null)}
+            onLaunch={() => setLaunchResult(launchGame(game.id))}
+          />
+          <p style={{ color: theme.textMuted, maxWidth: 420, textAlign: 'center', marginTop: 16 }}>
+            {game.description}
+          </p>
+          <div style={badgeRow}>
+            <Badge label={`${game.fpsTarget} FPS target`} />
+            {game.offline && <Badge label="Offline play" />}
+            {game.supportsController && <Badge label="Controller" />}
+            {game.supportsTouch && <Badge label="Touch" />}
           </div>
 
           {showOverlay && (
@@ -287,33 +288,11 @@ const gameHero: React.CSSProperties = {
 const playArea: React.CSSProperties = {
   flex: 1,
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   position: 'relative',
   padding: 32,
-}
-
-const playCard: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: 40,
-  borderRadius: 20,
-  border: '2px solid',
-  background: theme.surface,
-  maxWidth: 520,
-}
-
-const launchBtn: React.CSSProperties = {
-  marginTop: 24,
-  padding: '14px 32px',
-  borderRadius: 12,
-  border: 'none',
-  color: '#000',
-  fontWeight: 700,
-  fontSize: 16,
-  cursor: 'pointer',
-  minWidth: 200,
 }
 
 const fpsOverlay: React.CSSProperties = {

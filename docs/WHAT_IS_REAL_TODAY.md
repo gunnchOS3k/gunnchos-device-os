@@ -24,7 +24,7 @@
 - Media Mode playback — browser route prototypes, not certified streaming
 - Local media player — placeholder
 - AI assistant panel — UI shell only
-- Game launches — mock; first-party games not wired to engines
+- Game launches — **launch adapter prototype** (`gameLaunchService.ts`); web builds pending Phase 2E
 - Network/audio diagnostics — mock indicators
 
 ## Not real (not claimed)
