@@ -14,14 +14,13 @@ describe('GameMode launch adapter', () => {
     fireEvent.click(screen.getByText(/Anime Aggressors/i))
     expect(screen.getByTestId('game-launch-panel')).toBeInTheDocument()
     expect(screen.getByTestId('launch-readiness-checklist')).toBeInTheDocument()
-    expect(screen.getByTestId('game-readiness')).toHaveTextContent(/not connected/i)
+    expect(screen.getByTestId('game-readiness')).toHaveTextContent(/playable web build/i)
   })
 
-  it('shows not connected status for anime-aggressors before web build', () => {
+  it('launches anime-aggressors web build from Game Mode', () => {
     render(<GameMode onExit={() => {}} />)
     fireEvent.click(screen.getByText(/Anime Aggressors/i))
-    expect(screen.getByTestId('game-readiness')).toHaveTextContent(/not connected/i)
-    expect(screen.getByTestId('launch-readiness-checklist')).toHaveTextContent(/Phase 2E/i)
-    expect(screen.getByTestId('game-launch-button')).toBeDisabled()
+    expect(screen.getByTestId('game-readiness')).toHaveTextContent(/playable web build/i)
+    expect(screen.getByTestId('game-launch-button')).not.toBeDisabled()
   })
 })

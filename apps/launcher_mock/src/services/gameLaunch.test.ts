@@ -16,9 +16,14 @@ describe('gameLaunchService', () => {
     GAME_LAUNCH_REGISTRY['anime-aggressors'] = original
   })
 
-  it('returns not_connected for missing build', () => {
-    const result = launchGame('anime-aggressors')
-    expect(result.status).toBe('not_connected')
+  it('anime-aggressors is playable_web_build with valid path', () => {
+    const meta = getGameLaunchMeta('anime-aggressors')
+    expect(meta?.readiness).toBe('playable_web_build')
+    expect(meta?.webBuildPath).toBe('/games/anime-aggressors-web/index.html')
+    const openWindow = vi.fn(() => ({}) as Window)
+    const result = launchGame('anime-aggressors', openWindow)
+    expect(result.status).toBe('launched')
+    expect(openWindow).toHaveBeenCalledWith('/games/anime-aggressors-web/index.html')
   })
 
   it('returns native_build_pending for foot-racing', () => {
