@@ -25,7 +25,8 @@
 - Media Mode playback — browser route prototypes, not certified streaming
 - Local media player — placeholder
 - AI assistant panel — UI shell only
-- Game launches — **launch adapter prototype** (`gameLaunchService.ts`); web builds pending Phase 2E
+- **Game launch adapter** — `gameLaunchService.ts` (Phase 2D)
+- **Anime Aggressors web slice** — playable prototype at `games/anime-aggressors-web/` (Phase 2E)
 - Network/audio diagnostics — mock indicators
 
 ## Not real (not claimed)

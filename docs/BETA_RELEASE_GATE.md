@@ -41,7 +41,7 @@ This document defines what must be **true** before GunnchOS may be called **beta
 
 | Requirement | Evidence | Current |
 |-------------|----------|---------|
-| Launches at least one real game build | Launch log + screenshot | **Mock** |
+| Launches at least one real game build | Launch log + screenshot | **Prototype** ✓ (Anime Aggressors web slice, Phase 2E) |
 | Exit returns to Game library without crash | Vitest mode switch | **Prototype** ✓ |
 | First-party games listed | UI present | **Real** ✓ |
 

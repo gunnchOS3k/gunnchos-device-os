@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anime Aggressors — Vertical Slice Prototype</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="screen-title" class="screen active">
+    <h1>Anime Aggressors</h1>
+    <p class="subtitle">Original-character arena prototype · Not the full game</p>
+    <button id="btn-start">Start Arena</button>
+    <div class="controls">
+      <h2>Controls</h2>
+      <p><strong>Player 1 (Rook):</strong> A/D move · W jump · J attack</p>
+      <p><strong>Player 2 (Sage):</strong> ←/→ move · ↑ jump · K attack</p>
+      <p id="controller-hint">Controller detection: keyboard only in this slice</p>
+    </div>
+  </div>
+  <div id="screen-game" class="screen">
+    <canvas id="arena" width="800" height="450"></canvas>
+    <div id="hud">
+      <span id="p1-health">Rook: 100</span>
+      <span id="p2-health">Sage: 100</span>
+    </div>
+    <button id="btn-exit">Exit to title</button>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
