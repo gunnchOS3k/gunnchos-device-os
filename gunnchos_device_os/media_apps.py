@@ -75,8 +75,8 @@ MEDIA_APPS: dict[str, dict[str, Any]] = {
         "offline_supported": True,
         "guardian_controlled": False,
         "school_mode_default": "allowed",
-        "claim_status": "local_placeholder",
-        "notes": "Local file playback placeholder. Offline supported where rights permit.",
+        "claim_status": "browser_local_playback_prototype",
+        "notes": "HTML5 local file playback prototype. Not a production media library.",
     },
     "lecture_video": {
         "id": "lecture_video",
@@ -90,8 +90,8 @@ MEDIA_APPS: dict[str, dict[str, Any]] = {
         "offline_supported": True,
         "guardian_controlled": False,
         "school_mode_default": "allowed",
-        "claim_status": "local_placeholder",
-        "notes": "School lecture and course video placeholder. Downloaded content where rights permit.",
+        "claim_status": "browser_local_playback_prototype",
+        "notes": "HTML5 lecture playback prototype via local media player.",
     },
     "music_audio": {
         "id": "music_audio",

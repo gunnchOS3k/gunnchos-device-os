@@ -4,6 +4,7 @@ import { getMediaApps, getModePolicy, useLauncherContract, MediaAppMeta } from '
 import AppIcon from '../components/AppIcon'
 import MediaHub from './MediaHub'
 import MediaDiagnostics from './MediaDiagnostics'
+import LocalMediaPlayer from './LocalMediaPlayer'
 
 interface MediaModeProps {
   onExit: () => void
@@ -15,12 +16,39 @@ export default function MediaMode({ onExit, deploymentMode = 'Media' }: MediaMod
   const mediaApps = getMediaApps()
   const modePolicy = getModePolicy(deploymentMode)
   const [selected, setSelected] = useState<MediaAppMeta | null>(null)
+  const [showLocalPlayer, setShowLocalPlayer] = useState(false)
   const [playbackProfile, setPlaybackProfile] = useState<'battery' | 'balanced' | 'quality'>('balanced')
   const [captionsEnabled, setCaptionsEnabled] = useState(false)
+  const [launchMessage, setLaunchMessage] = useState<string | null>(null)
 
-  const openApp = (app: MediaAppMeta) => setSelected(app)
+  const openApp = (app: MediaAppMeta) => {
+    if (app.launch_type === 'local_media' || app.id === 'local_media' || app.id === 'lecture_video') {
+      setShowLocalPlayer(true)
+      setSelected(null)
+      return
+    }
+    setSelected(app)
+    setLaunchMessage(null)
+  }
+
+  if (showLocalPlayer) {
+    return (
+      <div style={shell} data-testid="media-mode">
+        <LocalMediaPlayer onBack={() => setShowLocalPlayer(false)} />
+        <button type="button" onClick={onExit} style={{ ...exitBtn, margin: 16 }}>Exit Media Mode</button>
+      </div>
+    )
+  }
 
   if (selected) {
+    const isHttp = selected.route_url.startsWith('http')
+    const handleOpen = () => {
+      if (isHttp) {
+        window.open(selected.route_url, '_blank', 'noopener,noreferrer')
+        setLaunchMessage(`Opened ${selected.name} in a new browser tab`)
+      }
+    }
+
     return (
       <div style={shell} data-testid="media-mode-detail">
         <header style={header}>
@@ -44,12 +72,17 @@ export default function MediaMode({ onExit, deploymentMode = 'Media' }: MediaMod
                 </span>
               )}
             </div>
-            {selected.route_url.startsWith('http') ? (
-              <a href={selected.route_url} target="_blank" rel="noreferrer" style={launchLink}>
-                Open in browser/PWA ↗
-              </a>
+            {isHttp ? (
+              <>
+                <button type="button" onClick={handleOpen} style={launchBtn} data-testid="media-open-browser">
+                  Open in browser/PWA ↗
+                </button>
+                {launchMessage && <p style={{ fontSize: 12, color: theme.textMuted }}>{launchMessage}</p>}
+              </>
             ) : (
-              <button type="button" style={launchBtn}>Open (mock)</button>
+              <button type="button" style={launchBtn} onClick={() => setShowLocalPlayer(true)} data-testid="media-open-local">
+                Open Local Media Player
+              </button>
             )}
             <p style={{ fontSize: 12, color: theme.textMuted }}>
               Service certification not claimed · No DRM circumvention
@@ -201,18 +234,13 @@ const tag: React.CSSProperties = {
   textTransform: 'capitalize',
 }
 
-const launchLink: React.CSSProperties = {
+const launchBtn: React.CSSProperties = {
   marginTop: 8,
   padding: '12px 24px',
   borderRadius: 10,
   background: theme.accent,
   color: '#000',
   fontWeight: 600,
-  textDecoration: 'none',
-}
-
-const launchBtn: React.CSSProperties = {
-  ...launchLink,
   border: 'none',
   cursor: 'pointer',
   fontSize: 14,
