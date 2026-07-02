@@ -21,7 +21,7 @@ describe('GameMode launch adapter', () => {
     render(<GameMode onExit={() => {}} />)
     fireEvent.click(screen.getByText(/Anime Aggressors/i))
     expect(screen.getByTestId('game-readiness')).toHaveTextContent(/not connected/i)
-    expect(screen.getByText(/Phase 2E/i)).toBeInTheDocument()
+    expect(screen.getByTestId('launch-readiness-checklist')).toHaveTextContent(/Phase 2E/i)
     expect(screen.getByTestId('game-launch-button')).toBeDisabled()
   })
 })
