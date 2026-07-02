@@ -18,7 +18,7 @@
 | P1 | Settings mock values | **Partial (Phase 2A)** — display/privacy/network persist; system stats still mock |
 | P1 | Media playback mock | Phase 2–3 |
 | P1 | AI assistant panel | Phase 3 |
-| P1 | Guardian/school enforcement stubs | Phase 3 |
+| P1 | Guardian/school enforcement stubs | **Partial (Phase 3)** — shell policy enforcement prototype |
 | P2 | Fleet/MDM stubs | Field pilot |
 | P2 | Updater/recovery design-only | RC |
 

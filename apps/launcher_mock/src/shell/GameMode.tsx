@@ -4,14 +4,16 @@ import { FIRST_PARTY_GAMES } from '../data/firstPartyGames'
 import AppIcon from '../components/AppIcon'
 import GameLaunchPanel from './GameLaunchPanel'
 import { getGameLaunchMeta, launchGame, type GameLaunchResult } from '../services/gameLaunchService'
+import { DeploymentMode } from '../services/policyEnforcementService'
 
 interface GameModeProps {
   onExit: () => void
+  deploymentMode?: DeploymentMode
 }
 
 type PerfProfile = 'battery' | 'balanced' | 'performance'
 
-export default function GameMode({ onExit }: GameModeProps) {
+export default function GameMode({ onExit, deploymentMode = 'Play' }: GameModeProps) {
   const [selected, setSelected] = useState<string | null>(null)
   const [profile, setProfile] = useState<PerfProfile>('balanced')
   const [showOverlay, setShowOverlay] = useState(false)
@@ -41,7 +43,7 @@ export default function GameMode({ onExit }: GameModeProps) {
             lastResult={launchResult}
             accent={game.accent}
             onBack={() => setSelected(null)}
-            onLaunch={() => setLaunchResult(launchGame(game.id))}
+            onLaunch={() => setLaunchResult(launchGame(game.id, deploymentMode))}
           />
           <p style={{ color: theme.textMuted, maxWidth: 420, textAlign: 'center', marginTop: 16 }}>
             {game.description}

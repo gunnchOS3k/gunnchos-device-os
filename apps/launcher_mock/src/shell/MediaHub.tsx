@@ -1,6 +1,7 @@
 import { theme } from '../styles/gunnchosTheme'
 import { MediaAppMeta } from '../hooks/useLauncherContract'
 import AppIcon from '../components/AppIcon'
+import { evaluateAppPolicy } from '../services/policyEnforcementService'
 
 interface MediaHubProps {
   apps: MediaAppMeta[]
@@ -46,14 +47,19 @@ function MediaCard({
   mode: string
   onOpen: () => void
 }) {
-  const blocked =
-    (mode === 'School' && app.school_mode_default === 'blocked') ||
-    (mode === 'Offline' && app.requires_network && !app.offline_supported)
+  const policy = evaluateAppPolicy(app.id, mode, {
+    schoolModeDefault: app.school_mode_default,
+    requiresNetwork: app.requires_network,
+    offlineSupported: app.offline_supported,
+  })
+  const blocked = !policy.canLaunch
 
   return (
     <button
       type="button"
-      onClick={onOpen}
+      onClick={() => {
+        if (!blocked) onOpen()
+      }}
       disabled={blocked}
       aria-label={`${app.name}${blocked ? ' (blocked in current mode)' : ''}`}
       data-testid={`media-card-${app.id}`}
@@ -74,7 +80,11 @@ function MediaCard({
             DRM/CDM required · HDCP may apply
           </div>
         )}
-        {blocked && <div style={blockedBadge}>Blocked in {mode} Mode</div>}
+        {blocked && (
+          <div data-testid={`blocked-reason-${app.id}`} style={blockedBadge}>
+            {policy.message}
+          </div>
+        )}
       </div>
     </button>
   )
@@ -97,6 +107,7 @@ function claimLabel(status: string): string {
   const labels: Record<string, string> = {
     browser_route_prototype: 'Browser route prototype',
     local_placeholder: 'Local placeholder',
+    browser_local_playback_prototype: 'Local playback prototype',
     future_placeholder: 'Future route',
   }
   return labels[status] ?? status
