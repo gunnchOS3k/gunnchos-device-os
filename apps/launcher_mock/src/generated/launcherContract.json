@@ -1,0 +1,532 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-07-02T19:47:11.357100+00:00",
+  "claim_boundary": {
+    "drm_circumvention_supported": false,
+    "service_certification_claimed": false,
+    "drm_disclaimer": "Playback quality depends on browser, hardware, network, codec, DRM, and service policy. DRM circumvention is not supported. Service certification not claimed."
+  },
+  "apps": {
+    "browser": {
+      "category": "system",
+      "name": "Browser",
+      "launch_type": "browser_pwa"
+    },
+    "vscode": {
+      "category": "developer",
+      "name": "VS Code",
+      "launch_type": "linux"
+    },
+    "terminal": {
+      "category": "developer",
+      "name": "Terminal",
+      "launch_type": "linux"
+    },
+    "wsl_ubuntu": {
+      "category": "developer",
+      "name": "WSL Ubuntu",
+      "launch_type": "linux"
+    },
+    "steam": {
+      "category": "gaming",
+      "name": "Steam",
+      "launch_type": "linux"
+    },
+    "gunnchai3k": {
+      "category": "education",
+      "name": "gunnchAI3k",
+      "launch_type": "native"
+    },
+    "waike_offline": {
+      "category": "education",
+      "name": "WAIKE Offline Lessons",
+      "launch_type": "native"
+    },
+    "scaly_wings": {
+      "category": "gaming",
+      "name": "Scaly Wings",
+      "launch_type": "native"
+    },
+    "scaly_wings_edu": {
+      "category": "education",
+      "name": "Scaly Wings Edu",
+      "launch_type": "native"
+    },
+    "edgegesture": {
+      "category": "gaming",
+      "name": "EdgeGesture",
+      "launch_type": "native"
+    },
+    "field_measurement": {
+      "category": "research",
+      "name": "Field Measurement",
+      "launch_type": "native"
+    },
+    "edge_io": {
+      "category": "research",
+      "name": "Edge-IO Node",
+      "launch_type": "native"
+    },
+    "youtube": {
+      "category": "video_streaming",
+      "name": "YouTube",
+      "id": "youtube",
+      "route_url": "https://www.youtube.com/",
+      "launch_type": "browser_pwa",
+      "requires_network": true,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "policy_dependent",
+      "claim_status": "browser_route_prototype",
+      "notes": "Browser route prototype. Some premium/rental content may require DRM. Service certification not claimed."
+    },
+    "netflix": {
+      "category": "video_streaming",
+      "name": "Netflix",
+      "id": "netflix",
+      "route_url": "https://www.netflix.com/",
+      "launch_type": "browser_pwa",
+      "requires_network": true,
+      "requires_drm": true,
+      "requires_hdcp_for_external_display": true,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "blocked",
+      "claim_status": "browser_route_prototype",
+      "notes": "Browser route prototype. DRM/CDM support required. HDCP may be required for external display. Service certification not claimed. No DRM circumvention."
+    },
+    "hulu": {
+      "category": "video_streaming",
+      "name": "Hulu",
+      "id": "hulu",
+      "route_url": "https://www.hulu.com/",
+      "launch_type": "browser_pwa",
+      "requires_network": true,
+      "requires_drm": true,
+      "requires_hdcp_for_external_display": true,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "blocked",
+      "claim_status": "browser_route_prototype",
+      "notes": "Browser route prototype. DRM/CDM support required. HDCP may be required for external display. Service certification not claimed. No DRM circumvention."
+    },
+    "local_media": {
+      "category": "local_media",
+      "name": "Local Media",
+      "id": "local_media",
+      "route_url": "gunnchos://local-media",
+      "launch_type": "local_media",
+      "requires_network": false,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": true,
+      "guardian_controlled": false,
+      "school_mode_default": "allowed",
+      "claim_status": "local_placeholder",
+      "notes": "Local file playback placeholder. Offline supported where rights permit."
+    },
+    "lecture_video": {
+      "category": "education_video",
+      "name": "Lecture Video",
+      "id": "lecture_video",
+      "route_url": "gunnchos://lecture-video",
+      "launch_type": "local_media",
+      "requires_network": false,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": true,
+      "guardian_controlled": false,
+      "school_mode_default": "allowed",
+      "claim_status": "local_placeholder",
+      "notes": "School lecture and course video placeholder. Downloaded content where rights permit."
+    },
+    "music_audio": {
+      "category": "music_audio",
+      "name": "Music & Audio",
+      "id": "music_audio",
+      "route_url": "gunnchos://music-audio",
+      "launch_type": "future_placeholder",
+      "requires_network": true,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "policy_dependent",
+      "claim_status": "future_placeholder",
+      "notes": "Spotify, Apple Music, and local audio \u2014 future route. Service certification not claimed."
+    },
+    "future_streaming_service": {
+      "category": "video_streaming",
+      "name": "More Streaming",
+      "id": "future_streaming_service",
+      "route_url": "",
+      "launch_type": "future_placeholder",
+      "requires_network": true,
+      "requires_drm": true,
+      "requires_hdcp_for_external_display": true,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "blocked",
+      "claim_status": "future_placeholder",
+      "notes": "Future: Disney+, Max, Prime Video, Peacock, Paramount+, Crunchyroll, Twitch. DRM/CDM and service certification required. Not available in Phase 1."
+    }
+  },
+  "categories": [
+    "education",
+    "developer",
+    "gaming",
+    "media",
+    "system",
+    "research",
+    "accessibility"
+  ],
+  "media_apps": {
+    "youtube": {
+      "id": "youtube",
+      "name": "YouTube",
+      "category": "video_streaming",
+      "route_url": "https://www.youtube.com/",
+      "launch_type": "browser_pwa",
+      "requires_network": true,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "policy_dependent",
+      "claim_status": "browser_route_prototype",
+      "notes": "Browser route prototype. Some premium/rental content may require DRM. Service certification not claimed."
+    },
+    "netflix": {
+      "id": "netflix",
+      "name": "Netflix",
+      "category": "video_streaming",
+      "route_url": "https://www.netflix.com/",
+      "launch_type": "browser_pwa",
+      "requires_network": true,
+      "requires_drm": true,
+      "requires_hdcp_for_external_display": true,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "blocked",
+      "claim_status": "browser_route_prototype",
+      "notes": "Browser route prototype. DRM/CDM support required. HDCP may be required for external display. Service certification not claimed. No DRM circumvention."
+    },
+    "hulu": {
+      "id": "hulu",
+      "name": "Hulu",
+      "category": "video_streaming",
+      "route_url": "https://www.hulu.com/",
+      "launch_type": "browser_pwa",
+      "requires_network": true,
+      "requires_drm": true,
+      "requires_hdcp_for_external_display": true,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "blocked",
+      "claim_status": "browser_route_prototype",
+      "notes": "Browser route prototype. DRM/CDM support required. HDCP may be required for external display. Service certification not claimed. No DRM circumvention."
+    },
+    "local_media": {
+      "id": "local_media",
+      "name": "Local Media",
+      "category": "local_media",
+      "route_url": "gunnchos://local-media",
+      "launch_type": "local_media",
+      "requires_network": false,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": true,
+      "guardian_controlled": false,
+      "school_mode_default": "allowed",
+      "claim_status": "local_placeholder",
+      "notes": "Local file playback placeholder. Offline supported where rights permit."
+    },
+    "lecture_video": {
+      "id": "lecture_video",
+      "name": "Lecture Video",
+      "category": "education_video",
+      "route_url": "gunnchos://lecture-video",
+      "launch_type": "local_media",
+      "requires_network": false,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": true,
+      "guardian_controlled": false,
+      "school_mode_default": "allowed",
+      "claim_status": "local_placeholder",
+      "notes": "School lecture and course video placeholder. Downloaded content where rights permit."
+    },
+    "music_audio": {
+      "id": "music_audio",
+      "name": "Music & Audio",
+      "category": "music_audio",
+      "route_url": "gunnchos://music-audio",
+      "launch_type": "future_placeholder",
+      "requires_network": true,
+      "requires_drm": false,
+      "requires_hdcp_for_external_display": false,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "policy_dependent",
+      "claim_status": "future_placeholder",
+      "notes": "Spotify, Apple Music, and local audio \u2014 future route. Service certification not claimed."
+    },
+    "future_streaming_service": {
+      "id": "future_streaming_service",
+      "name": "More Streaming",
+      "category": "video_streaming",
+      "route_url": "",
+      "launch_type": "future_placeholder",
+      "requires_network": true,
+      "requires_drm": true,
+      "requires_hdcp_for_external_display": true,
+      "offline_supported": false,
+      "guardian_controlled": true,
+      "school_mode_default": "blocked",
+      "claim_status": "future_placeholder",
+      "notes": "Future: Disney+, Max, Prime Video, Peacock, Paramount+, Crunchyroll, Twitch. DRM/CDM and service certification required. Not available in Phase 1."
+    }
+  },
+  "media_app_ids": [
+    "future_streaming_service",
+    "hulu",
+    "lecture_video",
+    "local_media",
+    "music_audio",
+    "netflix",
+    "youtube"
+  ],
+  "modes": {
+    "School": {
+      "allowed_apps": [
+        "browser",
+        "waike_offline",
+        "gunnchai3k",
+        "scaly_wings_edu"
+      ],
+      "blocked_apps": [
+        "steam",
+        "netflix",
+        "hulu",
+        "vscode",
+        "terminal"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Developer": {
+      "allowed_apps": [
+        "vscode",
+        "terminal",
+        "wsl_ubuntu",
+        "browser",
+        "gunnchai3k",
+        "git_placeholder"
+      ],
+      "blocked_apps": [
+        "steam"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Coder": {
+      "allowed_apps": [
+        "vscode",
+        "terminal",
+        "browser",
+        "waike_offline",
+        "gunnchai3k"
+      ],
+      "blocked_apps": [
+        "steam",
+        "netflix",
+        "hulu"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Research Measurement": {
+      "allowed_apps": [
+        "field_measurement",
+        "edge_io",
+        "browser"
+      ],
+      "blocked_apps": [
+        "steam",
+        "netflix"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Play": {
+      "allowed_apps": [
+        "steam",
+        "scaly_wings",
+        "edgegesture",
+        "browser"
+      ],
+      "blocked_apps": [],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Media": {
+      "allowed_apps": [
+        "browser",
+        "youtube",
+        "netflix",
+        "hulu",
+        "local_media",
+        "lecture_video",
+        "music_audio"
+      ],
+      "blocked_apps": [
+        "steam",
+        "vscode"
+      ],
+      "media_mode": true,
+      "streaming_priority": true,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Studio": {
+      "allowed_apps": [
+        "write_placeholder",
+        "sketch_placeholder",
+        "music_notes_placeholder",
+        "browser"
+      ],
+      "blocked_apps": [
+        "steam",
+        "terminal"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Workshop": {
+      "allowed_apps": [
+        "vscode",
+        "terminal",
+        "hardware_lab_placeholder",
+        "browser"
+      ],
+      "blocked_apps": [
+        "netflix",
+        "hulu"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Laboratory": {
+      "allowed_apps": [
+        "field_measurement",
+        "edge_io",
+        "research_notebook_placeholder",
+        "browser"
+      ],
+      "blocked_apps": [
+        "steam",
+        "netflix"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Guardian": {
+      "allowed_apps": [
+        "browser",
+        "waike_offline",
+        "gunnchai3k",
+        "scaly_wings_edu"
+      ],
+      "blocked_apps": [
+        "steam",
+        "netflix",
+        "hulu",
+        "vscode",
+        "terminal"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Library": {
+      "allowed_apps": [
+        "browser",
+        "waike_offline",
+        "gunnchai3k",
+        "lecture_video"
+      ],
+      "blocked_apps": [
+        "steam",
+        "vscode",
+        "terminal",
+        "netflix",
+        "hulu"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": true,
+      "no_saved_passwords_default": true
+    },
+    "Offline": {
+      "allowed_apps": [
+        "waike_offline",
+        "write_placeholder",
+        "sketch_placeholder",
+        "scaly_wings_edu",
+        "local_media",
+        "lecture_video"
+      ],
+      "blocked_apps": [
+        "steam",
+        "netflix",
+        "hulu",
+        "youtube",
+        "music_audio",
+        "future_streaming_service"
+      ],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    },
+    "Admin": {
+      "allowed_apps": [
+        "browser",
+        "terminal",
+        "vscode",
+        "steam"
+      ],
+      "blocked_apps": [],
+      "media_mode": false,
+      "streaming_priority": false,
+      "library_login_warning": false,
+      "no_saved_passwords_default": false
+    }
+  },
+  "policy_samples": {
+    "media_allows_youtube": true,
+    "media_blocks_steam": true,
+    "school_blocks_netflix": true,
+    "offline_blocks_netflix": true,
+    "offline_allows_local_media": true
+  }
+}

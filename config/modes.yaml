@@ -61,13 +61,15 @@ modes:
     child_safety: standard
     performance: gaming
   Media:
-    allowed_apps: [browser, youtube, netflix, hulu]
+    allowed_apps: [browser, youtube, netflix, hulu, local_media, lecture_video, music_audio]
     blocked_apps: [steam, vscode]
     telemetry: minimal
     network: standard
     update: user_prompt
     child_safety: standard
     performance: balanced
+    media_mode: true
+    streaming_priority: true
   Studio:
     allowed_apps: [write_placeholder, sketch_placeholder, music_notes_placeholder, browser]
     blocked_apps: [steam, terminal]
@@ -101,16 +103,18 @@ modes:
     child_safety: strict
     performance: school
   Library:
-    allowed_apps: [browser, waike_offline, gunnchai3k]
-    blocked_apps: [steam, vscode, terminal]
+    allowed_apps: [browser, waike_offline, gunnchai3k, lecture_video]
+    blocked_apps: [steam, vscode, terminal, netflix, hulu]
     telemetry: none
     network: filtered
     update: admin_scheduled
     child_safety: strict
     performance: school
+    library_login_warning: true
+    no_saved_passwords_default: true
   Offline:
-    allowed_apps: [waike_offline, write_placeholder, sketch_placeholder, scaly_wings_edu]
-    blocked_apps: [steam, netflix, hulu]
+    allowed_apps: [waike_offline, write_placeholder, sketch_placeholder, scaly_wings_edu, local_media, lecture_video]
+    blocked_apps: [steam, netflix, hulu, youtube, music_audio, future_streaming_service]
     telemetry: none
     network: offline_only
     update: deferred

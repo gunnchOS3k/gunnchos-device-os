@@ -50,10 +50,11 @@ export const GUNNCH_APPS: GunnchApp[] = [
   { id: 'pdf', name: 'PDF Reader', category: 'productivity', level: 'native', icon: 'pdf', description: 'Read and annotate PDFs', offline: true },
   { id: 'settings', name: 'Settings', category: 'system', level: 'native', icon: 'settings', description: 'System preferences' },
   { id: 'game-mode', name: 'Game Mode', category: 'games', level: 'native', icon: 'gamepad', description: 'Console-style game launcher' },
+  { id: 'media-mode', name: 'Media Mode', category: 'media', level: 'native', icon: 'video', description: 'Streaming, lectures, and local media' },
 ]
 
 export const CAMPUS_DOCK_IDS = [
-  'browser', 'files', 'notes', 'drive', 'ai-assistant', 'vscode-web', 'github', 'd2l', 'settings', 'game-mode',
+  'browser', 'files', 'notes', 'drive', 'ai-assistant', 'media-mode', 'vscode-web', 'github', 'd2l', 'settings', 'game-mode',
 ]
 
 export function getApp(id: string): GunnchApp | undefined {

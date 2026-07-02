@@ -112,16 +112,29 @@ Three exclusive titles with original IP — platform fighter, foot racing, educa
 
 See user-provided full specification. Phase 0 deliverables are implemented in `apps/launcher_mock/src/shell/` and documented in `docs/PHASE0.md`.
 
-## Implementation status (Phase 0)
+## Implementation status
 
-| Requirement | Phase 0 status |
-|-------------|----------------|
+### Phase 0 (merged — PR #30)
+
+| Requirement | Status |
+|-------------|--------|
 | Campus Mode shell | Implemented (mock) |
 | Game Mode shell | Implemented (mock) |
 | Browser/PWA hub | Implemented (mock) |
 | File manager | Implemented (mock) |
 | Settings | Implemented (mock) |
 | First boot / student profile | Implemented |
-| App icons | SVG icon system |
 | Linux base image | Docker container prototype |
-| Real browser / kernel / boot | Phase 1+ |
+
+### Phase 1 (in progress)
+
+| Requirement | Status |
+|-------------|--------|
+| Media Mode shell | Implemented (prototype) |
+| YouTube/Netflix/Hulu routes | Browser route prototype |
+| Python→React policy bridge | Export script + JSON contract |
+| Media policy tests | pytest + Vitest |
+| Official streaming certification | **Not claimed** |
+| DRM circumvention | **Not supported** |
+
+See `docs/PHASE1.md` and `docs/MEDIA_MODE.md`.

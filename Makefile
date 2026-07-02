@@ -1,6 +1,6 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
-	diagrams e2e smoke
+	export-launcher-contract diagrams e2e smoke
 
 PY := PYTHONPATH=src
 
@@ -21,7 +21,11 @@ generate-update-report:
 	python3 scripts/generate_update_report.py
 
 build-launcher:
+	python3 scripts/export_launcher_contract.py
 	cd apps/launcher_mock && npm run build
+
+export-launcher-contract:
+	python3 scripts/export_launcher_contract.py
 
 generate-campus-modes:
 	python3 scripts/generate_all_campus_mode_reports.py
