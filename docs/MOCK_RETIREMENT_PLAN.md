@@ -10,7 +10,7 @@
 
 | Priority | Mock | Target phase |
 |----------|------|--------------|
-| P0 | Browser/PWA hub mock | Phase 2 |
+| P0 | Browser/PWA hub mock | **Partial (Phase 2B)** — mock frame retired; external tab launch |
 | P0 | File manager mock | Phase 2 |
 | P0 | Game launch mock | Phase 2 |
 | P0 | Local media placeholder | Phase 2 |
@@ -30,13 +30,9 @@
 
 | Field | Detail |
 |-------|--------|
-| **Why it exists** | Phase 0 shell needed navigation to school/web targets without a browser engine |
-| **Location** | `apps/launcher_mock/src/shell/BrowserPwaHub.tsx` — mock frame, external link only |
-| **Replaces with** | Embedded Chromium shell (Electron/Wayland kiosk) or system browser delegate |
-| **Minimum real implementation** | Open URL in sandboxed webview; PWA install hook; no iframe security bypass |
-| **Test needed** | E2E: open Google Docs, D2L URL loads |
-| **Owner area** | Shell / browser |
-| **Blocking dependencies** | Browser engine choice; Linux base image |
+| **Status** | **Partially retired (Phase 2B)** — mock frame removed; `appLaunchService.ts` opens external URLs |
+| **Still prototype** | No embedded webview; PWA install; production browser shell |
+| **Location** | `apps/launcher_mock/src/services/appLaunchService.ts`, `BrowserPwaHub.tsx` |
 
 ### File manager mock
 
