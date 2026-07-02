@@ -23,9 +23,9 @@ This document defines what must be **true** before GunnchOS may be called **beta
 | Requirement | Evidence | Current |
 |-------------|----------|---------|
 | First boot → Campus Mode works | Vitest + manual smoke | **Prototype** ✓ |
-| Real file manager or scoped storage | CRUD test on real files | **Mock** |
-| Functional notes app | Persist note across restart | **Missing** |
-| Settings persistence | Settings survive restart | **Partial** (localStorage profile only) |
+| Real file manager or scoped storage | CRUD test on real files | **Prototype** ✓ (browser workspace, Phase 2A) |
+| Functional notes app | Persist note across restart | **Prototype** ✓ (Phase 2A) |
+| Settings persistence | Settings survive restart | **Partial** ✓ (display/privacy/network subset, Phase 2A) |
 | Browser/PWA opens real URLs | E2E URL load | **Mock** |
 
 ### 3. Media Mode (minimum)
@@ -49,8 +49,8 @@ This document defines what must be **true** before GunnchOS may be called **beta
 
 | Requirement | Evidence | Current |
 |-------------|----------|---------|
-| Python→React contract export automated in CI | CI workflow step | **Partial** (script exists; CI wiring TBD) |
-| Frontend tests in CI | `npm test` green in Actions | **Partial** |
+| Python→React contract export automated in CI | CI workflow step | **Real** ✓ (Phase 2A) |
+| Frontend tests in CI | `npm test` green in Actions | **Real** ✓ (Phase 2A) |
 | Python tests in CI | `pytest` green | **Real** ✓ |
 | Media/school/offline policy tests | `tests/test_media_policy.py` | **Real** ✓ |
 

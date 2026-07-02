@@ -15,8 +15,8 @@ cd apps/launcher_mock && npm install && npm run dev
 Tests:
 
 ```bash
-cd apps/launcher_mock && npm test
-pytest tests/test_media_policy.py -q
+make validate-full
+# or: pytest -q && cd apps/launcher_mock && npm test
 ```
 
 Linux container prototype:
@@ -36,7 +36,7 @@ See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [docs/PH
 |----------|------------|-----------------|------------|------------------|----------------|
 | **Shell & modes** | First boot, Campus/Game/Media UI, Vitest smoke | Mode switching, dock | App launches, game launch | Policy enforcement in shell | Full a11y on hardware |
 | **Policy** | Python modes, media metadata, contract export | Guardian/school in config | Shell enforcement | CI auto-export | Kernel enforcement |
-| **Productivity** | PWA list, contract apps | — | File manager, browser frame, settings | Real FS, notes, PDF, webview | Cloud sync |
+| **Productivity** | PWA list, contract apps, **Files v1, Notes v1** | Settings subset persists | Browser frame | PDF, webview | Cloud sync |
 | **Media** | DRM disclaimers, Media Mode UI | YouTube external link | Netflix/Hulu playback, local player | Local video, webview YouTube | Service certification |
 | **Games** | Game metadata, Game Mode UI | — | Launch (mock) | One real game build | Three vertical slices |
 | **Platform** | Docker prototype, SBOM scripts | HW compat (simulated) | Updater, rollback | Installable image | Production OTA |

@@ -15,7 +15,7 @@
 | P0 | Game launch mock | Phase 2 |
 | P0 | Local media placeholder | Phase 2 |
 | P0 | Python→React manual export | Phase 2 |
-| P1 | Settings mock values | Phase 2–3 |
+| P1 | Settings mock values | **Partial (Phase 2A)** — display/privacy/network persist; system stats still mock |
 | P1 | Media playback mock | Phase 2–3 |
 | P1 | AI assistant panel | Phase 3 |
 | P1 | Guardian/school enforcement stubs | Phase 3 |
@@ -42,25 +42,15 @@
 
 | Field | Detail |
 |-------|--------|
-| **Why it exists** | Phase 0 Campus Mode required Files UX |
-| **Location** | `apps/launcher_mock/src/shell/FileManagerMock.tsx` — static `MOCK_FILES` |
-| **Replaces with** | File System Access API (web) or native FS bridge (Linux) |
-| **Minimum real implementation** | List Downloads + user home; create/rename/delete files |
-| **Test needed** | CRUD smoke; scoped storage permissions |
-| **Owner area** | Shell / storage |
-| **Blocking dependencies** | Scoped storage policy; sandbox model |
+| **Status** | **RETIRED in Phase 2A** — replaced by `FileManager.tsx` |
+| **Replaced with** | `localWorkspaceStore.ts` + `FileManager.tsx` |
 
 ### Settings mock
 
 | Field | Detail |
 |-------|--------|
-| **Why it exists** | Phase 0 settings UX contract |
-| **Location** | `apps/launcher_mock/src/shell/SettingsPanel.tsx` — mock Wi-Fi, storage, updates |
-| **Replaces with** | Read/write to real config store (JSON on FS or dconf) |
-| **Minimum real implementation** | Persist theme, a11y, offline mode; read real storage stats where available |
-| **Test needed** | Settings persist across restart |
-| **Owner area** | Shell / system |
-| **Blocking dependencies** | Config persistence layer |
+| **Status** | **Partially retired (Phase 2A)** — `settingsStore.ts` persists theme, a11y, offline, AI privacy |
+| **Still mock** | Wi-Fi, storage stats, system update labels in `SettingsPanel.tsx` |
 
 ### Media playback mock
 

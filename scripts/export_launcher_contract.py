@@ -32,15 +32,17 @@ def build_contract() -> dict:
         }
 
     return {
-        "version": "1.0.0",
+        "version": "1.1.0",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "claim_boundary": {
             "drm_circumvention_supported": False,
             "service_certification_claimed": False,
             "drm_disclaimer": DRM_DISCLAIMER,
+            "workspace_storage": "browser_local_storage_prototype",
         },
         "apps": APPS,
         "categories": list(CATEGORIES),
+        "campus_native_apps": ["files", "notes", "browser", "settings", "game-mode", "media-mode"],
         "media_apps": MEDIA_APPS,
         "media_app_ids": list_media_apps(),
         "modes": modes,

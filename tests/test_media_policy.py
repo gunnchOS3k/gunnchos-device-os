@@ -83,6 +83,9 @@ def test_exported_launcher_contract_is_valid_json():
     data = json.loads(CONTRACT.read_text(encoding="utf-8"))
     assert data["version"]
     assert "youtube" in data["media_apps"]
+    assert "files" in data["apps"]
+    assert "notes" in data["apps"]
+    assert "campus_native_apps" in data
     assert data["claim_boundary"]["drm_circumvention_supported"] is False
     assert data["claim_boundary"]["service_certification_claimed"] is False
     assert data["policy_samples"]["media_blocks_steam"] is True

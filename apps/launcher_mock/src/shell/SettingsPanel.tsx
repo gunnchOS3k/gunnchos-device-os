@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { theme } from '../styles/gunnchosTheme'
 import { StudentProfile } from '../data/studentProfile'
 import AppIcon from '../components/AppIcon'
+import { useSettings } from '../services/settingsStore'
 
 interface SettingsPanelProps {
   profile: StudentProfile
@@ -13,10 +14,8 @@ type SettingsTab = 'profile' | 'display' | 'privacy' | 'network' | 'system'
 
 export default function SettingsPanel({ profile, onBack, onResetOnboarding }: SettingsPanelProps) {
   const [tab, setTab] = useState<SettingsTab>('profile')
-  const [largeText, setLargeText] = useState(profile.accessibility.includes('large_text'))
-  const [highContrast, setHighContrast] = useState(profile.accessibility.includes('high_contrast'))
-  const [offlineMode, setOfflineMode] = useState(profile.offline)
-  const [aiPrivacy, setAiPrivacy] = useState(true)
+  const [settings, patchSettings] = useSettings()
+  const { largeText, highContrast, reducedMotion, offlineMode, aiPrivacy } = settings
 
   const tabs: { id: SettingsTab; label: string }[] = [
     { id: 'profile', label: 'Profile' },
@@ -70,11 +69,12 @@ export default function SettingsPanel({ profile, onBack, onResetOnboarding }: Se
         {tab === 'display' && (
           <>
             <SettingGroup title="Accessibility">
-              <Toggle label="Large text" checked={largeText} onChange={() => setLargeText(v => !v)} />
-              <Toggle label="High contrast" checked={highContrast} onChange={() => setHighContrast(v => !v)} />
-              <Toggle label="Reduced motion" checked={false} onChange={() => {}} />
+              <Toggle label="Large text" checked={largeText} onChange={() => patchSettings({ largeText: !largeText })} />
+              <Toggle label="High contrast" checked={highContrast} onChange={() => patchSettings({ highContrast: !highContrast })} />
+              <Toggle label="Reduced motion" checked={reducedMotion} onChange={() => patchSettings({ reducedMotion: !reducedMotion })} />
               <Toggle label="Dyslexia-friendly reading" checked={profile.accessibility.includes('dyslexia')} onChange={() => {}} />
             </SettingGroup>
+            <p style={{ fontSize: 12, color: theme.textMuted, marginTop: 8 }}>Display preferences persist in browser storage on this device.</p>
             <SettingGroup title="Language">
               <SettingRow label="Interface" value="English" />
               <p style={{ fontSize: 13, color: theme.textMuted }}>Spanish, Arabic, French, Finnish — Phase 1</p>
@@ -85,7 +85,7 @@ export default function SettingsPanel({ profile, onBack, onResetOnboarding }: Se
         {tab === 'privacy' && (
           <>
             <SettingGroup title="Student data">
-              <Toggle label="AI privacy mode — no training on my data" checked={aiPrivacy} onChange={() => setAiPrivacy(v => !v)} />
+              <Toggle label="AI privacy mode — no training on my data" checked={aiPrivacy} onChange={() => patchSettings({ aiPrivacy: !aiPrivacy })} />
               <SettingRow label="Camera indicator" value="Always visible when active" />
               <SettingRow label="Microphone indicator" value="Always visible when active" />
               <SettingRow label="App permissions" value="Per-app sandbox" />
@@ -101,7 +101,7 @@ export default function SettingsPanel({ profile, onBack, onResetOnboarding }: Se
         {tab === 'network' && (
           <>
             <SettingGroup title="Connectivity">
-              <Toggle label="Offline-first mode" checked={offlineMode} onChange={() => setOfflineMode(v => !v)} />
+              <Toggle label="Offline-first mode" checked={offlineMode} onChange={() => patchSettings({ offlineMode: !offlineMode })} />
               <SettingRow label="Wi-Fi" value="Connected (mock)" />
               <SettingRow label="Bluetooth" value="Keyboard + controller paired" />
               <SettingRow label="Cloud backup" value="Enabled" />

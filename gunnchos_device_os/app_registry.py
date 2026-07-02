@@ -7,6 +7,22 @@ from .media_apps import MEDIA_APPS
 
 APPS: dict[str, dict[str, Any]] = {
     "browser": {"category": "system", "name": "Browser", "launch_type": "browser_pwa"},
+    "files": {
+        "category": "system",
+        "name": "Files",
+        "launch_type": "native",
+        "offline_supported": True,
+        "workspace_backed": True,
+        "claim_status": "browser_workspace_prototype",
+    },
+    "notes": {
+        "category": "productivity",
+        "name": "Notes",
+        "launch_type": "native",
+        "offline_supported": True,
+        "workspace_backed": True,
+        "claim_status": "browser_workspace_prototype",
+    },
     "vscode": {"category": "developer", "name": "VS Code", "launch_type": "linux"},
     "terminal": {"category": "developer", "name": "Terminal", "launch_type": "linux"},
     "wsl_ubuntu": {"category": "developer", "name": "WSL Ubuntu", "launch_type": "linux"},
