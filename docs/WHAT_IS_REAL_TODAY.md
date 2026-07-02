@@ -1,5 +1,7 @@
 # What Is Real Today
 
+**Last updated:** Phase 2 planning (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+
 ## Real (validated in repo)
 
 - `gunnchos_device_os` Python policy package
@@ -30,5 +32,13 @@
 - DRM circumvention or guaranteed Widevine
 - Production MDM/fleet deployment
 - Real browser CDM integration
+
+## Release readiness
+
+| Stage | Met? |
+|-------|------|
+| Alpha (shell + policy) | **Yes** |
+| Beta | **No** — see [BETA_RELEASE_GATE.md](BETA_RELEASE_GATE.md) |
+| RC / GA / Production | **No** |
 
 Smoke: `make e2e` · Launcher: `cd apps/launcher_mock && npm run dev`

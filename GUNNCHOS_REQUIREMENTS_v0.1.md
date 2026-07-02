@@ -126,7 +126,7 @@ See user-provided full specification. Phase 0 deliverables are implemented in `a
 | First boot / student profile | Implemented |
 | Linux base image | Docker container prototype |
 
-### Phase 1 (in progress)
+### Phase 1 (merged — PR #31)
 
 | Requirement | Status |
 |-------------|--------|
@@ -137,4 +137,14 @@ See user-provided full specification. Phase 0 deliverables are implemented in `a
 | Official streaming certification | **Not claimed** |
 | DRM circumvention | **Not supported** |
 
-See `docs/PHASE1.md` and `docs/MEDIA_MODE.md`.
+### Phase 2 (planning — operational gap audit)
+
+| Deliverable | Status |
+|-------------|--------|
+| Full operational gap matrix | Documented |
+| Mock retirement plan | Documented |
+| Beta release gate definition | Documented |
+| Implementation issues backlog | `docs/issues/` |
+| Mock replacement implementation | **Not started** |
+
+See `docs/PHASE1.md`, `docs/PHASE2_PLAN.md`, and `docs/FULL_OPERATIONAL_GAP_MATRIX.md`.
