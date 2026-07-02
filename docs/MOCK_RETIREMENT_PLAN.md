@@ -12,7 +12,7 @@
 |----------|------|--------------|
 | P0 | Browser/PWA hub mock | **Partial (Phase 2B)** — mock frame retired; external tab launch |
 | P0 | File manager mock | Phase 2 |
-| P0 | Game launch mock | Phase 2 |
+| P0 | Game launch mock | **Partial (Phase 2D)** — adapter + readiness; web build in 2E |
 | P0 | Local media placeholder | Phase 2 |
 | P0 | Python→React manual export | Phase 2 |
 | P1 | Settings mock values | **Partial (Phase 2A)** — display/privacy/network persist; system stats still mock |
@@ -99,13 +99,9 @@
 
 | Field | Detail |
 |-------|--------|
-| **Why it exists** | Phase 0 Game Mode shell |
-| **Location** | `GameMode.tsx` — "Launch (mock)" button |
-| **Replaces with** | Game launch adapter (local binary, web build URL, or container) |
-| **Minimum real implementation** | Launch one first-party game build (Anime Aggressors web/Godot) |
-| **Test needed** | Launch returns process/URL; exit returns to library |
-| **Owner area** | Game Mode |
-| **Blocking dependencies** | Playable game artifact; launch protocol |
+| **Status** | **Partially retired (Phase 2D)** — `gameLaunchService.ts` + `GameLaunchPanel.tsx` |
+| **Still prototype** | No native sandbox; playable web build pending Phase 2E |
+| **Location** | `gameLaunchService.ts`, `GameMode.tsx`, `GameLaunchPanel.tsx` |
 
 ### Steam/gaming path mock
 
