@@ -103,15 +103,34 @@ items:
     owner_area: game
     target_stage: beta
 
+  installable_os_image:
+    status: prototype
+    evidence_paths:
+      - os_build/installable_image/
+      - scripts/build_installable_image.sh
+      - scripts/validate_installable_image_artifacts.py
+      - hardware_validation/BOOT_VALIDATION_TEMPLATE.md
+      - docs/PHASE4B_INSTALLABLE_IMAGE.md
+    tests:
+      - tests/test_installable_image.py
+      - python3 scripts/validate_installable_image_artifacts.py
+    blocker: OS-layer tarball prototype — no ISO/IMG, no hardware boot evidence
+    owner_area: os_build
+    target_stage: beta
+
   bootable_image:
     status: prototype
     evidence_paths:
       - os_build/image_prototype/
+      - os_build/installable_image/
       - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
+      - hardware_validation/BOOT_VALIDATION_TEMPLATE.md
       - docs/PHASE2F_BOOTABLE_IMAGE_TRACK.md
+      - docs/PHASE4B_INSTALLABLE_IMAGE.md
     tests:
       - tests/test_image_prototype.py
-    blocker: Container kiosk only — not bootable hardware OS
+      - tests/test_installable_image.py
+    blocker: Container kiosk + installable bundle prototype only — not bootable hardware OS (no completed BOOT_VALIDATION_TEMPLATE)
     owner_area: os_build
     target_stage: beta
 
@@ -155,9 +174,15 @@ items:
       - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
       - hardware_validation/HARDWARE_CLAIM_BOUNDARY.md
       - hardware_validation/REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md
+      - hardware_validation/reference_device_matrix.yaml
+      - hardware_validation/reference_device_report.template.md
+      - hardware_validation/reference_device_report.example.md
+      - docs/PHASE4C_HARDWARE_VALIDATION.md
     tests:
       - tests/test_hardware_evidence.py
-    blocker: No physical hardware validation performed
+      - tests/test_reference_hardware_validation.py
+      - python3 scripts/validate_hardware_report.py
+    blocker: No physical hardware validation performed — container-only example and validation package scaffolding (Phase 4C)
     owner_area: hardware
     target_stage: beta
 

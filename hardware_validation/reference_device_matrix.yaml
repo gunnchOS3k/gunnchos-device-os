@@ -1,0 +1,149 @@
+# Reference device validation matrix — tracks evidence per target SKU and validation area.
+# status: not_started | container_only | partial | validated
+# Do NOT mark validated without a filled reference_device_report with physical_validation_performed: true
+
+schema_version: 6
+last_updated: "2026-07-02"
+
+validation_areas:
+  - id: cpu_architecture
+    label: CPU architecture
+    category: platform
+  - id: ram
+    label: RAM
+    category: platform
+  - id: storage
+    label: Storage
+    category: platform
+  - id: display_resolution
+    label: Display resolution
+    category: display
+  - id: touchscreen
+    label: Touchscreen
+    category: input
+  - id: keyboard_mouse
+    label: Keyboard / mouse
+    category: input
+  - id: controller_gamepad
+    label: Controller / gamepad
+    category: input
+  - id: wifi
+    label: Wi-Fi
+    category: network
+  - id: bluetooth
+    label: Bluetooth
+    category: network
+  - id: audio_output
+    label: Audio output
+    category: media
+  - id: microphone
+    label: Microphone
+    category: media
+  - id: camera
+    label: Camera
+    category: media
+  - id: usb_c_display
+    label: USB-C display
+    category: display
+  - id: battery
+    label: Battery
+    category: power
+  - id: thermal_behavior
+    label: Thermal behavior
+    category: power
+  - id: sleep_wake
+    label: Sleep / wake
+    category: power
+  - id: suspend_resume
+    label: Suspend / resume
+    category: power
+  - id: launcher_startup
+    label: Launcher startup
+    category: software
+  - id: local_workspace_persistence
+    label: Local workspace persistence
+    category: software
+  - id: media_playback
+    label: Media playback
+    category: software
+  - id: game_launch
+    label: Game launch
+    category: software
+  - id: accessibility_toggles
+    label: Accessibility toggles
+    category: software
+
+reference_devices:
+  student_14_5:
+    display_name: Student 14.5
+    profile_path: hardware_compat/device_profiles/student_14_5.yaml
+    target_arch: arm64
+    validation_status: not_started
+    evidence_report: null
+    notes: Primary education laptop-class reference SKU — no physical validation performed.
+
+  handheld_hybrid:
+    display_name: Handheld Hybrid
+    profile_path: hardware_compat/device_profiles/handheld_hybrid.yaml
+    target_arch: x86_64
+    validation_status: not_started
+    evidence_report: null
+    notes: Portable handheld console reference — no physical validation performed.
+
+  ds_xl_coder:
+    display_name: DS-XL Coder
+    profile_path: hardware_compat/device_profiles/ds_xl_coder.yaml
+    target_arch: arm64
+    validation_status: not_started
+    evidence_report: null
+    notes: Dual-screen coder reference — no physical validation performed.
+
+  wearables_arena_set:
+    display_name: Wearables / Arena Set
+    profile_path: hardware_compat/device_profiles/wearables_arena_set.yaml
+    target_arch: arm64
+    validation_status: not_started
+    evidence_report: null
+    notes: Wearables reference class — no physical validation performed.
+
+container_reference:
+  display_name: Container kiosk (CI / dev host)
+  validation_status: container_only
+  evidence_report: hardware_validation/reference_device_report.example.md
+  evidence_log: hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
+  notes: Automated container/kiosk checks only — NOT physical hardware validation.
+
+area_defaults:
+  # Per-area default status until a device-specific report overrides it.
+  cpu_architecture: not_started
+  ram: not_started
+  storage: not_started
+  display_resolution: not_started
+  touchscreen: not_started
+  keyboard_mouse: not_started
+  controller_gamepad: not_started
+  wifi: not_started
+  bluetooth: not_started
+  audio_output: not_started
+  microphone: not_started
+  camera: not_started
+  usb_c_display: not_started
+  battery: not_started
+  thermal_behavior: not_started
+  sleep_wake: not_started
+  suspend_resume: not_started
+  launcher_startup: container_only
+  local_workspace_persistence: container_only
+  media_playback: container_only
+  game_launch: container_only
+  accessibility_toggles: container_only
+
+claim_boundary:
+  physical_validation_required_for:
+    - Physical handheld validated
+    - Target SKU fleet ready
+    - Hardware-validated across fleet
+  container_only_evidence:
+    - Container kiosk prototype
+    - Launcher startup in container
+    - Browser workspace persistence in dev host

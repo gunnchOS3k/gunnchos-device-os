@@ -41,7 +41,7 @@
 - Policy: `docs/PHASE3_POLICY_ENFORCEMENT.md`
 - Privacy: `docs/PRIVACY_BETA_BASELINE.md`
 - Accessibility: `docs/ACCESSIBILITY_BETA_BASELINE.md`
-- Hardware: `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
+- Hardware: `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`, Phase 4C package (`docs/PHASE4C_HARDWARE_VALIDATION.md`)
 
 ## Commands run
 
