@@ -12,6 +12,7 @@ export type CampusView = 'home' | 'browser' | 'files' | 'settings' | 'app'
 interface CampusModeProps {
   profile: StudentProfile
   onEnterGameMode: () => void
+  onEnterMediaMode: () => void
   onResetOnboarding: () => void
 }
 
@@ -22,7 +23,7 @@ const HUB_SECTIONS = [
   { title: 'Creative & Media', categories: ['creative', 'media'] as const },
 ]
 
-export default function CampusMode({ profile, onEnterGameMode, onResetOnboarding }: CampusModeProps) {
+export default function CampusMode({ profile, onEnterGameMode, onEnterMediaMode, onResetOnboarding }: CampusModeProps) {
   const [view, setView] = useState<CampusView>('home')
   const [activeApp, setActiveApp] = useState<GunnchApp | null>(null)
   const [aiPanelOpen, setAiPanelOpen] = useState(false)
@@ -31,6 +32,10 @@ export default function CampusMode({ profile, onEnterGameMode, onResetOnboarding
   const openApp = (appId: string) => {
     if (appId === 'game-mode') {
       onEnterGameMode()
+      return
+    }
+    if (appId === 'media-mode') {
+      onEnterMediaMode()
       return
     }
     if (appId === 'browser') {

@@ -4,8 +4,9 @@ import { DEFAULT_PROFILE, StudentProfile } from '../data/studentProfile'
 import FirstBootFlow from './FirstBootFlow'
 import CampusMode from './CampusMode'
 import GameMode from './GameMode'
+import MediaMode from './MediaMode'
 
-export type SystemMode = 'campus' | 'game'
+export type SystemMode = 'campus' | 'game' | 'media'
 
 interface GunnchOSShellProps {
   devMode?: boolean
@@ -31,11 +32,21 @@ export default function GunnchOSShell({ devMode, onOpenDevTools }: GunnchOSShell
     return <GameMode onExit={() => setSystemMode('campus')} />
   }
 
+  if (systemMode === 'media') {
+    return (
+      <MediaMode
+        onExit={() => setSystemMode('campus')}
+        deploymentMode={profile.offline ? 'Offline' : profile.guardian ? 'Guardian' : 'Media'}
+      />
+    )
+  }
+
   return (
     <>
       <CampusMode
         profile={profile}
         onEnterGameMode={() => setSystemMode('game')}
+        onEnterMediaMode={() => setSystemMode('media')}
         onResetOnboarding={resetOnboarding}
       />
       {devMode && onOpenDevTools && (

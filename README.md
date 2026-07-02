@@ -2,13 +2,21 @@
 
 **GunnchOS** — an education-first, creator-first, gamer-first operating system for affordable handheld devices.
 
-> Phase 0 prototype shell is runnable today. This is not yet a bootable shipping OS image.
+> Phase 0 shell merged (PR #30). Phase 1 adds Media Mode and policy bridge. Not yet a bootable shipping OS image.
 
-## Phase 0 — Run GunnchOS now
+## Run GunnchOS
 
 ```bash
+python3 scripts/export_launcher_contract.py
 cd apps/launcher_mock && npm install && npm run dev
-# → http://localhost:5173 — first boot wizard → Campus Mode → Game Mode
+# → http://localhost:5173 — onboarding → Campus → Media Mode → Game Mode
+```
+
+Tests:
+
+```bash
+cd apps/launcher_mock && npm test
+pytest tests/test_media_policy.py -q
 ```
 
 Linux container prototype:
@@ -18,7 +26,7 @@ docker compose -f os_build/linux_desktop/docker-compose.yml up --build
 # → http://localhost:8080
 ```
 
-See [docs/PHASE0.md](docs/PHASE0.md) and [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md).
+See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md).
 
 ---
 
