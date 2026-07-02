@@ -1,0 +1,160 @@
+# GunnchOS Beta Gate Status — machine-readable dashboard
+# status: missing | prototype | implemented | validated
+# beta_ready: false until all P0 items are implemented or validated
+
+beta_ready: false
+last_updated: "2026-07-02"
+target_stage: beta_candidate
+
+items:
+  ci:
+    status: validated
+    evidence_paths:
+      - .github/workflows/ci.yml
+      - scripts/run_full_validation.sh
+      - Makefile
+    tests:
+      - make validate-full
+    blocker: null
+    owner_area: platform
+    target_stage: beta
+
+  contract_export:
+    status: validated
+    evidence_paths:
+      - scripts/export_launcher_contract.py
+      - scripts/check_launcher_contract_fresh.py
+    tests:
+      - python3 scripts/check_launcher_contract_fresh.py
+    blocker: null
+    owner_area: platform
+    target_stage: beta
+
+  file_manager:
+    status: implemented
+    evidence_paths:
+      - apps/launcher_mock/src/shell/FileManager.tsx
+      - apps/launcher_mock/src/services/localWorkspaceStore.ts
+    tests:
+      - apps/launcher_mock/src/shell/workspace.shell.test.tsx
+    blocker: Production filesystem not available — browser storage prototype
+    owner_area: shell
+    target_stage: beta
+
+  notes:
+    status: implemented
+    evidence_paths:
+      - apps/launcher_mock/src/shell/NotesApp.tsx
+      - apps/launcher_mock/src/services/notesStore.ts
+    tests:
+      - apps/launcher_mock/src/shell/workspace.shell.test.tsx
+    blocker: null
+    owner_area: shell
+    target_stage: beta
+
+  browser_pwa:
+    status: missing
+    evidence_paths:
+      - docs/issues/P0-real-browser-pwa-launcher.md
+    tests: []
+    blocker: Phase 2B PR pending merge
+    owner_area: shell
+    target_stage: beta
+
+  media_player:
+    status: missing
+    evidence_paths:
+      - docs/issues/P0-real-local-media-player.md
+    tests: []
+    blocker: Phase 2C PR pending merge
+    owner_area: media
+    target_stage: beta
+
+  game_launch_adapter:
+    status: missing
+    evidence_paths:
+      - docs/issues/P0-game-launch-adapter.md
+    tests: []
+    blocker: Phase 2D PR pending merge
+    owner_area: game
+    target_stage: beta
+
+  anime_aggressors_playable:
+    status: missing
+    evidence_paths:
+      - docs/issues/P0-wire-anime-aggressors.md
+    tests: []
+    blocker: Phase 2E PR pending merge (depends on 2D)
+    owner_area: game
+    target_stage: beta
+
+  bootable_image:
+    status: missing
+    evidence_paths:
+      - docs/issues/P0-bootable-os-image.md
+    tests: []
+    blocker: Phase 2F PR pending merge
+    owner_area: os_build
+    target_stage: beta
+
+  policy_enforcement:
+    status: prototype
+    evidence_paths:
+      - config/modes.yaml
+      - tests/test_media_policy.py
+      - apps/launcher_mock/src/hooks/useLauncherContract.ts
+    tests:
+      - tests/test_media_policy.py
+    blocker: Shell UI enforcement incomplete for all modes
+    owner_area: policy
+    target_stage: beta
+
+  accessibility_baseline:
+    status: prototype
+    evidence_paths:
+      - docs/LAUNCHER_ACCESSIBILITY_CONTRACT.md
+      - apps/launcher_mock/src/services/settingsStore.ts
+    tests:
+      - apps/launcher_mock/src/shell/shell.test.tsx
+    blocker: No conformance certification
+    owner_area: a11y
+    target_stage: beta
+
+  privacy_baseline:
+    status: prototype
+    evidence_paths:
+      - docs/GUARDIAN_AND_YOUTH_SAFETY.md
+      - config/modes.yaml
+    tests:
+      - tests/test_media_policy.py
+    blocker: Production privacy backend missing
+    owner_area: privacy
+    target_stage: beta
+
+  hardware_evidence:
+    status: missing
+    evidence_paths: []
+    tests: []
+    blocker: No reference hardware validation log
+    owner_area: hardware
+    target_stage: beta
+
+  known_issues:
+    status: missing
+    evidence_paths: []
+    tests: []
+    blocker: docs/KNOWN_ISSUES.md not published
+    owner_area: release
+    target_stage: beta
+
+p0_items:
+  - ci
+  - contract_export
+  - file_manager
+  - notes
+  - browser_pwa
+  - media_player
+  - game_launch_adapter
+  - anime_aggressors_playable
+  - bootable_image
+  - policy_enforcement
