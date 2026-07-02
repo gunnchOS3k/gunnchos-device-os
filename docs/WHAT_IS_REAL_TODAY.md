@@ -1,14 +1,20 @@
 # What Is Real Today
 
-**Last updated:** Phase 3 beta closure sprint (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 3 rebase after PR #35 merge (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
 - `gunnchos_device_os` Python policy package + `config/modes.yaml`
 - CI gate: contract export, pytest, frontend build/test (`make validate-full`)
-- **File Manager v1** — browser localStorage workspace
-- **Notes app v1** — browser localStorage
+- **File Manager v1** — browser localStorage workspace (`FileManager.tsx`)
+- **Notes app v1** — browser localStorage (`NotesApp.tsx`)
 - **Browser/PWA open behavior** — external tab launches (`appLaunchService.ts`)
+- **Local Media Player v1** — merged as a browser-backed local playback prototype (`LocalMediaPlayer.tsx`)
+  - HTML5 audio/video file picker
+  - Recent media metadata in localStorage only
+  - **Does not** persist media blobs across refresh
+  - **Does not** handle DRM streaming
+  - **Not** a production OS media library
 - **Game launch adapter** + **Anime Aggressors web vertical slice**
 - **Shell policy enforcement** — `policyEnforcementService.ts` (not production MDM)
 - **Settings persistence** — theme, a11y, offline, AI privacy toggles
@@ -20,21 +26,26 @@
 
 ## Prototype / honest labels
 
-- **Local media player** — pending PR #35 merge to main
-- Browser/PWA — external tab route; no embedded shell
+- Browser/PWA — external tab route; no embedded browser shell
+- Local media — browser file picker prototype; metadata-only persistence
 - Local workspace / notes — browser localStorage, not production FS
 - Policy enforcement — shell UI prototype
+- Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
 - Bootable image — container/OS-layer track only
 - Hardware — no physical device validation
 - Games — Anime Aggressors slice only; Foot Racing / Earth Species not connected
 - AI assistant — UI shell only
+- Settings — system stats (storage/RAM/Wi-Fi) still mock labels
 
 ## Not real (not claimed)
 
 - Production filesystem / encrypted storage
 - Google Drive sync
-- Netflix/Hulu certification / DRM CDM
-- Production MDM, secure boot, fleet deployment
+- Bootable OS image on target hardware
+- Kernel, secure boot, TPM validation
+- Official Netflix/Hulu/Disney+ certification / DRM CDM
+- Production MDM/fleet deployment
+- Real browser CDM integration
 - Accessibility or privacy legal certification
 - GA / beta release claim (`beta_ready: false`)
 

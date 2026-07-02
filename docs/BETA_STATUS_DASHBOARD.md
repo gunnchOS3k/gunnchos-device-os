@@ -10,14 +10,14 @@ Full report: [`release_artifacts/BETA_CANDIDATE_REPORT.md`](../release_artifacts
 python3 scripts/validate_beta_gate.py
 ```
 
-## Current summary (Phase 3)
+## Current summary (Phase 3 — post PR #35 merge)
 
 | Area | Status |
 |------|--------|
 | CI + contract | validated |
 | File manager + notes | implemented |
 | Browser/PWA | implemented (external tab) |
-| **Media player** | **missing — PR #35** |
+| **Media player** | **implemented** (browser-backed prototype) |
 | Game launch + Anime Aggressors | implemented (slice) |
 | Bootable image | prototype (container) |
 | Policy enforcement | implemented (shell) |
@@ -26,4 +26,4 @@ python3 scripts/validate_beta_gate.py
 | Known issues | implemented |
 | **beta_ready** | **false** |
 
-Update YAML as PR #35 merges and remaining blockers close.
+Remaining blockers: production FS, hardware validation, bootable OS image, streaming CDM, MDM, secure boot, legal certification.

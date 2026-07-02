@@ -66,12 +66,15 @@ items:
     target_stage: beta
 
   media_player:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/issues/P0-real-local-media-player.md
+      - apps/launcher_mock/src/shell/LocalMediaPlayer.tsx
+      - apps/launcher_mock/src/services/localMediaStore.ts
       - docs/PHASE2C_LOCAL_MEDIA_PLAYER.md
-    tests: []
-    blocker: PR #35 (phase2c-local-media-player) not merged to main
+    tests:
+      - apps/launcher_mock/src/shell/localMedia.shell.test.tsx
+      - apps/launcher_mock/src/services/localMedia.test.ts
+    blocker: Prototype only — no production OS media library, no DRM streaming, no persistent blob access
     owner_area: media
     target_stage: beta
 

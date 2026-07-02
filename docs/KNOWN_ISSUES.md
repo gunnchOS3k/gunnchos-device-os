@@ -10,7 +10,7 @@
 | KI-003 | High | Productivity | Open | Open Google Drive in external browser tab | No offline sync | shell | Yes |
 | KI-004 | High | Browser | Open | External tab opens via `appLaunchService` | No embedded certified shell | shell | Yes |
 | KI-005 | High | Media | Open | Use disclaimers; open Netflix/Hulu in browser | No service certification | media | Yes |
-| KI-006 | Medium | Media | Open | Re-select local files after refresh | Blobs not persisted (PR #35 when merged) | media | Yes until PR #35 |
+| KI-006 | Medium | Media | Open | Re-select local files after refresh | Blobs not persisted across refresh | media | Yes |
 | KI-007 | High | OS Build | Open | Use container kiosk prototype | Not bootable on hardware | os_build | Yes |
 | KI-008 | High | Hardware | Open | Use Docker/kiosk validation log only | No physical device validation | hardware | Yes |
 | KI-009 | High | Security | Open | Document claim boundaries only | No production secure boot | platform | Yes |
