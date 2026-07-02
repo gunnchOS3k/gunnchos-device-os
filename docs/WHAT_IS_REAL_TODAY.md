@@ -16,13 +16,13 @@
 - **Settings persistence** — display/privacy/network subset (`settingsStore.ts`)
 - Linux container prototype (`os_build/linux_desktop/`)
 - CI runs contract export, pytest, frontend build/test
+- **Local Media Player v1** — HTML5 file picker playback (`LocalMediaPlayer.tsx`)
 
 ## Prototype / mock (honest labels)
 
 - Browser/PWA hub — mock frames, no live iframe
 - Settings — system stats (storage/RAM/Wi-Fi) still mock labels
-- Media Mode playback — browser route prototypes, not certified streaming
-- Local media player — placeholder
+- Media Mode playback — browser route prototypes for streaming; local player for files
 - AI assistant panel — UI shell only
 - Game launches — mock; first-party games not wired to engines
 - Network/audio diagnostics — mock indicators

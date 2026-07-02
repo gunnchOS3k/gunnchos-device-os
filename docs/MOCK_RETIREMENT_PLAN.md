@@ -16,7 +16,7 @@
 | P0 | Local media placeholder | Phase 2 |
 | P0 | Python→React manual export | Phase 2 |
 | P1 | Settings mock values | **Partial (Phase 2A)** — display/privacy/network persist; system stats still mock |
-| P1 | Media playback mock | Phase 2–3 |
+| P1 | Media playback mock | **Partial (Phase 2C)** — local player; streaming still browser prototype |
 | P1 | AI assistant panel | Phase 3 |
 | P1 | Guardian/school enforcement stubs | Phase 3 |
 | P2 | Fleet/MDM stubs | Field pilot |
@@ -56,13 +56,9 @@
 
 | Field | Detail |
 |-------|--------|
-| **Why it exists** | Phase 1 Media Mode; honest DRM boundary |
-| **Location** | `MediaHub.tsx`, `MediaMode.tsx` — browser route prototype cards |
-| **Replaces with** | Real browser embed for YouTube; `<video>` for local files |
-| **Minimum real implementation** | YouTube opens in webview; Netflix/Hulu show DRM disclaimer + browser route |
-| **Test needed** | YouTube load smoke; DRM warning visible for Netflix/Hulu |
-| **Owner area** | Media Mode |
-| **Blocking dependencies** | Browser CDM path research (no circumvention) |
+| **Status** | **Partially retired (Phase 2C)** — `LocalMediaPlayer.tsx` for local files |
+| **Still prototype** | YouTube/Netflix/Hulu browser routes; no DRM CDM integration |
+| **Location** | `LocalMediaPlayer.tsx`, `localMediaStore.ts`, `MediaMode.tsx` |
 
 ### Local media placeholder
 
