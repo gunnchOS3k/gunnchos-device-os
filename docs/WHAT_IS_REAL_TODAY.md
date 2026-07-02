@@ -1,43 +1,41 @@
 # What Is Real Today
 
-**Last updated:** Phase 2C conflict resolution (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 3 rebase after PR #35 merge (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
-- `gunnchos_device_os` Python policy package
-- `config/modes.yaml` mode policies
-- `gunnchos_device_os/media_apps.py` structured media metadata
-- `scripts/export_launcher_contract.py` + `scripts/check_launcher_contract_fresh.py`
-- `apps/launcher_mock` React shell (Phase 0–2A)
-- Vitest frontend tests (`npm test`) — 40+ tests
-- Media + launcher contract pytest
+- `gunnchos_device_os` Python policy package + `config/modes.yaml`
+- CI gate: contract export, pytest, frontend build/test (`make validate-full`)
 - **File Manager v1** — browser localStorage workspace (`FileManager.tsx`)
 - **Notes app v1** — browser localStorage (`NotesApp.tsx`)
-- **Settings persistence** — display/privacy/network subset (`settingsStore.ts`)
-- **Browser/PWA open behavior** — `appLaunchService.ts` opens real URLs in new tab (`BrowserPwaHub.tsx`)
-- **Local Media Player v1** — HTML5 browser-backed local file playback (`LocalMediaPlayer.tsx`)
-  - Local file picker for audio/video (MP4, WebM, MP3, etc.)
+- **Browser/PWA open behavior** — external tab launches (`appLaunchService.ts`)
+- **Local Media Player v1** — merged as a browser-backed local playback prototype (`LocalMediaPlayer.tsx`)
+  - HTML5 audio/video file picker
   - Recent media metadata in localStorage only
   - **Does not** persist media blobs across refresh
   - **Does not** handle DRM streaming
   - **Not** a production OS media library
-- **Game launch adapter** — `gameLaunchService.ts` + readiness checklist (Phase 2D)
-- **Anime Aggressors web slice** — playable vertical slice at `games/anime-aggressors-web/` (Phase 2E)
-- Linux container prototype (`os_build/linux_desktop/`)
-- **Image prototype track** — kiosk packaging scripts (`os_build/image_prototype/`) — not bootable OS
-- CI runs contract export, pytest, frontend build/test
-- Beta gate dashboard (`beta_gate/beta_gate_status.yaml`)
+- **Game launch adapter** + **Anime Aggressors web vertical slice**
+- **Shell policy enforcement** — `policyEnforcementService.ts` (not production MDM)
+- **Settings persistence** — theme, a11y, offline, AI privacy toggles
+- **Beta gate dashboard** — `beta_gate/beta_gate_status.yaml` + validator
+- **Known issues registry** — `docs/KNOWN_ISSUES.md`
+- **Accessibility / privacy baselines** — documented, not certified
+- **Image prototype track** — container kiosk packaging (not bootable OS)
+- Container validation evidence — `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
 
-## Prototype / mock (honest labels)
+## Prototype / honest labels
 
-- Browser/PWA hub — external tab route prototype; no embedded browser shell
-- Settings — system stats (storage/RAM/Wi-Fi) still mock labels
-- Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
+- Browser/PWA — external tab route; no embedded browser shell
 - Local media — browser file picker prototype; metadata-only persistence
-- AI assistant panel — UI shell only
-- Game launches — adapter wired; Foot Racing / Earth Species not connected
-- Network/audio diagnostics — mock indicators
-- Shell policy enforcement — partial (see Phase 3)
+- Local workspace / notes — browser localStorage, not production FS
+- Policy enforcement — shell UI prototype
+- Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
+- Bootable image — container/OS-layer track only
+- Hardware — no physical device validation
+- Games — Anime Aggressors slice only; Foot Racing / Earth Species not connected
+- AI assistant — UI shell only
+- Settings — system stats (storage/RAM/Wi-Fi) still mock labels
 
 ## Not real (not claimed)
 
@@ -45,18 +43,18 @@
 - Google Drive sync
 - Bootable OS image on target hardware
 - Kernel, secure boot, TPM validation
-- Official Netflix/Hulu/Disney+ certification
-- DRM circumvention or guaranteed Widevine
+- Official Netflix/Hulu/Disney+ certification / DRM CDM
 - Production MDM/fleet deployment
 - Real browser CDM integration
 - Accessibility or privacy legal certification
+- GA / beta release claim (`beta_ready: false`)
 
 ## Release readiness
 
 | Stage | Met? |
 |-------|------|
 | Alpha (shell + policy) | **Yes** |
-| Beta | **No** — see [BETA_RELEASE_GATE.md](BETA_RELEASE_GATE.md) |
+| Beta candidate | **No** — see [BETA_CANDIDATE_REPORT.md](../release_artifacts/BETA_CANDIDATE_REPORT.md) |
 | RC / GA / Production | **No** |
 
-Smoke: `make e2e` · Launcher: `cd apps/launcher_mock && npm run dev`
+Smoke: `make validate-full` · Beta gate: `python3 scripts/validate_beta_gate.py`

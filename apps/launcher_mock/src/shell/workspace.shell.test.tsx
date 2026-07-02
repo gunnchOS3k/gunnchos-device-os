@@ -97,12 +97,13 @@ describe('CampusMode workspace apps', () => {
     render(
       <CampusMode
         profile={onboardedProfile}
+        deploymentMode="Media"
         onEnterGameMode={() => {}}
         onEnterMediaMode={() => {}}
         onResetOnboarding={() => {}}
       />,
     )
-    fireEvent.click(screen.getByLabelText('Files'))
+    fireEvent.click(screen.getByTestId('campus-dock-files'))
     expect(screen.getByTestId('file-manager')).toBeInTheDocument()
   })
 
@@ -110,12 +111,13 @@ describe('CampusMode workspace apps', () => {
     render(
       <CampusMode
         profile={onboardedProfile}
+        deploymentMode="Media"
         onEnterGameMode={() => {}}
         onEnterMediaMode={() => {}}
         onResetOnboarding={() => {}}
       />,
     )
-    fireEvent.click(screen.getByLabelText('Notes'))
+    fireEvent.click(screen.getByTestId('campus-dock-notes'))
     expect(screen.getByTestId('notes-app')).toBeInTheDocument()
   })
 })

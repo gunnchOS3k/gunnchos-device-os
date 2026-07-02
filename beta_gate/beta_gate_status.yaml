@@ -53,97 +53,132 @@ items:
     target_stage: beta
 
   browser_pwa:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/issues/P0-real-browser-pwa-launcher.md
-    tests: []
-    blocker: Phase 2B PR pending merge
+      - apps/launcher_mock/src/services/appLaunchService.ts
+      - apps/launcher_mock/src/shell/BrowserPwaHub.tsx
+      - docs/PHASE2B_BROWSER_PWA.md
+    tests:
+      - apps/launcher_mock/src/services/appLaunch.test.ts
+      - apps/launcher_mock/src/shell/browser.shell.test.tsx
+    blocker: External browser tab prototype — no embedded shell
     owner_area: shell
     target_stage: beta
 
   media_player:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/issues/P0-real-local-media-player.md
-    tests: []
-    blocker: Phase 2C PR pending merge
+      - apps/launcher_mock/src/shell/LocalMediaPlayer.tsx
+      - apps/launcher_mock/src/services/localMediaStore.ts
+      - docs/PHASE2C_LOCAL_MEDIA_PLAYER.md
+    tests:
+      - apps/launcher_mock/src/shell/localMedia.shell.test.tsx
+      - apps/launcher_mock/src/services/localMedia.test.ts
+    blocker: Prototype only — no production OS media library, no DRM streaming, no persistent blob access
     owner_area: media
     target_stage: beta
 
   game_launch_adapter:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/issues/P0-game-launch-adapter.md
-    tests: []
-    blocker: Phase 2D PR pending merge
+      - apps/launcher_mock/src/services/gameLaunchService.ts
+      - apps/launcher_mock/src/shell/GameLaunchPanel.tsx
+      - docs/PHASE2D_GAME_LAUNCH_ADAPTER.md
+    tests:
+      - apps/launcher_mock/src/services/gameLaunch.test.ts
+      - apps/launcher_mock/src/shell/gameLaunch.shell.test.tsx
+    blocker: Native sandbox not implemented
     owner_area: game
     target_stage: beta
 
   anime_aggressors_playable:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/issues/P0-wire-anime-aggressors.md
-    tests: []
-    blocker: Phase 2E PR pending merge (depends on 2D)
+      - games/anime-aggressors-web/
+      - apps/launcher_mock/public/games/anime-aggressors-web/
+      - scripts/build_anime_aggressors_web.sh
+    tests:
+      - tests/test_anime_aggressors_build.py
+    blocker: Vertical slice only — not full game
     owner_area: game
     target_stage: beta
 
   bootable_image:
-    status: missing
+    status: prototype
     evidence_paths:
-      - docs/issues/P0-bootable-os-image.md
-    tests: []
-    blocker: Phase 2F PR pending merge
+      - os_build/image_prototype/
+      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
+      - docs/PHASE2F_BOOTABLE_IMAGE_TRACK.md
+    tests:
+      - tests/test_image_prototype.py
+    blocker: Container kiosk only — not bootable hardware OS
     owner_area: os_build
     target_stage: beta
 
   policy_enforcement:
-    status: prototype
+    status: implemented
     evidence_paths:
-      - config/modes.yaml
-      - tests/test_media_policy.py
-      - apps/launcher_mock/src/hooks/useLauncherContract.ts
+      - apps/launcher_mock/src/services/policyEnforcementService.ts
+      - docs/PHASE3_POLICY_ENFORCEMENT.md
     tests:
-      - tests/test_media_policy.py
-    blocker: Shell UI enforcement incomplete for all modes
+      - apps/launcher_mock/src/services/policyEnforcement.test.ts
+      - apps/launcher_mock/src/shell/policy.shell.test.tsx
+    blocker: Shell UI prototype — not production MDM
     owner_area: policy
     target_stage: beta
 
   accessibility_baseline:
-    status: prototype
+    status: implemented
     evidence_paths:
-      - docs/LAUNCHER_ACCESSIBILITY_CONTRACT.md
-      - apps/launcher_mock/src/services/settingsStore.ts
+      - apps/launcher_mock/src/services/accessibilityAudit.ts
+      - docs/ACCESSIBILITY_BETA_BASELINE.md
     tests:
-      - apps/launcher_mock/src/shell/shell.test.tsx
-    blocker: No conformance certification
+      - apps/launcher_mock/src/services/policyEnforcement.test.ts
+    blocker: No WCAG certification
     owner_area: a11y
     target_stage: beta
 
   privacy_baseline:
-    status: prototype
+    status: implemented
     evidence_paths:
-      - docs/GUARDIAN_AND_YOUTH_SAFETY.md
-      - config/modes.yaml
+      - apps/launcher_mock/src/services/privacyStatus.ts
+      - docs/PRIVACY_BETA_BASELINE.md
     tests:
-      - tests/test_media_policy.py
-    blocker: Production privacy backend missing
+      - tests/test_privacy_baseline.py
+    blocker: No legal/privacy certification
     owner_area: privacy
     target_stage: beta
 
   hardware_evidence:
-    status: missing
-    evidence_paths: []
-    tests: []
-    blocker: No reference hardware validation log
+    status: prototype
+    evidence_paths:
+      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
+      - hardware_validation/HARDWARE_CLAIM_BOUNDARY.md
+      - hardware_validation/REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md
+    tests:
+      - tests/test_hardware_evidence.py
+    blocker: No physical hardware validation performed
     owner_area: hardware
     target_stage: beta
 
   known_issues:
-    status: missing
-    evidence_paths: []
-    tests: []
-    blocker: docs/KNOWN_ISSUES.md not published
+    status: implemented
+    evidence_paths:
+      - docs/KNOWN_ISSUES.md
+      - release_artifacts/KNOWN_ISSUES_TEMPLATE.md
+    tests:
+      - tests/test_known_issues.py
+    blocker: Multiple open release blockers documented
+    owner_area: release
+    target_stage: beta
+
+  beta_candidate_report:
+    status: implemented
+    evidence_paths:
+      - release_artifacts/BETA_CANDIDATE_REPORT.md
+    tests:
+      - tests/test_beta_gate_dashboard.py
+    blocker: null
     owner_area: release
     target_stage: beta
 
@@ -158,3 +193,4 @@ p0_items:
   - anime_aggressors_playable
   - bootable_image
   - policy_enforcement
+  - known_issues

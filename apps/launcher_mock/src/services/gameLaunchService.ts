@@ -24,7 +24,14 @@ export interface GameLaunchMeta {
   nextAction: string
 }
 
-export type GameLaunchResultStatus = 'launched' | 'not_connected' | 'native_build_pending' | 'unavailable'
+import { evaluateAppPolicy, DeploymentMode } from './policyEnforcementService'
+
+export type GameLaunchResultStatus =
+  | 'launched'
+  | 'not_connected'
+  | 'native_build_pending'
+  | 'unavailable'
+  | 'blocked_by_policy'
 
 export interface GameLaunchResult {
   status: GameLaunchResultStatus
@@ -85,11 +92,17 @@ export function getGameLaunchMeta(gameId: string): GameLaunchMeta | undefined {
 
 export function launchGame(
   gameId: string,
+  deploymentMode: DeploymentMode = 'Play',
   openWindow: (url: string) => Window | null = url => window.open(url, '_blank', 'noopener,noreferrer'),
 ): GameLaunchResult {
   const meta = getGameLaunchMeta(gameId)
   if (!meta) {
     return { status: 'unavailable', gameId, message: 'Unknown game' }
+  }
+
+  const policy = evaluateAppPolicy(gameId, deploymentMode, { isFirstPartyGame: true })
+  if (!policy.canLaunch) {
+    return { status: 'blocked_by_policy', gameId, message: policy.message }
   }
 
   if (meta.readiness === 'playable_web_build' && meta.webBuildPath) {

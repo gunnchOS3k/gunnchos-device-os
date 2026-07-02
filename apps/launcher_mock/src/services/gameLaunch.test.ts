@@ -10,7 +10,7 @@ describe('gameLaunchService', () => {
       webBuildPath: '/games/anime-aggressors-web/index.html',
     }
     const openWindow = vi.fn(() => ({}) as Window)
-    const result = launchGame('anime-aggressors', openWindow)
+    const result = launchGame('anime-aggressors', 'Play', openWindow)
     expect(result.status).toBe('launched')
     expect(openWindow).toHaveBeenCalledWith('/games/anime-aggressors-web/index.html')
     GAME_LAUNCH_REGISTRY['anime-aggressors'] = original
@@ -21,13 +21,13 @@ describe('gameLaunchService', () => {
     expect(meta?.readiness).toBe('playable_web_build')
     expect(meta?.webBuildPath).toBe('/games/anime-aggressors-web/index.html')
     const openWindow = vi.fn(() => ({}) as Window)
-    const result = launchGame('anime-aggressors', openWindow)
+    const result = launchGame('anime-aggressors', 'Play', openWindow)
     expect(result.status).toBe('launched')
     expect(openWindow).toHaveBeenCalledWith('/games/anime-aggressors-web/index.html')
   })
 
   it('returns native_build_pending for foot-racing', () => {
-    const result = launchGame('foot-racing')
+    const result = launchGame('foot-racing', 'Play')
     expect(result.status).toBe('native_build_pending')
   })
 

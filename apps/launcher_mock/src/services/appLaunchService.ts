@@ -1,4 +1,4 @@
-import { getModePolicy } from '../hooks/useLauncherContract'
+import { evaluateAppPolicy, resolvePolicyAppId } from './policyEnforcementService'
 
 export type LaunchType = 'external_url' | 'internal_route' | 'local_app' | 'unavailable'
 
@@ -16,6 +16,9 @@ export interface AppLaunchTarget {
   internalRoute?: string
   localAppId?: string
   policyAppId?: string
+  schoolModeDefault?: string
+  requiresNetwork?: boolean
+  offlineSupported?: boolean
 }
 
 export interface AppLaunchResult {
@@ -23,44 +26,7 @@ export interface AppLaunchResult {
   targetId: string
   message: string
   openedUrl?: string
-}
-
-/** Map PWA hub ids to contract app ids for mode policy checks. */
-const POLICY_APP_MAP: Record<string, string> = {
-  'vscode-web': 'vscode',
-  'cursor-web': 'vscode',
-  chatgpt: 'chatgpt',
-  github: 'git_placeholder',
-}
-
-const SCHOOL_BLOCKED_PWA = new Set(['chatgpt', 'cursor-web'])
-
-function isPolicyAllowed(policyAppId: string, mode: string): { allowed: boolean; reason?: string } {
-  const pol = getModePolicy(mode)
-  if (!pol) return { allowed: true }
-
-  if (pol.blocked_apps.includes(policyAppId)) {
-    return { allowed: false, reason: `${policyAppId} is blocked in ${mode} Mode` }
-  }
-
-  if (pol.allowed_apps.length > 0 && !pol.allowed_apps.includes(policyAppId)) {
-    if (policyAppId === 'browser' || pol.allowed_apps.includes('browser')) {
-      return { allowed: true }
-    }
-    return { allowed: false, reason: `${policyAppId} is not allowed in ${mode} Mode` }
-  }
-
-  return { allowed: true }
-}
-
-function checkPolicy(target: AppLaunchTarget, mode: string): { allowed: boolean; reason?: string } {
-  const policyAppId = target.policyAppId ?? POLICY_APP_MAP[target.id] ?? 'browser'
-
-  if ((mode === 'School' || mode === 'Guardian') && SCHOOL_BLOCKED_PWA.has(target.id)) {
-    return { allowed: false, reason: `${target.name} requires guardian approval in ${mode} Mode` }
-  }
-
-  return isPolicyAllowed(policyAppId, mode)
+  warning?: string
 }
 
 export function launchApp(
@@ -68,34 +34,35 @@ export function launchApp(
   mode = 'Media',
   openWindow: (url: string) => Window | null = url => window.open(url, '_blank', 'noopener,noreferrer'),
 ): AppLaunchResult {
-  const policy = checkPolicy(target, mode)
-  if (!policy.allowed) {
+  const policy = evaluateAppPolicy(target.id, mode, {
+    schoolModeDefault: target.schoolModeDefault,
+    requiresNetwork: target.requiresNetwork,
+    offlineSupported: target.offlineSupported,
+    isNativeShellApp: target.launchType === 'local_app',
+  })
+
+  if (!policy.canLaunch) {
     return {
       status: 'blocked_by_policy',
       targetId: target.id,
-      message: policy.reason ?? 'Blocked by policy',
+      message: policy.message,
     }
   }
+
+  const warning = policy.decision === 'warning_only' ? policy.message : undefined
 
   switch (target.launchType) {
     case 'external_url': {
       if (!target.url) {
         return { status: 'missing_url', targetId: target.id, message: 'No URL configured for this app' }
       }
-      const win = openWindow(target.url)
-      if (win === null && typeof window !== 'undefined') {
-        return {
-          status: 'launched',
-          targetId: target.id,
-          message: `Opened ${target.name} in a new tab (popup may have been blocked — use the link below)`,
-          openedUrl: target.url,
-        }
-      }
+      openWindow(target.url)
       return {
         status: 'launched',
         targetId: target.id,
         message: `Opened ${target.name} in a new browser tab`,
         openedUrl: target.url,
+        warning,
       }
     }
     case 'internal_route':
@@ -107,6 +74,7 @@ export function launchApp(
         targetId: target.id,
         message: `Navigating to ${target.name}`,
         openedUrl: target.internalRoute,
+        warning,
       }
     case 'local_app':
       if (!target.localAppId) {
@@ -117,6 +85,7 @@ export function launchApp(
         targetId: target.id,
         message: `Opening ${target.name} shell app`,
         openedUrl: `#local:${target.localAppId}`,
+        warning,
       }
     case 'unavailable':
       return {
@@ -141,6 +110,6 @@ export function pwaTargetToLaunchTarget(pwa: {
     name: pwa.name,
     launchType: pwa.launchType ?? 'external_url',
     url: pwa.url,
-    policyAppId: pwa.policyAppId,
+    policyAppId: pwa.policyAppId ?? resolvePolicyAppId(pwa.id),
   }
 }

@@ -12,8 +12,12 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 STATUS_FILE = ROOT / "beta_gate" / "beta_gate_status.yaml"
+BETA_REPORT = ROOT / "release_artifacts" / "BETA_CANDIDATE_REPORT.md"
+KNOWN_ISSUES = ROOT / "docs" / "KNOWN_ISSUES.md"
+PHYSICAL_HW_MARKER = ROOT / "hardware_validation" / "REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md"
 REQUIRED_FIELDS = ("status", "evidence_paths", "tests", "blocker", "owner_area", "target_stage")
 ALLOWED_STATUS = {"missing", "prototype", "implemented", "validated"}
+P0_REQUIRES_IMPLEMENTED = {"policy_enforcement", "known_issues"}
 
 
 def main() -> int:
@@ -26,6 +30,9 @@ def main() -> int:
 
     data = yaml.safe_load(STATUS_FILE.read_text(encoding="utf-8"))
     errors: list[str] = []
+
+    if not BETA_REPORT.exists():
+        errors.append("Missing release_artifacts/BETA_CANDIDATE_REPORT.md")
 
     if "items" not in data or not isinstance(data["items"], dict):
         errors.append("Missing items map")
@@ -40,8 +47,26 @@ def main() -> int:
             errors.append(f"{item_id}: invalid status {status!r}")
         if status == "validated" and not item.get("evidence_paths"):
             errors.append(f"{item_id}: validated status requires evidence_paths")
+        if status in ("implemented", "validated") and not item.get("evidence_paths"):
+            errors.append(f"{item_id}: {status} status requires evidence_paths")
         if status in ("implemented", "validated") and not item.get("tests"):
             errors.append(f"{item_id}: {status} status should list tests")
+
+        if item_id == "hardware_evidence" and status == "validated":
+            text = PHYSICAL_HW_MARKER.read_text(encoding="utf-8") if PHYSICAL_HW_MARKER.exists() else ""
+            if "Physical validation performed: Yes" not in text:
+                errors.append("hardware_evidence cannot be validated without physical report")
+
+    if not KNOWN_ISSUES.exists():
+        errors.append("Missing docs/KNOWN_ISSUES.md")
+
+    known = data["items"].get("known_issues", {})
+    if known.get("status") in ("missing", "prototype"):
+        errors.append("known_issues must be implemented for beta closure track")
+
+    policy = data["items"].get("policy_enforcement", {})
+    if policy.get("status") in ("missing", "prototype"):
+        errors.append("policy_enforcement must be implemented for beta closure track")
 
     if data.get("beta_ready"):
         p0 = data.get("p0_items", [])
@@ -52,6 +77,9 @@ def main() -> int:
                 continue
             if item["status"] in ("missing", "prototype"):
                 errors.append(f"beta_ready true but P0 {pid} is {item['status']}")
+        media = data["items"].get("media_player", {})
+        if media.get("status") == "missing":
+            errors.append("beta_ready true but media_player is missing (PR #35)")
 
     return report(errors)
 

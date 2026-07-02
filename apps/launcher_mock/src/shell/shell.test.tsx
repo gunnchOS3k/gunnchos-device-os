@@ -36,6 +36,7 @@ describe('GunnchOS shell', () => {
     render(
       <CampusMode
         profile={onboardedProfile}
+        deploymentMode="Media"
         onEnterGameMode={() => {}}
         onEnterMediaMode={() => {}}
         onResetOnboarding={() => {}}
@@ -89,11 +90,11 @@ describe('GunnchOS shell', () => {
 
   it('switching modes does not crash', () => {
     render(<GunnchOSShell />)
-    fireEvent.click(screen.getByLabelText('Media Mode'))
+    fireEvent.click(screen.getByTestId('campus-dock-media-mode'))
     expect(screen.getByTestId('media-mode')).toBeInTheDocument()
     fireEvent.click(screen.getByText(/Exit to Campus/i))
-    expect(screen.getByText(/Campus Mode/i)).toBeInTheDocument()
-    fireEvent.click(screen.getByLabelText('Game Mode'))
+    expect(screen.getByTestId('campus-mode')).toBeInTheDocument()
+    fireEvent.click(screen.getByTestId('campus-dock-game-mode'))
     expect(screen.getByText(/Anime Aggressors/i)).toBeInTheDocument()
   })
 })

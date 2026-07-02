@@ -2,28 +2,28 @@
 
 Machine-readable beta progress: [`beta_gate/beta_gate_status.yaml`](../beta_gate/beta_gate_status.yaml)
 
+Full report: [`release_artifacts/BETA_CANDIDATE_REPORT.md`](../release_artifacts/BETA_CANDIDATE_REPORT.md)
+
 ## Validate
 
 ```bash
 python3 scripts/validate_beta_gate.py
 ```
 
-## Rules
-
-- `validated` status requires `evidence_paths`
-- `beta_ready: true` forbidden while any P0 item is `missing` or `prototype`
-- Current `beta_ready: false` — beta not claimed
-
-## Summary (Phase 2G baseline on main)
+## Current summary (Phase 3 — post PR #35 merge)
 
 | Area | Status |
 |------|--------|
 | CI + contract | validated |
 | File manager + notes | implemented |
-| Browser/PWA | missing (2B pending) |
-| Local media | missing (2C pending) |
-| Game launch + Anime Aggressors | missing (2D/2E pending) |
-| Bootable image track | missing (2F pending) |
-| Hardware evidence | missing |
+| Browser/PWA | implemented (external tab) |
+| **Media player** | **implemented** (browser-backed prototype) |
+| Game launch + Anime Aggressors | implemented (slice) |
+| Bootable image | prototype (container) |
+| Policy enforcement | implemented (shell) |
+| Accessibility + privacy baselines | implemented (no cert) |
+| Hardware evidence | prototype (container only) |
+| Known issues | implemented |
+| **beta_ready** | **false** |
 
-Update `beta_gate_status.yaml` as PRs merge toward beta candidate.
+Remaining blockers: production FS, hardware validation, bootable OS image, streaming CDM, MDM, secure boot, legal certification.

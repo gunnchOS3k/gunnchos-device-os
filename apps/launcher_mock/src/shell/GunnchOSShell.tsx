@@ -1,10 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { DEFAULT_PROFILE, StudentProfile } from '../data/studentProfile'
 import FirstBootFlow from './FirstBootFlow'
 import CampusMode from './CampusMode'
 import GameMode from './GameMode'
 import MediaMode from './MediaMode'
+import ModeSelectorBar from './ModeSelectorBar'
+import {
+  DeploymentMode,
+  loadDeploymentMode,
+  resolveDeploymentMode,
+  saveDeploymentMode,
+} from '../services/policyEnforcementService'
+import { useSettings } from '../services/settingsStore'
+import { applyAccessibilityClasses, auditAccessibilitySettings } from '../services/accessibilityAudit'
 
 export type SystemMode = 'campus' | 'game' | 'media'
 
@@ -16,6 +25,20 @@ interface GunnchOSShellProps {
 export default function GunnchOSShell({ devMode, onOpenDevTools }: GunnchOSShellProps) {
   const [profile, setProfile] = useLocalStorage<StudentProfile>('gunnchos-profile', DEFAULT_PROFILE)
   const [systemMode, setSystemMode] = useState<SystemMode>('campus')
+  const [deploymentMode, setDeploymentMode] = useState<DeploymentMode>(() =>
+    resolveDeploymentMode(profile),
+  )
+  const [settings] = useSettings()
+
+  useEffect(() => {
+    document.body.className = applyAccessibilityClasses(settings)
+    auditAccessibilitySettings(settings)
+  }, [settings])
+
+  useEffect(() => {
+    if (profile.offline) setDeploymentMode('Offline')
+    else if (profile.guardian) setDeploymentMode('Guardian')
+  }, [profile.offline, profile.guardian])
 
   const completeOnboarding = (p: StudentProfile) => setProfile(p)
 
@@ -24,27 +47,51 @@ export default function GunnchOSShell({ devMode, onOpenDevTools }: GunnchOSShell
     setSystemMode('campus')
   }
 
+  const handleDeploymentModeChange = (mode: DeploymentMode) => {
+    setDeploymentMode(mode)
+    saveDeploymentMode(mode)
+  }
+
   if (!profile.onboarded) {
     return <FirstBootFlow onComplete={completeOnboarding} />
   }
 
+  const effectiveMode = profile.offline ? 'Offline' : profile.guardian ? 'Guardian' : deploymentMode
+
+  const modeBar = (
+    <ModeSelectorBar
+      mode={effectiveMode as DeploymentMode}
+      onChange={handleDeploymentModeChange}
+    />
+  )
+
   if (systemMode === 'game') {
-    return <GameMode onExit={() => setSystemMode('campus')} />
+    return (
+      <>
+        {modeBar}
+        <GameMode onExit={() => setSystemMode('campus')} deploymentMode={effectiveMode as DeploymentMode} />
+      </>
+    )
   }
 
   if (systemMode === 'media') {
     return (
-      <MediaMode
-        onExit={() => setSystemMode('campus')}
-        deploymentMode={profile.offline ? 'Offline' : profile.guardian ? 'Guardian' : 'Media'}
-      />
+      <>
+        {modeBar}
+        <MediaMode
+          onExit={() => setSystemMode('campus')}
+          deploymentMode={effectiveMode as DeploymentMode}
+        />
+      </>
     )
   }
 
   return (
     <>
+      {modeBar}
       <CampusMode
         profile={profile}
+        deploymentMode={effectiveMode as DeploymentMode}
         onEnterGameMode={() => setSystemMode('game')}
         onEnterMediaMode={() => setSystemMode('media')}
         onResetOnboarding={resetOnboarding}
@@ -53,6 +100,7 @@ export default function GunnchOSShell({ devMode, onOpenDevTools }: GunnchOSShell
         <button
           type="button"
           onClick={onOpenDevTools}
+          aria-label="Open developer fleet view"
           style={{
             position: 'fixed',
             bottom: 72,
