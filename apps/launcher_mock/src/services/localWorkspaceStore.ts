@@ -1,5 +1,13 @@
 /** Browser-backed local workspace storage prototype — not a production OS filesystem. */
 
+import {
+  isEncryptionEnabled,
+  isWorkspaceLocked,
+  persistSessionIfPossible,
+  readWorkspaceFromSession,
+  writeWorkspaceToSession,
+} from './encryptedWorkspaceStore'
+
 export const WORKSPACE_STORAGE_KEY = 'gunnchos-workspace-v1'
 export const WORKSPACE_CLAIM = 'local browser-backed workspace storage prototype'
 
@@ -37,6 +45,10 @@ function newId(): string {
 }
 
 function loadRaw(): WorkspaceNode[] {
+  if (isEncryptionEnabled()) {
+    if (isWorkspaceLocked()) return []
+    return readWorkspaceFromSession().workspace
+  }
   try {
     const raw = localStorage.getItem(WORKSPACE_STORAGE_KEY)
     if (!raw) return []
@@ -48,6 +60,12 @@ function loadRaw(): WorkspaceNode[] {
 }
 
 function saveRaw(nodes: WorkspaceNode[]): void {
+  if (isEncryptionEnabled()) {
+    if (isWorkspaceLocked()) throw new Error('Workspace is locked')
+    writeWorkspaceToSession({ workspace: nodes })
+    void persistSessionIfPossible()
+    return
+  }
   localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(nodes))
 }
 
@@ -63,6 +81,7 @@ export function createDemoWorkspace(): WorkspaceNode[] {
 }
 
 export function ensureWorkspaceInitialized(): WorkspaceNode[] {
+  if (isEncryptionEnabled() && isWorkspaceLocked()) return []
   const existing = loadRaw()
   if (existing.length > 0) return existing
   const demo = createDemoWorkspace()

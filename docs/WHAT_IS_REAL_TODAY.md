@@ -1,6 +1,6 @@
 # What Is Real Today
 
-**Last updated:** Phase 3 rebase after PR #35 merge (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 4A encrypted workspace + Phase 4G game slices + Phase 4B installable bundle track (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
@@ -8,6 +8,7 @@
 - CI gate: contract export, pytest, frontend build/test (`make validate-full`)
 - **File Manager v1** — browser localStorage workspace (`FileManager.tsx`)
 - **Notes app v1** — browser localStorage (`NotesApp.tsx`)
+- **Encrypted workspace prototype (Phase 4A)** — Web Crypto PBKDF2 + AES-GCM in launcher shell ([PHASE4A_ENCRYPTED_WORKSPACE.md](PHASE4A_ENCRYPTED_WORKSPACE.md))
 - **Browser/PWA open behavior** — external tab launches (`appLaunchService.ts`)
 - **Local Media Player v1** — merged as a browser-backed local playback prototype (`LocalMediaPlayer.tsx`)
   - HTML5 audio/video file picker
@@ -15,33 +16,37 @@
   - **Does not** persist media blobs across refresh
   - **Does not** handle DRM streaming
   - **Not** a production OS media library
-- **Game launch adapter** + **Anime Aggressors web vertical slice**
+- **Game launch adapter** + **first-party web vertical slices** (Anime Aggressors, Foot Racing, Earth Species)
 - **Shell policy enforcement** — `policyEnforcementService.ts` (not production MDM)
 - **Settings persistence** — theme, a11y, offline, AI privacy toggles
 - **Beta gate dashboard** — `beta_gate/beta_gate_status.yaml` + validator
 - **Known issues registry** — `docs/KNOWN_ISSUES.md`
 - **Accessibility / privacy baselines** — documented, not certified
-- **Image prototype track** — container kiosk packaging (not bootable OS)
+- **Installable OS image track (Phase 4B)** — reproducible OS-layer bundle prototype ([PHASE4B_INSTALLABLE_IMAGE.md](PHASE4B_INSTALLABLE_IMAGE.md))
+  - `scripts/build_installable_image.sh` produces tarball + manifest + checksums
+  - **Not** a bootable ISO/IMG
+  - **Not** hardware-validated
+- **Image prototype track** — container kiosk packaging (Phase 2F)
 - Container validation evidence — `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
 
 ## Prototype / honest labels
 
 - Browser/PWA — external tab route; no embedded browser shell
 - Local media — browser file picker prototype; metadata-only persistence
-- Local workspace / notes — browser localStorage, not production FS
+- Local workspace / notes — browser localStorage; optional encrypted prototype (not OS FS)
 - Policy enforcement — shell UI prototype
 - Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
-- Bootable image — container/OS-layer track only
+- Bootable / installable image — OS-layer bundle prototype (Phase 4B); not bootable ISO, not hardware-validated
 - Hardware — no physical device validation
-- Games — Anime Aggressors slice only; Foot Racing / Earth Species not connected
+- Games — all three first-party titles are web vertical slices only; not full games or native builds
 - AI assistant — UI shell only
 - Settings — system stats (storage/RAM/Wi-Fi) still mock labels
 
 ## Not real (not claimed)
 
-- Production filesystem / encrypted storage
+- Production OS filesystem / full-disk encrypted storage (Phase 4A is browser prototype only)
 - Google Drive sync
-- Bootable OS image on target hardware
+- Bootable OS image on target hardware (Phase 4B bundle is not a bootable ISO/IMG)
 - Kernel, secure boot, TPM validation
 - Official Netflix/Hulu/Disney+ certification / DRM CDM
 - Production MDM/fleet deployment

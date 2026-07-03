@@ -1,6 +1,6 @@
 # GunnchOS Beta Candidate Report
 
-**Generated:** Phase 3 rebase after PR #35 merge (2026-07-02)  
+**Generated:** Phase 4E rebase after Phase 4C merge (2026-07-02)  
 **beta_ready (YAML):** `false`  
 **Beta claim allowed:** **No — beta candidate claim is not allowed yet.**
 
@@ -12,40 +12,50 @@
 | Contract export | validated | — |
 | File manager | implemented | Browser storage prototype |
 | Notes | implemented | — |
+| Encrypted storage (4A) | prototype | Browser crypto only — not OS FS |
 | Browser/PWA | implemented | External tab only |
-| Media player | **implemented** | Prototype — no production library, no DRM, no blob persistence |
-| Game launch adapter | implemented | — |
-| Anime Aggressors | implemented | Vertical slice only |
-| Bootable image | prototype | Container track only |
+| Media player | implemented | Prototype — local media separate from DRM streaming |
+| Game launch + three web slices (4G) | implemented | Vertical slices only |
+| Bootable / installable image (4B) | prototype | OS-layer bundle — not bootable ISO/IMG |
+| Hardware evidence (4C) | prototype | No physical report — template/container only |
+| **Streaming certification (4E)** | **prototype** | No CDM, no official service cert, no HDCP hardware validation |
+| Legal/privacy/a11y readiness (4F) | prototype | Readiness only |
 | Policy enforcement | implemented | Shell prototype |
-| Accessibility baseline | implemented | No certification |
-| Privacy baseline | implemented | No legal review |
-| Hardware evidence | prototype | No physical validation |
-| Known issues | implemented | 16 open issues |
+| Known issues | implemented | Open blockers documented |
 
-## P0 gaps blocking beta
+## Phase 4E streaming certification (honest)
 
-1. Production filesystem / encrypted storage
-2. Physical hardware validation
-3. Bootable installable OS image
-4. Netflix/Hulu certification / CDM integration
+PR #45 adds compatibility matrix, CDM/HDCP checklists, and service certification tracker.
+
+**What it is:** readiness and evidence tracking for YouTube, Netflix, Hulu, Disney+, Max, Prime, and others.
+
+**What it is not:**
+- Official Netflix/Hulu/Disney+/Widevine certification
+- CDM integration or DRM circumvention
+- HDCP-validated external display behavior on hardware
+- Confirmed max resolution per service (unknown unless evidence path exists)
+
+## P0 gaps still blocking beta
+
+1. Production OS filesystem (encrypted storage is browser prototype only)
+2. Physical hardware validation with real device report
+3. Bootable installable OS image with boot evidence
+4. Streaming service certification with real CDM/service evidence
 5. Production MDM, secure boot
-6. Legal privacy / accessibility certification
-7. Foot Racing / Earth Species not connected (game limitation)
+6. Legal privacy / accessibility formal certification
 
 ## Evidence paths
 
+- Streaming: `docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md`, `streaming_certification/`
+- Hardware: `docs/PHASE4C_HARDWARE_VALIDATION.md`
 - Beta gate: `beta_gate/beta_gate_status.yaml`
 - Known issues: `docs/KNOWN_ISSUES.md`
-- Local media: `docs/PHASE2C_LOCAL_MEDIA_PLAYER.md`
-- Policy: `docs/PHASE3_POLICY_ENFORCEMENT.md`
-- Privacy: `docs/PRIVACY_BETA_BASELINE.md`
-- Accessibility: `docs/ACCESSIBILITY_BETA_BASELINE.md`
-- Hardware: `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
 
 ## Commands run
 
 ```bash
+python3 scripts/validate_streaming_certification_tracker.py
+pytest tests/test_streaming_certification.py -q
 python3 scripts/export_launcher_contract.py
 python3 scripts/check_launcher_contract_fresh.py
 python3 scripts/validate_beta_gate.py
@@ -54,4 +64,4 @@ make validate-full
 
 ## Review note
 
-If all P0 items reach `implemented` or `validated` with evidence, Edmund may review for **beta candidate** — do **not** claim GA.
+`beta_ready` remains **false**. Edmund may review PR #45 for streaming **readiness** only — do **not** claim service certification or CDM integration.
