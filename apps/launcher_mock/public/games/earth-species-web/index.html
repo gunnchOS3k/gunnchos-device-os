@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Earth Species — Vertical Slice Prototype</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="screen-title" class="screen active">
+    <h1>Earth Species</h1>
+    <p class="subtitle">Artifact adventure prototype · Original species only</p>
+    <button id="btn-start">Begin Expedition</button>
+    <div class="controls">
+      <h2>Controls</h2>
+      <p><strong>Nora (explorer):</strong> WASD or arrow keys to move</p>
+      <p>Walk near glowing artifacts to collect species data.</p>
+      <p>Press <strong>I</strong> to open the collection log.</p>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <canvas id="map" width="720" height="480"></canvas>
+    <div id="hud">
+      <span id="zone-label">Meadow Trail</span>
+      <span id="collect-count">Artifacts: 0 / 3</span>
+    </div>
+    <div id="species-card" class="hidden">
+      <h3 id="card-name"></h3>
+      <p id="card-habitat" class="meta"></p>
+      <p id="card-fact"></p>
+      <p id="card-citation" class="citation"></p>
+      <button id="btn-close-card">Close</button>
+    </div>
+    <div id="collection-log" class="hidden">
+      <h3>Collection Log</h3>
+      <ul id="log-list"></ul>
+      <button id="btn-close-log">Close Log</button>
+    </div>
+    <button id="btn-exit">Exit to title</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
