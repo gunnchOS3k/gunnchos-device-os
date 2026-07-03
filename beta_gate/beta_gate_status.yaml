@@ -37,7 +37,7 @@ items:
       - apps/launcher_mock/src/services/localWorkspaceStore.ts
     tests:
       - apps/launcher_mock/src/shell/workspace.shell.test.tsx
-    blocker: Production filesystem not available — browser storage prototype
+    blocker: Production filesystem not available — browser storage prototype; encrypted workspace prototype (Phase 4A)
     owner_area: shell
     target_stage: beta
 
@@ -49,6 +49,20 @@ items:
     tests:
       - apps/launcher_mock/src/shell/workspace.shell.test.tsx
     blocker: null
+    owner_area: shell
+    target_stage: beta
+
+  encrypted_storage:
+    status: prototype
+    evidence_paths:
+      - apps/launcher_mock/src/services/workspaceCrypto.ts
+      - apps/launcher_mock/src/services/encryptedWorkspaceStore.ts
+      - apps/launcher_mock/src/shell/EncryptedWorkspacePanel.tsx
+      - docs/PHASE4A_ENCRYPTED_WORKSPACE.md
+      - docs/STORAGE_SECURITY_BOUNDARY.md
+    tests:
+      - apps/launcher_mock/src/services/encryptedWorkspace.test.ts
+    blocker: Browser-backed encrypted workspace only — not production OS filesystem or full-disk encryption
     owner_area: shell
     target_stage: beta
 

@@ -1,6 +1,6 @@
 # What Is Real Today
 
-**Last updated:** Phase 4G foot racing & earth species web slices (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 4A encrypted workspace + Phase 4G game web slices (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
@@ -8,6 +8,7 @@
 - CI gate: contract export, pytest, frontend build/test (`make validate-full`)
 - **File Manager v1** — browser localStorage workspace (`FileManager.tsx`)
 - **Notes app v1** — browser localStorage (`NotesApp.tsx`)
+- **Encrypted workspace prototype (Phase 4A)** — Web Crypto PBKDF2 + AES-GCM in launcher shell ([PHASE4A_ENCRYPTED_WORKSPACE.md](PHASE4A_ENCRYPTED_WORKSPACE.md))
 - **Browser/PWA open behavior** — external tab launches (`appLaunchService.ts`)
 - **Local Media Player v1** — merged as a browser-backed local playback prototype (`LocalMediaPlayer.tsx`)
   - HTML5 audio/video file picker
@@ -28,7 +29,7 @@
 
 - Browser/PWA — external tab route; no embedded browser shell
 - Local media — browser file picker prototype; metadata-only persistence
-- Local workspace / notes — browser localStorage, not production FS
+- Local workspace / notes — browser localStorage; optional encrypted prototype (not OS FS)
 - Policy enforcement — shell UI prototype
 - Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
 - Bootable image — container/OS-layer track only
@@ -39,7 +40,7 @@
 
 ## Not real (not claimed)
 
-- Production filesystem / encrypted storage
+- Production OS filesystem / full-disk encrypted storage (Phase 4A is browser prototype only)
 - Google Drive sync
 - Bootable OS image on target hardware
 - Kernel, secure boot, TPM validation
