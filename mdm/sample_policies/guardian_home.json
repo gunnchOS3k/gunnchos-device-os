@@ -1,0 +1,40 @@
+{
+  "policy_id": "sample-guardian-home",
+  "policy_version": 1,
+  "deployment_mode": "Guardian",
+  "school_mode": {
+    "enabled": false,
+    "block_social": false,
+    "block_streaming_drm": false
+  },
+  "library_mode": {
+    "enabled": false,
+    "session_minutes": 0,
+    "guest_accounts": false
+  },
+  "guardian_mode": {
+    "enabled": true,
+    "bedtime_start": "21:30",
+    "bedtime_end": "06:30",
+    "require_pin_for_settings": true
+  },
+  "allowed_apps": ["files", "notes", "browser", "game-mode", "media-mode", "settings"],
+  "blocked_apps": ["chatgpt", "cursor-web", "terminal"],
+  "network_restrictions": {
+    "wifi_ssid_allowlist": [],
+    "block_tor": true,
+    "vpn_required": false
+  },
+  "update_channel": "stable",
+  "telemetry_consent_level": "diagnostics",
+  "media_restrictions": {
+    "block_drm_streaming": false,
+    "max_resolution": "1080p",
+    "external_display_hdcp_required": true
+  },
+  "game_restrictions": {
+    "allow_first_party_only": false,
+    "block_native_launchers": true,
+    "daily_minutes_cap": 120
+  }
+}

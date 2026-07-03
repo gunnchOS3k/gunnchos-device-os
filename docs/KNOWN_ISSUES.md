@@ -13,8 +13,8 @@
 | KI-006 | Medium | Media | Open | Re-select local files after refresh | Blobs not persisted across refresh | media | Yes |
 | KI-007 | High | OS Build | Open | Use container kiosk prototype | Not bootable on hardware | os_build | Yes |
 | KI-008 | High | Hardware | Open | Use Docker/kiosk validation log only | No physical device validation | hardware | Yes |
-| KI-009 | High | Security | Open | Document claim boundaries only | No production secure boot | platform | Yes |
-| KI-010 | High | Fleet | Open | None | No production MDM | fleet | Yes |
+| KI-009 | High | Security | In progress | Review secure boot architecture + dev manifest signing (Phase 4D) | No production secure boot on hardware | platform | Yes |
+| KI-010 | High | Fleet | In progress | Use local MDM policy agent + sample policies (Phase 4D) | No production MDM server/enrollment | fleet | Yes |
 | KI-011 | Medium | Accessibility | Open | Use in-app toggles (large text, contrast, motion) | No WCAG certification | a11y | Yes |
 | KI-012 | High | Privacy | Open | Review `PRIVACY_BETA_BASELINE.md` | No legal/privacy review | privacy | Yes |
 | KI-013 | Medium | Games | Open | Play Anime Aggressors web slice only | Foot Racing / Earth Species not connected | game | Partial |

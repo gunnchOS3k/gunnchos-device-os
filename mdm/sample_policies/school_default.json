@@ -1,0 +1,40 @@
+{
+  "policy_id": "sample-school-default",
+  "policy_version": 1,
+  "deployment_mode": "School",
+  "school_mode": {
+    "enabled": true,
+    "block_social": true,
+    "block_streaming_drm": true
+  },
+  "library_mode": {
+    "enabled": false,
+    "session_minutes": 0,
+    "guest_accounts": false
+  },
+  "guardian_mode": {
+    "enabled": false,
+    "bedtime_start": "21:00",
+    "bedtime_end": "07:00",
+    "require_pin_for_settings": false
+  },
+  "allowed_apps": ["files", "notes", "browser", "d2l", "docs", "sheets", "game-mode"],
+  "blocked_apps": ["chatgpt", "cursor-web", "netflix", "hulu", "steam", "terminal"],
+  "network_restrictions": {
+    "wifi_ssid_allowlist": [],
+    "block_tor": true,
+    "vpn_required": false
+  },
+  "update_channel": "stable",
+  "telemetry_consent_level": "diagnostics",
+  "media_restrictions": {
+    "block_drm_streaming": true,
+    "max_resolution": "1080p",
+    "external_display_hdcp_required": true
+  },
+  "game_restrictions": {
+    "allow_first_party_only": true,
+    "block_native_launchers": true,
+    "daily_minutes_cap": 60
+  }
+}

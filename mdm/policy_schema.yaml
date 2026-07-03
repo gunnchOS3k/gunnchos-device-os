@@ -1,0 +1,84 @@
+# GunnchOS MDM Policy Schema v1 (prototype)
+# Consumed by mdm/device_policy_agent.py — not a remote MDM server schema.
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: GunnchOSDevicePolicy
+type: object
+required:
+  - policy_id
+  - policy_version
+  - deployment_mode
+  - allowed_apps
+  - blocked_apps
+  - update_channel
+  - telemetry_consent_level
+additionalProperties: false
+properties:
+  policy_id:
+    type: string
+    minLength: 1
+  policy_version:
+    type: integer
+    minimum: 1
+  deployment_mode:
+    type: string
+    enum: [Play, School, Library, Guardian, Work]
+  school_mode:
+    type: object
+    properties:
+      enabled: { type: boolean }
+      block_social: { type: boolean }
+      block_streaming_drm: { type: boolean }
+    additionalProperties: false
+  library_mode:
+    type: object
+    properties:
+      enabled: { type: boolean }
+      session_minutes: { type: integer, minimum: 0 }
+      guest_accounts: { type: boolean }
+    additionalProperties: false
+  guardian_mode:
+    type: object
+    properties:
+      enabled: { type: boolean }
+      bedtime_start: { type: string }
+      bedtime_end: { type: string }
+      require_pin_for_settings: { type: boolean }
+    additionalProperties: false
+  allowed_apps:
+    type: array
+    items: { type: string }
+  blocked_apps:
+    type: array
+    items: { type: string }
+  network_restrictions:
+    type: object
+    description: Placeholder — not enforced in Phase 4D prototype
+    properties:
+      wifi_ssid_allowlist: { type: array, items: { type: string } }
+      block_tor: { type: boolean }
+      vpn_required: { type: boolean }
+    additionalProperties: false
+  update_channel:
+    type: string
+    enum: [stable, beta, dev, frozen]
+  telemetry_consent_level:
+    type: string
+    enum: [none, diagnostics, analytics, full]
+  media_restrictions:
+    type: object
+    properties:
+      block_drm_streaming: { type: boolean }
+      max_resolution: { type: string }
+      external_display_hdcp_required: { type: boolean }
+    additionalProperties: false
+  game_restrictions:
+    type: object
+    properties:
+      allow_first_party_only: { type: boolean }
+      block_native_launchers: { type: boolean }
+      daily_minutes_cap: { type: integer, minimum: 0 }
+    additionalProperties: false
+  signature:
+    type: string
+    description: Optional detached manifest signature reference (dev keys)

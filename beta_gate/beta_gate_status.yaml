@@ -161,6 +161,36 @@ items:
     owner_area: hardware
     target_stage: beta
 
+  secure_boot:
+    status: prototype
+    evidence_paths:
+      - security/secure_boot/ARCHITECTURE.md
+      - security/secure_boot/CLAIM_BOUNDARY.md
+      - security/secure_boot/SECURE_BOOT_CHECKLIST.md
+      - scripts/sign_release_manifest.py
+      - scripts/verify_release_manifest.py
+      - docs/PHASE4D_SECURE_BOOT_MDM.md
+    tests:
+      - tests/test_secure_boot_mdm.py
+    blocker: Dev manifest signing only — no bootloader/kernel boot chain on hardware
+    owner_area: security
+    target_stage: beta
+
+  production_mdm:
+    status: prototype
+    evidence_paths:
+      - mdm/policy_schema.yaml
+      - mdm/sample_policies/
+      - mdm/device_policy_agent.py
+      - mdm/enrollment_profile.example.json
+      - mdm/CLAIM_BOUNDARY.md
+      - docs/PHASE4D_SECURE_BOOT_MDM.md
+    tests:
+      - tests/test_secure_boot_mdm.py
+    blocker: Local static policy prototype — no remote enrollment/server/fleet MDM
+    owner_area: fleet
+    target_stage: beta
+
   known_issues:
     status: implemented
     evidence_paths:
