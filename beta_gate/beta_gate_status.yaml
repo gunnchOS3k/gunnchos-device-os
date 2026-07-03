@@ -179,8 +179,10 @@ items:
     evidence_paths:
       - apps/launcher_mock/src/services/accessibilityAudit.ts
       - docs/ACCESSIBILITY_BETA_BASELINE.md
+      - compliance/accessibility/
     tests:
       - apps/launcher_mock/src/services/policyEnforcement.test.ts
+      - tests/test_compliance_readiness.py
     blocker: No WCAG certification
     owner_area: a11y
     target_stage: beta
@@ -190,10 +192,26 @@ items:
     evidence_paths:
       - apps/launcher_mock/src/services/privacyStatus.ts
       - docs/PRIVACY_BETA_BASELINE.md
+      - compliance/privacy/
     tests:
       - tests/test_privacy_baseline.py
+      - tests/test_compliance_readiness.py
     blocker: No legal/privacy certification
     owner_area: privacy
+    target_stage: beta
+
+  legal_privacy_accessibility:
+    status: prototype
+    evidence_paths:
+      - compliance/README.md
+      - compliance/privacy/
+      - compliance/accessibility/
+      - compliance/legal/
+      - docs/PHASE4F_COMPLIANCE_READINESS.md
+    tests:
+      - tests/test_compliance_readiness.py
+    blocker: Readiness and self-assessment only — no formal legal, privacy, or accessibility certification
+    owner_area: compliance
     target_stage: beta
 
   hardware_evidence:
