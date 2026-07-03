@@ -2,6 +2,8 @@
 
 **Status:** Prototype documentation — **not** legal certification.
 
+Phase 4F readiness package: `compliance/privacy/` · [PHASE4F_COMPLIANCE_READINESS.md](PHASE4F_COMPLIANCE_READINESS.md)
+
 ## Local data (browser localStorage only)
 
 | Key | Purpose | Sent to server |

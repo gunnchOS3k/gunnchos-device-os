@@ -15,8 +15,8 @@
 | KI-008 | High | Hardware | Open | Use Docker/kiosk validation log only | No physical device validation | hardware | Yes |
 | KI-009 | High | Security | Open | Document claim boundaries only | No production secure boot | platform | Yes |
 | KI-010 | High | Fleet | Open | None | No production MDM | fleet | Yes |
-| KI-011 | Medium | Accessibility | Open | Use in-app toggles (large text, contrast, motion) | No WCAG certification | a11y | Yes |
-| KI-012 | High | Privacy | Open | Review `PRIVACY_BETA_BASELINE.md` | No legal/privacy review | privacy | Yes |
+| KI-011 | Medium | Accessibility | In progress | Use WCAG self-assessment + a11y toggles (Phase 4F readiness) | No WCAG certification | a11y | Yes |
+| KI-012 | High | Privacy | In progress | Review compliance readiness packet (Phase 4F) | No legal/privacy certification | privacy | Yes |
 | KI-013 | Medium | Games | Open | Play Anime Aggressors web slice only | Foot Racing / Earth Species not connected | game | Partial |
 | KI-014 | Low | Games | Open | Launch from Game Mode when web build available | Vertical slice only — not full game | game | No |
 | KI-015 | Medium | Policy | In progress | Use deployment mode selector for testing | Shell prototype — not production MDM | policy | Yes |

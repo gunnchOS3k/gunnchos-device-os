@@ -2,6 +2,8 @@
 
 **Status:** Prototype baseline — **not** certification.
 
+Phase 4F readiness: `compliance/accessibility/` · [PHASE4F_COMPLIANCE_READINESS.md](PHASE4F_COMPLIANCE_READINESS.md)
+
 ## Implemented in launcher
 
 - Keyboard navigation documented in Media Hub copy
