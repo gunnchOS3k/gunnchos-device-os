@@ -1,8 +1,21 @@
 # GunnchOS Beta Candidate Report
 
-**Generated:** Phase 3 rebase after PR #35 merge (2026-07-02)  
+**Generated:** Phase 4D secure boot + MDM rebase on post-4H main (2026-07-02)  
 **beta_ready (YAML):** `false`  
 **Beta claim allowed:** **No — beta candidate claim is not allowed yet.**
+
+## Phase 4 merge status
+
+| PR | Track | On `main`? |
+|----|-------|------------|
+| #41 | Foot Racing + Earth Species web slices | Yes |
+| #42 | Reference hardware validation package | Yes |
+| #43 | Installable OS image track | Yes |
+| #44 | Encrypted workspace storage | Yes |
+| #45 | Streaming CDM readiness | Yes |
+| #46 | Secure boot + MDM architecture | **This PR** |
+| #47 | Legal/privacy/a11y readiness | Yes |
+| #48 | Beta gate reconciliation | Yes |
 
 ## Beta gate summary
 
@@ -10,38 +23,43 @@
 |------|--------|---------|
 | CI | validated | — |
 | Contract export | validated | — |
-| File manager | implemented | Browser storage prototype |
-| Notes | implemented | — |
+| File manager + notes | implemented | Browser storage prototype |
+| Encrypted storage (4A) | prototype | Not OS FS / full-disk encryption |
 | Browser/PWA | implemented | External tab only |
-| Media player | **implemented** | Prototype — no production library, no DRM, no blob persistence |
-| Game launch adapter | implemented | — |
-| Anime Aggressors | implemented | Vertical slice only |
-| Bootable image | prototype | Container track only |
+| Media player | implemented | Local media separate from DRM streaming |
+| Game launch + 3 slices (4G) | implemented | Vertical slices only |
+| Bootable image (4B) | prototype | OS-layer bundle — not bootable ISO/IMG |
+| Hardware evidence (4C) | prototype | No physical device report |
+| Streaming certification (4E) | prototype | No CDM, no official service cert |
+| Legal/privacy/a11y (4F) | prototype | Readiness only — not certified |
+| Secure boot (4D) | **prototype** | Dev manifest signing — no boot chain on hardware |
+| Production MDM (4D) | **prototype** | Local policy agent — no enrollment server |
 | Policy enforcement | implemented | Shell prototype |
-| Accessibility baseline | implemented | No certification |
-| Privacy baseline | implemented | No legal review |
-| Hardware evidence | prototype | No physical validation |
-| Known issues | implemented | 16 open issues |
+| Known issues | implemented | Open blockers documented |
 
-## P0 gaps blocking beta
+## Exact remaining blockers
 
-1. Production filesystem / encrypted storage
-2. Physical hardware validation
-3. Bootable installable OS image
-4. Netflix/Hulu certification / CDM integration
-5. Production MDM, secure boot
-6. Legal privacy / accessibility certification
-7. Foot Racing / Earth Species not connected (game limitation)
+See `beta_gate/beta_gate_status.yaml` → `remaining_blockers` (7 items).
+
+**Cannot claim today:**
+
+- Production OS filesystem or full-disk encryption
+- Physical hardware validation without filled reference device report
+- Bootable installable OS without boot smoke evidence
+- Netflix/Hulu/Disney+/Widevine/service certification
+- Production secure boot without boot-chain verification on hardware
+- Production MDM without enrollment server and remote policy evidence
+- Legal, privacy, or accessibility certification without formal review
 
 ## Evidence paths
 
 - Beta gate: `beta_gate/beta_gate_status.yaml`
+- Dashboard: `docs/BETA_STATUS_DASHBOARD.md`
+- Phase docs: `docs/PHASE4A_*` through `docs/PHASE4G_*`, `docs/PHASE4F_*`
+- Streaming: `streaming_certification/`
+- Hardware: `hardware_validation/`, `docs/PHASE4C_HARDWARE_VALIDATION.md`
+- Compliance: `compliance/`
 - Known issues: `docs/KNOWN_ISSUES.md`
-- Local media: `docs/PHASE2C_LOCAL_MEDIA_PLAYER.md`
-- Policy: `docs/PHASE3_POLICY_ENFORCEMENT.md`
-- Privacy: `docs/PRIVACY_BETA_BASELINE.md`
-- Accessibility: `docs/ACCESSIBILITY_BETA_BASELINE.md`
-- Hardware: `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
 
 ## Commands run
 
@@ -49,9 +67,10 @@
 python3 scripts/export_launcher_contract.py
 python3 scripts/check_launcher_contract_fresh.py
 python3 scripts/validate_beta_gate.py
+pytest tests/test_beta_gate_reconciliation.py -q
 make validate-full
 ```
 
 ## Review note
 
-If all P0 items reach `implemented` or `validated` with evidence, Edmund may review for **beta candidate** — do **not** claim GA.
+`beta_ready` remains **false**. Edmund may review PR #48 for final gate reconciliation. Do **not** claim beta candidate or GA until every P0 item is `implemented` or `validated` with evidence.

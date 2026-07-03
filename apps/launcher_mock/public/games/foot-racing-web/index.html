@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foot Racing — Vertical Slice Prototype</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="screen-title" class="screen active">
+    <h1>Foot Racing</h1>
+    <p class="subtitle">Original-character sprint prototype · Not the full game</p>
+    <button id="btn-start">Start Race</button>
+    <div class="controls">
+      <h2>Controls</h2>
+      <p><strong>Bolt (runner):</strong> ← / → change lane · ↑ accelerate · Space sprint/boost</p>
+      <p>Boost meter drains while sprinting and refills when you coast.</p>
+      <p>Dodge barriers and puddles — three lanes, one finish line.</p>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <canvas id="track" width="800" height="500"></canvas>
+    <div id="hud">
+      <span id="timer">Time: 0.0s</span>
+      <span id="distance">Distance: 0%</span>
+      <div id="boost-wrap">
+        <label for="boost-meter">Boost</label>
+        <div id="boost-meter"><div id="boost-fill"></div></div>
+      </div>
+    </div>
+    <button id="btn-exit">Exit to title</button>
+  </div>
+
+  <div id="screen-win" class="screen">
+    <h1>Race Complete!</h1>
+    <p id="win-time" class="subtitle"></p>
+    <p class="subtitle">Bolt crossed the finish line.</p>
+    <button id="btn-replay">Race Again</button>
+    <button id="btn-win-exit">Back to Title</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

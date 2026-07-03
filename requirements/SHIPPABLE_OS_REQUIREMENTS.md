@@ -12,7 +12,7 @@ A shippable gunnchOS release must include:
 
 | Capability | Requirement summary | Current alpha evidence |
 |------------|---------------------|------------------------|
-| Installable OS or OS-layer package | Signed installer, version manifest, checksums | Documented only; no proven installable image |
+| Installable OS or OS-layer package | Signed installer, version manifest, checksums | Installable bundle prototype (Phase 4B); not bootable ISO |
 | First-run onboarding | Persona/preset wizard, profile setup | Launcher mock + user-focused demo |
 | Device-class detection | student_14_5, handheld_hybrid, ds_xl_coder, wearables_arena_set | `device_classes.py` + YAML |
 | User profile setup | Profiles, journey presets, import/export design | Profile manager prototype |

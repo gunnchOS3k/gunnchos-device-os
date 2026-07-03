@@ -2,7 +2,7 @@
 
 **GunnchOS** — an education-first, creator-first, gamer-first operating system for affordable handheld devices.
 
-> Phase 0 shell merged (PR #30). Phase 1 adds Media Mode and policy bridge. Not yet a bootable shipping OS image.
+> Phase 4 beta completion train — **beta_ready: false**. See [Beta Status Dashboard](docs/BETA_STATUS_DASHBOARD.md).
 
 ## Run GunnchOS
 
@@ -41,7 +41,7 @@ See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [docs/PH
 | **Games** | Game metadata, Game Mode UI | — | Launch (mock) | One real game build | Three vertical slices |
 | **Platform** | Docker prototype, SBOM scripts | HW compat (simulated) | Updater, rollback | Installable image | Production OTA |
 
-Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) · Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) · Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md) · **Beta status dashboard:** [docs/BETA_STATUS_DASHBOARD.md](docs/BETA_STATUS_DASHBOARD.md)
+Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) · Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) · Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md) · **Beta status:** [docs/BETA_STATUS_DASHBOARD.md](docs/BETA_STATUS_DASHBOARD.md)
 
 ---
 

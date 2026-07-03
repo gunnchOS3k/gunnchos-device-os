@@ -8,22 +8,46 @@ Full report: [`release_artifacts/BETA_CANDIDATE_REPORT.md`](../release_artifacts
 
 ```bash
 python3 scripts/validate_beta_gate.py
+pytest tests/test_beta_gate_reconciliation.py -q
+python3 scripts/validate_streaming_certification_tracker.py
 ```
 
-## Current summary (Phase 3 — post PR #35 merge)
+## Phase 4 reconciliation summary (2026-07-02)
 
-| Area | Status |
-|------|--------|
-| CI + contract | validated |
-| File manager + notes | implemented |
-| Browser/PWA | implemented (external tab) |
-| **Media player** | **implemented** (browser-backed prototype) |
-| Game launch + Anime Aggressors | implemented (slice) |
-| Bootable image | prototype (container) |
-| Policy enforcement | implemented (shell) |
-| Accessibility + privacy baselines | implemented (no cert) |
-| Hardware evidence | prototype (container only) |
-| Known issues | implemented |
-| **beta_ready** | **false** |
+| Area | Status | Phase |
+|------|--------|-------|
+| CI + contract | validated | — |
+| File manager + notes | implemented | 2A |
+| Encrypted workspace | **prototype** | 4A |
+| Browser/PWA | implemented | 2B |
+| Media player | implemented (prototype) | 2C |
+| Game launch + 3 web slices | implemented | 2D/2E/4G |
+| Installable OS bundle | **prototype** | 4B |
+| Hardware validation package | **prototype** | 4C |
+| Streaming CDM readiness | **prototype** | 4E |
+| Legal/privacy/a11y readiness | **prototype** | 4F |
+| Secure boot | **prototype** | 4D |
+| Production MDM | **prototype** | 4D |
+| Policy enforcement (shell) | implemented | 3 |
+| Known issues | implemented | 3 |
+| **beta_ready** | **false** | — |
 
-Remaining blockers: production FS, hardware validation, bootable OS image, streaming CDM, MDM, secure boot, legal certification.
+## What is implemented (honest)
+
+- Browser workspace, notes, encrypted workspace prototype, local media, game launch adapter
+- Three first-party web game vertical slices (Anime Aggressors, Foot Racing, Earth Species)
+- OS-layer installable bundle build track with manifest/checksums
+- Hardware validation package (matrix, templates, collector — no physical report)
+- Streaming certification readiness (tracker, checklists — not certified)
+- Compliance readiness packet (not certified)
+
+## What remains prototype / missing
+
+- Production OS filesystem and full-disk encryption
+- Bootable ISO/IMG with boot evidence
+- Physical reference hardware validation report
+- Official streaming/CDM/HDCP certification
+- Production secure boot on hardware and fleet MDM (4D is architecture prototype only)
+- Formal legal, privacy, accessibility certification
+
+**Beta candidate claim is not allowed yet.**

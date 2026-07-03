@@ -6,6 +6,11 @@ beta_ready: false
 last_updated: "2026-07-02"
 target_stage: beta_candidate
 
+phase4_reconciliation:
+  merged_prs: [41, 42, 43, 44, 45, 47, 48]
+  open_prs: [46]
+  note: "Phase 4D (#46) adds secure boot/MDM architecture prototypes on post-4H main."
+
 items:
   ci:
     status: validated
@@ -37,7 +42,7 @@ items:
       - apps/launcher_mock/src/services/localWorkspaceStore.ts
     tests:
       - apps/launcher_mock/src/shell/workspace.shell.test.tsx
-    blocker: Production filesystem not available — browser storage prototype
+    blocker: Production filesystem not available — browser storage prototype; encrypted workspace prototype (Phase 4A)
     owner_area: shell
     target_stage: beta
 
@@ -49,6 +54,20 @@ items:
     tests:
       - apps/launcher_mock/src/shell/workspace.shell.test.tsx
     blocker: null
+    owner_area: shell
+    target_stage: beta
+
+  encrypted_storage:
+    status: prototype
+    evidence_paths:
+      - apps/launcher_mock/src/services/workspaceCrypto.ts
+      - apps/launcher_mock/src/services/encryptedWorkspaceStore.ts
+      - apps/launcher_mock/src/shell/EncryptedWorkspacePanel.tsx
+      - docs/PHASE4A_ENCRYPTED_WORKSPACE.md
+      - docs/STORAGE_SECURITY_BOUNDARY.md
+    tests:
+      - apps/launcher_mock/src/services/encryptedWorkspace.test.ts
+    blocker: Browser-backed encrypted workspace only — not production OS filesystem or full-disk encryption
     owner_area: shell
     target_stage: beta
 
@@ -103,15 +122,48 @@ items:
     owner_area: game
     target_stage: beta
 
+  foot_racing_playable:
+    status: implemented
+    evidence_paths:
+      - games/foot-racing-web/
+      - apps/launcher_mock/public/games/foot-racing-web/
+      - scripts/build_foot_racing_web.sh
+      - docs/PHASE4G_FIRST_PARTY_GAME_SLICES.md
+    tests:
+      - tests/test_foot_racing_build.py
+    blocker: Vertical slice only — single track, keyboard only, no native build
+    owner_area: game
+    target_stage: beta
+
+  earth_species_playable:
+    status: implemented
+    evidence_paths:
+      - games/earth-species-web/
+      - apps/launcher_mock/public/games/earth-species-web/
+      - scripts/build_earth_species_web.sh
+      - docs/PHASE4G_FIRST_PARTY_GAME_SLICES.md
+    tests:
+      - tests/test_earth_species_build.py
+    blocker: Vertical slice only — citation placeholders, in-session collection log only
+    owner_area: game
+    target_stage: beta
+
   bootable_image:
     status: prototype
     evidence_paths:
-      - os_build/image_prototype/
-      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
-      - docs/PHASE2F_BOOTABLE_IMAGE_TRACK.md
+      - os_build/installable_image/
+      - os_build/installable_image/ARTIFACT_MANIFEST.md
+      - scripts/build_installable_image.sh
+      - scripts/validate_installable_image_artifacts.py
+      - tests/test_installable_image.py
+      - hardware_validation/BOOT_VALIDATION_TEMPLATE.md
+      - docs/PHASE4B_INSTALLABLE_IMAGE.md
     tests:
-      - tests/test_image_prototype.py
-    blocker: Container kiosk only — not bootable hardware OS
+      - bash scripts/build_installable_image.sh
+      - python3 scripts/validate_installable_image_artifacts.py
+      - pytest tests/test_installable_image.py -q
+      - make validate-full
+    blocker: Prototype OS-layer bundle only — not a bootable ISO/IMG, not physically hardware-validated, not a GA/beta installable OS image
     owner_area: os_build
     target_stage: beta
 
@@ -127,13 +179,31 @@ items:
     owner_area: policy
     target_stage: beta
 
+  streaming_certification:
+    status: prototype
+    evidence_paths:
+      - streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md
+      - streaming_certification/CDM_READINESS_CHECKLIST.md
+      - streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md
+      - streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml
+      - scripts/validate_streaming_certification_tracker.py
+      - docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md
+    tests:
+      - scripts/validate_streaming_certification_tracker.py
+      - tests/test_streaming_certification.py
+    blocker: No official service certification, no CDM integration evidence, no HDCP hardware validation, no DRM circumvention
+    owner_area: media
+    target_stage: beta
+
   accessibility_baseline:
     status: implemented
     evidence_paths:
       - apps/launcher_mock/src/services/accessibilityAudit.ts
       - docs/ACCESSIBILITY_BETA_BASELINE.md
+      - compliance/accessibility/
     tests:
       - apps/launcher_mock/src/services/policyEnforcement.test.ts
+      - tests/test_compliance_readiness.py
     blocker: No WCAG certification
     owner_area: a11y
     target_stage: beta
@@ -143,21 +213,44 @@ items:
     evidence_paths:
       - apps/launcher_mock/src/services/privacyStatus.ts
       - docs/PRIVACY_BETA_BASELINE.md
+      - compliance/privacy/
     tests:
       - tests/test_privacy_baseline.py
+      - tests/test_compliance_readiness.py
     blocker: No legal/privacy certification
     owner_area: privacy
+    target_stage: beta
+
+  legal_privacy_accessibility:
+    status: prototype
+    evidence_paths:
+      - compliance/README.md
+      - compliance/privacy/
+      - compliance/accessibility/
+      - compliance/legal/
+      - docs/PHASE4F_COMPLIANCE_READINESS.md
+    tests:
+      - tests/test_compliance_readiness.py
+    blocker: Readiness and self-assessment only — no formal legal, privacy, or accessibility certification
+    owner_area: compliance
     target_stage: beta
 
   hardware_evidence:
     status: prototype
     evidence_paths:
+      - hardware_validation/reference_device_matrix.yaml
+      - hardware_validation/reference_device_report.template.md
+      - hardware_validation/reference_device_report.example.md
       - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
       - hardware_validation/HARDWARE_CLAIM_BOUNDARY.md
-      - hardware_validation/REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md
+      - scripts/collect_reference_hardware_info.py
+      - scripts/validate_hardware_report.py
+      - docs/PHASE4C_HARDWARE_VALIDATION.md
     tests:
       - tests/test_hardware_evidence.py
-    blocker: No physical hardware validation performed
+      - tests/test_reference_hardware_validation.py
+      - python3 scripts/validate_hardware_report.py
+    blocker: No physical reference hardware validation report yet. Current evidence is template/container/host-info only unless a real physical device report exists
     owner_area: hardware
     target_stage: beta
 
@@ -206,8 +299,10 @@ items:
     status: implemented
     evidence_paths:
       - release_artifacts/BETA_CANDIDATE_REPORT.md
+      - docs/BETA_STATUS_DASHBOARD.md
     tests:
       - tests/test_beta_gate_dashboard.py
+      - tests/test_beta_gate_reconciliation.py
     blocker: null
     owner_area: release
     target_stage: beta
@@ -224,3 +319,26 @@ p0_items:
   - bootable_image
   - policy_enforcement
   - known_issues
+
+remaining_blockers:
+  - id: production_filesystem
+    summary: Production OS filesystem / encrypted storage at OS layer (4A is browser prototype only)
+    gate_item: encrypted_storage
+  - id: physical_hardware
+    summary: Physical hardware validation with filled reference device report
+    gate_item: hardware_evidence
+  - id: bootable_os
+    summary: Bootable installable OS image with boot smoke evidence
+    gate_item: bootable_image
+  - id: streaming_cdm
+    summary: Streaming service certification with real CDM/service evidence
+    gate_item: streaming_certification
+  - id: secure_boot
+    summary: Production secure boot chain on hardware (4D is dev manifest signing only)
+    gate_item: secure_boot
+  - id: production_mdm
+    summary: Production MDM enrollment and remote policy (4D is local static agent only)
+    gate_item: production_mdm
+  - id: legal_compliance
+    summary: Legal, privacy, accessibility formal certification
+    gate_item: legal_privacy_accessibility
