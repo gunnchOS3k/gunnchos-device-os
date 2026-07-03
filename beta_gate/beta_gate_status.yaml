@@ -217,18 +217,19 @@ items:
   hardware_evidence:
     status: prototype
     evidence_paths:
-      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
-      - hardware_validation/HARDWARE_CLAIM_BOUNDARY.md
-      - hardware_validation/REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md
       - hardware_validation/reference_device_matrix.yaml
       - hardware_validation/reference_device_report.template.md
       - hardware_validation/reference_device_report.example.md
+      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
+      - hardware_validation/HARDWARE_CLAIM_BOUNDARY.md
+      - scripts/collect_reference_hardware_info.py
+      - scripts/validate_hardware_report.py
       - docs/PHASE4C_HARDWARE_VALIDATION.md
     tests:
       - tests/test_hardware_evidence.py
       - tests/test_reference_hardware_validation.py
       - python3 scripts/validate_hardware_report.py
-    blocker: No physical hardware validation performed — container-only example and validation package scaffolding (Phase 4C)
+    blocker: No physical reference hardware validation report yet. Current evidence is template/container/host-info only unless a real physical device report exists
     owner_area: hardware
     target_stage: beta
 

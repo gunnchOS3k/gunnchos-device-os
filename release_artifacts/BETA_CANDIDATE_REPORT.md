@@ -1,6 +1,6 @@
 # GunnchOS Beta Candidate Report
 
-**Generated:** Phase 4B rebase after Phase 4A + 4G merge (2026-07-02)  
+**Generated:** Phase 4C rebase after Phase 4A + 4G + 4B + 4F merges (2026-07-02)  
 **beta_ready (YAML):** `false`  
 **Beta claim allowed:** **No — beta candidate claim is not allowed yet.**
 
@@ -19,55 +19,55 @@
 | Anime Aggressors | implemented | Vertical slice only |
 | Foot Racing (4G) | implemented | Vertical slice only |
 | Earth Species (4G) | implemented | Vertical slice only |
-| **Bootable / installable image (4B)** | **prototype** | OS-layer bundle only — not bootable ISO/IMG, not hardware-validated |
+| Bootable / installable image (4B) | prototype | OS-layer bundle only — not bootable ISO/IMG |
 | Policy enforcement | implemented | Shell prototype |
+| Legal/privacy/a11y readiness (4F) | prototype | Readiness only — no certification |
 | Accessibility baseline | implemented | No certification |
 | Privacy baseline | implemented | No legal review |
-| Hardware evidence | prototype | No physical validation |
+| **Hardware evidence (4C)** | **prototype** | No physical report — template/container/host-info only |
 | Known issues | implemented | Open blockers documented |
 
-## Phase 4B installable image track (honest)
+## Phase 4C hardware validation (honest)
 
-PR #43 adds a reproducible **OS-layer installable bundle prototype** via `scripts/build_installable_image.sh`.
+PR #42 adds reference device matrix, report templates, container-only example, and safe host-info collector.
 
-**What it is:** tarball with launcher dist, policy snapshot, install stubs, manifest, checksums.
+**What it is:** validation package scaffolding and container evidence.
 
 **What it is not:**
-- Bootable ISO or raw disk image
-- Hardware-validated installable OS
-- GA/beta shipping image
+- Physical reference hardware validation
+- Filled reference device report on real hardware
 
-Boot evidence requires completing `hardware_validation/BOOT_VALIDATION_TEMPLATE.md` on reference hardware.
+Physical validation requires a completed report from real reference hardware — not the container-only example.
 
 ## P0 gaps still blocking beta
 
 1. Production OS filesystem (encrypted storage is browser prototype only)
-2. Physical hardware validation
-3. Bootable installable OS image **with boot evidence**
+2. Physical hardware validation **with real device report**
+3. Bootable installable OS image with boot evidence
 4. Netflix/Hulu certification / CDM integration
 5. Production MDM, secure boot
-6. Legal privacy / accessibility certification
+6. Legal privacy / accessibility formal certification
 
 ## Evidence paths
 
 - Beta gate: `beta_gate/beta_gate_status.yaml`
-- Installable image: `docs/PHASE4B_INSTALLABLE_IMAGE.md`, `os_build/installable_image/`
+- Hardware validation: `docs/PHASE4C_HARDWARE_VALIDATION.md`, `hardware_validation/reference_device_matrix.yaml`
+- Installable image: `docs/PHASE4B_INSTALLABLE_IMAGE.md`
 - Encrypted workspace: `docs/PHASE4A_ENCRYPTED_WORKSPACE.md`
 - Game slices: `docs/PHASE4G_FIRST_PARTY_GAME_SLICES.md`
+- Compliance readiness: `docs/PHASE4F_COMPLIANCE_READINESS.md`
 - Known issues: `docs/KNOWN_ISSUES.md`
 
 ## Commands run
 
 ```bash
-bash scripts/build_installable_image.sh
-python3 scripts/validate_installable_image_artifacts.py
-pytest tests/test_installable_image.py -q
 python3 scripts/export_launcher_contract.py
 python3 scripts/check_launcher_contract_fresh.py
 python3 scripts/validate_beta_gate.py
+python3 scripts/validate_hardware_report.py
 make validate-full
 ```
 
 ## Review note
 
-`beta_ready` remains **false**. Edmund may review PR #43 for the installable bundle **prototype** track only — do **not** claim bootable OS or GA.
+`beta_ready` remains **false**. Edmund may review PR #42 for the hardware validation **package** only — do **not** claim physical device validation.
