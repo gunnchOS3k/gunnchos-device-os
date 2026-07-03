@@ -6,6 +6,11 @@ beta_ready: false
 last_updated: "2026-07-02"
 target_stage: beta_candidate
 
+phase4_reconciliation:
+  merged_prs: [41, 42, 43, 44, 45, 47]
+  open_prs: [46, 48]
+  note: "Phase 4A–4G tracks merged except secure boot/MDM (#46). PR #48 is this reconciliation."
+
 items:
   ci:
     status: validated
@@ -174,6 +179,44 @@ items:
     owner_area: policy
     target_stage: beta
 
+  streaming_certification:
+    status: prototype
+    evidence_paths:
+      - streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md
+      - streaming_certification/CDM_READINESS_CHECKLIST.md
+      - streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md
+      - streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml
+      - scripts/validate_streaming_certification_tracker.py
+      - docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md
+    tests:
+      - scripts/validate_streaming_certification_tracker.py
+      - tests/test_streaming_certification.py
+    blocker: No official service certification, no CDM integration evidence, no HDCP hardware validation, no DRM circumvention
+    owner_area: media
+    target_stage: beta
+
+  secure_boot:
+    status: missing
+    evidence_paths:
+      - release_artifacts/SIGNING_REQUIREMENTS.md
+      - docs/BETA_RELEASE_GATE.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: Pending PR #46 — secure boot architecture not merged to main; not validated without boot-chain evidence
+    owner_area: security
+    target_stage: beta
+
+  production_mdm:
+    status: missing
+    evidence_paths:
+      - docs/PHASE3_POLICY_ENFORCEMENT.md
+      - docs/BETA_RELEASE_GATE.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: Pending PR #46 — MDM policy agent not merged to main; not validated without enrollment/server evidence
+    owner_area: fleet
+    target_stage: beta
+
   accessibility_baseline:
     status: implemented
     evidence_paths:
@@ -248,26 +291,12 @@ items:
     status: implemented
     evidence_paths:
       - release_artifacts/BETA_CANDIDATE_REPORT.md
+      - docs/BETA_STATUS_DASHBOARD.md
     tests:
       - tests/test_beta_gate_dashboard.py
+      - tests/test_beta_gate_reconciliation.py
     blocker: null
     owner_area: release
-    target_stage: beta
-
-  streaming_certification:
-    status: prototype
-    evidence_paths:
-      - streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md
-      - streaming_certification/CDM_READINESS_CHECKLIST.md
-      - streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md
-      - streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml
-      - scripts/validate_streaming_certification_tracker.py
-      - docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md
-    tests:
-      - scripts/validate_streaming_certification_tracker.py
-      - tests/test_streaming_certification.py
-    blocker: No official service certification, no CDM integration evidence, no HDCP hardware validation, no DRM circumvention
-    owner_area: media
     target_stage: beta
 
 p0_items:
@@ -282,3 +311,26 @@ p0_items:
   - bootable_image
   - policy_enforcement
   - known_issues
+
+remaining_blockers:
+  - id: production_filesystem
+    summary: Production OS filesystem / encrypted storage at OS layer (4A is browser prototype only)
+    gate_item: encrypted_storage
+  - id: physical_hardware
+    summary: Physical hardware validation with filled reference device report
+    gate_item: hardware_evidence
+  - id: bootable_os
+    summary: Bootable installable OS image with boot smoke evidence
+    gate_item: bootable_image
+  - id: streaming_cdm
+    summary: Streaming service certification with real CDM/service evidence
+    gate_item: streaming_certification
+  - id: secure_boot
+    summary: Production secure boot chain on hardware (PR #46 pending)
+    gate_item: secure_boot
+  - id: production_mdm
+    summary: Production MDM enrollment and remote policy (PR #46 pending)
+    gate_item: production_mdm
+  - id: legal_compliance
+    summary: Legal, privacy, accessibility formal certification
+    gate_item: legal_privacy_accessibility

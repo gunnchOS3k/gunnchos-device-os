@@ -1,8 +1,21 @@
 # GunnchOS Beta Candidate Report
 
-**Generated:** Phase 4E rebase after Phase 4C merge (2026-07-02)  
+**Generated:** Phase 4H beta gate reconciliation — all Phase 4 tracks merged except #46 (2026-07-02)  
 **beta_ready (YAML):** `false`  
 **Beta claim allowed:** **No — beta candidate claim is not allowed yet.**
+
+## Phase 4 merge status
+
+| PR | Track | On `main`? |
+|----|-------|------------|
+| #41 | Foot Racing + Earth Species web slices | Yes |
+| #42 | Reference hardware validation package | Yes |
+| #43 | Installable OS image track | Yes |
+| #44 | Encrypted workspace storage | Yes |
+| #45 | Streaming CDM readiness | Yes |
+| #46 | Secure boot + MDM architecture | **Open** |
+| #47 | Legal/privacy/a11y readiness | Yes |
+| #48 | Beta gate reconciliation | This PR |
 
 ## Beta gate summary
 
@@ -10,58 +23,54 @@
 |------|--------|---------|
 | CI | validated | — |
 | Contract export | validated | — |
-| File manager | implemented | Browser storage prototype |
-| Notes | implemented | — |
-| Encrypted storage (4A) | prototype | Browser crypto only — not OS FS |
+| File manager + notes | implemented | Browser storage prototype |
+| Encrypted storage (4A) | prototype | Not OS FS / full-disk encryption |
 | Browser/PWA | implemented | External tab only |
-| Media player | implemented | Prototype — local media separate from DRM streaming |
-| Game launch + three web slices (4G) | implemented | Vertical slices only |
-| Bootable / installable image (4B) | prototype | OS-layer bundle — not bootable ISO/IMG |
-| Hardware evidence (4C) | prototype | No physical report — template/container only |
-| **Streaming certification (4E)** | **prototype** | No CDM, no official service cert, no HDCP hardware validation |
-| Legal/privacy/a11y readiness (4F) | prototype | Readiness only |
+| Media player | implemented | Local media separate from DRM streaming |
+| Game launch + 3 slices (4G) | implemented | Vertical slices only |
+| Bootable image (4B) | prototype | OS-layer bundle — not bootable ISO/IMG |
+| Hardware evidence (4C) | prototype | No physical device report |
+| Streaming certification (4E) | prototype | No CDM, no official service cert |
+| Legal/privacy/a11y (4F) | prototype | Readiness only — not certified |
+| Secure boot (4D) | **missing** | PR #46 not merged |
+| Production MDM (4D) | **missing** | PR #46 not merged |
 | Policy enforcement | implemented | Shell prototype |
 | Known issues | implemented | Open blockers documented |
 
-## Phase 4E streaming certification (honest)
+## Exact remaining blockers
 
-PR #45 adds compatibility matrix, CDM/HDCP checklists, and service certification tracker.
+See `beta_gate/beta_gate_status.yaml` → `remaining_blockers` (7 items).
 
-**What it is:** readiness and evidence tracking for YouTube, Netflix, Hulu, Disney+, Max, Prime, and others.
+**Cannot claim today:**
 
-**What it is not:**
-- Official Netflix/Hulu/Disney+/Widevine certification
-- CDM integration or DRM circumvention
-- HDCP-validated external display behavior on hardware
-- Confirmed max resolution per service (unknown unless evidence path exists)
-
-## P0 gaps still blocking beta
-
-1. Production OS filesystem (encrypted storage is browser prototype only)
-2. Physical hardware validation with real device report
-3. Bootable installable OS image with boot evidence
-4. Streaming service certification with real CDM/service evidence
-5. Production MDM, secure boot
-6. Legal privacy / accessibility formal certification
+- Production OS filesystem or full-disk encryption
+- Physical hardware validation without filled reference device report
+- Bootable installable OS without boot smoke evidence
+- Netflix/Hulu/Disney+/Widevine/service certification
+- Production secure boot without boot-chain verification on hardware
+- Production MDM without enrollment server and remote policy evidence
+- Legal, privacy, or accessibility certification without formal review
 
 ## Evidence paths
 
-- Streaming: `docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md`, `streaming_certification/`
-- Hardware: `docs/PHASE4C_HARDWARE_VALIDATION.md`
 - Beta gate: `beta_gate/beta_gate_status.yaml`
+- Dashboard: `docs/BETA_STATUS_DASHBOARD.md`
+- Phase docs: `docs/PHASE4A_*` through `docs/PHASE4G_*`, `docs/PHASE4F_*`
+- Streaming: `streaming_certification/`
+- Hardware: `hardware_validation/`, `docs/PHASE4C_HARDWARE_VALIDATION.md`
+- Compliance: `compliance/`
 - Known issues: `docs/KNOWN_ISSUES.md`
 
 ## Commands run
 
 ```bash
-python3 scripts/validate_streaming_certification_tracker.py
-pytest tests/test_streaming_certification.py -q
 python3 scripts/export_launcher_contract.py
 python3 scripts/check_launcher_contract_fresh.py
 python3 scripts/validate_beta_gate.py
+pytest tests/test_beta_gate_reconciliation.py -q
 make validate-full
 ```
 
 ## Review note
 
-`beta_ready` remains **false**. Edmund may review PR #45 for streaming **readiness** only — do **not** claim service certification or CDM integration.
+`beta_ready` remains **false**. Edmund may review PR #48 for final gate reconciliation. Merge PR #46 next for secure boot/MDM prototype tracks. Do **not** claim beta candidate or GA until every P0 item is `implemented` or `validated` with evidence.

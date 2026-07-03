@@ -1,6 +1,6 @@
 # What Is Real Today
 
-**Last updated:** Phase 4A encrypted workspace + Phase 4G game slices + Phase 4B installable bundle track (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 4H beta gate reconciliation (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
@@ -27,7 +27,9 @@
   - **Not** a bootable ISO/IMG
   - **Not** hardware-validated
 - **Image prototype track** — container kiosk packaging (Phase 2F)
-- Container validation evidence — `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
+- **Reference hardware validation package (Phase 4C)** — matrix, templates, collector ([PHASE4C_HARDWARE_VALIDATION.md](PHASE4C_HARDWARE_VALIDATION.md)); no physical device report
+- **Streaming certification readiness (Phase 4E)** — tracker and checklists ([PHASE4E_STREAMING_CDM_CERTIFICATION.md](PHASE4E_STREAMING_CDM_CERTIFICATION.md)); not certified
+- **Compliance readiness packet (Phase 4F)** — self-assessment docs ([PHASE4F_COMPLIANCE_READINESS.md](PHASE4F_COMPLIANCE_READINESS.md)); not certified
 
 ## Prototype / honest labels
 
@@ -37,7 +39,8 @@
 - Policy enforcement — shell UI prototype
 - Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
 - Bootable / installable image — OS-layer bundle prototype (Phase 4B); not bootable ISO, not hardware-validated
-- Hardware — no physical device validation
+- Hardware — validation package only; no physical device report (Phase 4C)
+- Streaming — readiness tracking only; no CDM or service certification (Phase 4E)
 - Games — all three first-party titles are web vertical slices only; not full games or native builds
 - AI assistant — UI shell only
 - Settings — system stats (storage/RAM/Wi-Fi) still mock labels

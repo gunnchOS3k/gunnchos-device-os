@@ -8,34 +8,46 @@ Full report: [`release_artifacts/BETA_CANDIDATE_REPORT.md`](../release_artifacts
 
 ```bash
 python3 scripts/validate_beta_gate.py
+pytest tests/test_beta_gate_reconciliation.py -q
 python3 scripts/validate_streaming_certification_tracker.py
 ```
 
-## Current summary (Phase 4E rebase — post 4A + 4G + 4B + 4F + 4C merge)
+## Phase 4 reconciliation summary (2026-07-02)
 
-| Area | Status |
-|------|--------|
-| CI + contract | validated |
-| File manager + notes | implemented |
-| Encrypted workspace (4A) | prototype |
-| Browser/PWA | implemented (external tab) |
-| Media player | implemented (browser-backed prototype) |
-| Game launch + all three web slices (4G) | implemented (vertical slices) |
-| Installable OS image track (4B) | prototype (OS-layer bundle — not bootable ISO/IMG) |
-| **Streaming CDM readiness (4E)** | **prototype** (readiness tracking — not certified) |
-| Hardware evidence (4C) | prototype (no physical report) |
-| Legal/privacy/a11y readiness (4F) | prototype |
-| Policy enforcement | implemented (shell) |
-| Accessibility + privacy baselines | implemented (no cert) |
-| Known issues | implemented |
-| **beta_ready** | **false** |
+| Area | Status | Phase |
+|------|--------|-------|
+| CI + contract | validated | — |
+| File manager + notes | implemented | 2A |
+| Encrypted workspace | **prototype** | 4A |
+| Browser/PWA | implemented | 2B |
+| Media player | implemented (prototype) | 2C |
+| Game launch + 3 web slices | implemented | 2D/2E/4G |
+| Installable OS bundle | **prototype** | 4B |
+| Hardware validation package | **prototype** | 4C |
+| Streaming CDM readiness | **prototype** | 4E |
+| Legal/privacy/a11y readiness | **prototype** | 4F |
+| Secure boot | **missing** | 4D (#46 open) |
+| Production MDM | **missing** | 4D (#46 open) |
+| Policy enforcement (shell) | implemented | 3 |
+| Known issues | implemented | 3 |
+| **beta_ready** | **false** | — |
 
-## Phase 4E honest boundary
+## What is implemented (honest)
 
-- Service compatibility matrix and certification tracker — **readiness only**
-- **No** Widevine/CDM integration, **no** official service certification
-- **No** DRM circumvention
-- HDCP external display not validated on hardware
-- Local media player remains separate from DRM streaming
+- Browser workspace, notes, encrypted workspace prototype, local media, game launch adapter
+- Three first-party web game vertical slices (Anime Aggressors, Foot Racing, Earth Species)
+- OS-layer installable bundle build track with manifest/checksums
+- Hardware validation package (matrix, templates, collector — no physical report)
+- Streaming certification readiness (tracker, checklists — not certified)
+- Compliance readiness packet (not certified)
 
-Remaining blockers: production FS at OS layer, physical hardware report, bootable ISO with boot evidence, secure boot, production MDM, formal legal certification.
+## What remains prototype / missing
+
+- Production OS filesystem and full-disk encryption
+- Bootable ISO/IMG with boot evidence
+- Physical reference hardware validation report
+- Official streaming/CDM/HDCP certification
+- Secure boot and production MDM (PR #46)
+- Formal legal, privacy, accessibility certification
+
+**Beta candidate claim is not allowed yet.**
