@@ -30,6 +30,18 @@ Game Mode does **not** become a streaming mode. Media state does not corrupt gam
 - Guardian/school/library restriction summary
 - DRM disclaimers on Netflix/Hulu cards
 
+## Phase 4E certification readiness (prototype)
+
+Phase 4E adds a **readiness package** — not certification. Track per-service status in:
+
+- [streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml](../streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml)
+- [streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md](../streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md)
+- [streaming_certification/CDM_READINESS_CHECKLIST.md](../streaming_certification/CDM_READINESS_CHECKLIST.md)
+- [streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md](../streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md)
+- [PHASE4E_STREAMING_CDM_CERTIFICATION.md](PHASE4E_STREAMING_CDM_CERTIFICATION.md)
+
+No service may be marked `certified` in the tracker without an on-disk evidence path.
+
 ## Claim boundary (required reading)
 
 GunnchOS does **not** claim:

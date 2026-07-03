@@ -254,6 +254,22 @@ items:
     owner_area: release
     target_stage: beta
 
+  streaming_certification:
+    status: prototype
+    evidence_paths:
+      - streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md
+      - streaming_certification/CDM_READINESS_CHECKLIST.md
+      - streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md
+      - streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml
+      - scripts/validate_streaming_certification_tracker.py
+      - docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md
+    tests:
+      - scripts/validate_streaming_certification_tracker.py
+      - tests/test_streaming_certification.py
+    blocker: No official service certification, no CDM integration evidence, no HDCP hardware validation, no DRM circumvention
+    owner_area: media
+    target_stage: beta
+
 p0_items:
   - ci
   - contract_export
