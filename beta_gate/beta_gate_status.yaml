@@ -6,6 +6,29 @@ beta_ready: false
 last_updated: "2026-07-02"
 target_stage: beta_candidate
 
+pending_prs:
+  - number: 41
+    title: "Phase 4G: Foot Racing and Earth Species Playable Web Prototypes"
+    branches: [foot_racing_playable, earth_species_playable]
+  - number: 42
+    title: "Phase 4C: Reference Hardware Validation Package"
+    branches: [hardware_evidence]
+  - number: 43
+    title: "Phase 4B: Installable OS Image Track"
+    branches: [bootable_image]
+  - number: 44
+    title: "Phase 4A: Encrypted Workspace Storage Prototype"
+    branches: [encrypted_storage]
+  - number: 45
+    title: "Phase 4E: Streaming CDM and Certification Readiness"
+    branches: [streaming_certification]
+  - number: 46
+    title: "Phase 4D: Secure Boot and MDM Architecture"
+    branches: [secure_boot, production_mdm]
+  - number: 47
+    title: "Phase 4F: Legal Privacy Accessibility Readiness"
+    branches: [legal_privacy_accessibility]
+
 items:
   ci:
     status: validated
@@ -49,6 +72,17 @@ items:
     tests:
       - apps/launcher_mock/src/shell/workspace.shell.test.tsx
     blocker: null
+    owner_area: shell
+    target_stage: beta
+
+  encrypted_storage:
+    status: missing
+    evidence_paths:
+      - docs/WHAT_IS_REAL_TODAY.md
+      - docs/KNOWN_ISSUES.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #44 — browser encrypted workspace prototype not merged to main"
     owner_area: shell
     target_stage: beta
 
@@ -103,6 +137,26 @@ items:
     owner_area: game
     target_stage: beta
 
+  foot_racing_playable:
+    status: missing
+    evidence_paths:
+      - docs/MOCK_RETIREMENT_PLAN.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #41 — Foot Racing web slice not merged to main"
+    owner_area: game
+    target_stage: beta
+
+  earth_species_playable:
+    status: missing
+    evidence_paths:
+      - docs/MOCK_RETIREMENT_PLAN.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #41 — Earth Species web slice not merged to main"
+    owner_area: game
+    target_stage: beta
+
   bootable_image:
     status: prototype
     evidence_paths:
@@ -111,7 +165,7 @@ items:
       - docs/PHASE2F_BOOTABLE_IMAGE_TRACK.md
     tests:
       - tests/test_image_prototype.py
-    blocker: Container kiosk only — not bootable hardware OS
+    blocker: "Container kiosk only — installable image track pending PR #43"
     owner_area: os_build
     target_stage: beta
 
@@ -125,6 +179,36 @@ items:
       - apps/launcher_mock/src/shell/policy.shell.test.tsx
     blocker: Shell UI prototype — not production MDM
     owner_area: policy
+    target_stage: beta
+
+  secure_boot:
+    status: missing
+    evidence_paths:
+      - release_artifacts/SIGNING_REQUIREMENTS.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #46 — secure boot architecture not merged to main"
+    owner_area: security
+    target_stage: beta
+
+  production_mdm:
+    status: missing
+    evidence_paths:
+      - docs/PHASE3_POLICY_ENFORCEMENT.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #46 — MDM policy agent not merged to main"
+    owner_area: fleet
+    target_stage: beta
+
+  streaming_certification:
+    status: missing
+    evidence_paths:
+      - docs/MEDIA_MODE.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #45 — streaming certification tracker not merged to main"
+    owner_area: media
     target_stage: beta
 
   accessibility_baseline:
@@ -149,6 +233,17 @@ items:
     owner_area: privacy
     target_stage: beta
 
+  legal_privacy_accessibility:
+    status: missing
+    evidence_paths:
+      - docs/PRIVACY_BETA_BASELINE.md
+      - docs/ACCESSIBILITY_BETA_BASELINE.md
+    tests:
+      - tests/test_beta_gate_reconciliation.py
+    blocker: "Pending PR #47 — compliance readiness package not merged to main"
+    owner_area: compliance
+    target_stage: beta
+
   hardware_evidence:
     status: prototype
     evidence_paths:
@@ -157,7 +252,7 @@ items:
       - hardware_validation/REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md
     tests:
       - tests/test_hardware_evidence.py
-    blocker: No physical hardware validation performed
+    blocker: "No physical hardware validation — reference package pending PR #42"
     owner_area: hardware
     target_stage: beta
 
@@ -178,6 +273,7 @@ items:
       - release_artifacts/BETA_CANDIDATE_REPORT.md
     tests:
       - tests/test_beta_gate_dashboard.py
+      - tests/test_beta_gate_reconciliation.py
     blocker: null
     owner_area: release
     target_stage: beta
@@ -194,3 +290,41 @@ p0_items:
   - bootable_image
   - policy_enforcement
   - known_issues
+
+remaining_blockers:
+  - id: production_filesystem
+    summary: Production OS filesystem / encrypted storage at OS layer
+    gate_item: encrypted_storage
+    pending_pr: 44
+  - id: physical_hardware
+    summary: Physical hardware validation on reference device
+    gate_item: hardware_evidence
+    pending_pr: 42
+  - id: bootable_os
+    summary: Bootable installable OS image with boot evidence
+    gate_item: bootable_image
+    pending_pr: 43
+  - id: streaming_cdm
+    summary: Streaming service / CDM certification
+    gate_item: streaming_certification
+    pending_pr: 45
+  - id: secure_boot
+    summary: Production secure boot chain on hardware
+    gate_item: secure_boot
+    pending_pr: 46
+  - id: production_mdm
+    summary: Production MDM enrollment and remote policy
+    gate_item: production_mdm
+    pending_pr: 46
+  - id: legal_compliance
+    summary: Legal, privacy, accessibility formal review
+    gate_item: legal_privacy_accessibility
+    pending_pr: 47
+  - id: foot_racing
+    summary: Foot Racing playable web slice
+    gate_item: foot_racing_playable
+    pending_pr: 41
+  - id: earth_species
+    summary: Earth Species playable web slice
+    gate_item: earth_species_playable
+    pending_pr: 41

@@ -1,7 +1,7 @@
 # GunnchOS Known Issues
 
-**Last updated:** Phase 3 beta closure sprint (2026-07-02)  
-**Beta claim:** Not allowed — see [release_artifacts/BETA_CANDIDATE_REPORT.md](../release_artifacts/BETA_CANDIDATE_REPORT.md)
+**Last updated:** Phase 4H beta gate reconciliation (2026-07-02)  
+**Beta claim:** Not allowed — see [release_artifacts/BETA_CANDIDATE_REPORT.md](../release_artifacts/BETA_CANDIDATE_REPORT.md) and open PRs #41–#48
 
 | ID | Severity | Area | Status | Workaround | Beta impact | Owner | Release blocker |
 |----|----------|------|--------|------------|-------------|-------|-----------------|
@@ -17,7 +17,7 @@
 | KI-010 | High | Fleet | Open | None | No production MDM | fleet | Yes |
 | KI-011 | Medium | Accessibility | Open | Use in-app toggles (large text, contrast, motion) | No WCAG certification | a11y | Yes |
 | KI-012 | High | Privacy | Open | Review `PRIVACY_BETA_BASELINE.md` | No legal/privacy review | privacy | Yes |
-| KI-013 | Medium | Games | Open | Play Anime Aggressors web slice only | Foot Racing / Earth Species not connected | game | Partial |
+| KI-013 | Medium | Games | Open | Play Anime Aggressors web slice only | Foot Racing / Earth Species pending PR #41 | game | Partial |
 | KI-014 | Low | Games | Open | Launch from Game Mode when web build available | Vertical slice only — not full game | game | No |
 | KI-015 | Medium | Policy | In progress | Use deployment mode selector for testing | Shell prototype — not production MDM | policy | Yes |
 | KI-016 | Medium | AI | Open | UI panel only | No AI backend; privacy toggle local only | ai | Yes |
