@@ -1,6 +1,6 @@
 # GunnchOS Beta Candidate Report
 
-**Generated:** Phase 4H beta gate reconciliation — all Phase 4 tracks merged except #46 (2026-07-02)  
+**Generated:** Phase 4D secure boot + MDM rebase on post-4H main (2026-07-02)  
 **beta_ready (YAML):** `false`  
 **Beta claim allowed:** **No — beta candidate claim is not allowed yet.**
 
@@ -13,9 +13,9 @@
 | #43 | Installable OS image track | Yes |
 | #44 | Encrypted workspace storage | Yes |
 | #45 | Streaming CDM readiness | Yes |
-| #46 | Secure boot + MDM architecture | **Open** |
+| #46 | Secure boot + MDM architecture | **This PR** |
 | #47 | Legal/privacy/a11y readiness | Yes |
-| #48 | Beta gate reconciliation | This PR |
+| #48 | Beta gate reconciliation | Yes |
 
 ## Beta gate summary
 
@@ -32,8 +32,8 @@
 | Hardware evidence (4C) | prototype | No physical device report |
 | Streaming certification (4E) | prototype | No CDM, no official service cert |
 | Legal/privacy/a11y (4F) | prototype | Readiness only — not certified |
-| Secure boot (4D) | **missing** | PR #46 not merged |
-| Production MDM (4D) | **missing** | PR #46 not merged |
+| Secure boot (4D) | **prototype** | Dev manifest signing — no boot chain on hardware |
+| Production MDM (4D) | **prototype** | Local policy agent — no enrollment server |
 | Policy enforcement | implemented | Shell prototype |
 | Known issues | implemented | Open blockers documented |
 
@@ -73,4 +73,4 @@ make validate-full
 
 ## Review note
 
-`beta_ready` remains **false**. Edmund may review PR #48 for final gate reconciliation. Merge PR #46 next for secure boot/MDM prototype tracks. Do **not** claim beta candidate or GA until every P0 item is `implemented` or `validated` with evidence.
+`beta_ready` remains **false**. Edmund may review PR #48 for final gate reconciliation. Do **not** claim beta candidate or GA until every P0 item is `implemented` or `validated` with evidence.

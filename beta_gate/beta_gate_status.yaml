@@ -7,9 +7,9 @@ last_updated: "2026-07-02"
 target_stage: beta_candidate
 
 phase4_reconciliation:
-  merged_prs: [41, 42, 43, 44, 45, 47]
-  open_prs: [46, 48]
-  note: "Phase 4A–4G tracks merged except secure boot/MDM (#46). PR #48 is this reconciliation."
+  merged_prs: [41, 42, 43, 44, 45, 47, 48]
+  open_prs: [46]
+  note: "Phase 4D (#46) adds secure boot/MDM architecture prototypes on post-4H main."
 
 items:
   ci:
@@ -195,28 +195,6 @@ items:
     owner_area: media
     target_stage: beta
 
-  secure_boot:
-    status: missing
-    evidence_paths:
-      - release_artifacts/SIGNING_REQUIREMENTS.md
-      - docs/BETA_RELEASE_GATE.md
-    tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: Pending PR #46 — secure boot architecture not merged to main; not validated without boot-chain evidence
-    owner_area: security
-    target_stage: beta
-
-  production_mdm:
-    status: missing
-    evidence_paths:
-      - docs/PHASE3_POLICY_ENFORCEMENT.md
-      - docs/BETA_RELEASE_GATE.md
-    tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: Pending PR #46 — MDM policy agent not merged to main; not validated without enrollment/server evidence
-    owner_area: fleet
-    target_stage: beta
-
   accessibility_baseline:
     status: implemented
     evidence_paths:
@@ -276,6 +254,36 @@ items:
     owner_area: hardware
     target_stage: beta
 
+  secure_boot:
+    status: prototype
+    evidence_paths:
+      - security/secure_boot/ARCHITECTURE.md
+      - security/secure_boot/CLAIM_BOUNDARY.md
+      - security/secure_boot/SECURE_BOOT_CHECKLIST.md
+      - scripts/sign_release_manifest.py
+      - scripts/verify_release_manifest.py
+      - docs/PHASE4D_SECURE_BOOT_MDM.md
+    tests:
+      - tests/test_secure_boot_mdm.py
+    blocker: Dev manifest signing only — no bootloader/kernel boot chain on hardware
+    owner_area: security
+    target_stage: beta
+
+  production_mdm:
+    status: prototype
+    evidence_paths:
+      - mdm/policy_schema.yaml
+      - mdm/sample_policies/
+      - mdm/device_policy_agent.py
+      - mdm/enrollment_profile.example.json
+      - mdm/CLAIM_BOUNDARY.md
+      - docs/PHASE4D_SECURE_BOOT_MDM.md
+    tests:
+      - tests/test_secure_boot_mdm.py
+    blocker: Local static policy prototype — no remote enrollment/server/fleet MDM
+    owner_area: fleet
+    target_stage: beta
+
   known_issues:
     status: implemented
     evidence_paths:
@@ -326,10 +334,10 @@ remaining_blockers:
     summary: Streaming service certification with real CDM/service evidence
     gate_item: streaming_certification
   - id: secure_boot
-    summary: Production secure boot chain on hardware (PR #46 pending)
+    summary: Production secure boot chain on hardware (4D is dev manifest signing only)
     gate_item: secure_boot
   - id: production_mdm
-    summary: Production MDM enrollment and remote policy (PR #46 pending)
+    summary: Production MDM enrollment and remote policy (4D is local static agent only)
     gate_item: production_mdm
   - id: legal_compliance
     summary: Legal, privacy, accessibility formal certification

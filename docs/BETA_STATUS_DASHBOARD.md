@@ -26,8 +26,8 @@ python3 scripts/validate_streaming_certification_tracker.py
 | Hardware validation package | **prototype** | 4C |
 | Streaming CDM readiness | **prototype** | 4E |
 | Legal/privacy/a11y readiness | **prototype** | 4F |
-| Secure boot | **missing** | 4D (#46 open) |
-| Production MDM | **missing** | 4D (#46 open) |
+| Secure boot | **prototype** | 4D |
+| Production MDM | **prototype** | 4D |
 | Policy enforcement (shell) | implemented | 3 |
 | Known issues | implemented | 3 |
 | **beta_ready** | **false** | — |
@@ -47,7 +47,7 @@ python3 scripts/validate_streaming_certification_tracker.py
 - Bootable ISO/IMG with boot evidence
 - Physical reference hardware validation report
 - Official streaming/CDM/HDCP certification
-- Secure boot and production MDM (PR #46)
+- Production secure boot on hardware and fleet MDM (4D is architecture prototype only)
 - Formal legal, privacy, accessibility certification
 
 **Beta candidate claim is not allowed yet.**

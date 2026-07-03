@@ -1,0 +1,33 @@
+{
+  "enrollment_profile_id": "gunnchos-enrollment-example-v1",
+  "claim": "Example enrollment profile for documentation only — not a live MDM server",
+  "device_identity": {
+    "device_id_placeholder": "DEVICE-UUID-HERE",
+    "platform": "gunnchos-reference-x86_64",
+    "ownership": "school_managed"
+  },
+  "mdm_server": {
+    "url": "https://mdm.example.invalid/gunnchos",
+    "note": "No remote server implemented in Phase 4D"
+  },
+  "certificate_delivery": {
+    "method": "placeholder_manual",
+    "client_cert_path": "/etc/gunnchos/mdm/client.pem",
+    "note": "Production requires SCEP or ACME-style provisioning"
+  },
+  "initial_policy_ref": "mdm/sample_policies/school_default.json",
+  "telemetry_consent_default": "diagnostics",
+  "enrollment_steps": [
+    "Power on reference device with GunnchOS installable image",
+    "Connect to school Wi-Fi (or USB provisioning stick)",
+    "Scan enrollment QR / enter org code (future server)",
+    "Device downloads signed policy bundle (future server)",
+    "Local agent applies policy via device_policy_agent.py"
+  ],
+  "not_implemented": [
+    "Remote enrollment server",
+    "Device certificate rotation",
+    "Remote wipe",
+    "Policy push ACK/rollback"
+  ]
+}

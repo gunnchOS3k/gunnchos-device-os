@@ -1,6 +1,6 @@
 # GunnchOS Known Issues
 
-**Last updated:** Phase 4H beta gate reconciliation (2026-07-02)  
+**Last updated:** Phase 4D secure boot + MDM rebase on post-4H main (2026-07-02)  
 **Beta claim:** Not allowed — see [release_artifacts/BETA_CANDIDATE_REPORT.md](../release_artifacts/BETA_CANDIDATE_REPORT.md)
 
 | ID | Severity | Area | Status | Workaround | Beta impact | Owner | Release blocker |
@@ -16,8 +16,8 @@
 | KI-006 | Medium | Media | Open | Re-select local files after refresh | Local media player separate from DRM streaming; blobs not persisted | media | Yes |
 | KI-007 | High | OS Build | In progress | Use OS-layer installable bundle prototype (Phase 4B) | Not bootable ISO/IMG — no boot evidence | os_build | Yes |
 | KI-008 | High | Hardware | In progress | Use validation package + container log (Phase 4C) | No physical device report — template/container/host-info only | hardware | Yes |
-| KI-009 | High | Security | Open | Document claim boundaries; merge PR #46 for architecture track | No production secure boot on hardware | platform | Yes |
-| KI-010 | High | Fleet | Open | Merge PR #46 for MDM prototype; shell policy for testing | No production MDM enrollment/server | fleet | Yes |
+| KI-009 | High | Security | In progress | Review secure boot architecture + dev manifest signing (Phase 4D) | No production secure boot on hardware | platform | Yes |
+| KI-010 | High | Fleet | In progress | Use local MDM policy agent + sample policies (Phase 4D) | No production MDM enrollment/server | fleet | Yes |
 | KI-011 | Medium | Accessibility | In progress | WCAG self-assessment + a11y toggles (Phase 4F) | No WCAG certification | a11y | Yes |
 | KI-012 | High | Privacy | In progress | Compliance readiness packet (Phase 4F) | No legal/privacy certification | privacy | Yes |
 | KI-013 | Medium | Games | Open | Play all three web vertical slices from Game Mode | Vertical slices only — not full games | game | Partial |
