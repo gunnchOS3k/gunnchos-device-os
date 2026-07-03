@@ -1,6 +1,6 @@
 # What Is Real Today
 
-**Last updated:** Phase 4A encrypted workspace + Phase 4G game web slices (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
+**Last updated:** Phase 4A encrypted workspace + Phase 4G game slices + Phase 4B installable bundle track (2026-07-02). Full audit: [FULL_OPERATIONAL_GAP_MATRIX.md](FULL_OPERATIONAL_GAP_MATRIX.md)
 
 ## Real (validated in repo)
 
@@ -22,7 +22,11 @@
 - **Beta gate dashboard** — `beta_gate/beta_gate_status.yaml` + validator
 - **Known issues registry** — `docs/KNOWN_ISSUES.md`
 - **Accessibility / privacy baselines** — documented, not certified
-- **Image prototype track** — container kiosk packaging (not bootable OS)
+- **Installable OS image track (Phase 4B)** — reproducible OS-layer bundle prototype ([PHASE4B_INSTALLABLE_IMAGE.md](PHASE4B_INSTALLABLE_IMAGE.md))
+  - `scripts/build_installable_image.sh` produces tarball + manifest + checksums
+  - **Not** a bootable ISO/IMG
+  - **Not** hardware-validated
+- **Image prototype track** — container kiosk packaging (Phase 2F)
 - Container validation evidence — `hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md`
 
 ## Prototype / honest labels
@@ -32,7 +36,7 @@
 - Local workspace / notes — browser localStorage; optional encrypted prototype (not OS FS)
 - Policy enforcement — shell UI prototype
 - Media Mode streaming — browser route prototypes; Netflix/Hulu DRM disclaimers only
-- Bootable image — container/OS-layer track only
+- Bootable / installable image — OS-layer bundle prototype (Phase 4B); not bootable ISO, not hardware-validated
 - Hardware — no physical device validation
 - Games — all three first-party titles are web vertical slices only; not full games or native builds
 - AI assistant — UI shell only
@@ -42,7 +46,7 @@
 
 - Production OS filesystem / full-disk encrypted storage (Phase 4A is browser prototype only)
 - Google Drive sync
-- Bootable OS image on target hardware
+- Bootable OS image on target hardware (Phase 4B bundle is not a bootable ISO/IMG)
 - Kernel, secure boot, TPM validation
 - Official Netflix/Hulu/Disney+ certification / DRM CDM
 - Production MDM/fleet deployment

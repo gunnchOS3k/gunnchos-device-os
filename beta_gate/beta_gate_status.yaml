@@ -146,12 +146,19 @@ items:
   bootable_image:
     status: prototype
     evidence_paths:
-      - os_build/image_prototype/
-      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
-      - docs/PHASE2F_BOOTABLE_IMAGE_TRACK.md
+      - os_build/installable_image/
+      - os_build/installable_image/ARTIFACT_MANIFEST.md
+      - scripts/build_installable_image.sh
+      - scripts/validate_installable_image_artifacts.py
+      - tests/test_installable_image.py
+      - hardware_validation/BOOT_VALIDATION_TEMPLATE.md
+      - docs/PHASE4B_INSTALLABLE_IMAGE.md
     tests:
-      - tests/test_image_prototype.py
-    blocker: Container kiosk only — not bootable hardware OS
+      - bash scripts/build_installable_image.sh
+      - python3 scripts/validate_installable_image_artifacts.py
+      - pytest tests/test_installable_image.py -q
+      - make validate-full
+    blocker: Prototype OS-layer bundle only — not a bootable ISO/IMG, not physically hardware-validated, not a GA/beta installable OS image
     owner_area: os_build
     target_stage: beta
 
