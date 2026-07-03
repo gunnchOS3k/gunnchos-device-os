@@ -1,5 +1,13 @@
 /** Browser-backed notes storage prototype — persists in localStorage. */
 
+import {
+  isEncryptionEnabled,
+  isWorkspaceLocked,
+  persistSessionIfPossible,
+  readWorkspaceFromSession,
+  writeWorkspaceToSession,
+} from './encryptedWorkspaceStore'
+
 export const NOTES_STORAGE_KEY = 'gunnchos-notes-v1'
 
 export interface Note {
@@ -26,6 +34,10 @@ function newId(): string {
 }
 
 function loadRaw(): Note[] {
+  if (isEncryptionEnabled()) {
+    if (isWorkspaceLocked()) return []
+    return readWorkspaceFromSession().notes
+  }
   try {
     const raw = localStorage.getItem(NOTES_STORAGE_KEY)
     if (!raw) return []
@@ -37,6 +49,12 @@ function loadRaw(): Note[] {
 }
 
 function saveRaw(notes: Note[]): void {
+  if (isEncryptionEnabled()) {
+    if (isWorkspaceLocked()) throw new Error('Workspace is locked')
+    writeWorkspaceToSession({ notes })
+    void persistSessionIfPossible()
+    return
+  }
   localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes))
 }
 
@@ -74,6 +92,7 @@ export function createStarterNotes(): Note[] {
 }
 
 export function ensureNotesInitialized(): Note[] {
+  if (isEncryptionEnabled() && isWorkspaceLocked()) return []
   const existing = loadRaw()
   if (existing.length > 0) return existing
   const starter = createStarterNotes()
