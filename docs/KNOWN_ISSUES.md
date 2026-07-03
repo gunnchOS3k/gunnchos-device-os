@@ -6,7 +6,7 @@
 | ID | Severity | Area | Status | Workaround | Beta impact | Owner | Release blocker |
 |----|----------|------|--------|------------|-------------|-------|-----------------|
 | KI-001 | High | Storage | Open | Use browser localStorage workspace; export JSON manually | No production filesystem | shell | Yes |
-| KI-002 | High | Storage | Open | None — encrypted OS storage not implemented | Data not hardware-protected | platform | Yes |
+| KI-002 | High | Storage | In progress | Enable encrypted workspace prototype in Settings (Phase 4A) | Browser crypto only — not OS/hardware encryption | platform | Yes |
 | KI-003 | High | Productivity | Open | Open Google Drive in external browser tab | No offline sync | shell | Yes |
 | KI-004 | High | Browser | Open | External tab opens via `appLaunchService` | No embedded certified shell | shell | Yes |
 | KI-005 | High | Media | Open | Use disclaimers; open Netflix/Hulu in browser | No service certification | media | Yes |

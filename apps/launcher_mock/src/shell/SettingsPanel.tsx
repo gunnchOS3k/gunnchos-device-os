@@ -3,6 +3,7 @@ import { theme } from '../styles/gunnchosTheme'
 import { StudentProfile } from '../data/studentProfile'
 import AppIcon from '../components/AppIcon'
 import { useSettings } from '../services/settingsStore'
+import EncryptedWorkspacePanel from './EncryptedWorkspacePanel'
 
 interface SettingsPanelProps {
   profile: StudentProfile
@@ -111,6 +112,7 @@ export default function SettingsPanel({ profile, onBack, onResetOnboarding }: Se
 
         {tab === 'system' && (
           <>
+            <EncryptedWorkspacePanel />
             <SettingGroup title="Device">
               <SettingRow label="OS version" value="GunnchOS 0.1 (Phase 0 prototype)" />
               <SettingRow label="Storage" value="128 GB · 42 GB free (mock)" />
