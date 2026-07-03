@@ -9,14 +9,17 @@
       "bootable": false
     },
     "installable_os_image": {
-      "status": "not_built",
-      "bootable": false
+      "status": "prototype",
+      "bootable": false,
+      "iso_built": false,
+      "bundle": "gunnchos-installable-image-prototype.tar.gz"
     }
   },
   "components": {
     "launcher_shell": "apps/launcher_mock",
     "policy_package": "gunnchos_device_os",
-    "image_prototype": "os_build/image_prototype"
+    "image_prototype": "os_build/image_prototype",
+    "installable_image_track": "os_build/installable_image"
   },
   "claims": {
     "beta": false,

@@ -40,6 +40,15 @@
 |-------|--------|
 | **Status** | **RETIRED in Phase 2A** — replaced by `FileManager.tsx` |
 | **Replaced with** | `localWorkspaceStore.ts` + `FileManager.tsx` |
+| **Phase 4A** | Optional encrypted workspace prototype — `encryptedWorkspaceStore.ts` (not OS FS) |
+
+### Encrypted storage mock
+
+| Field | Detail |
+|-------|--------|
+| **Status** | **Partially retired (Phase 4A)** — browser encrypted workspace prototype |
+| **Location** | `workspaceCrypto.ts`, `encryptedWorkspaceStore.ts`, `EncryptedWorkspacePanel.tsx` |
+| **Still not real** | OS filesystem, full-disk encryption, hardware-backed keys |
 
 ### Settings mock
 
@@ -95,9 +104,9 @@
 
 | Field | Detail |
 |-------|--------|
-| **Status** | **Partially retired (Phase 2D)** — `gameLaunchService.ts` + `GameLaunchPanel.tsx` |
-| **Still prototype** | No native sandbox; playable web build pending Phase 2E |
-| **Location** | `gameLaunchService.ts`, `GameMode.tsx`, `GameLaunchPanel.tsx` |
+| **Status** | **Partially retired (Phase 2D/2E/4G)** — `gameLaunchService.ts` + `GameLaunchPanel.tsx` |
+| **Still prototype** | No native sandbox; all three first-party titles are web vertical slices |
+| **Location** | `gameLaunchService.ts`, `GameMode.tsx`, `GameLaunchPanel.tsx`, `games/*-web/` |
 
 ### Steam/gaming path mock
 
