@@ -6,28 +6,10 @@ beta_ready: false
 last_updated: "2026-07-02"
 target_stage: beta_candidate
 
-pending_prs:
-  - number: 41
-    title: "Phase 4G: Foot Racing and Earth Species Playable Web Prototypes"
-    branches: [foot_racing_playable, earth_species_playable]
-  - number: 42
-    title: "Phase 4C: Reference Hardware Validation Package"
-    branches: [hardware_evidence]
-  - number: 43
-    title: "Phase 4B: Installable OS Image Track"
-    branches: [bootable_image]
-  - number: 44
-    title: "Phase 4A: Encrypted Workspace Storage Prototype"
-    branches: [encrypted_storage]
-  - number: 45
-    title: "Phase 4E: Streaming CDM and Certification Readiness"
-    branches: [streaming_certification]
-  - number: 46
-    title: "Phase 4D: Secure Boot and MDM Architecture"
-    branches: [secure_boot, production_mdm]
-  - number: 47
-    title: "Phase 4F: Legal Privacy Accessibility Readiness"
-    branches: [legal_privacy_accessibility]
+phase4_reconciliation:
+  merged_prs: [41, 42, 43, 44, 45, 47]
+  open_prs: [46, 48]
+  note: "Phase 4A–4G tracks merged except secure boot/MDM (#46). PR #48 is this reconciliation."
 
 items:
   ci:
@@ -60,7 +42,7 @@ items:
       - apps/launcher_mock/src/services/localWorkspaceStore.ts
     tests:
       - apps/launcher_mock/src/shell/workspace.shell.test.tsx
-    blocker: Production filesystem not available — browser storage prototype
+    blocker: Production filesystem not available — browser storage prototype; encrypted workspace prototype (Phase 4A)
     owner_area: shell
     target_stage: beta
 
@@ -76,13 +58,16 @@ items:
     target_stage: beta
 
   encrypted_storage:
-    status: missing
+    status: prototype
     evidence_paths:
-      - docs/WHAT_IS_REAL_TODAY.md
-      - docs/KNOWN_ISSUES.md
+      - apps/launcher_mock/src/services/workspaceCrypto.ts
+      - apps/launcher_mock/src/services/encryptedWorkspaceStore.ts
+      - apps/launcher_mock/src/shell/EncryptedWorkspacePanel.tsx
+      - docs/PHASE4A_ENCRYPTED_WORKSPACE.md
+      - docs/STORAGE_SECURITY_BOUNDARY.md
     tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #44 — browser encrypted workspace prototype not merged to main"
+      - apps/launcher_mock/src/services/encryptedWorkspace.test.ts
+    blocker: Browser-backed encrypted workspace only — not production OS filesystem or full-disk encryption
     owner_area: shell
     target_stage: beta
 
@@ -138,34 +123,47 @@ items:
     target_stage: beta
 
   foot_racing_playable:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/MOCK_RETIREMENT_PLAN.md
+      - games/foot-racing-web/
+      - apps/launcher_mock/public/games/foot-racing-web/
+      - scripts/build_foot_racing_web.sh
+      - docs/PHASE4G_FIRST_PARTY_GAME_SLICES.md
     tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #41 — Foot Racing web slice not merged to main"
+      - tests/test_foot_racing_build.py
+    blocker: Vertical slice only — single track, keyboard only, no native build
     owner_area: game
     target_stage: beta
 
   earth_species_playable:
-    status: missing
+    status: implemented
     evidence_paths:
-      - docs/MOCK_RETIREMENT_PLAN.md
+      - games/earth-species-web/
+      - apps/launcher_mock/public/games/earth-species-web/
+      - scripts/build_earth_species_web.sh
+      - docs/PHASE4G_FIRST_PARTY_GAME_SLICES.md
     tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #41 — Earth Species web slice not merged to main"
+      - tests/test_earth_species_build.py
+    blocker: Vertical slice only — citation placeholders, in-session collection log only
     owner_area: game
     target_stage: beta
 
   bootable_image:
     status: prototype
     evidence_paths:
-      - os_build/image_prototype/
-      - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
-      - docs/PHASE2F_BOOTABLE_IMAGE_TRACK.md
+      - os_build/installable_image/
+      - os_build/installable_image/ARTIFACT_MANIFEST.md
+      - scripts/build_installable_image.sh
+      - scripts/validate_installable_image_artifacts.py
+      - tests/test_installable_image.py
+      - hardware_validation/BOOT_VALIDATION_TEMPLATE.md
+      - docs/PHASE4B_INSTALLABLE_IMAGE.md
     tests:
-      - tests/test_image_prototype.py
-    blocker: "Container kiosk only — installable image track pending PR #43"
+      - bash scripts/build_installable_image.sh
+      - python3 scripts/validate_installable_image_artifacts.py
+      - pytest tests/test_installable_image.py -q
+      - make validate-full
+    blocker: Prototype OS-layer bundle only — not a bootable ISO/IMG, not physically hardware-validated, not a GA/beta installable OS image
     owner_area: os_build
     target_stage: beta
 
@@ -181,13 +179,30 @@ items:
     owner_area: policy
     target_stage: beta
 
+  streaming_certification:
+    status: prototype
+    evidence_paths:
+      - streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md
+      - streaming_certification/CDM_READINESS_CHECKLIST.md
+      - streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md
+      - streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml
+      - scripts/validate_streaming_certification_tracker.py
+      - docs/PHASE4E_STREAMING_CDM_CERTIFICATION.md
+    tests:
+      - scripts/validate_streaming_certification_tracker.py
+      - tests/test_streaming_certification.py
+    blocker: No official service certification, no CDM integration evidence, no HDCP hardware validation, no DRM circumvention
+    owner_area: media
+    target_stage: beta
+
   secure_boot:
     status: missing
     evidence_paths:
       - release_artifacts/SIGNING_REQUIREMENTS.md
+      - docs/BETA_RELEASE_GATE.md
     tests:
       - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #46 — secure boot architecture not merged to main"
+    blocker: Pending PR #46 — secure boot architecture not merged to main; not validated without boot-chain evidence
     owner_area: security
     target_stage: beta
 
@@ -195,20 +210,11 @@ items:
     status: missing
     evidence_paths:
       - docs/PHASE3_POLICY_ENFORCEMENT.md
+      - docs/BETA_RELEASE_GATE.md
     tests:
       - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #46 — MDM policy agent not merged to main"
+    blocker: Pending PR #46 — MDM policy agent not merged to main; not validated without enrollment/server evidence
     owner_area: fleet
-    target_stage: beta
-
-  streaming_certification:
-    status: missing
-    evidence_paths:
-      - docs/MEDIA_MODE.md
-    tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #45 — streaming certification tracker not merged to main"
-    owner_area: media
     target_stage: beta
 
   accessibility_baseline:
@@ -216,8 +222,10 @@ items:
     evidence_paths:
       - apps/launcher_mock/src/services/accessibilityAudit.ts
       - docs/ACCESSIBILITY_BETA_BASELINE.md
+      - compliance/accessibility/
     tests:
       - apps/launcher_mock/src/services/policyEnforcement.test.ts
+      - tests/test_compliance_readiness.py
     blocker: No WCAG certification
     owner_area: a11y
     target_stage: beta
@@ -227,32 +235,44 @@ items:
     evidence_paths:
       - apps/launcher_mock/src/services/privacyStatus.ts
       - docs/PRIVACY_BETA_BASELINE.md
+      - compliance/privacy/
     tests:
       - tests/test_privacy_baseline.py
+      - tests/test_compliance_readiness.py
     blocker: No legal/privacy certification
     owner_area: privacy
     target_stage: beta
 
   legal_privacy_accessibility:
-    status: missing
+    status: prototype
     evidence_paths:
-      - docs/PRIVACY_BETA_BASELINE.md
-      - docs/ACCESSIBILITY_BETA_BASELINE.md
+      - compliance/README.md
+      - compliance/privacy/
+      - compliance/accessibility/
+      - compliance/legal/
+      - docs/PHASE4F_COMPLIANCE_READINESS.md
     tests:
-      - tests/test_beta_gate_reconciliation.py
-    blocker: "Pending PR #47 — compliance readiness package not merged to main"
+      - tests/test_compliance_readiness.py
+    blocker: Readiness and self-assessment only — no formal legal, privacy, or accessibility certification
     owner_area: compliance
     target_stage: beta
 
   hardware_evidence:
     status: prototype
     evidence_paths:
+      - hardware_validation/reference_device_matrix.yaml
+      - hardware_validation/reference_device_report.template.md
+      - hardware_validation/reference_device_report.example.md
       - hardware_validation/CONTAINER_KIOSK_VALIDATION_LOG.md
       - hardware_validation/HARDWARE_CLAIM_BOUNDARY.md
-      - hardware_validation/REFERENCE_HARDWARE_VALIDATION_TEMPLATE.md
+      - scripts/collect_reference_hardware_info.py
+      - scripts/validate_hardware_report.py
+      - docs/PHASE4C_HARDWARE_VALIDATION.md
     tests:
       - tests/test_hardware_evidence.py
-    blocker: "No physical hardware validation — reference package pending PR #42"
+      - tests/test_reference_hardware_validation.py
+      - python3 scripts/validate_hardware_report.py
+    blocker: No physical reference hardware validation report yet. Current evidence is template/container/host-info only unless a real physical device report exists
     owner_area: hardware
     target_stage: beta
 
@@ -271,6 +291,7 @@ items:
     status: implemented
     evidence_paths:
       - release_artifacts/BETA_CANDIDATE_REPORT.md
+      - docs/BETA_STATUS_DASHBOARD.md
     tests:
       - tests/test_beta_gate_dashboard.py
       - tests/test_beta_gate_reconciliation.py
@@ -293,38 +314,23 @@ p0_items:
 
 remaining_blockers:
   - id: production_filesystem
-    summary: Production OS filesystem / encrypted storage at OS layer
+    summary: Production OS filesystem / encrypted storage at OS layer (4A is browser prototype only)
     gate_item: encrypted_storage
-    pending_pr: 44
   - id: physical_hardware
-    summary: Physical hardware validation on reference device
+    summary: Physical hardware validation with filled reference device report
     gate_item: hardware_evidence
-    pending_pr: 42
   - id: bootable_os
-    summary: Bootable installable OS image with boot evidence
+    summary: Bootable installable OS image with boot smoke evidence
     gate_item: bootable_image
-    pending_pr: 43
   - id: streaming_cdm
-    summary: Streaming service / CDM certification
+    summary: Streaming service certification with real CDM/service evidence
     gate_item: streaming_certification
-    pending_pr: 45
   - id: secure_boot
-    summary: Production secure boot chain on hardware
+    summary: Production secure boot chain on hardware (PR #46 pending)
     gate_item: secure_boot
-    pending_pr: 46
   - id: production_mdm
-    summary: Production MDM enrollment and remote policy
+    summary: Production MDM enrollment and remote policy (PR #46 pending)
     gate_item: production_mdm
-    pending_pr: 46
   - id: legal_compliance
-    summary: Legal, privacy, accessibility formal review
+    summary: Legal, privacy, accessibility formal certification
     gate_item: legal_privacy_accessibility
-    pending_pr: 47
-  - id: foot_racing
-    summary: Foot Racing playable web slice
-    gate_item: foot_racing_playable
-    pending_pr: 41
-  - id: earth_species
-    summary: Earth Species playable web slice
-    gate_item: earth_species_playable
-    pending_pr: 41

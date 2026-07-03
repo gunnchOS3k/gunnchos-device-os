@@ -1,68 +1,65 @@
 # GunnchOS Beta Candidate Report
 
-**Generated:** Phase 4H beta gate reconciliation (2026-07-02)  
+**Generated:** Phase 4H beta gate reconciliation — all Phase 4 tracks merged except #46 (2026-07-02)  
 **beta_ready (YAML):** `false`  
 **Beta claim allowed:** **No — beta candidate claim is not allowed yet.**
 
-## Open Phase 4 PRs (pending merge to `main`)
+## Phase 4 merge status
 
-| PR | Title | Gate items |
+| PR | Track | On `main`? |
 |----|-------|------------|
-| [#41](https://github.com/gunnchOS3k/gunnchos-device-os/pull/41) | Foot Racing + Earth Species web prototypes | foot_racing_playable, earth_species_playable |
-| [#42](https://github.com/gunnchOS3k/gunnchos-device-os/pull/42) | Reference hardware validation package | hardware_evidence |
-| [#43](https://github.com/gunnchOS3k/gunnchos-device-os/pull/43) | Installable OS image track | bootable_image |
-| [#44](https://github.com/gunnchOS3k/gunnchos-device-os/pull/44) | Encrypted workspace storage | encrypted_storage |
-| [#45](https://github.com/gunnchOS3k/gunnchos-device-os/pull/45) | Streaming CDM readiness | streaming_certification |
-| [#46](https://github.com/gunnchOS3k/gunnchos-device-os/pull/46) | Secure boot + MDM architecture | secure_boot, production_mdm |
-| [#47](https://github.com/gunnchOS3k/gunnchos-device-os/pull/47) | Legal/privacy/a11y readiness | legal_privacy_accessibility |
-| [#48](https://github.com/gunnchOS3k/gunnchos-device-os/pull/48) | Beta gate reconciliation | beta_candidate_report |
+| #41 | Foot Racing + Earth Species web slices | Yes |
+| #42 | Reference hardware validation package | Yes |
+| #43 | Installable OS image track | Yes |
+| #44 | Encrypted workspace storage | Yes |
+| #45 | Streaming CDM readiness | Yes |
+| #46 | Secure boot + MDM architecture | **Open** |
+| #47 | Legal/privacy/a11y readiness | Yes |
+| #48 | Beta gate reconciliation | This PR |
 
-## Beta gate summary (on `main` today)
+## Beta gate summary
 
 | Item | Status | Blocker |
 |------|--------|---------|
 | CI | validated | — |
 | Contract export | validated | — |
-| File manager | implemented | Browser storage prototype |
-| Notes | implemented | — |
-| Encrypted storage | **missing** | Pending PR #44 |
+| File manager + notes | implemented | Browser storage prototype |
+| Encrypted storage (4A) | prototype | Not OS FS / full-disk encryption |
 | Browser/PWA | implemented | External tab only |
-| Media player | implemented | Prototype — no DRM |
-| Game launch adapter | implemented | — |
-| Anime Aggressors | implemented | Vertical slice only |
-| Foot Racing | **missing** | Pending PR #41 |
-| Earth Species | **missing** | Pending PR #41 |
-| Bootable image | prototype | Pending PR #43 + no boot evidence |
+| Media player | implemented | Local media separate from DRM streaming |
+| Game launch + 3 slices (4G) | implemented | Vertical slices only |
+| Bootable image (4B) | prototype | OS-layer bundle — not bootable ISO/IMG |
+| Hardware evidence (4C) | prototype | No physical device report |
+| Streaming certification (4E) | prototype | No CDM, no official service cert |
+| Legal/privacy/a11y (4F) | prototype | Readiness only — not certified |
+| Secure boot (4D) | **missing** | PR #46 not merged |
+| Production MDM (4D) | **missing** | PR #46 not merged |
 | Policy enforcement | implemented | Shell prototype |
-| Secure boot | **missing** | Pending PR #46 |
-| Production MDM | **missing** | Pending PR #46 |
-| Streaming certification | **missing** | Pending PR #45 |
-| Accessibility baseline | implemented | No certification |
-| Privacy baseline | implemented | No legal review |
-| Legal/privacy/a11y readiness | **missing** | Pending PR #47 |
-| Hardware evidence | prototype | Pending PR #42 + no physical report |
 | Known issues | implemented | Open blockers documented |
 
 ## Exact remaining blockers
 
-See `beta_gate/beta_gate_status.yaml` → `remaining_blockers` (9 items).
+See `beta_gate/beta_gate_status.yaml` → `remaining_blockers` (7 items).
 
-None of the following may be claimed today:
+**Cannot claim today:**
 
 - Production OS filesystem or full-disk encryption
-- Physical hardware validation (without filled reference device report)
-- Bootable installable OS (without boot smoke evidence)
-- Netflix/Hulu/Disney+/Widevine certification
-- Production secure boot (without boot-chain verification on hardware)
-- Production MDM (without enrollment server and remote policy evidence)
-- Legal, privacy, or accessibility certification (without formal review reports)
+- Physical hardware validation without filled reference device report
+- Bootable installable OS without boot smoke evidence
+- Netflix/Hulu/Disney+/Widevine/service certification
+- Production secure boot without boot-chain verification on hardware
+- Production MDM without enrollment server and remote policy evidence
+- Legal, privacy, or accessibility certification without formal review
 
 ## Evidence paths
 
 - Beta gate: `beta_gate/beta_gate_status.yaml`
 - Dashboard: `docs/BETA_STATUS_DASHBOARD.md`
+- Phase docs: `docs/PHASE4A_*` through `docs/PHASE4G_*`, `docs/PHASE4F_*`
+- Streaming: `streaming_certification/`
+- Hardware: `hardware_validation/`, `docs/PHASE4C_HARDWARE_VALIDATION.md`
+- Compliance: `compliance/`
 - Known issues: `docs/KNOWN_ISSUES.md`
-- Validator: `scripts/validate_beta_gate.py`
 
 ## Commands run
 
@@ -70,9 +67,10 @@ None of the following may be claimed today:
 python3 scripts/export_launcher_contract.py
 python3 scripts/check_launcher_contract_fresh.py
 python3 scripts/validate_beta_gate.py
+pytest tests/test_beta_gate_reconciliation.py -q
 make validate-full
 ```
 
 ## Review note
 
-After PRs #41–#47 merge, re-run reconciliation and update gate statuses from **missing → prototype/implemented** only when evidence exists on `main`. Edmund may review for **beta candidate** only when every P0 item is `implemented` or `validated` with evidence — do **not** claim GA.
+`beta_ready` remains **false**. Edmund may review PR #48 for final gate reconciliation. Merge PR #46 next for secure boot/MDM prototype tracks. Do **not** claim beta candidate or GA until every P0 item is `implemented` or `validated` with evidence.

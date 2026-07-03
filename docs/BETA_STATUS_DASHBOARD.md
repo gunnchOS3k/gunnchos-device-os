@@ -9,39 +9,45 @@ Full report: [`release_artifacts/BETA_CANDIDATE_REPORT.md`](../release_artifacts
 ```bash
 python3 scripts/validate_beta_gate.py
 pytest tests/test_beta_gate_reconciliation.py -q
+python3 scripts/validate_streaming_certification_tracker.py
 ```
 
-## Current summary (Phase 4H reconciliation — 2026-07-02)
+## Phase 4 reconciliation summary (2026-07-02)
 
-| Area | Status on `main` | Open PR |
-|------|------------------|---------|
+| Area | Status | Phase |
+|------|--------|-------|
 | CI + contract | validated | — |
-| File manager + notes | implemented | — |
-| Encrypted workspace | **missing** | [#44](https://github.com/gunnchOS3k/gunnchos-device-os/pull/44) |
-| Browser/PWA | implemented | — |
-| Media player | implemented (prototype) | — |
-| Game launch + Anime Aggressors | implemented | — |
-| Foot Racing + Earth Species | **missing** | [#41](https://github.com/gunnchOS3k/gunnchos-device-os/pull/41) |
-| Bootable / installable image | prototype | [#43](https://github.com/gunnchOS3k/gunnchos-device-os/pull/43) |
-| Hardware validation | prototype | [#42](https://github.com/gunnchOS3k/gunnchos-device-os/pull/42) |
-| Policy enforcement (shell) | implemented | — |
-| Secure boot | **missing** | [#46](https://github.com/gunnchOS3k/gunnchos-device-os/pull/46) |
-| Production MDM | **missing** | [#46](https://github.com/gunnchOS3k/gunnchos-device-os/pull/46) |
-| Streaming CDM readiness | **missing** | [#45](https://github.com/gunnchOS3k/gunnchos-device-os/pull/45) |
-| Legal/privacy/a11y readiness | **missing** | [#47](https://github.com/gunnchOS3k/gunnchos-device-os/pull/47) |
-| Accessibility + privacy baselines | implemented (no cert) | — |
-| Known issues | implemented | — |
-| **beta_ready** | **false** | [#48](https://github.com/gunnchOS3k/gunnchos-device-os/pull/48) (this reconciliation) |
+| File manager + notes | implemented | 2A |
+| Encrypted workspace | **prototype** | 4A |
+| Browser/PWA | implemented | 2B |
+| Media player | implemented (prototype) | 2C |
+| Game launch + 3 web slices | implemented | 2D/2E/4G |
+| Installable OS bundle | **prototype** | 4B |
+| Hardware validation package | **prototype** | 4C |
+| Streaming CDM readiness | **prototype** | 4E |
+| Legal/privacy/a11y readiness | **prototype** | 4F |
+| Secure boot | **missing** | 4D (#46 open) |
+| Production MDM | **missing** | 4D (#46 open) |
+| Policy enforcement (shell) | implemented | 3 |
+| Known issues | implemented | 3 |
+| **beta_ready** | **false** | — |
 
-## Remaining P0 blockers (honest)
+## What is implemented (honest)
 
-1. Production filesystem / encrypted storage (PR #44)
-2. Physical hardware validation (PR #42)
-3. Bootable installable OS image with boot evidence (PR #43)
-4. Streaming certification / CDM (PR #45)
-5. Secure boot on hardware (PR #46)
-6. Production MDM (PR #46)
-7. Legal / privacy / accessibility formal review (PR #47)
-8. Foot Racing / Earth Species web slices (PR #41)
+- Browser workspace, notes, encrypted workspace prototype, local media, game launch adapter
+- Three first-party web game vertical slices (Anime Aggressors, Foot Racing, Earth Species)
+- OS-layer installable bundle build track with manifest/checksums
+- Hardware validation package (matrix, templates, collector — no physical report)
+- Streaming certification readiness (tracker, checklists — not certified)
+- Compliance readiness packet (not certified)
 
-**Do not set `beta_ready: true` until every P0 item is implemented or validated with evidence on `main`.**
+## What remains prototype / missing
+
+- Production OS filesystem and full-disk encryption
+- Bootable ISO/IMG with boot evidence
+- Physical reference hardware validation report
+- Official streaming/CDM/HDCP certification
+- Secure boot and production MDM (PR #46)
+- Formal legal, privacy, accessibility certification
+
+**Beta candidate claim is not allowed yet.**

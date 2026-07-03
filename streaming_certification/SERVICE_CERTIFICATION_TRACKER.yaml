@@ -1,0 +1,206 @@
+# GunnchOS Streaming Service Certification Tracker
+# Phase 4E — readiness and evidence tracking only; no false certification claims.
+# certification_status values:
+#   not_started | browser_route_prototype | readiness_prototype | tested_unverified | certified
+# certified requires evidence_path pointing to a real test report or partner certification letter.
+
+schema_version: "1.0"
+last_updated: "2026-07-02"
+claim_boundary: >-
+  GunnchOS does not claim official Netflix, Hulu, Disney+, Widevine, or other
+  streaming service certification until partner certification or audited test
+  evidence exists. DRM circumvention is not supported.
+
+services:
+  youtube:
+    display_name: YouTube
+    launch_route: https://www.youtube.com/
+    browser_requirement: Chromium-compatible browser with HTML5/MSE
+    drm_cdm_required: false
+    drm_cdm_required_notes: Premium/rental content may require DRM; not validated
+    hdcp_external_display_required: false
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: External browser tab prototype only
+    certification_status: browser_route_prototype
+    evidence_path: null
+    claim_boundary: Browser route prototype. Service certification not claimed.
+
+  netflix:
+    display_name: Netflix
+    launch_route: https://www.netflix.com/
+    browser_requirement: Chromium + Widevine L1/L3 capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Widevine CDM required; not integrated in GunnchOS
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: DRM disclaimer shown in Media Mode; no playback validation
+    certification_status: readiness_prototype
+    evidence_path: streaming_certification/CDM_READINESS_CHECKLIST.md
+    claim_boundary: >-
+      Browser route prototype. DRM/CDM support required. HDCP may be required
+      for external display. Service certification not claimed.
+
+  hulu:
+    display_name: Hulu
+    launch_route: https://www.hulu.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Widevine CDM required; not integrated in GunnchOS
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: DRM disclaimer shown in Media Mode; no playback validation
+    certification_status: readiness_prototype
+    evidence_path: streaming_certification/CDM_READINESS_CHECKLIST.md
+    claim_boundary: >-
+      Browser route prototype. DRM/CDM support required. HDCP may be required
+      for external display. Service certification not claimed.
+
+  disney_plus:
+    display_name: Disney+
+    launch_route: https://www.disneyplus.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Not available in Media Mode shell yet
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. DRM/CDM and service certification required.
+
+  max:
+    display_name: Max
+    launch_route: https://www.max.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Not available in Media Mode shell yet
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. DRM/CDM and service certification required.
+
+  prime_video:
+    display_name: Prime Video
+    launch_route: https://www.primevideo.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Not available in Media Mode shell yet
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. DRM/CDM and service certification required.
+
+  peacock:
+    display_name: Peacock
+    launch_route: https://www.peacocktv.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Not available in Media Mode shell yet
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. DRM/CDM and service certification required.
+
+  paramount_plus:
+    display_name: Paramount+
+    launch_route: https://www.paramountplus.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Not available in Media Mode shell yet
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. DRM/CDM and service certification required.
+
+  crunchyroll:
+    display_name: Crunchyroll
+    launch_route: https://www.crunchyroll.com/
+    browser_requirement: Chromium + Widevine capable browser path
+    drm_cdm_required: true
+    drm_cdm_required_notes: Not available in Media Mode shell yet
+    hdcp_external_display_required: true
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. DRM/CDM and service certification required.
+
+  twitch:
+    display_name: Twitch
+    launch_route: https://www.twitch.tv/
+    browser_requirement: Chromium-compatible browser with HTML5/MSE
+    drm_cdm_required: false
+    drm_cdm_required_notes: Live streams generally non-DRM; VOD/subscriber content may vary
+    hdcp_external_display_required: false
+    tested_browser: null
+    tested_os_image: null
+    tested_hardware: null
+    max_confirmed_resolution: null
+    audio_captions_status: not_tested
+    login_session_notes: Future route — future_streaming_service placeholder
+    certification_status: not_started
+    evidence_path: null
+    claim_boundary: Future route. Service certification not claimed.
+
+  local_media:
+    display_name: Local Media
+    launch_route: gunnchos://local-media
+    browser_requirement: HTML5 audio/video element (no DRM)
+    drm_cdm_required: false
+    drm_cdm_required_notes: Non-DRM local files only; separate from streaming CDM path
+    hdcp_external_display_required: false
+    tested_browser: Chromium (launcher_mock LocalMediaPlayer)
+    tested_os_image: launcher_mock web shell prototype
+    tested_hardware: null
+    max_confirmed_resolution: source_file_dependent
+    audio_captions_status: html5_native_captions_if_embedded
+    login_session_notes: No login; file picker + session blob storage
+    certification_status: browser_route_prototype
+    evidence_path: docs/PHASE2C_LOCAL_MEDIA_PLAYER.md
+    claim_boundary: >-
+      HTML5 local file playback prototype. Not a production media library.
+      Not DRM streaming. Blobs not persisted across refresh.

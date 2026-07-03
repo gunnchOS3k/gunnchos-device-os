@@ -20,36 +20,37 @@ def test_beta_ready_is_false(gate_data: dict):
     assert gate_data["beta_ready"] is False
 
 
-def test_pending_prs_documented(gate_data: dict):
-    pending = gate_data.get("pending_prs", [])
-    numbers = {p["number"] for p in pending}
-    assert {41, 42, 43, 44, 45, 46, 47}.issubset(numbers)
-
-
-def test_open_pr_items_not_implemented_on_main(gate_data: dict):
-    pending_items = {
-        "encrypted_storage": 44,
-        "foot_racing_playable": 41,
-        "earth_species_playable": 41,
-        "streaming_certification": 45,
-        "secure_boot": 46,
-        "production_mdm": 46,
-        "legal_privacy_accessibility": 47,
-    }
+def test_phase4_merged_items_implemented(gate_data: dict):
     items = gate_data["items"]
-    for item_id, pr_num in pending_items.items():
-        item = items[item_id]
-        assert item["status"] == "missing", f"{item_id} should be missing until PR #{pr_num} merges"
-        assert str(pr_num) in (item.get("blocker") or "")
+    for item_id in (
+        "encrypted_storage",
+        "foot_racing_playable",
+        "earth_species_playable",
+        "streaming_certification",
+        "legal_privacy_accessibility",
+        "hardware_evidence",
+        "bootable_image",
+    ):
+        assert items[item_id]["status"] in ("prototype", "implemented"), item_id
+
+
+def test_secure_boot_mdm_still_missing_or_prototype(gate_data: dict):
+    items = gate_data["items"]
+    assert items["secure_boot"]["status"] in ("missing", "prototype")
+    assert items["production_mdm"]["status"] in ("missing", "prototype")
+    assert items["secure_boot"]["status"] != "validated"
+    assert items["production_mdm"]["status"] != "validated"
 
 
 def test_remaining_blockers_list(gate_data: dict):
     blockers = gate_data.get("remaining_blockers", [])
-    assert len(blockers) >= 8
+    assert len(blockers) >= 7
     ids = {b["id"] for b in blockers}
     assert "production_filesystem" in ids
     assert "physical_hardware" in ids
     assert "bootable_os" in ids
+    assert "streaming_cdm" in ids
+    assert "secure_boot" in ids
 
 
 def test_validate_beta_gate_script_passes():
@@ -58,17 +59,21 @@ def test_validate_beta_gate_script_passes():
 
 
 def test_cannot_set_validated_without_evidence(gate_data: dict):
-    """Simulate dishonest validated transitions — validator must reject on real files."""
-    # hardware validated without physical report should fail if we patch yaml in memory
     items = gate_data["items"]
-    assert items["hardware_evidence"]["status"] != "validated"
-    assert items["bootable_image"]["status"] != "validated"
-    assert items.get("secure_boot", {}).get("status") != "validated"
-    assert items.get("production_mdm", {}).get("status") != "validated"
+    for item_id in (
+        "hardware_evidence",
+        "bootable_image",
+        "streaming_certification",
+        "secure_boot",
+        "production_mdm",
+        "legal_privacy_accessibility",
+        "encrypted_storage",
+    ):
+        assert items[item_id]["status"] != "validated", item_id
 
 
 def test_beta_candidate_report_exists():
     report = ROOT / "release_artifacts" / "BETA_CANDIDATE_REPORT.md"
     text = report.read_text(encoding="utf-8")
+    assert "not allowed yet" in text.lower()
     assert "beta_ready" in text.lower() or "false" in text
-    assert "Pending PR" in text or "pending PR" in text.lower() or "#41" in text

@@ -40,13 +40,25 @@ Required statements:
 
 See [MEDIA_MODE.md](MEDIA_MODE.md) for School, Guardian, Library, and Offline rules.
 
+## Phase 4E certification readiness (prototype)
+
+| Artifact | Purpose |
+|----------|---------|
+| [SERVICE_CERTIFICATION_TRACKER.yaml](../streaming_certification/SERVICE_CERTIFICATION_TRACKER.yaml) | Per-service DRM, HDCP, and certification evidence tracking |
+| [STREAMING_COMPATIBILITY_MATRIX.md](../streaming_certification/STREAMING_COMPATIBILITY_MATRIX.md) | Service × codec × mode matrix |
+| [CDM_READINESS_CHECKLIST.md](../streaming_certification/CDM_READINESS_CHECKLIST.md) | Widevine/EME integration prerequisites |
+| [HDCP_EXTERNAL_DISPLAY_CHECKLIST.md](../streaming_certification/HDCP_EXTERNAL_DISPLAY_CHECKLIST.md) | External display test plan |
+| [PHASE4E_STREAMING_CDM_CERTIFICATION.md](PHASE4E_STREAMING_CDM_CERTIFICATION.md) | Phase summary and validation commands |
+
+Validator: `python3 scripts/validate_streaming_certification_tracker.py`
+
 ## Phase 1 implementation status
 
-| Requirement | Phase 1 |
-|-------------|---------|
-| Media Mode shell | Prototype UI |
-| YouTube/Netflix/Hulu cards | Browser route prototype |
-| Local media | Placeholder |
-| Real browser/DRM/CDM | Not implemented |
-| Service certification | Not claimed |
-| Policy tests | Implemented |
+| Requirement | Phase 1 | Phase 4E |
+|-------------|---------|----------|
+| Media Mode shell | Prototype UI | Prototype UI |
+| YouTube/Netflix/Hulu cards | Browser route prototype | Browser route prototype |
+| Local media | HTML5 prototype (Phase 2C) | Tracked separately from DRM in tracker |
+| Real browser/DRM/CDM | Not implemented | Readiness checklists only |
+| Service certification | Not claimed | Tracker + validator; still not claimed |
+| Policy tests | Implemented | Implemented |

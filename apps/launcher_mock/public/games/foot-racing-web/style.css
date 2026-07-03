@@ -1,0 +1,65 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #0d1117;
+  color: #e8eaed;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.screen { display: none; text-align: center; padding: 24px; }
+.screen.active { display: block; }
+h1 { color: #ffd93d; font-size: 2.5rem; margin-bottom: 0.25rem; }
+.subtitle { color: #9aa0a6; margin-bottom: 1.5rem; }
+button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: #ffd93d;
+  color: #111;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 6px;
+}
+.controls {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #9aa0a6;
+  text-align: left;
+  max-width: 480px;
+  margin-inline: auto;
+}
+#track {
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #1a2332;
+  display: block;
+  margin: 0 auto;
+}
+#hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 8px auto;
+  font-family: monospace;
+  gap: 16px;
+}
+#boost-wrap { display: flex; align-items: center; gap: 8px; }
+#boost-meter {
+  width: 120px;
+  height: 12px;
+  background: #333;
+  border-radius: 6px;
+  overflow: hidden;
+}
+#boost-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #4ecdc4, #ffd93d);
+  transition: width 0.05s linear;
+}
+#btn-exit, #btn-win-exit { background: #333; color: #fff; }
