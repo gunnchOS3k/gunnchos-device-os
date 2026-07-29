@@ -1,0 +1,32 @@
+{
+  "gate": "6",
+  "repository": "gunnchos-device-os",
+  "mode": "dry_run",
+  "started": "2026-07-29T19:06:14Z",
+  "files": {
+    "ok": true,
+    "missing": [],
+    "required": [
+      "os_validation/BOOT_EVIDENCE_TEMPLATE.json",
+      "os_validation/DRIVER_INVENTORY_TEMPLATE.json",
+      "os_validation/SUSPEND_RESUME_CHECKLIST.md",
+      "os_validation/UPDATE_ROLLBACK_CHECKLIST.md",
+      "os_validation/OFFLINE_MODE_CHECKLIST.md",
+      "os_validation/ACCESSIBILITY_CHECKLIST.md",
+      "os_validation/GAME_APP_COMPATIBILITY_TEMPLATE.json",
+      "fixtures/synthetic_os_validation_dry_run.json"
+    ]
+  },
+  "fixture": {
+    "ok": true,
+    "errors": [],
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/physical_evidence/fixtures/synthetic_os_validation_dry_run.json"
+  },
+  "statuses": {
+    "GATE6_HARNESS": "GATE6_HARNESS_PASS",
+    "OS_PHYSICAL_BOOT": "OS_PHYSICAL_BOOT_PENDING",
+    "PHYSICAL_EVIDENCE": "PHYSICAL_EVIDENCE_PENDING"
+  },
+  "claim": "GATE6_HARNESS_PASS only \u2014 emulated profiles are NOT physical boot evidence (OS_PHYSICAL_BOOT_PENDING)",
+  "finished": "2026-07-29T19:06:14Z"
+}

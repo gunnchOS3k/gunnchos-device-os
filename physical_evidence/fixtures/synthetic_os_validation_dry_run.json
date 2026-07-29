@@ -1,0 +1,19 @@
+{
+  "evidence_id": "os-dryrun-boot-001",
+  "evidence_label": "SYNTHETIC_EXPERIMENT",
+  "domain": "os_boot",
+  "mode": "DRY_RUN",
+  "status": "DRY_RUN_SYNTHETIC",
+  "captured_at": "2026-07-29T00:00:00Z",
+  "operator": "cursor-gate6-dry-run",
+  "repository": "gunnchos-device-os",
+  "commit": "dryrun00",
+  "device_profile": "emulated-profile-001",
+  "emulated": true,
+  "physical_boot": false,
+  "claim_boundary": "OS_PHYSICAL_BOOT_PENDING",
+  "artifacts": [
+    "physical_evidence/fixtures/synthetic_os_validation_dry_run.json"
+  ],
+  "notes": "Emulated OS validation dry-run only. Emulated profiles are NOT physical boot evidence (OS_PHYSICAL_BOOT_PENDING)."
+}

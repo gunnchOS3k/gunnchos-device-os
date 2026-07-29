@@ -1,6 +1,6 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
-	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke
+	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run
 
 PY := PYTHONPATH=src:.
 
@@ -61,3 +61,7 @@ e2e-tooling:
 
 e2e-sionna e2e-deepmimo e2e-aerial e2e-oran:
 	@echo "Optional target $@ — requires external install; not run in default CI"
+
+# Gate 6 harness only — emulated; OS_PHYSICAL_BOOT_PENDING (not physical boot evidence)
+gate6-dry-run:
+	python3 scripts/gate6_dry_run.py
