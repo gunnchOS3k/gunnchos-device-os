@@ -1,0 +1,20 @@
+{
+  "template_id": "os-boot-evidence-v1",
+  "boot_id": "REPLACE",
+  "device_profile": "REPLACE",
+  "image_build_id": "REPLACE",
+  "boot_path": "cold|warm|recovery",
+  "emulated": true,
+  "physical_boot": false,
+  "claim_boundary": "OS_PHYSICAL_BOOT_PENDING",
+  "evidence_label": "SYNTHETIC_EXPERIMENT",
+  "checklist": {
+    "firmware_handoff_observed": null,
+    "kernel_console_observed": null,
+    "init_reached": null,
+    "launcher_started": null,
+    "safe_mode_available": null
+  },
+  "status": "PENDING",
+  "notes": "Emulated profiles are NOT physical boot evidence. Keep OS_PHYSICAL_BOOT_PENDING until a real device boot log exists."
+}
