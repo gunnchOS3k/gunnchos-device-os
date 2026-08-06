@@ -1,6 +1,6 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
-	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run
+	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain
 
 PY := PYTHONPATH=src:.
 
@@ -65,3 +65,17 @@ e2e-sionna e2e-deepmimo e2e-aerial e2e-oran:
 # Gate 6 harness only — emulated; OS_PHYSICAL_BOOT_PENDING (not physical boot evidence)
 gate6-dry-run:
 	python3 scripts/gate6_dry_run.py
+
+
+# Gate 1 workstreams A/C — software path only (physical pending)
+gate1-boot:
+	PYTHONPATH=.:src python3 -m gunnchos_device_os.boot --manifest config/boot/sample_manifest.json --out results/gate1/boot_evidence.json
+
+gate1-dock:
+	PYTHONPATH=.:src python3 -m gunnchos_device_os.dock --out results/gate1/dock_evidence.json
+
+gate1-test:
+	PYTHONPATH=.:src pytest -q tests/test_gate1_identity.py tests/test_gate1_boot_probe.py tests/test_gate1_dock_continuity.py
+
+gate1-toolchain:
+	PYTHONPATH=.:src python3 -m gunnchos_device_os.boot --toolchain-check

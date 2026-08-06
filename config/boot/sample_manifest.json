@@ -1,0 +1,53 @@
+{
+  "manifest_version": "1.0",
+  "image_id": "gunnchos-boot-sw-2026.08.06",
+  "image_arch": "host",
+  "target_class": "host-native",
+  "created_at": "2026-08-06T00:00:00Z",
+  "stale_after_days": 365,
+  "services": [
+    {
+      "name": "display-manager",
+      "required": true
+    },
+    {
+      "name": "networkd",
+      "required": true
+    },
+    {
+      "name": "launcher",
+      "required": true
+    },
+    {
+      "name": "telemetry-opt-in",
+      "required": false
+    }
+  ],
+  "health_checks": [
+    {
+      "name": "display-manager",
+      "type": "process"
+    },
+    {
+      "name": "networkd",
+      "type": "process"
+    },
+    {
+      "name": "launcher",
+      "type": "http-local"
+    }
+  ],
+  "storage": {
+    "min_free_mb": 256,
+    "root_label": "gunnchos-root"
+  },
+  "display": {
+    "internal_required": true,
+    "external_optional": true
+  },
+  "network": {
+    "loopback_required": true,
+    "external_optional": true
+  },
+  "notes": "Sample software-path manifest. Physical candidate targets use physical-candidate class."
+}
