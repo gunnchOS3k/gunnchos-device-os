@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.local/schemas/gate1/dock_evidence.schema.json",
+  "title": "gunnchOS Dock Continuity Evidence",
+  "type": "object",
+  "required": [
+    "schema",
+    "status_tokens"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gunnchos.dock_evidence.v1"
+    },
+    "device_id": {
+      "type": "string"
+    },
+    "dock_id": {
+      "type": "string"
+    },
+    "ports": {
+      "type": "array"
+    },
+    "display_before": {
+      "type": "object"
+    },
+    "display_after": {
+      "type": "object"
+    },
+    "inputs_before": {
+      "type": "object"
+    },
+    "inputs_after": {
+      "type": "object"
+    },
+    "network_before": {
+      "type": [
+        "string",
+        "object",
+        "null"
+      ]
+    },
+    "network_after": {
+      "type": [
+        "string",
+        "object",
+        "null"
+      ]
+    },
+    "apps": {
+      "type": "array"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "save_checksum": {
+      "type": "string"
+    },
+    "audio": {
+      "type": "string"
+    },
+    "power": {
+      "type": "string"
+    },
+    "latencies_ms": {
+      "type": "object"
+    },
+    "errors": {
+      "type": "array"
+    },
+    "physical_dock": {
+      "type": "boolean"
+    },
+    "status_tokens": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "claim_boundary": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.local/schemas/gate1/boot_evidence.schema.json",
+  "title": "gunnchOS Boot Evidence",
+  "type": "object",
+  "required": [
+    "schema",
+    "boot_id",
+    "timestamp",
+    "status_tokens",
+    "physical_boot"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gunnchos.boot_evidence.v1"
+    },
+    "boot_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "boot_completed": {
+      "type": "boolean"
+    },
+    "duration_ms": {
+      "type": "integer"
+    },
+    "services": {
+      "type": "array"
+    },
+    "storage": {
+      "type": "object"
+    },
+    "display_input": {
+      "type": "object"
+    },
+    "network": {
+      "type": "object"
+    },
+    "hardware_identity": {
+      "type": "object"
+    },
+    "secure_boot": {
+      "type": "object"
+    },
+    "crash_restart_count": {
+      "type": "integer"
+    },
+    "log_checksum_sha256": {
+      "type": "string"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "physical_boot": {
+      "type": "boolean"
+    },
+    "status_tokens": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Must include GUNNCHOS_PHYSICAL_BOOT_PENDING until physical evidence exists"
+    },
+    "claim_boundary": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

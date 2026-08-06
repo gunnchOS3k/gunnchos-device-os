@@ -1,0 +1,61 @@
+{
+  "descriptor_version": "1.0",
+  "dock_classes": [
+    {
+      "id": "generic-usb-hub",
+      "ports": [
+        "usb-a",
+        "usb-c"
+      ],
+      "display": {
+        "external_possible": true,
+        "assumes_dp_alt_mode": false
+      },
+      "network": [
+        "ethernet-optional"
+      ],
+      "audio": [
+        "headset-optional"
+      ],
+      "power": {
+        "passthrough_possible": true,
+        "negotiated": false
+      }
+    },
+    {
+      "id": "generic-display-dock",
+      "ports": [
+        "usb-c",
+        "hdmi-or-dp",
+        "ethernet"
+      ],
+      "display": {
+        "external_possible": true,
+        "assumes_dp_alt_mode": false
+      },
+      "network": [
+        "ethernet"
+      ],
+      "audio": [
+        "hdmi-audio-optional",
+        "3.5mm-optional"
+      ],
+      "power": {
+        "passthrough_possible": true,
+        "negotiated": false
+      }
+    }
+  ],
+  "layout_profiles": [
+    "handheld",
+    "docked-extend",
+    "docked-mirror",
+    "degraded-internal-only"
+  ],
+  "detection_policy": {
+    "never_assume_vendor": true,
+    "never_assume_pixel": true,
+    "never_assume_usb_c_dp_alt_mode": true,
+    "require_observed_capability": true
+  }
+}
