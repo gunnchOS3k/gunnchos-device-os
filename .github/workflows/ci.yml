@@ -87,8 +87,21 @@ jobs:
         run: |
           python3 scripts/export_launcher_contract.py
           python3 scripts/check_launcher_contract_fresh.py
+      - name: Checkout ring protocol sibling
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/gunnchos-hardware-industrial-design
+          path: .deps/gunnchos-hardware-industrial-design
+          # Same-org GITHUB_TOKEN; fails loudly if inaccessible (do not weaken)
+      - name: Link sibling for relative imports
+        run: |
+          set -euo pipefail
+          dest="$(dirname "$GITHUB_WORKSPACE")/gunnchos-hardware-industrial-design"
+          ln -sfn "$GITHUB_WORKSPACE/.deps/gunnchos-hardware-industrial-design" "$dest"
+          test -f "$dest/ring_input/python/authenticated_ring_input/__init__.py"
+          echo "Linked sibling at $dest"
       - name: Run tests
-        run: pytest -q tests/
+        run: PYTHONPATH=.:src pytest -q tests/
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
