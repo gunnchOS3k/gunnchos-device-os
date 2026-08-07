@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "evidence_class",
+    "artifact_path",
+    "captured_at_utc",
+    "operator"
+  ],
+  "properties": {
+    "evidence_class": {
+      "enum": [
+        "MEASURED",
+        "HUMAN_PARTICIPANT",
+        "EXTERNAL_ACCEPTANCE"
+      ]
+    },
+    "artifact_path": {
+      "type": "string"
+    },
+    "captured_at_utc": {
+      "type": "string"
+    },
+    "operator": {
+      "type": "string"
+    },
+    "device_id": {
+      "type": "string"
+    }
+  }
+}

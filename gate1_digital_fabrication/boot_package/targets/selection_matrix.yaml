@@ -1,0 +1,11 @@
+targets:
+  - id: android_adb
+    role: G1-C1_primary_candidate
+    collectors: [adb_serial, logcat, dumpsys]
+  - id: linux_ssh
+    role: secondary
+    collectors: [ssh, journalctl, dmesg]
+  - id: ring_nrf52840
+    role: G1-C2_companion
+    collectors: [swd, ble_gatt, uart]
+physical_evidence: GATE_1_PHYSICAL_EVIDENCE_PENDING
