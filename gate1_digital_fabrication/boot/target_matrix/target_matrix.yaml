@@ -1,0 +1,16 @@
+generated_at_utc: "2026-08-07T22:25:26Z"
+criterion: G1-C1
+targets:
+  - id: host-native
+    description: Developer host probe with sample manifest
+    software_evidence: PASS
+    physical_evidence: N/A
+  - id: vm-container
+    description: Docker image prototype smoke
+    software_evidence: OPTIONAL
+    physical_evidence: N/A
+  - id: physical-candidate-rpi4
+    description: Raspberry Pi 4 / CM4 class representative board
+    software_evidence: CAPTURE_TEMPLATE_ONLY
+    physical_evidence: GUNNCHOS_PHYSICAL_BOOT_PENDING
+    blocker_class: REQUIRES_LOCAL_HARDWARE

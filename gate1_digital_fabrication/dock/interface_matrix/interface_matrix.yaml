@@ -1,0 +1,26 @@
+generated_at_utc: "2026-08-07T22:25:26Z"
+criterion: G1-C3
+interfaces:
+  - id: usb_c_data
+    connector: USB-C
+    signals: [USB2_D+, USB2_D-, GND, VBUS]
+    role: host_or_device_data
+  - id: usb_c_pd
+    connector: USB-C
+    signals: [CC1, CC2, VBUS, GND]
+    role: power_negotiation
+  - id: dp_alt_mode
+    connector: USB-C
+    signals: [SSTX/SSRX pairs as DP lanes]
+    role: displayport_alt_mode
+  - id: hdmi_out
+    connector: HDMI Type-A (dock side)
+    signals: [TMDS, CEC, HPD, 5V]
+    role: external_display
+  - id: continuity_sense
+    connector: fixture
+    signals: [sense lines]
+    role: automated_continuity
+status_tokens:
+  - DOCK_CONTINUITY_SIMULATION_PASS
+  - PHYSICAL_DOCK_EVIDENCE_PENDING

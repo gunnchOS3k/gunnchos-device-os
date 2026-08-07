@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.gate1.boot.physical_evidence.schema.json",
+  "title": "G1-C1 Physical Boot Evidence",
+  "type": "object",
+  "required": ["evidence_class", "physical_boot_claimed", "device_id", "boot_log_sha256", "operator", "captured_at_utc"],
+  "properties": {
+    "evidence_class": {"enum": ["MEASURED", "SOFTWARE_SIMULATED", "CAPTURE_TEMPLATE"]},
+    "physical_boot_claimed": {"type": "boolean"},
+    "device_id": {"type": "string", "minLength": 1},
+    "boot_log_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "operator": {"type": "string"},
+    "captured_at_utc": {"type": "string"},
+    "edmund_acceptance": {"type": "boolean", "default": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"physical_boot_claimed": {"const": true}}},
+      "then": {"properties": {"evidence_class": {"const": "MEASURED"}}}
+    }
+  ]
+}
