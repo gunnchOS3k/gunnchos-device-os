@@ -10,13 +10,33 @@ from ring_input import PHYSICAL_RING_CLAIMED, STATUSES, RingInputAdapter
 
 
 def _ari():
-    root = Path(
-        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
+    repos_root = Path(__file__).resolve().parents[2]
+    candidates = [
+        repos_root / "gunnchos-hardware-industrial-design" / "ring_input" / "python",
+        Path(__file__).resolve().parents[1].parent.parent
+        / "gunnchos-hardware-industrial-design"
+        / "ring_input"
+        / "python",
+        Path(
+            "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
+            "gunnchos-hardware-industrial-design/ring_input/python"
+        ),
+    ]
+    # parents[1]=tests, parents[2]=device-os repo; sibling is alongside repo root
+    repo_root = Path(__file__).resolve().parents[1]
+    candidates.insert(
+        0,
+        repo_root.parent / "gunnchos-hardware-industrial-design" / "ring_input" / "python",
+    )
+    for root in candidates:
+        if (root / "authenticated_ring_input" / "__init__.py").exists():
+            if str(root) not in sys.path:
+                sys.path.insert(0, str(root))
+            return importlib.import_module("authenticated_ring_input")
+    raise ImportError(
+        "authenticated_ring_input reference not found; expected sibling "
         "gunnchos-hardware-industrial-design/ring_input/python"
     )
-    if str(root) not in sys.path:
-        sys.path.insert(0, str(root))
-    return importlib.import_module("authenticated_ring_input")
 
 
 BASE = 1_700_000_000_000
