@@ -1,0 +1,127 @@
+name: Gate 1 post-merge integrity
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gate1-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+
+      - name: Checkout ring protocol sibling
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/gunnchos-hardware-industrial-design
+          path: .deps/gunnchos-hardware-industrial-design
+          # Same-org GITHUB_TOKEN; fails loudly if inaccessible (do not weaken)
+
+      - name: Link sibling for relative imports
+        run: |
+          set -euo pipefail
+          dest="$(dirname "$GITHUB_WORKSPACE")/gunnchos-hardware-industrial-design"
+          ln -sfn "$GITHUB_WORKSPACE/.deps/gunnchos-hardware-industrial-design" "$dest"
+          test -f "$dest/ring_input/python/authenticated_ring_input/__init__.py"
+          echo "Linked sibling at $dest"
+
+      - name: Fail on master as active base/default
+        run: |
+          set -euo pipefail
+          if grep -RInE --include='*.yml' --include='*.yaml' \
+            -e 'branches:[[:space:]]*\[[^]]*master' \
+            -e 'default[_-]branch:[[:space:]]*master' \
+            -e 'base:[[:space:]]*master' \
+            .github/workflows 2>/dev/null; then
+            echo "MAIN_BRANCH_POLICY_FAIL: active master default/base ref in workflows"
+            exit 1
+          fi
+          echo "MAIN_BRANCH_POLICY_OK"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install jsonschema pyyaml
+
+      - name: Full pytest
+        run: PYTHONPATH=.:src pytest -q
+
+      - name: Gate1 boot / dock / ring adapter
+        run: |
+          make gate1-boot
+          make gate1-dock
+          make gate1-test
+          PYTHONPATH=.:src pytest -q tests/test_ring_input_adapter.py
+
+      - name: Gate1 schema validation
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          import jsonschema
+
+          root = Path(".")
+          schema_dir = root / "schemas" / "gate1"
+          schemas = list(schema_dir.glob("*.schema.json"))
+          assert schemas, f"missing schemas under {schema_dir}"
+          for path in schemas:
+              schema = json.loads(path.read_text(encoding="utf-8"))
+              jsonschema.Draft202012Validator.check_schema(schema)
+              print(f"OK schema {path}")
+
+          # Validate sample boot manifest against boot_manifest schema when present
+          manifest = root / "config" / "boot" / "sample_manifest.json"
+          boot_schema = schema_dir / "boot_manifest.schema.json"
+          if manifest.exists() and boot_schema.exists():
+              jsonschema.validate(
+                  json.loads(manifest.read_text(encoding="utf-8")),
+                  json.loads(boot_schema.read_text(encoding="utf-8")),
+              )
+              print(f"OK instance {manifest} vs {boot_schema.name}")
+
+          for evidence in [
+              root / "results" / "gate1" / "boot_evidence.json",
+              root / "results" / "gate1" / "dock_evidence.json",
+          ]:
+              if not evidence.exists():
+                  continue
+              name = evidence.name.replace(".json", ".schema.json")
+              schema_path = schema_dir / name
+              if schema_path.exists():
+                  jsonschema.validate(
+                      json.loads(evidence.read_text(encoding="utf-8")),
+                      json.loads(schema_path.read_text(encoding="utf-8")),
+                  )
+                  print(f"OK instance {evidence} vs {schema_path.name}")
+          print("GATE1_SCHEMA_VALIDATION_OK")
+          PY
+
+      - name: Gate1 toolchain probe (may report BLOCKED_TOOLCHAIN)
+        run: make gate1-toolchain || true
+
+      - name: Upload synthetic Gate1 summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate1-synthetic-summary
+          path: |
+            results/gate1/*.json
+          if-no-files-found: ignore
+          retention-days: 14
