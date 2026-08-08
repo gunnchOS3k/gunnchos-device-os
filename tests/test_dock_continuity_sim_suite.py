@@ -23,3 +23,13 @@ def test_suite_covers_expected_scenario_names():
     report = run_continuity_simulation_suite()
     names = {r["scenario"] for r in report["scenarios"]}
     assert names == set(SCENARIOS)
+
+
+def test_suite_covers_fault_injection_expansions():
+    report = run_continuity_simulation_suite()
+    names = {r["scenario"] for r in report["scenarios"]}
+    assert "fault_mid_attach_power_loss" in names
+    assert "fault_ethernet_drop_while_docked" in names
+    assert "fault_snapshot_corruption_recovery" in names
+    assert "fault_hot_unplug_during_restore" in names
+    assert report["scenario_count"] >= 9

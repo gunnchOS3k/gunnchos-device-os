@@ -1,0 +1,15 @@
+#!/bin/sh
+# Minimal reference shell for the bootable DEV image.
+set -eu
+case "${1:-}" in
+  --self-test)
+    echo "gunnchos-shell self-test ok realm=DEV"
+    exit 0
+    ;;
+  --help|-h)
+    echo "gunnchos-shell — DEV reference shell (not a production compositor)"
+    exit 0
+    ;;
+esac
+echo "gunnchos-shell: interactive shell not attached in automated boot; realm=DEV"
+exit 0
