@@ -23,8 +23,10 @@ This wave delivers a **genuinely bootable DEV/VM reference image** under QEMU aa
 
 - **Target:** `qemu-system-aarch64` machine `virt`, linux direct-kernel boot (`-kernel` / `-initrd`)
 - **Rootfs:** Alpine 3.21 minirootfs + gunnchOS overlay (`os_build/bootable_reference/overlay`)
-- **Init:** `/init` starts 17 long-lived service stubs, shell self-test, loopback networking, A/B updater status, recovery self-check
+- **Init:** `/init` starts 17 supervised real services (mailbox HTTP-line IPC), shell self-test, loopback networking, A/B updater status, recovery self-check, app/game manifest checks
+- **IPC:** `gunnchos-ipc` client + per-service daemons (`start|stop|restart|health|logs|persist`)
 - **Evidence:** `results/full_product/bootable_reference/qemu_serial_boot.log` + `BOOT_EVIDENCE.json`
+- **Not earned:** `FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE` (explicitly false in guest boot log)
 
 ```bash
 PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py

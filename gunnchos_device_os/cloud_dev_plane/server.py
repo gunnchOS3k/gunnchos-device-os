@@ -98,8 +98,18 @@ class DevPlaneApp:
         route = parsed.path.rstrip("/") or "/"
         qs = parse_qs(parsed.query)
 
+        # Multi-instance coherence: reload durable backend before serving.
+        if getattr(self.store, "backend", None) == "sqlite":
+            self.store.reload()
+
         if method == "GET" and route in ("/health", "/v1/health"):
-            return 200, {"ok": True, "role": self.role, "realm": REALM, "mock": False}
+            return 200, {
+                "ok": True,
+                "role": self.role,
+                "realm": REALM,
+                "backend": getattr(self.store, "backend", "memory"),
+                "mock": False,
+            }
         if method == "GET" and route in ("/v1/inventory", "/inventory"):
             return 200, self.inventory()
         if method == "GET" and route == "/v1/snapshot":
@@ -444,10 +454,13 @@ class DevPlaneServer:
 def serve_forever_from_env() -> None:
     role = os.environ.get("GUNNCHOS_SERVICE", "gateway")
     port = int(os.environ.get("GUNNCHOS_PORT", DEFAULT_PORTS.get(role, 8100)))
-    store_path = os.environ.get("GUNNCHOS_STORE_PATH", "/tmp/gunnchos-dev-plane-store.json")
+    store_path = os.environ.get(
+        "GUNNCHOS_STORE_PATH",
+        "/tmp/gunnchos-dev-plane-store.sqlite3",
+    )
     mode = ServiceMode(os.environ.get("GUNNCHOS_MODE", "local").lower())
     otel_ep = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "http://127.0.0.1:4318/v1/traces")
-    store = DevPlaneStore(store_path)
+    store = DevPlaneStore(store_path, backend=os.environ.get("GUNNCHOS_STORE_BACKEND"))
     otel = OtelRoundTrip(endpoint=otel_ep)
     app = DevPlaneApp(store, default_mode=mode, otel=otel, role=role)
     server = DevPlaneServer(app, host="0.0.0.0", port=port)

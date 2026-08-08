@@ -1,6 +1,7 @@
 #!/bin/sh
 # gunnchOS bootable reference image — DEV/VM init (not production secure boot).
 # Boots under QEMU aarch64 virt; prints honest markers for digital evidence.
+# Starts supervised real services with local mailbox IPC (not PID-only stubs).
 
 set -eu
 
@@ -10,14 +11,16 @@ echo "GUNNCHOS_BOOT_STAGE=early"
 echo "GUNNCHOS_IMAGE_REALM=DEV"
 echo "GUNNCHOS_PRODUCTION_KEYS=false"
 echo "GUNNCHOS_PHYSICAL_BOOT_CLAIMED=false"
+echo "GUNNCHOS_FULL_PLATFORM_COMPLETE=false"
 
 # Minimal mounts for a self-contained initramfs rootfs.
 mount -t proc proc /proc 2>/dev/null || true
 mount -t sysfs sysfs /sys 2>/dev/null || true
 mount -t devtmpfs devtmpfs /dev 2>/dev/null || true
-mkdir -p /dev/pts /tmp /run /var/lib/gunnchos/state
+mkdir -p /dev/pts /tmp /run /var/lib/gunnchos/state /var/log/gunnchos /run/gunnchos/ipc
 mount -t tmpfs tmpfs /tmp 2>/dev/null || true
 mount -t tmpfs tmpfs /run 2>/dev/null || true
+mkdir -p /run/gunnchos/ipc /var/log/gunnchos /var/lib/gunnchos/state
 
 echo "GUNNCHOS_BOOT_STAGE=fs_mounted"
 
@@ -34,15 +37,29 @@ echo "GUNNCHOS_NETWORKING=loopback_up"
 ACTIVE_SLOT="$(cat /var/lib/gunnchos/state/active_slot 2>/dev/null || echo a)"
 echo "GUNNCHOS_AB_ACTIVE_SLOT=${ACTIVE_SLOT}"
 
-# Start long-lived service stubs (shell supervisors in this reference image).
+# Start long-lived supervised services (real daemons + mailbox IPC).
+# Defer IPC health until after all daemons are up — per-service health during
+# start thrash-timeouts under QEMU TCG (CI aarch64-on-x86).
 SERVICES="hal input ring display dock continuity identity permissions sandbox connectivity ai_interface profile_manager a11y diagnostics updater recovery fleet_agent"
 STARTED=0
 FAILED=0
+HEALTH_OK=0
 for svc in $SERVICES; do
   script="/opt/gunnchos/services/${svc}.sh"
   if [ -x "$script" ]; then
-    "$script" start >/run/gunnchos-${svc}.log 2>&1 && STARTED=$((STARTED + 1)) || FAILED=$((FAILED + 1))
-    echo "GUNNCHOS_SERVICE_START svc=${svc} ok=$([ -f /run/gunnchos-${svc}.pid ] && echo true || echo false)"
+    if "$script" start >/run/gunnchos-${svc}-start.log 2>&1; then
+      STARTED=$((STARTED + 1))
+      OK=true
+    else
+      FAILED=$((FAILED + 1))
+      OK=false
+    fi
+    if [ -f "/run/gunnchos/${svc}.pid" ] && kill -0 "$(cat /run/gunnchos/${svc}.pid)" 2>/dev/null; then
+      OK=true
+    else
+      OK=false
+    fi
+    echo "GUNNCHOS_SERVICE_START svc=${svc} ok=${OK}"
   else
     echo "GUNNCHOS_SERVICE_START svc=${svc} ok=false missing=true"
     FAILED=$((FAILED + 1))
@@ -50,8 +67,59 @@ for svc in $SERVICES; do
 done
 echo "GUNNCHOS_SERVICES_STARTED=${STARTED}"
 echo "GUNNCHOS_SERVICES_FAILED=${FAILED}"
+echo "GUNNCHOS_SERVICES_KIND=supervised_real"
 
-# Shell + app runtime presence checks.
+# Batch health via short IPC waits (CI TCG must finish within harness timeout).
+# Keep cross-service IPC below on the default longer client timeout.
+for svc in $SERVICES; do
+  if [ -f "/run/gunnchos/${svc}.pid" ] && kill -0 "$(cat /run/gunnchos/${svc}.pid)" 2>/dev/null; then
+    if GUNNCHOS_IPC_MAX_ITERS=40 gunnchos-ipc "$svc" GET /health 2>/dev/null | grep -q "ok svc=${svc}"; then
+      HEALTH_OK=$((HEALTH_OK + 1))
+    fi
+  fi
+done
+echo "GUNNCHOS_SERVICES_HEALTH_OK=${HEALTH_OK}"
+
+# Cross-service IPC proof (diagnostics -> hal, fleet_agent -> identity).
+IPC_OK=false
+CROSS_OK=false
+if gunnchos-ipc diagnostics POST /call "probe=hal" 2>/dev/null | grep -q "probe_ok"; then
+  if gunnchos-ipc hal POST /call "list_profiles" 2>/dev/null | grep -q "profiles="; then
+    if gunnchos-ipc fleet_agent POST /call "ping_identity" 2>/dev/null | grep -q "identity_reachable=true"; then
+      if gunnchos-ipc identity POST /call "whoami" 2>/dev/null | grep -q "subject="; then
+        IPC_OK=true
+        CROSS_OK=true
+      fi
+    fi
+  fi
+fi
+echo "GUNNCHOS_IPC_TRANSPORT=mailbox_http_line"
+echo "GUNNCHOS_IPC_CROSS_CALL=${CROSS_OK}"
+if [ "${IPC_OK}" = "true" ]; then
+  echo "GUNNCHOS_IPC=ok"
+  echo "GUNNCHOS_IPC_PROBE=ok"
+else
+  echo "GUNNCHOS_IPC=degraded"
+  echo "GUNNCHOS_IPC_PROBE=degraded"
+fi
+
+# Persistence proof (state files written by daemons).
+PERSIST_OK=0
+for svc in hal identity diagnostics fleet_agent; do
+  if [ -f "/var/lib/gunnchos/state/${svc}.state" ]; then
+    PERSIST_OK=$((PERSIST_OK + 1))
+  fi
+done
+echo "GUNNCHOS_SERVICE_PERSISTENCE_OK=${PERSIST_OK}"
+
+# Restart smoke on diagnostics (supervised restart path).
+if /opt/gunnchos/services/diagnostics.sh restart >/run/gunnchos-diagnostics-restart.log 2>&1; then
+  echo "GUNNCHOS_SERVICE_RESTART=ok"
+else
+  echo "GUNNCHOS_SERVICE_RESTART=failed"
+fi
+
+# Shell + app/game runtime presence checks.
 if [ -x /opt/gunnchos/bin/gunnchos-shell ]; then
   /opt/gunnchos/bin/gunnchos-shell --self-test || true
   echo "GUNNCHOS_SHELL=ok"
@@ -61,8 +129,16 @@ fi
 
 if [ -f /opt/gunnchos/apps/manifest.json ]; then
   echo "GUNNCHOS_APP_RUNTIME=manifest_present"
+  echo "GUNNCHOS_APP_MANIFEST=ok"
 else
   echo "GUNNCHOS_APP_RUNTIME=manifest_missing"
+  echo "GUNNCHOS_APP_MANIFEST=missing"
+fi
+
+if [ -f /opt/gunnchos/games/manifest.json ]; then
+  echo "GUNNCHOS_GAME_MANIFEST=ok"
+else
+  echo "GUNNCHOS_GAME_MANIFEST=missing"
 fi
 
 if [ -x /opt/gunnchos/updater/ab_status.sh ]; then
@@ -75,11 +151,13 @@ fi
 
 echo "GUNNCHOS_BOOTLOADER=linux_direct_kernel"
 echo "GUNNCHOS_TARGET=qemu-system-aarch64"
+# Explicitly withhold full-platform completion while image IPC is mailbox (not host AF_UNIX plane).
+echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false"
 echo "GUNNCHOS_BOOT_MARKER=OK"
 echo "GUNNCHOS_BOOT_COMPLETE=true"
 
 # Keep guest alive briefly so QEMU serial capture finishes, then halt.
-sleep 1
+sleep 2
 # Prefer clean poweroff; fall back to busybox poweroff/halt.
 ifcommand poweroff && poweroff -f 2>/dev/null || true
 ifcommand halt && halt -f 2>/dev/null || true

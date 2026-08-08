@@ -308,8 +308,12 @@ class DiagnosticsService(RuntimeService):
         from gunnchos_device_os.diagnostics_log import DiagnosticsLog
         from pathlib import Path
 
-        path = self.config.persistence_path or "results/diagnostics/runtime_events.jsonl"
-        self._log = DiagnosticsLog(path=Path(path))
+        # Keep event JSONL distinct from supervisor persistence JSON.
+        if self.config.persistence_path:
+            path = Path(self.config.persistence_path).with_suffix(".events.jsonl")
+        else:
+            path = Path("results/diagnostics/runtime_events.jsonl")
+        self._log = DiagnosticsLog(path=path)
         self._store["entries"] = 0
         self._store["log_path"] = str(path)
 

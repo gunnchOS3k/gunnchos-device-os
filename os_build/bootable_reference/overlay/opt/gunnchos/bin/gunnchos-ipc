@@ -1,0 +1,47 @@
+#!/bin/sh
+# gunnchos-ipc — local mailbox HTTP-line client for reference image services.
+# Talks to supervised service daemons under /run/gunnchos/ipc/<svc>/{in,out}.
+set -eu
+
+NAME="${1:-}"
+METHOD="${2:-GET}"
+PATH_Q="${3:-/health}"
+BODY="${4:-}"
+
+if [ -z "${NAME}" ]; then
+  echo "usage: gunnchos-ipc <service> [METHOD] [path] [body]" >&2
+  exit 2
+fi
+
+RUN_ROOT="${GUNNCHOS_RUN_ROOT:-/run/gunnchos}"
+INBOX="${RUN_ROOT}/ipc/${NAME}/in"
+OUTBOX="${RUN_ROOT}/ipc/${NAME}/out"
+mkdir -p "${INBOX}" "${OUTBOX}"
+
+ID="$$_$(date +%s 2>/dev/null || echo 0)_${RANDOM:-0}"
+REQ="${INBOX}/${ID}.req"
+REP="${OUTBOX}/${ID}.rep"
+rm -f "${REP}"
+
+{
+  echo "${METHOD} ${PATH_Q}"
+  if [ -n "${BODY}" ]; then
+    echo "${BODY}"
+  fi
+} > "${REQ}"
+
+MAX_ITERS="${GUNNCHOS_IPC_MAX_ITERS:-100}"
+i=0
+while [ "$i" -lt "${MAX_ITERS}" ]; do
+  if [ -f "${REP}" ]; then
+    cat "${REP}"
+    rm -f "${REP}"
+    exit 0
+  fi
+  i=$((i + 1))
+  sleep 0.05
+done
+
+echo "error timeout waiting for ${NAME}" >&2
+rm -f "${REQ}"
+exit 1
