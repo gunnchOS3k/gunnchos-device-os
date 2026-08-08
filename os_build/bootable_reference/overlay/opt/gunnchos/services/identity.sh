@@ -1,11 +1,5 @@
 #!/bin/sh
-# gunnchOS reference service: identity (DEV/VM stub supervisor)
+# gunnchOS reference service: identity (supervised real DEV/VM service)
 set -eu
 . /opt/gunnchos/services/_lib.sh
-case "${1:-start}" in
-  start) svc_start "identity" ;;
-  status)
-    if [ -f /run/gunnchos-identity.pid ]; then echo "identity: running"; else echo "identity: stopped"; fi
-    ;;
-  *) echo "usage: identity.sh start|status"; exit 1 ;;
-esac
+svc_dispatch "identity" "$@"

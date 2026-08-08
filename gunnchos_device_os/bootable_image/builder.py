@@ -2,7 +2,7 @@
 
 Produces a genuinely bootable DEV/VM initramfs image for QEMU aarch64
 (linux direct-kernel boot) with bootloader path metadata, kernel, rootfs,
-init, long-lived service stubs, shell, networking, app runtime manifests,
+init, long-lived supervised services with local IPC, shell, networking, app runtime manifests,
 updater A/B markers, and recovery self-check.
 
 Honest token: GUNNCHOS_BOOTABLE_REFERENCE_IMAGE_DIGITAL_PASS only when QEMU
@@ -48,6 +48,12 @@ REQUIRED_BOOT_MARKERS = (
     "GUNNCHOS_SHELL=ok",
     "GUNNCHOS_UPDATER_AB",
     "GUNNCHOS_RECOVERY_SELF_CHECK=ok",
+    "GUNNCHOS_SERVICES_KIND=supervised_real",
+    "GUNNCHOS_IPC=ok",
+    "GUNNCHOS_IPC_CROSS_CALL=true",
+    "GUNNCHOS_APP_MANIFEST=ok",
+    "GUNNCHOS_GAME_MANIFEST=ok",
+    "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false",
 )
 
 REQUIRED_SERVICES = (

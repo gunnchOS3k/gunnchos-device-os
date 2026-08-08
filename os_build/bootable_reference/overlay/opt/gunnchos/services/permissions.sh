@@ -1,11 +1,5 @@
 #!/bin/sh
-# gunnchOS reference service: permissions (DEV/VM stub supervisor)
+# gunnchOS reference service: permissions (supervised real DEV/VM service)
 set -eu
 . /opt/gunnchos/services/_lib.sh
-case "${1:-start}" in
-  start) svc_start "permissions" ;;
-  status)
-    if [ -f /run/gunnchos-permissions.pid ]; then echo "permissions: running"; else echo "permissions: stopped"; fi
-    ;;
-  *) echo "usage: permissions.sh start|status"; exit 1 ;;
-esac
+svc_dispatch "permissions" "$@"

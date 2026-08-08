@@ -3,7 +3,7 @@
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
 	runtime-services system-image full-product-iii \
 	cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom \
-	bootable-reference full-product-iv
+	bootable-reference full-product-iv full-product-v
 
 PY := PYTHONPATH=src:.
 
@@ -113,6 +113,7 @@ cloud-dev-plane-test:
 		tests/test_cloud_dev_plane_outage_resync.py \
 		tests/test_cloud_dev_plane_otel.py \
 		tests/test_cloud_dev_plane_security_ops.py \
+		tests/test_cloud_dev_plane_persistence.py \
 		tests/test_adversarial_fuzz_starters.py \
 		tests/test_cloud_edge_services.py
 	PYTHONPATH=.:src python3 security/dev_ops/sast_hook.py
@@ -132,3 +133,14 @@ full-product-iv: cloud-dev-plane-test
 		tests/test_dock_continuity_sim_suite.py \
 		tests/test_runtime_services.py
 	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py --build-only
+
+# FULL PRODUCT CONTINUATION V — stub elimination + real IPC + SQLite persistence
+full-product-v:
+	PYTHONPATH=.:src pytest -q \
+		tests/test_runtime_ipc.py \
+		tests/test_cloud_dev_plane_persistence.py \
+		tests/test_cloud_dev_plane_modes.py \
+		tests/test_cloud_dev_plane_outage_resync.py \
+		tests/test_bootable_reference_image.py \
+		tests/test_runtime_services.py
+	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py

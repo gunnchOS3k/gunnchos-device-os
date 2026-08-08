@@ -36,6 +36,17 @@ Module: `python -m gunnchos_device_os.cloud_dev_plane`
 
 Header: `X-Gunnchos-Mode` or JSON `mode`.
 
+## Persistence
+
+| Backend | Selection |
+| --- | --- |
+| `sqlite` (default for compose) | `GUNNCHOS_STORE_PATH=/data/store.sqlite3` + `GUNNCHOS_STORE_BACKEND=sqlite` |
+| `json` | path ending in `.json` |
+| `memory` | no path (in-process tests) |
+| Redis (optional) | `GUNNCHOS_REDIS_URL` / `REDIS_URL` for coordination only |
+
+SQLite uses WAL + merge-on-write for multi-instance writers. See `tests/test_cloud_dev_plane_persistence.py`.
+
 ## Tokens
 
 | Token | Status |
