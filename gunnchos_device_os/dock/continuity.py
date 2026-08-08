@@ -43,6 +43,14 @@ class DockContinuityEngine:
     network_route: str = "wlan"
     display_state: dict[str, Any] = field(default_factory=dict)
     peripherals: list[str] = field(default_factory=list)
+    ai_privacy: dict[str, Any] = field(
+        default_factory=lambda: {
+            "local_only": True,
+            "cloud_export": False,
+            "retain_prompts": False,
+            "policy": "dock_continuity_default",
+        }
+    )
     degraded: bool = False
     last_snapshot: dict[str, Any] | None = None
     events: list[dict[str, Any]] = field(default_factory=list)
@@ -80,6 +88,7 @@ class DockContinuityEngine:
             "network_route": self.network_route,
             "display_state": dict(self.display_state),
             "peripherals": list(self.peripherals),
+            "ai_privacy": dict(self.ai_privacy),
             "degraded": self.degraded,
         }
         self.last_snapshot = copy.deepcopy(snap)
@@ -138,10 +147,11 @@ class DockContinuityEngine:
         self.power_state = "battery"
         self.input_map = {"primary": "touch", "secondary": "buttons"}
         self.degraded = False
-        # Continuity: preserve apps, identity, save
+        # Continuity: preserve apps, identity, save, ai privacy
         self.apps = list(prior_snap.get("apps") or self.apps)
         self.identity = dict(prior_snap.get("identity") or self.identity)
         self.save_blob = dict(prior_snap.get("save_blob") or self.save_blob)
+        self.ai_privacy = dict(prior_snap.get("ai_privacy") or self.ai_privacy)
         self.latencies_ms["detach"] = latency_ms
         if not safe:
             self.errors.append("unsafe_undock_observed")
@@ -169,6 +179,7 @@ class DockContinuityEngine:
         self.identity = dict(snap["identity"])
         self.save_blob = dict(snap["save_blob"])
         self.input_map = dict(snap["input_map"])
+        self.ai_privacy = dict(snap.get("ai_privacy") or self.ai_privacy)
         # Prefer internal-safe restore after interruption
         self.docked = False
         self.layout_profile = "handheld"
@@ -195,9 +206,14 @@ class DockContinuityEngine:
         self.power_state = snap.get("power_state", self.power_state)
         self.layout_profile = snap.get("layout_profile", self.layout_profile)
         self.display_state = dict(snap.get("display_state") or self.display_state)
+        self.ai_privacy = dict(snap.get("ai_privacy") or self.ai_privacy)
         self.docked = bool(snap.get("docked"))
         self.dock_id = snap.get("dock_id")
         return self._event("restore", save_checksum=sha256_json(self.save_blob))
+
+    def set_ai_privacy(self, **kwargs: Any) -> dict[str, Any]:
+        self.ai_privacy.update(kwargs)
+        return self._event("ai_privacy_update", ai_privacy=dict(self.ai_privacy))
 
     def observe(self, *, phase: str) -> dict[str, Any]:
         return {
@@ -215,6 +231,8 @@ class DockContinuityEngine:
             "audio": self.audio_route,
             "power": self.power_state,
             "layout_profile": self.layout_profile,
+            "identity": dict(self.identity),
+            "ai_privacy": dict(self.ai_privacy),
             "degraded": self.degraded,
         }
 
