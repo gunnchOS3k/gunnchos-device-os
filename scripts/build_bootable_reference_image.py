@@ -14,7 +14,7 @@ def main() -> int:
     parser.add_argument("--build-only", action="store_true", help="Assemble artifacts without QEMU boot")
     parser.add_argument("--boot-only", action="store_true", help="Boot existing artifacts only")
     parser.add_argument("--no-fetch", action="store_true", help="Do not download Alpine cache")
-    parser.add_argument("--timeout", type=float, default=180.0, help="QEMU boot timeout seconds")
+    parser.add_argument("--timeout", type=float, default=240.0, help="QEMU boot timeout seconds")
     args = parser.parse_args()
 
     if args.boot_only:

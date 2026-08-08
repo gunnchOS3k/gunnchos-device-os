@@ -39,7 +39,7 @@ while [ "$i" -lt "${MAX_ITERS}" ]; do
     exit 0
   fi
   i=$((i + 1))
-  sleep 0.05
+  sleep 0.02
 done
 
 echo "error timeout waiting for ${NAME}" >&2

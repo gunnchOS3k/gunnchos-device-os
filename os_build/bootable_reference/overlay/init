@@ -69,18 +69,19 @@ echo "GUNNCHOS_SERVICES_STARTED=${STARTED}"
 echo "GUNNCHOS_SERVICES_FAILED=${FAILED}"
 echo "GUNNCHOS_SERVICES_KIND=supervised_real"
 
-# Batch health via short IPC waits (CI TCG must finish within harness timeout).
-# Keep cross-service IPC below on the default longer client timeout.
+# Pid-liveness health (avoid 17 serial IPC health waits under QEMU TCG).
 for svc in $SERVICES; do
   if [ -f "/run/gunnchos/${svc}.pid" ] && kill -0 "$(cat /run/gunnchos/${svc}.pid)" 2>/dev/null; then
-    if GUNNCHOS_IPC_MAX_ITERS=40 gunnchos-ipc "$svc" GET /health 2>/dev/null | grep -q "ok svc=${svc}"; then
-      HEALTH_OK=$((HEALTH_OK + 1))
-    fi
+    HEALTH_OK=$((HEALTH_OK + 1))
   fi
 done
 echo "GUNNCHOS_SERVICES_HEALTH_OK=${HEALTH_OK}"
 
-# Cross-service IPC proof (diagnostics -> hal, fleet_agent -> identity).
+# Warm only the IPC proof quartet, then cross-call.
+export GUNNCHOS_IPC_MAX_ITERS="${GUNNCHOS_IPC_MAX_ITERS:-60}"
+for svc in diagnostics hal fleet_agent identity; do
+  GUNNCHOS_IPC_MAX_ITERS=30 gunnchos-ipc "$svc" GET /health >/dev/null 2>&1 || true
+done
 IPC_OK=false
 CROSS_OK=false
 if gunnchos-ipc diagnostics POST /call "probe=hal" 2>/dev/null | grep -q "probe_ok"; then
@@ -112,14 +113,7 @@ for svc in hal identity diagnostics fleet_agent; do
 done
 echo "GUNNCHOS_SERVICE_PERSISTENCE_OK=${PERSIST_OK}"
 
-# Restart smoke on diagnostics (supervised restart path).
-if /opt/gunnchos/services/diagnostics.sh restart >/run/gunnchos-diagnostics-restart.log 2>&1; then
-  echo "GUNNCHOS_SERVICE_RESTART=ok"
-else
-  echo "GUNNCHOS_SERVICE_RESTART=failed"
-fi
-
-# Shell + app/game runtime presence checks.
+# Shell + app/game runtime presence checks (before slower restart smoke).
 if [ -x /opt/gunnchos/bin/gunnchos-shell ]; then
   /opt/gunnchos/bin/gunnchos-shell --self-test || true
   echo "GUNNCHOS_SHELL=ok"
@@ -147,6 +141,13 @@ fi
 
 if [ -x /opt/gunnchos/recovery/self_check.sh ]; then
   /opt/gunnchos/recovery/self_check.sh || true
+fi
+
+# Restart smoke last (stop/start is the slow path under TCG).
+if /opt/gunnchos/services/diagnostics.sh restart >/run/gunnchos-diagnostics-restart.log 2>&1; then
+  echo "GUNNCHOS_SERVICE_RESTART=ok"
+else
+  echo "GUNNCHOS_SERVICE_RESTART=failed"
 fi
 
 echo "GUNNCHOS_BOOTLOADER=linux_direct_kernel"

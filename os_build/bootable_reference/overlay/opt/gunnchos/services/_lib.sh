@@ -21,12 +21,17 @@ svc_paths() {
   RESTARTFILE="${GUNNCHOS_RUN_ROOT}/${NAME}.restarts"
 }
 
+svc_now() {
+  # Prefer cheap monotonic uptime under QEMU TCG (date forks are costly).
+  cut -d' ' -f1 /proc/uptime 2>/dev/null || echo now
+}
+
 svc_log() {
   NAME="$1"
   shift
   mkdir -p "${GUNNCHOS_LOG_ROOT}"
   # shellcheck disable=SC2154
-  echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo now) $*" >> "${GUNNCHOS_LOG_ROOT}/${NAME}.log"
+  echo "$(svc_now) $*" >> "${GUNNCHOS_LOG_ROOT}/${NAME}.log"
 }
 
 svc_persist() {
@@ -42,7 +47,7 @@ svc_persist() {
     echo "realm=DEV"
     echo "pid=$(cat "${PIDFILE}" 2>/dev/null || echo none)"
     echo "restarts=$(cat "${RESTARTFILE}" 2>/dev/null || echo 0)"
-    echo "updated=$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo now)"
+    echo "updated=$(svc_now)"
   } > "${STATEFILE}"
 }
 
@@ -219,7 +224,7 @@ svc_start() {
   /opt/gunnchos/services/"${NAME}".sh _daemon >/dev/null 2>&1 &
   # Wait briefly for pidfile + health
   i=0
-  while [ "$i" -lt 40 ]; do
+  while [ "$i" -lt 20 ]; do
     if svc_is_running "$NAME"; then
       break
     fi
@@ -244,7 +249,7 @@ svc_stop() {
   if command -v gunnchos-ipc >/dev/null 2>&1; then
     gunnchos-ipc "$NAME" POST /shutdown >/dev/null 2>&1 || true
     i=0
-    while [ "$i" -lt 20 ]; do
+    while [ "$i" -lt 10 ]; do
       svc_is_running "$NAME" || break
       i=$((i + 1))
       sleep 0.05
