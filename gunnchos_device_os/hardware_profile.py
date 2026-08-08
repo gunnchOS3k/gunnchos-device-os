@@ -44,6 +44,9 @@ class StorageCapabilities:
 class NetworkCapabilities:
     wifi: str = ""
     offline_capable: bool = True
+    ethernet_dock_optional: bool = False
+    cellular: str = ""  # generic class tag only (e.g. simulated_generic)
+    ntn: str = ""  # none | simulated
 
 
 @dataclass

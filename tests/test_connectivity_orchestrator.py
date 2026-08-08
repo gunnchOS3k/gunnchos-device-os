@@ -147,6 +147,29 @@ def test_force_offline_fault():
     assert result["active"] == BearerKind.OFFLINE.value
 
 
+def test_ntn_simulated_bearer_scores_and_ranks():
+    orch = ConnectivityOrchestrator()
+    orch.update_metrics(BearerKind.WIFI, _good_wifi())
+    orch.update_metrics(
+        BearerKind.NTN_SIMULATED,
+        BearerMetrics(
+            available=True,
+            signal_dbm=-80.0,
+            latency_ms=500.0,
+            jitter_ms=80.0,
+            loss_pct=3.0,
+            cost_per_mb=0.9,
+            energy_mw=1300.0,
+            security_score=0.6,
+            user_preference=0.2,
+        ),
+    )
+    ranked = dict(orch.rank_bearers())
+    assert ranked[BearerKind.WIFI.value] > ranked[BearerKind.NTN_SIMULATED.value]
+    result = orch.evaluate()
+    assert result["active"] == BearerKind.WIFI.value
+
+
 def test_scores_use_all_metric_axes():
     orch = ConnectivityOrchestrator()
     orch.update_metrics(
