@@ -23,3 +23,14 @@ gate1/evidence/out/**
 !gate1/evidence/out/**/.gitkeep
 results/gate1/**
 !results/gate1/**/.gitkeep
+
+# Bootable reference image caches / large binaries (rebuildable)
+os_build/bootable_reference/cache/
+os_build/bootable_reference/work/
+os_build/bootable_reference/artifacts/*.img
+os_build/bootable_reference/artifacts/*.cpio*
+os_build/bootable_reference/artifacts/vmlinuz*
+!os_build/bootable_reference/artifacts/.gitkeep
+!os_build/bootable_reference/artifacts/MANIFEST.json
+!os_build/bootable_reference/artifacts/BOOT_EVIDENCE.json
+!os_build/bootable_reference/artifacts/qemu_serial_boot.log

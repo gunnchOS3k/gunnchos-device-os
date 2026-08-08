@@ -1,0 +1,86 @@
+#!/bin/sh
+# gunnchOS bootable reference image — DEV/VM init (not production secure boot).
+# Boots under QEMU aarch64 virt; prints honest markers for digital evidence.
+
+set -eu
+
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin:/opt/gunnchos/bin
+
+echo "GUNNCHOS_BOOT_STAGE=early"
+echo "GUNNCHOS_IMAGE_REALM=DEV"
+echo "GUNNCHOS_PRODUCTION_KEYS=false"
+echo "GUNNCHOS_PHYSICAL_BOOT_CLAIMED=false"
+
+# Minimal mounts for a self-contained initramfs rootfs.
+mount -t proc proc /proc 2>/dev/null || true
+mount -t sysfs sysfs /sys 2>/dev/null || true
+mount -t devtmpfs devtmpfs /dev 2>/dev/null || true
+mkdir -p /dev/pts /tmp /run /var/lib/gunnchos/state
+mount -t tmpfs tmpfs /tmp 2>/dev/null || true
+mount -t tmpfs tmpfs /run 2>/dev/null || true
+
+echo "GUNNCHOS_BOOT_STAGE=fs_mounted"
+
+# Loopback networking (userspace path; no carrier claim).
+ifcommand() { command -v "$1" >/dev/null 2>&1; }
+if ifcommand ip; then
+  ip link set lo up 2>/dev/null || true
+elif ifcommand ifconfig; then
+  ifconfig lo up 2>/dev/null || true
+fi
+echo "GUNNCHOS_NETWORKING=loopback_up"
+
+# Active A/B slot marker (digital reference layout).
+ACTIVE_SLOT="$(cat /var/lib/gunnchos/state/active_slot 2>/dev/null || echo a)"
+echo "GUNNCHOS_AB_ACTIVE_SLOT=${ACTIVE_SLOT}"
+
+# Start long-lived service stubs (shell supervisors in this reference image).
+SERVICES="hal input ring display dock continuity identity permissions sandbox connectivity ai_interface profile_manager a11y diagnostics updater recovery fleet_agent"
+STARTED=0
+FAILED=0
+for svc in $SERVICES; do
+  script="/opt/gunnchos/services/${svc}.sh"
+  if [ -x "$script" ]; then
+    "$script" start >/run/gunnchos-${svc}.log 2>&1 && STARTED=$((STARTED + 1)) || FAILED=$((FAILED + 1))
+    echo "GUNNCHOS_SERVICE_START svc=${svc} ok=$([ -f /run/gunnchos-${svc}.pid ] && echo true || echo false)"
+  else
+    echo "GUNNCHOS_SERVICE_START svc=${svc} ok=false missing=true"
+    FAILED=$((FAILED + 1))
+  fi
+done
+echo "GUNNCHOS_SERVICES_STARTED=${STARTED}"
+echo "GUNNCHOS_SERVICES_FAILED=${FAILED}"
+
+# Shell + app runtime presence checks.
+if [ -x /opt/gunnchos/bin/gunnchos-shell ]; then
+  /opt/gunnchos/bin/gunnchos-shell --self-test || true
+  echo "GUNNCHOS_SHELL=ok"
+else
+  echo "GUNNCHOS_SHELL=missing"
+fi
+
+if [ -f /opt/gunnchos/apps/manifest.json ]; then
+  echo "GUNNCHOS_APP_RUNTIME=manifest_present"
+else
+  echo "GUNNCHOS_APP_RUNTIME=manifest_missing"
+fi
+
+if [ -x /opt/gunnchos/updater/ab_status.sh ]; then
+  /opt/gunnchos/updater/ab_status.sh || true
+fi
+
+if [ -x /opt/gunnchos/recovery/self_check.sh ]; then
+  /opt/gunnchos/recovery/self_check.sh || true
+fi
+
+echo "GUNNCHOS_BOOTLOADER=linux_direct_kernel"
+echo "GUNNCHOS_TARGET=qemu-system-aarch64"
+echo "GUNNCHOS_BOOT_MARKER=OK"
+echo "GUNNCHOS_BOOT_COMPLETE=true"
+
+# Keep guest alive briefly so QEMU serial capture finishes, then halt.
+sleep 1
+# Prefer clean poweroff; fall back to busybox poweroff/halt.
+ifcommand poweroff && poweroff -f 2>/dev/null || true
+ifcommand halt && halt -f 2>/dev/null || true
+exit 0

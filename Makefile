@@ -1,7 +1,9 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
-	runtime-services system-image full-product-iii cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom full-product-iv
+	runtime-services system-image full-product-iii \
+	cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom \
+	bootable-reference full-product-iv
 
 PY := PYTHONPATH=src:.
 
@@ -98,7 +100,6 @@ full-product-iii:
 	PYTHONPATH=.:src python3 scripts/build_reproducible_system_image.py
 	PYTHONPATH=.:src python3 scripts/export_runtime_service_matrix.py
 
-
 # FULL PRODUCT CONTINUATION IV — runnable cloud/fleet/security DEV plane
 cloud-dev-plane:
 	PYTHONPATH=.:src GUNNCHOS_SERVICE=gateway GUNNCHOS_PORT=8100 python3 -m gunnchos_device_os.cloud_dev_plane
@@ -117,4 +118,17 @@ cloud-dev-plane-test:
 	PYTHONPATH=.:src python3 security/dev_ops/sast_hook.py
 	PYTHONPATH=.:src python3 scripts/generate_cloud_dev_plane_sbom.py
 
+# Bootable QEMU reference image (DEV/VM evidence; no physical boot claim)
+bootable-reference:
+	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py
+	PYTHONPATH=.:src pytest -q tests/test_bootable_reference_image.py
+
 full-product-iv: cloud-dev-plane-test
+	PYTHONPATH=.:src pytest -q \
+		tests/test_bootable_reference_image.py \
+		tests/test_app_packaging.py \
+		tests/test_update_recovery_completeness.py \
+		tests/test_dual_screen_runtime.py \
+		tests/test_dock_continuity_sim_suite.py \
+		tests/test_runtime_services.py
+	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py --build-only
