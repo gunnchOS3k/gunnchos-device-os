@@ -1,7 +1,8 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
-	runtime-services system-image full-product-iii
+	runtime-services system-image full-product-iii bootable-reference full-product-iv
+
 
 PY := PYTHONPATH=src:.
 
@@ -97,3 +98,19 @@ full-product-iii:
 		tests/test_dock_continuity_sim_suite.py
 	PYTHONPATH=.:src python3 scripts/build_reproducible_system_image.py
 	PYTHONPATH=.:src python3 scripts/export_runtime_service_matrix.py
+
+# Bootable QEMU reference image (DEV/VM evidence; no physical boot claim)
+bootable-reference:
+	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py
+	PYTHONPATH=.:src pytest -q tests/test_bootable_reference_image.py
+
+full-product-iv:
+	PYTHONPATH=.:src pytest -q \
+		tests/test_bootable_reference_image.py \
+		tests/test_app_packaging.py \
+		tests/test_update_recovery_completeness.py \
+		tests/test_dual_screen_runtime.py \
+		tests/test_dock_continuity_sim_suite.py \
+		tests/test_runtime_services.py
+	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py --build-only
+

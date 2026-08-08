@@ -14,6 +14,11 @@ SCENARIOS = (
     "multi_attach_cycle",
     "unsafe_undock_flag",
     "save_identity_network_ai_roundtrip",
+    # Fault-injection expansions (FULL PRODUCT CONTINUATION IV)
+    "fault_mid_attach_power_loss",
+    "fault_ethernet_drop_while_docked",
+    "fault_snapshot_corruption_recovery",
+    "fault_hot_unplug_during_restore",
 )
 
 
@@ -90,12 +95,93 @@ def _scenario_save_identity_network_ai_roundtrip() -> dict[str, Any]:
     return {"scenario": "save_identity_network_ai_roundtrip", "ok": ok, "engine": eng}
 
 
+def _scenario_fault_mid_attach_power_loss() -> dict[str, Any]:
+    eng = DockContinuityEngine()
+    eng.apps = ["launcher", "coder"]
+    eng.save_blob = {"slot": 7, "progress": 33}
+    checksum = sha256_json(eng.save_blob)
+    eng.attach("sim-power-fault", external_display=True, power_passthrough=True)
+    eng.enter_degraded_mode("dock_power_loss")
+    eng.safe_undock()
+    ok = (
+        eng.degraded is False
+        and eng.docked is False
+        and eng.power_state == "battery"
+        and sha256_json(eng.save_blob) == checksum
+        and eng.apps == ["launcher", "coder"]
+    )
+    return {"scenario": "fault_mid_attach_power_loss", "ok": ok, "engine": eng}
+
+
+def _scenario_fault_ethernet_drop_while_docked() -> dict[str, Any]:
+    eng = DockContinuityEngine()
+    eng.attach("sim-eth-drop", ethernet=True, external_display=True)
+    assert eng.network_route == "ethernet-via-dock"
+    # Simulate ethernet drop without full undock.
+    eng.network_route = "wlan"
+    eng.errors.append("ethernet_link_down")
+    eng.enter_degraded_mode("ethernet_drop")
+    snap = eng.snapshot_session()
+    ok = (
+        eng.docked is True
+        and eng.network_route == "wlan"
+        and eng.degraded is True
+        and snap["save_checksum"] == sha256_json(eng.save_blob)
+        and "ethernet_link_down" in eng.errors
+    )
+    eng.safe_undock()
+    return {"scenario": "fault_ethernet_drop_while_docked", "ok": ok, "engine": eng}
+
+
+def _scenario_fault_snapshot_corruption_recovery() -> dict[str, Any]:
+    eng = DockContinuityEngine()
+    eng.apps = ["launcher", "notes"]
+    eng.save_blob = {"slot": 9, "progress": 12}
+    eng.attach("sim-corrupt")
+    good = eng.snapshot_session()
+    # Corrupt in-memory session then recover from last good snapshot.
+    eng.apps = []
+    eng.save_blob = {"slot": -1, "progress": -1}
+    eng.last_snapshot = dict(good)
+    recovered = eng.recover_interruption()
+    ok = (
+        recovered.get("ok") is True
+        and eng.apps == ["launcher", "notes"]
+        and eng.save_blob == good["save_blob"]
+        and eng.docked is False
+    )
+    return {"scenario": "fault_snapshot_corruption_recovery", "ok": ok, "engine": eng}
+
+
+def _scenario_fault_hot_unplug_during_restore() -> dict[str, Any]:
+    eng = DockContinuityEngine()
+    eng.apps = ["launcher", "preview"]
+    eng.save_blob = {"slot": 3, "progress": 70}
+    eng.attach("sim-hot-unplug", external_display=True, ethernet=True)
+    snap = eng.snapshot_session()
+    # Begin restore, then inject unsafe hot-unplug mid-flight.
+    eng.restore_from_snapshot(snap)
+    eng.detach(safe=False)
+    ok = (
+        "unsafe_undock_observed" in eng.errors
+        and eng.docked is False
+        and eng.apps == ["launcher", "preview"]
+        and sha256_json(eng.save_blob) == sha256_json(snap["save_blob"])
+        and eng.network_route == "wlan"
+    )
+    return {"scenario": "fault_hot_unplug_during_restore", "ok": ok, "engine": eng}
+
+
 _RUNNERS = {
     "attach_extend_undock": _scenario_attach_extend_undock,
     "mirror_then_degraded": _scenario_mirror_then_degraded,
     "multi_attach_cycle": _scenario_multi_attach_cycle,
     "unsafe_undock_flag": _scenario_unsafe_undock_flag,
     "save_identity_network_ai_roundtrip": _scenario_save_identity_network_ai_roundtrip,
+    "fault_mid_attach_power_loss": _scenario_fault_mid_attach_power_loss,
+    "fault_ethernet_drop_while_docked": _scenario_fault_ethernet_drop_while_docked,
+    "fault_snapshot_corruption_recovery": _scenario_fault_snapshot_corruption_recovery,
+    "fault_hot_unplug_during_restore": _scenario_fault_hot_unplug_during_restore,
 }
 
 

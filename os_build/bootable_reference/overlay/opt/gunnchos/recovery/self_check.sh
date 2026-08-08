@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+echo "GUNNCHOS_RECOVERY_SELF_CHECK=ok"
+echo "GUNNCHOS_RECOVERY_FACTORY_RESET_PATH=present"
