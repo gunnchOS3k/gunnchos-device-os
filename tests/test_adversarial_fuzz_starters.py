@@ -106,3 +106,45 @@ def test_orchestrator_rejects_unsupported_bearer_update():
             BearerKind.CELLULAR,
             BearerMetrics(available=True, latency_ms=40, loss_pct=1, energy_mw=900),
         )
+
+
+
+def test_dev_plane_hostile_mode_headers():
+    from gunnchos_device_os.cloud_dev_plane import DevPlaneApp, DevPlaneClient, DevPlaneServer
+
+    server = DevPlaneServer(DevPlaneApp(role="gateway")).start()
+    client = DevPlaneClient(base_url=server.base_url)
+    for junk in ["", "!!!", "CLOUD_PLEASE", "prod"]:
+        try:
+            client.set_mode(junk)
+            raised = False
+        except ValueError:
+            raised = True
+        assert raised
+    # Extremely long subject id should not crash server
+    client.set_mode("local")
+    rid = client.identity_register("x" * 4000, {"note": "fuzz"})
+    assert rid["subject_id"].startswith("x")
+    server.stop()
+
+
+def test_dev_plane_role_isolation_blocks_cross_surface():
+    from gunnchos_device_os.cloud_dev_plane import DevPlaneApp, DevPlaneServer
+    import json
+    import urllib.request
+
+    server = DevPlaneServer(DevPlaneApp(role="identity")).start()
+    # enrollment on identity role should 404
+    req = urllib.request.Request(
+        server.base_url + "/v1/enrollment/submit",
+        data=json.dumps({"device_id": "d", "org_id": "o", "enrollment_token": "DEV_T", "mode": "local"}).encode(),
+        headers={"Content-Type": "application/json", "X-Gunnchos-Mode": "local"},
+        method="POST",
+    )
+    try:
+        urllib.request.urlopen(req, timeout=2)
+        status = 200
+    except Exception as exc:  # noqa: BLE001
+        status = getattr(exc, "code", 0)
+    assert status == 404
+    server.stop()
