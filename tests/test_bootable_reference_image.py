@@ -81,7 +81,7 @@ def test_build_bootable_initramfs():
 def test_qemu_boot_earns_digital_pass():
     builder = BootableReferenceBuilder()
     builder.build(fetch=True)
-    evidence = QemuBootHarness(builder.paths).boot(timeout_sec=90.0)
+    evidence = QemuBootHarness(builder.paths).boot(timeout_sec=180.0)
     assert evidence["ok"] is True, evidence.get("markers_missing")
     assert evidence["token"] == TOKEN_DIGITAL_PASS
     assert TOKEN_PHYSICAL_PENDING in evidence["status_tokens"]

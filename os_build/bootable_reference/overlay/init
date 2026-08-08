@@ -38,6 +38,8 @@ ACTIVE_SLOT="$(cat /var/lib/gunnchos/state/active_slot 2>/dev/null || echo a)"
 echo "GUNNCHOS_AB_ACTIVE_SLOT=${ACTIVE_SLOT}"
 
 # Start long-lived supervised services (real daemons + mailbox IPC).
+# Defer IPC health until after all daemons are up — per-service health during
+# start thrash-timeouts under QEMU TCG (CI aarch64-on-x86).
 SERVICES="hal input ring display dock continuity identity permissions sandbox connectivity ai_interface profile_manager a11y diagnostics updater recovery fleet_agent"
 STARTED=0
 FAILED=0
@@ -54,9 +56,6 @@ for svc in $SERVICES; do
     fi
     if [ -f "/run/gunnchos/${svc}.pid" ] && kill -0 "$(cat /run/gunnchos/${svc}.pid)" 2>/dev/null; then
       OK=true
-      if gunnchos-ipc "$svc" GET /health 2>/dev/null | grep -q "ok svc=${svc}"; then
-        HEALTH_OK=$((HEALTH_OK + 1))
-      fi
     else
       OK=false
     fi
@@ -69,6 +68,16 @@ done
 echo "GUNNCHOS_SERVICES_STARTED=${STARTED}"
 echo "GUNNCHOS_SERVICES_FAILED=${FAILED}"
 echo "GUNNCHOS_SERVICES_KIND=supervised_real"
+
+# Batch health via short IPC waits (CI TCG must finish within harness timeout).
+# Keep cross-service IPC below on the default longer client timeout.
+for svc in $SERVICES; do
+  if [ -f "/run/gunnchos/${svc}.pid" ] && kill -0 "$(cat /run/gunnchos/${svc}.pid)" 2>/dev/null; then
+    if GUNNCHOS_IPC_MAX_ITERS=40 gunnchos-ipc "$svc" GET /health 2>/dev/null | grep -q "ok svc=${svc}"; then
+      HEALTH_OK=$((HEALTH_OK + 1))
+    fi
+  fi
+done
 echo "GUNNCHOS_SERVICES_HEALTH_OK=${HEALTH_OK}"
 
 # Cross-service IPC proof (diagnostics -> hal, fleet_agent -> identity).

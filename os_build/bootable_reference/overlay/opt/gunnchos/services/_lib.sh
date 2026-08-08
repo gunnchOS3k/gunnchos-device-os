@@ -189,7 +189,8 @@ svc_daemon_loop() {
           ;;
       esac
     done
-    sleep 0.05
+    # Slightly longer poll interval reduces TCG thrash with 17 concurrent daemons.
+    sleep 0.1
   done
 }
 

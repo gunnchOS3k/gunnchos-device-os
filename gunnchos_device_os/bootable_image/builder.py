@@ -316,7 +316,7 @@ class QemuBootHarness:
     def boot(
         self,
         *,
-        timeout_sec: float = 90.0,
+        timeout_sec: float = 180.0,
         memory_mb: int = 512,
     ) -> dict[str, Any]:
         kernel = self.paths.artifacts / "vmlinuz-virt"
@@ -436,7 +436,7 @@ class QemuBootHarness:
         return evidence
 
 
-def build_and_boot(*, fetch: bool = True, timeout_sec: float = 90.0) -> dict[str, Any]:
+def build_and_boot(*, fetch: bool = True, timeout_sec: float = 180.0) -> dict[str, Any]:
     builder = BootableReferenceBuilder()
     build = builder.build(fetch=fetch)
     harness = QemuBootHarness(builder.paths)

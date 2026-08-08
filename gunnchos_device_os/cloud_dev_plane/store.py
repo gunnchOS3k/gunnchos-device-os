@@ -10,9 +10,11 @@ failure tests (falls back to in-process coordination when unavailable).
 """
 from __future__ import annotations
 
+import fcntl
 import json
 import sqlite3
 import threading
+import time
 from pathlib import Path
 from typing import Any
 
@@ -82,17 +84,61 @@ class DevPlaneStore:
         if self.backend == "sqlite":
             assert self.path is not None
             self.path.parent.mkdir(parents=True, exist_ok=True)
-            self._conn = sqlite3.connect(
-                str(self.path),
-                check_same_thread=False,
-                isolation_level=None,
-            )
-            self._conn.execute("PRAGMA journal_mode=WAL")
-            self._conn.execute("PRAGMA synchronous=NORMAL")
-            self._conn.execute(
-                "CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT NOT NULL)"
-            )
-            self._load_sqlite()
+            self._lock_path = self.path.with_suffix(self.path.suffix + ".lock")
+            last_exc: Exception | None = None
+            for attempt in range(16):
+                lock_fh = None
+                try:
+                    lock_fh = self._with_file_lock()
+                    self._conn = sqlite3.connect(
+                        str(self.path),
+                        check_same_thread=False,
+                        isolation_level=None,
+                        timeout=30.0,
+                    )
+                    self._conn.execute("PRAGMA busy_timeout=30000")
+                    self._conn.execute("PRAGMA journal_mode=WAL")
+                    self._conn.execute("PRAGMA synchronous=NORMAL")
+                    self._conn.execute(
+                        "CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT NOT NULL)"
+                    )
+                    # Load under the same cross-process lock to avoid init races.
+                    row = self._conn.execute(
+                        "SELECT value FROM kv WHERE key = ?", ("root",)
+                    ).fetchone()
+                    if not row:
+                        # Seed empty doc without re-entering file lock via persist().
+                        payload = json.dumps(self.data, sort_keys=True, default=str)
+                        self._conn.execute("BEGIN IMMEDIATE")
+                        self._conn.execute(
+                            "INSERT INTO kv(key, value) VALUES(?, ?) "
+                            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+                            ("root", payload),
+                        )
+                        self._conn.execute("COMMIT")
+                    else:
+                        raw = json.loads(row[0])
+                        self.data.update(raw)
+                        self.data.setdefault("meta", {})
+                        self.data["meta"]["backend"] = "sqlite"
+                    last_exc = None
+                    break
+                except sqlite3.OperationalError as exc:
+                    last_exc = exc
+                    if getattr(self, "_conn", None) is not None:
+                        try:
+                            self._conn.close()
+                        except Exception:  # noqa: BLE001
+                            pass
+                        self._conn = None
+                    if "locked" not in str(exc).lower() and "busy" not in str(exc).lower():
+                        raise
+                    time.sleep(0.05 * (attempt + 1))
+                finally:
+                    if lock_fh is not None:
+                        self._release_file_lock(lock_fh)
+            if last_exc is not None:
+                raise last_exc
         elif self.backend == "json":
             self._conn = None
             if self.path and self.path.exists():
@@ -125,14 +171,41 @@ class DevPlaneStore:
 
     def _load_sqlite(self) -> None:
         assert self._conn is not None
-        row = self._conn.execute("SELECT value FROM kv WHERE key = ?", ("root",)).fetchone()
-        if not row:
-            self.persist()
-            return
-        raw = json.loads(row[0])
-        self.data.update(raw)
-        self.data.setdefault("meta", {})
-        self.data["meta"]["backend"] = "sqlite"
+        last_exc: Exception | None = None
+        for attempt in range(12):
+            try:
+                row = self._conn.execute("SELECT value FROM kv WHERE key = ?", ("root",)).fetchone()
+                if not row:
+                    self.persist()
+                    return
+                raw = json.loads(row[0])
+                self.data.update(raw)
+                self.data.setdefault("meta", {})
+                self.data["meta"]["backend"] = "sqlite"
+                return
+            except sqlite3.OperationalError as exc:
+                last_exc = exc
+                if "locked" not in str(exc).lower() and "busy" not in str(exc).lower():
+                    raise
+                time.sleep(0.05 * (attempt + 1))
+        if last_exc is not None:
+            raise last_exc
+
+    def _with_file_lock(self):
+        """Exclusive cross-process lock for multi-instance merge-writes."""
+        assert self.path is not None
+        lock_path = getattr(self, "_lock_path", None) or self.path.with_suffix(self.path.suffix + ".lock")
+        self._lock_path = lock_path
+        lock_path.parent.mkdir(parents=True, exist_ok=True)
+        fh = lock_path.open("a+", encoding="utf-8")
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+        return fh
+
+    def _release_file_lock(self, fh) -> None:
+        try:
+            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+        finally:
+            fh.close()
 
     def persist(self) -> None:
         with self._lock:
@@ -143,24 +216,41 @@ class DevPlaneStore:
             self.data["meta"]["updated_at"] = utc_now_iso()
             if self.backend == "sqlite":
                 assert self._conn is not None
-                self._conn.execute("BEGIN IMMEDIATE")
-                try:
-                    row = self._conn.execute(
-                        "SELECT value FROM kv WHERE key = ?", ("root",)
-                    ).fetchone()
-                    if row:
-                        existing = json.loads(row[0])
-                        self.data = self._merge_docs(existing, self.data)
-                    payload = json.dumps(self.data, sort_keys=True, default=str)
-                    self._conn.execute(
-                        "INSERT INTO kv(key, value) VALUES(?, ?) "
-                        "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
-                        ("root", payload),
-                    )
-                    self._conn.execute("COMMIT")
-                except Exception:
-                    self._conn.execute("ROLLBACK")
-                    raise
+                last_exc: Exception | None = None
+                for attempt in range(12):
+                    lock_fh = None
+                    try:
+                        lock_fh = self._with_file_lock()
+                        self._conn.execute("BEGIN IMMEDIATE")
+                        row = self._conn.execute(
+                            "SELECT value FROM kv WHERE key = ?", ("root",)
+                        ).fetchone()
+                        if row:
+                            existing = json.loads(row[0])
+                            self.data = self._merge_docs(existing, self.data)
+                        payload = json.dumps(self.data, sort_keys=True, default=str)
+                        self._conn.execute(
+                            "INSERT INTO kv(key, value) VALUES(?, ?) "
+                            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+                            ("root", payload),
+                        )
+                        self._conn.execute("COMMIT")
+                        last_exc = None
+                        break
+                    except sqlite3.OperationalError as exc:
+                        last_exc = exc
+                        try:
+                            self._conn.execute("ROLLBACK")
+                        except Exception:  # noqa: BLE001
+                            pass
+                        if "locked" not in str(exc).lower() and "busy" not in str(exc).lower():
+                            raise
+                        time.sleep(0.05 * (attempt + 1))
+                    finally:
+                        if lock_fh is not None:
+                            self._release_file_lock(lock_fh)
+                if last_exc is not None:
+                    raise last_exc
             elif self.backend == "json" and self.path is not None:
                 payload_obj = self.data
                 self.path.parent.mkdir(parents=True, exist_ok=True)

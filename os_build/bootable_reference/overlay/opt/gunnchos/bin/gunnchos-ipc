@@ -30,8 +30,9 @@ rm -f "${REP}"
   fi
 } > "${REQ}"
 
+MAX_ITERS="${GUNNCHOS_IPC_MAX_ITERS:-100}"
 i=0
-while [ "$i" -lt 100 ]; do
+while [ "$i" -lt "${MAX_ITERS}" ]; do
   if [ -f "${REP}" ]; then
     cat "${REP}"
     rm -f "${REP}"
