@@ -51,6 +51,7 @@ def test_overlay_has_supervised_services_and_ipc_client():
     assert "GUNNCHOS_SERVICES_KIND=supervised_real" in init
     assert "GUNNCHOS_IPC" in init
     assert "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false" in init
+    assert "GUNNCHOS_CONT_VI_SEMANTICS" in init or "GUNNCHOS_HAL_QUERY" in init
     assert (OVERLAY / "opt" / "gunnchos" / "bin" / "gunnchos-shell").exists()
     assert (OVERLAY / "opt" / "gunnchos" / "apps" / "manifest.json").exists()
     assert (OVERLAY / "opt" / "gunnchos" / "games" / "manifest.json").exists()
@@ -93,6 +94,9 @@ def test_qemu_boot_earns_digital_pass():
     text = log_path.read_text(encoding="utf-8")
     assert "GUNNCHOS_BOOT_MARKER=OK" in text
     assert "GUNNCHOS_PRODUCTION_KEYS=false" in text
+    assert "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false" in text
+    # Cont VI service-specific boot proofs (TCG-friendly subset)
+    assert "GUNNCHOS_CONT_VI_SEMANTICS=true" in text or "GUNNCHOS_HAL_QUERY=" in text
     validation = validate_boot_evidence(evidence)
     assert validation["ok"] is True
     assert validation["token"] == TOKEN_DIGITAL_PASS

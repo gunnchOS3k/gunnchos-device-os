@@ -108,7 +108,8 @@ svc_handle_http() {
   esac
 }
 
-# Domain-specific call surface for cross-service proof (DEV).
+# Domain-specific call surface for Cont VI service semantics (DEV).
+# Mutates /var/lib/gunnchos/state when applicable — not health-only.
 svc_domain_call() {
   NAME="$1"
   BODY="$2"
@@ -117,28 +118,99 @@ svc_domain_call() {
   case "${BODY}" in
     *=*) ARG="${BODY#*=}" ;;
   esac
+  STATE_KV="${GUNNCHOS_STATE_ROOT:-/var/lib/gunnchos/state}/${NAME}.kv"
+  mkdir -p "${GUNNCHOS_STATE_ROOT:-/var/lib/gunnchos/state}"
   case "${NAME}:${METHOD_NAME}" in
     hal:list_profiles) echo "profiles=Student14,Student11,Pro14" ;;
     hal:get_profile) echo "profile=${ARG:-Student14}" ;;
+    hal:inventory) echo "items=cpu,display0,wifi0,modem0,dock0 count=5 modem=RM520N-GL ntn_claimed=false" ;;
+    hal:capabilities) echo "device=${ARG:-Student14} modem_sku=RM520N-GL ntn_claimed=false" ;;
+    hal:power_state)
+      PWR="$(grep '^power_state=' "${STATE_KV}" 2>/dev/null | cut -d= -f2 || echo on)"
+      echo "power_state=${PWR}"
+      ;;
+    hal:set_power_state)
+      echo "power_state=${ARG:-on}" > "${STATE_KV}"
+      echo "power_state=${ARG:-on} persisted=true"
+      ;;
     identity:whoami) echo "subject=dev-local realm=DEV" ;;
     identity:issue_session) echo "session=dev-sess token=DEV_SESSION" ;;
+    identity:role) echo "role=student" ;;
     diagnostics:probe) echo "probe_ok target=${ARG:-hal}" ;;
     diagnostics:inventory) echo "services=17 kind=supervised_real" ;;
-    fleet_agent:heartbeat) echo "enrolled=false realm=DEV" ;;
+    diagnostics:health) echo "health=ok entries=1" ;;
+    fleet_agent:heartbeat)
+      if grep -q '^revoked=true' "${STATE_KV}" 2>/dev/null; then
+        echo "ok=false reason=revoked"
+      elif grep -q '^enrolled=true' "${STATE_KV}" 2>/dev/null; then
+        echo "ok=true realm=DEV enrolled=true"
+      else
+        echo "ok=false reason=not_enrolled realm=DEV"
+      fi
+      ;;
+    fleet_agent:enroll)
+      echo "enrolled=true" > "${STATE_KV}"
+      echo "enrolled=true realm=DEV token_class=DEV"
+      ;;
+    fleet_agent:inventory) echo "device_id=fleet-dev-001 services=17 games=4 modem=RM520N-GL ntn_claimed=false" ;;
+    fleet_agent:revoke)
+      echo "revoked=true" > "${STATE_KV}"
+      echo "revoked=true"
+      ;;
     fleet_agent:ping_identity) echo "identity_reachable=true" ;;
     connectivity:loopback) echo "lo=up" ;;
-    display:current) echo "mode=handheld" ;;
+    connectivity:interfaces) echo "bearers=ethernet,wifi,terrestrial,future_ntn,ntn_simulated future_ntn_fake_current=false" ;;
+    connectivity:modem_rm520n) echo "sku=RM520N-GL attached=true ntn_claimed=false simulated=true" ;;
+    connectivity:route_choice) echo "active=wifi degraded=false offline=false" ;;
+    display:current) echo "mode=handheld brightness=0.7 orientation=landscape" ;;
+    display:outputs) echo "outputs=internal" ;;
+    display:set_brightness)
+      echo "brightness=${ARG:-0.8}" >> "${STATE_KV}"
+      echo "brightness=${ARG:-0.8}"
+      ;;
     dock:status) echo "docked=false" ;;
+    dock:simulate)
+      echo "docked=true" > "${STATE_KV}"
+      echo "docked=true power_w=65 ethernet_up=true"
+      ;;
+    dock:state)
+      if grep -q '^docked=true' "${STATE_KV}" 2>/dev/null; then
+        echo "docked=true power_w=65 ethernet_up=true"
+      else
+        echo "docked=false power_w=0"
+      fi
+      ;;
     continuity:snapshot) echo "snapshot=ok" ;;
+    continuity:app_handoff) echo "status=handed_off app=${ARG:-waike}" ;;
     permissions:check) echo "decision=allow capability=${ARG:-basic}" ;;
+    permissions:request)
+      if [ "${ARG}" = "camera" ] || [ "${ARG}" = "ai_cloud_export" ]; then
+        echo "decision=deny permission=${ARG} reason=outside_role_allowlist"
+      else
+        echo "decision=allow permission=${ARG:-files_read}"
+      fi
+      ;;
     sandbox:status) echo "sandbox=ready" ;;
+    sandbox:launch_policy) echo "app=${ARG:-waike} isolation=app fs_home_read=allow"
+      ;;
     input:bindings) echo "preset=handheld_default" ;;
-    ring:status) echo "physical_ring_claimed=false" ;;
+    input:enumerate_sources) echo "sources=kbd0,touch0,pad0,ring0" ;;
+    ring:status) echo "physical_ring_claimed=false paired=false" ;;
+    ring:pair)
+      echo "paired=true" > "${STATE_KV}"
+      echo "paired=true physical_ring_claimed=false"
+      ;;
     updater:slot) echo "active=$(cat /var/lib/gunnchos/state/active_slot 2>/dev/null || echo a)" ;;
+    updater:metadata) echo "channel=dev version=${ARG:-0.1.1} production_keys_used=false" ;;
     recovery:self_check) echo "recovery=ok" ;;
+    recovery:data_preservation_policy) echo "preserve_user_data_default=true" ;;
     a11y:status) echo "a11y=ready" ;;
+    a11y:global_preferences) echo "captions=true reduced_motion=false scaling=1.0" ;;
     profile_manager:active) echo "profile=default" ;;
+    profile_manager:device_profiles) echo "Student,DS-XL,Handheld,docked" ;;
     ai_interface:ping) echo "ai=dev_stub_entry" ;;
+    ai_interface:local_request) echo "ok=true capability=tutor privacy_mode=local_only" ;;
+    ai_interface:permission) echo "decision=deny permission=ai_cloud_export reason=local_only_privacy" ;;
     *) echo "ack method=${METHOD_NAME} arg=${ARG}" ;;
   esac
 }

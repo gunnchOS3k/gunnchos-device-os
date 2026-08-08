@@ -93,6 +93,14 @@ FIRST_PARTY_GAMES: tuple[AppPackage, ...] = (
         controller_first=True,
         source_tree="games/foot-racing-web",
     ),
+    AppPackage(
+        id="beatlink-party-web",
+        kind="first_party_web_game",
+        version="0.1.0-dev",
+        entry="games/beatlink-party-web/index.html",
+        controller_first=True,
+        source_tree="games/beatlink-party-web",
+    ),
 )
 
 
@@ -155,7 +163,7 @@ class PackageManifestBuilder:
         apps_ok = all(r["source_ok"] for r in app_rows if r["id"] != "gunnchai_tutor")
         # gunnchai_tutor is a stub entry — allowed without source tree
         games_ok = all(r["source_ok"] for r in game_rows)
-        ok = apps_ok and games_ok and len(app_rows) >= 2 and len(game_rows) >= 3
+        ok = apps_ok and games_ok and len(app_rows) >= 2 and len(game_rows) >= 4
         return {
             "schema": "gunnchos.app_packaging.validation.v1",
             "ok": ok,
