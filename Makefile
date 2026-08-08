@@ -1,6 +1,7 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
-	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain
+	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
+	runtime-services system-image full-product-iii
 
 PY := PYTHONPATH=src:.
 
@@ -79,3 +80,20 @@ gate1-test:
 
 gate1-toolchain:
 	PYTHONPATH=.:src python3 -m gunnchos_device_os.boot --toolchain-check
+
+# FULL PRODUCT CONTINUATION III — digital runtime + reproducible image path
+runtime-services:
+	PYTHONPATH=.:src pytest -q tests/test_runtime_services.py
+
+system-image:
+	PYTHONPATH=.:src python3 scripts/build_reproducible_system_image.py
+	PYTHONPATH=.:src pytest -q tests/test_system_image.py
+
+full-product-iii:
+	PYTHONPATH=.:src pytest -q \
+		tests/test_runtime_services.py \
+		tests/test_system_image.py \
+		tests/test_dual_screen_workflows.py \
+		tests/test_dock_continuity_sim_suite.py
+	PYTHONPATH=.:src python3 scripts/build_reproducible_system_image.py
+	PYTHONPATH=.:src python3 scripts/export_runtime_service_matrix.py
