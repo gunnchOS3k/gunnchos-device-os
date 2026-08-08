@@ -49,7 +49,7 @@
 | T-06 | Open Wi-Fi preferred over trusted ethernet | Integrity / privacy | Orchestrator security_score + profile constraints | Injected metrics only |
 | T-07 | NTN / cellular path treated as certified | False certification claim | Capability classes `simulated_*`; claim_boundary on snapshots | Docs/tests must keep honest tokens |
 | T-08 | DISCONNECTED mode still syncs to cloud | Data exfil / policy break | Mode capability matrix denies sync/telemetry | Stub-level only |
-| T-09 | Adversarial input to orchestrator / parsers | Crash / bad handoff | Fuzz starters under `tests/security/` | Coverage starter, not exhaustive |
+| T-09 | Adversarial input to orchestrator / parsers | Crash / bad handoff | Fuzz starters in `tests/test_adversarial_fuzz_starters.py` | Coverage starter, not exhaustive |
 | T-10 | Measurement-mode data mixed into school telemetry | Sensitive research leak | Separate event types; consent docs | Incomplete enforcement |
 
 ## Trust boundaries
@@ -78,5 +78,5 @@ No boundary may be labeled production-trusted without external keys and hardware
 - `gunnchos_device_os/fleet_ops.py` — fleet sim
 - `gunnchos_device_os/cloud_edge/` — mode-aware stubs
 - `gunnchos_device_os/connectivity_orchestrator.py` + `radio_capability.py`
-- `tests/security/` — adversarial / fuzz starters
+- `tests/test_adversarial_fuzz_starters.py` — adversarial / fuzz starters
 - `docs/LANE_H_EXISTS_VS_STUB.md` — honest inventory

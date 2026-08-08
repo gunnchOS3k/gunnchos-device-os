@@ -14,7 +14,7 @@ Honest inventory for FULL PRODUCT CONTINUATION III, Lane H.
 | DEV attestation | **EXISTS (DEV)** | `attestation.py` | No TPM / prod keys |
 | DEV update signing | **EXISTS (DEV)** | `update_signing.py` | PROD realm rejected |
 | Threat model | **DOC (living)** | `docs/security/THREAT_MODEL.md` | Not external review |
-| Adversarial / fuzz starters | **STARTER** | `tests/security/` | Not exhaustive fuzz campaign |
+| Adversarial / fuzz starters | **STARTER** | `tests/test_adversarial_fuzz_starters.py` | Not exhaustive fuzz campaign |
 | Production MDM / carrier attach / NTN cert | **ABSENT** | — | External blockers |
 
 Tokens: no production fleet, no carrier certification, no fictional named modem.
