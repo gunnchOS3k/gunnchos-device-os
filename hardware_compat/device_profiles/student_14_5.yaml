@@ -21,6 +21,9 @@ network:
   wifi: wifi_6e
   ethernet_dock_optional: true
   offline_capable: true
+  # Generic simulated cellular class — not a commercial modem SKU.
+  cellular: simulated_generic
+  ntn: none
 storage:
   class: nvme
   min_gb: 256

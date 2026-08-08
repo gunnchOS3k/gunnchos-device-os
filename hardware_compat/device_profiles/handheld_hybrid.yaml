@@ -18,7 +18,11 @@ camera_mic:
   mic: true
 network:
   wifi: wifi_6e
+  ethernet_dock_optional: true
   offline_capable: true
+  cellular: simulated_generic
+  # Research/sim NTN path only — not satellite certification or partner attach.
+  ntn: simulated
 storage:
   class: nvme
   min_gb: 512

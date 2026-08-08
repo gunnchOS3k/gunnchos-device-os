@@ -73,6 +73,11 @@ def _parse_profile(data: dict[str, Any]) -> DeviceProfile:
         network=NetworkCapabilities(
             wifi=network.get("wifi", ""),
             offline_capable=network.get("offline_capable", True),
+            ethernet_dock_optional=bool(
+                network.get("ethernet_dock_optional") or network.get("ethernet_dock")
+            ),
+            cellular=str(network.get("cellular") or ""),
+            ntn=str(network.get("ntn") or network.get("ntn_class") or ""),
         ),
         dock=DockCapabilities(
             supported=dock.get("supported", False),
