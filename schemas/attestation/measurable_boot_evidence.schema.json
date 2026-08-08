@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.local/schemas/attestation/measurable_boot_evidence.schema.json",
+  "title": "MeasurableBootEvidence",
+  "description": "DEV-realm measurable-boot evidence. Not a production TPM attestation quote.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "realm",
+    "boot_id",
+    "device_id",
+    "measurements",
+    "pcr_bank",
+    "security_version",
+    "created_at",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "realm": { "type": "string", "enum": ["dev", "prod"] },
+    "boot_id": { "type": "string", "minLength": 1 },
+    "device_id": { "type": "string", "minLength": 1 },
+    "measurements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["stage", "digest_sha256"],
+        "properties": {
+          "stage": {
+            "type": "string",
+            "enum": ["bootloader", "kernel", "initrd", "rootfs_manifest", "launcher"]
+          },
+          "digest_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "pcr_bank": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+    },
+    "security_version": { "type": "integer", "minimum": 1 },
+    "created_at": { "type": "string", "minLength": 1 },
+    "signature": { "type": "string", "minLength": 32 },
+    "claim_boundary": { "type": "string" },
+    "mock": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}
