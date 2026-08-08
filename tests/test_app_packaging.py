@@ -14,7 +14,7 @@ def test_app_and_game_packaging_pass():
     assert report["token"] == TOKEN_APP_PACKAGING_PASS
     assert report["production_keys_used"] is False
     assert len(report["apps"]) >= 2
-    assert len(report["games"]) == 3
+    assert len(report["games"]) >= 4
     assert all(g["controller_first"] for g in report["games"])
 
 

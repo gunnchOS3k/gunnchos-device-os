@@ -310,6 +310,83 @@ class DevPlaneClient:
             "claim_boundary": CLAIM_BOUNDARY,
         }
 
+
+    def enrollment_revoke(self, device_id: str, reason: str = "admin_revoke") -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/v1/enrollment/revoke",
+            {"device_id": device_id, "reason": reason},
+            capability="enrollment",
+        )
+
+    def fleet_inventory(self) -> dict[str, Any]:
+        return self._request(
+            "GET",
+            "/v1/fleet/inventory",
+            capability="enrollment",
+            queue_on_failure=False,
+        )
+
+    def fleet_ota_campaign(
+        self, *, channel: str = "dev", version: str = "0.1.1", cohort: str = "dev-default"
+    ) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/v1/fleet/ota_campaign",
+            {"channel": channel, "version": version, "cohort": cohort},
+            capability="enrollment",
+        )
+
+    def fleet_rollback_campaign(
+        self, *, channel: str = "dev", target_version: str = "0.1.0", cohort: str = "dev-default"
+    ) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/v1/fleet/rollback_campaign",
+            {"channel": channel, "target_version": target_version, "cohort": cohort},
+            capability="enrollment",
+        )
+
+    def fleet_mark_stale(self, device_id: str) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/v1/fleet/mark_stale",
+            {"device_id": device_id},
+            capability="enrollment",
+        )
+
+    def fleet_stale(self, stale_after_s: float = 60.0) -> dict[str, Any]:
+        return self._request(
+            "GET",
+            f"/v1/fleet/stale?stale_after_s={stale_after_s}",
+            capability="enrollment",
+            queue_on_failure=False,
+        )
+
+    def diagnostics_request(self, device_id: str, checks: dict[str, Any] | None = None) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/v1/diagnostics/request",
+            {"device_id": device_id, "checks": checks or {"full": True}},
+            capability="saves",
+        )
+
+    def telemetry_backlog(self) -> dict[str, Any]:
+        return self._request(
+            "GET",
+            "/v1/telemetry/backlog",
+            capability="telemetry",
+            queue_on_failure=False,
+        )
+
+    def save_put_versioned(
+        self, save_id: str, meta: dict[str, Any], *, expect_version: int | None = None
+    ) -> dict[str, Any]:
+        body: dict[str, Any] = {"save_id": save_id, "meta": meta}
+        if expect_version is not None:
+            body["expect_version"] = expect_version
+        return self._request("POST", "/v1/saves/put", body, capability="saves")
+
     def inventory(self) -> dict[str, Any]:
         req = urllib.request.Request(
             self.base_url.rstrip("/") + "/v1/inventory",

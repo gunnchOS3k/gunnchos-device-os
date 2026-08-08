@@ -222,15 +222,30 @@ class DevPlaneApp:
             if method == "POST" and route == "/v1/saves/put" and role_ok("saves"):
                 self._allow(mode, "saves")
                 save_id = body["save_id"]
-                record = {
-                    "save_id": save_id,
-                    "meta": redact_payload(dict(body.get("meta") or {})),
-                    "mode": mode.value,
-                    "at": utc_now_iso(),
-                    "mock": False,
-                    "claim_boundary": CLAIM_BOUNDARY,
-                }
+                expect = body.get("expect_version")
                 with self.store._lock:
+                    existing = self.store.data["saves"].get(save_id)
+                    if expect is not None and existing is not None:
+                        cur = (existing.get("meta") or {}).get("version")
+                        if cur != expect:
+                            return 409, {
+                                "status": "conflict",
+                                "save_id": save_id,
+                                "expected": expect,
+                                "current": cur,
+                                "mock": False,
+                            }
+                    meta = redact_payload(dict(body.get("meta") or {}))
+                    if "version" not in meta:
+                        meta["version"] = int((existing or {}).get("meta", {}).get("version") or 0) + 1
+                    record = {
+                        "save_id": save_id,
+                        "meta": meta,
+                        "mode": mode.value,
+                        "at": utc_now_iso(),
+                        "mock": False,
+                        "claim_boundary": CLAIM_BOUNDARY,
+                    }
                     self.store.data["saves"][save_id] = record
                     self.store.persist()
                 self._maybe_trace("saves", mode)
@@ -372,6 +387,129 @@ class DevPlaneApp:
                 with self.store._lock:
                     items = list(self.store.data["diagnostics"][-50:])
                 return 200, {"reports": items, "mode": mode.value, "mock": False}
+
+            if method == "POST" and route == "/v1/enrollment/revoke" and role_ok("enrollment"):
+                self._allow(mode, "enrollment")
+                device_id = body["device_id"]
+                with self.store._lock:
+                    rec = self.store.data["enrollments"].get(device_id)
+                    if not rec:
+                        return 404, {"status": "not_found", "device_id": device_id, "mock": False}
+                    rec = dict(rec)
+                    rec["status"] = "revoked"
+                    rec["revoked_at"] = utc_now_iso()
+                    rec["reason"] = body.get("reason", "admin_revoke")
+                    self.store.data["enrollments"][device_id] = rec
+                    # Also mark fleet record if present
+                    fleet = self.store.data["fleet"].get(device_id)
+                    if fleet:
+                        fleet = dict(fleet)
+                        fleet["health"] = "revoked"
+                        fleet["revoked"] = True
+                        self.store.data["fleet"][device_id] = fleet
+                    self.store.persist()
+                return 200, {**rec, "mock": False}
+
+            if method == "POST" and route == "/v1/fleet/ota_campaign" and role_ok("fleet"):
+                if mode == ServiceMode.DISCONNECTED:
+                    raise PermissionError("capability 'fleet' unavailable in mode disconnected")
+                campaign_id = body.get("campaign_id") or uuid4().hex[:12]
+                record = {
+                    "campaign_id": campaign_id,
+                    "kind": "ota",
+                    "channel": body.get("channel", "dev"),
+                    "version": body.get("version", "0.1.1"),
+                    "cohort": body.get("cohort", "dev-default"),
+                    "status": "scheduled_dev",
+                    "mode": mode.value,
+                    "at": utc_now_iso(),
+                    "mock": False,
+                    "claim_boundary": CLAIM_BOUNDARY,
+                }
+                with self.store._lock:
+                    campaigns = self.store.data.setdefault("campaigns", {})
+                    campaigns[campaign_id] = record
+                    self.store.data["update_metadata"][record["channel"]] = {
+                        "channel": record["channel"],
+                        "version": record["version"],
+                        "campaign_id": campaign_id,
+                        "at": utc_now_iso(),
+                        "mock": False,
+                    }
+                    self.store.persist()
+                return 200, record
+
+            if method == "POST" and route == "/v1/fleet/rollback_campaign" and role_ok("fleet"):
+                if mode == ServiceMode.DISCONNECTED:
+                    raise PermissionError("capability 'fleet' unavailable in mode disconnected")
+                campaign_id = body.get("campaign_id") or uuid4().hex[:12]
+                record = {
+                    "campaign_id": campaign_id,
+                    "kind": "rollback",
+                    "channel": body.get("channel", "dev"),
+                    "target_version": body.get("target_version", "0.1.0"),
+                    "cohort": body.get("cohort", "dev-default"),
+                    "status": "scheduled_dev",
+                    "mode": mode.value,
+                    "at": utc_now_iso(),
+                    "mock": False,
+                    "claim_boundary": CLAIM_BOUNDARY,
+                }
+                with self.store._lock:
+                    campaigns = self.store.data.setdefault("campaigns", {})
+                    campaigns[campaign_id] = record
+                    self.store.persist()
+                return 200, record
+
+            if method == "GET" and route == "/v1/fleet/stale" and role_ok("fleet"):
+                if mode == ServiceMode.DISCONNECTED:
+                    raise PermissionError("capability 'fleet' unavailable in mode disconnected")
+                stale_after_s = float(body.get("stale_after_s") if body else 0) or float((qs.get("stale_after_s") or ["60"])[0])
+                now = utc_now_iso()
+                with self.store._lock:
+                    devices = list(self.store.data["fleet"].values())
+                # DEV heuristic: devices without recent heartbeat marked stale by missing 'at' freshness token
+                stale = []
+                for d in devices:
+                    # If explicitly flagged or health stale
+                    if d.get("health") == "stale" or d.get("stale"):
+                        stale.append(d)
+                    elif body.get("mark_all_stale"):
+                        stale.append(d)
+                return 200, {"stale": stale, "stale_after_s": stale_after_s, "checked_at": now, "mock": False}
+
+            if method == "POST" and route == "/v1/fleet/mark_stale" and role_ok("fleet"):
+                if mode == ServiceMode.DISCONNECTED:
+                    raise PermissionError("capability 'fleet' unavailable in mode disconnected")
+                device_id = body["device_id"]
+                with self.store._lock:
+                    rec = dict(self.store.data["fleet"].get(device_id) or {"device_id": device_id})
+                    rec["health"] = "stale"
+                    rec["stale"] = True
+                    rec["at"] = utc_now_iso()
+                    self.store.data["fleet"][device_id] = rec
+                    self.store.persist()
+                return 200, rec
+
+            if method == "POST" and route == "/v1/diagnostics/request" and role_ok("diagnostics"):
+                req = {
+                    "request_id": uuid4().hex[:12],
+                    "device_id": body.get("device_id", "diag-dev-001"),
+                    "checks": redact_payload(dict(body.get("checks") or {"full": True})),
+                    "status": "queued_dev",
+                    "mode": mode.value,
+                    "at": utc_now_iso(),
+                    "mock": False,
+                }
+                with self.store._lock:
+                    self.store.data.setdefault("diagnostic_requests", []).append(req)
+                    self.store.persist()
+                return 200, req
+
+            if method == "GET" and route == "/v1/telemetry/backlog" and role_ok("telemetry"):
+                with self.store._lock:
+                    items = list(self.store.data["telemetry"])
+                return 200, {"backlog": items, "count": len(items), "mode": mode.value, "mock": False}
 
         except PermissionError as exc:
             return 403, {"error": str(exc), "mode": mode.value, "mock": False}

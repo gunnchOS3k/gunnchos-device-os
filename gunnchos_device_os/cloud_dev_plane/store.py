@@ -32,6 +32,8 @@ _EMPTY = {
     "update_metadata": {},
     "fleet": {},
     "diagnostics": [],
+    "campaigns": {},
+    "diagnostic_requests": [],
 }
 
 
@@ -279,8 +281,15 @@ class DevPlaneStore:
             "matchmaking",
             "update_metadata",
             "fleet",
+            "campaigns",
         )
-        list_keys = ("sync_queue", "sync_delivered", "telemetry", "diagnostics")
+        list_keys = (
+            "sync_queue",
+            "sync_delivered",
+            "telemetry",
+            "diagnostics",
+            "diagnostic_requests",
+        )
         for key in dict_keys:
             merged = dict(out.get(key) or {})
             merged.update(dict(incoming.get(key) or {}))

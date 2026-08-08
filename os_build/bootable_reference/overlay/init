@@ -113,6 +113,30 @@ for svc in hal identity diagnostics fleet_agent; do
 done
 echo "GUNNCHOS_SERVICE_PERSISTENCE_OK=${PERSIST_OK}"
 
+# Cont VI service-specific semantics (TCG-friendly: few targeted IPC calls).
+HAL_INV="$(gunnchos-ipc hal POST /call inventory 2>/dev/null || true)"
+DISP="$(gunnchos-ipc display POST /call current 2>/dev/null || true)"
+DOCK="$(gunnchos-ipc dock POST /call simulate 2>/dev/null || true)"
+CONN="$(gunnchos-ipc connectivity POST /call modem_rm520n 2>/dev/null || true)"
+AI="$(gunnchos-ipc ai_interface POST /call local_request 2>/dev/null || true)"
+UPD="$(gunnchos-ipc updater POST /call metadata 2>/dev/null || true)"
+FLEET="$(gunnchos-ipc fleet_agent POST /call inventory 2>/dev/null || true)"
+if echo "${HAL_INV}" | grep -q "modem=RM520N-GL"; then echo "GUNNCHOS_HAL_QUERY=ok"; else echo "GUNNCHOS_HAL_QUERY=degraded"; fi
+if echo "${DISP}" | grep -q "mode="; then echo "GUNNCHOS_DISPLAY_QUERY=ok"; else echo "GUNNCHOS_DISPLAY_QUERY=degraded"; fi
+if echo "${DOCK}" | grep -q "docked=true"; then echo "GUNNCHOS_DOCK_SIM=ok"; else echo "GUNNCHOS_DOCK_SIM=degraded"; fi
+if echo "${CONN}" | grep -q "ntn_claimed=false"; then echo "GUNNCHOS_CONNECTIVITY=ok"; else echo "GUNNCHOS_CONNECTIVITY=degraded"; fi
+if echo "${AI}" | grep -q "ok=true"; then echo "GUNNCHOS_AI_INTERFACE=ok"; else echo "GUNNCHOS_AI_INTERFACE=degraded"; fi
+if echo "${UPD}" | grep -q "channel=dev"; then echo "GUNNCHOS_UPDATE_STATE=ok"; else echo "GUNNCHOS_UPDATE_STATE=degraded"; fi
+if echo "${FLEET}" | grep -q "services=17"; then echo "GUNNCHOS_FLEET_INVENTORY=ok"; else echo "GUNNCHOS_FLEET_INVENTORY=degraded"; fi
+# Package/launch one app via sandbox launch_policy (manifest + policy path).
+if [ -f /opt/gunnchos/apps/manifest.json ] && gunnchos-ipc sandbox POST /call "launch_policy=waike" 2>/dev/null | grep -q "isolation="; then
+  echo "GUNNCHOS_APP_LAUNCH=ok"
+else
+  echo "GUNNCHOS_APP_LAUNCH=degraded"
+fi
+echo "GUNNCHOS_CONT_VI_SEMANTICS=true"
+echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false"
+
 # Shell + app/game runtime presence checks (before slower restart smoke).
 if [ -x /opt/gunnchos/bin/gunnchos-shell ]; then
   /opt/gunnchos/bin/gunnchos-shell --self-test || true
