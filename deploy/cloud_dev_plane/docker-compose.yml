@@ -1,0 +1,122 @@
+# Gunnchos cloud/fleet DEV plane — local compose only.
+# Realm: DEV. Not production cloud/MDM.
+# Usage: docker compose -f deploy/cloud_dev_plane/docker-compose.yml up --build
+
+x-dev-plane: &dev-plane
+  build:
+    context: ../..
+    dockerfile: deploy/cloud_dev_plane/Dockerfile
+  volumes:
+    - dev-plane-data:/data
+  environment: &dev-env
+    GUNNCHOS_STORE_PATH: /data/store.json
+    GUNNCHOS_MODE: local
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318/v1/traces
+  depends_on:
+    - otel-collector
+  restart: unless-stopped
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector:0.96.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+      - otel-logs:/var/log/otel
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+
+  gateway:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: gateway
+      GUNNCHOS_PORT: "8100"
+    ports:
+      - "8100:8100"
+
+  identity:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: identity
+      GUNNCHOS_PORT: "8101"
+    ports:
+      - "8101:8101"
+
+  enrollment:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: enrollment
+      GUNNCHOS_PORT: "8102"
+    ports:
+      - "8102:8102"
+
+  sync:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: sync
+      GUNNCHOS_PORT: "8103"
+    ports:
+      - "8103:8103"
+
+  saves:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: saves
+      GUNNCHOS_PORT: "8104"
+    ports:
+      - "8104:8104"
+
+  matchmaking:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: matchmaking
+      GUNNCHOS_PORT: "8105"
+    ports:
+      - "8105:8105"
+
+  ota_metadata:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: ota_metadata
+      GUNNCHOS_PORT: "8106"
+    ports:
+      - "8106:8106"
+
+  telemetry:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: telemetry
+      GUNNCHOS_PORT: "8107"
+    ports:
+      - "8107:8107"
+
+  fleet:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: fleet
+      GUNNCHOS_PORT: "8108"
+    ports:
+      - "8108:8108"
+
+  diagnostics:
+    <<: *dev-plane
+    environment:
+      <<: *dev-env
+      GUNNCHOS_SERVICE: diagnostics
+      GUNNCHOS_PORT: "8109"
+    ports:
+      - "8109:8109"
+
+volumes:
+  dev-plane-data:
+  otel-logs:
