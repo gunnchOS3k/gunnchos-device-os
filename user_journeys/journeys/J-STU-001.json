@@ -1,0 +1,322 @@
+{
+  "id": "J-STU-001",
+  "persona": "P01",
+  "goal": "Student assignment\u2192submit\u2192relax",
+  "class": "student",
+  "devices": [
+    "student_14_5",
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "wake",
+      "action": "wake",
+      "expected": "ok"
+    },
+    {
+      "id": "auth",
+      "action": "auth",
+      "expected": "ok"
+    },
+    {
+      "id": "wifi_campus",
+      "action": "wifi_campus",
+      "expected": "ok"
+    },
+    {
+      "id": "browser",
+      "action": "browser",
+      "expected": "ok"
+    },
+    {
+      "id": "lms_open",
+      "action": "lms_open",
+      "expected": "ok"
+    },
+    {
+      "id": "pdf_download",
+      "action": "pdf_download",
+      "expected": "ok"
+    },
+    {
+      "id": "pdf_open",
+      "action": "pdf_open",
+      "expected": "ok"
+    },
+    {
+      "id": "doc_create",
+      "action": "doc_create",
+      "expected": "ok"
+    },
+    {
+      "id": "music_study",
+      "action": "music_study",
+      "expected": "ok"
+    },
+    {
+      "id": "waike_search",
+      "action": "waike_search",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_tutor",
+      "action": "ai_tutor",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_privacy_gate",
+      "action": "ai_privacy_gate",
+      "expected": "ok"
+    },
+    {
+      "id": "notes_cite",
+      "action": "notes_cite",
+      "expected": "ok"
+    },
+    {
+      "id": "save_local",
+      "action": "save_local",
+      "expected": "ok"
+    },
+    {
+      "id": "net_loss",
+      "action": "net_loss",
+      "expected": "ok"
+    },
+    {
+      "id": "edit_offline",
+      "action": "edit_offline",
+      "expected": "ok"
+    },
+    {
+      "id": "net_restore",
+      "action": "net_restore",
+      "expected": "ok"
+    },
+    {
+      "id": "sync_file",
+      "action": "sync_file",
+      "expected": "ok"
+    },
+    {
+      "id": "lms_upload",
+      "action": "lms_upload",
+      "expected": "ok"
+    },
+    {
+      "id": "submission_receipt",
+      "action": "submission_receipt",
+      "expected": "ok"
+    },
+    {
+      "id": "session_preserve",
+      "action": "session_preserve",
+      "expected": "ok"
+    },
+    {
+      "id": "game_launch",
+      "action": "game_launch",
+      "expected": "ok"
+    },
+    {
+      "id": "game_play",
+      "action": "game_play",
+      "expected": "ok"
+    },
+    {
+      "id": "game_save",
+      "action": "game_save",
+      "expected": "ok"
+    },
+    {
+      "id": "return_assignment",
+      "action": "return_assignment",
+      "expected": "ok"
+    },
+    {
+      "id": "reopen_receipt",
+      "action": "reopen_receipt",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "wake",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "auth",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "wifi_campus",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "lms_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pdf_download",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pdf_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "doc_create",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "music_study",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "waike_search",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_tutor",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_privacy_gate",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "notes_cite",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "net_loss",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "edit_offline",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "net_restore",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sync_file",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "lms_upload",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "submission_receipt",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "session_preserve",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_play",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_save",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "return_assignment",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "reopen_receipt",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [
+    {
+      "type": "network_loss",
+      "at_step": "net_loss"
+    }
+  ],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-001.json"
+  }
+}

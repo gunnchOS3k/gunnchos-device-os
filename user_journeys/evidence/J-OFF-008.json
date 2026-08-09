@@ -1,0 +1,154 @@
+{
+  "journey_id": "J-OFF-008",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "mobile_work",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "mobile_work"
+      }
+    },
+    {
+      "step": "dock",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "direction": "dock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": false,
+          "network": "online",
+          "open_files": {
+            "assignment.odt": {
+              "kind": "doc",
+              "dirty": false
+            }
+          },
+          "cursor_position": {
+            "assignment.odt": 0
+          },
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {}
+        }
+      }
+    },
+    {
+      "step": "external_display",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "display": "external_sim"
+      }
+    },
+    {
+      "step": "ethernet",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "ethernet"
+      }
+    },
+    {
+      "step": "kb_mouse",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "kb_mouse"
+      }
+    },
+    {
+      "step": "headset",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "audio_device": "headset"
+      }
+    },
+    {
+      "step": "continue_doc",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "continue_doc"
+      }
+    },
+    {
+      "step": "undock",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "direction": "undock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": false,
+          "network": "ethernet",
+          "open_files": {
+            "assignment.odt": {
+              "kind": "doc",
+              "dirty": false
+            }
+          },
+          "cursor_position": {
+            "assignment.odt": 0
+          },
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {}
+        }
+      }
+    },
+    {
+      "step": "continue_device",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "continue_device"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54036/health",
+    "lms": "http://127.0.0.1:54036/lms",
+    "imap": "http://127.0.0.1:54036/imap",
+    "smtp": "http://127.0.0.1:54036/smtp/send",
+    "caldav": "http://127.0.0.1:54036/caldav",
+    "webdav": "http://127.0.0.1:54036/webdav",
+    "matrix": "http://127.0.0.1:54036/matrix",
+    "webrtc": "http://127.0.0.1:54036/webrtc",
+    "ring": "http://127.0.0.1:54036/ring",
+    "mdm": "http://127.0.0.1:54036/mdm",
+    "sync": "http://127.0.0.1:54036/sync/queue"
+  },
+  "mock": false
+}

@@ -1,0 +1,145 @@
+{
+  "journey_id": "J-STU-007",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "pptx_open",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "file": "deck.pptx",
+        "kind": "pptx"
+      }
+    },
+    {
+      "step": "dock",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "direction": "dock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": false,
+          "network": "online",
+          "open_files": {
+            "deck.pptx": {
+              "kind": "pptx",
+              "dirty": false
+            }
+          },
+          "cursor_position": {
+            "deck.pptx": 0
+          },
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {}
+        }
+      }
+    },
+    {
+      "step": "external_display",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "display": "external_sim"
+      }
+    },
+    {
+      "step": "presenter_mode",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "step": "notes_second_screen",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "layout": "dual"
+      }
+    },
+    {
+      "step": "audio_playback",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "audio",
+          "source": "deck",
+          "playing": true
+        }
+      }
+    },
+    {
+      "step": "display_hotplug",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "hotplug": "sim",
+        "physical": false
+      }
+    },
+    {
+      "step": "state_preserve",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "keys": [
+          "ai_sync_permitted",
+          "authenticated",
+          "battery_pct",
+          "chat_state",
+          "cursor_position",
+          "doc_versions",
+          "focus_mode",
+          "game_save",
+          "music_position",
+          "network",
+          "open_files",
+          "storage_used_pct",
+          "video_position"
+        ]
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "display_hotplug_lab",
+    "dock_si"
+  ],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

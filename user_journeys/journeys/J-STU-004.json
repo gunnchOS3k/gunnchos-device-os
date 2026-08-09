@@ -1,0 +1,152 @@
+{
+  "id": "J-STU-004",
+  "persona": "P02",
+  "goal": "Movie + assignment multitask",
+  "class": "student",
+  "devices": [
+    "student_14_5",
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "video_local",
+      "action": "video_local",
+      "expected": "ok"
+    },
+    {
+      "id": "pip_or_second_display",
+      "action": "pip_or_second_display",
+      "expected": "ok"
+    },
+    {
+      "id": "doc_edit",
+      "action": "doc_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "browser",
+      "action": "browser",
+      "expected": "ok"
+    },
+    {
+      "id": "wifi_switch",
+      "action": "wifi_switch",
+      "expected": "ok"
+    },
+    {
+      "id": "notify_receive",
+      "action": "notify_receive",
+      "expected": "ok"
+    },
+    {
+      "id": "media_pause",
+      "action": "media_pause",
+      "expected": "ok"
+    },
+    {
+      "id": "media_resume",
+      "action": "media_resume",
+      "expected": "ok"
+    },
+    {
+      "id": "save_local",
+      "action": "save_local",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "video_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pip_or_second_display",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "doc_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "wifi_switch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "notify_receive",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "media_pause",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "media_resume",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_local",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "fan_acoustics",
+    "display_brightness"
+  ],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-004.json"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "id": "J-STU-006",
+  "persona": "P02",
+  "goal": "Group project share+chat+call",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "share_folder",
+      "action": "share_folder",
+      "expected": "ok"
+    },
+    {
+      "id": "invite_members",
+      "action": "invite_members",
+      "expected": "ok"
+    },
+    {
+      "id": "sync_exchange",
+      "action": "sync_exchange",
+      "expected": "ok"
+    },
+    {
+      "id": "chat",
+      "action": "chat",
+      "expected": "ok"
+    },
+    {
+      "id": "webrtc_call",
+      "action": "webrtc_call",
+      "expected": "ok"
+    },
+    {
+      "id": "screen_share",
+      "action": "screen_share",
+      "expected": "ok"
+    },
+    {
+      "id": "pptx_edit",
+      "action": "pptx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "pdf_export",
+      "action": "pdf_export",
+      "expected": "ok"
+    },
+    {
+      "id": "share_final",
+      "action": "share_final",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "share_folder",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "invite_members",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sync_exchange",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "chat",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "webrtc_call",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "screen_share",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pptx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pdf_export",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "share_final",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-006.json"
+  }
+}

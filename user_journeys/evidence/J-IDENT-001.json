@@ -1,0 +1,93 @@
+{
+  "journey_id": "J-IDENT-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "user_a_work",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "user_a_work"
+      }
+    },
+    {
+      "step": "switch_user",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "switch_user"
+      }
+    },
+    {
+      "step": "user_b_session",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "user_b_session"
+      }
+    },
+    {
+      "step": "switch_back",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "switch_back"
+      }
+    },
+    {
+      "step": "no_leak",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "no_leak"
+      }
+    },
+    {
+      "step": "state_preserve",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "keys": [
+          "ai_sync_permitted",
+          "authenticated",
+          "battery_pct",
+          "chat_state",
+          "cursor_position",
+          "doc_versions",
+          "focus_mode",
+          "game_save",
+          "music_position",
+          "network",
+          "open_files",
+          "storage_used_pct",
+          "video_position"
+        ]
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

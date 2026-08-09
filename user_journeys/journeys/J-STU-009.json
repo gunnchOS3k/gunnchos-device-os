@@ -1,0 +1,150 @@
+{
+  "id": "J-STU-009",
+  "persona": "P01",
+  "goal": "Low-battery save priority",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "doc_open",
+      "action": "doc_open",
+      "expected": "ok"
+    },
+    {
+      "id": "music_study",
+      "action": "music_study",
+      "expected": "ok"
+    },
+    {
+      "id": "browser",
+      "action": "browser",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_pending",
+      "action": "ai_pending",
+      "expected": "ok"
+    },
+    {
+      "id": "low_battery_warn",
+      "action": "low_battery_warn",
+      "expected": "ok"
+    },
+    {
+      "id": "save_sync_priority",
+      "action": "save_sync_priority",
+      "expected": "ok"
+    },
+    {
+      "id": "power_shift",
+      "action": "power_shift",
+      "expected": "ok"
+    },
+    {
+      "id": "no_data_loss",
+      "action": "no_data_loss",
+      "expected": "ok"
+    },
+    {
+      "id": "graceful_suspend",
+      "action": "graceful_suspend",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "doc_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "music_study",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_pending",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "low_battery_warn",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_sync_priority",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "power_shift",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_data_loss",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "graceful_suspend",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [
+    {
+      "type": "low_battery"
+    }
+  ],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-009.json"
+  }
+}

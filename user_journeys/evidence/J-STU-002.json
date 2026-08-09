@@ -1,0 +1,193 @@
+{
+  "journey_id": "J-STU-002",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "doc_create",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "file": "assignment.odt",
+        "kind": "doc"
+      }
+    },
+    {
+      "step": "share_folder",
+      "ok": true,
+      "ms": 1,
+      "result": {
+        "ok": true,
+        "path": "shared.odt",
+        "version": 1,
+        "share": "webdav://local/shared.odt?v=1"
+      }
+    },
+    {
+      "step": "share_link",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "share": "webdav://local/shared.odt?v=1"
+      }
+    },
+    {
+      "step": "message_send",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "message": {
+          "id": "31653be0-5733-4432-b2a7-35068f00264a",
+          "room": "!class",
+          "body": "please review webdav://local/shared.odt?v=1",
+          "from": "user"
+        }
+      }
+    },
+    {
+      "step": "music_continue",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "music",
+          "source": "fixtures/study_track.wav",
+          "playing": true
+        }
+      }
+    },
+    {
+      "step": "notify_receive",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "notification": {
+          "ok": true,
+          "delivered": true,
+          "item": {
+            "category": "message",
+            "title": "Classmate replied"
+          },
+          "media_destroyed": false
+        },
+        "media": {
+          "ok": true,
+          "destroyed": false,
+          "ducked_db": -6.0
+        },
+        "media_destroyed": false
+      }
+    },
+    {
+      "step": "message_open_preserve_cursor",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor_preserved": true,
+        "cursors": {
+          "assignment.odt": 0
+        }
+      }
+    },
+    {
+      "step": "doc_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 2
+      }
+    },
+    {
+      "step": "version_save",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "share_verify",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "accessible": true,
+        "files": [
+          "assignment.odt",
+          "assignment.pdf",
+          "deck.pptx",
+          "export.pdf",
+          "lms_assignment.html",
+          "movie_clip.mp4",
+          "notes.odt",
+          "report.docx",
+          "shared.odt",
+          "sheet.xlsx",
+          "study_notes.odt",
+          "study_track.wav",
+          "v0",
+          "v0",
+          "v0",
+          "v0",
+          "v0",
+          "v0",
+          "v0",
+          "v1",
+          "v1",
+          "v1",
+          "v1",
+          "v1",
+          "v1",
+          "v1",
+          "v2"
+        ]
+      }
+    },
+    {
+      "step": "conflict_resolve",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "resolved": "keep_both_versions"
+      }
+    },
+    {
+      "step": "version_restore",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "restored": true
+      }
+    }
+  ],
+  "duration_ms": 5,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

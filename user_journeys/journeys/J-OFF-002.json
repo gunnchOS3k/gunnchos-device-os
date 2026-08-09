@@ -1,0 +1,117 @@
+{
+  "id": "J-OFF-002",
+  "persona": "P05",
+  "goal": "Office deep-work + music",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "docx_edit",
+      "action": "docx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "xlsx_edit",
+      "action": "xlsx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "music_study",
+      "action": "music_study",
+      "expected": "ok"
+    },
+    {
+      "id": "messaging",
+      "action": "messaging",
+      "expected": "ok"
+    },
+    {
+      "id": "browser",
+      "action": "browser",
+      "expected": "ok"
+    },
+    {
+      "id": "responsiveness",
+      "action": "responsiveness",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "docx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "xlsx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "music_study",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "messaging",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "responsiveness",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-002.json"
+  }
+}

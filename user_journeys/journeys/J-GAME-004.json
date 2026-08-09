@@ -1,0 +1,100 @@
+{
+  "id": "J-GAME-004",
+  "persona": "P08",
+  "goal": "Game + background music choice",
+  "class": "recreation",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "music_study",
+      "action": "music_study",
+      "expected": "ok"
+    },
+    {
+      "id": "game_launch",
+      "action": "game_launch",
+      "expected": "ok"
+    },
+    {
+      "id": "audio_focus_policy",
+      "action": "audio_focus_policy",
+      "expected": "ok"
+    },
+    {
+      "id": "user_choice",
+      "action": "user_choice",
+      "expected": "ok"
+    },
+    {
+      "id": "game_save",
+      "action": "game_save",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "music_study",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "audio_focus_policy",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "user_choice",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_save",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-GAME-004.json"
+  }
+}

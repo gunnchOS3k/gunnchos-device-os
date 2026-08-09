@@ -1,0 +1,132 @@
+{
+  "id": "J-OFF-004",
+  "persona": "P05",
+  "goal": "VPN + network share resilience",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "vpn_connect",
+      "action": "vpn_connect",
+      "expected": "ok"
+    },
+    {
+      "id": "mount_share",
+      "action": "mount_share",
+      "expected": "ok"
+    },
+    {
+      "id": "doc_open",
+      "action": "doc_open",
+      "expected": "ok"
+    },
+    {
+      "id": "net_loss",
+      "action": "net_loss",
+      "expected": "ok"
+    },
+    {
+      "id": "no_corruption",
+      "action": "no_corruption",
+      "expected": "ok"
+    },
+    {
+      "id": "net_restore",
+      "action": "net_restore",
+      "expected": "ok"
+    },
+    {
+      "id": "save_safe",
+      "action": "save_safe",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "vpn_connect",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "mount_share",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "doc_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "net_loss",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_corruption",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "net_restore",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_safe",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [
+    {
+      "type": "network_loss",
+      "at_step": "net_loss"
+    }
+  ],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-004.json"
+  }
+}

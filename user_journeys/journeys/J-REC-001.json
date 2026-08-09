@@ -1,0 +1,93 @@
+{
+  "id": "J-REC-001",
+  "persona": "P05",
+  "goal": "Crash recovery open docs",
+  "class": "security",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "auth",
+    "update_client",
+    "audit"
+  ],
+  "required_services": [
+    "auth_local",
+    "update_dev"
+  ],
+  "steps": [
+    {
+      "id": "doc_edit",
+      "action": "doc_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "inject_crash",
+      "action": "inject_crash",
+      "expected": "ok"
+    },
+    {
+      "id": "recover",
+      "action": "recover",
+      "expected": "ok"
+    },
+    {
+      "id": "no_data_loss",
+      "action": "no_data_loss",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "doc_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "inject_crash",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "recover",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_data_loss",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [
+    {
+      "type": "inject_crash"
+    }
+  ],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-REC-001.json"
+  }
+}

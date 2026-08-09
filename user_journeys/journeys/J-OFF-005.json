@@ -1,0 +1,117 @@
+{
+  "id": "J-OFF-005",
+  "persona": "P05",
+  "goal": "CUPS virtual print",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "docx_open",
+      "action": "docx_open",
+      "expected": "ok"
+    },
+    {
+      "id": "print_virtual_pdf",
+      "action": "print_virtual_pdf",
+      "expected": "ok"
+    },
+    {
+      "id": "cups_submit",
+      "action": "cups_submit",
+      "expected": "ok"
+    },
+    {
+      "id": "queue_inspect",
+      "action": "queue_inspect",
+      "expected": "ok"
+    },
+    {
+      "id": "job_cancel",
+      "action": "job_cancel",
+      "expected": "ok"
+    },
+    {
+      "id": "resubmit",
+      "action": "resubmit",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "docx_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "print_virtual_pdf",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "cups_submit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "queue_inspect",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "job_cancel",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "resubmit",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-005.json"
+  }
+}

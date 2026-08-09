@@ -1,0 +1,113 @@
+{
+  "id": "J-CREATOR-002",
+  "persona": "P07",
+  "goal": "Game tooling UGC where permitted",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "creator_tools",
+      "action": "creator_tools",
+      "expected": "ok"
+    },
+    {
+      "id": "edit_content",
+      "action": "edit_content",
+      "expected": "ok"
+    },
+    {
+      "id": "validate",
+      "action": "validate",
+      "expected": "ok"
+    },
+    {
+      "id": "run_local",
+      "action": "run_local",
+      "expected": "ok"
+    },
+    {
+      "id": "package_ugc",
+      "action": "package_ugc",
+      "expected": "ok"
+    },
+    {
+      "id": "sandbox_perms",
+      "action": "sandbox_perms",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "creator_tools",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "edit_content",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "validate",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "run_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "package_ugc",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sandbox_perms",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-CREATOR-002.json"
+  }
+}

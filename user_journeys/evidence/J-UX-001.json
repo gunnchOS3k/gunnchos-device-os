@@ -1,0 +1,70 @@
+{
+  "journey_id": "J-UX-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "a11y_enable",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "a11y_enable"
+      }
+    },
+    {
+      "step": "navigate_launcher",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "navigate_launcher"
+      }
+    },
+    {
+      "step": "open_doc",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "open_doc"
+      }
+    },
+    {
+      "step": "read_content",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "read_content"
+      }
+    },
+    {
+      "step": "submit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "submit"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

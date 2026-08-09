@@ -1,0 +1,107 @@
+{
+  "id": "J-HAND-001",
+  "persona": "P06",
+  "goal": "Handheld commute workflow",
+  "class": "office",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "undocked_work",
+      "action": "undocked_work",
+      "expected": "ok"
+    },
+    {
+      "id": "notify",
+      "action": "notify",
+      "expected": "ok"
+    },
+    {
+      "id": "quick_reply",
+      "action": "quick_reply",
+      "expected": "ok"
+    },
+    {
+      "id": "save",
+      "action": "save",
+      "expected": "ok"
+    },
+    {
+      "id": "dock_later",
+      "action": "dock_later",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "undocked_work",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "notify",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "quick_reply",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "dock_later",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-HAND-001.json"
+  }
+}

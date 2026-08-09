@@ -1,0 +1,89 @@
+{
+  "id": "J-SEC-003",
+  "persona": "P12",
+  "goal": "Update signature verify digital",
+  "class": "security",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "auth",
+    "update_client",
+    "audit"
+  ],
+  "required_services": [
+    "auth_local",
+    "update_dev"
+  ],
+  "steps": [
+    {
+      "id": "update_package",
+      "action": "update_package",
+      "expected": "ok"
+    },
+    {
+      "id": "sig_verify",
+      "action": "sig_verify",
+      "expected": "ok"
+    },
+    {
+      "id": "reject_bad",
+      "action": "reject_bad",
+      "expected": "ok"
+    },
+    {
+      "id": "accept_good",
+      "action": "accept_good",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "update_package",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sig_verify",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "reject_bad",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "accept_good",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-SEC-003.json"
+  }
+}

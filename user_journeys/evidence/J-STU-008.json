@@ -1,0 +1,106 @@
+{
+  "journey_id": "J-STU-008",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "focus_mode_enable",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "focus_mode": true
+      }
+    },
+    {
+      "step": "mute_noncritical",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "delivered": false,
+        "blocked_by_focus": true
+      }
+    },
+    {
+      "step": "timer_keep",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "delivered": true,
+        "item": {
+          "category": "timer",
+          "title": "Pomodoro"
+        },
+        "media_destroyed": false
+      }
+    },
+    {
+      "step": "a11y_alerts_keep",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "delivered": true,
+        "item": {
+          "category": "accessibility",
+          "title": "Alert"
+        },
+        "media_destroyed": false
+      }
+    },
+    {
+      "step": "admin_emergency_keep",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "delivered": true,
+        "item": {
+          "category": "emergency",
+          "title": "Drill"
+        },
+        "media_destroyed": false
+      }
+    },
+    {
+      "step": "block_game_notify",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "delivered": false,
+        "blocked_by_focus": true
+      }
+    },
+    {
+      "step": "background_saves",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

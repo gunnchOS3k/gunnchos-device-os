@@ -1,0 +1,88 @@
+{
+  "id": "J-UX-003",
+  "persona": "P13",
+  "goal": "Keyboard-only navigation",
+  "class": "a11y",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "a11y_stack"
+  ],
+  "required_services": [
+    "a11y_bus"
+  ],
+  "steps": [
+    {
+      "id": "kb_nav",
+      "action": "kb_nav",
+      "expected": "ok"
+    },
+    {
+      "id": "focus_ring",
+      "action": "focus_ring",
+      "expected": "ok"
+    },
+    {
+      "id": "no_trap",
+      "action": "no_trap",
+      "expected": "ok"
+    },
+    {
+      "id": "complete_goal",
+      "action": "complete_goal",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "kb_nav",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "focus_ring",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_trap",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "complete_goal",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-UX-003.json"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "id": "J-RING-003",
+  "persona": "P08",
+  "goal": "Ring game control sim",
+  "class": "ring",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ring_bridge",
+    "browser"
+  ],
+  "required_services": [
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "ring_sim_input",
+      "action": "ring_sim_input",
+      "expected": "ok"
+    },
+    {
+      "id": "game_control",
+      "action": "game_control",
+      "expected": "ok"
+    },
+    {
+      "id": "no_conflict",
+      "action": "no_conflict",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "ring_sim_input",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_control",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_conflict",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-RING-003.json"
+  }
+}

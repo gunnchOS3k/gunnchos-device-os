@@ -1,0 +1,147 @@
+{
+  "id": "J-OFF-008",
+  "persona": "P06",
+  "goal": "Hot-desk dock continuity",
+  "class": "office",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "mobile_work",
+      "action": "mobile_work",
+      "expected": "ok"
+    },
+    {
+      "id": "dock",
+      "action": "dock",
+      "expected": "ok"
+    },
+    {
+      "id": "external_display",
+      "action": "external_display",
+      "expected": "ok"
+    },
+    {
+      "id": "ethernet",
+      "action": "ethernet",
+      "expected": "ok"
+    },
+    {
+      "id": "kb_mouse",
+      "action": "kb_mouse",
+      "expected": "ok"
+    },
+    {
+      "id": "headset",
+      "action": "headset",
+      "expected": "ok"
+    },
+    {
+      "id": "continue_doc",
+      "action": "continue_doc",
+      "expected": "ok"
+    },
+    {
+      "id": "undock",
+      "action": "undock",
+      "expected": "ok"
+    },
+    {
+      "id": "continue_device",
+      "action": "continue_device",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "mobile_work",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "dock",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "external_display",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ethernet",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "kb_mouse",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "headset",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "continue_doc",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "undock",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "continue_device",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-008.json"
+  }
+}

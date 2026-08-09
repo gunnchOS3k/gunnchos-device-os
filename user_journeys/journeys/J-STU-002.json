@@ -1,0 +1,176 @@
+{
+  "id": "J-STU-002",
+  "persona": "P02",
+  "goal": "Share+message+music with versioning",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "doc_create",
+      "action": "doc_create",
+      "expected": "ok"
+    },
+    {
+      "id": "share_folder",
+      "action": "share_folder",
+      "expected": "ok"
+    },
+    {
+      "id": "share_link",
+      "action": "share_link",
+      "expected": "ok"
+    },
+    {
+      "id": "message_send",
+      "action": "message_send",
+      "expected": "ok"
+    },
+    {
+      "id": "music_continue",
+      "action": "music_continue",
+      "expected": "ok"
+    },
+    {
+      "id": "notify_receive",
+      "action": "notify_receive",
+      "expected": "ok"
+    },
+    {
+      "id": "message_open_preserve_cursor",
+      "action": "message_open_preserve_cursor",
+      "expected": "ok"
+    },
+    {
+      "id": "doc_edit",
+      "action": "doc_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "version_save",
+      "action": "version_save",
+      "expected": "ok"
+    },
+    {
+      "id": "share_verify",
+      "action": "share_verify",
+      "expected": "ok"
+    },
+    {
+      "id": "conflict_resolve",
+      "action": "conflict_resolve",
+      "expected": "ok"
+    },
+    {
+      "id": "version_restore",
+      "action": "version_restore",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "doc_create",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "share_folder",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "share_link",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "message_send",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "music_continue",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "notify_receive",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "message_open_preserve_cursor",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "doc_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "version_save",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "share_verify",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "conflict_resolve",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "version_restore",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-002.json"
+  }
+}

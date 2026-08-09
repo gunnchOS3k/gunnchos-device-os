@@ -1,0 +1,102 @@
+{
+  "journey_id": "J-OFF-009",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "primary_doc",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "primary_doc"
+      }
+    },
+    {
+      "step": "secondary_chat",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "secondary_chat"
+      }
+    },
+    {
+      "step": "external_dashboard",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "external_dashboard"
+      }
+    },
+    {
+      "step": "window_place",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "window_place"
+      }
+    },
+    {
+      "step": "unplug_replug",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "unplug_replug"
+      }
+    },
+    {
+      "step": "sleep_resume",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "sleep_resume"
+      }
+    },
+    {
+      "step": "dpi_scale",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "dpi_scale"
+      }
+    },
+    {
+      "step": "focus",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "focus"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "display_hotplug_lab",
+    "dock_si"
+  ],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

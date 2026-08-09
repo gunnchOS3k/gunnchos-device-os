@@ -1,0 +1,90 @@
+{
+  "id": "J-NET-005",
+  "persona": "P14",
+  "goal": "DNS/outage degraded UX",
+  "class": "offline",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "intermittent",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "sync_agent",
+    "local_ai"
+  ],
+  "required_services": [
+    "sync_queue",
+    "webdav"
+  ],
+  "steps": [
+    {
+      "id": "net_degrade",
+      "action": "net_degrade",
+      "expected": "ok"
+    },
+    {
+      "id": "clear_error",
+      "action": "clear_error",
+      "expected": "ok"
+    },
+    {
+      "id": "offline_hint",
+      "action": "offline_hint",
+      "expected": "ok"
+    },
+    {
+      "id": "retry",
+      "action": "retry",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "net_degrade",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "clear_error",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "offline_hint",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "retry",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-NET-005.json"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "id": "J-AI-001",
+  "persona": "P02",
+  "goal": "Local AI tutor session",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "ai_tutor",
+      "action": "ai_tutor",
+      "expected": "ok"
+    },
+    {
+      "id": "citation",
+      "action": "citation",
+      "expected": "ok"
+    },
+    {
+      "id": "no_exfil",
+      "action": "no_exfil",
+      "expected": "ok"
+    },
+    {
+      "id": "session_save",
+      "action": "session_save",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "ai_tutor",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "citation",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_exfil",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "session_save",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-AI-001.json"
+  }
+}

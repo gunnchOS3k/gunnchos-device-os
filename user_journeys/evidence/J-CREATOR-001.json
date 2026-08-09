@@ -1,0 +1,137 @@
+{
+  "journey_id": "J-CREATOR-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "sdk_use",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "sdk_use"
+      }
+    },
+    {
+      "step": "sample_app",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "sample_app"
+      }
+    },
+    {
+      "step": "device_profile_api",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "device_profile_api"
+      }
+    },
+    {
+      "step": "ai_capability",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "capability": "local_infer"
+      }
+    },
+    {
+      "step": "ring_sim_input",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "packet": {
+          "id": "d1ae2e27-5b54-4ec4-95d7-fd4110d071ad",
+          "gesture": "tap",
+          "ts": 0
+        }
+      }
+    },
+    {
+      "step": "local_data",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "local_data"
+      }
+    },
+    {
+      "step": "package",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "package"
+      }
+    },
+    {
+      "step": "install",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "install"
+      }
+    },
+    {
+      "step": "launch",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "launch"
+      }
+    },
+    {
+      "step": "inspect_logs",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "inspect_logs"
+      }
+    },
+    {
+      "step": "update",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "update"
+      }
+    },
+    {
+      "step": "rollback",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "rollback"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54008/health",
+    "lms": "http://127.0.0.1:54008/lms",
+    "imap": "http://127.0.0.1:54008/imap",
+    "smtp": "http://127.0.0.1:54008/smtp/send",
+    "caldav": "http://127.0.0.1:54008/caldav",
+    "webdav": "http://127.0.0.1:54008/webdav",
+    "matrix": "http://127.0.0.1:54008/matrix",
+    "webrtc": "http://127.0.0.1:54008/webrtc",
+    "ring": "http://127.0.0.1:54008/ring",
+    "mdm": "http://127.0.0.1:54008/mdm",
+    "sync": "http://127.0.0.1:54008/sync/queue"
+  },
+  "mock": false
+}

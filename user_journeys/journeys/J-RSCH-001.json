@@ -1,0 +1,103 @@
+{
+  "id": "J-RSCH-001",
+  "persona": "P10",
+  "goal": "Research dataset local analysis",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "dataset_local",
+      "action": "dataset_local",
+      "expected": "ok"
+    },
+    {
+      "id": "analysis",
+      "action": "analysis",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_assist",
+      "action": "ai_assist",
+      "expected": "ok"
+    },
+    {
+      "id": "export_notes",
+      "action": "export_notes",
+      "expected": "ok"
+    },
+    {
+      "id": "privacy_ok",
+      "action": "privacy_ok",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "dataset_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "analysis",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_assist",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "export_notes",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "privacy_ok",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-RSCH-001.json"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "J-DSXL-001",
+  "persona": "P03",
+  "goal": "DS-XL dual-screen coding",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "dual_screen",
+      "action": "dual_screen",
+      "expected": "ok"
+    },
+    {
+      "id": "ide_docs",
+      "action": "ide_docs",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_side",
+      "action": "ai_side",
+      "expected": "ok"
+    },
+    {
+      "id": "state_preserve",
+      "action": "state_preserve",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "dual_screen",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ide_docs",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_side",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "state_preserve",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-DSXL-001.json"
+  }
+}

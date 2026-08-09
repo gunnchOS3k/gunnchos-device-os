@@ -1,0 +1,86 @@
+{
+  "journey_id": "J-OFF-003",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "video_local",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "video",
+          "source": "fixtures/movie_clip.mp4",
+          "playing": true
+        }
+      }
+    },
+    {
+      "step": "pip_or_second_display",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "pip": true
+      }
+    },
+    {
+      "step": "xlsx_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "chat",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "message": {
+          "id": "b85edeb0-b0c3-4d38-9a3b-f75bc89df010",
+          "room": "!class",
+          "body": "please review webdav://local/shared.odt?v=1",
+          "from": "user"
+        }
+      }
+    },
+    {
+      "step": "save_export",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false
+      }
+    }
+  ],
+  "duration_ms": 1,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "fan_acoustics",
+    "display_brightness"
+  ],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

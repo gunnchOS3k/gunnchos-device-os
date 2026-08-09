@@ -1,0 +1,95 @@
+{
+  "id": "J-MEDIA-002",
+  "persona": "P08",
+  "goal": "Local video library",
+  "class": "recreation",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "video_library",
+      "action": "video_library",
+      "expected": "ok"
+    },
+    {
+      "id": "play",
+      "action": "play",
+      "expected": "ok"
+    },
+    {
+      "id": "pip_or_second_display",
+      "action": "pip_or_second_display",
+      "expected": "ok"
+    },
+    {
+      "id": "position_save",
+      "action": "position_save",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "video_library",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "play",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pip_or_second_display",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "position_save",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "fan_acoustics",
+    "display_brightness"
+  ],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-MEDIA-002.json"
+  }
+}

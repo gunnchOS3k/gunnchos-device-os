@@ -1,0 +1,100 @@
+{
+  "id": "J-NET-003",
+  "persona": "P14",
+  "goal": "Captive portal school WiFi",
+  "class": "offline",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "intermittent",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "sync_agent",
+    "local_ai"
+  ],
+  "required_services": [
+    "sync_queue",
+    "webdav"
+  ],
+  "steps": [
+    {
+      "id": "wifi_campus",
+      "action": "wifi_campus",
+      "expected": "ok"
+    },
+    {
+      "id": "captive_detect",
+      "action": "captive_detect",
+      "expected": "ok"
+    },
+    {
+      "id": "browser_portal",
+      "action": "browser_portal",
+      "expected": "ok"
+    },
+    {
+      "id": "auth_sim",
+      "action": "auth_sim",
+      "expected": "ok"
+    },
+    {
+      "id": "continue",
+      "action": "continue",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "wifi_campus",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "captive_detect",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser_portal",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "auth_sim",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "continue",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-NET-003.json"
+  }
+}

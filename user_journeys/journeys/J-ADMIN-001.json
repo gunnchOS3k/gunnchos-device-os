@@ -1,0 +1,88 @@
+{
+  "id": "J-ADMIN-001",
+  "persona": "P11",
+  "goal": "School fleet policy push digital",
+  "class": "admin",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "mdm",
+    "browser",
+    "terminal"
+  ],
+  "required_services": [
+    "mdm_dev"
+  ],
+  "steps": [
+    {
+      "id": "mdm_policy",
+      "action": "mdm_policy",
+      "expected": "ok"
+    },
+    {
+      "id": "push_config",
+      "action": "push_config",
+      "expected": "ok"
+    },
+    {
+      "id": "device_apply",
+      "action": "device_apply",
+      "expected": "ok"
+    },
+    {
+      "id": "verify",
+      "action": "verify",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "mdm_policy",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "push_config",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "device_apply",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "verify",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-ADMIN-001.json"
+  }
+}

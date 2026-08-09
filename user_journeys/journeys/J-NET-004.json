@@ -1,0 +1,100 @@
+{
+  "id": "J-NET-004",
+  "persona": "P06",
+  "goal": "VPN flap during sync",
+  "class": "offline",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "intermittent",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "sync_agent",
+    "local_ai"
+  ],
+  "required_services": [
+    "sync_queue",
+    "webdav"
+  ],
+  "steps": [
+    {
+      "id": "vpn_connect",
+      "action": "vpn_connect",
+      "expected": "ok"
+    },
+    {
+      "id": "sync_file",
+      "action": "sync_file",
+      "expected": "ok"
+    },
+    {
+      "id": "vpn_flap",
+      "action": "vpn_flap",
+      "expected": "ok"
+    },
+    {
+      "id": "no_corruption",
+      "action": "no_corruption",
+      "expected": "ok"
+    },
+    {
+      "id": "resume",
+      "action": "resume",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "vpn_connect",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sync_file",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "vpn_flap",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_corruption",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "resume",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-NET-004.json"
+  }
+}

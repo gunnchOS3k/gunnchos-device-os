@@ -1,0 +1,144 @@
+{
+  "journey_id": "J-STU-004",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "video_local",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "video",
+          "source": "fixtures/movie_clip.mp4",
+          "playing": true
+        }
+      }
+    },
+    {
+      "step": "pip_or_second_display",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "pip": true
+      }
+    },
+    {
+      "step": "doc_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "browser",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "app": "browser",
+        "invoked": true
+      }
+    },
+    {
+      "step": "wifi_switch",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "switched"
+      }
+    },
+    {
+      "step": "notify_receive",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "notification": {
+          "ok": true,
+          "delivered": true,
+          "item": {
+            "category": "message",
+            "title": "Classmate replied"
+          },
+          "media_destroyed": false
+        },
+        "media": {
+          "ok": true,
+          "destroyed": false,
+          "ducked_db": -6.0
+        },
+        "media_destroyed": false
+      }
+    },
+    {
+      "step": "media_pause",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "video",
+          "source": "fixtures/movie_clip.mp4",
+          "playing": false,
+          "ducked_db": -6.0
+        },
+        "key": "play_pause"
+      }
+    },
+    {
+      "step": "media_resume",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "video",
+          "source": "fixtures/movie_clip.mp4",
+          "playing": true,
+          "ducked_db": -6.0
+        },
+        "key": "play_pause"
+      }
+    },
+    {
+      "step": "save_local",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false
+      }
+    }
+  ],
+  "duration_ms": 1,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "fan_acoustics",
+    "display_brightness"
+  ],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

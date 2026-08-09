@@ -1,0 +1,105 @@
+{
+  "id": "J-GAME-006",
+  "persona": "P08",
+  "goal": "Docked gaming continuity",
+  "class": "recreation",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "game_play",
+      "action": "game_play",
+      "expected": "ok"
+    },
+    {
+      "id": "dock",
+      "action": "dock",
+      "expected": "ok"
+    },
+    {
+      "id": "display_switch",
+      "action": "display_switch",
+      "expected": "ok"
+    },
+    {
+      "id": "undock",
+      "action": "undock",
+      "expected": "ok"
+    },
+    {
+      "id": "state_preserve",
+      "action": "state_preserve",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "game_play",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "dock",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "display_switch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "undock",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "state_preserve",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "display_hotplug_lab",
+    "dock_si"
+  ],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-GAME-006.json"
+  }
+}

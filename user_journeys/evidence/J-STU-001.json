@@ -1,0 +1,316 @@
+{
+  "journey_id": "J-STU-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "wake",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "state": "awake"
+      }
+    },
+    {
+      "step": "auth",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "authenticated": true
+      }
+    },
+    {
+      "step": "wifi_campus",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "campus_wifi"
+      }
+    },
+    {
+      "step": "browser",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "app": "browser",
+        "invoked": true
+      }
+    },
+    {
+      "step": "lms_open",
+      "ok": true,
+      "ms": 1,
+      "result": {
+        "ok": true,
+        "service": "lms_dev",
+        "assignment": "assignment.pdf"
+      }
+    },
+    {
+      "step": "pdf_download",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "path": "assignment.pdf"
+      }
+    },
+    {
+      "step": "pdf_open",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "file": "assignment.pdf",
+        "kind": "pdf"
+      }
+    },
+    {
+      "step": "doc_create",
+      "ok": true,
+      "ms": 1,
+      "result": {
+        "ok": true,
+        "file": "assignment.odt",
+        "kind": "doc"
+      }
+    },
+    {
+      "step": "music_study",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "music",
+          "source": "fixtures/study_track.wav",
+          "playing": true
+        }
+      }
+    },
+    {
+      "step": "waike_search",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "hits": [
+          "local_waike://fixture"
+        ]
+      }
+    },
+    {
+      "step": "ai_tutor",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "answered": true,
+        "blocked_private_clipboard": false,
+        "reply": "Tutoring hint for: explain photosynthesis",
+        "citations": [
+          "local_waike://fixture"
+        ]
+      }
+    },
+    {
+      "step": "ai_privacy_gate",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "answered": false,
+        "blocked_private_clipboard": true,
+        "message": "Refusing to send private clipboard without permission"
+      }
+    },
+    {
+      "step": "notes_cite",
+      "ok": true,
+      "ms": 1,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "save_local",
+      "ok": true,
+      "ms": 1,
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false
+      }
+    },
+    {
+      "step": "net_loss",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "offline"
+      }
+    },
+    {
+      "step": "edit_offline",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "queued": true,
+        "cursor": 1
+      }
+    },
+    {
+      "step": "net_restore",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "online",
+        "flush": {
+          "ok": true,
+          "flushed": 1
+        }
+      }
+    },
+    {
+      "step": "sync_file",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "flushed": 1
+      }
+    },
+    {
+      "step": "lms_upload",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "receipt": {
+          "id": "4b4cc61a-1cdf-4294-8e46-1f4a3a6f6697",
+          "status": "submitted",
+          "bytes": 2048
+        }
+      }
+    },
+    {
+      "step": "submission_receipt",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "receipt": {
+          "id": "4b4cc61a-1cdf-4294-8e46-1f4a3a6f6697",
+          "status": "submitted",
+          "bytes": 2048
+        }
+      }
+    },
+    {
+      "step": "session_preserve",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "keys": [
+          "ai_sync_permitted",
+          "authenticated",
+          "battery_pct",
+          "chat_state",
+          "cursor_position",
+          "doc_versions",
+          "focus_mode",
+          "game_save",
+          "music_position",
+          "network",
+          "open_files",
+          "storage_used_pct",
+          "video_position"
+        ]
+      }
+    },
+    {
+      "step": "game_launch",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "user_journeys/evidence/pedestrian_pursuit_save.json",
+        "fixture": true
+      }
+    },
+    {
+      "step": "game_play",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "playing": true
+      }
+    },
+    {
+      "step": "game_save",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "user_journeys/evidence/pedestrian_pursuit_save.json",
+        "fixture": true
+      }
+    },
+    {
+      "step": "return_assignment",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "file": "assignment.odt",
+        "kind": "doc"
+      }
+    },
+    {
+      "step": "reopen_receipt",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "receipt": {
+          "id": "4b4cc61a-1cdf-4294-8e46-1f4a3a6f6697",
+          "status": "submitted",
+          "bytes": 2048
+        }
+      }
+    }
+  ],
+  "duration_ms": 12,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54008/health",
+    "lms": "http://127.0.0.1:54008/lms",
+    "imap": "http://127.0.0.1:54008/imap",
+    "smtp": "http://127.0.0.1:54008/smtp/send",
+    "caldav": "http://127.0.0.1:54008/caldav",
+    "webdav": "http://127.0.0.1:54008/webdav",
+    "matrix": "http://127.0.0.1:54008/matrix",
+    "webrtc": "http://127.0.0.1:54008/webrtc",
+    "ring": "http://127.0.0.1:54008/ring",
+    "mdm": "http://127.0.0.1:54008/mdm",
+    "sync": "http://127.0.0.1:54008/sync/queue"
+  },
+  "mock": false
+}

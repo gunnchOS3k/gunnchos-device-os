@@ -1,0 +1,82 @@
+{
+  "id": "J-AI-003",
+  "persona": "P04",
+  "goal": "AI lesson assist offline",
+  "class": "educator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "waike",
+    "browser",
+    "libreoffice",
+    "messaging",
+    "gunnchai"
+  ],
+  "required_services": [
+    "webdav",
+    "matrix_dev",
+    "waike_local"
+  ],
+  "steps": [
+    {
+      "id": "go_offline",
+      "action": "go_offline",
+      "expected": "ok"
+    },
+    {
+      "id": "local_ai",
+      "action": "local_ai",
+      "expected": "ok"
+    },
+    {
+      "id": "lesson_help",
+      "action": "lesson_help",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "go_offline",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "local_ai",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "lesson_help",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-AI-003.json"
+  }
+}

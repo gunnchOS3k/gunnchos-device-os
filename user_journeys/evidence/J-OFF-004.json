@@ -1,0 +1,95 @@
+{
+  "journey_id": "J-OFF-004",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "vpn_connect",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "vpn": "wireguard_dev"
+      }
+    },
+    {
+      "step": "mount_share",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "mount": "webdav://local"
+      }
+    },
+    {
+      "step": "doc_open",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "file": "assignment.odt",
+        "kind": "doc"
+      }
+    },
+    {
+      "step": "net_loss",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "offline"
+      }
+    },
+    {
+      "step": "no_corruption",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "corrupt": false,
+        "data_loss": false
+      }
+    },
+    {
+      "step": "net_restore",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "online",
+        "flush": {
+          "ok": true,
+          "flushed": 0
+        }
+      }
+    },
+    {
+      "step": "save_safe",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false
+      }
+    }
+  ],
+  "duration_ms": 3,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54036/health",
+    "lms": "http://127.0.0.1:54036/lms",
+    "imap": "http://127.0.0.1:54036/imap",
+    "smtp": "http://127.0.0.1:54036/smtp/send",
+    "caldav": "http://127.0.0.1:54036/caldav",
+    "webdav": "http://127.0.0.1:54036/webdav",
+    "matrix": "http://127.0.0.1:54036/matrix",
+    "webrtc": "http://127.0.0.1:54036/webrtc",
+    "ring": "http://127.0.0.1:54036/ring",
+    "mdm": "http://127.0.0.1:54036/mdm",
+    "sync": "http://127.0.0.1:54036/sync/queue"
+  },
+  "mock": false
+}

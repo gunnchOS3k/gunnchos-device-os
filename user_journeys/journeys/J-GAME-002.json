@@ -1,0 +1,100 @@
+{
+  "id": "J-GAME-002",
+  "persona": "P09",
+  "goal": "Competitive session + overlay",
+  "class": "recreation",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "game_launch",
+      "action": "game_launch",
+      "expected": "ok"
+    },
+    {
+      "id": "overlay_safe",
+      "action": "overlay_safe",
+      "expected": "ok"
+    },
+    {
+      "id": "input_map",
+      "action": "input_map",
+      "expected": "ok"
+    },
+    {
+      "id": "audio_mix",
+      "action": "audio_mix",
+      "expected": "ok"
+    },
+    {
+      "id": "game_save",
+      "action": "game_save",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "game_launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "overlay_safe",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "input_map",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "audio_mix",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_save",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-GAME-002.json"
+  }
+}

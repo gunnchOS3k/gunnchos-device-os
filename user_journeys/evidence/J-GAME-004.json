@@ -1,0 +1,81 @@
+{
+  "journey_id": "J-GAME-004",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "music_study",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "kind": "music",
+          "source": "fixtures/study_track.wav",
+          "playing": true
+        }
+      }
+    },
+    {
+      "step": "game_launch",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "user_journeys/evidence/pedestrian_pursuit_save.json",
+        "fixture": true
+      }
+    },
+    {
+      "step": "audio_focus_policy",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "destroyed": false,
+        "ducked_db": -6.0
+      }
+    },
+    {
+      "step": "user_choice",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "user_choice"
+      }
+    },
+    {
+      "step": "game_save",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "user_journeys/evidence/pedestrian_pursuit_save.json",
+        "fixture": true
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

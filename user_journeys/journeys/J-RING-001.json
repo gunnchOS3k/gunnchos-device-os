@@ -1,0 +1,97 @@
+{
+  "id": "J-RING-001",
+  "persona": "P03",
+  "goal": "Simulated ring input to OS",
+  "class": "ring",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ring_bridge",
+    "browser"
+  ],
+  "required_services": [
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "ring_sim_connect",
+      "action": "ring_sim_connect",
+      "expected": "ok"
+    },
+    {
+      "id": "gesture_packet",
+      "action": "gesture_packet",
+      "expected": "ok"
+    },
+    {
+      "id": "os_receive",
+      "action": "os_receive",
+      "expected": "ok"
+    },
+    {
+      "id": "app_action",
+      "action": "app_action",
+      "expected": "ok"
+    },
+    {
+      "id": "latency_digital",
+      "action": "latency_digital",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "ring_sim_connect",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "gesture_packet",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "os_receive",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "app_action",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "latency_digital",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-RING-001.json"
+  }
+}

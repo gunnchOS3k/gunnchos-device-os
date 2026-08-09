@@ -1,0 +1,82 @@
+{
+  "journey_id": "J-STU-010",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "storage_pressure",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "storage_used_pct": 92.0,
+        "warn": true
+      }
+    },
+    {
+      "step": "warn_user",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "warned": true
+      }
+    },
+    {
+      "step": "cleanup_recs",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "recs": [
+          "clear_cache",
+          "remove_old_packs"
+        ]
+      }
+    },
+    {
+      "step": "user_file_safety",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "user_files_safe": true
+      }
+    },
+    {
+      "step": "update_reserve",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "reserve_protected": true
+      }
+    },
+    {
+      "step": "no_corrupt_saves",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}

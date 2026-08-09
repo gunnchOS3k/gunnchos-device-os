@@ -1,0 +1,107 @@
+{
+  "id": "J-OFF-010",
+  "persona": "P05",
+  "goal": "Update during work safety",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "work_open",
+      "action": "work_open",
+      "expected": "ok"
+    },
+    {
+      "id": "update_available",
+      "action": "update_available",
+      "expected": "ok"
+    },
+    {
+      "id": "defer_or_safe",
+      "action": "defer_or_safe",
+      "expected": "ok"
+    },
+    {
+      "id": "no_data_loss",
+      "action": "no_data_loss",
+      "expected": "ok"
+    },
+    {
+      "id": "resume_work",
+      "action": "resume_work",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "work_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "update_available",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "defer_or_safe",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_data_loss",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "resume_work",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-010.json"
+  }
+}

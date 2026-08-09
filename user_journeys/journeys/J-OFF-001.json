@@ -1,0 +1,217 @@
+{
+  "id": "J-OFF-001",
+  "persona": "P05",
+  "goal": "Office morning workflow",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "wake",
+      "action": "wake",
+      "expected": "ok"
+    },
+    {
+      "id": "auth",
+      "action": "auth",
+      "expected": "ok"
+    },
+    {
+      "id": "dock",
+      "action": "dock",
+      "expected": "ok"
+    },
+    {
+      "id": "ethernet",
+      "action": "ethernet",
+      "expected": "ok"
+    },
+    {
+      "id": "external_display",
+      "action": "external_display",
+      "expected": "ok"
+    },
+    {
+      "id": "browser",
+      "action": "browser",
+      "expected": "ok"
+    },
+    {
+      "id": "email",
+      "action": "email",
+      "expected": "ok"
+    },
+    {
+      "id": "calendar",
+      "action": "calendar",
+      "expected": "ok"
+    },
+    {
+      "id": "docx_edit",
+      "action": "docx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "xlsx_edit",
+      "action": "xlsx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "pptx_edit",
+      "action": "pptx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "pdf_export",
+      "action": "pdf_export",
+      "expected": "ok"
+    },
+    {
+      "id": "webrtc_call",
+      "action": "webrtc_call",
+      "expected": "ok"
+    },
+    {
+      "id": "screen_share",
+      "action": "screen_share",
+      "expected": "ok"
+    },
+    {
+      "id": "save_local",
+      "action": "save_local",
+      "expected": "ok"
+    },
+    {
+      "id": "share_files",
+      "action": "share_files",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "wake",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "auth",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "dock",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ethernet",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "external_display",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "email",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "calendar",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "docx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "xlsx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pptx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pdf_export",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "webrtc_call",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "screen_share",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "share_files",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-001.json"
+  }
+}

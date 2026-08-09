@@ -1,0 +1,40 @@
+"""Phase XI — Real-User Journey Completion + Product Experience Hardening.
+
+PHYSICAL_EXECUTION_FREEZE remains active. Tokens only earned when blocking
+journeys in a class PASS. SUCCESS_TOKEN_WITH_FAILED_USER_JOURNEY is FORBIDDEN.
+"""
+from __future__ import annotations
+
+CLAIM_BOUNDARY = (
+    "Phase XI digital user-journey lock only. "
+    "No physical EVT/DVT/PVT runtime/thermal/RF claims. "
+    "No commercial cloud credentials required. "
+    "Mocks only at irreducible physical/external boundaries."
+)
+
+TOKEN_STUDENT_DAY = "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS"
+TOKEN_OFFICE_DAY = "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS"
+TOKEN_CREATOR_DAY = "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS"
+TOKEN_RECREATION_DAY = "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS"
+TOKEN_EDUCATOR_DAY = "GUNNCHOS_REAL_EDUCATOR_DAY_DIGITAL_PASS"
+TOKEN_ADMIN_DAY = "GUNNCHOS_REAL_ADMIN_DAY_DIGITAL_PASS"
+TOKEN_A11Y = "GUNNCHOS_ACCESSIBILITY_JOURNEY_DIGITAL_PASS"
+TOKEN_OFFLINE = "GUNNCHOS_OFFLINE_DAY_DIGITAL_PASS"
+TOKEN_MULTITASK = "GUNNCHOS_MULTITASKING_DIGITAL_PASS"
+TOKEN_CONTEXT = "GUNNCHOS_CONTEXT_SWITCHING_DIGITAL_PASS"
+TOKEN_DIGITAL_LOCK = "GUNNCHOS_DIGITAL_RELEASE_LOCK_PASS"
+
+CLASS_TOKENS = {
+    "student": TOKEN_STUDENT_DAY,
+    "office": TOKEN_OFFICE_DAY,
+    "creator": TOKEN_CREATOR_DAY,
+    "recreation": TOKEN_RECREATION_DAY,
+    "educator": TOKEN_EDUCATOR_DAY,
+    "admin": TOKEN_ADMIN_DAY,
+    "a11y": TOKEN_A11Y,
+    "offline": TOKEN_OFFLINE,
+}
+
+# Journeys that gate multitasking / context-switching tokens
+MULTITASK_JOURNEYS = {"J-STU-003", "J-STU-004", "J-OFF-002", "J-OFF-003", "J-PERF-002", "J-GAME-004"}
+CONTEXT_JOURNEYS = {"J-STU-001", "J-OFF-008", "J-OFF-001", "J-REC-002", "J-HAND-001"}

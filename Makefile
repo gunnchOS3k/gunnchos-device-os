@@ -213,3 +213,14 @@ full-product-vii:
 		tests/test_runtime_ipc.py \
 		tests/test_bootable_reference_image.py
 	PYTHONPATH=.:src python3 -c "from gunnchos_device_os.app_runtime import AppRuntime; AppRuntime().export_overlay_runtime()"
+
+
+# Phase XI real-user journey campaign (digital; PHYSICAL_EXECUTION_FREEZE intact)
+phase-xi-journeys:
+	PYTHONPATH=.:src python3 -m gunnchos_device_os.phase_xi.campaign
+
+phase-xi-representative:
+	PYTHONPATH=.:src python3 -m gunnchos_device_os.phase_xi.campaign --representative
+
+phase-xi-test:
+	PYTHONPATH=.:src pytest -q tests/test_phase_xi_user_journeys.py

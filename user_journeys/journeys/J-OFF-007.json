@@ -1,0 +1,157 @@
+{
+  "id": "J-OFF-007",
+  "persona": "P06",
+  "goal": "Remote worker meeting resilience",
+  "class": "office",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "wifi_home",
+      "action": "wifi_home",
+      "expected": "ok"
+    },
+    {
+      "id": "vpn_connect",
+      "action": "vpn_connect",
+      "expected": "ok"
+    },
+    {
+      "id": "email",
+      "action": "email",
+      "expected": "ok"
+    },
+    {
+      "id": "calendar",
+      "action": "calendar",
+      "expected": "ok"
+    },
+    {
+      "id": "webrtc_call",
+      "action": "webrtc_call",
+      "expected": "ok"
+    },
+    {
+      "id": "screen_share",
+      "action": "screen_share",
+      "expected": "ok"
+    },
+    {
+      "id": "headset_switch",
+      "action": "headset_switch",
+      "expected": "ok"
+    },
+    {
+      "id": "net_degrade",
+      "action": "net_degrade",
+      "expected": "ok"
+    },
+    {
+      "id": "meeting_adapt",
+      "action": "meeting_adapt",
+      "expected": "ok"
+    },
+    {
+      "id": "files_preserved",
+      "action": "files_preserved",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "wifi_home",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "vpn_connect",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "email",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "calendar",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "webrtc_call",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "screen_share",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "headset_switch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "net_degrade",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "meeting_adapt",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "files_preserved",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-007.json"
+  }
+}

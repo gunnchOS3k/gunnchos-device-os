@@ -1,0 +1,89 @@
+{
+  "id": "J-FAMILY-001",
+  "persona": "P15",
+  "goal": "Family time limits digital",
+  "class": "security",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "auth",
+    "update_client",
+    "audit"
+  ],
+  "required_services": [
+    "auth_local",
+    "update_dev"
+  ],
+  "steps": [
+    {
+      "id": "profile_child",
+      "action": "profile_child",
+      "expected": "ok"
+    },
+    {
+      "id": "time_limit",
+      "action": "time_limit",
+      "expected": "ok"
+    },
+    {
+      "id": "enforce",
+      "action": "enforce",
+      "expected": "ok"
+    },
+    {
+      "id": "no_data_loss",
+      "action": "no_data_loss",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "profile_child",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "time_limit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "enforce",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_data_loss",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-FAMILY-001.json"
+  }
+}

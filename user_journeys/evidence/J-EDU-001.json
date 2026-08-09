@@ -1,0 +1,122 @@
+{
+  "journey_id": "J-EDU-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "edu_login",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "edu_login"
+      }
+    },
+    {
+      "step": "waike_open",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "app": "waike"
+      }
+    },
+    {
+      "step": "lesson_browse",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "lesson_browse"
+      }
+    },
+    {
+      "step": "prepare_material",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "prepare_material"
+      }
+    },
+    {
+      "step": "share_pdf",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "path": "shared.odt",
+        "version": 1,
+        "share": "webdav://local/shared.odt?v=1"
+      }
+    },
+    {
+      "step": "learner_progress",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "learner_progress"
+      }
+    },
+    {
+      "step": "class_message",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "message": {
+          "id": "c8f66450-262b-45eb-8f39-f76247600157",
+          "room": "!class",
+          "body": "please review webdav://local/shared.odt?v=1",
+          "from": "user"
+        }
+      }
+    },
+    {
+      "step": "dock_present",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "dock_present"
+      }
+    },
+    {
+      "step": "export_report",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "export_report"
+      }
+    },
+    {
+      "step": "no_private_leak",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "no_private_leak"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:53920/health",
+    "lms": "http://127.0.0.1:53920/lms",
+    "imap": "http://127.0.0.1:53920/imap",
+    "smtp": "http://127.0.0.1:53920/smtp/send",
+    "caldav": "http://127.0.0.1:53920/caldav",
+    "webdav": "http://127.0.0.1:53920/webdav",
+    "matrix": "http://127.0.0.1:53920/matrix",
+    "webrtc": "http://127.0.0.1:53920/webrtc",
+    "ring": "http://127.0.0.1:53920/ring",
+    "mdm": "http://127.0.0.1:53920/mdm",
+    "sync": "http://127.0.0.1:53920/sync/queue"
+  },
+  "mock": false
+}
