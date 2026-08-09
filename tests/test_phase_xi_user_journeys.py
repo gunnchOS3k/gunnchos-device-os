@@ -59,7 +59,7 @@ def test_student_day_journey_passes():
 
 
 def test_representative_ci_suite_passes():
-    report = run_campaign(root=ROOT, representative=True, write=True)
+    report = run_campaign(root=ROOT, representative=True, write=False)
     assert report["totals"]["FAIL"] == 0, report["results"]
     for jid in REPRESENTATIVE_CI:
         row = next(r for r in report["results"] if r["id"] == jid)
