@@ -2,7 +2,7 @@
   "schema": "gunnchos.accepted_main_baseline.v1",
   "phase": "XII",
   "phase_name": "Execution-Reality Conversion",
-  "recorded_at": "2026-08-09T22:56:21Z",
+  "recorded_at": "2026-08-09T23:37:24Z",
   "physical_execution_freeze": true,
   "accepted_phase_xi": {
     "device_os_pr": 70,
@@ -17,20 +17,25 @@
   },
   "claim_correction": {
     "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
-    "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN"
+    "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN",
+    "REAL_APP_X0_OPEN": 0,
+    "REAL_APP_X1_OPEN": 5,
+    "REAL_APP_X2_OPEN": 0,
+    "REAL_DAY_DIGITAL_PASS": false,
+    "x1_residuals": "artifacts/phase_xii/CI_X1_RESIDUALS.json"
   },
   "repos": {
     "gunnchos-device-os": {
-      "sha": "faf9b32642fb84c27f1b347b466cdf6bc147c1b8",
-      "subject": "Merge pull request #70 from gunnchOS3k/phase-xi/user-journey-hardening",
+      "sha": "ce101bd2fece09f2af3cb4c44eb76b7a5b158b95",
+      "subject": "Merge pull request #71 from gunnchOS3k/phase-xii/execution-reality",
       "ref": "origin/main",
-      "pr": 70
+      "pr": 71
     },
     "gunnchos-7gc-ai-ran-field-kit": {
-      "sha": "003de0e165c7fa73b2a457f61ca3b292a3a61f05",
-      "subject": "Merge pull request #45 from gunnchOS3k/phase-xi/user-journey-evidence",
+      "sha": "964217947a78197e621a4d2eb01628d5cf5a5558",
+      "subject": "Merge pull request #46 from gunnchOS3k/phase-xii/execution-reality",
       "ref": "origin/main",
-      "pr": 45
+      "pr": 46
     },
     "anime-aggressors": {
       "sha": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
@@ -81,5 +86,21 @@
   ],
   "cursor_never_merges": true,
   "auto_merge_request": null,
-  "test_without_fix": "FORBIDDEN"
+  "test_without_fix": "FORBIDDEN",
+  "accepted_phase_xii": {
+    "device_os_pr": 71,
+    "device_os_sha": "ce101bd2fece09f2af3cb4c44eb76b7a5b158b95",
+    "device_os_ci_fix": "8c5f2b08acdace7ff195b08b099aa73d1a030a48",
+    "field_kit_pr": 46,
+    "field_kit_sha": "964217947a78197e621a4d2eb01628d5cf5a5558",
+    "merged": true
+  },
+  "stale_draft_tips_retired": [
+    {
+      "label": "phase_xii_device_os_draft",
+      "sha": "ce604c23d75c168db589a574159864d456194879",
+      "status": "STALE_SUPERSEDED_BY_MAIN",
+      "superseded_by": "ce101bd2fece09f2af3cb4c44eb76b7a5b158b95"
+    }
+  ]
 }

@@ -8,14 +8,14 @@ PHYSICAL_EXECUTION_FREEZE: ACTIVE
 ## Critical claim correction (preserved)
 ```
 PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS = TRUE
-PHASE_XI_REAL_APPLICATION_DAY_PROOF = PROVEN_VIA_PHASE_XII_RJ
+PHASE_XI_REAL_APPLICATION_DAY_PROOF = NOT_YET_PROVEN
 ```
 Phase XI 79 journey JSONs remain normative E2E specs. Phase XII replaces L0–L2 handlers with L3–L6 real execution for the RJ acceptance set.
 
 ## A. Accepted mains
-- device-os #70 `faf9b32642fb84c27f1b347b466cdf6bc147c1b8`
-- field-kit #45 `003de0e165c7fa73b2a457f61ca3b292a3a61f05`
-- Phase X field-kit #44 `b1ac56bb5f9ec4ccd3f6e086dfcc9429fb323b3d`
+- device-os #71 `ce101bd2fece09f2af3cb4c44eb76b7a5b158b95` (includes CI fix `8c5f2b08acdace7ff195b08b099aa73d1a030a48`)
+- field-kit #46 `964217947a78197e621a4d2eb01628d5cf5a5558`
+- Stale draft tip `ce604c23…` retired (not accepted main)
 Full pin: `artifacts/phase_xii/ACCEPTED_MAIN_BASELINE.json`
 
 ## B. Execution-depth ledger summary
@@ -149,8 +149,12 @@ See campaign defects list (initially AI/office/godot/caldav/creator gaps on firs
 - LibreOffice + Godot host install for local prove
 
 ## R. Remaining digital defects
-Open X0/X1/X2 for RJ set: **0** on latest campaign.  
-Residual: fuller Matrix homeserver (Conduit compose), richer dual-display GUI on CI, Playwright gallery completeness on macOS hosts without weston.
+Open counts (CI-honest): **X0=0, X1=5, X2=0**.
+X1 residuals are **CONDITIONAL_EXTERNAL**:
+- RJ-GAME-001..004 — Godot / sibling game repos missing on CI runners
+- RJ-STUDENT-001 — llama/AI runtime and/or composite overlay masking journey FAIL
+See `CI_X1_RESIDUALS.json`. `reality` job may exit 0 when X0==0; that must not be read as X1=0.
+REAL_*_DAY_DIGITAL_PASS = **FALSE** while X1 residuals remain.
 
 ## S. Physical EVT followups
 Unchanged Phase X A01–A07 packets; PHYSICAL_PENDING.
@@ -162,7 +166,7 @@ EXTERNAL_PENDING (RFQ/NDA/send still Edmund-only).
 DRAFT PRs only; `autoMergeRequest=null`. Primary: device-os; field-kit evidence/firewall LAST.
 
 ## V. Final tokens and exact scope
-Behavioral harness tokens preserved. REAL_*_DAY_DIGITAL_PASS now means RJ actual application execution with X0/X1/X2 open = 0.
+Behavioral harness tokens preserved. REAL_*_DAY_DIGITAL_PASS remains FALSE while CI X1 residuals are open (CONDITIONAL_EXTERNAL). Full pass still requires X0/X1/X2 open = 0 on accepted evidence.
 
 ## W. Definition-of-done matrix
 ```
@@ -174,13 +178,13 @@ Behavioral harness tokens preserved. REAL_*_DAY_DIGITAL_PASS now means RJ actual
   "Productivity apps": "COMPLETE_DIGITAL",
   "Communication stack": "COMPLETE_DIGITAL",
   "Media stack": "COMPLETE_DIGITAL",
-  "gunnchAI": "COMPLETE_DIGITAL",
-  "Games": "COMPLETE_DIGITAL",
+  "gunnchAI": "COMPLETE_CONDITIONAL_EXTERNAL",
+  "Games": "COMPLETE_CONDITIONAL_EXTERNAL",
   "Ring digital input": "COMPLETE_DIGITAL",
   "Hardware digital design": "COMPLETE_CONDITIONAL_EXTERNAL",
   "Manufacturer package": "COMPLETE_CONDITIONAL_EXTERNAL",
   "NPI/RFQ package": "COMPLETE_CONDITIONAL_EXTERNAL",
-  "Real-app user journeys": "COMPLETE_DIGITAL",
+  "Real-app user journeys": "COMPLETE_CONDITIONAL_EXTERNAL",
   "Physical EVT": "PHYSICAL_PENDING",
   "Vendor collateral": "EXTERNAL_PENDING",
   "DFM": "EXTERNAL_PENDING",
