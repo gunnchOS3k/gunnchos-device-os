@@ -1,0 +1,508 @@
+{
+  "schema": "gunnchos.factory_line.v1",
+  "ok": true,
+  "token": "GUNNCHOS_FACTORY_LINE_DIGITAL_PASS",
+  "products": {
+    "student": {
+      "ok": true,
+      "steps": [
+        {
+          "step": "scan_serial",
+          "ok": true,
+          "serial": "GCH-STUDENT-800e5442"
+        },
+        {
+          "step": "identify_board",
+          "ok": true,
+          "board_id": "6dd591a6bef3"
+        },
+        {
+          "step": "flash_fw",
+          "ok": true,
+          "image": "dev-fw.bin",
+          "production_keys": false
+        },
+        {
+          "step": "install_os",
+          "ok": true,
+          "image": "gunnchos-ref-initramfs.cpio.gz"
+        },
+        {
+          "step": "provision_dev_identity",
+          "ok": true,
+          "realm": "DEV"
+        },
+        {
+          "step": "tests",
+          "ok": true
+        },
+        {
+          "step": "calibration",
+          "ok": true,
+          "mode": "digital_sim"
+        },
+        {
+          "step": "update_recovery",
+          "ok": true,
+          "ab_slots": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "step": "label_metadata",
+          "ok": true,
+          "label": {
+            "serial": "GCH-STUDENT-800e5442",
+            "sku": "student",
+            "hw_rev": "EVT1-SIM",
+            "sw_rev": "0.9.0-cont-ix",
+            "station": "FTS-IX-001",
+            "timestamp": 1786310935.469607
+          }
+        }
+      ],
+      "measurements": [
+        {
+          "name": "boot_probe_ms",
+          "value": 410.0,
+          "unit": "ms",
+          "limit_low": 0,
+          "limit_high": 5000,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "storage_gb",
+          "value": 128.0,
+          "unit": "GB",
+          "limit_low": 64,
+          "limit_high": 2048,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "wifi_scan_count",
+          "value": 3.0,
+          "unit": "count",
+          "limit_low": 1,
+          "limit_high": 64,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "ring_calibrate_ok",
+          "value": 1.0,
+          "unit": "bool",
+          "limit_low": 1,
+          "limit_high": 1,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "battery_discharge_c_rate",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 1,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        },
+        {
+          "name": "thermal_soc_c",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 85,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        }
+      ],
+      "label": {
+        "serial": "GCH-STUDENT-800e5442",
+        "sku": "student",
+        "hw_rev": "EVT1-SIM",
+        "sw_rev": "0.9.0-cont-ix",
+        "station": "FTS-IX-001",
+        "timestamp": 1786310935.469607
+      }
+    },
+    "ds_xl": {
+      "ok": true,
+      "steps": [
+        {
+          "step": "scan_serial",
+          "ok": true,
+          "serial": "GCH-DS_XL-483e2b2d"
+        },
+        {
+          "step": "identify_board",
+          "ok": true,
+          "board_id": "59b884c90059"
+        },
+        {
+          "step": "flash_fw",
+          "ok": true,
+          "image": "dev-fw.bin",
+          "production_keys": false
+        },
+        {
+          "step": "install_os",
+          "ok": true,
+          "image": "gunnchos-ref-initramfs.cpio.gz"
+        },
+        {
+          "step": "provision_dev_identity",
+          "ok": true,
+          "realm": "DEV"
+        },
+        {
+          "step": "tests",
+          "ok": true
+        },
+        {
+          "step": "calibration",
+          "ok": true,
+          "mode": "digital_sim"
+        },
+        {
+          "step": "update_recovery",
+          "ok": true,
+          "ab_slots": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "step": "label_metadata",
+          "ok": true,
+          "label": {
+            "serial": "GCH-DS_XL-483e2b2d",
+            "sku": "ds_xl",
+            "hw_rev": "EVT1-SIM",
+            "sw_rev": "0.9.0-cont-ix",
+            "station": "FTS-IX-001",
+            "timestamp": 1786310935.4696257
+          }
+        }
+      ],
+      "measurements": [
+        {
+          "name": "boot_probe_ms",
+          "value": 410.0,
+          "unit": "ms",
+          "limit_low": 0,
+          "limit_high": 5000,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "storage_gb",
+          "value": 512.0,
+          "unit": "GB",
+          "limit_low": 64,
+          "limit_high": 2048,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "wifi_scan_count",
+          "value": 3.0,
+          "unit": "count",
+          "limit_low": 1,
+          "limit_high": 64,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "ring_calibrate_ok",
+          "value": 1.0,
+          "unit": "bool",
+          "limit_low": 1,
+          "limit_high": 1,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "battery_discharge_c_rate",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 1,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        },
+        {
+          "name": "thermal_soc_c",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 85,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        }
+      ],
+      "label": {
+        "serial": "GCH-DS_XL-483e2b2d",
+        "sku": "ds_xl",
+        "hw_rev": "EVT1-SIM",
+        "sw_rev": "0.9.0-cont-ix",
+        "station": "FTS-IX-001",
+        "timestamp": 1786310935.4696257
+      }
+    },
+    "handheld": {
+      "ok": true,
+      "steps": [
+        {
+          "step": "scan_serial",
+          "ok": true,
+          "serial": "GCH-HANDHELD-ad7968cc"
+        },
+        {
+          "step": "identify_board",
+          "ok": true,
+          "board_id": "ef0e34975c74"
+        },
+        {
+          "step": "flash_fw",
+          "ok": true,
+          "image": "dev-fw.bin",
+          "production_keys": false
+        },
+        {
+          "step": "install_os",
+          "ok": true,
+          "image": "gunnchos-ref-initramfs.cpio.gz"
+        },
+        {
+          "step": "provision_dev_identity",
+          "ok": true,
+          "realm": "DEV"
+        },
+        {
+          "step": "tests",
+          "ok": true
+        },
+        {
+          "step": "calibration",
+          "ok": true,
+          "mode": "digital_sim"
+        },
+        {
+          "step": "update_recovery",
+          "ok": true,
+          "ab_slots": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "step": "label_metadata",
+          "ok": true,
+          "label": {
+            "serial": "GCH-HANDHELD-ad7968cc",
+            "sku": "handheld",
+            "hw_rev": "EVT1-SIM",
+            "sw_rev": "0.9.0-cont-ix",
+            "station": "FTS-IX-001",
+            "timestamp": 1786310935.4696522
+          }
+        }
+      ],
+      "measurements": [
+        {
+          "name": "boot_probe_ms",
+          "value": 410.0,
+          "unit": "ms",
+          "limit_low": 0,
+          "limit_high": 5000,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "storage_gb",
+          "value": 128.0,
+          "unit": "GB",
+          "limit_low": 64,
+          "limit_high": 2048,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "wifi_scan_count",
+          "value": 3.0,
+          "unit": "count",
+          "limit_low": 1,
+          "limit_high": 64,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "ring_calibrate_ok",
+          "value": 1.0,
+          "unit": "bool",
+          "limit_low": 1,
+          "limit_high": 1,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "battery_discharge_c_rate",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 1,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        },
+        {
+          "name": "thermal_soc_c",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 85,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        }
+      ],
+      "label": {
+        "serial": "GCH-HANDHELD-ad7968cc",
+        "sku": "handheld",
+        "hw_rev": "EVT1-SIM",
+        "sw_rev": "0.9.0-cont-ix",
+        "station": "FTS-IX-001",
+        "timestamp": 1786310935.4696522
+      }
+    },
+    "dock_host": {
+      "ok": true,
+      "steps": [
+        {
+          "step": "scan_serial",
+          "ok": true,
+          "serial": "GCH-DOCK_HOST-74ecc4f8"
+        },
+        {
+          "step": "identify_board",
+          "ok": true,
+          "board_id": "7ef158998b56"
+        },
+        {
+          "step": "flash_fw",
+          "ok": true,
+          "image": "dev-fw.bin",
+          "production_keys": false
+        },
+        {
+          "step": "install_os",
+          "ok": true,
+          "image": "gunnchos-ref-initramfs.cpio.gz"
+        },
+        {
+          "step": "provision_dev_identity",
+          "ok": true,
+          "realm": "DEV"
+        },
+        {
+          "step": "tests",
+          "ok": true
+        },
+        {
+          "step": "calibration",
+          "ok": true,
+          "mode": "digital_sim"
+        },
+        {
+          "step": "update_recovery",
+          "ok": true,
+          "ab_slots": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "step": "label_metadata",
+          "ok": true,
+          "label": {
+            "serial": "GCH-DOCK_HOST-74ecc4f8",
+            "sku": "dock_host",
+            "hw_rev": "EVT1-SIM",
+            "sw_rev": "0.9.0-cont-ix",
+            "station": "FTS-IX-001",
+            "timestamp": 1786310935.4696734
+          }
+        }
+      ],
+      "measurements": [
+        {
+          "name": "boot_probe_ms",
+          "value": 410.0,
+          "unit": "ms",
+          "limit_low": 0,
+          "limit_high": 5000,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "storage_gb",
+          "value": 128.0,
+          "unit": "GB",
+          "limit_low": 64,
+          "limit_high": 2048,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "wifi_scan_count",
+          "value": 3.0,
+          "unit": "count",
+          "limit_low": 1,
+          "limit_high": 64,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "ring_calibrate_ok",
+          "value": 1.0,
+          "unit": "bool",
+          "limit_low": 1,
+          "limit_high": 1,
+          "status": "PASS",
+          "physical": false
+        },
+        {
+          "name": "battery_discharge_c_rate",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 1,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        },
+        {
+          "name": "thermal_soc_c",
+          "value": 0.0,
+          "unit": "C",
+          "limit_low": 0,
+          "limit_high": 85,
+          "status": "MEASUREMENT_PENDING",
+          "physical": true
+        }
+      ],
+      "label": {
+        "serial": "GCH-DOCK_HOST-74ecc4f8",
+        "sku": "dock_host",
+        "hw_rev": "EVT1-SIM",
+        "sw_rev": "0.9.0-cont-ix",
+        "station": "FTS-IX-001",
+        "timestamp": 1786310935.4696734
+      }
+    }
+  },
+  "production_private_keys_in_repo": [],
+  "simulated_hal": true,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

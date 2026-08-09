@@ -1,0 +1,48 @@
+{
+  "schema": "gunnchos.ring_app_e2e.v1",
+  "ok": true,
+  "token": "GUNNCHOS_RING_APP_E2E_DIGITAL_PASS",
+  "surfaces": {
+    "document_typing": {
+      "ok": true,
+      "mapping": {
+        "gesture": "swipe",
+        "action": "caret_move_or_type"
+      }
+    },
+    "browser_pointer": {
+      "ok": true,
+      "mapping": {
+        "gesture": "point",
+        "action": "cursor_move_click"
+      }
+    },
+    "pdf_scroll": {
+      "ok": true,
+      "mapping": {
+        "gesture": "scroll_ring",
+        "action": "page_scroll"
+      }
+    },
+    "ide_shortcut": {
+      "ok": true,
+      "mapping": {
+        "gesture": "double_tap",
+        "action": "run_build"
+      }
+    },
+    "game_input": {
+      "ok": true,
+      "mapping": {
+        "gesture": "tilt",
+        "action": "look_or_steer"
+      },
+      "ergonomic": true
+    }
+  },
+  "adapter_test_present": true,
+  "physical_ring": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

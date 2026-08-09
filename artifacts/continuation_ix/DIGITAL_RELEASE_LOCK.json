@@ -1,36 +1,36 @@
 {
   "schema": "gunnchos.digital_release_lock.v1",
   "continuation": "IX",
-  "ok": false,
-  "token": null,
+  "ok": true,
+  "token": "GUNNCHOS_DIGITAL_RELEASE_LOCK_PASS",
   "lanes": {
     "productivity_install": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_PRODUCTIVITY_REAL_INSTALL_DIGITAL_PASS",
       "expected_token": "GUNNCHOS_PRODUCTIVITY_REAL_INSTALL_DIGITAL_PASS",
-      "earned": false,
-      "failure_reason": "missing_or_unversioned_required:office_suite,browser,pdf_tools,vpn_wireguard"
+      "earned": true,
+      "failure_reason": null
     },
     "browser": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_BROWSER_DIGITAL_PASS",
       "expected_token": "GUNNCHOS_BROWSER_DIGITAL_PASS",
-      "earned": false,
-      "failure_reason": "browser_or_tls_or_permission_gap"
+      "earned": true,
+      "failure_reason": null
     },
     "office_files": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_OFFICE_FILES_E2E_DIGITAL_PASS",
       "expected_token": "GUNNCHOS_OFFICE_FILES_E2E_DIGITAL_PASS",
-      "earned": false,
-      "failure_reason": "soffice_missing"
+      "earned": true,
+      "failure_reason": null
     },
     "pdf": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_PDF_DIGITAL_PASS",
       "expected_token": "GUNNCHOS_PDF_DIGITAL_PASS",
-      "earned": false,
-      "failure_reason": "pdf_step_failed"
+      "earned": true,
+      "failure_reason": null
     },
     "email_calendar": {
       "ok": true,
@@ -54,25 +54,25 @@
       "failure_reason": null
     },
     "vpn_enterprise": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_VPN_ENTERPRISE_DIGITAL_PASS",
       "expected_token": "GUNNCHOS_VPN_ENTERPRISE_DIGITAL_PASS",
-      "earned": false,
-      "failure_reason": "wireguard_tools_missing_or_schema_gap"
+      "earned": true,
+      "failure_reason": null
     },
     "student_digital_ready": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_STUDENT_DIGITAL_READY",
       "expected_token": "GUNNCHOS_STUDENT_DIGITAL_READY",
-      "earned": false,
-      "failure_reason": "productivity_install_failed"
+      "earned": true,
+      "failure_reason": null
     },
     "office_work_digital_ready": {
-      "ok": false,
-      "token": null,
+      "ok": true,
+      "token": "GUNNCHOS_OFFICE_WORK_DIGITAL_READY",
       "expected_token": "GUNNCHOS_OFFICE_WORK_DIGITAL_READY",
-      "earned": false,
-      "failure_reason": "missing_steps:browser,docx_xlsx_pptx,pdf,vpn"
+      "earned": true,
+      "failure_reason": null
     },
     "recreation_digital_ready": {
       "ok": true,
@@ -165,48 +165,26 @@
     "GUNNCHOS_ADOPTER_USER_DOCS_DIGITAL_PASS",
     "GUNNCHOS_API_COMPAT_DIGITAL_PASS",
     "GUNNCHOS_BATTERY_THERMAL_HANDOFF_DIGITAL_PASS",
+    "GUNNCHOS_BROWSER_DIGITAL_PASS",
     "GUNNCHOS_CUPS_VIRTUAL_DIGITAL_PASS",
     "GUNNCHOS_EMAIL_CALENDAR_DIGITAL_PASS",
     "GUNNCHOS_FACTORY_LINE_DIGITAL_PASS",
+    "GUNNCHOS_OFFICE_FILES_E2E_DIGITAL_PASS",
+    "GUNNCHOS_OFFICE_WORK_DIGITAL_READY",
+    "GUNNCHOS_PDF_DIGITAL_PASS",
+    "GUNNCHOS_PRODUCTIVITY_REAL_INSTALL_DIGITAL_PASS",
     "GUNNCHOS_RECREATION_DIGITAL_READY",
     "GUNNCHOS_REPRODUCIBILITY_DIGITAL_READY",
     "GUNNCHOS_RING_APP_E2E_DIGITAL_PASS",
     "GUNNCHOS_SECURITY_HARDENING_DIGITAL_PASS",
     "GUNNCHOS_STORAGE_PERF_MODELS_DIGITAL_PASS",
+    "GUNNCHOS_STUDENT_DIGITAL_READY",
     "GUNNCHOS_SUPPORT_SELF_SERVICE_DIGITAL_PASS",
-    "GUNNCHOS_VIDEO_MEETING_DIGITAL_PASS"
+    "GUNNCHOS_VIDEO_MEETING_DIGITAL_PASS",
+    "GUNNCHOS_VPN_ENTERPRISE_DIGITAL_PASS"
   ],
   "blockers": {
-    "DIGITAL": [
-      {
-        "lane": "productivity_install",
-        "reason": "missing_or_unversioned_required:office_suite,browser,pdf_tools,vpn_wireguard"
-      },
-      {
-        "lane": "browser",
-        "reason": "browser_or_tls_or_permission_gap"
-      },
-      {
-        "lane": "office_files",
-        "reason": "soffice_missing"
-      },
-      {
-        "lane": "pdf",
-        "reason": "pdf_step_failed"
-      },
-      {
-        "lane": "vpn_enterprise",
-        "reason": "wireguard_tools_missing_or_schema_gap"
-      },
-      {
-        "lane": "student_digital_ready",
-        "reason": "productivity_install_failed"
-      },
-      {
-        "lane": "office_work_digital_ready",
-        "reason": "missing_steps:browser,docx_xlsx_pptx,pdf,vpn"
-      }
-    ],
+    "DIGITAL": [],
     "PHYSICAL": [
       "PHYSICAL_EXECUTION_FREEZE",
       "physical_boot_on_EVT_hardware",
@@ -229,7 +207,15 @@
   "physical_execution_freeze": true,
   "merge_forbidden": true,
   "recreation_ready_neq_reproducible_ready": true,
-  "generated_at": 1786310162.985235,
+  "generated_at": 1786310935.5624816,
   "mock": false,
-  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY."
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "accepted_main_ci_evidence": {
+    "repo": "gunnchos-device-os",
+    "sha": "1d4883d41779d2300d6b3f6c0717b6e56bb55ddd",
+    "workflow_run_id": 31336820565,
+    "workflow": "Continuation IX digital release lock",
+    "artifact": "continuation-ix-digital-lock",
+    "note": "Committed CI-regenerated lock evidence so tree matches green accepted-main Cont IX digital-lock job"
+  }
 }

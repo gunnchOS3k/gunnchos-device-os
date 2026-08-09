@@ -1,0 +1,58 @@
+{
+  "schema": "gunnchos.security_hardening.v1",
+  "ok": true,
+  "token": "GUNNCHOS_SECURITY_HARDENING_DIGITAL_PASS",
+  "checks": {
+    "sast": {
+      "ok": true,
+      "path": "security/dev_ops/sast_hook.py"
+    },
+    "secret_scan": {
+      "ok": true,
+      "hits": []
+    },
+    "sbom": {
+      "ok": true,
+      "path": "os_build/reproducible_system_image/artifacts/sbom.cdx.json"
+    },
+    "package_hashes": {
+      "ok": true,
+      "hashes": {
+        "anime-aggressors-web": "7993757d2daeb9840a65b1c372f67c1e9e1824273ed3093e8444c450b33fed46",
+        "earth-species-web": "5f847b016c11082179aa869d10182c57c148973e90926e7f2739b07d12b6434e",
+        "foot-racing-web": "4ab11000db75d1994e2067767d708ec0c84d04b628bc3ce0f64e84c78542437d",
+        "beatlink-party-web": "c998b9b499e5860dac9f270008de90557c78ea5d58908402fe67872cf55ab93e"
+      }
+    },
+    "archive_provenance": {
+      "ok": true
+    },
+    "beatlink_rights": {
+      "ok": true,
+      "note": "rights metadata on package; no store claim"
+    },
+    "permission_bypass": {
+      "ok": true,
+      "decision": "deny"
+    },
+    "update_tamper": {
+      "ok": true,
+      "mode": "dev_signature_required",
+      "production_keys": false
+    },
+    "revoked_identity": {
+      "ok": true,
+      "revoked_rejected": true,
+      "realm": "DEV"
+    },
+    "ring_replay": {
+      "ok": true,
+      "nonce_required": true,
+      "physical_ring": false
+    }
+  },
+  "critical_defects": [],
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

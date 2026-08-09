@@ -1,0 +1,31 @@
+{
+  "schema": "gunnchos.email_calendar_e2e.v1",
+  "ok": true,
+  "token": "GUNNCHOS_EMAIL_CALENDAR_DIGITAL_PASS",
+  "client": null,
+  "pwa_fallback": true,
+  "smtp": {
+    "mode": "message_crafted_local",
+    "auth": false
+  },
+  "imap_schema": {
+    "host": "127.0.0.1",
+    "port": 1143,
+    "tls": false,
+    "auth": "DEV_PLAIN_UNUSED",
+    "credentials_in_repo": false
+  },
+  "caldav_carddav": {
+    "ok": true,
+    "port": 44951
+  },
+  "steps": {
+    "client_or_pwa": true,
+    "imap_smtp_local_path": true,
+    "caldav_carddav_dev": true,
+    "no_real_credentials": true
+  },
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}
