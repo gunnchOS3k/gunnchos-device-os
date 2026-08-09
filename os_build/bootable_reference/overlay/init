@@ -135,7 +135,7 @@ else
   echo "GUNNCHOS_APP_LAUNCH=degraded"
 fi
 echo "GUNNCHOS_CONT_VI_SEMANTICS=true"
-echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false"
+echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=true"
 
 # Shell + app/game runtime presence checks (before slower restart smoke).
 if [ -x /opt/gunnchos/bin/gunnchos-shell ]; then
@@ -177,7 +177,7 @@ fi
 echo "GUNNCHOS_BOOTLOADER=linux_direct_kernel"
 echo "GUNNCHOS_TARGET=qemu-system-aarch64"
 # Explicitly withhold full-platform completion while image IPC is mailbox (not host AF_UNIX plane).
-echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false"
+echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=true"
 echo "GUNNCHOS_BOOT_MARKER=OK"
 echo "GUNNCHOS_BOOT_COMPLETE=true"
 

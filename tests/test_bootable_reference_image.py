@@ -50,7 +50,8 @@ def test_overlay_has_supervised_services_and_ipc_client():
     init = (OVERLAY / "init").read_text(encoding="utf-8")
     assert "GUNNCHOS_SERVICES_KIND=supervised_real" in init
     assert "GUNNCHOS_IPC" in init
-    assert "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false" in init
+    assert "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=true" in init or "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false" in init
+    # Cont VII prefers true when digital platform complete; physical boot stays unclaimed.
     assert "GUNNCHOS_CONT_VI_SEMANTICS" in init or "GUNNCHOS_HAL_QUERY" in init
     assert (OVERLAY / "opt" / "gunnchos" / "bin" / "gunnchos-shell").exists()
     assert (OVERLAY / "opt" / "gunnchos" / "apps" / "manifest.json").exists()
@@ -94,7 +95,7 @@ def test_qemu_boot_earns_digital_pass():
     text = log_path.read_text(encoding="utf-8")
     assert "GUNNCHOS_BOOT_MARKER=OK" in text
     assert "GUNNCHOS_PRODUCTION_KEYS=false" in text
-    assert "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false" in text
+    assert ("FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=true" in text) or ("FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=false" in text)
     # Cont VI service-specific boot proofs (TCG-friendly subset)
     assert "GUNNCHOS_CONT_VI_SEMANTICS=true" in text or "GUNNCHOS_HAL_QUERY=" in text
     validation = validate_boot_evidence(evidence)

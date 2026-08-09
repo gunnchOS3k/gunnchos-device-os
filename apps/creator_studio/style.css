@@ -1,0 +1,11 @@
+:root { --bg:#111827; --panel:#1f2937; --fg:#f3f4f6; --accent:#34d399; }
+body { margin:0; background:linear-gradient(160deg,#0b1224,#111827 40%,#14532d22); color:var(--fg); font-family:"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace; }
+header { padding:1rem 1.25rem; }
+.layout { display:grid; grid-template-columns:240px 1fr 280px; gap:0.75rem; padding:0 1rem 1rem; min-height:70vh; }
+body.dsxl .layout { grid-template-columns:220px 1fr 1fr; }
+aside, section { background:var(--panel); border:1px solid #374151; padding:0.75rem; }
+textarea { width:100%; min-height:320px; background:#0b1020; color:var(--fg); border:1px solid #4b5563; padding:0.75rem; font:inherit; }
+button, select { background:var(--accent); color:#064e3b; border:0; padding:0.45rem 0.7rem; font-weight:700; cursor:pointer; margin-right:0.35rem; }
+pre { white-space:pre-wrap; font-size:0.8rem; max-height:220px; overflow:auto; }
+.row { margin-top:0.5rem; }
+@media (max-width:900px){ .layout { grid-template-columns:1fr; } }

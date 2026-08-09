@@ -3,7 +3,7 @@
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
 	runtime-services system-image full-product-iii \
 	cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom \
-	bootable-reference full-product-iv full-product-v full-product-vi
+	bootable-reference full-product-iv full-product-v full-product-vi full-product-vii
 
 PY := PYTHONPATH=src:.
 
@@ -157,3 +157,14 @@ full-product-vi:
 		tests/test_cloud_dev_plane_persistence.py \
 		tests/test_bootable_reference_image.py
 	PYTHONPATH=.:src python3 scripts/build_bootable_reference_image.py
+
+# FULL PRODUCT CONTINUATION VII — real packages + platform digital token
+full-product-vii:
+	PYTHONPATH=.:src pytest -q \
+		tests/test_continuation_vii_real_packages.py \
+		tests/test_continuation_vi_app_runtime.py \
+		tests/test_continuation_vi_ipc_semantics.py \
+		tests/test_continuation_vi_connectivity.py \
+		tests/test_runtime_ipc.py \
+		tests/test_bootable_reference_image.py
+	PYTHONPATH=.:src python3 -c "from gunnchos_device_os.app_runtime import AppRuntime; AppRuntime().export_overlay_runtime()"

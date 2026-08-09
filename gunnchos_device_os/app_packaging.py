@@ -53,11 +53,25 @@ FIRST_PARTY_APPS: tuple[AppPackage, ...] = (
         source_tree="apps/launcher_mock",
     ),
     AppPackage(
+        id="waike",
+        kind="first_party",
+        version="0.3.0-cont-vii",
+        entry="apps/waike_learning/index.html",
+        source_tree="apps/waike_learning",
+    ),
+    AppPackage(
+        id="creator_studio",
+        kind="first_party",
+        version="0.2.0-cont-vii",
+        entry="apps/creator_studio/index.html",
+        source_tree="apps/creator_studio",
+    ),
+    AppPackage(
         id="device_dashboard",
         kind="first_party",
-        version="0.1.0-dev",
-        entry="apps/device_dashboard_mock",
-        source_tree="apps/device_dashboard_mock",
+        version="0.2.0-cont-vii",
+        entry="apps/device_management/index.html",
+        source_tree="apps/device_management",
     ),
     AppPackage(
         id="gunnchai_tutor",
@@ -96,7 +110,7 @@ FIRST_PARTY_GAMES: tuple[AppPackage, ...] = (
     AppPackage(
         id="beatlink-party-web",
         kind="first_party_web_game",
-        version="0.1.0-dev",
+        version="0.2.0-digital-rc",
         entry="games/beatlink-party-web/index.html",
         controller_first=True,
         source_tree="games/beatlink-party-web",
@@ -161,6 +175,11 @@ class PackageManifestBuilder:
         app_rows = self._validate_sources(FIRST_PARTY_APPS)
         game_rows = self._validate_sources(FIRST_PARTY_GAMES)
         apps_ok = all(r["source_ok"] for r in app_rows if r["id"] != "gunnchai_tutor")
+        # Cont VII: device dashboard must not be the mock tree
+        apps_ok = apps_ok and not any(
+            r["id"] == "device_dashboard" and "device_dashboard_mock" in r.get("source_detail", "")
+            for r in app_rows
+        )
         # gunnchai_tutor is a stub entry — allowed without source tree
         games_ok = all(r["source_ok"] for r in game_rows)
         ok = apps_ok and games_ok and len(app_rows) >= 2 and len(game_rows) >= 4
