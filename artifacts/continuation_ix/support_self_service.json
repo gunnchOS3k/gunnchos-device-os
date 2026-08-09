@@ -1,0 +1,60 @@
+{
+  "schema": "gunnchos.support_self_service.v1",
+  "ok": true,
+  "token": "GUNNCHOS_SUPPORT_SELF_SERVICE_DIGITAL_PASS",
+  "bundle": "artifacts/continuation_ix/support/diagnostic_bundle.zip",
+  "system_info": {
+    "product": "gunnchOS Device OS",
+    "version": "0.9.0-cont-ix",
+    "platform": "Linux-6.17.0-1020-azure-x86_64-with-glibc2.39",
+    "python": "3.11.15",
+    "machine": "x86_64",
+    "realm": "DEV"
+  },
+  "tests": {
+    "network": {
+      "ok": true,
+      "loopback": true,
+      "carrier_claimed": false
+    },
+    "storage": {
+      "ok": true,
+      "writable": true
+    },
+    "update": {
+      "ok": true,
+      "ab_slots": [
+        "a",
+        "b"
+      ],
+      "production_keys": false
+    },
+    "ring": {
+      "ok": true,
+      "adapter_present": true,
+      "physical": false
+    },
+    "dock": {
+      "ok": true,
+      "sim": true,
+      "physical": false
+    }
+  },
+  "recovery": {
+    "factory_reset": {
+      "available": true,
+      "destructive": true,
+      "confirm_required": true
+    },
+    "recovery_slot": {
+      "available": true,
+      "slot": "b"
+    },
+    "safe_mode": {
+      "available": true
+    }
+  },
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "gunnchos.office_work_digital_ready.v1",
+  "ok": true,
+  "token": "GUNNCHOS_OFFICE_WORK_DIGITAL_READY",
+  "steps": [
+    "login",
+    "browser",
+    "docx_xlsx_pptx",
+    "pdf",
+    "email_calendar",
+    "webrtc",
+    "vpn",
+    "virtual_print",
+    "dock_transition",
+    "suspend_resume",
+    "save_reopen"
+  ],
+  "events": [
+    {
+      "step": "login",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1831214
+    },
+    {
+      "step": "browser",
+      "ok": true,
+      "detail": {
+        "token": "GUNNCHOS_BROWSER_DIGITAL_PASS"
+      },
+      "ts": 1786310935.1831234
+    },
+    {
+      "step": "docx_xlsx_pptx",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1831331
+    },
+    {
+      "step": "pdf",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1831343
+    },
+    {
+      "step": "email_calendar",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1831348
+    },
+    {
+      "step": "webrtc",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1831355
+    },
+    {
+      "step": "vpn",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.183136
+    },
+    {
+      "step": "virtual_print",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1831372
+    },
+    {
+      "step": "dock_transition",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1869924
+    },
+    {
+      "step": "suspend_resume",
+      "ok": true,
+      "detail": {
+        "physical": false
+      },
+      "ts": 1786310935.1988254
+    },
+    {
+      "step": "save_reopen",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310935.1989276
+    }
+  ],
+  "missing": [],
+  "deps": {
+    "install": true,
+    "browser": true,
+    "files": true,
+    "pdf": true,
+    "email": true,
+    "video": true,
+    "vpn": true,
+    "cups": true
+  },
+  "ms_fidelity_claimed": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

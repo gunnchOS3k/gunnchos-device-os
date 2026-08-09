@@ -1,0 +1,38 @@
+{
+  "schema": "gunnchos.cups_virtual.v1",
+  "ok": true,
+  "token": "GUNNCHOS_CUPS_VIRTUAL_DIGITAL_PASS",
+  "steps": {
+    "submit": true,
+    "queue": true,
+    "cancel": true,
+    "output": true,
+    "tools_present_or_virtual": true
+  },
+  "queue": [
+    {
+      "id": "dadadb22",
+      "state": "completed",
+      "file": "/tmp/gchos-cups-yq6y1j50/page.txt",
+      "output": "/tmp/gchos-cups-yq6y1j50/pdf-out/job-dadadb22.pdf"
+    },
+    {
+      "id": "d0b43c53",
+      "state": "cancelled",
+      "file": "/tmp/gchos-cups-yq6y1j50/page.txt"
+    }
+  ],
+  "lp": "/usr/bin/lp",
+  "lpstat": "/usr/bin/lpstat",
+  "cancel_bin": "/usr/bin/cancel",
+  "lp_submit": {
+    "attempted": true,
+    "ok": false,
+    "stdout": "",
+    "stderr": "/usr/bin/lp: Error - The printer or class does not exist.\n"
+  },
+  "physical_printer": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

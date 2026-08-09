@@ -1,0 +1,92 @@
+{
+  "schema": "gunnchos.storage_perf_models.v1",
+  "ok": true,
+  "token": "GUNNCHOS_STORAGE_PERF_MODELS_DIGITAL_PASS",
+  "budget": {
+    "os_base": 8.0,
+    "productivity": 4.5,
+    "games": 3.0,
+    "ai_models_local": 2.5,
+    "user_data_reserve": 16.0,
+    "update_ab_reserve_ratio": 0.35
+  },
+  "models": [
+    {
+      "sku": "student",
+      "capacity_gb": 256.0,
+      "needed_gb": 123.6,
+      "fits": true,
+      "storage": {
+        "capacity_gb": 256.0,
+        "used_gb": 123.6,
+        "free_gb": 132.4,
+        "free_ratio": 0.517
+      },
+      "memory": {
+        "ram_gb": 8.0,
+        "working_set_gb": 3.5,
+        "headroom_gb": 4.5,
+        "pressure": "low"
+      }
+    },
+    {
+      "sku": "ds_xl",
+      "capacity_gb": 512.0,
+      "needed_gb": 213.2,
+      "fits": true,
+      "storage": {
+        "capacity_gb": 512.0,
+        "used_gb": 213.2,
+        "free_gb": 298.8,
+        "free_ratio": 0.584
+      },
+      "memory": {
+        "ram_gb": 16.0,
+        "working_set_gb": 3.5,
+        "headroom_gb": 12.5,
+        "pressure": "low"
+      }
+    },
+    {
+      "sku": "handheld",
+      "capacity_gb": 128.0,
+      "needed_gb": 78.8,
+      "fits": true,
+      "storage": {
+        "capacity_gb": 128.0,
+        "used_gb": 78.8,
+        "free_gb": 49.2,
+        "free_ratio": 0.384
+      },
+      "memory": {
+        "ram_gb": 8.0,
+        "working_set_gb": 3.5,
+        "headroom_gb": 4.5,
+        "pressure": "low"
+      }
+    },
+    {
+      "sku": "dock_host",
+      "capacity_gb": 512.0,
+      "needed_gb": 213.2,
+      "fits": true,
+      "storage": {
+        "capacity_gb": 512.0,
+        "used_gb": 213.2,
+        "free_gb": 298.8,
+        "free_ratio": 0.584
+      },
+      "memory": {
+        "ram_gb": 16.0,
+        "working_set_gb": 3.5,
+        "headroom_gb": 12.5,
+        "pressure": "low"
+      }
+    }
+  ],
+  "failures": [],
+  "measured_physical": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

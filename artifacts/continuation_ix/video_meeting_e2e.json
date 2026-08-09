@@ -1,0 +1,62 @@
+{
+  "schema": "gunnchos.video_meeting_e2e.v1",
+  "ok": true,
+  "token": "GUNNCHOS_VIDEO_MEETING_DIGITAL_PASS",
+  "steps": {
+    "webrtc_capability": true,
+    "synthetic_camera": true,
+    "synthetic_mic": true,
+    "audio_sink": true,
+    "mute": true,
+    "permission_camera": true,
+    "permission_mic": true,
+    "screen_share_capability": true
+  },
+  "synthetic": {
+    "camera": {
+      "device": "v4l2-synthetic",
+      "frames": 30,
+      "muted": false
+    },
+    "microphone": {
+      "device": "pulse-synthetic",
+      "sample_rate": 48000,
+      "muted": true
+    },
+    "audio_sink": {
+      "device": "null-sink",
+      "muted": true
+    }
+  },
+  "permissions": {
+    "camera": {
+      "app_id": "meet.webrtc",
+      "permission": "camera",
+      "decision": "allow",
+      "role": "educator",
+      "reason": "least_privilege_allow",
+      "granted_at_ms": 1786310935175,
+      "expires_at_ms": null,
+      "mock": false
+    },
+    "microphone": {
+      "app_id": "meet.webrtc",
+      "permission": "microphone",
+      "decision": "allow",
+      "role": "educator",
+      "reason": "least_privilege_allow",
+      "granted_at_ms": 1786310935175,
+      "expires_at_ms": null,
+      "mock": false
+    },
+    "screen": {
+      "decision": "allow",
+      "capability": "screen_share_schema",
+      "synthetic": true
+    }
+  },
+  "physical_av_lab": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "gunnchos.reproducibility_digital_ready.v1",
+  "ok": true,
+  "token": "GUNNCHOS_REPRODUCIBILITY_DIGITAL_READY",
+  "base_reproducibility": {
+    "ok": true,
+    "token": "GUNNCHOS_REPRODUCIBILITY_DIGITAL_PASS"
+  },
+  "checks": {
+    "manifest_present": true,
+    "devcontainer_present": true,
+    "makefile_bootstrap": true,
+    "makefile_build": true,
+    "makefile_test": true,
+    "makefile_package": true,
+    "makefile_evidence": true,
+    "no_laptop_only_paths": true,
+    "no_embedded_prod_secrets": true,
+    "manifest_pinned_python": true,
+    "manifest_pinned_node": true,
+    "manifest_claims_no_host_secrets": true,
+    "path_device_os_qemu": true,
+    "path_ring_firmware_bridge": true,
+    "path_ai_service": true,
+    "path_games_packages": true,
+    "path_archive_db_export": true,
+    "path_beat_link": true,
+    "path_hardware_exports_public": true,
+    "path_devcontainer": true,
+    "path_ci_workflow": true
+  },
+  "software_repro": {
+    "device_os_qemu": true,
+    "ai_service": true,
+    "games": true,
+    "archive": true,
+    "beat_link": true,
+    "sdk": true
+  },
+  "restricted_vendor_hw": {
+    "separated": true,
+    "note": "Restricted-vendor HW exports are not required for software reproducibility token",
+    "physical_validation_pending": true
+  },
+  "laptop_hits": [],
+  "recreation_ready_conflated": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

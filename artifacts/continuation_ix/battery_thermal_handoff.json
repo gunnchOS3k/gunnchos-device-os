@@ -1,0 +1,96 @@
+{
+  "schema": "gunnchos.battery_thermal_handoff.v1",
+  "ok": true,
+  "token": "GUNNCHOS_BATTERY_THERMAL_HANDOFF_DIGITAL_PASS",
+  "models": [
+    {
+      "sku": "student",
+      "battery_wh_model": 40.0,
+      "idle_w": 2.5,
+      "active_w": 8.0,
+      "display_w": 3.0,
+      "battery_hours_model": 7.31,
+      "thermal_envelope_c_model": {
+        "idle": 35.0,
+        "active_warn": 70.0,
+        "shutdown": 90.0
+      },
+      "actual_values": "PHYSICAL"
+    },
+    {
+      "sku": "ds_xl",
+      "battery_wh_model": 55.0,
+      "idle_w": 3.5,
+      "active_w": 12.0,
+      "display_w": 5.5,
+      "battery_hours_model": 6.55,
+      "thermal_envelope_c_model": {
+        "idle": 35.0,
+        "active_warn": 70.0,
+        "shutdown": 90.0
+      },
+      "actual_values": "PHYSICAL"
+    },
+    {
+      "sku": "handheld",
+      "battery_wh_model": 25.0,
+      "idle_w": 1.8,
+      "active_w": 6.5,
+      "display_w": 2.2,
+      "battery_hours_model": 5.93,
+      "thermal_envelope_c_model": {
+        "idle": 35.0,
+        "active_warn": 70.0,
+        "shutdown": 90.0
+      },
+      "actual_values": "PHYSICAL"
+    },
+    {
+      "sku": "dock_host",
+      "battery_wh_model": 0.0,
+      "idle_w": 5.0,
+      "active_w": 18.0,
+      "display_w": 0.0,
+      "battery_hours_model": null,
+      "thermal_envelope_c_model": {
+        "idle": 35.0,
+        "active_warn": 70.0,
+        "shutdown": 90.0
+      },
+      "actual_values": "PHYSICAL"
+    }
+  ],
+  "evt_procedures": [
+    {
+      "id": "EVT-BAT-001",
+      "title": "Battery discharge curve at room ambient",
+      "status": "PHYSICAL_PENDING",
+      "instrumentation": [
+        "power_monitor",
+        "thermocouple"
+      ]
+    },
+    {
+      "id": "EVT-THM-001",
+      "title": "SoC surface temperature under office + game load",
+      "status": "PHYSICAL_PENDING",
+      "instrumentation": [
+        "IR_camera",
+        "thermocouple"
+      ]
+    },
+    {
+      "id": "EVT-THM-002",
+      "title": "Docked thermal with external display active",
+      "status": "PHYSICAL_PENDING",
+      "instrumentation": [
+        "thermocouple"
+      ]
+    }
+  ],
+  "doc": "docs/release/EVT_BATTERY_THERMAL_PROCEDURES.md",
+  "measured_physical": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

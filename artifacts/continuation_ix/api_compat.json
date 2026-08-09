@@ -1,0 +1,191 @@
+{
+  "schema": "gunnchos.api_compat.v1",
+  "ok": true,
+  "token": "GUNNCHOS_API_COMPAT_DIGITAL_PASS",
+  "current": {
+    "app_manifest": "1.2.0",
+    "permissions": "1.1.0",
+    "device_role": "1.0.0",
+    "ring_input": "1.3.0",
+    "ai": "1.0.0",
+    "connectivity": "1.1.0",
+    "telemetry": "1.0.0",
+    "fleet": "1.0.0",
+    "save_cloud": "1.0.0"
+  },
+  "deprecated": {
+    "app_manifest": [
+      "1.0.0",
+      "1.1.0"
+    ],
+    "ring_input": [
+      "1.0.0",
+      "1.1.0"
+    ]
+  },
+  "min_supported": {
+    "app_manifest": "1.0.0",
+    "permissions": "1.0.0",
+    "device_role": "1.0.0",
+    "ring_input": "1.0.0",
+    "ai": "1.0.0",
+    "connectivity": "1.0.0",
+    "telemetry": "1.0.0",
+    "fleet": "1.0.0",
+    "save_cloud": "1.0.0"
+  },
+  "cases": [
+    {
+      "case": "current",
+      "surface": "app_manifest",
+      "requested": "1.2.0",
+      "ok": true,
+      "negotiated": "1.2.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.2.0"
+    },
+    {
+      "case": "current",
+      "surface": "permissions",
+      "requested": "1.1.0",
+      "ok": true,
+      "negotiated": "1.1.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.1.0"
+    },
+    {
+      "case": "current",
+      "surface": "device_role",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.0.0"
+    },
+    {
+      "case": "current",
+      "surface": "ring_input",
+      "requested": "1.3.0",
+      "ok": true,
+      "negotiated": "1.3.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.3.0"
+    },
+    {
+      "case": "current",
+      "surface": "ai",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.0.0"
+    },
+    {
+      "case": "current",
+      "surface": "connectivity",
+      "requested": "1.1.0",
+      "ok": true,
+      "negotiated": "1.1.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.1.0"
+    },
+    {
+      "case": "current",
+      "surface": "telemetry",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.0.0"
+    },
+    {
+      "case": "current",
+      "surface": "fleet",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.0.0"
+    },
+    {
+      "case": "current",
+      "surface": "save_cloud",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "compatible",
+      "deprecation": false,
+      "current": "1.0.0"
+    },
+    {
+      "case": "deprecated",
+      "surface": "app_manifest",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "deprecated_accepted",
+      "deprecation": true,
+      "upgrade_to": "1.2.0"
+    },
+    {
+      "case": "deprecated",
+      "surface": "app_manifest",
+      "requested": "1.1.0",
+      "ok": true,
+      "negotiated": "1.1.0",
+      "compatibility": "deprecated_accepted",
+      "deprecation": true,
+      "upgrade_to": "1.2.0"
+    },
+    {
+      "case": "deprecated",
+      "surface": "ring_input",
+      "requested": "1.0.0",
+      "ok": true,
+      "negotiated": "1.0.0",
+      "compatibility": "deprecated_accepted",
+      "deprecation": true,
+      "upgrade_to": "1.3.0"
+    },
+    {
+      "case": "deprecated",
+      "surface": "ring_input",
+      "requested": "1.1.0",
+      "ok": true,
+      "negotiated": "1.1.0",
+      "compatibility": "deprecated_accepted",
+      "deprecation": true,
+      "upgrade_to": "1.3.0"
+    },
+    {
+      "case": "unsupported",
+      "surface": "app_manifest",
+      "requested": "0.0.1",
+      "ok": false,
+      "reason": "below_min_supported",
+      "min_supported": "1.0.0",
+      "compatibility": "incompatible"
+    }
+  ],
+  "migration": {
+    "from": "1.0.0",
+    "to": "1.2.0",
+    "surface": "app_manifest",
+    "steps": [
+      "update manifest schema",
+      "re-run negotiate",
+      "repackage"
+    ]
+  },
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}

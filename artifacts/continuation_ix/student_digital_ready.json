@@ -1,0 +1,187 @@
+{
+  "schema": "gunnchos.student_digital_ready.v1",
+  "ok": true,
+  "token": "GUNNCHOS_STUDENT_DIGITAL_READY",
+  "steps": [
+    "login",
+    "waike",
+    "lesson",
+    "pdf",
+    "notes",
+    "terminal",
+    "compile_run",
+    "gunnchai_tutor",
+    "save_export",
+    "offline",
+    "continue",
+    "resync"
+  ],
+  "events": [
+    {
+      "step": "login",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.5398579
+    },
+    {
+      "step": "waike",
+      "ok": true,
+      "detail": {
+        "entry": "apps/waike_learning/index.html"
+      },
+      "ts": 1786310930.539915
+    },
+    {
+      "step": "lesson",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.5399787
+    },
+    {
+      "step": "pdf",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.540032
+    },
+    {
+      "step": "notes",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.540121
+    },
+    {
+      "step": "terminal",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.5402455
+    },
+    {
+      "step": "compile_run",
+      "ok": true,
+      "detail": {
+        "stdout": "4\n"
+      },
+      "ts": 1786310930.6597857
+    },
+    {
+      "step": "gunnchai_tutor",
+      "ok": true,
+      "detail": {
+        "cloud": false
+      },
+      "ts": 1786310930.659993
+    },
+    {
+      "step": "save_export",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.660211
+    },
+    {
+      "step": "offline",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.663215
+    },
+    {
+      "step": "continue",
+      "ok": true,
+      "detail": {},
+      "ts": 1786310930.6633763
+    },
+    {
+      "step": "resync",
+      "ok": true,
+      "detail": {
+        "sync": {
+          "replica_id": "campus-sim",
+          "policy": "last_write_wins",
+          "results": [
+            {
+              "status": "synced",
+              "key": "notes.md",
+              "applied": "remote",
+              "mock": false
+            },
+            {
+              "status": "resolved",
+              "key": "notes.md",
+              "conflict": {
+                "key": "notes.md",
+                "local": {
+                  "key": "notes.md",
+                  "value": "- takeaway\n",
+                  "replica_id": "student-ix",
+                  "wall_time_ms": 1786310930663,
+                  "vector": {
+                    "student-ix": 1
+                  },
+                  "version": 1,
+                  "tombstone": false
+                },
+                "remote": {
+                  "key": "notes.md",
+                  "value": "- takeaway\n- continued offline\n",
+                  "replica_id": "student-ix",
+                  "wall_time_ms": 1786310930663,
+                  "vector": {
+                    "student-ix": 2
+                  },
+                  "version": 2,
+                  "tombstone": false
+                },
+                "policy": "last_write_wins",
+                "winner": "local",
+                "reason": "tie_break_replica_id"
+              },
+              "mock": false
+            }
+          ],
+          "store_size": 1,
+          "conflicts": [
+            {
+              "key": "notes.md",
+              "local": {
+                "key": "notes.md",
+                "value": "- takeaway\n",
+                "replica_id": "student-ix",
+                "wall_time_ms": 1786310930663,
+                "vector": {
+                  "student-ix": 1
+                },
+                "version": 1,
+                "tombstone": false
+              },
+              "remote": {
+                "key": "notes.md",
+                "value": "- takeaway\n- continued offline\n",
+                "replica_id": "student-ix",
+                "wall_time_ms": 1786310930663,
+                "vector": {
+                  "student-ix": 2
+                },
+                "version": 2,
+                "tombstone": false
+              },
+              "policy": "last_write_wins",
+              "winner": "local",
+              "reason": "tie_break_replica_id"
+            }
+          ],
+          "mock": false
+        }
+      },
+      "ts": 1786310930.6634943
+    }
+  ],
+  "missing": [],
+  "install": {
+    "ok": true,
+    "token": "GUNNCHOS_PRODUCTIVITY_REAL_INSTALL_DIGITAL_PASS",
+    "rootfs_staged": "os_build/productivity_rootfs/root"
+  },
+  "recreation_ready_conflated": false,
+  "mock": false,
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY.",
+  "failure_reason": null
+}
