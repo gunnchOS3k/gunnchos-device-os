@@ -13,7 +13,7 @@ Branched from PR #63 tip (`bd68181`) so the QEMU TCG / SQLite CI fix is included
    permission rejection, timeout, restart.
 3. **QEMU boot proofs**: HAL/display/dock/connectivity/AI/updater/fleet + app launch policy.
 4. **App runtime**: WAIKE, coding/creation, management/diagnostics, four games
-   (beatlink stub content OK; launch path real through sandbox/permissions).
+   (Cont VII replaces beatlink stub with accepted package; launch path real).
 5. **Connectivity**: `TerrestrialBearer`, `FutureNTNBearer` (no fake current NTN),
    `SimulatedNTNBearer`, `EthernetBearer`, `WiFiBearer`; RM520N-GL simulated fixture.
 6. **Fleet lifecycle**: restart, multi-instance, enroll/revoke, OTA/rollback campaigns,
@@ -36,3 +36,6 @@ make full-product-vi
 # or
 PYTHONPATH=.:src pytest -q tests/test_continuation_vi_*.py tests/test_bootable_reference_image.py
 ```
+
+
+> Cont VII supersedes the Cont VI allowance for Beat Link stub content and may earn `FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE` without physical boot.

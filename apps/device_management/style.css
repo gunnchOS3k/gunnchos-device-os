@@ -1,0 +1,9 @@
+:root { --bg:#020617; --card:#0f172a; --fg:#e2e8f0; --ok:#4ade80; --warn:#fbbf24; }
+body { margin:0; background:radial-gradient(900px 500px at 90% 0%, #1e3a8a55, transparent), var(--bg); color:var(--fg); font-family:"IBM Plex Sans", system-ui, sans-serif; }
+header, section { max-width:1100px; margin:0 auto; padding:1rem 1.25rem; }
+.cards { max-width:1100px; margin:0 auto; padding:0 1.25rem 1rem; display:grid; gap:0.75rem; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+.card { background:var(--card); border:1px solid #1e293b; padding:0.9rem; }
+.card h2 { margin:0 0 0.4rem; font-size:1rem; }
+.ok { color:var(--ok); } .warn { color:var(--warn); }
+button { background:#38bdf8; color:#0c4a6e; border:0; padding:0.5rem 0.8rem; font-weight:700; cursor:pointer; margin-right:0.4rem; }
+pre { background:#0f172a; border:1px solid #1e293b; padding:0.75rem; white-space:pre-wrap; }

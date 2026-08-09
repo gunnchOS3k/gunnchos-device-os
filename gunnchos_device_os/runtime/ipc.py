@@ -19,8 +19,9 @@ import urllib.request
 
 
 CLAIM_BOUNDARY = (
-    "DEV-realm local IPC only (Unix socket / local HTTP). Not D-Bus, not gRPC "
-    "production mesh, not FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE."
+    "DEV-realm local IPC (Unix socket / local HTTP). Not D-Bus and not a "
+    "production gRPC mesh. Sufficient for digital platform completeness when "
+    "robustness criteria pass (see ipc_robustness)."
 )
 
 TOKEN_IPC_PASS = "GUNNCHOS_RUNTIME_IPC_DIGITAL_PASS"

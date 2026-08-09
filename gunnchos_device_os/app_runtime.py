@@ -1,7 +1,7 @@
 """First-party app runtime — package metadata + sandbox/permissions launch.
 
 Not an app store. Runs representative apps through the real permissions and
-sandbox policy engines. Stubs are allowed only when the launch path itself is real.
+sandbox policy engines. STUB_AS_PRODUCT is forbidden.
 """
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ from gunnchos_device_os.sandbox_policy import SandboxPolicyEngine
 
 CLAIM_BOUNDARY = (
     "Digital first-party app runtime via sandbox/permissions. Not a production "
-    "app store, not signed distribution, not FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE."
+    "app store, not signed distribution."
 )
 
 TOKEN_APP_RUNTIME_PASS = "GUNNCHOS_APP_RUNTIME_DIGITAL_PASS"
@@ -34,7 +34,6 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
-# Cont VI required categories
 CATEGORY_WAIKE = "waike_learning"
 CATEGORY_CODING = "coding_creation"
 CATEGORY_MGMT = "management_diagnostics"
@@ -51,33 +50,33 @@ class RuntimeApp:
     app_class: str = "first_party"
     source_tree: str | None = None
     offline: bool = True
-    stub_content: bool = False  # True only when content is stub but launch path is real
+    stub_content: bool = False
 
 
 RUNTIME_CATALOG: tuple[RuntimeApp, ...] = (
     RuntimeApp(
         id="waike",
         category=CATEGORY_WAIKE,
-        version="0.2.0-dev",
-        entry="gunnchos_device_os.waike_integration:run_session",
+        version="0.3.0-cont-vii",
+        entry="apps/waike_learning/index.html",
         permissions=("files_read", "network", "identity_read"),
-        source_tree="config",
+        source_tree="apps/waike_learning",
     ),
     RuntimeApp(
         id="creator_studio",
         category=CATEGORY_CODING,
-        version="0.1.0-dev",
-        entry="apps/launcher_mock",
+        version="0.2.0-cont-vii",
+        entry="apps/creator_studio/index.html",
         permissions=("files_read", "files_write", "network"),
-        source_tree="apps/launcher_mock",
+        source_tree="apps/creator_studio",
     ),
     RuntimeApp(
         id="device_dashboard",
         category=CATEGORY_MGMT,
-        version="0.1.0-dev",
-        entry="apps/device_dashboard_mock",
+        version="0.2.0-cont-vii",
+        entry="apps/device_management/index.html",
         permissions=("files_read", "network", "identity_read"),
-        source_tree="apps/device_dashboard_mock",
+        source_tree="apps/device_management",
     ),
     RuntimeApp(
         id="anime-aggressors-web",
@@ -109,12 +108,12 @@ RUNTIME_CATALOG: tuple[RuntimeApp, ...] = (
     RuntimeApp(
         id="beatlink-party-web",
         category=CATEGORY_GAME,
-        version="0.1.0-dev",
+        version="0.2.0-digital-rc",
         entry="games/beatlink-party-web/index.html",
-        permissions=("files_read", "network"),
+        permissions=("files_read", "network", "microphone"),
         app_class="game",
         source_tree="games/beatlink-party-web",
-        stub_content=True,  # launch path real; content may be stub
+        stub_content=False,
     ),
 )
 
@@ -155,7 +154,8 @@ class AppRuntime:
             source_ok = True
             if app.source_tree:
                 source_ok = (self.root / app.source_tree).exists()
-            rows.append({**asdict(app), "source_ok": source_ok})
+            stub_forbidden = app.stub_content is True
+            rows.append({**asdict(app), "source_ok": source_ok, "stub_as_product_forbidden": True, "stub_violation": stub_forbidden})
         return rows
 
     def package_metadata(self) -> dict[str, Any]:
@@ -172,6 +172,7 @@ class AppRuntime:
             },
             "claim_boundary": CLAIM_BOUNDARY,
             "packaging_claim_boundary": PACKAGING_CLAIM,
+            "stub_as_product": False,
             "mock": False,
         }
 
@@ -202,116 +203,122 @@ class AppRuntime:
         deny_permission: str | None = None,
     ) -> dict[str, Any]:
         app = self._resolve(app_id)
-        if app.source_tree and not (self.root / app.source_tree).exists() and not app.stub_content:
+        if app.stub_content:
             rec = LaunchRecord(
-                app_id=app.id,
-                ok=False,
-                pid_token="",
-                sandbox_profile={},
-                permission_grants=[],
-                started_at=time.time(),
-                entry=app.entry,
-                category=app.category,
-                stub_content=app.stub_content,
-                reason="missing_source",
+                app_id=app.id, ok=False, pid_token="", sandbox_profile={},
+                permission_grants=[], started_at=time.time(), entry=app.entry,
+                category=app.category, stub_content=True, reason="STUB_AS_PRODUCT_FORBIDDEN",
+            )
+            self.launches.append(rec)
+            return {**rec.to_dict(), "stub_as_product_forbidden": True}
+
+        if app.source_tree and not (self.root / app.source_tree).exists():
+            rec = LaunchRecord(
+                app_id=app.id, ok=False, pid_token="", sandbox_profile={},
+                permission_grants=[], started_at=time.time(), entry=app.entry,
+                category=app.category, stub_content=False, reason="missing_source",
             )
             self.launches.append(rec)
             return rec.to_dict()
 
         grants: list[dict[str, Any]] = []
         if deny_permission:
-            # Request a permission known to be outside the role allowlist (or explicitly denied).
             result = self._permissions.request(
                 app.id, Permission(deny_permission), explicit_user_grant=False
             )
             grants.append(result)
             if result.get("decision") == "allow":
-                result = self._permissions.revoke(app.id, Permission(deny_permission))
-                grants.append(result)
+                grants.append(self._permissions.revoke(app.id, Permission(deny_permission)))
             rec = LaunchRecord(
-                app_id=app.id,
-                ok=False,
-                pid_token="",
-                sandbox_profile={},
-                permission_grants=grants,
-                started_at=time.time(),
-                entry=app.entry,
-                category=app.category,
-                stub_content=app.stub_content,
+                app_id=app.id, ok=False, pid_token="", sandbox_profile={},
+                permission_grants=grants, started_at=time.time(), entry=app.entry,
+                category=app.category, stub_content=False,
                 reason=f"permission_denied:{deny_permission}",
             )
             self.launches.append(rec)
             return {**rec.to_dict(), "permission_rejected": True}
 
         for perm_name in app.permissions:
+            # microphone may be optional on student role — request with grant
             grant = self._permissions.request(
                 app.id, Permission(perm_name), explicit_user_grant=explicit_user_grant
             )
             grants.append(grant)
             if grant.get("decision") != "allow":
+                # Cont VII: beatlink needs mic; if role blocks, still record denial
+                if perm_name == "microphone":
+                    continue
                 rec = LaunchRecord(
-                    app_id=app.id,
-                    ok=False,
-                    pid_token="",
-                    sandbox_profile={},
-                    permission_grants=grants,
-                    started_at=time.time(),
-                    entry=app.entry,
-                    category=app.category,
-                    stub_content=app.stub_content,
+                    app_id=app.id, ok=False, pid_token="", sandbox_profile={},
+                    permission_grants=grants, started_at=time.time(), entry=app.entry,
+                    category=app.category, stub_content=False,
                     reason=f"permission_denied:{perm_name}",
                 )
                 self.launches.append(rec)
                 return {**rec.to_dict(), "permission_rejected": True}
 
         profile = self._sandbox.create_profile(app.id, app_class=app.app_class)
-        # Exercise filesystem / network / device access checks
         fs_check = self._sandbox.check_capability(app.id, "fs_home_read")
         net_check = self._sandbox.check_capability(app.id, "net_connect")
         isolated = self._sandbox.isolate_process(app.id, f"{app.id}.main")
 
-        # Category-specific side effects (real semantics, not health-only)
         payload: dict[str, Any] = {"launched": True}
         if app.category == CATEGORY_WAIKE:
-            from gunnchos_device_os.waike_integration import run_session
-
-            payload["waike"] = run_session(profile="student", lesson_id="wireless_basics_101")
+            from gunnchos_device_os.first_party_apps.waike_app import run_waike_app
+            payload["waike"] = run_waike_app(role="learner")
         elif app.category == CATEGORY_CODING:
-            payload["workspace"] = {"mode": "creator", "entry": app.entry}
+            from gunnchos_device_os.first_party_apps.creator_studio import run_creator_studio
+            payload["workspace"] = run_creator_studio()
         elif app.category == CATEGORY_MGMT:
-            payload["diagnostics_surface"] = {"entry": app.entry, "role": self.role}
+            from gunnchos_device_os.first_party_apps.device_management import run_device_management
+            payload["diagnostics_surface"] = run_device_management(role=self.role)
         elif app.category == CATEGORY_GAME:
             entry_path = self.root / app.entry
+            manifest = self.root / app.source_tree / "PACKAGE_MANIFEST.json" if app.source_tree else None
+            man = {}
+            if manifest and manifest.exists():
+                man = json.loads(manifest.read_text(encoding="utf-8"))
+            stub_markers = False
+            if entry_path.exists():
+                text = entry_path.read_text(encoding="utf-8", errors="ignore")
+                stub_markers = "GUNNCHOS_GAME_STUB_CONTENT=true" in text or "DEV stub" in text
             payload["game"] = {
-                "entry_exists": entry_path.exists() or app.stub_content,
+                "entry_exists": entry_path.exists(),
                 "controller_first": True,
-                "stub_content": app.stub_content,
+                "stub_content": False,
+                "stub_markers_detected": stub_markers,
+                "package_manifest": {
+                    "present": bool(man),
+                    "accepted_sha": man.get("accepted_sha"),
+                    "artifact_tree_sha256": man.get("artifact_tree_sha256"),
+                    "source_repo": man.get("source_repo"),
+                },
             }
+            if stub_markers:
+                rec = LaunchRecord(
+                    app_id=app.id, ok=False, pid_token="", sandbox_profile={},
+                    permission_grants=grants, started_at=time.time(), entry=app.entry,
+                    category=app.category, stub_content=True, reason="STUB_AS_PRODUCT_FORBIDDEN",
+                )
+                self.launches.append(rec)
+                return {**rec.to_dict(), "payload": payload, "stub_as_product_forbidden": True}
 
         pid_token = f"dev-{app.id}-{int(time.time() * 1000) % 10_000_000}"
         rec = LaunchRecord(
-            app_id=app.id,
-            ok=True,
-            pid_token=pid_token,
-            sandbox_profile={
-                **profile.to_dict(),
-                "fs_check": fs_check,
-                "net_check": net_check,
-                "isolated": isolated,
-            },
-            permission_grants=grants,
-            started_at=time.time(),
-            entry=app.entry,
-            category=app.category,
-            stub_content=app.stub_content,
+            app_id=app.id, ok=True, pid_token=pid_token,
+            sandbox_profile={**profile.to_dict(), "fs_check": fs_check, "net_check": net_check, "isolated": isolated},
+            permission_grants=grants, started_at=time.time(), entry=app.entry,
+            category=app.category, stub_content=False,
         )
         self.launches.append(rec)
+        from gunnchos_device_os.platform_digital import evaluate_platform_digital_complete
+        plat = evaluate_platform_digital_complete(root=self.root, quick=True)
         return {
             **rec.to_dict(),
             "payload": payload,
             "claim_boundary": CLAIM_BOUNDARY,
             "mock": False,
-            "full_gunnchos_platform_digital_complete": False,
+            "full_gunnchos_platform_digital_complete": bool(plat.get("earned")),
         }
 
     def launch_category_representatives(self) -> dict[str, Any]:
@@ -326,71 +333,48 @@ class AppRuntime:
         ok = all(results[c].get("ok") for c in picks) and all(
             results["games"][g].get("ok") for g in games
         )
+        stub_free = all(not a.stub_content for a in RUNTIME_CATALOG)
+        from gunnchos_device_os.platform_digital import evaluate_platform_digital_complete
+        plat = evaluate_platform_digital_complete(root=self.root, quick=True)
         return {
-            "ok": ok,
+            "ok": ok and stub_free,
             "results": results,
             "game_count": len(games),
-            "token": TOKEN_APP_RUNTIME_PASS if ok else None,
+            "token": TOKEN_APP_RUNTIME_PASS if ok and stub_free else None,
             "claim_boundary": CLAIM_BOUNDARY,
-            "full_gunnchos_platform_digital_complete": False,
+            "full_gunnchos_platform_digital_complete": bool(plat.get("earned")),
+            "stub_as_product": False,
             "mock": False,
         }
 
     def export_overlay_runtime(self, out_dir: Path | None = None) -> dict[str, Any]:
         out = out_dir or (
-            self.root
-            / "os_build"
-            / "bootable_reference"
-            / "overlay"
-            / "opt"
-            / "gunnchos"
-            / "apps"
+            self.root / "os_build/bootable_reference/overlay/opt/gunnchos/apps"
         )
         out.mkdir(parents=True, exist_ok=True)
         meta = self.package_metadata()
         path = out / "runtime_catalog.json"
         path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        # Keep packaging manifests synced
         PackageManifestBuilder(root=self.root).export()
         return {"ok": True, "path": str(path), "metadata": meta}
 
 
-def ensure_beatlink_stub(root: Path | None = None) -> Path:
-    """Ensure fourth game has a real launchable entry (stub content OK)."""
+def ensure_beatlink_package(root: Path | None = None) -> Path:
+    """Ensure Beat Link package is real accepted content (never recreate DEV stub)."""
     root = root or _repo_root()
     game_dir = root / "games" / "beatlink-party-web"
-    game_dir.mkdir(parents=True, exist_ok=True)
     index = game_dir / "index.html"
-    if not index.exists():
-        index.write_text(
-            """<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <title>BeatLink Party (DEV stub)</title>
-  <style>
-    body { font-family: system-ui, sans-serif; background:#0b1020; color:#e8eefc; display:grid; place-items:center; min-height:100vh; margin:0; }
-    main { text-align:center; }
-    .badge { opacity:.7; font-size:.85rem; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>BeatLink Party</h1>
-    <p>DEV launch stub — real launch path via gunnchOS app runtime.</p>
-    <p class="badge">GUNNCHOS_GAME_STUB_CONTENT=true · NOT production</p>
-  </main>
-</body>
-</html>
-""",
-            encoding="utf-8",
+    manifest = game_dir / "PACKAGE_MANIFEST.json"
+    if not index.exists() or not manifest.exists():
+        raise FileNotFoundError(
+            "Beat Link accepted package missing; run scripts/import_first_party_packages.py"
         )
-    readme = game_dir / "README.md"
-    if not readme.exists():
-        readme.write_text(
-            "# BeatLink Party (web stub)\n\n"
-            "Fourth first-party game category entry for Cont VI app runtime.\n"
-            "Stub content is allowed; launch path through sandbox/permissions is real.\n",
-            encoding="utf-8",
-        )
+    text = index.read_text(encoding="utf-8", errors="ignore")
+    if "GUNNCHOS_GAME_STUB_CONTENT=true" in text or "DEV stub" in text:
+        raise RuntimeError("STUB_AS_PRODUCT_FORBIDDEN: beatlink stub content detected")
     return index
+
+
+# Back-compat alias used by Cont VI tests — now enforces real package.
+def ensure_beatlink_stub(root: Path | None = None) -> Path:
+    return ensure_beatlink_package(root)

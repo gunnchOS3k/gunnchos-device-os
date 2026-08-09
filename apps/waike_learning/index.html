@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>WAIKE Learning</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>WAIKE Learning</h1>
+    <p>Wireless + AI Kinesthetic Education — offline packs, labs, progress</p>
+  </header>
+  <main class="grid">
+    <section>
+      <h2>Course / lesson browser</h2>
+      <ul id="lessons"></ul>
+    </section>
+    <section>
+      <h2>Labs & offline packs</h2>
+      <div id="labs"></div>
+      <button id="start-lab">Start selected lesson</button>
+    </section>
+    <section>
+      <h2>Progress & portfolio</h2>
+      <pre id="progress"></pre>
+      <button id="export-portfolio">Export portfolio JSON</button>
+    </section>
+    <section>
+      <h2>Roles & accessibility</h2>
+      <label>Role <select id="role"><option>learner</option><option>educator</option></select></label>
+      <label><input type="checkbox" id="a11y-high-contrast"/> High contrast</label>
+      <p id="tutor-note">gunnchAI tutoring hooks via ai_interface (local/DEV).</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

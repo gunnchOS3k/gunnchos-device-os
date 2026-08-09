@@ -1,3 +1,4 @@
-# Device Dashboard Mock
+# Device Dashboard Mock (retired from release path)
 
-Placeholder for EVT-1 profile/mode dashboard UI.
+Cont VII replaces this with `apps/device_management`.
+Kept only for historical reference; not in first-party packaging entry.

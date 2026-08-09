@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Creator / Coder Studio</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>Creator / Coder Studio</h1>
+    <p>Projects · editor · terminal · build · git · device debug · DS-XL layouts</p>
+  </header>
+  <div class="layout" id="layout">
+    <aside>
+      <h2>Projects</h2>
+      <ul id="files"></ul>
+      <h2>Git</h2>
+      <pre id="git"></pre>
+      <button id="git-refresh">Refresh git status</button>
+    </aside>
+    <section class="editor-pane">
+      <h2>Editor</h2>
+      <textarea id="editor" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="run">Run</button>
+        <button id="build">Build / package</button>
+        <button id="assist">gunnchAI assist</button>
+      </div>
+    </section>
+    <section>
+      <h2>Terminal / logs</h2>
+      <pre id="term"></pre>
+      <h2>Device serial / debug</h2>
+      <pre id="debug"></pre>
+      <label>Layout
+        <select id="layout-mode">
+          <option value="single">Single</option>
+          <option value="dsxl">DS-XL dual</option>
+        </select>
+      </label>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -16,7 +16,7 @@
       "waike"
     ]
   },
-  "claim_boundary": "Digital first-party app runtime via sandbox/permissions. Not a production app store, not signed distribution, not FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE.",
+  "claim_boundary": "Digital first-party app runtime via sandbox/permissions. Not a production app store, not signed distribution.",
   "mock": false,
   "packaging": {
     "app_manifest": {
@@ -32,12 +32,30 @@
         },
         {
           "controller_first": false,
-          "entry": "apps/device_dashboard_mock",
+          "entry": "apps/waike_learning/index.html",
+          "id": "waike",
+          "kind": "first_party",
+          "offline": true,
+          "source_tree": "apps/waike_learning",
+          "version": "0.3.0-cont-vii"
+        },
+        {
+          "controller_first": false,
+          "entry": "apps/creator_studio/index.html",
+          "id": "creator_studio",
+          "kind": "first_party",
+          "offline": true,
+          "source_tree": "apps/creator_studio",
+          "version": "0.2.0-cont-vii"
+        },
+        {
+          "controller_first": false,
+          "entry": "apps/device_management/index.html",
           "id": "device_dashboard",
           "kind": "first_party",
           "offline": true,
-          "source_tree": "apps/device_dashboard_mock",
-          "version": "0.1.0-dev"
+          "source_tree": "apps/device_management",
+          "version": "0.2.0-cont-vii"
         },
         {
           "controller_first": false,
@@ -50,8 +68,8 @@
         }
       ],
       "claim_boundary": "Digital first-party app/game package manifests only. Not an app store, not Steam/certification, no production signing keys.",
-      "count": 3,
-      "digest_sha256": "ea79686c85d4b3f5e268cabfb07cb9141a60cd67d74481d2f515306fb898ddb4",
+      "count": 5,
+      "digest_sha256": "78e874cec14b3d3a10d25ae5e81224b508355ff8b46e675cc153fd87abe85584",
       "production_keys_used": false,
       "realm": "DEV",
       "schema": "gunnchos.app_packaging.apps.v1"
@@ -69,13 +87,33 @@
       },
       {
         "controller_first": false,
-        "entry": "apps/device_dashboard_mock",
+        "entry": "apps/waike_learning/index.html",
+        "id": "waike",
+        "kind": "first_party",
+        "offline": true,
+        "source_detail": "apps/waike_learning",
+        "source_ok": true,
+        "version": "0.3.0-cont-vii"
+      },
+      {
+        "controller_first": false,
+        "entry": "apps/creator_studio/index.html",
+        "id": "creator_studio",
+        "kind": "first_party",
+        "offline": true,
+        "source_detail": "apps/creator_studio",
+        "source_ok": true,
+        "version": "0.2.0-cont-vii"
+      },
+      {
+        "controller_first": false,
+        "entry": "apps/device_management/index.html",
         "id": "device_dashboard",
         "kind": "first_party",
         "offline": true,
-        "source_detail": "apps/device_dashboard_mock",
+        "source_detail": "apps/device_management",
         "source_ok": true,
-        "version": "0.1.0-dev"
+        "version": "0.2.0-cont-vii"
       },
       {
         "controller_first": false,
@@ -93,7 +131,7 @@
     "game_manifest": {
       "claim_boundary": "Digital first-party app/game package manifests only. Not an app store, not Steam/certification, no production signing keys.",
       "count": 4,
-      "digest_sha256": "61715d427d95085cb09ffe912acd013e400da67e901f06b40bfcd4b007d53086",
+      "digest_sha256": "49b90c1b2663f78adbc6dcc84e6fa4e6c4a3e14055632f07cf08ddf0fda1b95a",
       "games": [
         {
           "controller_first": true,
@@ -129,7 +167,7 @@
           "kind": "first_party_web_game",
           "offline": true,
           "source_tree": "games/beatlink-party-web",
-          "version": "0.1.0-dev"
+          "version": "0.2.0-digital-rc"
         }
       ],
       "production_keys_used": false,
@@ -175,7 +213,7 @@
         "offline": true,
         "source_detail": "games/beatlink-party-web",
         "source_ok": true,
-        "version": "0.1.0-dev"
+        "version": "0.2.0-digital-rc"
       }
     ],
     "ok": true,
@@ -188,7 +226,7 @@
     {
       "app_class": "first_party",
       "category": "waike_learning",
-      "entry": "gunnchos_device_os.waike_integration:run_session",
+      "entry": "apps/waike_learning/index.html",
       "id": "waike",
       "offline": true,
       "permissions": [
@@ -197,14 +235,16 @@
         "identity_read"
       ],
       "source_ok": true,
-      "source_tree": "config",
+      "source_tree": "apps/waike_learning",
+      "stub_as_product_forbidden": true,
       "stub_content": false,
-      "version": "0.2.0-dev"
+      "stub_violation": false,
+      "version": "0.3.0-cont-vii"
     },
     {
       "app_class": "first_party",
       "category": "coding_creation",
-      "entry": "apps/launcher_mock",
+      "entry": "apps/creator_studio/index.html",
       "id": "creator_studio",
       "offline": true,
       "permissions": [
@@ -213,14 +253,16 @@
         "network"
       ],
       "source_ok": true,
-      "source_tree": "apps/launcher_mock",
+      "source_tree": "apps/creator_studio",
+      "stub_as_product_forbidden": true,
       "stub_content": false,
-      "version": "0.1.0-dev"
+      "stub_violation": false,
+      "version": "0.2.0-cont-vii"
     },
     {
       "app_class": "first_party",
       "category": "management_diagnostics",
-      "entry": "apps/device_dashboard_mock",
+      "entry": "apps/device_management/index.html",
       "id": "device_dashboard",
       "offline": true,
       "permissions": [
@@ -229,9 +271,11 @@
         "identity_read"
       ],
       "source_ok": true,
-      "source_tree": "apps/device_dashboard_mock",
+      "source_tree": "apps/device_management",
+      "stub_as_product_forbidden": true,
       "stub_content": false,
-      "version": "0.1.0-dev"
+      "stub_violation": false,
+      "version": "0.2.0-cont-vii"
     },
     {
       "app_class": "game",
@@ -245,7 +289,9 @@
       ],
       "source_ok": true,
       "source_tree": "games/anime-aggressors-web",
+      "stub_as_product_forbidden": true,
       "stub_content": false,
+      "stub_violation": false,
       "version": "0.1.0-dev"
     },
     {
@@ -260,7 +306,9 @@
       ],
       "source_ok": true,
       "source_tree": "games/earth-species-web",
+      "stub_as_product_forbidden": true,
       "stub_content": false,
+      "stub_violation": false,
       "version": "0.1.0-dev"
     },
     {
@@ -275,7 +323,9 @@
       ],
       "source_ok": true,
       "source_tree": "games/foot-racing-web",
+      "stub_as_product_forbidden": true,
       "stub_content": false,
+      "stub_violation": false,
       "version": "0.1.0-dev"
     },
     {
@@ -286,13 +336,17 @@
       "offline": true,
       "permissions": [
         "files_read",
-        "network"
+        "network",
+        "microphone"
       ],
       "source_ok": true,
       "source_tree": "games/beatlink-party-web",
-      "stub_content": true,
-      "version": "0.1.0-dev"
+      "stub_as_product_forbidden": true,
+      "stub_content": false,
+      "stub_violation": false,
+      "version": "0.2.0-digital-rc"
     }
   ],
-  "schema": "gunnchos.app_runtime.package_metadata.v1"
+  "schema": "gunnchos.app_runtime.package_metadata.v1",
+  "stub_as_product": false
 }

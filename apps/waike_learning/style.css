@@ -1,0 +1,11 @@
+:root { --bg:#0f172a; --fg:#e2e8f0; --accent:#38bdf8; --panel:#1e293b; }
+body.high-contrast { --bg:#000; --fg:#fff; --panel:#111; --accent:#ffe600; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:"IBM Plex Sans", "Source Sans 3", system-ui, sans-serif; background:radial-gradient(1200px 600px at 10% -10%, #1d4ed8 0%, transparent 50%), var(--bg); color:var(--fg); }
+header, main { max-width:1100px; margin:0 auto; padding:1.25rem; }
+header h1 { margin:0; font-size:2rem; letter-spacing:.02em; }
+.grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+section { background:var(--panel); padding:1rem; border:1px solid #334155; }
+button, select { background:#0ea5e9; color:#082f49; border:0; padding:.55rem .9rem; font-weight:600; cursor:pointer; }
+ul { padding-left:1.1rem; }
+pre { white-space:pre-wrap; font-size:.85rem; }

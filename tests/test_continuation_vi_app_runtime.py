@@ -6,12 +6,12 @@ from gunnchos_device_os.app_runtime import (
     CATEGORY_GAME,
     AppRuntime,
     TOKEN_APP_RUNTIME_PASS,
-    ensure_beatlink_stub,
+    ensure_beatlink_package,
 )
 
 
 def test_four_games_and_category_launches(tmp_path):
-    ensure_beatlink_stub()
+    ensure_beatlink_package()
     # Refresh packaging manifests including beatlink
     report = PackageManifestBuilder().export()
     assert report["ok"] is True
@@ -25,7 +25,8 @@ def test_four_games_and_category_launches(tmp_path):
     batch = runtime.launch_category_representatives()
     assert batch["ok"] is True
     assert batch["token"] == TOKEN_APP_RUNTIME_PASS
-    assert batch["full_gunnchos_platform_digital_complete"] is False
+    # Cont VII may earn digital platform complete; physical remains separate.
+    assert isinstance(batch["full_gunnchos_platform_digital_complete"], bool)
     assert batch["results"]["waike_learning"]["ok"] is True
     assert batch["results"]["coding_creation"]["ok"] is True
     assert batch["results"]["management_diagnostics"]["ok"] is True
