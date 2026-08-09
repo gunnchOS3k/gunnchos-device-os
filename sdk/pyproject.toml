@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gunnchos-adopter-sdk"
+version = "0.1.0"
+description = "gunnchOS adopter SDK (digital DEV client)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "gunnchOS3k" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["gunnchos_adopter_sdk*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
