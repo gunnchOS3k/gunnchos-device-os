@@ -67,7 +67,12 @@ None. No NPI_DEFECT opened; selected configs remain mathematically sufficient fo
 6 companions mapped → `artifacts/phase_xi/EVT_COMPANIONS.json` (not digital backlog).
 
 ## P — PRs
-Filled after draft PR open. Cursor never merges; autoMergeRequest=null.
+| order | repo | PR | branch | SHA | CI | autoMergeRequest | depends_on |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | gunnchos-device-os | https://github.com/gunnchOS3k/gunnchos-device-os/pull/70 | phase-xi/user-journey-hardening |  | phase-xi-user-journeys | null | — |
+| 2 | gunnchos-7gc-ai-ran-field-kit | https://github.com/gunnchOS3k/gunnchos-7gc-ai-ran-field-kit/pull/45 | phase-xi/user-journey-evidence |  | evidence | null | device-os Phase XI |
+
+Cursor never merges; autoMergeRequest=null.
 
 ## Q — Final digital tokens
 ```json
