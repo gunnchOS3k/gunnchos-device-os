@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "artifacts" / "phase_xii"
+sys.path.insert(0, str(ROOT))
 
 
 def run(cmd: list[str]) -> dict:
@@ -22,7 +23,7 @@ def main() -> int:
     steps = []
     steps.append(run([sys.executable, "scripts/build_reality_depth_ledger.py"]))
     # claim scope
-    from gunnchos_device_os.phase_xii.claim_scope import write_claim_scope
+    from gunnchos_device_os.phase_xii.claim_scope import write_claim_scope  # noqa: E402
     scope = write_claim_scope(ROOT)
     steps.append({"cmd": "write_claim_scope", "rc": 0, "scope_tokens": list((scope.get("tokens") or {}).keys())})
     steps.append(run([sys.executable, "scripts/run_phase_xii_rj.py"]))

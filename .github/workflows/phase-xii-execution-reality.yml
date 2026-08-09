@@ -12,6 +12,7 @@ jobs:
     env:
       REAL_APP_EXECUTION_MODE: ACTIVE
       GUNNCHOS_REPOS_ROOT: ${{ github.workspace }}/../repos
+      PYTHONPATH: .:src
     steps:
       - uses: actions/checkout@v4
       - name: Install GUI + productivity stack
@@ -26,7 +27,8 @@ jobs:
       - name: Python deps
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install aiosmtpd radicale wsgidav httpx pytest playwright
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install playwright
           python3 -m playwright install --with-deps chromium || true
       - name: Optional protocol compose
         run: |
