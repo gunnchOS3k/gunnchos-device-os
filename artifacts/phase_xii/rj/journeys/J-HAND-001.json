@@ -1,0 +1,98 @@
+{
+  "journey_id": "J-HAND-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "undocked_work",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "undocked_work",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "notify",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L1_POLICY_MODEL",
+      "result": {
+        "ok": true,
+        "notification": {
+          "ok": true,
+          "delivered": true,
+          "item": {
+            "category": "message",
+            "title": "Ping"
+          },
+          "media_destroyed": false
+        },
+        "media": {
+          "ok": true,
+          "destroyed": false
+        },
+        "media_destroyed": false,
+        "execution_depth": "L1_POLICY_MODEL",
+        "duration_ms": 0,
+        "action": "notify"
+      }
+    },
+    {
+      "step": "quick_reply",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "quick_reply",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "save",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "save"
+      }
+    },
+    {
+      "step": "dock_later",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "dock_later",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    }
+  ],
+  "duration_ms": 1,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

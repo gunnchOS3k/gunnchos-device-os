@@ -1,0 +1,61 @@
+{
+  "multitask": {
+    "ok": true,
+    "profile": "student",
+    "processes": [
+      "office_workflow",
+      "ffplay_or_ffmpeg",
+      "python_probe"
+    ],
+    "metrics": [
+      {
+        "step": "office",
+        "rss": 20529152,
+        "ok": true
+      },
+      {
+        "step": "media",
+        "rss": 20529152,
+        "ok": true
+      },
+      {
+        "step": "network_probe",
+        "rss": 20529152,
+        "rc": 1
+      }
+    ],
+    "duration_ms": 3259,
+    "execution_depth": "L4_REAL_APPLICATION_PROCESS"
+  },
+  "soak": {
+    "ok": true,
+    "iterations": 3,
+    "rss_start": 20529152,
+    "rss_end": 20529152,
+    "samples": [
+      {
+        "i": 0,
+        "rss": 20529152
+      },
+      {
+        "i": 1,
+        "rss": 20529152
+      },
+      {
+        "i": 2,
+        "rss": 20529152
+      }
+    ],
+    "duration_ms": 3603,
+    "orphan_check": "best_effort"
+  },
+  "storage": {
+    "ok": true,
+    "filled_bytes": 12582912,
+    "user_warning": true,
+    "update_reserve_protected": true,
+    "corrupt": false,
+    "path": "pressure.bin",
+    "execution_depth": "L4_REAL_APPLICATION_PROCESS"
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "journey_id": "J-CREATOR-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "sdk_use",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "sdk_use",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "sample_app",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "sample_app",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "device_profile_api",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "device_profile_api",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "ai_capability",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "capability": "local_infer",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "ai_capability"
+      }
+    },
+    {
+      "step": "ring_sim_input",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "packet": {
+          "schema": "gunnchos.ring.packet.v1",
+          "ts": 1786317131.271869,
+          "gesture": "confirm",
+          "axis": {
+            "x": 0.1,
+            "y": -0.2,
+            "z": 0.95
+          },
+          "source": "edge_io_firmware_sim",
+          "validated": false
+        },
+        "mapped": {
+          "action": "confirm",
+          "target": "document",
+          "from": "phase_xii_mapper"
+        },
+        "target_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/ring/ring_target.txt",
+        "bytes_written": 41,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "physical_device": false,
+        "duration_ms": 0,
+        "action": "ring_sim_input",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "local_data",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "local_data",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "package",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "package",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "install",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "install",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "launch",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "launch",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "inspect_logs",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "inspect_logs",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "update",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "update",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "rollback",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "rollback",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    }
+  ],
+  "duration_ms": 1,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

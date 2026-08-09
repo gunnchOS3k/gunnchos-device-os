@@ -1,0 +1,49 @@
+name: phase-xii-execution-reality
+on:
+  push:
+    branches: [phase-xii/execution-reality, main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  reality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      REAL_APP_EXECUTION_MODE: ACTIVE
+      GUNNCHOS_REPOS_ROOT: ${{ github.workspace }}/../repos
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GUI + productivity stack
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            weston xvfb xauth \
+            libreoffice-writer libreoffice-calc libreoffice-impress \
+            ffmpeg mpv chromium-browser || true
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            chromium ffmpeg mpv python3-pip python3-venv git curl
+      - name: Python deps
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install playwright
+          python3 -m playwright install --with-deps chromium || true
+      - name: Optional protocol compose
+        run: |
+          if command -v docker >/dev/null; then
+            docker compose -f os_build/phase_xii/protocols/docker-compose.yml up -d || true
+          fi
+      - name: Build depth ledger
+        run: python3 scripts/build_reality_depth_ledger.py
+      - name: Run RJ acceptance
+        run: python3 scripts/run_phase_xii_rj.py
+      - name: Prove phase xii
+        run: python3 scripts/prove_phase_xii.py
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-xii-artifacts
+          path: artifacts/phase_xii/

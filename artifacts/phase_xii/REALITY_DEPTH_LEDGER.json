@@ -1,0 +1,3760 @@
+{
+  "schema": "gunnchos.reality_depth_ledger.v1",
+  "phase": "XII",
+  "journey_count": 79,
+  "phase_xi_depth_histogram": {
+    "L0_GENERIC_OK": 79
+  },
+  "phase_xii_target_depth_histogram": {
+    "L0_GENERIC_OK": 54,
+    "L4_REAL_APPLICATION_PROCESS": 20,
+    "L5_REAL_GUI_INTERACTION": 3,
+    "L3_REAL_SERVICE_API": 2
+  },
+  "journeys_not_yet_real_app_proven": 79,
+  "journeys": [
+    {
+      "journey_id": "J-ADMIN-001",
+      "class": "admin",
+      "goal": "School fleet policy push digital",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "mdm_policy",
+          "action": "mdm_policy",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "push_config",
+          "action": "push_config",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "device_apply",
+          "action": "device_apply",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "verify",
+          "action": "verify",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-ADMIN-002",
+      "class": "admin",
+      "goal": "Enterprise inventory + update wave",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "inventory",
+          "action": "inventory",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "wave_plan",
+          "action": "wave_plan",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "staged_update",
+          "action": "staged_update",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "report",
+          "action": "report",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-AI-001",
+      "class": "student",
+      "goal": "Local AI tutor session",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ai_tutor",
+          "action": "ai_tutor",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "citation",
+          "action": "citation",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_exfil",
+          "action": "no_exfil",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "session_save",
+          "action": "session_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-AI-002",
+      "class": "creator",
+      "goal": "AI code assist privacy",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ai_code_help",
+          "action": "ai_code_help",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "repo_scope",
+          "action": "repo_scope",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_hidden_private",
+          "action": "no_hidden_private",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-AI-003",
+      "class": "educator",
+      "goal": "AI lesson assist offline",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "go_offline",
+          "action": "go_offline",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_ai",
+          "action": "local_ai",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "lesson_help",
+          "action": "lesson_help",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-AI-004",
+      "class": "creator",
+      "goal": "AI research summarize local docs",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "local_docs",
+          "action": "local_docs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_summarize",
+          "action": "ai_summarize",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "citations",
+          "action": "citations",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "privacy_ok",
+          "action": "privacy_ok",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-APP-001",
+      "class": "creator",
+      "goal": "App install from adopter store sim",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "store_sim",
+          "action": "store_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "install",
+          "action": "install",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "launch",
+          "action": "launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "perms",
+          "action": "perms",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-APP-002",
+      "class": "creator",
+      "goal": "App update rollback",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "app_update",
+          "action": "app_update",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "fail_sim",
+          "action": "fail_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "rollback",
+          "action": "rollback",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-CREATOR-001",
+      "class": "creator",
+      "goal": "Adopter SDK app lifecycle",
+      "step_count": 12,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "sdk_use",
+          "action": "sdk_use",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sample_app",
+          "action": "sample_app",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "device_profile_api",
+          "action": "device_profile_api",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_capability",
+          "action": "ai_capability",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ring_sim_input",
+          "action": "ring_sim_input",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "local_data",
+          "action": "local_data",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "package",
+          "action": "package",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "install",
+          "action": "install",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "launch",
+          "action": "launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "inspect_logs",
+          "action": "inspect_logs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "update",
+          "action": "update",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "rollback",
+          "action": "rollback",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-CREATOR-002",
+      "class": "creator",
+      "goal": "Game tooling UGC where permitted",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "creator_tools",
+          "action": "creator_tools",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "edit_content",
+          "action": "edit_content",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "validate",
+          "action": "validate",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "run_local",
+          "action": "run_local",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "package_ugc",
+          "action": "package_ugc",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sandbox_perms",
+          "action": "sandbox_perms",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-DATA-001",
+      "class": "office",
+      "goal": "Export/import portable docs",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "export_bundle",
+          "action": "export_bundle",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "import_bundle",
+          "action": "import_bundle",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "integrity",
+          "action": "integrity",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-DATA-002",
+      "class": "student",
+      "goal": "Backup restore user files",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "backup",
+          "action": "backup",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "wipe_sim",
+          "action": "wipe_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "restore",
+          "action": "restore",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "verify",
+          "action": "verify",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-DEVSTU-001",
+      "class": "creator",
+      "goal": "College coding assignment",
+      "step_count": 12,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "git_clone_local",
+          "action": "git_clone_local",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ide_open",
+          "action": "ide_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "terminal",
+          "action": "terminal",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "run_tests",
+          "action": "run_tests",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "second_screen_logs",
+          "action": "second_screen_logs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_code_help",
+          "action": "ai_code_help",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "code_change",
+          "action": "code_change",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "format_test_build",
+          "action": "format_test_build",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "git_commit",
+          "action": "git_commit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "export_project",
+          "action": "export_project",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "browser_upload",
+          "action": "browser_upload",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "game_break",
+          "action": "game_break",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-DEVSTU-002",
+      "class": "creator",
+      "goal": "Hardware/networking lab (unprivileged)",
+      "step_count": 9,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "lab_instructions",
+          "action": "lab_instructions",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "terminal",
+          "action": "terminal",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "net_tools",
+          "action": "net_tools",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "capture_log",
+          "action": "capture_log",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "visualize",
+          "action": "visualize",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_explain",
+          "action": "ai_explain",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "lab_report",
+          "action": "lab_report",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "pdf_export",
+          "action": "pdf_export",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "no_unsafe_privs",
+          "action": "no_unsafe_privs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-DSXL-001",
+      "class": "creator",
+      "goal": "DS-XL dual-screen coding",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "dual_screen",
+          "action": "dual_screen",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ide_docs",
+          "action": "ide_docs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_side",
+          "action": "ai_side",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "state_preserve",
+          "action": "state_preserve",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-EDU-001",
+      "class": "educator",
+      "goal": "Educator daily workflow",
+      "step_count": 10,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "edu_login",
+          "action": "edu_login",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "waike_open",
+          "action": "waike_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "lesson_browse",
+          "action": "lesson_browse",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "prepare_material",
+          "action": "prepare_material",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "share_pdf",
+          "action": "share_pdf",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "learner_progress",
+          "action": "learner_progress",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "class_message",
+          "action": "class_message",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "dock_present",
+          "action": "dock_present",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "export_report",
+          "action": "export_report",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_private_leak",
+          "action": "no_private_leak",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-EDU-002",
+      "class": "educator",
+      "goal": "Educator offline class",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "campus_net_fail",
+          "action": "campus_net_fail",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_lessons",
+          "action": "local_lessons",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_ai",
+          "action": "local_ai",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_files",
+          "action": "local_files",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_share",
+          "action": "local_share",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "queued_sync",
+          "action": "queued_sync",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-FAMILY-001",
+      "class": "security",
+      "goal": "Family time limits digital",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "profile_child",
+          "action": "profile_child",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "time_limit",
+          "action": "time_limit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "enforce",
+          "action": "enforce",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_data_loss",
+          "action": "no_data_loss",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-001",
+      "class": "recreation",
+      "goal": "Casual game launch+save",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "game_launch",
+          "action": "game_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "game_play",
+          "action": "game_play",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "game_save",
+          "action": "game_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "exit_clean",
+          "action": "exit_clean",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "relaunch_resume",
+          "action": "relaunch_resume",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-002",
+      "class": "recreation",
+      "goal": "Competitive session + overlay",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "game_launch",
+          "action": "game_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "overlay_safe",
+          "action": "overlay_safe",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "input_map",
+          "action": "input_map",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "audio_mix",
+          "action": "audio_mix",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "game_save",
+          "action": "game_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-003",
+      "class": "recreation",
+      "goal": "Game + voice/network",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "game_launch",
+          "action": "game_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "voice_optional",
+          "action": "voice_optional",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "net_bearer",
+          "action": "net_bearer",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_crash",
+          "action": "no_crash",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "game_save",
+          "action": "game_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-004",
+      "class": "recreation",
+      "goal": "Game + background music choice",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "music_study",
+          "action": "music_study",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "game_launch",
+          "action": "game_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "audio_focus_policy",
+          "action": "audio_focus_policy",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "user_choice",
+          "action": "user_choice",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "game_save",
+          "action": "game_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-005",
+      "class": "recreation",
+      "goal": "Controller assignment",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "controller_sim",
+          "action": "controller_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "assign",
+          "action": "assign",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "remap",
+          "action": "remap",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "conflict_resolve",
+          "action": "conflict_resolve",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "game_play",
+          "action": "game_play",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-006",
+      "class": "recreation",
+      "goal": "Docked gaming continuity",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "game_play",
+          "action": "game_play",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "dock",
+          "action": "dock",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "display_switch",
+          "action": "display_switch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "undock",
+          "action": "undock",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "state_preserve",
+          "action": "state_preserve",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-007",
+      "class": "recreation",
+      "goal": "Archive of Life session",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "archive_launch",
+          "action": "archive_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "local_ai",
+          "action": "local_ai",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "save_progress",
+          "action": "save_progress",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "privacy_ok",
+          "action": "privacy_ok",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-GAME-008",
+      "class": "recreation",
+      "goal": "Beatlink party media mix",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L5_REAL_GUI_INTERACTION",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "beatlink_launch",
+          "action": "beatlink_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "media_mix",
+          "action": "media_mix",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "session_save",
+          "action": "session_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-HAND-001",
+      "class": "office",
+      "goal": "Handheld commute workflow",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "undocked_work",
+          "action": "undocked_work",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "notify",
+          "action": "notify",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "quick_reply",
+          "action": "quick_reply",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "save",
+          "action": "save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "dock_later",
+          "action": "dock_later",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-IDENT-001",
+      "class": "security",
+      "goal": "Multi-user switch preserve",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "user_a_work",
+          "action": "user_a_work",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "switch_user",
+          "action": "switch_user",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "user_b_session",
+          "action": "user_b_session",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "switch_back",
+          "action": "switch_back",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_leak",
+          "action": "no_leak",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "state_preserve",
+          "action": "state_preserve",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-MEDIA-001",
+      "class": "recreation",
+      "goal": "Local music library",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "music_library",
+          "action": "music_library",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "play",
+          "action": "play",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "gapless_or_cont",
+          "action": "gapless_or_cont",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "media_keys",
+          "action": "media_keys",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-MEDIA-002",
+      "class": "recreation",
+      "goal": "Local video library",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "video_library",
+          "action": "video_library",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "play",
+          "action": "play",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "pip_or_second_display",
+          "action": "pip_or_second_display",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "position_save",
+          "action": "position_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-MEDIA-003",
+      "class": "office",
+      "goal": "Browser streaming path",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L5_REAL_GUI_INTERACTION",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "stream_fixture",
+          "action": "stream_fixture",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "media_session",
+          "action": "media_session",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_claim_license",
+          "action": "no_claim_license",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-NET-001",
+      "class": "offline",
+      "goal": "Airplane/offline day",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "go_offline",
+          "action": "go_offline",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_apps",
+          "action": "local_apps",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "local_files",
+          "action": "local_files",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "queue_ops",
+          "action": "queue_ops",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "net_restore",
+          "action": "net_restore",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "flush_queue",
+          "action": "flush_queue",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-NET-002",
+      "class": "offline",
+      "goal": "Bearer switch WiFi\u2192cellular sim",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "wifi_campus",
+          "action": "wifi_campus",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "bearer_switch",
+          "action": "bearer_switch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "session_keep",
+          "action": "session_keep",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sync_retry",
+          "action": "sync_retry",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-NET-003",
+      "class": "offline",
+      "goal": "Captive portal school WiFi",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "wifi_campus",
+          "action": "wifi_campus",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "captive_detect",
+          "action": "captive_detect",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "browser_portal",
+          "action": "browser_portal",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "auth_sim",
+          "action": "auth_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "continue",
+          "action": "continue",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-NET-004",
+      "class": "offline",
+      "goal": "VPN flap during sync",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "vpn_connect",
+          "action": "vpn_connect",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "sync_file",
+          "action": "sync_file",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "vpn_flap",
+          "action": "vpn_flap",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_corruption",
+          "action": "no_corruption",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "resume",
+          "action": "resume",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-NET-005",
+      "class": "offline",
+      "goal": "DNS/outage degraded UX",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "net_degrade",
+          "action": "net_degrade",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "clear_error",
+          "action": "clear_error",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "offline_hint",
+          "action": "offline_hint",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "retry",
+          "action": "retry",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-001",
+      "class": "office",
+      "goal": "Office morning workflow",
+      "step_count": 16,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 4,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "wake",
+          "action": "wake",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "auth",
+          "action": "auth",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "dock",
+          "action": "dock",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "ethernet",
+          "action": "ethernet",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "external_display",
+          "action": "external_display",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "email",
+          "action": "email",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "calendar",
+          "action": "calendar",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "docx_edit",
+          "action": "docx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "xlsx_edit",
+          "action": "xlsx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pptx_edit",
+          "action": "pptx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pdf_export",
+          "action": "pdf_export",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "webrtc_call",
+          "action": "webrtc_call",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "screen_share",
+          "action": "screen_share",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "save_local",
+          "action": "save_local",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "share_files",
+          "action": "share_files",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-002",
+      "class": "office",
+      "goal": "Office deep-work + music",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 2,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "docx_edit",
+          "action": "docx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "xlsx_edit",
+          "action": "xlsx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "music_study",
+          "action": "music_study",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "messaging",
+          "action": "messaging",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "responsiveness",
+          "action": "responsiveness",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-003",
+      "class": "office",
+      "goal": "Office video + work",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "video_local",
+          "action": "video_local",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pip_or_second_display",
+          "action": "pip_or_second_display",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "xlsx_edit",
+          "action": "xlsx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "chat",
+          "action": "chat",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "save_export",
+          "action": "save_export",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-004",
+      "class": "office",
+      "goal": "VPN + network share resilience",
+      "step_count": 7,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "vpn_connect",
+          "action": "vpn_connect",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "mount_share",
+          "action": "mount_share",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "doc_open",
+          "action": "doc_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "net_loss",
+          "action": "net_loss",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_corruption",
+          "action": "no_corruption",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "net_restore",
+          "action": "net_restore",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "save_safe",
+          "action": "save_safe",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-005",
+      "class": "office",
+      "goal": "CUPS virtual print",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "docx_open",
+          "action": "docx_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "print_virtual_pdf",
+          "action": "print_virtual_pdf",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "cups_submit",
+          "action": "cups_submit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "queue_inspect",
+          "action": "queue_inspect",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "job_cancel",
+          "action": "job_cancel",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "resubmit",
+          "action": "resubmit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-006",
+      "class": "office",
+      "goal": "Scan/camera document flow",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "synthetic_capture",
+          "action": "synthetic_capture",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "save_image",
+          "action": "save_image",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "crop_rotate",
+          "action": "crop_rotate",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "attach_message",
+          "action": "attach_message",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "archive_folder",
+          "action": "archive_folder",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-007",
+      "class": "office",
+      "goal": "Remote worker meeting resilience",
+      "step_count": 10,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 2,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "wifi_home",
+          "action": "wifi_home",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "vpn_connect",
+          "action": "vpn_connect",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "email",
+          "action": "email",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "calendar",
+          "action": "calendar",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "webrtc_call",
+          "action": "webrtc_call",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "screen_share",
+          "action": "screen_share",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "headset_switch",
+          "action": "headset_switch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "net_degrade",
+          "action": "net_degrade",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "meeting_adapt",
+          "action": "meeting_adapt",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "files_preserved",
+          "action": "files_preserved",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-008",
+      "class": "office",
+      "goal": "Hot-desk dock continuity",
+      "step_count": 9,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "mobile_work",
+          "action": "mobile_work",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "dock",
+          "action": "dock",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "external_display",
+          "action": "external_display",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ethernet",
+          "action": "ethernet",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "kb_mouse",
+          "action": "kb_mouse",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "headset",
+          "action": "headset",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "continue_doc",
+          "action": "continue_doc",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "undock",
+          "action": "undock",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "continue_device",
+          "action": "continue_device",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-009",
+      "class": "office",
+      "goal": "Multi-display office layout",
+      "step_count": 8,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "primary_doc",
+          "action": "primary_doc",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "secondary_chat",
+          "action": "secondary_chat",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "external_dashboard",
+          "action": "external_dashboard",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "window_place",
+          "action": "window_place",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "unplug_replug",
+          "action": "unplug_replug",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sleep_resume",
+          "action": "sleep_resume",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "dpi_scale",
+          "action": "dpi_scale",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "focus",
+          "action": "focus",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-OFF-010",
+      "class": "office",
+      "goal": "Update during work safety",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "work_open",
+          "action": "work_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "update_available",
+          "action": "update_available",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "defer_or_safe",
+          "action": "defer_or_safe",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_data_loss",
+          "action": "no_data_loss",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "resume_work",
+          "action": "resume_work",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-ONBOARD-001",
+      "class": "student",
+      "goal": "Student onboarding",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "first_boot_sim",
+          "action": "first_boot_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "persona",
+          "action": "persona",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "wifi",
+          "action": "wifi",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "accounts_optional",
+          "action": "accounts_optional",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "done",
+          "action": "done",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-ONBOARD-002",
+      "class": "office",
+      "goal": "Office onboarding",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "first_boot_sim",
+          "action": "first_boot_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "enterprise_profile",
+          "action": "enterprise_profile",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "vpn_optional",
+          "action": "vpn_optional",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "done",
+          "action": "done",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-PERF-001",
+      "class": "office",
+      "goal": "Cold start budget digital",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "cold_start",
+          "action": "cold_start",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "budget_check",
+          "action": "budget_check",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "apps_ready",
+          "action": "apps_ready",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-PERF-002",
+      "class": "student",
+      "goal": "Memory pressure multitask",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "multitask_stack",
+          "action": "multitask_stack",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "memory_pressure",
+          "action": "memory_pressure",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "no_silent_kill",
+          "action": "no_silent_kill",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "warn_user",
+          "action": "warn_user",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-PERF-003",
+      "class": "recreation",
+      "goal": "Game frame-time digital host",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "game_launch",
+          "action": "game_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "frame_sample",
+          "action": "frame_sample",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_claim_physical",
+          "action": "no_claim_physical",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-REC-001",
+      "class": "security",
+      "goal": "Crash recovery open docs",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "doc_edit",
+          "action": "doc_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "inject_crash",
+          "action": "inject_crash",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "recover",
+          "action": "recover",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_data_loss",
+          "action": "no_data_loss",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-REC-002",
+      "class": "security",
+      "goal": "Forced reboot resume",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "session_open",
+          "action": "session_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "forced_reboot_sim",
+          "action": "forced_reboot_sim",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "restore_session",
+          "action": "restore_session",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-REC-003",
+      "class": "security",
+      "goal": "Broken update rollback",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "update_bad",
+          "action": "update_bad",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "detect_fail",
+          "action": "detect_fail",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "rollback",
+          "action": "rollback",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "boot_ok",
+          "action": "boot_ok",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-RIGHTS-001",
+      "class": "security",
+      "goal": "Guardian consent gates",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "guardian_gate",
+          "action": "guardian_gate",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "youth_safe",
+          "action": "youth_safe",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "audit",
+          "action": "audit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-RING-001",
+      "class": "ring",
+      "goal": "Simulated ring input to OS",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ring_sim_connect",
+          "action": "ring_sim_connect",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "gesture_packet",
+          "action": "gesture_packet",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "os_receive",
+          "action": "os_receive",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "app_action",
+          "action": "app_action",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "latency_digital",
+          "action": "latency_digital",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-RING-002",
+      "class": "ring",
+      "goal": "Ring + creator app",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ring_sim_input",
+          "action": "ring_sim_input",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "sample_app",
+          "action": "sample_app",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "action_map",
+          "action": "action_map",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "logs",
+          "action": "logs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-RING-003",
+      "class": "ring",
+      "goal": "Ring game control sim",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ring_sim_input",
+          "action": "ring_sim_input",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "game_control",
+          "action": "game_control",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_conflict",
+          "action": "no_conflict",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-RING-004",
+      "class": "ring",
+      "goal": "Ring accessibility alternate input",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ring_sim_input",
+          "action": "ring_sim_input",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "a11y_map",
+          "action": "a11y_map",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "confirm_action",
+          "action": "confirm_action",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-RSCH-001",
+      "class": "creator",
+      "goal": "Research dataset local analysis",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "dataset_local",
+          "action": "dataset_local",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "analysis",
+          "action": "analysis",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_assist",
+          "action": "ai_assist",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "export_notes",
+          "action": "export_notes",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "privacy_ok",
+          "action": "privacy_ok",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-SEC-001",
+      "class": "security",
+      "goal": "Permission boundary on share",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "share_link",
+          "action": "share_link",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "permission_check",
+          "action": "permission_check",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "deny_cross_user",
+          "action": "deny_cross_user",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "audit_log",
+          "action": "audit_log",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-SEC-002",
+      "class": "security",
+      "goal": "Clipboard privacy on AI",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "ai_tutor",
+          "action": "ai_tutor",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "clipboard_gate",
+          "action": "clipboard_gate",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_hidden_private",
+          "action": "no_hidden_private",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-SEC-003",
+      "class": "security",
+      "goal": "Update signature verify digital",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "update_package",
+          "action": "update_package",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sig_verify",
+          "action": "sig_verify",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "reject_bad",
+          "action": "reject_bad",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "accept_good",
+          "action": "accept_good",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-001",
+      "class": "student",
+      "goal": "Student assignment\u2192submit\u2192relax",
+      "step_count": 26,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 4,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "wake",
+          "action": "wake",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "auth",
+          "action": "auth",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "wifi_campus",
+          "action": "wifi_campus",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "lms_open",
+          "action": "lms_open",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "pdf_download",
+          "action": "pdf_download",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pdf_open",
+          "action": "pdf_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "doc_create",
+          "action": "doc_create",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "music_study",
+          "action": "music_study",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "waike_search",
+          "action": "waike_search",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "ai_tutor",
+          "action": "ai_tutor",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "ai_privacy_gate",
+          "action": "ai_privacy_gate",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "notes_cite",
+          "action": "notes_cite",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "save_local",
+          "action": "save_local",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "net_loss",
+          "action": "net_loss",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "edit_offline",
+          "action": "edit_offline",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "net_restore",
+          "action": "net_restore",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sync_file",
+          "action": "sync_file",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "lms_upload",
+          "action": "lms_upload",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "submission_receipt",
+          "action": "submission_receipt",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "session_preserve",
+          "action": "session_preserve",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "game_launch",
+          "action": "game_launch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "game_play",
+          "action": "game_play",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "game_save",
+          "action": "game_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "return_assignment",
+          "action": "return_assignment",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "reopen_receipt",
+          "action": "reopen_receipt",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-002",
+      "class": "student",
+      "goal": "Share+message+music with versioning",
+      "step_count": 12,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L3_REAL_SERVICE_API",
+      "phase_xi_key_steps_below_l4": 2,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "doc_create",
+          "action": "doc_create",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "share_folder",
+          "action": "share_folder",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "share_link",
+          "action": "share_link",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "message_send",
+          "action": "message_send",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "music_continue",
+          "action": "music_continue",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "notify_receive",
+          "action": "notify_receive",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "message_open_preserve_cursor",
+          "action": "message_open_preserve_cursor",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "doc_edit",
+          "action": "doc_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "version_save",
+          "action": "version_save",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "share_verify",
+          "action": "share_verify",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "conflict_resolve",
+          "action": "conflict_resolve",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "version_restore",
+          "action": "version_restore",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-003",
+      "class": "student",
+      "goal": "Study music multitask",
+      "step_count": 8,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 2,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "music_study",
+          "action": "music_study",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pdf_open",
+          "action": "pdf_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "notes_cite",
+          "action": "notes_cite",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "ai_tutor",
+          "action": "ai_tutor",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "media_keys",
+          "action": "media_keys",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "notify_no_audio_kill",
+          "action": "notify_no_audio_kill",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "suspend_resume_media",
+          "action": "suspend_resume_media",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-004",
+      "class": "student",
+      "goal": "Movie + assignment multitask",
+      "step_count": 9,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 2,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "video_local",
+          "action": "video_local",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pip_or_second_display",
+          "action": "pip_or_second_display",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "doc_edit",
+          "action": "doc_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "wifi_switch",
+          "action": "wifi_switch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "notify_receive",
+          "action": "notify_receive",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "media_pause",
+          "action": "media_pause",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "media_resume",
+          "action": "media_resume",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "save_local",
+          "action": "save_local",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-005",
+      "class": "student",
+      "goal": "Class preparation offline pack",
+      "step_count": 10,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L5_REAL_GUI_INTERACTION",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "calendar_reminder",
+          "action": "calendar_reminder",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "course_folder",
+          "action": "course_folder",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "pdf_open",
+          "action": "pdf_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "notes_cite",
+          "action": "notes_cite",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "waike_offline_pack",
+          "action": "waike_offline_pack",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "coding_lab",
+          "action": "coding_lab",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "run_tests",
+          "action": "run_tests",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pack_device",
+          "action": "pack_device",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "go_offline",
+          "action": "go_offline",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "reopen_material",
+          "action": "reopen_material",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-006",
+      "class": "student",
+      "goal": "Group project share+chat+call",
+      "step_count": 9,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L3_REAL_SERVICE_API",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "share_folder",
+          "action": "share_folder",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "invite_members",
+          "action": "invite_members",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "sync_exchange",
+          "action": "sync_exchange",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        },
+        {
+          "id": "chat",
+          "action": "chat",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L3_REAL_SERVICE_API"
+        },
+        {
+          "id": "webrtc_call",
+          "action": "webrtc_call",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "screen_share",
+          "action": "screen_share",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "pptx_edit",
+          "action": "pptx_edit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "pdf_export",
+          "action": "pdf_export",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "share_final",
+          "action": "share_final",
+          "phase_xi_depth": "L2_PROTOCOL_SIMULATION",
+          "phase_xii_target_depth": "L2_PROTOCOL_SIMULATION"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-007",
+      "class": "student",
+      "goal": "Presentation day dock display",
+      "step_count": 8,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "pptx_open",
+          "action": "pptx_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "dock",
+          "action": "dock",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "external_display",
+          "action": "external_display",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "presenter_mode",
+          "action": "presenter_mode",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "notes_second_screen",
+          "action": "notes_second_screen",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "audio_playback",
+          "action": "audio_playback",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "display_hotplug",
+          "action": "display_hotplug",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "state_preserve",
+          "action": "state_preserve",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-008",
+      "class": "student",
+      "goal": "Exam/quiet focus mode",
+      "step_count": 7,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "focus_mode_enable",
+          "action": "focus_mode_enable",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "mute_noncritical",
+          "action": "mute_noncritical",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "timer_keep",
+          "action": "timer_keep",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "a11y_alerts_keep",
+          "action": "a11y_alerts_keep",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "admin_emergency_keep",
+          "action": "admin_emergency_keep",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "block_game_notify",
+          "action": "block_game_notify",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "background_saves",
+          "action": "background_saves",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-009",
+      "class": "student",
+      "goal": "Low-battery save priority",
+      "step_count": 9,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L4_REAL_APPLICATION_PROCESS",
+      "phase_xi_key_steps_below_l4": 1,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "doc_open",
+          "action": "doc_open",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "music_study",
+          "action": "music_study",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        {
+          "id": "browser",
+          "action": "browser",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "ai_pending",
+          "action": "ai_pending",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "low_battery_warn",
+          "action": "low_battery_warn",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "save_sync_priority",
+          "action": "save_sync_priority",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "power_shift",
+          "action": "power_shift",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_data_loss",
+          "action": "no_data_loss",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "graceful_suspend",
+          "action": "graceful_suspend",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STU-010",
+      "class": "student",
+      "goal": "Storage pressure safety",
+      "step_count": 6,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "storage_pressure",
+          "action": "storage_pressure",
+          "phase_xi_depth": "L1_POLICY_MODEL",
+          "phase_xii_target_depth": "L1_POLICY_MODEL"
+        },
+        {
+          "id": "warn_user",
+          "action": "warn_user",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "cleanup_recs",
+          "action": "cleanup_recs",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "user_file_safety",
+          "action": "user_file_safety",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "update_reserve",
+          "action": "update_reserve",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_corrupt_saves",
+          "action": "no_corrupt_saves",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-STUDENTHW-001",
+      "class": "student",
+      "goal": "Student HW profile defaults",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "profile_student",
+          "action": "profile_student",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "apps_present",
+          "action": "apps_present",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "storage_ok",
+          "action": "storage_ok",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "ai_profile",
+          "action": "ai_profile",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-UX-001",
+      "class": "a11y",
+      "goal": "Screen reader core path",
+      "step_count": 5,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "a11y_enable",
+          "action": "a11y_enable",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "navigate_launcher",
+          "action": "navigate_launcher",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "open_doc",
+          "action": "open_doc",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "read_content",
+          "action": "read_content",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "submit",
+          "action": "submit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-UX-002",
+      "class": "a11y",
+      "goal": "High contrast + large text",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "theme_hc",
+          "action": "theme_hc",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "text_scale",
+          "action": "text_scale",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "readable",
+          "action": "readable",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "controls_hit",
+          "action": "controls_hit",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-UX-003",
+      "class": "a11y",
+      "goal": "Keyboard-only navigation",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "kb_nav",
+          "action": "kb_nav",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L5_REAL_GUI_INTERACTION"
+        },
+        {
+          "id": "focus_ring",
+          "action": "focus_ring",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_trap",
+          "action": "no_trap",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "complete_goal",
+          "action": "complete_goal",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-UX-004",
+      "class": "student",
+      "goal": "First-run clarity",
+      "step_count": 4,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "onboard_start",
+          "action": "onboard_start",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "choose_persona",
+          "action": "choose_persona",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "defaults_safe",
+          "action": "defaults_safe",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "finish",
+          "action": "finish",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    },
+    {
+      "journey_id": "J-UX-005",
+      "class": "student",
+      "goal": "Family shared profile boundaries",
+      "step_count": 3,
+      "phase_xi_min_key_depth": "L0_GENERIC_OK",
+      "phase_xii_target_min_key_depth": "L0_GENERIC_OK",
+      "phase_xi_key_steps_below_l4": 0,
+      "VALID_AS_BEHAVIORAL_HARNESS": true,
+      "NOT_YET_REAL_APP_PROVEN": true,
+      "steps": [
+        {
+          "id": "profile_switch",
+          "action": "profile_switch",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "guardian_gate",
+          "action": "guardian_gate",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        },
+        {
+          "id": "no_cross_data",
+          "action": "no_cross_data",
+          "phase_xi_depth": "L0_GENERIC_OK",
+          "phase_xii_target_depth": "L0_GENERIC_OK"
+        }
+      ]
+    }
+  ],
+  "claim_correction": {
+    "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
+    "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN"
+  }
+}

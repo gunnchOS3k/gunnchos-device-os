@@ -1,0 +1,70 @@
+{
+  "ok": true,
+  "app": {
+    "ok": true,
+    "app_id": "device_dashboard",
+    "entry": "apps/device_management/index.html",
+    "surfaces": {
+      "hardware_inventory": "hal.inventory",
+      "storage": "diagnostics.storage",
+      "battery": "hal.power_state",
+      "display": "display.outputs",
+      "connectivity": "connectivity.status",
+      "ring": "ring.calibrate",
+      "update_state": "updater.status",
+      "recovery": "recovery.status",
+      "logs": "diagnostics.query",
+      "privacy_permissions": "permissions.summary",
+      "fleet": "fleet_agent.report"
+    },
+    "bundle": {
+      "schema": "gunnchos.diagnostics_bundle.v1",
+      "created_at": 1786317160.33778,
+      "role": "student",
+      "surfaces": [
+        "hardware_inventory",
+        "storage",
+        "battery",
+        "display",
+        "connectivity",
+        "ring",
+        "update_state",
+        "recovery",
+        "logs",
+        "privacy_permissions",
+        "fleet"
+      ],
+      "live_keys": [
+        "hal.inventory",
+        "hal.power_state",
+        "display.outputs",
+        "connectivity.status",
+        "ring.calibrate",
+        "updater.status",
+        "recovery.status",
+        "diagnostics.query",
+        "permissions.summary",
+        "fleet_agent.report"
+      ],
+      "mock": false
+    },
+    "live": {
+      "hal.inventory": true,
+      "hal.power_state": true,
+      "display.outputs": true,
+      "connectivity.status": true,
+      "ring.calibrate": true,
+      "updater.status": true,
+      "recovery.status": true,
+      "diagnostics.query": true,
+      "permissions.summary": true,
+      "fleet_agent.report": true
+    },
+    "ui_present": true,
+    "mock": false,
+    "stub_content": false,
+    "claim_boundary": "Digital device management surfaces over real runtime service APIs. Not production MDM and not physical hardware attestation."
+  },
+  "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+  "duration_ms": 2741
+}

@@ -1,0 +1,49 @@
+# Real protocol stacks for Linux CI / developers with Docker.
+# PHYSICAL_EXECUTION_FREEZE: local/dev only; no external vendor send.
+services:
+  greenmail:
+    image: greenmail/standalone:2.0.1
+    ports:
+      - "3025:3025"   # SMTP
+      - "3110:3110"   # POP3
+      - "3143:3143"   # IMAP
+    environment:
+      GREENMAIL_OPTS: "-Dgreenmail.setup.test.all -Dgreenmail.hostname=0.0.0.0 -Dgreenmail.verbose"
+
+  radicale:
+    image: tomsquest/docker-radicale:3.1.8.0
+    ports:
+      - "5232:5232"
+    volumes:
+      - radicale_data:/data
+
+  conduit:
+    image: matrixconduit/matrix-conduit:latest
+    ports:
+      - "6167:6167"
+    environment:
+      CONDUIT_SERVER_NAME: localhost
+      CONDUIT_PORT: 6167
+      CONDUIT_DATABASE_BACKEND: sqlite
+      CONDUIT_ALLOW_REGISTRATION: "true"
+      CONDUIT_ALLOW_FEDERATION: "false"
+
+  webdav:
+    image: bytemark/webdav:2.4
+    ports:
+      - "8088:80"
+    environment:
+      AUTH_TYPE: Basic
+      USERNAME: dev
+      PASSWORD: dev
+    volumes:
+      - webdav_data:/var/lib/dav
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  radicale_data:
+  webdav_data:

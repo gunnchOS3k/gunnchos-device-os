@@ -1,0 +1,85 @@
+{
+  "journey_id": "J-DSXL-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "dual_screen",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "dual_screen"
+      }
+    },
+    {
+      "step": "ide_docs",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "ide_docs",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "ai_side",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "ai_side",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "state_preserve",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L1_POLICY_MODEL",
+      "result": {
+        "ok": true,
+        "keys": [
+          "ai_sync_permitted",
+          "authenticated",
+          "battery_pct",
+          "chat_state",
+          "cursor_position",
+          "doc_versions",
+          "focus_mode",
+          "game_save",
+          "music_position",
+          "network",
+          "open_files",
+          "storage_used_pct",
+          "video_position"
+        ],
+        "execution_depth": "L1_POLICY_MODEL",
+        "duration_ms": 0,
+        "action": "state_preserve"
+      }
+    }
+  ],
+  "duration_ms": 1,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}
