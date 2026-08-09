@@ -1,0 +1,90 @@
+{
+  "id": "J-GAME-007",
+  "persona": "P08",
+  "goal": "Archive of Life session",
+  "class": "recreation",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "archive_launch",
+      "action": "archive_launch",
+      "expected": "ok"
+    },
+    {
+      "id": "local_ai",
+      "action": "local_ai",
+      "expected": "ok"
+    },
+    {
+      "id": "save_progress",
+      "action": "save_progress",
+      "expected": "ok"
+    },
+    {
+      "id": "privacy_ok",
+      "action": "privacy_ok",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "archive_launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "local_ai",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_progress",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "privacy_ok",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-GAME-007.json"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.user_journey.v1",
+  "title": "gunnchos user journey",
+  "type": "object",
+  "required": [
+    "id",
+    "persona",
+    "goal",
+    "devices",
+    "starting_state",
+    "network_state",
+    "power_state",
+    "required_apps",
+    "required_services",
+    "steps",
+    "result"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "persona": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "class": {
+      "type": "string"
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "starting_state": {
+      "type": "object"
+    },
+    "network_state": {
+      "type": "string"
+    },
+    "power_state": {
+      "type": "string"
+    },
+    "required_apps": {
+      "type": "array"
+    },
+    "required_services": {
+      "type": "array"
+    },
+    "steps": {
+      "type": "array"
+    },
+    "expected_state_after_each_step": {
+      "type": "array"
+    },
+    "performance_budget": {
+      "type": "object"
+    },
+    "privacy_expectation": {
+      "type": "string"
+    },
+    "accessibility_expectation": {
+      "type": "string"
+    },
+    "failure_injections": {
+      "type": "array"
+    },
+    "cleanup": {
+      "type": "array"
+    },
+    "physical_followups": {
+      "type": "array"
+    },
+    "result": {
+      "type": "object"
+    },
+    "evidence": {
+      "type": "object"
+    }
+  }
+}

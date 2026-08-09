@@ -1,0 +1,128 @@
+{
+  "journey_id": "J-STU-006",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "share_folder",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "path": "shared.odt",
+        "version": 1,
+        "share": "webdav://local/shared.odt?v=1"
+      }
+    },
+    {
+      "step": "invite_members",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "members": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "step": "sync_exchange",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "flushed": 1
+      }
+    },
+    {
+      "step": "chat",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "message": {
+          "id": "92963a83-a6e8-43f3-a273-461d027e9046",
+          "room": "!class",
+          "body": "please review webdav://local/shared.odt?v=1",
+          "from": "user"
+        }
+      }
+    },
+    {
+      "step": "webrtc_call",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "id": "7f5368a5-173e-459d-a12b-15cb93df8a5a",
+          "state": "connected",
+          "screen_share": false
+        }
+      }
+    },
+    {
+      "step": "screen_share",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "id": "ed8d50f0-6967-4517-92f2-1eccd5c12a6f",
+          "state": "connected",
+          "screen_share": true
+        }
+      }
+    },
+    {
+      "step": "pptx_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "pdf_export",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "share_final",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "path": "shared.odt",
+        "version": 1,
+        "share": "webdav://local/shared.odt?v=1"
+      }
+    }
+  ],
+  "duration_ms": 2,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54113/health",
+    "lms": "http://127.0.0.1:54113/lms",
+    "imap": "http://127.0.0.1:54113/imap",
+    "smtp": "http://127.0.0.1:54113/smtp/send",
+    "caldav": "http://127.0.0.1:54113/caldav",
+    "webdav": "http://127.0.0.1:54113/webdav",
+    "matrix": "http://127.0.0.1:54113/matrix",
+    "webrtc": "http://127.0.0.1:54113/webrtc",
+    "ring": "http://127.0.0.1:54113/ring",
+    "mdm": "http://127.0.0.1:54113/mdm",
+    "sync": "http://127.0.0.1:54113/sync/queue"
+  },
+  "mock": false
+}

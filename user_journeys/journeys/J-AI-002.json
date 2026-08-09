@@ -1,0 +1,83 @@
+{
+  "id": "J-AI-002",
+  "persona": "P03",
+  "goal": "AI code assist privacy",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "ai_code_help",
+      "action": "ai_code_help",
+      "expected": "ok"
+    },
+    {
+      "id": "repo_scope",
+      "action": "repo_scope",
+      "expected": "ok"
+    },
+    {
+      "id": "no_hidden_private",
+      "action": "no_hidden_private",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "ai_code_help",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "repo_scope",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_hidden_private",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-AI-002.json"
+  }
+}

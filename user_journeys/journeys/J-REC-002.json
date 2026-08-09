@@ -1,0 +1,79 @@
+{
+  "id": "J-REC-002",
+  "persona": "P02",
+  "goal": "Forced reboot resume",
+  "class": "security",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "auth",
+    "update_client",
+    "audit"
+  ],
+  "required_services": [
+    "auth_local",
+    "update_dev"
+  ],
+  "steps": [
+    {
+      "id": "session_open",
+      "action": "session_open",
+      "expected": "ok"
+    },
+    {
+      "id": "forced_reboot_sim",
+      "action": "forced_reboot_sim",
+      "expected": "ok"
+    },
+    {
+      "id": "restore_session",
+      "action": "restore_session",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "session_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "forced_reboot_sim",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "restore_session",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-REC-002.json"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "id": "J-OFF-006",
+  "persona": "P05",
+  "goal": "Scan/camera document flow",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "synthetic_capture",
+      "action": "synthetic_capture",
+      "expected": "ok"
+    },
+    {
+      "id": "save_image",
+      "action": "save_image",
+      "expected": "ok"
+    },
+    {
+      "id": "crop_rotate",
+      "action": "crop_rotate",
+      "expected": "ok"
+    },
+    {
+      "id": "attach_message",
+      "action": "attach_message",
+      "expected": "ok"
+    },
+    {
+      "id": "archive_folder",
+      "action": "archive_folder",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "synthetic_capture",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_image",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "crop_rotate",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "attach_message",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "archive_folder",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-006.json"
+  }
+}

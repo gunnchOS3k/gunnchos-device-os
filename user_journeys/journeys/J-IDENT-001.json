@@ -1,0 +1,109 @@
+{
+  "id": "J-IDENT-001",
+  "persona": "P15",
+  "goal": "Multi-user switch preserve",
+  "class": "security",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "auth",
+    "update_client",
+    "audit"
+  ],
+  "required_services": [
+    "auth_local",
+    "update_dev"
+  ],
+  "steps": [
+    {
+      "id": "user_a_work",
+      "action": "user_a_work",
+      "expected": "ok"
+    },
+    {
+      "id": "switch_user",
+      "action": "switch_user",
+      "expected": "ok"
+    },
+    {
+      "id": "user_b_session",
+      "action": "user_b_session",
+      "expected": "ok"
+    },
+    {
+      "id": "switch_back",
+      "action": "switch_back",
+      "expected": "ok"
+    },
+    {
+      "id": "no_leak",
+      "action": "no_leak",
+      "expected": "ok"
+    },
+    {
+      "id": "state_preserve",
+      "action": "state_preserve",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "user_a_work",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "switch_user",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "user_b_session",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "switch_back",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_leak",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "state_preserve",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-IDENT-001.json"
+  }
+}

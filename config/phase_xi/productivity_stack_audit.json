@@ -1,0 +1,37 @@
+{
+  "schema": "gunnchos.productivity_stack_audit.v1",
+  "host_binaries": {
+    "browser": null,
+    "office": null,
+    "pdf": null,
+    "email": null,
+    "terminal": null,
+    "editor": {
+      "name": "vim",
+      "path": "/usr/bin/vim"
+    },
+    "music": null,
+    "video": null,
+    "cups": {
+      "name": "lp",
+      "path": "/usr/bin/lp"
+    },
+    "vpn": null,
+    "git": {
+      "name": "git",
+      "path": "/opt/homebrew/bin/git"
+    }
+  },
+  "rootfs_staged": true,
+  "install_ledger_present": true,
+  "stack_config": "config/productivity/stack.yaml",
+  "one_app_per_job": {
+    "office_documents": "libreoffice",
+    "browser_x86_64": "chromium",
+    "browser_aarch64": "firefox-esr",
+    "print": "cups_virtual_pdf",
+    "vpn": "wireguard_primary_openvpn_alt"
+  },
+  "commercial_cloud_creds_required": false,
+  "path_home_dependency_forbidden": true
+}

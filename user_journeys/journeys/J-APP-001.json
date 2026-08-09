@@ -1,0 +1,93 @@
+{
+  "id": "J-APP-001",
+  "persona": "P07",
+  "goal": "App install from adopter store sim",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "store_sim",
+      "action": "store_sim",
+      "expected": "ok"
+    },
+    {
+      "id": "install",
+      "action": "install",
+      "expected": "ok"
+    },
+    {
+      "id": "launch",
+      "action": "launch",
+      "expected": "ok"
+    },
+    {
+      "id": "perms",
+      "action": "perms",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "store_sim",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "install",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "perms",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-APP-001.json"
+  }
+}

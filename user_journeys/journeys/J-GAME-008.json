@@ -1,0 +1,80 @@
+{
+  "id": "J-GAME-008",
+  "persona": "P08",
+  "goal": "Beatlink party media mix",
+  "class": "recreation",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "beatlink_launch",
+      "action": "beatlink_launch",
+      "expected": "ok"
+    },
+    {
+      "id": "media_mix",
+      "action": "media_mix",
+      "expected": "ok"
+    },
+    {
+      "id": "session_save",
+      "action": "session_save",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "beatlink_launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "media_mix",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "session_save",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-GAME-008.json"
+  }
+}

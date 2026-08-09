@@ -1,0 +1,90 @@
+{
+  "id": "J-MEDIA-001",
+  "persona": "P08",
+  "goal": "Local music library",
+  "class": "recreation",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "games",
+    "music_player",
+    "video_player",
+    "browser"
+  ],
+  "required_services": [
+    "media",
+    "game_runtime"
+  ],
+  "steps": [
+    {
+      "id": "music_library",
+      "action": "music_library",
+      "expected": "ok"
+    },
+    {
+      "id": "play",
+      "action": "play",
+      "expected": "ok"
+    },
+    {
+      "id": "gapless_or_cont",
+      "action": "gapless_or_cont",
+      "expected": "ok"
+    },
+    {
+      "id": "media_keys",
+      "action": "media_keys",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "music_library",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "play",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "gapless_or_cont",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "media_keys",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-MEDIA-001.json"
+  }
+}

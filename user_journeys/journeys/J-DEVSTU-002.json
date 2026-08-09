@@ -1,0 +1,143 @@
+{
+  "id": "J-DEVSTU-002",
+  "persona": "P03",
+  "goal": "Hardware/networking lab (unprivileged)",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "lab_instructions",
+      "action": "lab_instructions",
+      "expected": "ok"
+    },
+    {
+      "id": "terminal",
+      "action": "terminal",
+      "expected": "ok"
+    },
+    {
+      "id": "net_tools",
+      "action": "net_tools",
+      "expected": "ok"
+    },
+    {
+      "id": "capture_log",
+      "action": "capture_log",
+      "expected": "ok"
+    },
+    {
+      "id": "visualize",
+      "action": "visualize",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_explain",
+      "action": "ai_explain",
+      "expected": "ok"
+    },
+    {
+      "id": "lab_report",
+      "action": "lab_report",
+      "expected": "ok"
+    },
+    {
+      "id": "pdf_export",
+      "action": "pdf_export",
+      "expected": "ok"
+    },
+    {
+      "id": "no_unsafe_privs",
+      "action": "no_unsafe_privs",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "lab_instructions",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "terminal",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "net_tools",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "capture_log",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "visualize",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_explain",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "lab_report",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pdf_export",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_unsafe_privs",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-DEVSTU-002.json"
+  }
+}

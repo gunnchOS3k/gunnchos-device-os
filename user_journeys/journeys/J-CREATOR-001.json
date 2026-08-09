@@ -1,0 +1,173 @@
+{
+  "id": "J-CREATOR-001",
+  "persona": "P07",
+  "goal": "Adopter SDK app lifecycle",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "sdk_use",
+      "action": "sdk_use",
+      "expected": "ok"
+    },
+    {
+      "id": "sample_app",
+      "action": "sample_app",
+      "expected": "ok"
+    },
+    {
+      "id": "device_profile_api",
+      "action": "device_profile_api",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_capability",
+      "action": "ai_capability",
+      "expected": "ok"
+    },
+    {
+      "id": "ring_sim_input",
+      "action": "ring_sim_input",
+      "expected": "ok"
+    },
+    {
+      "id": "local_data",
+      "action": "local_data",
+      "expected": "ok"
+    },
+    {
+      "id": "package",
+      "action": "package",
+      "expected": "ok"
+    },
+    {
+      "id": "install",
+      "action": "install",
+      "expected": "ok"
+    },
+    {
+      "id": "launch",
+      "action": "launch",
+      "expected": "ok"
+    },
+    {
+      "id": "inspect_logs",
+      "action": "inspect_logs",
+      "expected": "ok"
+    },
+    {
+      "id": "update",
+      "action": "update",
+      "expected": "ok"
+    },
+    {
+      "id": "rollback",
+      "action": "rollback",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "sdk_use",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sample_app",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "device_profile_api",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_capability",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ring_sim_input",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "local_data",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "package",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "install",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "launch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "inspect_logs",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "update",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "rollback",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-CREATOR-001.json"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "id": "J-UX-001",
+  "persona": "P13",
+  "goal": "Screen reader core path",
+  "class": "a11y",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "a11y_stack"
+  ],
+  "required_services": [
+    "a11y_bus"
+  ],
+  "steps": [
+    {
+      "id": "a11y_enable",
+      "action": "a11y_enable",
+      "expected": "ok"
+    },
+    {
+      "id": "navigate_launcher",
+      "action": "navigate_launcher",
+      "expected": "ok"
+    },
+    {
+      "id": "open_doc",
+      "action": "open_doc",
+      "expected": "ok"
+    },
+    {
+      "id": "read_content",
+      "action": "read_content",
+      "expected": "ok"
+    },
+    {
+      "id": "submit",
+      "action": "submit",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "a11y_enable",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "navigate_launcher",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "open_doc",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "read_content",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "submit",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-UX-001.json"
+  }
+}

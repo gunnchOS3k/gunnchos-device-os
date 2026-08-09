@@ -1,0 +1,137 @@
+{
+  "journey_id": "J-GAME-006",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "game_play",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "playing": true
+      }
+    },
+    {
+      "step": "dock",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "direction": "dock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": false,
+          "network": "ethernet",
+          "open_files": {
+            "assignment.odt": {
+              "kind": "doc",
+              "dirty": false
+            }
+          },
+          "cursor_position": {
+            "assignment.odt": 0
+          },
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {}
+        }
+      }
+    },
+    {
+      "step": "display_switch",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "display": "switched"
+      }
+    },
+    {
+      "step": "undock",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "direction": "undock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": false,
+          "network": "ethernet",
+          "open_files": {
+            "assignment.odt": {
+              "kind": "doc",
+              "dirty": false
+            }
+          },
+          "cursor_position": {
+            "assignment.odt": 0
+          },
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {}
+        }
+      }
+    },
+    {
+      "step": "state_preserve",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "keys": [
+          "ai_sync_permitted",
+          "authenticated",
+          "battery_pct",
+          "chat_state",
+          "cursor_position",
+          "doc_versions",
+          "focus_mode",
+          "game_save",
+          "music_position",
+          "network",
+          "open_files",
+          "storage_used_pct",
+          "video_position"
+        ]
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "display_hotplug_lab",
+    "dock_si"
+  ],
+  "services": {
+    "health": "http://127.0.0.1:54227/health",
+    "lms": "http://127.0.0.1:54227/lms",
+    "imap": "http://127.0.0.1:54227/imap",
+    "smtp": "http://127.0.0.1:54227/smtp/send",
+    "caldav": "http://127.0.0.1:54227/caldav",
+    "webdav": "http://127.0.0.1:54227/webdav",
+    "matrix": "http://127.0.0.1:54227/matrix",
+    "webrtc": "http://127.0.0.1:54227/webrtc",
+    "ring": "http://127.0.0.1:54227/ring",
+    "mdm": "http://127.0.0.1:54227/mdm",
+    "sync": "http://127.0.0.1:54227/sync/queue"
+  },
+  "mock": false
+}

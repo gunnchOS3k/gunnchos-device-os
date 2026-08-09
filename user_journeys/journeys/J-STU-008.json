@@ -1,0 +1,126 @@
+{
+  "id": "J-STU-008",
+  "persona": "P01",
+  "goal": "Exam/quiet focus mode",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "focus_mode_enable",
+      "action": "focus_mode_enable",
+      "expected": "ok"
+    },
+    {
+      "id": "mute_noncritical",
+      "action": "mute_noncritical",
+      "expected": "ok"
+    },
+    {
+      "id": "timer_keep",
+      "action": "timer_keep",
+      "expected": "ok"
+    },
+    {
+      "id": "a11y_alerts_keep",
+      "action": "a11y_alerts_keep",
+      "expected": "ok"
+    },
+    {
+      "id": "admin_emergency_keep",
+      "action": "admin_emergency_keep",
+      "expected": "ok"
+    },
+    {
+      "id": "block_game_notify",
+      "action": "block_game_notify",
+      "expected": "ok"
+    },
+    {
+      "id": "background_saves",
+      "action": "background_saves",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "focus_mode_enable",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "mute_noncritical",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "timer_keep",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "a11y_alerts_keep",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "admin_emergency_keep",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "block_game_notify",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "background_saves",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-008.json"
+  }
+}

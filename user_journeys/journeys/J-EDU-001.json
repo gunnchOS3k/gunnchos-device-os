@@ -1,0 +1,152 @@
+{
+  "id": "J-EDU-001",
+  "persona": "P04",
+  "goal": "Educator daily workflow",
+  "class": "educator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "waike",
+    "browser",
+    "libreoffice",
+    "messaging",
+    "gunnchai"
+  ],
+  "required_services": [
+    "webdav",
+    "matrix_dev",
+    "waike_local"
+  ],
+  "steps": [
+    {
+      "id": "edu_login",
+      "action": "edu_login",
+      "expected": "ok"
+    },
+    {
+      "id": "waike_open",
+      "action": "waike_open",
+      "expected": "ok"
+    },
+    {
+      "id": "lesson_browse",
+      "action": "lesson_browse",
+      "expected": "ok"
+    },
+    {
+      "id": "prepare_material",
+      "action": "prepare_material",
+      "expected": "ok"
+    },
+    {
+      "id": "share_pdf",
+      "action": "share_pdf",
+      "expected": "ok"
+    },
+    {
+      "id": "learner_progress",
+      "action": "learner_progress",
+      "expected": "ok"
+    },
+    {
+      "id": "class_message",
+      "action": "class_message",
+      "expected": "ok"
+    },
+    {
+      "id": "dock_present",
+      "action": "dock_present",
+      "expected": "ok"
+    },
+    {
+      "id": "export_report",
+      "action": "export_report",
+      "expected": "ok"
+    },
+    {
+      "id": "no_private_leak",
+      "action": "no_private_leak",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "edu_login",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "waike_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "lesson_browse",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "prepare_material",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "share_pdf",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "learner_progress",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "class_message",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "dock_present",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "export_report",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "no_private_leak",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-EDU-001.json"
+  }
+}

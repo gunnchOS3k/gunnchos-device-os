@@ -1,0 +1,88 @@
+{
+  "id": "J-ADMIN-002",
+  "persona": "P12",
+  "goal": "Enterprise inventory + update wave",
+  "class": "admin",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "mdm",
+    "browser",
+    "terminal"
+  ],
+  "required_services": [
+    "mdm_dev"
+  ],
+  "steps": [
+    {
+      "id": "inventory",
+      "action": "inventory",
+      "expected": "ok"
+    },
+    {
+      "id": "wave_plan",
+      "action": "wave_plan",
+      "expected": "ok"
+    },
+    {
+      "id": "staged_update",
+      "action": "staged_update",
+      "expected": "ok"
+    },
+    {
+      "id": "report",
+      "action": "report",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "inventory",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "wave_plan",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "staged_update",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "report",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-ADMIN-002.json"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "id": "J-DEVSTU-001",
+  "persona": "P03",
+  "goal": "College coding assignment",
+  "class": "creator",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "ide",
+    "terminal",
+    "git",
+    "sdk",
+    "browser",
+    "gunnchai"
+  ],
+  "required_services": [
+    "git_local",
+    "sdk_registry",
+    "ring_sim"
+  ],
+  "steps": [
+    {
+      "id": "git_clone_local",
+      "action": "git_clone_local",
+      "expected": "ok"
+    },
+    {
+      "id": "ide_open",
+      "action": "ide_open",
+      "expected": "ok"
+    },
+    {
+      "id": "terminal",
+      "action": "terminal",
+      "expected": "ok"
+    },
+    {
+      "id": "run_tests",
+      "action": "run_tests",
+      "expected": "ok"
+    },
+    {
+      "id": "second_screen_logs",
+      "action": "second_screen_logs",
+      "expected": "ok"
+    },
+    {
+      "id": "ai_code_help",
+      "action": "ai_code_help",
+      "expected": "ok"
+    },
+    {
+      "id": "code_change",
+      "action": "code_change",
+      "expected": "ok"
+    },
+    {
+      "id": "format_test_build",
+      "action": "format_test_build",
+      "expected": "ok"
+    },
+    {
+      "id": "git_commit",
+      "action": "git_commit",
+      "expected": "ok"
+    },
+    {
+      "id": "export_project",
+      "action": "export_project",
+      "expected": "ok"
+    },
+    {
+      "id": "browser_upload",
+      "action": "browser_upload",
+      "expected": "ok"
+    },
+    {
+      "id": "game_break",
+      "action": "game_break",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "git_clone_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ide_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "terminal",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "run_tests",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "second_screen_logs",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "ai_code_help",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "code_change",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "format_test_build",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "git_commit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "export_project",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "browser_upload",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "game_break",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-DEVSTU-001.json"
+  }
+}

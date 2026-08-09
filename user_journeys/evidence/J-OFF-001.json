@@ -1,0 +1,212 @@
+{
+  "journey_id": "J-OFF-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "wake",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "state": "awake"
+      }
+    },
+    {
+      "step": "auth",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "authenticated": true
+      }
+    },
+    {
+      "step": "dock",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "direction": "dock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": true,
+          "network": "online",
+          "open_files": {},
+          "cursor_position": {},
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {}
+        }
+      }
+    },
+    {
+      "step": "ethernet",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "network": "ethernet"
+      }
+    },
+    {
+      "step": "external_display",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "display": "external_sim"
+      }
+    },
+    {
+      "step": "browser",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "app": "browser",
+        "invoked": true
+      }
+    },
+    {
+      "step": "email",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "queued": {
+          "id": "c80388c2-08d0-4934-9b2c-cfc57df4b944",
+          "from": "dev@localhost",
+          "to": "peer@localhost",
+          "subject": "Phase XI",
+          "body": "hello"
+        }
+      }
+    },
+    {
+      "step": "calendar",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "event": {
+          "id": "c664e085-ddcf-420e-8f51-d59045fda7b0",
+          "title": "Class",
+          "when": "now"
+        }
+      }
+    },
+    {
+      "step": "docx_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "xlsx_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "pptx_edit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "pdf_export",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1
+      }
+    },
+    {
+      "step": "webrtc_call",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "id": "28f2517f-3a83-4412-a993-28c2a5faccfe",
+          "state": "connected",
+          "screen_share": false
+        }
+      }
+    },
+    {
+      "step": "screen_share",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "session": {
+          "id": "6e8c820d-f770-45b6-9c4f-b38188452ebd",
+          "state": "connected",
+          "screen_share": true
+        }
+      }
+    },
+    {
+      "step": "save_local",
+      "ok": true,
+      "ms": 1,
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false
+      }
+    },
+    {
+      "step": "share_files",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "path": "shared.odt",
+        "version": 1,
+        "share": "webdav://local/shared.odt?v=1"
+      }
+    }
+  ],
+  "duration_ms": 6,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54199/health",
+    "lms": "http://127.0.0.1:54199/lms",
+    "imap": "http://127.0.0.1:54199/imap",
+    "smtp": "http://127.0.0.1:54199/smtp/send",
+    "caldav": "http://127.0.0.1:54199/caldav",
+    "webdav": "http://127.0.0.1:54199/webdav",
+    "matrix": "http://127.0.0.1:54199/matrix",
+    "webrtc": "http://127.0.0.1:54199/webrtc",
+    "ring": "http://127.0.0.1:54199/ring",
+    "mdm": "http://127.0.0.1:54199/mdm",
+    "sync": "http://127.0.0.1:54199/sync/queue"
+  },
+  "mock": false
+}

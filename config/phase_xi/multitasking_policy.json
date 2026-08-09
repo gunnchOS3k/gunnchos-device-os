@@ -1,0 +1,64 @@
+{
+  "schema": "gunnchos.multitasking_policy.v1",
+  "foreground_nice": -5,
+  "background_nice": 5,
+  "media_nice": -2,
+  "memory_warn_pct": 85.0,
+  "memory_critical_pct": 95.0,
+  "silent_kill_forbidden": true,
+  "protected_workloads": [
+    "document_editor",
+    "spreadsheet",
+    "presentation",
+    "ide",
+    "terminal",
+    "browser_tabs_active",
+    "game_session",
+    "ai_session",
+    "sync_inflight"
+  ],
+  "stacks": {
+    "document_music": [
+      "document_editor",
+      "music_player"
+    ],
+    "pdf_music": [
+      "pdf_viewer",
+      "music_player"
+    ],
+    "browser_ai": [
+      "browser",
+      "ai_tutor"
+    ],
+    "document_messaging": [
+      "document_editor",
+      "messaging"
+    ],
+    "video_document": [
+      "video_player",
+      "document_editor"
+    ],
+    "videocall_document_browser": [
+      "webrtc",
+      "document_editor",
+      "browser"
+    ],
+    "ide_docs_ai": [
+      "ide",
+      "docs",
+      "ai_tutor"
+    ],
+    "game_voice": [
+      "game",
+      "voice"
+    ],
+    "game_music_opt_in": [
+      "game",
+      "music_player"
+    ],
+    "archive_local_ai": [
+      "archive",
+      "ai_tutor"
+    ]
+  }
+}

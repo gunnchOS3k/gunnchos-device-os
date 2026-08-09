@@ -1,0 +1,140 @@
+{
+  "journey_id": "J-DEVSTU-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "git_clone_local",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "git_clone_local"
+      }
+    },
+    {
+      "step": "ide_open",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "ide_open"
+      }
+    },
+    {
+      "step": "terminal",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "terminal"
+      }
+    },
+    {
+      "step": "run_tests",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "run_tests"
+      }
+    },
+    {
+      "step": "second_screen_logs",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "step": "ai_code_help",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "answered": true,
+        "blocked_private_clipboard": false,
+        "reply": "Tutoring hint for: refactor loop",
+        "citations": [
+          "local_waike://fixture"
+        ]
+      }
+    },
+    {
+      "step": "code_change",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "code_change"
+      }
+    },
+    {
+      "step": "format_test_build",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "format_test_build"
+      }
+    },
+    {
+      "step": "git_commit",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "git_commit"
+      }
+    },
+    {
+      "step": "export_project",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "export_project"
+      }
+    },
+    {
+      "step": "browser_upload",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "browser_upload"
+      }
+    },
+    {
+      "step": "game_break",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "user_journeys/evidence/anime_aggressors_save.json",
+        "fixture": true
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54113/health",
+    "lms": "http://127.0.0.1:54113/lms",
+    "imap": "http://127.0.0.1:54113/imap",
+    "smtp": "http://127.0.0.1:54113/smtp/send",
+    "caldav": "http://127.0.0.1:54113/caldav",
+    "webdav": "http://127.0.0.1:54113/webdav",
+    "matrix": "http://127.0.0.1:54113/matrix",
+    "webrtc": "http://127.0.0.1:54113/webrtc",
+    "ring": "http://127.0.0.1:54113/ring",
+    "mdm": "http://127.0.0.1:54113/mdm",
+    "sync": "http://127.0.0.1:54113/sync/queue"
+  },
+  "mock": false
+}

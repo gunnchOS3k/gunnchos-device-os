@@ -1,0 +1,89 @@
+{
+  "id": "J-SEC-001",
+  "persona": "P11",
+  "goal": "Permission boundary on share",
+  "class": "security",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "auth",
+    "update_client",
+    "audit"
+  ],
+  "required_services": [
+    "auth_local",
+    "update_dev"
+  ],
+  "steps": [
+    {
+      "id": "share_link",
+      "action": "share_link",
+      "expected": "ok"
+    },
+    {
+      "id": "permission_check",
+      "action": "permission_check",
+      "expected": "ok"
+    },
+    {
+      "id": "deny_cross_user",
+      "action": "deny_cross_user",
+      "expected": "ok"
+    },
+    {
+      "id": "audit_log",
+      "action": "audit_log",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "share_link",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "permission_check",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "deny_cross_user",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "audit_log",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-SEC-001.json"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "id": "J-STU-005",
+  "persona": "P02",
+  "goal": "Class preparation offline pack",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "calendar_reminder",
+      "action": "calendar_reminder",
+      "expected": "ok"
+    },
+    {
+      "id": "course_folder",
+      "action": "course_folder",
+      "expected": "ok"
+    },
+    {
+      "id": "pdf_open",
+      "action": "pdf_open",
+      "expected": "ok"
+    },
+    {
+      "id": "notes_cite",
+      "action": "notes_cite",
+      "expected": "ok"
+    },
+    {
+      "id": "waike_offline_pack",
+      "action": "waike_offline_pack",
+      "expected": "ok"
+    },
+    {
+      "id": "coding_lab",
+      "action": "coding_lab",
+      "expected": "ok"
+    },
+    {
+      "id": "run_tests",
+      "action": "run_tests",
+      "expected": "ok"
+    },
+    {
+      "id": "pack_device",
+      "action": "pack_device",
+      "expected": "ok"
+    },
+    {
+      "id": "go_offline",
+      "action": "go_offline",
+      "expected": "ok"
+    },
+    {
+      "id": "reopen_material",
+      "action": "reopen_material",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "calendar_reminder",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "course_folder",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pdf_open",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "notes_cite",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "waike_offline_pack",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "coding_lab",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "run_tests",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pack_device",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "go_offline",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "reopen_material",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-STU-005.json"
+  }
+}

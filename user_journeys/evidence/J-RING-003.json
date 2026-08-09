@@ -1,0 +1,55 @@
+{
+  "journey_id": "J-RING-003",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "ring_sim_input",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "packet": {
+          "id": "413b2a24-b527-47ec-a573-991f02718827",
+          "gesture": "tap",
+          "ts": 0
+        }
+      }
+    },
+    {
+      "step": "game_control",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "step": "no_conflict",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "no_conflict"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54113/health",
+    "lms": "http://127.0.0.1:54113/lms",
+    "imap": "http://127.0.0.1:54113/imap",
+    "smtp": "http://127.0.0.1:54113/smtp/send",
+    "caldav": "http://127.0.0.1:54113/caldav",
+    "webdav": "http://127.0.0.1:54113/webdav",
+    "matrix": "http://127.0.0.1:54113/matrix",
+    "webrtc": "http://127.0.0.1:54113/webrtc",
+    "ring": "http://127.0.0.1:54113/ring",
+    "mdm": "http://127.0.0.1:54113/mdm",
+    "sync": "http://127.0.0.1:54113/sync/queue"
+  },
+  "mock": false
+}

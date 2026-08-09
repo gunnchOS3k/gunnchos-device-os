@@ -1,0 +1,78 @@
+{
+  "journey_id": "J-RING-001",
+  "status": "PASS",
+  "fail_reason": null,
+  "classification": null,
+  "steps": [
+    {
+      "step": "ring_sim_connect",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "packet": {
+          "id": "c05e30a1-3e7d-4627-9539-5b52ac7bf4fc",
+          "gesture": "tap",
+          "ts": 0
+        }
+      }
+    },
+    {
+      "step": "gesture_packet",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "packet": {
+          "id": "bdb3e777-7aef-41ab-b141-f8b572de6424",
+          "gesture": "tap",
+          "ts": 0
+        }
+      }
+    },
+    {
+      "step": "os_receive",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "os_receive"
+      }
+    },
+    {
+      "step": "app_action",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "app_action"
+      }
+    },
+    {
+      "step": "latency_digital",
+      "ok": true,
+      "ms": 0,
+      "result": {
+        "ok": true,
+        "action": "latency_digital"
+      }
+    }
+  ],
+  "duration_ms": 0,
+  "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "physical_followups": [],
+  "services": {
+    "health": "http://127.0.0.1:54199/health",
+    "lms": "http://127.0.0.1:54199/lms",
+    "imap": "http://127.0.0.1:54199/imap",
+    "smtp": "http://127.0.0.1:54199/smtp/send",
+    "caldav": "http://127.0.0.1:54199/caldav",
+    "webdav": "http://127.0.0.1:54199/webdav",
+    "matrix": "http://127.0.0.1:54199/matrix",
+    "webrtc": "http://127.0.0.1:54199/webrtc",
+    "ring": "http://127.0.0.1:54199/ring",
+    "mdm": "http://127.0.0.1:54199/mdm",
+    "sync": "http://127.0.0.1:54199/sync/queue"
+  },
+  "mock": false
+}

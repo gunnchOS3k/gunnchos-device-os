@@ -1,0 +1,90 @@
+{
+  "id": "J-NET-002",
+  "persona": "P14",
+  "goal": "Bearer switch WiFi\u2192cellular sim",
+  "class": "offline",
+  "devices": [
+    "handheld_hybrid"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "intermittent",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "sync_agent",
+    "local_ai"
+  ],
+  "required_services": [
+    "sync_queue",
+    "webdav"
+  ],
+  "steps": [
+    {
+      "id": "wifi_campus",
+      "action": "wifi_campus",
+      "expected": "ok"
+    },
+    {
+      "id": "bearer_switch",
+      "action": "bearer_switch",
+      "expected": "ok"
+    },
+    {
+      "id": "session_keep",
+      "action": "session_keep",
+      "expected": "ok"
+    },
+    {
+      "id": "sync_retry",
+      "action": "sync_retry",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "wifi_campus",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "bearer_switch",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "session_keep",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sync_retry",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-NET-002.json"
+  }
+}

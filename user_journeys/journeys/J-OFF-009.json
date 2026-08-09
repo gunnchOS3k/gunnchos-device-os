@@ -1,0 +1,142 @@
+{
+  "id": "J-OFF-009",
+  "persona": "P05",
+  "goal": "Multi-display office layout",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "primary_doc",
+      "action": "primary_doc",
+      "expected": "ok"
+    },
+    {
+      "id": "secondary_chat",
+      "action": "secondary_chat",
+      "expected": "ok"
+    },
+    {
+      "id": "external_dashboard",
+      "action": "external_dashboard",
+      "expected": "ok"
+    },
+    {
+      "id": "window_place",
+      "action": "window_place",
+      "expected": "ok"
+    },
+    {
+      "id": "unplug_replug",
+      "action": "unplug_replug",
+      "expected": "ok"
+    },
+    {
+      "id": "sleep_resume",
+      "action": "sleep_resume",
+      "expected": "ok"
+    },
+    {
+      "id": "dpi_scale",
+      "action": "dpi_scale",
+      "expected": "ok"
+    },
+    {
+      "id": "focus",
+      "action": "focus",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "primary_doc",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "secondary_chat",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "external_dashboard",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "window_place",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "unplug_replug",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "sleep_resume",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "dpi_scale",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "focus",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "display_hotplug_lab",
+    "dock_si"
+  ],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-009.json"
+  }
+}

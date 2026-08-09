@@ -1,0 +1,112 @@
+{
+  "id": "J-OFF-003",
+  "persona": "P05",
+  "goal": "Office video + work",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "video_local",
+      "action": "video_local",
+      "expected": "ok"
+    },
+    {
+      "id": "pip_or_second_display",
+      "action": "pip_or_second_display",
+      "expected": "ok"
+    },
+    {
+      "id": "xlsx_edit",
+      "action": "xlsx_edit",
+      "expected": "ok"
+    },
+    {
+      "id": "chat",
+      "action": "chat",
+      "expected": "ok"
+    },
+    {
+      "id": "save_export",
+      "action": "save_export",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "video_local",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "pip_or_second_display",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "xlsx_edit",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "chat",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "save_export",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [
+    "battery",
+    "thermals",
+    "fan_acoustics",
+    "display_brightness"
+  ],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-OFF-003.json"
+  }
+}

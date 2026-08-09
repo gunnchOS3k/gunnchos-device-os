@@ -1,0 +1,106 @@
+{
+  "id": "J-ONBOARD-001",
+  "persona": "P01",
+  "goal": "Student onboarding",
+  "class": "student",
+  "devices": [
+    "student_14_5"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "pdf_viewer",
+    "music_player",
+    "gunnchai",
+    "waike",
+    "games"
+  ],
+  "required_services": [
+    "lms_dev",
+    "webdav",
+    "matrix_dev",
+    "imap_smtp",
+    "media"
+  ],
+  "steps": [
+    {
+      "id": "first_boot_sim",
+      "action": "first_boot_sim",
+      "expected": "ok"
+    },
+    {
+      "id": "persona",
+      "action": "persona",
+      "expected": "ok"
+    },
+    {
+      "id": "wifi",
+      "action": "wifi",
+      "expected": "ok"
+    },
+    {
+      "id": "accounts_optional",
+      "action": "accounts_optional",
+      "expected": "ok"
+    },
+    {
+      "id": "done",
+      "action": "done",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "first_boot_sim",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "persona",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "wifi",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "accounts_optional",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "done",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-ONBOARD-001.json"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "id": "J-PERF-001",
+  "persona": "P05",
+  "goal": "Cold start budget digital",
+  "class": "office",
+  "devices": [
+    "ds_xl"
+  ],
+  "starting_state": {
+    "session": "cold_or_resume",
+    "authenticated": false
+  },
+  "network_state": "online",
+  "power_state": "normal",
+  "required_apps": [
+    "browser",
+    "libreoffice",
+    "email_client",
+    "calendar",
+    "vpn",
+    "cups",
+    "webrtc"
+  ],
+  "required_services": [
+    "imap_smtp",
+    "caldav",
+    "webdav",
+    "webrtc_test",
+    "vpn_dev",
+    "cups_virtual"
+  ],
+  "steps": [
+    {
+      "id": "cold_start",
+      "action": "cold_start",
+      "expected": "ok"
+    },
+    {
+      "id": "budget_check",
+      "action": "budget_check",
+      "expected": "ok"
+    },
+    {
+      "id": "apps_ready",
+      "action": "apps_ready",
+      "expected": "ok"
+    }
+  ],
+  "expected_state_after_each_step": [
+    {
+      "step": "cold_start",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "budget_check",
+      "data_loss": false,
+      "crash": false
+    },
+    {
+      "step": "apps_ready",
+      "data_loss": false,
+      "crash": false
+    }
+  ],
+  "performance_budget": {
+    "max_step_ms": 30000,
+    "host": "reference_digital"
+  },
+  "privacy_expectation": "no_hidden_exfil; consent gates honored",
+  "accessibility_expectation": "core path operable when a11y class or P13",
+  "failure_injections": [],
+  "cleanup": [
+    "stop_services",
+    "clear_tmp_fixtures"
+  ],
+  "physical_followups": [],
+  "blocking_for_tokens": true,
+  "result": {
+    "status": "PASS",
+    "fail_reason": null,
+    "classification": null
+  },
+  "evidence": {
+    "path": "user_journeys/evidence/J-PERF-001.json"
+  }
+}
