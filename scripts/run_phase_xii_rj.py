@@ -23,7 +23,9 @@ def main() -> int:
         "REAL_APP_X2_OPEN": summary.get("REAL_APP_X2_OPEN"),
         "tokens": summary.get("tokens"),
     }, indent=2))
-    # Non-zero if X0 open; X1/X2 reported but CI may still collect evidence
+    # Non-zero if X0 open. X1/X2 are reported but do not fail CI exit.
+    # Honesty: X1 residuals (games/AI) are CONDITIONAL/EXTERNAL — consumers must
+    # not treat exit 0 as REAL_APP_X1_OPEN==0 or REAL_*_DAY_DIGITAL_PASS.
     return 1 if summary.get("REAL_APP_X0_OPEN", 0) else 0
 
 

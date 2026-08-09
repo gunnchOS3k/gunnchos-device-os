@@ -9,13 +9,13 @@
     "Productivity apps": "COMPLETE_DIGITAL",
     "Communication stack": "COMPLETE_DIGITAL",
     "Media stack": "COMPLETE_DIGITAL",
-    "gunnchAI": "COMPLETE_DIGITAL",
-    "Games": "COMPLETE_DIGITAL",
+    "gunnchAI": "COMPLETE_CONDITIONAL_EXTERNAL",
+    "Games": "COMPLETE_CONDITIONAL_EXTERNAL",
     "Ring digital input": "COMPLETE_DIGITAL",
     "Hardware digital design": "COMPLETE_CONDITIONAL_EXTERNAL",
     "Manufacturer package": "COMPLETE_CONDITIONAL_EXTERNAL",
     "NPI/RFQ package": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Real-app user journeys": "COMPLETE_DIGITAL",
+    "Real-app user journeys": "COMPLETE_CONDITIONAL_EXTERNAL",
     "Physical EVT": "PHYSICAL_PENDING",
     "Vendor collateral": "EXTERNAL_PENDING",
     "DFM": "EXTERNAL_PENDING",
@@ -28,7 +28,9 @@
   },
   "notes": {
     "gunnchOS GUI/session": "Weston/Xvfb integrated for Linux CI; macOS host lacks Wayland compositor binary \u2014 GUI CI path is Linux workflow",
-    "Real-app user journeys": "RJ acceptance set 18/18 PASS with REAL_APP_X0/X1/X2 open = 0 on this run"
+    "Real-app user journeys": "CI reality may exit 0 with X0=0 while X1=5 open; REAL_*_DAY_DIGITAL_PASS=FALSE until residuals clear",
+    "gunnchAI": "CI X1 residual: llama/runtime CONDITIONAL_EXTERNAL (RJ-STUDENT-001)",
+    "Games": "CI X1 residual: Godot/sibling repos CONDITIONAL_EXTERNAL (RJ-GAME-001..004)"
   },
   "session_config": {
     "schema": "gunnchos.phase_xii.gui_session.v1",
@@ -70,14 +72,14 @@
     "RJ_ACCESSIBILITY_PASS": true
   },
   "REAL_APP_X0_OPEN": 0,
-  "REAL_APP_X1_OPEN": 0,
+  "REAL_APP_X1_OPEN": 5,
   "REAL_APP_X2_OPEN": 0,
-  "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": true,
-  "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": true,
-  "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": true,
-  "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": false,
+  "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": false,
+  "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": false,
+  "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": false,
   "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
-  "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "PROVEN_VIA_PHASE_XII_RJ",
+  "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN",
   "auto_merge_request": null,
   "physical_execution_freeze": true
 }
