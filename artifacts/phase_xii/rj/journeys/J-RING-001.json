@@ -1,0 +1,145 @@
+{
+  "journey_id": "J-RING-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "ring_sim_connect",
+      "ok": true,
+      "ms": 2,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "packet": {
+          "schema": "gunnchos.ring.packet.v1",
+          "ts": 1786317156.024668,
+          "gesture": "confirm",
+          "axis": {
+            "x": 0.1,
+            "y": -0.2,
+            "z": 0.95
+          },
+          "source": "edge_io_firmware_sim",
+          "validated": false
+        },
+        "mapped": {
+          "action": "confirm",
+          "target": "document",
+          "from": "phase_xii_mapper"
+        },
+        "target_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/ring/ring_target.txt",
+        "bytes_written": 41,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "physical_device": false,
+        "duration_ms": 1,
+        "action": "ring_sim_connect",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "gesture_packet",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "packet": {
+          "schema": "gunnchos.ring.packet.v1",
+          "ts": 1786317156.0267808,
+          "gesture": "confirm",
+          "axis": {
+            "x": 0.1,
+            "y": -0.2,
+            "z": 0.95
+          },
+          "source": "edge_io_firmware_sim",
+          "validated": false
+        },
+        "mapped": {
+          "action": "confirm",
+          "target": "document",
+          "from": "phase_xii_mapper"
+        },
+        "target_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/ring/ring_target.txt",
+        "bytes_written": 41,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "physical_device": false,
+        "duration_ms": 0,
+        "action": "gesture_packet",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "os_receive",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "os_receive",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "app_action",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "packet": {
+          "schema": "gunnchos.ring.packet.v1",
+          "ts": 1786317156.027036,
+          "gesture": "confirm",
+          "axis": {
+            "x": 0.1,
+            "y": -0.2,
+            "z": 0.95
+          },
+          "source": "edge_io_firmware_sim",
+          "validated": false
+        },
+        "mapped": {
+          "action": "confirm",
+          "target": "game",
+          "from": "phase_xii_mapper"
+        },
+        "target_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/ring/ring_target.txt",
+        "bytes_written": 41,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "physical_device": false,
+        "duration_ms": 0,
+        "action": "app_action",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "latency_digital",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "latency_digital",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    }
+  ],
+  "duration_ms": 2,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

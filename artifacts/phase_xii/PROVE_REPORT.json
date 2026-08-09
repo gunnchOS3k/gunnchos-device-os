@@ -1,0 +1,42 @@
+{
+  "schema": "gunnchos.phase_xii.prove.v1",
+  "generated_at": "2026-08-09T23:12:45.523436+00:00",
+  "steps": [
+    {
+      "cmd": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "scripts/build_reality_depth_ledger.py"
+      ],
+      "rc": 0,
+      "out": "{\"wrote\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/REALITY_DEPTH_LEDGER.json\", \"journeys\": 79, \"not_yet_real\": 79}\n",
+      "err": ""
+    },
+    {
+      "cmd": "write_claim_scope",
+      "rc": 0,
+      "scope_tokens": [
+        "GUNNCHOS_ACCESSIBILITY_JOURNEY_DIGITAL_PASS",
+        "GUNNCHOS_CONTEXT_SWITCHING_DIGITAL_PASS",
+        "GUNNCHOS_MULTITASKING_DIGITAL_PASS",
+        "GUNNCHOS_OFFLINE_DAY_DIGITAL_PASS",
+        "GUNNCHOS_REAL_ADMIN_DAY_DIGITAL_PASS",
+        "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS",
+        "GUNNCHOS_REAL_EDUCATOR_DAY_DIGITAL_PASS",
+        "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS",
+        "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS",
+        "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS"
+      ]
+    },
+    {
+      "cmd": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "scripts/run_phase_xii_rj.py"
+      ],
+      "rc": 0,
+      "out": "{\n  \"pass_count\": 18,\n  \"fail_count\": 0,\n  \"failed\": [],\n  \"REAL_APP_X0_OPEN\": 0,\n  \"REAL_APP_X1_OPEN\": 0,\n  \"REAL_APP_X2_OPEN\": 0,\n  \"tokens\": {\n    \"RJ_STUDENT_PASS\": true,\n    \"RJ_OFFICE_PASS\": true,\n    \"RJ_CREATOR_PASS\": true,\n    \"RJ_EDUCATOR_PASS\": true,\n    \"RJ_RECREATION_PASS\": true,\n    \"RJ_OFFLINE_PASS\": true,\n    \"RJ_RING_DIGITAL_PASS\": true,\n    \"RJ_RECOVERY_PASS\": true,\n    \"RJ_ACCESSIBILITY_PASS\": true\n  }\n}\n",
+      "err": "No user authentication is selected: '[auth] type=none' (INSECURE)\n127.0.0.1 - - [09/Aug/2026 18:11:32] \"MKCOL /dev/ HTTP/1.1\" 405 69\nMKCOL request '/dev/calendar' (type:UNKNOWN): rejected because of missing rights 'W'\n127.0.0.1 - - [09/Aug/2026 18:11:33] \"MKCOL /dev/calendar HTTP/1.1\" 401 61\nSkip broken item 'rj-cal-1.ics' in 'dev/calendar': Item type 'VCALENDAR' not supported in generic collection\nNot a collection (check .Radicale.props): 'dev/calendar'\n127.0.0.1 - - [09/Aug/2026 18:11:34] \"PUT /dev/calendar/rj-cal-1.ics HTTP/1.1\" 401 61\n127.0.0.1 - - [09/Aug/2026 18:12:02] \"PUT /shared.odt HTTP/1.1\" 204 0\n127.0.0.1 - - [09/Aug/2026 18:12:10] \"GET /shared.odt HTTP/1.1\" 200 18\n127.0.0.1 - - [09/Aug/2026 18:12:14] \"PUT /shared.odt HTTP/1.1\" 204 0\n127.0.0.1 - - [09/Aug/2026 18:12:14] \"MKCOL /dev/ HTTP/1.1\" 405 69\nMKCOL request '/dev/calendar' (type:UNKNOWN): rejected because of missing rights 'W'\n127.0.0.1 - - [09/Aug/2026 18:12:15] \"MKCOL /dev/calendar HTTP/1.1\" 401 61\nNot a collection (check .Radicale.props): 'dev/calendar'\n127.0.0.1 - - [09/Aug/2026 18:12:16] \"PUT /dev/calendar/evt-1786317134.ics HTTP/1.1\" 401 61\n127.0.0.1 - - [09/Aug/2026 18:12:36] \"MKCOL /dev/ HTTP/1.1\" 405 69\nMKCOL request '/dev/calendar' (type:UNKNOWN): rejected because of missing rights 'W'\n127.0.0.1 - - [09/Aug/2026 18:12:36] \"MKCOL /dev/calendar HTTP/1.1\" 401 61\nNot a collection (check .Radicale.props): 'dev/calendar'\n127.0.0.1 - - [09/Aug/2026 18:12:37] \"PUT /dev/calendar/evt-1786317156.ics HTTP/1.1\" 401 61\n"
+    }
+  ],
+  "physical_execution_freeze": true,
+  "auto_merge_request": null
+}

@@ -1,0 +1,151 @@
+{
+  "schema": "gunnchos.phase_xii_tokens.v1",
+  "phase_xi_historical": {
+    "schema": "gunnchos.phase_xi_tokens.v1",
+    "earned": [
+      "GUNNCHOS_ACCESSIBILITY_JOURNEY_DIGITAL_PASS",
+      "GUNNCHOS_CONTEXT_SWITCHING_DIGITAL_PASS",
+      "GUNNCHOS_MULTITASKING_DIGITAL_PASS",
+      "GUNNCHOS_OFFLINE_DAY_DIGITAL_PASS",
+      "GUNNCHOS_REAL_ADMIN_DAY_DIGITAL_PASS",
+      "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS",
+      "GUNNCHOS_REAL_EDUCATOR_DAY_DIGITAL_PASS",
+      "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS",
+      "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS",
+      "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS"
+    ],
+    "status": {
+      "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_REAL_EDUCATOR_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_REAL_ADMIN_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_ACCESSIBILITY_JOURNEY_DIGITAL_PASS": true,
+      "GUNNCHOS_OFFLINE_DAY_DIGITAL_PASS": true,
+      "GUNNCHOS_MULTITASKING_DIGITAL_PASS": true,
+      "GUNNCHOS_CONTEXT_SWITCHING_DIGITAL_PASS": true
+    },
+    "digital_release_lock_complete": true,
+    "claim_boundary": "Phase XI digital user-journey lock only. No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries."
+  },
+  "phase_xii_scope": {
+    "schema": "gunnchos.phase_xii.claim_scope.v1",
+    "generated_at": "2026-08-09T23:12:52.633092+00:00",
+    "phase_xi_tokens_preserved": true,
+    "tokens": {
+      "GUNNCHOS_ACCESSIBILITY_JOURNEY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": false,
+        "phase_xii_real_app_value": null,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_CONTEXT_SWITCHING_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": false,
+        "phase_xii_real_app_value": null,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_MULTITASKING_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": false,
+        "phase_xii_real_app_value": null,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_OFFLINE_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": null,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_REAL_ADMIN_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": false,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": true,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_REAL_EDUCATOR_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": false,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": true,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": true,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      },
+      "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": {
+        "historical_phase_xi_value": true,
+        "VALID_AS_BEHAVIORAL_HARNESS": true,
+        "NOT_YET_REAL_APP_PROVEN": true,
+        "phase_xii_real_app_value": true,
+        "requires_min_depth": "L4_REAL_APPLICATION_PROCESS"
+      }
+    },
+    "firewall": {
+      "reject_REAL_DAY_DIGITAL_PASS_below_L4_L5": true,
+      "allow_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
+      "forbidden_proofs": [
+        "GENERIC_OK_HANDLER_AS_E2E",
+        "FIXTURE_JSON_AS_GAME_LAUNCH",
+        "AI_STUB_AS_GUNNCHAI_PROOF",
+        "HTTP_FAKE_AS_PROTOCOL_PROOF"
+      ],
+      "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
+      "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN"
+    },
+    "ledger_journeys_not_yet_real": 79,
+    "rj_summary": {
+      "pass_count": 18,
+      "fail_count": 0,
+      "REAL_APP_X0_OPEN": 0,
+      "REAL_APP_X1_OPEN": 0,
+      "REAL_APP_X2_OPEN": 0
+    },
+    "claim_boundary": "Phase XI earned tokens remain VALID_AS_BEHAVIORAL_HARNESS. REAL_*_DAY_DIGITAL_PASS for product readiness requires Phase XII L4/L5+ actual application execution on the RJ acceptance set."
+  },
+  "earned_behavioral_harness": [
+    "GUNNCHOS_ACCESSIBILITY_JOURNEY_DIGITAL_PASS",
+    "GUNNCHOS_CONTEXT_SWITCHING_DIGITAL_PASS",
+    "GUNNCHOS_MULTITASKING_DIGITAL_PASS",
+    "GUNNCHOS_OFFLINE_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_ADMIN_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_EDUCATOR_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS"
+  ],
+  "earned_real_app": [
+    "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS",
+    "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS"
+  ],
+  "digital_release_lock_complete_behavioral": true,
+  "digital_release_lock_complete_real_app": true,
+  "claim_boundary": "Phase XI earned tokens remain VALID_AS_BEHAVIORAL_HARNESS. REAL_*_DAY_DIGITAL_PASS for product readiness requires Phase XII L4/L5+ actual application execution on the RJ acceptance set."
+}

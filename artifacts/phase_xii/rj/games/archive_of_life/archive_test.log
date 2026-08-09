@@ -1,0 +1,107 @@
+
+> archive-of-life-artifact-world@2.0.0 test
+> vitest run --run
+
+
+ RUN  v2.1.9 /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world
+
+ ✓ src/services/providers/openDataPipeline.digital.test.ts (4 tests) 14ms
+ ✓ src/systems/claimIntegrity.test.ts (4 tests) 7ms
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > does not block all providers when one provider times out
+[federation] provider failures (partial results retained) [
+  {
+    providerId: 'gbif',
+    reason: 'provider gbif timed out after 80ms',
+    timedOut: true
+  }
+]
+
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > preserves successful records when one provider throws
+[federation] provider failures (partial results retained) [ { providerId: 'gbif', reason: 'gbif boom', timedOut: false } ]
+
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > reports error status when multiple providers fail and none succeed
+[federation] provider failures (partial results retained) [
+  { providerId: 'col', reason: 'col fail', timedOut: false },
+  { providerId: 'gbif', reason: 'gbif fail', timedOut: false }
+]
+
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > surfaces cached evidence when all live providers fail but cache exists
+[federation] provider failures (partial results retained) [ { providerId: 'col', reason: 'live down', timedOut: false } ]
+
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > surfaces fixture evidence when all live providers fail but fixture exists
+[federation] provider failures (partial results retained) [ { providerId: 'col', reason: 'live down', timedOut: false } ]
+
+ ✓ src/ui/evidence/SourcesEvidencePanel.test.ts (14 tests) 126ms
+ ✓ src/systems/waveF.alpha.test.ts (8 tests) 48ms
+ ✓ src/systems/betaRc.test.ts (9 tests) 17ms
+ ✓ src/systems/alphaExit.test.ts (7 tests) 45ms
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > always resolves loading-bound aggregation (no infinite hang)
+[federation] provider failures (partial results retained) [
+  {
+    providerId: 'col',
+    reason: 'provider col timed out after 60ms',
+    timedOut: true
+  },
+  {
+    providerId: 'gbif',
+    reason: 'provider gbif timed out after 60ms',
+    timedOut: true
+  },
+  {
+    providerId: 'pbdb',
+    reason: 'provider pbdb timed out after 60ms',
+    timedOut: true
+  }
+]
+
+stdout | src/services/providers/FederationService.evidence.test.ts > FederationService.getSpeciesEvidenceResult > regression: Sources and Evidence infinite-loading defect — hung provider must not stall federation
+[federation] provider failures (partial results retained) [
+  {
+    providerId: 'worms',
+    reason: 'provider worms timed out after 70ms',
+    timedOut: true
+  }
+]
+
+ ✓ src/services/providers/FederationService.evidence.test.ts (11 tests) 230ms
+ ✓ src/systems/encounterSystem.test.ts (3 tests) 3ms
+ ✓ src/systems/saveSystem.test.ts (2 tests) 4ms
+ ✓ src/services/providers/provenanceAdapters.test.ts (4 tests) 4ms
+ ✓ src/systems/companionProgression.test.ts (3 tests) 4ms
+ ✓ src/device/deviceRoles.test.ts (2 tests) 9ms
+ ✓ src/systems/continuationVii.release.test.ts (2 tests) 8ms
+ ✓ src/systems/accessibility.test.ts (1 test) 7ms
+ ✓ src/services/providers/boundedPromise.test.ts (3 tests) 4ms
+ ✓ src/systems/telemetry.test.ts (1 test) 2ms
+ ✓ src/db/scienceDb.test.ts (4 tests) 5107ms
+   ✓ ScientificDb durable store > migrates, indexes taxa, and supports taxonomic/region/era lookups 638ms
+   ✓ Digital RC suite + claim ledger runtime gate > runs Cont VI RC suite checks 4426ms
+
+ Test Files  17 passed (17)
+      Tests  82 passed (82)
+   Start at  18:11:43
+   Duration  8.02s (transform 1.08s, setup 0ms, collect 1.90s, tests 5.64s, environment 10.32s, prepare 1.62s)
+
+
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+stderr | src/ui/evidence/SourcesEvidencePanel.test.ts > SourcesEvidencePanel > loading state always resolves even when federation throws
+[sources-evidence] lookup failed Error: unexpected
+    at /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/src/ui/evidence/SourcesEvidencePanel.test.ts:247:48
+    at file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:146:14
+    at file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:533:11
+    at runWithTimeout (file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:39:7)
+    at runTest (file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:1056:17)
+    at runSuite (file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+
+stderr | src/ui/evidence/SourcesEvidencePanel.test.ts > SourcesEvidencePanel > regression: Sources and Evidence infinite-loading defect — UI never stays on Loading
+[sources-evidence] lookup failed Error: provider hung past bound
+    at Timeout._onTimeout (/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/src/ui/evidence/SourcesEvidencePanel.test.ts:258:35)
+    at listOnTimeout (node:internal/timers:608:17)
+    at processTimers (node:internal/timers:543:7)
+
+(node:61254) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

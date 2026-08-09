@@ -1,0 +1,272 @@
+{
+  "journey_id": "J-EDU-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "edu_login",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "edu_login",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "waike_open",
+      "ok": true,
+      "ms": 9,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "app": {
+          "ok": true,
+          "app_id": "waike",
+          "entry": "apps/waike_learning/index.html",
+          "lessons": [
+            "waike_gary_upnow_intro",
+            "wireless_basics_101",
+            "python_starter_pack"
+          ],
+          "session": {
+            "ok": true,
+            "session": {
+              "lesson_id": "wireless_basics_101",
+              "profile": "student",
+              "role": "student",
+              "account": "dev-student",
+              "offline_pack": "wireless_basics_101",
+              "labs": [
+                "lab-intro",
+                "lab-check"
+              ],
+              "tutor": {
+                "available": true,
+                "mode": "local_privacy",
+                "topic": "wireless_basics_101",
+                "profile": "student"
+              },
+              "accessibility": {
+                "captions": true,
+                "reduced_motion": false,
+                "scaling": 1.0,
+                "input_alternatives": [
+                  "keyboard",
+                  "controller"
+                ]
+              },
+              "educator": null,
+              "progress": {
+                "account": "dev-student",
+                "lesson_id": "wireless_basics_101",
+                "pct": 25.0,
+                "role": "student",
+                "updated_at": 1786317131.2757828
+              }
+            },
+            "content_sources": [
+              {
+                "source": "config/waike_student_tasks.yaml",
+                "bytes": 1959,
+                "sha_prefix": "f164280ab187",
+                "present": true
+              },
+              {
+                "source": "config/waike_tutor_cards.yaml",
+                "bytes": 3808,
+                "sha_prefix": "5f69246b5568",
+                "present": true
+              },
+              {
+                "source": "configs/modes/waike_lesson.yaml",
+                "bytes": 372,
+                "sha_prefix": "b8e5c3ba5fd6",
+                "present": true
+              }
+            ],
+            "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, not production cloud sync.",
+            "mock": false
+          },
+          "deploy": {
+            "deployed": true,
+            "lesson_id": "wireless_basics_101",
+            "profile": "student",
+            "offline_capable": true,
+            "content_sources": [
+              {
+                "source": "config/waike_student_tasks.yaml",
+                "bytes": 1959,
+                "sha_prefix": "f164280ab187",
+                "present": true
+              },
+              {
+                "source": "config/waike_tutor_cards.yaml",
+                "bytes": 3808,
+                "sha_prefix": "5f69246b5568",
+                "present": true
+              },
+              {
+                "source": "configs/modes/waike_lesson.yaml",
+                "bytes": 372,
+                "sha_prefix": "b8e5c3ba5fd6",
+                "present": true
+              }
+            ],
+            "mock": false,
+            "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, not production cloud sync."
+          },
+          "portfolio": {
+            "schema": "waike.portfolio.v1",
+            "lesson_id": "wireless_basics_101",
+            "role": "learner",
+            "exported_at": 1786317131.276028,
+            "session_ok": true
+          },
+          "accessibility": {
+            "high_contrast_supported": true,
+            "roles": [
+              "learner",
+              "educator"
+            ]
+          },
+          "ui_present": true,
+          "mock": false,
+          "stub_content": false,
+          "claim_boundary": "Digital WAIKE Learning app using repo lesson packs and progress store. Not a full LMS or production cloud sync."
+        },
+        "browser": {
+          "ok": false,
+          "error": "Request URL is missing an 'http://' or 'https://' protocol."
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 9,
+        "stub": false,
+        "action": "waike_open"
+      }
+    },
+    {
+      "step": "lesson_browse",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "lesson_browse",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "prepare_material",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "prepare_material",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "share_pdf",
+      "ok": true,
+      "ms": 3013,
+      "execution_depth": "L3_REAL_SERVICE_API",
+      "result": {
+        "ok": true,
+        "name": "shared.odt",
+        "bytes": 18,
+        "version": 1,
+        "url": "http://127.0.0.1:55258/shared.odt",
+        "status": null,
+        "share": "webdav://local/shared.odt?v=1",
+        "execution_depth": "L3_REAL_SERVICE_API",
+        "duration_ms": 3013,
+        "action": "share_pdf"
+      }
+    },
+    {
+      "step": "learner_progress",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "learner_progress",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "class_message",
+      "ok": true,
+      "ms": 31,
+      "execution_depth": "L3_REAL_SERVICE_API",
+      "result": {
+        "ok": true,
+        "room_id": "!10b267ba76:localhost",
+        "event": {
+          "event_id": "$3cd3eab761e045b3b58e75417fd3359b"
+        },
+        "execution_depth": "L3_REAL_SERVICE_API",
+        "duration_ms": 31,
+        "action": "class_message"
+      }
+    },
+    {
+      "step": "dock_present",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "dock_present",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "export_report",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "export_report",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "no_private_leak",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "no_private_leak",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    }
+  ],
+  "duration_ms": 3054,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

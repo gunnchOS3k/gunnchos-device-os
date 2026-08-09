@@ -1,0 +1,111 @@
+{
+  "journey_id": "J-GAME-004",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "music_study",
+      "ok": true,
+      "ms": 829,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "player": {
+          "name": "ffplay",
+          "path": "/opt/homebrew/bin/ffplay"
+        },
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/user_journeys/fixtures/study_track.wav",
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 827,
+        "action": "music_study",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "game_launch",
+      "ok": true,
+      "ms": 392,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/save.json",
+        "fixture": false,
+        "fixture_json_used": false,
+        "godot": {
+          "name": "godot",
+          "path": "/opt/homebrew/bin/godot"
+        },
+        "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 390,
+        "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
+        "action": "game_launch"
+      }
+    },
+    {
+      "step": "audio_focus_policy",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L1_POLICY_MODEL",
+      "result": {
+        "ok": true,
+        "destroyed": false,
+        "execution_depth": "L1_POLICY_MODEL",
+        "duration_ms": 0,
+        "action": "audio_focus_policy"
+      }
+    },
+    {
+      "step": "user_choice",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "action": "user_choice",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0
+      }
+    },
+    {
+      "step": "game_save",
+      "ok": true,
+      "ms": 359,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "launched": true,
+        "saved": true,
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/save.json",
+        "fixture": false,
+        "fixture_json_used": false,
+        "godot": {
+          "name": "godot",
+          "path": "/opt/homebrew/bin/godot"
+        },
+        "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 358,
+        "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
+        "action": "game_save"
+      }
+    }
+  ],
+  "duration_ms": 1581,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

@@ -1,0 +1,447 @@
+{
+  "journey_id": "J-STU-001",
+  "status": "FAIL",
+  "ok": false,
+  "fail_reason": "submission_receipt: no_receipt",
+  "steps": [
+    {
+      "step": "wake",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "state": "awake",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "wake"
+      }
+    },
+    {
+      "step": "auth",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L1_POLICY_MODEL",
+      "result": {
+        "ok": true,
+        "authenticated": true,
+        "execution_depth": "L1_POLICY_MODEL",
+        "duration_ms": 0,
+        "action": "auth"
+      }
+    },
+    {
+      "step": "wifi_campus",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "network": "campus_wifi",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "wifi_campus"
+      }
+    },
+    {
+      "step": "browser",
+      "ok": true,
+      "ms": 36,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "browser": false,
+        "status": 200,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 36,
+        "action": "browser"
+      }
+    },
+    {
+      "step": "lms_open",
+      "ok": true,
+      "ms": 24,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "browser": false,
+        "status": 200,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 24,
+        "action": "lms_open"
+      }
+    },
+    {
+      "step": "pdf_download",
+      "ok": true,
+      "ms": 5,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/assignment.pdf",
+        "bytes": 45,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 5,
+        "action": "pdf_download",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "pdf_open",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L5_REAL_GUI_INTERACTION",
+      "result": {
+        "ok": true,
+        "file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/assignment.pdf",
+        "bytes": 45,
+        "execution_depth": "L5_REAL_GUI_INTERACTION",
+        "duration_ms": 0,
+        "action": "pdf_open",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "doc_create",
+      "ok": true,
+      "ms": 3944,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "soffice": "/opt/homebrew/bin/soffice",
+        "opened": true,
+        "edited": true,
+        "saved": true,
+        "reopened": true,
+        "exported_pdf": true,
+        "checksums": {
+          "assignment.odt": "dd4fd0f15b632787557b0ec3b7037abe778d6679cb734d0b0214a37f8db70375",
+          "assignment_edited.odt": "133ff43ec14e170c6bff6181fe32a937102ed018eb5ebd931f9eaa6d00327334",
+          "assignment_edited.pdf": "45bbb93e32d4c55f289e3f28e35ff838bcc974db331dcd90f0c78f0b4bde3ad7"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 3941,
+        "convert_rc": 0,
+        "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
+      }
+    },
+    {
+      "step": "music_study",
+      "ok": true,
+      "ms": 304,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "player": {
+          "name": "ffplay",
+          "path": "/opt/homebrew/bin/ffplay"
+        },
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/user_journeys/fixtures/study_track.wav",
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 303,
+        "action": "music_study",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "waike_search",
+      "ok": true,
+      "ms": 22,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "app": {
+          "ok": true,
+          "app_id": "waike",
+          "entry": "apps/waike_learning/index.html",
+          "lessons": [
+            "waike_gary_upnow_intro",
+            "wireless_basics_101",
+            "python_starter_pack"
+          ],
+          "session": {
+            "ok": true,
+            "session": {
+              "lesson_id": "wireless_basics_101",
+              "profile": "student",
+              "role": "student",
+              "account": "dev-student",
+              "offline_pack": "wireless_basics_101",
+              "labs": [
+                "lab-intro",
+                "lab-check"
+              ],
+              "tutor": {
+                "available": true,
+                "mode": "local_privacy",
+                "topic": "wireless_basics_101",
+                "profile": "student"
+              },
+              "accessibility": {
+                "captions": true,
+                "reduced_motion": false,
+                "scaling": 1.0,
+                "input_alternatives": [
+                  "keyboard",
+                  "controller"
+                ]
+              },
+              "educator": null,
+              "progress": {
+                "account": "dev-student",
+                "lesson_id": "wireless_basics_101",
+                "pct": 25.0,
+                "role": "student",
+                "updated_at": 1786317117.387433
+              }
+            },
+            "content_sources": [
+              {
+                "source": "config/waike_student_tasks.yaml",
+                "bytes": 1959,
+                "sha_prefix": "f164280ab187",
+                "present": true
+              },
+              {
+                "source": "config/waike_tutor_cards.yaml",
+                "bytes": 3808,
+                "sha_prefix": "5f69246b5568",
+                "present": true
+              },
+              {
+                "source": "configs/modes/waike_lesson.yaml",
+                "bytes": 372,
+                "sha_prefix": "b8e5c3ba5fd6",
+                "present": true
+              }
+            ],
+            "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, not production cloud sync.",
+            "mock": false
+          },
+          "deploy": {
+            "deployed": true,
+            "lesson_id": "wireless_basics_101",
+            "profile": "student",
+            "offline_capable": true,
+            "content_sources": [
+              {
+                "source": "config/waike_student_tasks.yaml",
+                "bytes": 1959,
+                "sha_prefix": "f164280ab187",
+                "present": true
+              },
+              {
+                "source": "config/waike_tutor_cards.yaml",
+                "bytes": 3808,
+                "sha_prefix": "5f69246b5568",
+                "present": true
+              },
+              {
+                "source": "configs/modes/waike_lesson.yaml",
+                "bytes": 372,
+                "sha_prefix": "b8e5c3ba5fd6",
+                "present": true
+              }
+            ],
+            "mock": false,
+            "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, not production cloud sync."
+          },
+          "portfolio": {
+            "schema": "waike.portfolio.v1",
+            "lesson_id": "wireless_basics_101",
+            "role": "learner",
+            "exported_at": 1786317117.38767,
+            "session_ok": true
+          },
+          "accessibility": {
+            "high_contrast_supported": true,
+            "roles": [
+              "learner",
+              "educator"
+            ]
+          },
+          "ui_present": true,
+          "mock": false,
+          "stub_content": false,
+          "claim_boundary": "Digital WAIKE Learning app using repo lesson packs and progress store. Not a full LMS or production cloud sync."
+        },
+        "browser": {
+          "ok": false,
+          "error": "Request URL is missing an 'http://' or 'https://' protocol."
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 21,
+        "stub": false,
+        "action": "waike_search"
+      }
+    },
+    {
+      "step": "ai_tutor",
+      "ok": true,
+      "ms": 527,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "answered": true,
+        "blocked_private_clipboard": false,
+        "reply": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy. It's a crucial process that helps plants grow and produce oxygen. Here's a brief explanation:\n\nWhen sunlight hits a plant, it triggers a series of chemical reactions that ultimately lead to the production of glucose (",
+        "backend": "llama.cpp",
+        "endpoint": "http://127.0.0.1:8091",
+        "stub": false,
+        "ai_stub_as_gunnchai_proof": false,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 527,
+        "action": "ai_tutor"
+      }
+    },
+    {
+      "step": "ai_privacy_gate",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "answered": false,
+        "blocked_private_clipboard": true,
+        "message": "Refusing to send private clipboard without permission",
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "stub": false,
+        "duration_ms": 0,
+        "action": "ai_privacy_gate"
+      }
+    },
+    {
+      "step": "notes_cite",
+      "ok": true,
+      "ms": 5,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "cursor": 1,
+        "version": 1,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 5,
+        "action": "notes_cite"
+      }
+    },
+    {
+      "step": "save_local",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 1,
+        "action": "save_local"
+      }
+    },
+    {
+      "step": "net_loss",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "network": "offline",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "net_loss"
+      }
+    },
+    {
+      "step": "edit_offline",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "queued": true,
+        "cursor": 1,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 1,
+        "action": "edit_offline"
+      }
+    },
+    {
+      "step": "net_restore",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "network": "online",
+        "flush": {
+          "ok": true,
+          "flushed": 1
+        },
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "net_restore"
+      }
+    },
+    {
+      "step": "sync_file",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L2_PROTOCOL_SIMULATION",
+      "result": {
+        "ok": true,
+        "flushed": 1,
+        "execution_depth": "L2_PROTOCOL_SIMULATION",
+        "duration_ms": 0,
+        "action": "sync_file"
+      }
+    },
+    {
+      "step": "lms_upload",
+      "ok": true,
+      "ms": 24,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "browser": false,
+        "playwright": false,
+        "downloaded": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/assignment.pdf",
+        "bytes": 45,
+        "receipt": {
+          "ok": true,
+          "receipt": {
+            "id": "10ae69cf-9b7d-4757-bbc6-42c775005a66",
+            "status": "submitted",
+            "bytes": 16
+          }
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 24,
+        "note": "playwright missing; used real HTTP client against HTML LMS",
+        "action": "lms_upload",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "submission_receipt",
+      "ok": false,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "error": "no_receipt",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/phase_xii/journeys/real_harness.py\", line 239, in run_journey\n    raise RuntimeError(result.get(\"error\") or f\"step_failed:{action}\")\nRuntimeError: no_receipt\n"
+    }
+  ],
+  "duration_ms": 4938,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

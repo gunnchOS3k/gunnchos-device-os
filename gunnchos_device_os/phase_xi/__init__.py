@@ -5,8 +5,12 @@ journeys in a class PASS. SUCCESS_TOKEN_WITH_FAILED_USER_JOURNEY is FORBIDDEN.
 """
 from __future__ import annotations
 
+PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS = True
+PHASE_XI_REAL_APPLICATION_DAY_PROOF = "NOT_YET_PROVEN"
+
 CLAIM_BOUNDARY = (
-    "Phase XI digital user-journey lock only. "
+    "Phase XI digital user-journey behavioral/policy harness lock. "
+    "REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). "
     "No physical EVT/DVT/PVT runtime/thermal/RF claims. "
     "No commercial cloud credentials required. "
     "Mocks only at irreducible physical/external boundaries."

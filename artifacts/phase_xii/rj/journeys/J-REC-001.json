@@ -1,0 +1,87 @@
+{
+  "journey_id": "J-REC-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "doc_edit",
+      "ok": true,
+      "ms": 3611,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "soffice": "/opt/homebrew/bin/soffice",
+        "opened": true,
+        "edited": true,
+        "saved": true,
+        "reopened": true,
+        "exported_pdf": true,
+        "checksums": {
+          "assignment.odt": "d88d4018ecb6bf91aa002e56dd34a72640e820e75c4a71ca14bd0c33ea42988a",
+          "assignment_edited.odt": "2a3a20f8b3bd421ef2938ec4b5c85bab0d4417b8dcf2a98e82f798e5fa6ea8af",
+          "assignment_edited.pdf": "e83d33a08cb49781587fc58808d811e486ea274afd32b980311dd35425c21768"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 3611,
+        "convert_rc": 0,
+        "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
+      }
+    },
+    {
+      "step": "inject_crash",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "crashed": true,
+        "snapshot": true,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "inject_crash"
+      }
+    },
+    {
+      "step": "recover",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "recovered": true,
+        "data_loss": false,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "recover"
+      }
+    },
+    {
+      "step": "no_data_loss",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "data_loss": false,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "no_data_loss"
+      }
+    }
+  ],
+  "duration_ms": 3612,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

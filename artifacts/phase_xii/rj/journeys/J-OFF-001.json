@@ -1,0 +1,343 @@
+{
+  "journey_id": "J-OFF-001",
+  "status": "PASS",
+  "ok": true,
+  "fail_reason": null,
+  "steps": [
+    {
+      "step": "wake",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "state": "awake",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "wake"
+      }
+    },
+    {
+      "step": "auth",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L1_POLICY_MODEL",
+      "result": {
+        "ok": true,
+        "authenticated": true,
+        "execution_depth": "L1_POLICY_MODEL",
+        "duration_ms": 0,
+        "action": "auth"
+      }
+    },
+    {
+      "step": "dock",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L1_POLICY_MODEL",
+      "result": {
+        "ok": true,
+        "direction": "dock",
+        "duplicate_session": false,
+        "data_loss": false,
+        "restored": {
+          "authenticated": true,
+          "network": "online",
+          "open_files": {
+            "notes.odt": {
+              "kind": "doc",
+              "dirty": true
+            },
+            "assignment.odt": {
+              "kind": "doc",
+              "dirty": true
+            },
+            "shared.odt": {
+              "kind": "doc",
+              "dirty": true
+            }
+          },
+          "cursor_position": {
+            "notes.odt": 3,
+            "assignment.odt": 1,
+            "shared.odt": 1
+          },
+          "music_position": 0,
+          "video_position": 0,
+          "chat_state": {},
+          "game_save": null,
+          "ai_sync_permitted": false,
+          "focus_mode": false,
+          "storage_used_pct": 40.0,
+          "battery_pct": 80.0,
+          "doc_versions": {
+            "notes.odt": 3,
+            "shared.odt": 1
+          }
+        },
+        "execution_depth": "L1_POLICY_MODEL",
+        "duration_ms": 0,
+        "action": "dock"
+      }
+    },
+    {
+      "step": "ethernet",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "network": "ethernet",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "ethernet"
+      }
+    },
+    {
+      "step": "external_display",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "display": "external_sim",
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 0,
+        "action": "external_display"
+      }
+    },
+    {
+      "step": "browser",
+      "ok": true,
+      "ms": 7,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "browser": false,
+        "status": 200,
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 7,
+        "action": "browser"
+      }
+    },
+    {
+      "step": "email",
+      "ok": true,
+      "ms": 85,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "sent": {
+          "ok": true,
+          "sent": true,
+          "subject": "phase-xii",
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        "recv": {
+          "ok": true,
+          "count": 2,
+          "latest": {
+            "subject": "phase-xii",
+            "from": "student@localhost",
+            "bytes": 601
+          },
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 85,
+        "action": "email"
+      }
+    },
+    {
+      "step": "calendar",
+      "ok": true,
+      "ms": 2050,
+      "execution_depth": "L3_REAL_SERVICE_API",
+      "result": {
+        "ok": true,
+        "status": 401,
+        "uid": "evt-1786317134",
+        "fallback": "radicale_filesystem",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786317134.ics",
+        "execution_depth": "L3_REAL_SERVICE_API",
+        "duration_ms": 2050,
+        "action": "calendar",
+        "path_home_dependency": true
+      }
+    },
+    {
+      "step": "docx_edit",
+      "ok": true,
+      "ms": 2637,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "soffice": "/opt/homebrew/bin/soffice",
+        "opened": true,
+        "edited": true,
+        "saved": true,
+        "reopened": true,
+        "exported_pdf": true,
+        "checksums": {
+          "assignment.odt": "509b8ec7e79c9b620ca87ec8b633db03ff9902811893b4d64b9c0b3a710c2142",
+          "assignment_edited.odt": "d427ecede7f7e8a5a8888f857ddd752caf7932969c1eebe3e0f54ffdcc302c41",
+          "assignment_edited.pdf": "348300b34313b5f791caaf69d6c5defbcfbbb5001dedefca6689717f5a56309c"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 2637,
+        "convert_rc": 0,
+        "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
+      }
+    },
+    {
+      "step": "xlsx_edit",
+      "ok": true,
+      "ms": 1570,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "soffice": "/opt/homebrew/bin/soffice",
+        "opened": true,
+        "edited": true,
+        "saved": true,
+        "reopened": true,
+        "exported_pdf": true,
+        "checksums": {
+          "assignment.odt": "2750b90810acac3cd64079a653b1bcfc3afb263794c57148afa09875fce5fb52",
+          "assignment_edited.odt": "05a3a510ef233b220072fa446d215fbe8bf08b25d202dbcada9bcfa63c8b750e",
+          "assignment_edited.pdf": "b6764a1a647acb273b28d41889862cc6d4bea6a5649b185f4eaa79d781004d35"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 1570,
+        "convert_rc": 0,
+        "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
+      }
+    },
+    {
+      "step": "pptx_edit",
+      "ok": true,
+      "ms": 1081,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "soffice": "/opt/homebrew/bin/soffice",
+        "opened": true,
+        "edited": true,
+        "saved": true,
+        "reopened": true,
+        "exported_pdf": true,
+        "checksums": {
+          "assignment.odt": "5097f64c5b419c619d1d22543e10aff07cdf042d8000964c3887aaed5814c4b5",
+          "assignment_edited.odt": "fb802f51dd2f20ebfa4c1631ce66177e171b5274edce175c601fe2cd9ceafd05",
+          "assignment_edited.pdf": "63e01080cd25ea2317c2576a65c041d05ec7530c5157c490f201ef5fd38fea05"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 1081,
+        "convert_rc": 0,
+        "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
+      }
+    },
+    {
+      "step": "pdf_export",
+      "ok": true,
+      "ms": 1133,
+      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "result": {
+        "ok": true,
+        "soffice": "/opt/homebrew/bin/soffice",
+        "opened": true,
+        "edited": true,
+        "saved": true,
+        "reopened": true,
+        "exported_pdf": true,
+        "checksums": {
+          "assignment.odt": "5097f64c5b419c619d1d22543e10aff07cdf042d8000964c3887aaed5814c4b5",
+          "assignment_edited.odt": "c0e85e8dc1ab248580f586543603128d47e528b228dc2334180afe09791765f4",
+          "assignment_edited.pdf": "a4cc4fc856a4dfbb14653ae6bcbbf0d8fcc3dd3e22db25250b28a7b42f9668a0"
+        },
+        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        "duration_ms": 1132,
+        "convert_rc": 0,
+        "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
+      }
+    },
+    {
+      "step": "webrtc_call",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L3_REAL_SERVICE_API",
+      "result": {
+        "ok": true,
+        "browser": false,
+        "signaling_url": "http://127.0.0.1:55260/",
+        "sessions": 0,
+        "execution_depth": "L3_REAL_SERVICE_API",
+        "note": "playwright not installed on host; signaling stack is live",
+        "duration_ms": 0,
+        "action": "webrtc_call"
+      }
+    },
+    {
+      "step": "screen_share",
+      "ok": true,
+      "ms": 1,
+      "execution_depth": "L3_REAL_SERVICE_API",
+      "result": {
+        "ok": true,
+        "browser": false,
+        "signaling_url": "http://127.0.0.1:55260/",
+        "sessions": 0,
+        "execution_depth": "L3_REAL_SERVICE_API",
+        "note": "playwright not installed on host; signaling stack is live",
+        "duration_ms": 0,
+        "action": "screen_share"
+      }
+    },
+    {
+      "step": "save_local",
+      "ok": true,
+      "ms": 5,
+      "execution_depth": "L0_GENERIC_OK",
+      "result": {
+        "ok": true,
+        "saved": true,
+        "data_loss": false,
+        "execution_depth": "L0_GENERIC_OK",
+        "duration_ms": 5,
+        "action": "save_local"
+      }
+    },
+    {
+      "step": "share_files",
+      "ok": true,
+      "ms": 3128,
+      "execution_depth": "L3_REAL_SERVICE_API",
+      "result": {
+        "ok": true,
+        "name": "shared.odt",
+        "bytes": 18,
+        "version": 1,
+        "url": "http://127.0.0.1:55258/shared.odt",
+        "status": null,
+        "share": "webdav://local/shared.odt?v=1",
+        "execution_depth": "L3_REAL_SERVICE_API",
+        "duration_ms": 3128,
+        "action": "share_files"
+      }
+    }
+  ],
+  "duration_ms": 11702,
+  "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
+  "phase": "XII",
+  "real_protocol_endpoints": {
+    "smtp": "127.0.0.1:55255",
+    "imap": "127.0.0.1:55256",
+    "caldav": "http://127.0.0.1:55257/",
+    "webdav": "http://127.0.0.1:55258/",
+    "matrix": "http://127.0.0.1:55259",
+    "webrtc": "http://127.0.0.1:55260/",
+    "lms": "http://127.0.0.1:55261/"
+  },
+  "physical_followups": [],
+  "mock": false
+}

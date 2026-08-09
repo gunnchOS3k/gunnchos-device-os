@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "app": {
+    "ok": true,
+    "app_id": "waike",
+    "entry": "apps/waike_learning/index.html",
+    "lessons": [
+      "waike_gary_upnow_intro",
+      "wireless_basics_101",
+      "python_starter_pack"
+    ],
+    "session": {
+      "ok": true,
+      "session": {
+        "lesson_id": "wireless_basics_101",
+        "profile": "student",
+        "role": "student",
+        "account": "dev-student",
+        "offline_pack": "wireless_basics_101",
+        "labs": [
+          "lab-intro",
+          "lab-check"
+        ],
+        "tutor": {
+          "available": true,
+          "mode": "local_privacy",
+          "topic": "wireless_basics_101",
+          "profile": "student"
+        },
+        "accessibility": {
+          "captions": true,
+          "reduced_motion": false,
+          "scaling": 1.0,
+          "input_alternatives": [
+            "keyboard",
+            "controller"
+          ]
+        },
+        "educator": null,
+        "progress": {
+          "account": "dev-student",
+          "lesson_id": "wireless_basics_101",
+          "pct": 25.0,
+          "role": "student",
+          "updated_at": 1786317131.2757828
+        }
+      },
+      "content_sources": [
+        {
+          "source": "config/waike_student_tasks.yaml",
+          "bytes": 1959,
+          "sha_prefix": "f164280ab187",
+          "present": true
+        },
+        {
+          "source": "config/waike_tutor_cards.yaml",
+          "bytes": 3808,
+          "sha_prefix": "5f69246b5568",
+          "present": true
+        },
+        {
+          "source": "configs/modes/waike_lesson.yaml",
+          "bytes": 372,
+          "sha_prefix": "b8e5c3ba5fd6",
+          "present": true
+        }
+      ],
+      "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, not production cloud sync.",
+      "mock": false
+    },
+    "deploy": {
+      "deployed": true,
+      "lesson_id": "wireless_basics_101",
+      "profile": "student",
+      "offline_capable": true,
+      "content_sources": [
+        {
+          "source": "config/waike_student_tasks.yaml",
+          "bytes": 1959,
+          "sha_prefix": "f164280ab187",
+          "present": true
+        },
+        {
+          "source": "config/waike_tutor_cards.yaml",
+          "bytes": 3808,
+          "sha_prefix": "5f69246b5568",
+          "present": true
+        },
+        {
+          "source": "configs/modes/waike_lesson.yaml",
+          "bytes": 372,
+          "sha_prefix": "b8e5c3ba5fd6",
+          "present": true
+        }
+      ],
+      "mock": false,
+      "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, not production cloud sync."
+    },
+    "portfolio": {
+      "schema": "waike.portfolio.v1",
+      "lesson_id": "wireless_basics_101",
+      "role": "learner",
+      "exported_at": 1786317131.276028,
+      "session_ok": true
+    },
+    "accessibility": {
+      "high_contrast_supported": true,
+      "roles": [
+        "learner",
+        "educator"
+      ]
+    },
+    "ui_present": true,
+    "mock": false,
+    "stub_content": false,
+    "claim_boundary": "Digital WAIKE Learning app using repo lesson packs and progress store. Not a full LMS or production cloud sync."
+  },
+  "browser": {
+    "ok": false,
+    "error": "Request URL is missing an 'http://' or 'https://' protocol."
+  },
+  "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+  "duration_ms": 9,
+  "stub": false
+}

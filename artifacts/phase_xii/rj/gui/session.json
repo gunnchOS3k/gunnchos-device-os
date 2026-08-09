@@ -1,0 +1,36 @@
+{
+  "ok": false,
+  "weston": null,
+  "xvfb": null,
+  "defect": "XR-DEFECT-GUI-SESSION",
+  "config": {
+    "schema": "gunnchos.phase_xii.gui_session.v1",
+    "compositor": "weston",
+    "alternatives_documented": [
+      "wlroots/sway",
+      "plasma",
+      "gnome",
+      "xfce"
+    ],
+    "selection_rationale": [
+      "ARM + x86 CI support",
+      "Wayland maturity with headless backend",
+      "Low resource use for Student/Handheld profiles",
+      "Accessible via weston-terminal + AT-SPI hooks",
+      "Branded via gunnchOS shell/launcher overlays"
+    ],
+    "branding": {
+      "session_name": "gunnchOS",
+      "launcher": "apps/gunnchos_shell",
+      "not_stock_distro_desktop": true
+    },
+    "ci": {
+      "xvfb": true,
+      "weston_headless": true,
+      "qemu_optional": true
+    },
+    "config_path": "os_build/phase_xii/gui/weston.ini"
+  },
+  "note": "Install weston/Xvfb in CI image; local macOS host may lack Wayland",
+  "execution_depth": "L3_REAL_SERVICE_API"
+}
