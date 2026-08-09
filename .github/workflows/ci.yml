@@ -108,6 +108,10 @@ jobs:
           echo "Linked sibling at $dest"
       - name: Run tests
         run: PYTHONPATH=.:src pytest -q tests/
+      - name: Continuation VIII release-readiness firewall
+        run: |
+          PYTHONPATH=.:src python3 scripts/validate_release_readiness_firewall.py
+          test -f results/cont_viii/release_readiness_scorecard.json
       - uses: actions/setup-node@v4
         with:
           node-version: '20'

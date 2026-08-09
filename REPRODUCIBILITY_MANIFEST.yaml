@@ -1,0 +1,22 @@
+# Pinned reproducible build/test environment for gunnchOS Device OS
+schema: gunnchos.reproducibility_manifest.v1
+python: "3.11.9"
+node: "20.18.0"
+qemu: "qemu-system-aarch64 (distro package in CI)"
+container:
+  kind: devcontainer
+  file: .devcontainer/devcontainer.json
+  image: mcr.microsoft.com/devcontainers/python:3.11
+make_targets:
+  - bootstrap
+  - build
+  - test
+  - package
+  - evidence
+no_host_secrets: true
+forbidden_host_paths:
+  - laptop-absolute home paths
+  - Edmund-laptop-only mounts
+notes:
+  - "CI and fresh machines must not require host-only secrets."
+  - "PHYSICAL_EXECUTION_FREEZE: no purchase/merge from this manifest."

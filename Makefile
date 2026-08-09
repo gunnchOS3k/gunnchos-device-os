@@ -3,12 +3,46 @@
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
 	runtime-services system-image full-product-iii \
 	cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom \
-	bootable-reference full-product-iv full-product-v full-product-vi full-product-vii
+	bootable-reference full-product-iv full-product-v full-product-vi full-product-vii \
+	bootstrap build package evidence factory-station full-product-viii release-firewall
 
 PY := PYTHONPATH=src:.
 
+# Cont VIII reproducible entrypoints (no host-only secrets/paths)
+bootstrap:
+	python3 -m pip install -U pip
+	python3 -m pip install pytest pyyaml
+	@if [ -f requirements.txt ]; then python3 -m pip install -r requirements.txt; fi
+	@if [ -f requirements-dev.txt ]; then python3 -m pip install -r requirements-dev.txt; fi
+	python3 -m pip install -e ./sdk || python3 -m pip install -e "sdk/[dev]" || true
+
+build:
+	$(PY) python3 -c "from gunnchos_device_os.cont_viii.productivity_stack import build_productivity_stack; import json; print(json.dumps(build_productivity_stack(), indent=2))"
+	$(PY) python3 -c "from gunnchos_device_os.app_packaging import PackageManifestBuilder; print(PackageManifestBuilder().validate())"
+
 test:
 	pytest -q
+
+package:
+	@mkdir -p results/cont_viii/package
+	$(PY) python3 -c "from gunnchos_device_os.cont_viii.factory_station import run_factory_station; run_factory_station()"
+	$(PY) python3 -c "from gunnchos_device_os.cont_viii.release_readiness import evaluate_release_readiness; import json; print(json.dumps(evaluate_release_readiness(write=True), indent=2)[:2000])"
+	@cp -f REPRODUCIBILITY_MANIFEST.yaml results/cont_viii/package/ 2>/dev/null || true
+	@echo "package artifacts under results/cont_viii/"
+
+evidence: package
+	$(PY) python3 scripts/validate_release_readiness_firewall.py
+	@test -f results/cont_viii/release_readiness_scorecard.json
+
+factory-station:
+	$(PY) python3 -c "from gunnchos_device_os.cont_viii.factory_station import run_factory_station; import json; print(json.dumps(run_factory_station(), indent=2)[:4000])"
+
+full-product-viii:
+	PYTHONPATH=.:src pytest -q tests/test_continuation_viii_release_readiness.py
+	$(MAKE) evidence
+
+release-firewall:
+	$(PY) python3 scripts/validate_release_readiness_firewall.py
 
 validate-full:
 	bash scripts/run_full_validation.sh
