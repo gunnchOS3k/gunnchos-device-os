@@ -1,0 +1,93 @@
+{
+  "schema": "gunnchos.productivity_install_ledger.v1",
+  "generated_at": 1786310162.451314,
+  "host": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "python": "3.11.2",
+    "ci": false
+  },
+  "components": {
+    "office_suite": {
+      "present": false,
+      "executable": null,
+      "path": null,
+      "version": null,
+      "candidates": [
+        "soffice",
+        "libreoffice"
+      ]
+    },
+    "browser": {
+      "present": false,
+      "executable": null,
+      "path": null,
+      "version": null,
+      "candidates": [
+        "chromium-browser",
+        "chromium",
+        "google-chrome",
+        "firefox",
+        "firefox-esr"
+      ]
+    },
+    "pdf_tools": {
+      "present": false,
+      "executable": null,
+      "path": null,
+      "version": null,
+      "candidates": [
+        "pdftotext",
+        "pdfinfo",
+        "pdftoppm"
+      ]
+    },
+    "email_calendar": {
+      "present": false,
+      "executable": null,
+      "path": null,
+      "version": null,
+      "candidates": [
+        "thunderbird",
+        "evolution"
+      ],
+      "pwa_fallback_allowed": true,
+      "ok": true
+    },
+    "printing": {
+      "executable": "lp",
+      "path": "/usr/bin/lp",
+      "version": "Usage: lp [options] [--] [file(s)]",
+      "present": true
+    },
+    "vpn_wireguard": {
+      "present": false,
+      "executable": null,
+      "path": null,
+      "version": null,
+      "candidates": [
+        "wg",
+        "wg-quick"
+      ]
+    },
+    "editor_ide": {
+      "executable": "vim",
+      "path": "/usr/bin/vim",
+      "version": "VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Apr 18 2026 20:29:32)",
+      "present": true
+    },
+    "terminal": {
+      "executable": "bash",
+      "path": "/bin/bash",
+      "version": "GNU bash, version 3.2.57(1)-release (arm64-apple-darwin25)",
+      "present": true
+    }
+  },
+  "missing_required": [
+    "office_suite",
+    "browser",
+    "pdf_tools",
+    "vpn_wireguard"
+  ],
+  "claim_boundary": "Continuation IX digital release lock only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission. RECREATION_DIGITAL_READY \u2260 REPRODUCIBILITY_DIGITAL_READY."
+}

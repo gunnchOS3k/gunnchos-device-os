@@ -1,0 +1,49 @@
+{
+  "DIGITAL": [
+    {
+      "lane": "productivity_install",
+      "reason": "missing_or_unversioned_required:office_suite,browser,pdf_tools,vpn_wireguard"
+    },
+    {
+      "lane": "browser",
+      "reason": "browser_or_tls_or_permission_gap"
+    },
+    {
+      "lane": "office_files",
+      "reason": "soffice_missing"
+    },
+    {
+      "lane": "pdf",
+      "reason": "pdf_step_failed"
+    },
+    {
+      "lane": "vpn_enterprise",
+      "reason": "wireguard_tools_missing_or_schema_gap"
+    },
+    {
+      "lane": "student_digital_ready",
+      "reason": "productivity_install_failed"
+    },
+    {
+      "lane": "office_work_digital_ready",
+      "reason": "missing_steps:browser,docx_xlsx_pptx,pdf,vpn"
+    }
+  ],
+  "PHYSICAL": [
+    "PHYSICAL_EXECUTION_FREEZE",
+    "physical_boot_on_EVT_hardware",
+    "physical_printer_CUPS",
+    "physical_BT_audio_lab",
+    "physical_dock_display_lab",
+    "battery_lab_measurements",
+    "thermal_lab_measurements",
+    "physical_ring_hardware"
+  ],
+  "EXTERNAL": [
+    "MS_Office_perfect_fidelity_not_claimed",
+    "carrier_certification",
+    "store_submission_HSM_signing",
+    "production_cloud_credentials",
+    "restricted_vendor_hw_reproduction"
+  ]
+}

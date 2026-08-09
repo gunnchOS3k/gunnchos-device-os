@@ -112,6 +112,10 @@ jobs:
         run: |
           PYTHONPATH=.:src python3 scripts/validate_release_readiness_firewall.py
           test -f results/cont_viii/release_readiness_scorecard.json
+      - name: Continuation IX digital lock (structure + Gate1 recreation fix)
+        run: |
+          PYTHONPATH=.:src pytest -q tests/test_continuation_ix_digital_lock.py::test_gate1_recreation_reprove_ci_safe_without_siblings
+          PYTHONPATH=.:src pytest -q tests/test_continuation_ix_digital_lock.py::test_cont_ix_digital_lock_structure
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
