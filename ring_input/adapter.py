@@ -10,6 +10,13 @@ from typing import Any
 
 from .fallback_input import OsSafeFallback
 
+try:
+    from gunnchos_device_os.silent_destructive_uncertain_gestures import (
+        SilentDestructiveUncertainGesturesGuard,
+    )
+except ImportError:  # pragma: no cover - package path variants in CI
+    SilentDestructiveUncertainGesturesGuard = None  # type: ignore[misc, assignment]
+
 
 def _load_ari():
     candidates = [
@@ -69,6 +76,11 @@ class RingInputAdapter:
         self._receiver = self._ari.AuthenticatedReceiver(
             host_id=self.host_id, known_devices=set()
         )
+        self._destructive_guard = (
+            SilentDestructiveUncertainGesturesGuard()
+            if SilentDestructiveUncertainGesturesGuard is not None
+            else None
+        )
 
     @property
     def receiver(self):
@@ -89,12 +101,33 @@ class RingInputAdapter:
         if not ok or verified is None:
             self.fallback.engage(reason.value if reason else "auth_fail")
             return None
-        kind = EVENT_TO_OS.get(str(verified["event_type"]), "unknown")
+        event_type = str(verified["event_type"])
+        confidence = float(verified["confidence"])
+        payload = dict(verified.get("payload") or {})
+        # RING-RELIAB-016: never silently apply uncertain destructive gestures.
+        if self._destructive_guard is not None:
+            action_name = payload.get("action")
+            # Authenticated high-confidence destructive_confirm *is* the confirm token.
+            explicit = bool(payload.get("explicit_confirm")) or (
+                event_type in {"destructive_confirm", "confirm_destructive"}
+                and confidence >= self._destructive_guard.threshold
+            )
+            decision = self._destructive_guard.evaluate(
+                event_type=event_type,
+                confidence=confidence,
+                action=str(action_name) if action_name else None,
+                explicit_confirm=explicit,
+                destructive_flag=bool(payload.get("destructive")),
+            )
+            if not decision.allowed:
+                self.fallback.engage(decision.reason)
+                return None
+        kind = EVENT_TO_OS.get(event_type, "unknown")
         action = OsInputAction(
             kind=kind,
-            event_type=str(verified["event_type"]),
-            confidence=float(verified["confidence"]),
-            payload=dict(verified.get("payload") or {}),
+            event_type=event_type,
+            confidence=confidence,
+            payload=payload,
             device_id=str(verified["device_id"]),
             session_id=str(verified["session_id"]),
             authenticated=True,
