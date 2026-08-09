@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at_utc": "2026-08-08T21:09:42.141Z",
+  "branch": "cursor/full-product-continuation-vi-beta-rc",
+  "base_sha": "c8a2de8c51929d776eea7b219f6015e787e0f174",
+  "tokens": {
+    "BEATLINK_ALPHA_EXIT_DIGITAL_PASS": true,
+    "BEATLINK_LOAD_HARNESS_SCAFFOLD_PASS": true,
+    "BEATLINK_BETA_CONTENT_COMPLETE_DIGITAL": true,
+    "BEATLINK_EVENT_LIFECYCLE_STRESS_PASS": true,
+    "BEATLINK_EVENT_SCALE_SIM_PASS": true,
+    "BEATLINK_DIGITAL_RC_READY": true,
+    "BEATLINK_REDIS_DURABLE_ROOMS_PASS": true,
+    "BEATLINK_LIVE_MIC_PIPELINE_PASS": true,
+    "BEATLINK_PROVIDER_INTERFACE_PASS": true,
+    "BEATLINK_NETWORK_LOAD_PASS": true,
+    "FULL_PRODUCT_CONTENT_COMPLETE": false,
+    "FULL_PRODUCT_FEATURE_COMPLETE": false,
+    "BETA": false,
+    "RC": false,
+    "LAUNCH": false
+  },
+  "revalidation": {
+    "BEATLINK_BETA_CONTENT_COMPLETE_DIGITAL": "RE_EARNED — offline launch catalog + five-mode depth",
+    "BEATLINK_DIGITAL_RC_READY": "RE_EARNED — package/SBOM/update/rollback/privacy/reconnect/TTL + SLOs",
+    "BETA": "REVOKED_OR_NOT_EARNED — commercial EXTERNAL; no live pilot",
+    "RC": "REVOKED_OR_NOT_EARNED — digital RC ≠ store/HSM/physical"
+  },
+  "gap_audit": "docs/release/beta_gap_audit.json"
+}

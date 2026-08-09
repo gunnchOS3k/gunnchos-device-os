@@ -4,7 +4,8 @@
 	runtime-services system-image full-product-iii \
 	cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom \
 	bootable-reference full-product-iv full-product-v full-product-vi full-product-vii \
-	bootstrap build package evidence factory-station full-product-viii release-firewall
+	bootstrap build package evidence factory-station full-product-viii release-firewall \
+	full-product-ix cont-ix-evidence
 
 PY := PYTHONPATH=src:.
 
@@ -40,6 +41,16 @@ factory-station:
 full-product-viii:
 	PYTHONPATH=.:src pytest -q tests/test_continuation_viii_release_readiness.py
 	$(MAKE) evidence
+
+# Cont IX final digital release lock (requires host productivity packages for READY tokens)
+full-product-ix:
+	PYTHONPATH=.:src pytest -q tests/test_continuation_ix_digital_lock.py
+	$(MAKE) cont-ix-evidence
+
+cont-ix-evidence:
+	$(PY) python3 -c "from gunnchos_device_os.cont_ix.digital_lock import evaluate_digital_lock; import json; r=evaluate_digital_lock(write=True); print(json.dumps({k:r[k] for k in ('ok','token','earned_tokens','blockers')}, indent=2, default=str)[:4000])"
+	@test -f artifacts/continuation_ix/DIGITAL_RELEASE_LOCK.json
+	@test -f docs/release/CONTINUATION_IX_DIGITAL_LOCK.md
 
 release-firewall:
 	$(PY) python3 scripts/validate_release_readiness_firewall.py

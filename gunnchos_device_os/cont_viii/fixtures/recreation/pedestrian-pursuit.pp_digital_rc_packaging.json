@@ -1,0 +1,54 @@
+{
+  "schema": "pp_digital_rc_packaging/v2",
+  "clean_install": true,
+  "legacy_cup_save_detected": true,
+  "save_migration_version": 2,
+  "package_content_version": 3,
+  "update_rollback": true,
+  "export_presets_present": true,
+  "android_build_script": true,
+  "perf_budget_doc": "scripts/core/PerfBudget.gd",
+  "online_arch_private_only": true,
+  "offline_playable": true,
+  "local_mp": true,
+  "ai_field": true,
+  "crash_watchdog": "scripts/rc/CrashWatchdog.gd",
+  "input_profiles": [
+    "gamepad_default",
+    "keyboard_default",
+    "local_mp_split",
+    "touch_assist"
+  ],
+  "art_status": "LAUNCH_PROCEDURAL_FINAL",
+  "audio_status": "LAUNCH_PROCEDURAL_FINAL",
+  "visual_qa_sheets": [
+    "footwear_contact_sheet.png",
+    "items_contact_sheet.png",
+    "racers_contact_sheet.png",
+    "tracks_contact_sheet.png",
+    "ui_contact_sheet.png",
+    "vfx_contact_sheet.png"
+  ],
+  "provenance_entries": 44,
+  "token_candidate": "PEDESTRIAN_DIGITAL_RC_READY",
+  "token_earned": true,
+  "token_state": "YES",
+  "tokens": {
+    "PEDESTRIAN_DIGITAL_RC_READY": true,
+    "PEDESTRIAN_PHYSICAL_PERFORMANCE_PENDING": true,
+    "PEDESTRIAN_BETA_CONTENT_COMPLETE_DIGITAL": true,
+    "PEDESTRIAN_COMPETITIVE_AI_DIGITAL_VALIDATED": true
+  },
+  "gaps": [
+    "Public online deploy out of scope",
+    "Human device FPS certification remains PEDESTRIAN_PHYSICAL_PERFORMANCE_PENDING (separate from digital RC)"
+  ],
+  "local_mp_polish": [
+    "split_cameras",
+    "dual_controllers",
+    "results_tags",
+    "pause_ownership",
+    "a11y_hud",
+    "career_save_skipped"
+  ]
+}

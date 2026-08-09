@@ -1,0 +1,63 @@
+{
+	"checks": {
+		"beta_content": true,
+		"clean_install_doc": true,
+		"long_ai_sim": {
+			"matrix": "7x7x5",
+			"note": "Full long AI sim via dedicated runner; RC requires prior/alpha evidence or re-run",
+			"prior_ok": true,
+			"runner": "tests/battle_scene_cpu_eval_runner.gd",
+			"token": "ANIME_COMPETITIVE_AI_DIGITAL_VALIDATED"
+		},
+		"net_fault_injection": {
+			"a_received": 90,
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+			"b_received": 90,
+			"frames": 90,
+			"ok": true,
+			"stats_a": {
+				"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+				"clock_ms": 1833.7,
+				"delivered": 90,
+				"dropped": 0,
+				"jitter_ms": 5.0,
+				"latency_ms": 40.0,
+				"loss_rate": 0.0,
+				"queued": 0,
+				"sent": 90
+			},
+			"stats_b": {
+				"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+				"clock_ms": 1833.7,
+				"delivered": 90,
+				"dropped": 0,
+				"jitter_ms": 8.0,
+				"latency_ms": 70.0,
+				"loss_rate": 0.0,
+				"queued": 0,
+				"sent": 90
+			}
+		},
+		"netplay": true,
+		"performance": {
+			"acc": 46.121612287279,
+			"budget_ms_per_frame": 8.0,
+			"elapsed_ms": 0.011,
+			"ms_per_frame": 0.0000458333333333333,
+			"ok": true,
+			"sample_frames": 240
+		},
+		"rc_smoke": true,
+		"replay": true,
+		"standalone_package": true
+	},
+	"honesty": {
+		"alpha_tokens_repackaged": false,
+		"final_art_complete": false,
+		"final_audio_complete": false
+	},
+	"ok": true,
+	"public_deploy": false,
+	"token": "ANIME_DIGITAL_RC_READY",
+	"token_earned": true
+}

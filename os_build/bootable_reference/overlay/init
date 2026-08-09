@@ -167,6 +167,13 @@ if [ -x /opt/gunnchos/recovery/self_check.sh ]; then
   /opt/gunnchos/recovery/self_check.sh || true
 fi
 
+# Cont IX productivity ledger probe (install evidence staged into rootfs)
+if [ -x /opt/gunnchos/productivity/probe.sh ]; then
+  /opt/gunnchos/productivity/probe.sh || echo "GUNNCHOS_PRODUCTIVITY_PROBE=failed"
+else
+  echo "GUNNCHOS_PRODUCTIVITY_PROBE=missing"
+fi
+
 # Restart smoke last (stop/start is the slow path under TCG).
 if /opt/gunnchos/services/diagnostics.sh restart >/run/gunnchos-diagnostics-restart.log 2>&1; then
   echo "GUNNCHOS_SERVICE_RESTART=ok"
