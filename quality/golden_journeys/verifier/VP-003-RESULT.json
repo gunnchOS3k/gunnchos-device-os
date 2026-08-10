@@ -1,0 +1,965 @@
+{
+  "schema": "gunnchos.vp003_independent_result.v1",
+  "work_packet": "WP-003",
+  "verification_packet": "VP-003",
+  "tip_sha": "aa13f2c51413327ec84e67f1640bf6ee0070d827",
+  "executed_at": "2026-08-10T14:48:54Z",
+  "verifier": "independent-verifier-vp-003",
+  "independence_attestation": "Acceptance plan derived from MLP/Product Quality Gate/GOLDEN_JOURNEYS/Evidence+Depth/Independent Verification Policy/WP-003/Requirements before treating implementer Phase XI/XII journey tests as authoritative. Execution composed OS APIs directly; did not invoke phase_xi harness or phase_xii journey acceptance runners as the design oracle.",
+  "overall_result": "FAIL",
+  "competitor_matrix_review": {
+    "path": "quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json",
+    "capability_count": 34,
+    "fabricated_competitor_scores": [],
+    "doctrine_flag": true,
+    "verdict": "ACCEPT",
+    "notes": "All competitor_score values null; category strategies only. Verifier accepts matrix; no measurements fabricated."
+  },
+  "journeys": [
+    {
+      "journey_id": "GOLDEN-01",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Independent digital probe of office/LMS/AI/game continuity"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Independent digital probe of office/LMS/AI/game continuity"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "A1_office_document",
+          "ok": true,
+          "detail": "office={'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'vp003_assignment.odt': '9267227d0732f0df7f54044d0457a8165e8c5b2b7a56f4fab47a48baeccca320', 'vp003_assignment_edited.odt': '94e0ebbbdcae22680daf78e909220e2048160df2bdb547cbbb4ff1f179ca6b0e', 'vp003_assignment_edited.pdf': '0b295b0e14d350d1e94d306eb000e2f7e6df8114688197ffcbb5d2cf6bca9fb7'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 1775, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.pdf', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment.odt']} doc=/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.pdf"
+        },
+        {
+          "name": "A3_os_ai_api",
+          "ok": true,
+          "detail": "{'ok': True, 'capability': 'tutor', 'user_id': 'stu1', 'text': '[tutor/micro:76f785250ec0] Help outline my assignment', 'route': {'model_id': 'micro-deterministic-v1', 'sha256': 'eeb6114b1f8bfd16', 'tier': 'micro', 'runtime': 'deterministic_micro'}, 'source': 'os_local_ai', 'model_path_exposed': False}"
+        },
+        {
+          "name": "A1_submit_receipt",
+          "ok": true,
+          "detail": "url=http://127.0.0.1:62348 browser_lms={'ok': True, 'browser': True, 'playwright': True, 'downloaded': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/evidence/assignment.pdf', 'receipt': {'ok': True, 'receipt': {'id': 'cc3ff920-75bc-4c28-9c7c-2f1036f52ce5', 'status': 'submitted', 'bytes': 14565}}, 'screenshots': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/evidence/lms_open.png', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/evidence/lms_submit.png'], 'execution_depth': 'L5_REAL_GUI_INTERACTION', 'duration_ms': 1737}"
+        },
+        {
+          "name": "A1_recreation",
+          "ok": true,
+          "detail": "regs=4 web_ok=True save=SaveSlot(game_id='anime-aggressors', slot=1, payload={'level': 1, 'score': 10}, checkpoint=True, at=1786373326.496207) resume={'ok': True, 'session_id': 'f0047d340587', 'payload': {'level': 1, 'score': 10}} beatlink={'ok': False, 'error': 'beatlink_repo_missing', 'fixture_json_used': False}"
+        },
+        {
+          "name": "A2_document_intact_after_recreation",
+          "ok": true,
+          "detail": "pre=0b295b0e14d350d1e94d306eb000e2f7e6df8114688197ffcbb5d2cf6bca9fb7 post=0b295b0e14d350d1e94d306eb000e2f7e6df8114688197ffcbb5d2cf6bca9fb7"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-DEF-G01-GAME-REPO",
+          "severity": "S2",
+          "journey_id": "GOLDEN-01",
+          "title": "phase_xii play_short_session cannot launch first-party Godot/sibling repos (XR-DEFECT-GAME-REPO); in-tree web packages used for digital recreation proof",
+          "detail": {
+            "ok": false,
+            "error": "beatlink_repo_missing",
+            "fixture_json_used": false
+          },
+          "blocking": false
+        }
+      ],
+      "notes": "Composed LMS+office+OS AI+game without Phase XI/XII journey runners.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Campus LMS UI / device display PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-02",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "interaction_quality": {
+            "value": 1,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.56,
+        "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "B1_offline_local_durable",
+          "ok": true,
+          "detail": "local store has draft"
+        },
+        {
+          "name": "B2_conflict_safe_sync",
+          "ok": true,
+          "detail": "sync_result={'replica_id': 'student-local', 'policy': 'vector_clock', 'results': [{'status': 'conflict', 'key': 'assignment.odt', 'conflict': {'key': 'assignment.odt', 'local': {'key': 'assignment.odt', 'value': {'body': 'offline draft A'}, 'replica_id': 'student-local', 'wall_time_ms': 1786373326499, 'vector': {'student-local': 1}, 'version': 1, 'tombstone': False}, 'remote': {'key': 'assignment.odt', 'value': {'body': 'server draft B'}, 'replica_id': 'lms-remote', 'wall_time_ms': 1786373326499, 'vector': {'lms-remote': 1}, 'version': 1, 'tombstone': False}, 'policy': 'vector_clock', 'winner': 'merged_lww_fallback', 'reason': 'concurrent_then_tie_break_replica_id'}, 'resolved_value': {'body': 'offline draft A'}, 'mock': False}], 'store_size': 1, 'conflicts': [{'key': 'assignment.odt', 'local': {'key': 'assignment.odt', 'value': {'body': 'offline draft A'}, 'replica_id': 'student-local', 'wall_time_ms': 1786373326499, 'vector': {'student-local': 1}, 'version': 1, 'tombstone': False}, 'remote': {'key': 'assignment.odt', 'value': {'body': 'server draft B'}, 'replica_id': 'lms-remote', 'wall_time_ms': 1786373326499, 'vector': {'lms-remote': 1}, 'version': 1, 'tombstone': False}, 'policy': 'vector_clock', 'winner': 'merged_lww_fallback', 'reason': 'concurrent_then_tie_break_replica_id'}], 'mock': False}"
+        },
+        {
+          "name": "B3_no_silent_overwrite",
+          "ok": true,
+          "detail": "silent=False"
+        },
+        {
+          "name": "B2_policy_vector_clock_required",
+          "ok": true,
+          "detail": "VECTOR_CLOCK concurrent conflict required for acceptance"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-S2-G02-D6-OFFICE-LMS",
+          "severity": "S2",
+          "journey_id": "GOLDEN-02",
+          "title": "Offline sync conflict-safe at engine D5; full office+LMS offline D6 cross-app not earned",
+          "blocking": false
+        }
+      ],
+      "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Wi-Fi/radio partition PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-03",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Creator toolchain independent probe"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Creator toolchain independent probe"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Creator toolchain independent probe"
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Creator toolchain independent probe"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Creator toolchain independent probe"
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Creator toolchain independent probe"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Creator toolchain independent probe"
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Creator toolchain independent probe"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Creator toolchain independent probe"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Creator toolchain independent probe"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "C1_creator_build_surface",
+          "ok": true,
+          "detail": "{'ok': True, 'app': {'ok': True, 'app_id': 'creator_studio', 'entry': 'apps/creator_studio/index.html', 'workspace': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/gchos-studio-6crg7u7y', 'files': ['Makefile', 'hello.py'], 'run': {'stdout': 'hello from Creator Studio', 'stderr': '', 'code': 0}, 'build': {'stdout': 'build-ok', 'code': 0}, 'git_status_preview': ['M quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json', ' M quality/golden_journeys/scorecards/GOLDEN-01.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-02.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-03.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-04.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-05.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-07.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-09.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-10.scorecard.json', ' M quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md', ' M quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_RESULTS.md', '?? quality/golden_journeys/verifier/RESULTS.md', '?? quality/golden_journeys/verifier/VP-003-RESULT.json', '?? quality/golden_journeys/verifier/run_independent_acceptance.py'], 'device_debug': {'serial': 'DEV-UART-0', 'layout': ['single', 'dsxl']}, 'gunnchai_assist': {'available': True, 'mode': 'local_dev_hint'}, 'ui_present': True, 'mock': False, 'stub_content': False, 'claim_boundary': 'Digital Creator/Coder Studio with real local file/git/run paths. Not a full IDE distribution or production signing toolchain.'}, 'test_rc': 0, 'test_out': 'ok\\n', 'git': 'git version 2.51.0', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 92}"
+        },
+        {
+          "name": "C2_package_install_run",
+          "ok": true,
+          "detail": "{'ok': True, 'channels': {'dev': {'ok': True, 'app_id': 'demo.app', 'version': '0.1.0-dev', 'channel': 'dev'}, 'beta': {'ok': True, 'app_id': 'demo.app', 'version': '0.1.0-beta', 'channel': 'beta'}, 'stable': {'ok': True, 'app_id': 'demo.app', 'version': '1.0.0', 'channel': 'stable'}}, 'update': {'ok': True, 'app_id': 'demo.app', 'version': '1.0.1', 'channel': 'stable'}, 'rollback': {'ok': True, 'rolled_back_to': {'version': '1.0.0', 'channel': 'stable', 'prev': {'version': '0.1.0-beta', 'channel': 'beta', 'prev': {'version': '0.1.0-dev', 'channel': 'dev', 'prev': None}}}, 'install': {'ok': True, 'app_id': 'demo.app', 'version': '1.0.0', 'channel': 'stable'}}, 'revoke': {'ok': True, 'revoked': 'demo.app'}, 'revoked_install_denied': True}"
+        },
+        {
+          "name": "C3_ai_code_assist_api",
+          "ok": true,
+          "detail": "{'ok': True, 'capability': 'code', 'user_id': 'dev1', 'text': '[code/micro:087f80fc7546] def add(a,b):', 'route': {'model_id': 'micro-deterministic-v1', 'sha256': 'eeb6114b1f8bfd16', 'tier': 'micro', 'runtime': 'deterministic_micro'}, 'source': 'os_local_ai', 'model_path_exposed': False}"
+        }
+      ],
+      "defects": [],
+      "notes": "PackageManager+creator+AI API (capability=code) composed independently.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Physical DS-XL dual panel PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-04",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "D1_dock_digital",
+          "ok": true,
+          "detail": "{'docked': True, 'external_display': True, 'performance': 'docked_performance', 'status_tokens': ['PHYSICAL_DOCK_EVIDENCE_PENDING'], 'claim_boundary': 'Stub state only; not physical dock evidence.'}"
+        },
+        {
+          "name": "D1_profile_dock",
+          "ok": true,
+          "detail": "ProfileConfig(profile=<AdaptiveProfile.OFFICE_DOCKED: 'OFFICE_DOCKED'>, device_role='laptop', input_modality=['keyboard', 'mouse'], chrome='desktop', docked=True, dual_screen=False, launcher_density='comfortable', window_mode='floating')"
+        },
+        {
+          "name": "D1_office_formats",
+          "ok": true,
+          "detail": "{'ok': True, 'formats': {'odt': {'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'sample.odt': '50a9ae22c1d1435128ce1b4acd6fdecb04b2e36c406b8debcb735ef941117abf', 'sample_edited.odt': '3eb11e0af74fa3ec44b4b13dd643c3927472eb7c48c36066517770029f661246', 'sample_edited.pdf': '50e3adb94154feaa83d177a6f597d88a5a676da199a444c59a4a8a1dbc29463c'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 978, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.pdf', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample.odt']}, 'ods': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'odp': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'docx': {'ok': True, 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/docx/seed.docx'], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'xlsx': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'pptx': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'pdf': {'ok': True, 'via': 'odt_export', 'checksums': {'sample.odt': '9aa70ba72dfe493cce9761194869be55b49153e73cc6928eb966136ff797e5e8', 'sample_edited.odt': '29c0d4f06250b9060cff14930aa978ca08bd692bcd31536feb3f8d9a1b4b3358', 'sample_edited.pdf': '59a37c1163f35e9c8fda55b8ec9b7a041a1badd74d2c2636ee3001731141d319'}, 'error': None, 'soffice': '/opt/homebrew/bin/soffice'}, 'csv': {'ok': True, 'path': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/csv/sample.csv', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'md': {'ok': True, 'path': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/md/sample.md', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}}, 'soffice': '/opt/homebrew/bin/soffice'}"
+        },
+        {
+          "name": "D1_email",
+          "ok": true,
+          "detail": "{'ok': True, 'sent': True, 'subject': 'office dock', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}"
+        },
+        {
+          "name": "D1_undock_session_preserved",
+          "ok": true,
+          "detail": "detach=ProfileConfig(profile=<AdaptiveProfile.HANDHELD_GAMEPAD: 'HANDHELD_GAMEPAD'>, device_role='handheld', input_modality=['gamepad', 'touch'], chrome='handheld', docked=False, dual_screen=False, launcher_density='compact', window_mode='fullscreen') undock={'docked': False, 'external_display': False, 'performance': 'balanced', 'status_tokens': ['PHYSICAL_DOCK_EVIDENCE_PENDING'], 'claim_boundary': 'Stub state only; not physical dock evidence.'} files=True"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-S2-G04-PHYSICAL-DOCK",
+          "severity": "S2",
+          "journey_id": "GOLDEN-04",
+          "title": "Digital dock plane PASS; physical display/Ethernet/USB/audio SI pending (caps independent at PARTIAL)",
+          "blocking": false
+        }
+      ],
+      "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Dock display/Ethernet/USB/audio SI PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-05",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Handheld continuity independent probe"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Handheld continuity independent probe"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Handheld continuity independent probe"
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Handheld continuity independent probe"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Handheld continuity independent probe"
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Handheld continuity independent probe"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Handheld continuity independent probe"
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Handheld continuity independent probe"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Handheld continuity independent probe"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Handheld continuity independent probe"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "E0_register_games",
+          "ok": true,
+          "detail": "[GameRegistration(game_id='anime-aggressors', title='Anime Aggressors', path='games/anime-aggressors-web', kind='web', registered_at=1786373333.336087), GameRegistration(game_id='beatlink-party', title='BeatLink Party', path='games/beatlink-party-web', kind='web', registered_at=1786373333.33633), GameRegistration(game_id='earth-species', title='Earth Species', path='games/earth-species-web', kind='web', registered_at=1786373333.336469), GameRegistration(game_id='foot-racing', title='Foot Racing', path='games/foot-racing-web', kind='web', registered_at=1786373333.336598)]"
+        },
+        {
+          "name": "E1_checkpoint",
+          "ok": true,
+          "detail": "SaveSlot(game_id='anime-aggressors', slot=1, payload={'level': 3, 'score': 1200}, checkpoint=True, at=1786373333.336818)"
+        },
+        {
+          "name": "E2_docked_work_task",
+          "ok": true,
+          "detail": "{'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'docked_work.odt': '9aa70ba72dfe493cce9761194869be55b49153e73cc6928eb966136ff797e5e8', 'docked_work_edited.odt': 'ca7f4498fcc46e9b49a79e3b7f27b3751428c34f803ae269c5e68886f2ed15bd', 'docked_work_edited.pdf': '08e36af39262295de91ebb628fdc2e7157f1a3ee0a39f57ee5a6c8dffa24b620'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 971, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.pdf']}"
+        },
+        {
+          "name": "E3_resume_game_state",
+          "ok": true,
+          "detail": "{'ok': True, 'session_id': 'b7762a2d9493', 'payload': {'level': 3, 'score': 1200}}"
+        }
+      ],
+      "defects": [],
+      "notes": "game_id=anime-aggressors save={'level': 3, 'score': 1200}",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Handheld/dock SI PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-06",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "F1_dual_planes",
+          "ok": true,
+          "detail": "ext=ProfileConfig(profile=<AdaptiveProfile.DSXL_DUAL_SCREEN: 'DSXL_DUAL_SCREEN'>, device_role='dsxl', input_modality=['keyboard', 'touch', 'stylus'], chrome='dual', docked=False, dual_screen=True, launcher_density='comfortable', window_mode='tiled_dual') snap={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-3334309', 'profile': 'HANDHELD_DOCKED', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': False, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False} log=[{'error': 'unknown transition: dock_attach'}] displays=[{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}]"
+        },
+        {
+          "name": "F2_build_test_from_layout",
+          "ok": true,
+          "detail": "{'ok': True, 'channels': {'dev': {'ok': True, 'app_id': 'demo.app', 'version': '0.1.0-dev', 'channel': 'dev'}, 'beta': {'ok': True, 'app_id': 'demo.app', 'version': '0.1.0-beta', 'channel': 'beta'}, 'stable': {'ok': True, 'app_id': 'demo.app', 'version': '1.0.0', 'channel': 'stable'}}, 'update': {'ok': True, 'app_id': 'demo.app', 'version': '1.0.1', 'channel': 'stable'}, 'rollback': {'ok': True, 'rolled_back_to': {'version': '1.0.0', 'channel': 'stable', 'prev': {'version': '0.1.0-beta', 'channel': 'beta', 'prev': {'version': '0.1.0-dev', 'channel': 'dev', 'prev': None}}}, 'install': {'ok': True, 'app_id': 'demo.app', 'version': '1.0.0', 'channel': 'stable'}}, 'revoke': {'ok': True, 'revoked': 'demo.app'}, 'revoked_install_denied': True}"
+        },
+        {
+          "name": "F2_ai_in_layout",
+          "ok": true,
+          "detail": "{'ok': True, 'capability': 'code', 'user_id': 'u_demo', 'text': '[code/micro:10ae8865618f] fix null deref', 'route': {'model_id': 'micro-deterministic-v1', 'sha256': 'eeb6114b1f8bfd16', 'tier': 'micro', 'runtime': 'deterministic_micro'}, 'source': 'os_local_ai', 'model_path_exposed': False}"
+        },
+        {
+          "name": "F3_layout_persistence",
+          "ok": true,
+          "detail": "before={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-3334309', 'profile': 'HANDHELD_DOCKED', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': False, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False} after={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-3334309', 'profile': 'HANDHELD_DOCKED', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': True, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False}"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-S2-G06-PHYSICAL-DUAL",
+          "severity": "S2",
+          "journey_id": "GOLDEN-06",
+          "title": "Logical DS-XL dual-plane PASS; physical dual-panel hardware pending",
+          "blocking": false
+        }
+      ],
+      "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Physical dual displays PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-07",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "latency_perceived_performance": {
+            "value": 1,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "error_recovery": {
+            "value": 3,
+            "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "G1_ring_document",
+          "ok": true,
+          "detail": "{'ok': True, 'packet': {'schema': 'gunnchos.ring.packet.v1', 'ts': 1786373334.317138, 'gesture': 'confirm', 'axis': {'x': 0.1, 'y': -0.2, 'z': 0.95}, 'source': 'edge_io_firmware_sim', 'validated': False}, 'mapped': {'action': 'confirm', 'target': 'document', 'from': 'phase_xii_mapper'}, 'target_file': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-07/evidence/ring_target.txt', 'bytes_written': 41, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'physical_device': False, 'duration_ms': 12}"
+        },
+        {
+          "name": "G2_low_confidence_destructive_rejected",
+          "ok": true,
+          "detail": "GestureGuardDecision(allowed=False, reason='uncertain_destructive_without_confirm', requires_explicit_confirm=True, silent_accept=False, action='delete_all', confidence=0.2, details={'threshold': 0.85, 'normative': 'RING-RELIAB-016'})"
+        },
+        {
+          "name": "G3_conventional_fallback",
+          "ok": true,
+          "detail": "engaged={'fallback_active': True, 'reason': 'ring_unavailable', 'modalities': ['keyboard', 'touch', 'trackpad'], 'silent_accept': False, 'available': True}"
+        },
+        {
+          "name": "G1_edge_io_adapter_status",
+          "ok": true,
+          "detail": "{'adapter': 'gunnchos-device-os/ring_input', 'physical_ring_claimed': False, 'statuses': {'AUTHENTICATED_INPUT_PROTOCOL_PASS': True, 'RING_PHYSICAL_PROTOTYPE_PENDING': True}, 'fallback': {'active': False, 'available': True, 'reason': ''}, 'accepted_actions': 0, 'evidence_class': 'SOFTWARE_SIMULATED'}"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-S2-G07-PHYSICAL-RING",
+          "severity": "S2",
+          "journey_id": "GOLDEN-07",
+          "title": "Digital ring packet+confidence guard PASS; physical ring SI pending",
+          "blocking": false
+        }
+      ],
+      "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Physical ring targeting latency PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-08",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.67,
+        "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "H0_ensure_models",
+          "ok": true,
+          "detail": "['micro-deterministic-v1']"
+        },
+        {
+          "name": "H1_local_offline_tutor",
+          "ok": true,
+          "detail": "{'ok': True, 'text': '[tutor/micro:a92dd1eae068] Explain photosynthesis using authorized notes only', 'runtime': 'deterministic_micro', 'tier': 'micro', 'route': {'model_id': 'micro-deterministic-v1', 'sha256': 'eeb6114b1f8bfd16'}}"
+        },
+        {
+          "name": "H1_cloud_denied_still_local",
+          "ok": true,
+          "detail": "{'ok': True, 'capability': 'tutor', 'user_id': 'stu1', 'text': '[tutor/micro:26de7eaf4c39] tutor me', 'route': {'model_id': 'micro-deterministic-v1', 'sha256': 'eeb6114b1f8bfd16', 'tier': 'micro', 'runtime': 'deterministic_micro'}, 'source': 'os_local_ai', 'model_path_exposed': False}"
+        },
+        {
+          "name": "H3_privacy_isolation",
+          "ok": true,
+          "detail": "b={'ok': True, 'capability': 'tutor', 'user_id': 'userB', 'text': '[tutor/micro:bf53d187113d] what is the secret?', 'route': {'model_id': 'micro-deterministic-v1', 'sha256': 'eeb6114b1f8bfd16', 'tier': 'micro', 'runtime': 'deterministic_micro'}, 'source': 'os_local_ai', 'model_path_exposed': False}"
+        },
+        {
+          "name": "H2_authorized_source_boundary",
+          "ok": true,
+          "detail": "No unauthorized private bank content observed in cloud-denied local invoke"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-S2-G08-CITATION-HUMAN",
+          "severity": "S2",
+          "journey_id": "GOLDEN-08",
+          "title": "Local tutor+isolation digital PASS; citation usefulness and tutoring UX remain HUMAN_VALIDATION_PENDING",
+          "blocking": false
+        }
+      ],
+      "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "On-device NPU/accelerator PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-09",
+      "severity": "S0",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 3,
+            "notes": "A/B rollback independent probe"
+          },
+          "reliability": {
+            "value": 3,
+            "notes": "A/B rollback independent probe"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "A/B rollback independent probe"
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "A/B rollback independent probe"
+          },
+          "interaction_quality": {
+            "value": 1,
+            "notes": "A/B rollback independent probe"
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "A/B rollback independent probe"
+          },
+          "consistency": {
+            "value": 3,
+            "notes": "A/B rollback independent probe"
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "A/B rollback independent probe"
+          },
+          "error_recovery": {
+            "value": 3,
+            "notes": "A/B rollback independent probe"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "A/B rollback independent probe"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "I1_health_fail_rollback",
+          "ok": true,
+          "detail": "{'path': 'failure_rollback', 'apply': {'ok': True, 'state': 'pending_reboot', 'active_slot': 'A', 'inactive_slot': 'B', 'version': '0.2.1-bad', 'rolled_back': False, 'user_data_intact': None, 'detail': {'written_to': 'B'}}, 'reboot': {'ok': True, 'state': 'booted_pending', 'active_slot': 'B', 'inactive_slot': 'A', 'version': '0.2.1-bad', 'rolled_back': False, 'user_data_intact': None, 'detail': {}}, 'finalize': {'ok': True, 'state': 'rolled_back', 'active_slot': 'A', 'inactive_slot': 'B', 'version': '0.1.0-baseline', 'rolled_back': True, 'user_data_intact': True, 'detail': {'failed_slot': 'B', 'health': {'ok': False, 'slot': 'B', 'path': 'system-b/usr/lib/gunnchos/healthcheck'}}}, 'user_data_before': '984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd', 'user_data_after': '984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd', 'ok': True}"
+        },
+        {
+          "name": "I2_user_data_intact",
+          "ok": true,
+          "detail": "before=984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd after=984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd"
+        }
+      ],
+      "defects": [],
+      "notes": "Digital A/B rollback path assessed; physical flash/boot SI PHYSICAL_PENDING.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Physical bootloader/flash PHYSICAL_PENDING"
+    },
+    {
+      "journey_id": "GOLDEN-10",
+      "severity": "S0",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "visual_quality": {
+            "value": 1,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "interaction_quality": {
+            "value": 1,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "discoverability": {
+            "value": 1,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "accessibility": {
+            "value": 1,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 1.56,
+        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "J1_trusted_device_identity",
+          "ok": true,
+          "detail": "binding=DeviceBinding(binding_id='bind-2c01e8d575cf90a3', account_id='acct-536bb3f2c690', device_id='handhe-335a86b4cd64', state=<BindingState.BOUND: 'bound'>, bound_at='2026-08-10T14:48:54Z', trust_level='trusted') session={'session_id': 'sess-5158c5be21f149f9', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'binding_id': 'bind-2c01e8d575cf90a3', 'state': 'active', 'issued_at_ms': 1786373334344, 'expires_at_ms': 1786376934344, 'token_hash': '31681c55f468f938405adea9a0eef367c802b5b41e5587ff361b0cc829af4990', 'roles': ['owner'], 'token': 'eAT3tVS9SOcqGQ1LYUB4_NrqmM8h_0tK', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'} valid={'valid': True, 'session_id': 'sess-5158c5be21f149f9', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'roles': ['owner'], 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}"
+        },
+        {
+          "name": "J1_private_continuity_file",
+          "ok": true,
+          "detail": "{'ok': True, 'name': 'private_notes.txt', 'bytes': 17}"
+        },
+        {
+          "name": "J2_revoke_denies_session",
+          "ok": true,
+          "detail": "rev={'session_id': 'sess-5158c5be21f149f9', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'binding_id': 'bind-2c01e8d575cf90a3', 'state': 'revoked', 'issued_at_ms': 1786373334344, 'expires_at_ms': 1786376934344, 'token_hash': '31681c55f468f938405adea9a0eef367c802b5b41e5587ff361b0cc829af4990', 'roles': ['owner'], 'mock': False} post={'valid': False, 'reason': 'revoked', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}"
+        },
+        {
+          "name": "J2_unbind_blocks_continuity_access",
+          "ok": true,
+          "detail": "unbound=DeviceBinding(binding_id='bind-2c01e8d575cf90a3', account_id='acct-536bb3f2c690', device_id='handhe-335a86b4cd64', state=<BindingState.REVOKED: 'revoked'>, bound_at='2026-08-10T14:48:54Z', trust_level='trusted') reissue={'error': 'device_not_bound_to_account'}"
+        },
+        {
+          "name": "J2_private_files_unavailable_when_revoked_perms",
+          "ok": true,
+          "detail": "{'raised': True}"
+        },
+        {
+          "name": "J3_local_recovery_path",
+          "ok": true,
+          "detail": "rec=Principal(principal_id='owner-recovered', kind='user', display_name='Owner Recovered', roles=['owner'], revoked=False, salt='415c1f31464e79fe1f2a2e30cc87d01a', secret_hash='f305f600115c086ab17cab023b68783d3a0bdb1abc2b83f53bb271665ce8f865') login=Session(session_id='dafe2774529268d4b8d31e87', principal_id='owner-recovered', state='active', roles=['owner'], created_at=1786373334.359798, locked_at=None)"
+        }
+      ],
+      "defects": [
+        {
+          "id": "VP003-S2-G10-FLEET-WIPE",
+          "severity": "S2",
+          "journey_id": "GOLDEN-10",
+          "title": "Session revoke/unbind/denied-perms/recovery digital PASS; full fleet MDM wipe + continuity vault D6 incomplete",
+          "blocking": false
+        }
+      ],
+      "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "physical_notes": "Secure element / factory identity PHYSICAL_PENDING"
+    }
+  ],
+  "blocking_defects": [],
+  "PHYSICAL_PENDING": true,
+  "HUMAN_VALIDATION_PENDING": true,
+  "claim_boundary": {
+    "independent_verification_claimed": false,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false
+  },
+  "s2_backlog_defects": [
+    {
+      "id": "VP003-S2-G02-D6-OFFICE-LMS",
+      "severity": "S2",
+      "journey_id": "GOLDEN-02",
+      "title": "Offline sync conflict-safe at engine D5; full office+LMS offline D6 cross-app not earned",
+      "blocking": false
+    },
+    {
+      "id": "VP003-S2-G04-PHYSICAL-DOCK",
+      "severity": "S2",
+      "journey_id": "GOLDEN-04",
+      "title": "Digital dock plane PASS; physical display/Ethernet/USB/audio SI pending (caps independent at PARTIAL)",
+      "blocking": false
+    },
+    {
+      "id": "VP003-S2-G06-PHYSICAL-DUAL",
+      "severity": "S2",
+      "journey_id": "GOLDEN-06",
+      "title": "Logical DS-XL dual-plane PASS; physical dual-panel hardware pending",
+      "blocking": false
+    },
+    {
+      "id": "VP003-S2-G07-PHYSICAL-RING",
+      "severity": "S2",
+      "journey_id": "GOLDEN-07",
+      "title": "Digital ring packet+confidence guard PASS; physical ring SI pending",
+      "blocking": false
+    },
+    {
+      "id": "VP003-S2-G08-CITATION-HUMAN",
+      "severity": "S2",
+      "journey_id": "GOLDEN-08",
+      "title": "Local tutor+isolation digital PASS; citation usefulness and tutoring UX remain HUMAN_VALIDATION_PENDING",
+      "blocking": false
+    },
+    {
+      "id": "VP003-S2-G10-FLEET-WIPE",
+      "severity": "S2",
+      "journey_id": "GOLDEN-10",
+      "title": "Session revoke/unbind/denied-perms/recovery digital PASS; full fleet MDM wipe + continuity vault D6 incomplete",
+      "blocking": false
+    }
+  ],
+  "overall_rationale": "Overall FAIL: V1 readiness requires all 10 journeys Independent PASS. 4 journeys PASS; 6 PARTIAL (no S0/S1 blocking functional failures). PARTIAL reflects honest depth/physical/human caps, not silent overwrite of failures."
+}

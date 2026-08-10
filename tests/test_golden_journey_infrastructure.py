@@ -30,7 +30,13 @@ def test_scorecards_and_fixtures_valid():
     assert report["independent_verification_claimed"] is False
 
 
-def test_scorecards_distinguish_five_statuses():
+def test_scorecards_distinguish_statuses_and_honesty_tokens():
+    """After VP-003, committed scorecards may carry verifier PASS/FAIL/PARTIAL.
+
+    Implementer self-certification remains forbidden: claim_boundary stays false,
+    and PASS is allowed only when updated_by is the independent verifier.
+    """
+    allowed = {"PENDING", "NOT_CLAIMED", "PASS", "PARTIAL", "FAIL", "BLOCKED"}
     for i in range(1, 11):
         jid = f"GOLDEN-{i:02d}"
         card = json.loads(
@@ -46,8 +52,14 @@ def test_scorecards_distinguish_five_statuses():
             "HUMAN_VALIDATION_PENDING",
         ):
             assert key in card
-        assert card["INDEPENDENT_VERIFICATION"]["status"] in {"PENDING", "NOT_CLAIMED", "FAIL", "BLOCKED"}
-        assert card["INDEPENDENT_VERIFICATION"]["status"] != "PASS"
+        status = card["INDEPENDENT_VERIFICATION"]["status"]
+        assert status in allowed
+        updated_by = card.get("updated_by", "")
+        if status in {"PASS", "PARTIAL"}:
+            assert updated_by.startswith("independent-verifier"), (
+                f"{jid} status={status} requires independent verifier authority, got {updated_by}"
+            )
+            assert not updated_by.startswith("implementer")
         assert card["PHYSICAL_PENDING"]["pending"] is True
         assert card["HUMAN_VALIDATION_PENDING"]["pending"] is True
         assert card["claim_boundary"] == CLAIM_BOUNDARY
@@ -95,14 +107,15 @@ def test_competitor_matrix_has_no_fabricated_scores():
         assert cap["competitor_score"] is None
 
 
-def test_verifier_stub_paths_exist():
+def test_verifier_owned_paths_exist():
     plan = ROOT / "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md"
     results = ROOT / "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_RESULTS.md"
     assert plan.exists()
     assert results.exists()
     text = plan.read_text(encoding="utf-8")
     assert "VERIFIER OWNED" in text
-    assert "Implementer stub" in text
+    # After VP-003 execution the plan is real acceptance content, not an implementer stub.
+    assert "Independence attestation" in text or "Independent Golden Acceptance Plan" in text
 
 
 def test_supporting_subset_student_journey_and_no_independent_claim():
@@ -119,13 +132,23 @@ def test_supporting_subset_student_journey_and_no_independent_claim():
     row = report["journeys"][0]
     assert row["INDEPENDENT_VERIFICATION"] == "PENDING"
     assert row["FUNCTIONAL_PASS"] in {"PASS", "FAIL"}
-    # Committed scorecard remains non-independent
+    # Supporting harness report stays PENDING; committed scorecard may already hold
+    # independent verifier PASS/PARTIAL/FAIL, but claim_boundary must remain false.
     card = json.loads(
         (ROOT / "quality/golden_journeys/scorecards/GOLDEN-01.scorecard.json").read_text(
             encoding="utf-8"
         )
     )
-    assert card["INDEPENDENT_VERIFICATION"]["status"] == "PENDING"
+    assert card["INDEPENDENT_VERIFICATION"]["status"] in {
+        "PENDING",
+        "NOT_CLAIMED",
+        "PASS",
+        "PARTIAL",
+        "FAIL",
+        "BLOCKED",
+    }
+    if card["INDEPENDENT_VERIFICATION"]["status"] in {"PASS", "PARTIAL"}:
+        assert str(card.get("updated_by", "")).startswith("independent-verifier")
     assert card["claim_boundary"]["independent_verification_claimed"] is False
 
 
@@ -162,4 +185,5 @@ def test_merge_recommendation_blocks_on_schema_ok_and_s0_s1(tmp_path):
                 staging / "quality/golden_journeys/scorecards" / f"{jid}.scorecard.json"
             ).read_text(encoding="utf-8")
         )
-        assert card["INDEPENDENT_VERIFICATION"]["status"] != "PASS"
+        # Merge gate must never set claim_boundary independent token true.
+        assert card["claim_boundary"]["independent_verification_claimed"] is False

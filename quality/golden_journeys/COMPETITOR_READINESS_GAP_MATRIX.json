@@ -17,13 +17,15 @@
   "capabilities": [
     {
       "capability_id": "student_assignment_submit",
-      "golden_journeys": ["GOLDEN-01"],
+      "golden_journeys": [
+        "GOLDEN-01"
+      ],
       "competitor_category": "student_chromebook_ipad_laptop_assignment_workflow",
       "benchmark_reference": "Typical school Chromebook/iPad/laptop LMS assignment submit + return-to-work flow (category only; not measured here)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Independent E4/D6 cross-app verification of assignment→receipt→recreation→intact return not yet performed by separate verifier",
+      "digital_gap": "Independent E4/D6 cross-app verification of assignment\u2192receipt\u2192recreation\u2192intact return not yet performed by separate verifier",
       "physical_gap": "E5 target hardware pending",
       "human_gap": "E6 preference/usability pending",
       "external_benchmarking_gap": "No competitor timing/fidelity measurements recorded",
@@ -32,7 +34,10 @@
     },
     {
       "capability_id": "local_ai_help",
-      "golden_journeys": ["GOLDEN-01", "GOLDEN-08"],
+      "golden_journeys": [
+        "GOLDEN-01",
+        "GOLDEN-08"
+      ],
       "competitor_category": "cloud_ai_tutors_and_copilots",
       "benchmark_reference": "Cloud-first tutoring copilots (category)",
       "strategy": "MUST_EXCEED",
@@ -46,13 +51,16 @@
     },
     {
       "capability_id": "recreation_resume",
-      "golden_journeys": ["GOLDEN-01", "GOLDEN-05"],
+      "golden_journeys": [
+        "GOLDEN-01",
+        "GOLDEN-05"
+      ],
       "competitor_category": "handheld_suspend_resume_and_save_states",
       "benchmark_reference": "Handheld/console suspend-resume and save continuity (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Cross-app work↔play continuity needs independent D6 verification",
+      "digital_gap": "Cross-app work\u2194play continuity needs independent D6 verification",
       "physical_gap": "E5 handheld/dock SI pending",
       "human_gap": "E6 feel/preference pending",
       "external_benchmarking_gap": "No competitor resume latency measurements",
@@ -60,7 +68,10 @@
     },
     {
       "capability_id": "document_integrity",
-      "golden_journeys": ["GOLDEN-01", "GOLDEN-02"],
+      "golden_journeys": [
+        "GOLDEN-01",
+        "GOLDEN-02"
+      ],
       "competitor_category": "desktop_document_integrity_and_versioning",
       "benchmark_reference": "Mainstream desktop office/document suites (category)",
       "strategy": "MUST_MATCH",
@@ -74,7 +85,9 @@
     },
     {
       "capability_id": "offline_edit",
-      "golden_journeys": ["GOLDEN-02"],
+      "golden_journeys": [
+        "GOLDEN-02"
+      ],
       "competitor_category": "offline_first_education_devices",
       "benchmark_reference": "Offline Chromebook/iPad/laptop school workflows (category)",
       "strategy": "MUST_EXCEED",
@@ -88,7 +101,9 @@
     },
     {
       "capability_id": "conflict_safe_sync",
-      "golden_journeys": ["GOLDEN-02"],
+      "golden_journeys": [
+        "GOLDEN-02"
+      ],
       "competitor_category": "cloud_doc_sync_conflict_ux",
       "benchmark_reference": "Google Drive/OneDrive/iCloud conflict UX (category)",
       "strategy": "MUST_MATCH",
@@ -102,7 +117,9 @@
     },
     {
       "capability_id": "no_silent_overwrite",
-      "golden_journeys": ["GOLDEN-02"],
+      "golden_journeys": [
+        "GOLDEN-02"
+      ],
       "competitor_category": "sync_data_loss_safety",
       "benchmark_reference": "Mainstream sync clients (category)",
       "strategy": "MUST_MATCH",
@@ -116,7 +133,10 @@
     },
     {
       "capability_id": "creator_toolchain",
-      "golden_journeys": ["GOLDEN-03", "GOLDEN-06"],
+      "golden_journeys": [
+        "GOLDEN-03",
+        "GOLDEN-06"
+      ],
       "competitor_category": "dev_laptop_ide_toolchain",
       "benchmark_reference": "macOS/Windows/Linux creator laptops (category)",
       "strategy": "MUST_MATCH",
@@ -130,13 +150,15 @@
     },
     {
       "capability_id": "package_install_run",
-      "golden_journeys": ["GOLDEN-03"],
+      "golden_journeys": [
+        "GOLDEN-03"
+      ],
       "competitor_category": "app_store_sideload_package_lifecycle",
       "benchmark_reference": "Desktop package managers / app stores (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Independent package→install→run→logs acceptance pending",
+      "digital_gap": "Independent package\u2192install\u2192run\u2192logs acceptance pending",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor package reliability measurements",
@@ -144,7 +166,11 @@
     },
     {
       "capability_id": "ai_code_assist_api",
-      "golden_journeys": ["GOLDEN-03", "GOLDEN-06", "GOLDEN-08"],
+      "golden_journeys": [
+        "GOLDEN-03",
+        "GOLDEN-06",
+        "GOLDEN-08"
+      ],
       "competitor_category": "cloud_coding_assistants",
       "benchmark_reference": "Cloud coding assistants (category)",
       "strategy": "MUST_EXCEED",
@@ -158,7 +184,10 @@
     },
     {
       "capability_id": "dock_undock_continuity",
-      "golden_journeys": ["GOLDEN-04", "GOLDEN-05"],
+      "golden_journeys": [
+        "GOLDEN-04",
+        "GOLDEN-05"
+      ],
       "competitor_category": "laptop_dock_and_handheld_dock_continuity",
       "benchmark_reference": "Laptop docks / Steam Deck dock class (category)",
       "strategy": "MUST_MATCH",
@@ -172,7 +201,9 @@
     },
     {
       "capability_id": "office_docs_email_calendar",
-      "golden_journeys": ["GOLDEN-04"],
+      "golden_journeys": [
+        "GOLDEN-04"
+      ],
       "competitor_category": "desktop_office_productivity",
       "benchmark_reference": "MS Office / Google Workspace / Apple iWork class (category)",
       "strategy": "MUST_MATCH",
@@ -186,7 +217,9 @@
     },
     {
       "capability_id": "print_export",
-      "golden_journeys": ["GOLDEN-04"],
+      "golden_journeys": [
+        "GOLDEN-04"
+      ],
       "competitor_category": "desktop_print_export",
       "benchmark_reference": "CUPS/desktop print pipelines (category)",
       "strategy": "MUST_MATCH",
@@ -200,7 +233,9 @@
     },
     {
       "capability_id": "handheld_game_checkpoint",
-      "golden_journeys": ["GOLDEN-05"],
+      "golden_journeys": [
+        "GOLDEN-05"
+      ],
       "competitor_category": "handheld_gaming_checkpoint",
       "benchmark_reference": "Handheld gaming devices (category)",
       "strategy": "MUST_MATCH",
@@ -214,7 +249,9 @@
     },
     {
       "capability_id": "docked_work_mode",
-      "golden_journeys": ["GOLDEN-05"],
+      "golden_journeys": [
+        "GOLDEN-05"
+      ],
       "competitor_category": "hybrid_handheld_workstation",
       "benchmark_reference": "Devices that claim play+work dock modes (category)",
       "strategy": "MUST_EXCEED",
@@ -228,7 +265,9 @@
     },
     {
       "capability_id": "game_state_resume",
-      "golden_journeys": ["GOLDEN-05"],
+      "golden_journeys": [
+        "GOLDEN-05"
+      ],
       "competitor_category": "handheld_suspend_resume",
       "benchmark_reference": "Handheld suspend/resume (category)",
       "strategy": "MUST_MATCH",
@@ -242,7 +281,9 @@
     },
     {
       "capability_id": "dual_screen_layout",
-      "golden_journeys": ["GOLDEN-06"],
+      "golden_journeys": [
+        "GOLDEN-06"
+      ],
       "competitor_category": "dual_screen_dev_laptops",
       "benchmark_reference": "Dual-screen developer devices (category)",
       "strategy": "MUST_MATCH",
@@ -256,7 +297,9 @@
     },
     {
       "capability_id": "ide_terminal_preview",
-      "golden_journeys": ["GOLDEN-06"],
+      "golden_journeys": [
+        "GOLDEN-06"
+      ],
       "competitor_category": "dev_multitasking_layouts",
       "benchmark_reference": "IDE + terminal + preview layouts on laptops (category)",
       "strategy": "MUST_MATCH",
@@ -270,7 +313,9 @@
     },
     {
       "capability_id": "layout_persistence",
-      "golden_journeys": ["GOLDEN-06"],
+      "golden_journeys": [
+        "GOLDEN-06"
+      ],
       "competitor_category": "window_layout_persistence",
       "benchmark_reference": "Desktop window managers / Spaces (category)",
       "strategy": "MUST_MATCH",
@@ -284,7 +329,9 @@
     },
     {
       "capability_id": "ring_document_browser_game",
-      "golden_journeys": ["GOLDEN-07"],
+      "golden_journeys": [
+        "GOLDEN-07"
+      ],
       "competitor_category": "spatial_ring_or_wearable_input",
       "benchmark_reference": "Wearable/spatial pointer products (category)",
       "strategy": "MUST_EXCEED",
@@ -298,7 +345,9 @@
     },
     {
       "capability_id": "target_confidence_safety",
-      "golden_journeys": ["GOLDEN-07"],
+      "golden_journeys": [
+        "GOLDEN-07"
+      ],
       "competitor_category": "safe_gesture_input_gating",
       "benchmark_reference": "Gesture/voice confirmation safety patterns (category)",
       "strategy": "MUST_EXCEED",
@@ -312,7 +361,9 @@
     },
     {
       "capability_id": "conventional_input_fallback",
-      "golden_journeys": ["GOLDEN-07"],
+      "golden_journeys": [
+        "GOLDEN-07"
+      ],
       "competitor_category": "input_fallback_accessibility",
       "benchmark_reference": "Keyboard/mouse/trackpad fallback (category)",
       "strategy": "MUST_MATCH",
@@ -326,7 +377,9 @@
     },
     {
       "capability_id": "local_ai_tutoring",
-      "golden_journeys": ["GOLDEN-08"],
+      "golden_journeys": [
+        "GOLDEN-08"
+      ],
       "competitor_category": "ai_tutoring_products",
       "benchmark_reference": "Cloud AI tutors (category)",
       "strategy": "MUST_EXCEED",
@@ -340,7 +393,10 @@
     },
     {
       "capability_id": "privacy_isolation",
-      "golden_journeys": ["GOLDEN-08", "GOLDEN-10"],
+      "golden_journeys": [
+        "GOLDEN-08",
+        "GOLDEN-10"
+      ],
       "competitor_category": "on_device_ai_privacy",
       "benchmark_reference": "On-device vs cloud AI privacy models (category)",
       "strategy": "MUST_EXCEED",
@@ -354,7 +410,9 @@
     },
     {
       "capability_id": "cloud_denied_offline_ok",
-      "golden_journeys": ["GOLDEN-08"],
+      "golden_journeys": [
+        "GOLDEN-08"
+      ],
       "competitor_category": "offline_ai_availability",
       "benchmark_reference": "Cloud-dependent tutors (category)",
       "strategy": "MUST_EXCEED",
@@ -368,13 +426,15 @@
     },
     {
       "capability_id": "ab_or_equivalent_update",
-      "golden_journeys": ["GOLDEN-09"],
+      "golden_journeys": [
+        "GOLDEN-09"
+      ],
       "competitor_category": "ab_ota_update_systems",
       "benchmark_reference": "Android/ChromeOS/A/B OTA class (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Independent bad-update→rollback acceptance pending",
+      "digital_gap": "Independent bad-update\u2192rollback acceptance pending",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor rollback timing measurements",
@@ -382,7 +442,9 @@
     },
     {
       "capability_id": "health_fail_rollback",
-      "golden_journeys": ["GOLDEN-09"],
+      "golden_journeys": [
+        "GOLDEN-09"
+      ],
       "competitor_category": "update_health_rollback",
       "benchmark_reference": "OTA health-check rollback (category)",
       "strategy": "MUST_MATCH",
@@ -396,7 +458,9 @@
     },
     {
       "capability_id": "user_data_intact",
-      "golden_journeys": ["GOLDEN-09"],
+      "golden_journeys": [
+        "GOLDEN-09"
+      ],
       "competitor_category": "update_data_preservation",
       "benchmark_reference": "OS update user-data preservation (category)",
       "strategy": "MUST_MATCH",
@@ -410,7 +474,9 @@
     },
     {
       "capability_id": "trusted_device_identity",
-      "golden_journeys": ["GOLDEN-10"],
+      "golden_journeys": [
+        "GOLDEN-10"
+      ],
       "competitor_category": "device_identity_and_mdm",
       "benchmark_reference": "MDM/Find My/device identity (category)",
       "strategy": "MUST_MATCH",
@@ -424,7 +490,9 @@
     },
     {
       "capability_id": "session_device_revoke",
-      "golden_journeys": ["GOLDEN-10"],
+      "golden_journeys": [
+        "GOLDEN-10"
+      ],
       "competitor_category": "lost_device_remote_revoke",
       "benchmark_reference": "Find My / MDM wipe-revoke (category)",
       "strategy": "MUST_MATCH",
@@ -438,7 +506,9 @@
     },
     {
       "capability_id": "private_data_unavailable_after_revoke",
-      "golden_journeys": ["GOLDEN-10"],
+      "golden_journeys": [
+        "GOLDEN-10"
+      ],
       "competitor_category": "post_revoke_data_protection",
       "benchmark_reference": "Lost-device data protection (category)",
       "strategy": "MUST_MATCH",
@@ -452,7 +522,9 @@
     },
     {
       "capability_id": "local_recovery_path",
-      "golden_journeys": ["GOLDEN-10"],
+      "golden_journeys": [
+        "GOLDEN-10"
+      ],
       "competitor_category": "owner_recovery_after_revoke",
       "benchmark_reference": "Owner account recovery flows (category)",
       "strategy": "MUST_MATCH",
@@ -492,5 +564,12 @@
       "external_benchmarking_gap": "N/A",
       "competitor_score": null
     }
-  ]
+  ],
+  "independent_verifier_review": {
+    "reviewed_at": "2026-08-10T14:48:54Z",
+    "tip_sha": "aa13f2c51413327ec84e67f1640bf6ee0070d827",
+    "verdict": "ACCEPT",
+    "fabricated_competitor_scores_found": [],
+    "notes": "All competitor_score values null; category strategies only. Verifier accepts matrix; no measurements fabricated."
+  }
 }
