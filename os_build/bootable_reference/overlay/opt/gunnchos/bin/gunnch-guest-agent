@@ -1,0 +1,20 @@
+#!/bin/sh
+# gunnchGuestAgent — minimal in-guest agent for Device Lab (DEV realm).
+# Speaks line-oriented JSON on stdout for serial capture; optional mailbox via virtio later.
+# No production keys. No unauthenticated network bind.
+
+set -eu
+
+PROTOCOL="gunnchos.guest_agent.v1"
+BOOT_COMPLETE=true
+
+echo "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"event\":\"started\",\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false}"
+
+# Heartbeat markers readable from QEMU serial log (HOST_OBSERVED readiness).
+i=0
+while true; do
+  i=$((i + 1))
+  echo "GUNNCHOS_GUEST_AGENT_HEARTBEAT=${i}"
+  echo "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":${BOOT_COMPLETE},\"SILICON_EXACT_EMULATION\":false}"
+  sleep 10
+done

@@ -7,7 +7,7 @@
 	bootstrap build package evidence factory-station full-product-viii release-firewall \
 	full-product-ix cont-ix-evidence \
 	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate \
-	device-lab-test device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08 \
+	device-lab-test device-lab-profile-verify device-lab-wp011 device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08 \
 	wp007-red-team wp007-test
 
 PY := PYTHONPATH=src:.
@@ -245,6 +245,13 @@ golden-journeys-merge-gate:
 # WP-003R gunnchDevice Lab Foundation v0.1
 device-lab-test:
 	PYTHONPATH=.:src pytest -q tests/device_lab/test_device_lab_foundation.py
+
+device-lab-profile-verify:
+	PYTHONPATH=.:src python3 scripts/gunnchctl profile verify
+
+device-lab-wp011:
+	PYTHONPATH=.:src python3 scripts/gunnchctl profile verify
+	PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_profile_guest_foundation.py
 
 device-lab-g04:
 	$(PY) python3 scripts/gunnchctl test GOLDEN-04 --device handheld_docked

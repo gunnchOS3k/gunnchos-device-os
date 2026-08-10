@@ -1,26 +1,35 @@
-"""gunnchDevice Lab — Virtual Device & Ecosystem Simulator (Foundation v0.1).
+"""gunnchDevice Lab — Virtual Device & Ecosystem Simulator.
 
-Part of WP-003R. Class D approved product/SDK foundation.
-Does NOT claim physical silicon fidelity, EVT calibration, or independent V1.
+WP-011 critical path: hardware profile sync + real QEMU guest + guest agent foundation.
+Does NOT claim physical silicon fidelity, EVT calibration, independent V1, or full ecosystem digital complete.
 """
 from __future__ import annotations
 
-LAB_FOUNDATION_VERSION = "0.1.0"
+LAB_FOUNDATION_VERSION = "0.2.0"
 GUNNCHDEVICE_LAB_FOUNDATION = "PART_OF_WP003R"
-GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION = "NOT_ACTIVE"
+GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION = "PREPARED_PARTIAL"
+GUNNCHDEVICE_LAB_PROFILE_SYNC_PREPARED = True
+GUNNCHDEVICE_LAB_GUEST_IMAGE_PREPARED = True
+GUNNCHDEVICE_LAB_GUEST_AGENT_PREPARED = True
+GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE = False
 SILICON_EXACT_EMULATION = False
 BEHAVIORAL_DEVICE_PROFILE = True
 
 CLAIM_BOUNDARY = (
-    "gunnchDevice Lab Foundation v0.1: behavioral virtual device + real gunnchOS "
-    "APIs/services. SILICON_EXACT_EMULATION=false. VF4/VF5/VF6 PHYSICAL_PENDING. "
-    "Not independent verification; not physical evidence; not human validation; "
-    "frontier_parity_claimed=false."
+    "gunnchDevice Lab: behavioral virtual device + optional real QEMU guest with "
+    "hybrid Alpine + gunnchOS services. SILICON_EXACT_EMULATION=false. "
+    "VF4/VF5/VF6 PHYSICAL_PENDING. Not independent verification; not physical evidence; "
+    "not PRODUCTION_READY; GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE=false."
 )
 
 __all__ = [
     "LAB_FOUNDATION_VERSION",
     "GUNNCHDEVICE_LAB_FOUNDATION",
+    "GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION",
+    "GUNNCHDEVICE_LAB_PROFILE_SYNC_PREPARED",
+    "GUNNCHDEVICE_LAB_GUEST_IMAGE_PREPARED",
+    "GUNNCHDEVICE_LAB_GUEST_AGENT_PREPARED",
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE",
     "SILICON_EXACT_EMULATION",
     "BEHAVIORAL_DEVICE_PROFILE",
     "CLAIM_BOUNDARY",

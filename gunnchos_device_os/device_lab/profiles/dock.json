@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.device_lab.device_profile.v1",
   "profile_version": "0.2.0",
-  "profile_id": "dsxl_coder",
+  "profile_id": "dock",
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "VF0_PHYSICAL_TWIN": "PARTIAL",
@@ -39,90 +39,91 @@
     "exact_mpn_matrix": "docs/full_product_family/EXACT_MPN_MATRIX.md",
     "note": "SHAs recorded at sync; do not invent hardware specs"
   },
-  "product": "DS-XL Coder",
+  "product": "Dock (USB4/TB4)",
   "compute": {
-    "role": "COM module (shared with Student)",
-    "vendor": "ADLINK",
-    "mpn": "COM-HPC-mMTL-155H-32G",
-    "notes": "Same module as Student; dual-eDP is carrier differentiator",
+    "role": "USB4/TB4 controller",
+    "vendor": "Intel",
+    "mpn": "JHL8440",
+    "notes": "Goshen Ridge peripheral/dock controller @ 40 Gbps (ADR-HW-002)",
     "source": "EXACT_MPN_MATRIX",
     "status": "DESIGN_FREEZE_MPN",
     "measurement_class": "MODELED_TARGET_RANGE"
   },
   "exact_mpns": {
-    "compute": "COM-HPC-mMTL-155H-32G",
-    "wifi": "BE200",
-    "wwan": "RM520N-GL",
-    "tpm": "SLB9672XQ2.0"
+    "compute": "JHL8440",
+    "ethernet": "RTL8156",
+    "usb_hub": "VL817",
+    "retimer": "JHL9040R"
+  },
+  "retimer": {
+    "role": "TB4 retimer",
+    "vendor": "Intel",
+    "mpn": "JHL9040R",
+    "notes": "Hayden Bridge retimer — not the dock controller; not Maple Ridge",
+    "source": "EXACT_MPN_MATRIX"
   },
   "ram": {
-    "gb": 32,
-    "kind": "LPDDR5x_on_module",
-    "derived_from_mpn": "COM-HPC-mMTL-155H-32G",
-    "source": "EXACT_MPN_MATRIX",
-    "measurement_class": "MODELED_TARGET_RANGE"
+    "status": "N/A_controller",
+    "source": "EXACT_MPN_MATRIX"
   },
   "storage": {
-    "class": "nvme",
-    "min_gb": 256,
-    "mpn": null,
-    "source": "DEVICE_COMPARISON_MATRIX",
-    "measurement_class": "MODELED_TARGET_RANGE",
-    "note": "BOM ds_xl_coder rows still TBD for SSD MPN — capacity from accepted comparison matrix only; do not invent SSD MPN"
+    "status": "N/A_controller",
+    "source": "EXACT_MPN_MATRIX"
   },
-  "architecture": "x86_64_preferred_emulation_host_hybrid",
+  "architecture": "peripheral_not_full_guest",
   "display_outputs": [
     {
-      "id": "dsxl_top",
-      "role": "primary",
-      "resolution": "1280x720",
-      "size_inches": 7.0
-    },
-    {
-      "id": "dsxl_bottom",
-      "role": "secondary",
-      "resolution": "1280x720",
-      "size_inches": 7.0
+      "id": "dock_external",
+      "role": "external",
+      "resolution": "TARGET_TBD",
+      "status": "TARGET_TBD",
+      "note": "Appears on dock_attach; disappears on dock_detach"
     }
   ],
   "display_geometry": {
-    "dual_screen": true,
-    "per_panel_resolution": "1280x720",
-    "size_inches_each": 7.0,
-    "note": "Two compositor outputs REQUIRED; one-output instance MUST FAIL D6"
+    "status": "external_via_dock"
   },
-  "touch": true,
+  "touch": false,
   "input_capabilities": {
-    "keyboard": true,
-    "touch": true,
-    "controller": false
+    "keyboard": "dock_desktop",
+    "mouse": "dock"
   },
   "audio_capabilities": {
-    "speakers": true,
-    "mic": true
+    "dock_audio": true
   },
   "network_capabilities": {
-    "wifi": "wifi_7_target_BE200",
-    "ethernet_dock_optional": true,
-    "offline_capable": true
+    "ethernet_via_dock": true,
+    "ethernet_mpn": "RTL8156"
   },
   "cellular_target": {
-    "status": "none"
+    "status": "N/A"
   },
   "dock_capabilities": {
     "supported": true,
-    "deploy_source": true
+    "adr": "ADR-005-Dock / ADR-HW-002 USB4/TB4",
+    "controller_mpn": "JHL8440",
+    "retimer_mpn": "JHL9040R",
+    "bandwidth_gbps": 40,
+    "tb5_claimed": false,
+    "virtual_peripherals": [
+      "external_display",
+      "ethernet",
+      "audio",
+      "hid",
+      "cups_pdf",
+      "power_passthrough"
+    ],
+    "boolean_docked_flag_insufficient": true
   },
   "ring_capabilities": {
     "supported": false
   },
   "AI_capabilities": {
-    "local_code_assist": true,
-    "tier": "local_plus"
+    "status": "N/A"
   },
   "fidelity_level": "VF2",
   "status_notes": [
-    "Shared COM-HPC-mMTL-155H-32G with Student; dual-eDP carrier differentiator",
-    "Storage min 256GB from DEVICE_COMPARISON_MATRIX — SSD MPN not frozen in BOM"
+    "Dock controller JHL8440 + retimer JHL9040R from EXACT_MPN_MATRIX",
+    "Not a full compute guest; peripheral lifecycle only"
   ]
 }
