@@ -160,6 +160,9 @@ def main() -> int:
             "field_kit_npi": "NPI_DEFECT-HANDHELD-STORAGE-HEADROOM-001",
             "local_artifact": "artifacts/phase_xv/HANDHELD_32G_HEADROOM.json",
             "local_npi": "artifacts/phase_xv/NPI_DEFECT-STORAGE-HANDHELD-32G.json",
+            "wp002_decision_outcome": "A",
+            "status": "CLOSED_OUTCOME_A_PENDING_V1",
+            "v1_certification": "NOT_SELF_CERTIFIED",
         },
         "artifacts": {
             "os_prove_report": "artifacts/phase_xv/OS_PROVE_REPORT.json",
