@@ -1,0 +1,170 @@
+{
+  "schema": "gunnchos.accepted_main_reproof.v1",
+  "work_packet": "WP-003",
+  "verification_packet": "VP-003-ACCEPTED-MAIN-REPROOF",
+  "posture": "independent_verifier",
+  "accepted_main_sha": "d0fdd8c3ac66c927f6d83962e82de22b2ca9a1cc",
+  "expected_includes_pr": {
+    "pr": 82,
+    "merge_commit": "d0fdd8c3ac66c927f6d83962e82de22b2ca9a1cc",
+    "title": "fix(wp-003): G02 CI pass without LibreOffice",
+    "verified_on_main": true
+  },
+  "baseline_notes": {
+    "device_os_main": "d0fdd8c3ac66c927f6d83962e82de22b2ca9a1cc",
+    "hardware_industrial_design_main": "3db783633321e54061575ee90a74778b0e914b55",
+    "hardware_includes_vp002_pr55": true,
+    "field_kit_main": "84a5c9ef8b4f0b4bbb6a9003ea8eba41c55c22d0",
+    "field_kit_draft_pr58": {
+      "url": "https://github.com/gunnchOS3k/gunnchos-7gc-ai-ran-field-kit/pull/58",
+      "state": "OPEN",
+      "isDraft": true,
+      "title": "Cycle 1 report addendum: device-os #82 CI repair"
+    }
+  },
+  "ci_on_accepted_main": {
+    "Gate 1 post-merge integrity": {
+      "conclusion": "success",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31404336508"
+    },
+    "Golden Journeys (WP-003)": {
+      "conclusion": "success",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31404336492"
+    },
+    "CI": {
+      "conclusion": "success",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31404341104"
+    },
+    "local_make_gate1_test": {
+      "conclusion": "FAIL_HOST_ENV",
+      "notes": "2 failed (test_gate1_boot_probe network_unhealthy / hostname resolution). Not treated as accepted-main regression; CI Gate 1 on tip succeeded."
+    }
+  },
+  "executed_at": "2026-08-10T15:40:59Z",
+  "reproof_recorded_at": "2026-08-10T15:40:59Z",
+  "runner": "quality/golden_journeys/verifier/run_independent_acceptance.py",
+  "DIGITAL_INDEPENDENT_V1": "PASS",
+  "full_physical_human_v1": "FAIL",
+  "overall_result": "FAIL",
+  "PHYSICAL_PENDING": true,
+  "HUMAN_VALIDATION_PENDING": true,
+  "claim_boundary": {
+    "independent_verification_claimed": false,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false
+  },
+  "g02_libreoffice_honesty": {
+    "holds": true,
+    "notes": "G02 digital D6 path (offline_office_lms_reconnect) still accepts durable ODT edit when soffice absent (error=libreoffice_not_installed) for CI/gate1 hosts; L4 when soffice present. PR #82 merged this honesty into main; this reproof does not claim frontier parity or physical LibreOffice SI.",
+    "code_path": "gunnchos_device_os/golden_journeys/digital_paths.py",
+    "local_soffice_present_during_reproof": true,
+    "local_soffice_path": "/opt/homebrew/bin/soffice"
+  },
+  "per_journey_independent": {
+    "GOLDEN-01": {
+      "independent_verification": "PASS",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-02": {
+      "independent_verification": "PASS",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-03": {
+      "independent_verification": "PASS",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-04": {
+      "independent_verification": "PARTIAL",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-05": {
+      "independent_verification": "PASS",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-06": {
+      "independent_verification": "PARTIAL",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-07": {
+      "independent_verification": "PARTIAL",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-08": {
+      "independent_verification": "PARTIAL",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-09": {
+      "independent_verification": "PASS",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    "GOLDEN-10": {
+      "independent_verification": "PASS",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    }
+  },
+  "competitor_matrix_review": {
+    "path": "quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json",
+    "capability_count": 34,
+    "fabricated_competitor_scores": [],
+    "doctrine_flag": true,
+    "verdict": "ACCEPT",
+    "notes": "All competitor_score values null; category strategies only. Verifier accepts matrix; no measurements fabricated."
+  },
+  "blocking_defects": [],
+  "s2_backlog_ids": [
+    "VP003-DEF-G01-GAME-REPO",
+    "VP003-S2-G04-PHYSICAL-DOCK",
+    "VP003-S2-G06-PHYSICAL-DUAL",
+    "VP003-S2-G07-PHYSICAL-RING",
+    "VP003-S2-G08-CITATION-HUMAN"
+  ],
+  "doctrine": {
+    "frontier_parity_claimed": false,
+    "wp005_plus_started": false,
+    "promotion_without_draft": false,
+    "notes": "Accepted-main reproof only. PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING remain honest. No WP-005+."
+  },
+  "source_result_tip_sha": "d0fdd8c3ac66c927f6d83962e82de22b2ca9a1cc",
+  "independence_attestation": "Independent accepted-main reproof after device-os #82 merge. Re-ran verifier runner against origin/main tip (not a PR branch). Prior PR-tip VP-003 PASS is not substituted for this reproof."
+}
