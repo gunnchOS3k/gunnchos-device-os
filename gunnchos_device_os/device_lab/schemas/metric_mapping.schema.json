@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.org/schemas/device_lab_metric_mapping.schema.json",
+  "title": "MetricMapping",
+  "type": "object",
+  "required": [
+    "lab_metric_id",
+    "physical_metric_id",
+    "physical_test_id",
+    "unit"
+  ],
+  "properties": {
+    "lab_metric_id": {
+      "type": "string"
+    },
+    "physical_metric_id": {
+      "type": "string"
+    },
+    "physical_test_id": {
+      "type": "string",
+      "pattern": "^EVT-[A-Z]+-[0-9]{3}$"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "golden_journeys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.org/schemas/device_lab_prediction_vs_measurement.schema.json",
+  "title": "PredictionVsMeasurement",
+  "type": "object",
+  "required": [
+    "prediction",
+    "measurement",
+    "error",
+    "relative_error",
+    "uncertainty",
+    "comparison_status",
+    "vf_status"
+  ],
+  "properties": {
+    "prediction": {},
+    "measurement": {},
+    "error": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "relative_error": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "uncertainty": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "comparison_status": {
+      "type": "string",
+      "enum": [
+        "INCOMPLETE",
+        "COMPUTED_NOT_CALIBRATED"
+      ]
+    },
+    "vf_status": {
+      "type": "string",
+      "const": "PHYSICAL_PENDING"
+    },
+    "CALIBRATED_EVT0": {
+      "type": "boolean",
+      "const": false
+    }
+  }
+}

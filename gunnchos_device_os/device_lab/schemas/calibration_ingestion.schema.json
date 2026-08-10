@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.org/schemas/device_lab_calibration_ingestion.schema.json",
+  "title": "CalibrationIngestionRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "virtual_run_id",
+    "physical_test_id",
+    "metric_id",
+    "prediction",
+    "measurement",
+    "calibration_version"
+  ],
+  "properties": {
+    "virtual_run_id": {
+      "type": "string"
+    },
+    "physical_test_id": {
+      "type": "string",
+      "pattern": "^EVT-[A-Z]+-[0-9]{3}$"
+    },
+    "metric_id": {
+      "type": "string"
+    },
+    "prediction": {},
+    "measurement": {},
+    "error": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "relative_error": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "uncertainty": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "calibration_version": {
+      "type": "string"
+    },
+    "evidence_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instrument_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vf_status": {
+      "type": "string",
+      "const": "PHYSICAL_PENDING"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

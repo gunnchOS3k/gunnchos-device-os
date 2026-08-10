@@ -41,3 +41,10 @@ Or: `python3 -m gunnchos_device_os.device_lab …`
 - Full QEMU guest optional when tooling present; never claimed as SoC silicon replica.
 - Implementer does **not** self-certify Independent PASS / V1.
 - ADR-010: `docs/adr/ADR-010-gunnchDevice-Lab.md`
+
+## WP-010 calibration interfaces (schema only)
+
+- Physical test ID + calibration ingestion + metric map + prediction↔measurement + evidence linkage
+- Instrument import adapters under `instrument_import/`
+- Schemas in `schemas/*calibration*` / `physical_test_id.schema.json`
+- **VF4/VF5/VF6 remain PHYSICAL_PENDING** — no CALIBRATED_EVT0; LAB-FUTURE-007 not executed
