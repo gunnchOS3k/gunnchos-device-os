@@ -27,6 +27,8 @@ Executed: 2026-08-10T18:56:02Z
 ## Overall
 **PASS** — WP-003R digital Independent residuals (G06/G07/G08 D6) closed on accepted-main tip content.
 
+Artifact DRAFT PR: https://github.com/gunnchOS3k/gunnchos-device-os/pull/86
+
 ## Edmund / next
 - Keep this verifier-artifact PR **DRAFT** (auto-merge off).
 - Accepted-main **product** reproof is **not** next — tip already on `origin/main`.
