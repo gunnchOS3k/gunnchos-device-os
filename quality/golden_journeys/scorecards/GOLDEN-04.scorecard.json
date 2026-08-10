@@ -2,55 +2,55 @@
   "schema": "gunnchos.golden_journey_quality_scorecard.v1",
   "journey_id": "GOLDEN-04",
   "severity": "S1",
-  "work_packet": "WP-003R",
+  "work_packet": "WP-003R.1",
   "FUNCTIONAL_PASS": {
     "status": "PASS",
     "authority": "independent_verifier",
     "evidence_paths": [
-      "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
-      "quality/golden_journeys/verifier/VP-003R-RESULTS.md",
+      "quality/golden_journeys/verifier/INDEPENDENT_WP003R1_ACCEPTANCE_PLAN.md",
+      "quality/golden_journeys/verifier/VP-003R.1-RESULT.json",
       "quality/golden_journeys/verifier/VP-003R-RESULT.json"
     ],
-    "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+    "notes": "VP-003R.1 Independent: dock lifecycle retained E4/D6; GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS via privileged netns+packet transfer + Pulse/ALSA audio lifecycle on tip 645d31a. Logical FALLBACK_ONLY not counted as E4. PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
   },
   "PRODUCT_QUALITY_SCORE": {
     "authority": "independent_verifier",
     "dimensions": {
       "correctness": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "reliability": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "latency_perceived_performance": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "visual_quality": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "interaction_quality": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "discoverability": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "consistency": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "accessibility": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "error_recovery": {
         "value": 2,
-        "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+        "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
       },
       "user_preference": {
         "value": "NOT_MEASURED",
@@ -58,15 +58,15 @@
       }
     },
     "average_excluding_not_measured": 2.0,
-    "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+    "notes": "VP-003R.1 Independent: privileged G04 E4 backends closed; physical dock SI still PENDING."
   },
   "INDEPENDENT_VERIFICATION": {
     "status": "PASS",
     "evidence_level_claimed": "E4",
     "depth_level_claimed": "D6",
-    "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
-    "verifier_result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json",
-    "notes": "Independent re-confirm LAB-SCENARIO-OFFICE-DOCK on tip-in-main: undock\u2192attach lifecycle (not boolean_dock primary), Cont IX office path + print, detach preserve; PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
+    "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_WP003R1_ACCEPTANCE_PLAN.md",
+    "verifier_result_path": "quality/golden_journeys/verifier/VP-003R.1-RESULT.json",
+    "notes": "VP-003R.1 Independent: dock lifecycle retained E4/D6; GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS via privileged netns+packet transfer + Pulse/ALSA audio lifecycle on tip 645d31a. Logical FALLBACK_ONLY not counted as E4. PHYSICAL_DOCK_VALIDATION=PENDING; SILICON_EXACT_EMULATION=false."
   },
   "PHYSICAL_PENDING": {
     "pending": true,
@@ -85,13 +85,15 @@
       "J-OFF-005"
     ],
     "unit_or_integration_tests": [
-      "tests/device_lab/test_device_lab_foundation.py"
+      "tests/device_lab/test_device_lab_foundation.py",
+      "tests/test_golden_journey_infrastructure.py"
     ],
     "fixture_paths": [
       "quality/golden_journeys/fixtures/GOLDEN-04.fixture.json",
-      "artifacts/device_lab/"
+      "artifacts/device_lab/",
+      "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31427705621/job/93583238967"
     ],
-    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
+    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. Privileged CI job is machine evidence for GJ-DEFECT-005 after Independent criteria derivation. It is not a substitute for E5 physical dock SI."
   },
   "defects": [
     {
@@ -109,6 +111,6 @@
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "updated_at": "2026-08-10T18:56:02Z",
-  "updated_by": "independent-verifier-vp003r"
+  "updated_at": "2026-08-10T20:22:00Z",
+  "updated_by": "independent-verifier-vp003r1"
 }

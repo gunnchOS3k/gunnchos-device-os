@@ -1,0 +1,299 @@
+{
+  "schema": "gunnchos.vp003r1.result.v1",
+  "work_packet": "WP-003R.1",
+  "verification_packet": "VP-003R.1",
+  "role": "INDEPENDENT_VERIFIER",
+  "executed_at": "2026-08-10T20:22:00Z",
+  "verifier": "independent_verifier_vp003r1",
+  "tip_claimed": "645d31a6b795b461afb1c66982b1402ffa373237",
+  "tip_verified": "645d31a6b795b461afb1c66982b1402ffa373237",
+  "tip_matches_claim": true,
+  "accepted_main_sha": "801b332ba2025b5ddfd8f85cebbafa2c2c368e02",
+  "tip_is_ancestor_of_origin_main": true,
+  "pr_88": {
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/88",
+    "state_at_verify": "MERGED",
+    "was_draft_at_verify": false,
+    "merged_at": "2026-08-10T20:11:22Z",
+    "merge_commit_sha": "801b332ba2025b5ddfd8f85cebbafa2c2c368e02",
+    "head_sha": "645d31a6b795b461afb1c66982b1402ffa373237",
+    "note": "Primary tip #88 already merged; Independent artifacts go to NEW DRAFT only."
+  },
+  "baseline_context": {
+    "product_pr_85_tip": "67e10ea1d329703d4764fb3799c5244e9781cd97",
+    "product_pr_85_main": "0449cbb64da416c3b702dcd880d76946e96eb16e",
+    "pr_87_main": "b82504d520c8119e6985c839b4c575a89e587ca4",
+    "pr_87_note": "Integrity closure merged but G04 privileged job broken; #88 is CI fix"
+  },
+  "independence_attestation": {
+    "plan_written_before_treating_remediation_tests_authoritative": true,
+    "plan_path": "quality/golden_journeys/verifier/INDEPENDENT_WP003R1_ACCEPTANCE_PLAN.md",
+    "derivation_sources": [
+      "program/operating_model/ACTIVE_WIP.json WP-003R.1 A/B/C",
+      "quality/golden_journeys/DEFECT_BACKLOG.json GJ-DEFECT-005 honest_cap",
+      "Lab VF2 fidelity honesty / SILICON_EXACT_EMULATION=false",
+      "EVIDENCE_LEVELS E4 / DEPTH_LADDER D6",
+      "prior VP-003R Independent G04 dock lifecycle criteria"
+    ],
+    "implementer_ok_true_not_treated_as_independent_pass": true,
+    "logical_fallback_not_counted_as_e4_reference": true,
+    "g04_e4_reference_requirements_derived": {
+      "virtual_ethernet_lifecycle_with_packet_transfer": "REQUIRED",
+      "virtual_audio_route_lifecycle_pulse_pipewire_or_alsa": "REQUIRED",
+      "VF2_REQUIRED_GOLDEN_BACKENDS_PASS_only_when_both_e4": "REQUIRED",
+      "unprivileged_FALLBACK_ONLY_NOT_E4_REFERENCE_PROOF": "REQUIRED_HONESTY",
+      "VF3_MODELED_ONLY": true,
+      "VF4_VF5_VF6_PHYSICAL_PENDING": true,
+      "SILICON_EXACT_EMULATION": false
+    }
+  },
+  "overall_result": "PASS",
+  "ci": {
+    "tip_sha": "645d31a6b795b461afb1c66982b1402ffa373237",
+    "observed_via": "GitHub Checks API (public)",
+    "required_workflows": {
+      "Scorecard schema + fixtures": "GREEN",
+      "test": "GREEN",
+      "gate1": "GREEN",
+      "Golden Journeys Supporting subset + S0/S1 merge gate": "GREEN",
+      "G04 privileged netns + virtual audio (E4 reference)": "GREEN"
+    },
+    "non_success_required_count": 0,
+    "g04_privileged_job": {
+      "run_url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31427705621",
+      "job_url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31427705621/job/93583238967",
+      "job_id": 93583238967,
+      "conclusion": "success",
+      "steps_observed": [
+        {"name": "Install net + audio tooling", "conclusion": "success"},
+        {"name": "Start user PulseAudio for null-sink lifecycle", "conclusion": "success"},
+        {"name": "Run privileged G04 netns + audio reference proof", "conclusion": "success"},
+        {"name": "Unprivileged fallback remains available (NOT E4 reference)", "conclusion": "success"},
+        {"name": "Upload privileged evidence", "conclusion": "success"}
+      ],
+      "artifact_name": "g04-privileged-net-audio-evidence",
+      "artifact_id": 9077852460,
+      "artifact_body_download": "BLOCKED_PUBLIC_API_403_ADMIN_REQUIRED",
+      "independent_use_of_ci": "Machine evidence that independently derived asserts executed green on Linux runner; not an implementer narrative claim."
+    },
+    "summary": "All required tip checks GREEN including privileged G04 E4 reference job. No red waived."
+  },
+  "gj_defect_005": {
+    "id": "GJ-DEFECT-005",
+    "independent_status": "CLOSED_INDEPENDENT_PASS",
+    "blocking": false,
+    "evidence": [
+      "Independent plan B1/B2 derived before trusting remediation",
+      "Code: NetworkBackend e4_reference_proof only after netns+veth+packet_transfer.ok",
+      "Code: AudioBackend e4_reference_proof only after real sink/loopback appear + stream_probe.ok",
+      "Local Independent unprivileged probe: FALLBACK_ONLY / NOT_E4_REFERENCE_PROOF; VF2_REQUIRED_GOLDEN_BACKENDS=FALLBACK_ONLY",
+      "CI privileged job step 'Run privileged G04 netns + audio reference proof' success on tip 645d31a (asserts mode=netns, packet_transfer.ok, both e4_reference_proof, VF2_REQUIRED_GOLDEN_BACKENDS=PASS, VF2_UNPRIVILEGED_FALLBACK=AVAILABLE, VF3/4 honesty, SILICON_EXACT_EMULATION=false)",
+      "CI step 'Unprivileged fallback remains available (NOT E4 reference)' success"
+    ],
+    "not_counted_as_e4": [
+      "logical_in_memory network attach",
+      "logical in-memory audio dock route"
+    ]
+  },
+  "lab_fidelity_honesty": {
+    "VF2_REQUIRED_GOLDEN_BACKENDS_privileged_ci": "PASS",
+    "VF2_UNPRIVILEGED_FALLBACK": "AVAILABLE",
+    "VF3": "MODELED_ONLY",
+    "VF4": "PHYSICAL_PENDING",
+    "VF5": "PHYSICAL_PENDING",
+    "VF6": "PHYSICAL_PENDING",
+    "SILICON_EXACT_EMULATION": false,
+    "local_unprivileged_office_dock": {
+      "VF2_REQUIRED_GOLDEN_BACKENDS": "FALLBACK_ONLY",
+      "network_e4_reference_proof": false,
+      "audio_e4_reference_proof": false,
+      "note": "Confirms fallback honesty; does not earn E4 reference"
+    }
+  },
+  "competitor_matrix": {
+    "COMPETITOR_MATRIX_CONTRADICTIONS": 0,
+    "validator_ok": true,
+    "competitor_score_all_null": true,
+    "iv_pass_without_evidence_refs": 0,
+    "bulk_promotion_inconsistencies": 0,
+    "capability_count": 34,
+    "iv_pass_count": 11,
+    "frontier_parity_claimed": false,
+    "notes": "validate_competitor_matrix_consistency + Independent promotion walk: no narrative D6 vs structured D5; no score fabrication."
+  },
+  "local_independent_probes": {
+    "validate_golden_journey_scorecards": "PASS (COMPETITOR_MATRIX_CONTRADICTIONS=0)",
+    "tests/test_golden_journey_infrastructure.py": "13 passed",
+    "tests/device_lab": "21 passed",
+    "unprivileged_net_audio_fallback_only": "PASS",
+    "office_dock_fallback_honesty": "PASS"
+  },
+  "digital_table": {
+    "GOLDEN-01": "PASS E4/D6 (no regression)",
+    "GOLDEN-02": "PASS E4/D6 (no regression)",
+    "GOLDEN-03": "PASS E4/D6 (no regression)",
+    "GOLDEN-04": "PASS E4/D6 (privileged net+audio E4 reference CLOSED_INDEPENDENT_PASS; PHYSICAL_DOCK PENDING)",
+    "GOLDEN-05": "PASS E4/D6 (no regression)",
+    "GOLDEN-06": "PASS E4/D6 (no regression; PHYSICAL_PANELS PENDING)",
+    "GOLDEN-07": "PASS E4/D6 (no regression; PHYSICAL_RING PENDING)",
+    "GOLDEN-08": "PASS E4/D6 (no regression; HUMAN_QUALITY PENDING)",
+    "GOLDEN-09": "PASS E4/D5 (accepted)",
+    "GOLDEN-10": "PASS E4/D6 (no regression)"
+  },
+  "journeys": [
+    {
+      "journey_id": "GOLDEN-01",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression",
+      "notes": "Scorecard + tip CI green; no WP-003R.1 regression."
+    },
+    {
+      "journey_id": "GOLDEN-02",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression",
+      "notes": "Scorecard + tip CI green; no WP-003R.1 regression."
+    },
+    {
+      "journey_id": "GOLDEN-03",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression",
+      "notes": "Scorecard + tip CI green; no WP-003R.1 regression."
+    },
+    {
+      "journey_id": "GOLDEN-04",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "primary_wp003r1",
+      "checks": [
+        {
+          "name": "derived_e4_requires_real_net_packet_transfer",
+          "ok": true
+        },
+        {
+          "name": "derived_e4_requires_real_audio_route_lifecycle",
+          "ok": true
+        },
+        {
+          "name": "privileged_ci_g04_job_green",
+          "ok": true,
+          "detail": "job 93583238967 success on 645d31a"
+        },
+        {
+          "name": "unprivileged_fallback_not_e4",
+          "ok": true,
+          "detail": "local FALLBACK_ONLY / NOT_E4_REFERENCE_PROOF"
+        },
+        {
+          "name": "VF_honesty_tokens",
+          "ok": true,
+          "detail": "VF3 MODELED_ONLY; VF4/5/6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false"
+        },
+        {
+          "name": "physical_dock_not_claimed",
+          "ok": true,
+          "detail": "PHYSICAL_DOCK_VALIDATION=PENDING"
+        }
+      ],
+      "defects": [
+        {
+          "id": "GJ-DEFECT-005",
+          "status": "CLOSED_INDEPENDENT_PASS"
+        },
+        {
+          "id": "VP003-S2-G04-PHYSICAL-DOCK",
+          "status": "PHYSICAL_PENDING"
+        }
+      ],
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    {
+      "journey_id": "GOLDEN-05",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression"
+    },
+    {
+      "journey_id": "GOLDEN-06",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression_no_regression",
+      "PHYSICAL_PENDING": true
+    },
+    {
+      "journey_id": "GOLDEN-07",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression_no_regression",
+      "PHYSICAL_PENDING": true
+    },
+    {
+      "journey_id": "GOLDEN-08",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression_no_regression",
+      "HUMAN_VALIDATION_PENDING": true
+    },
+    {
+      "journey_id": "GOLDEN-09",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PASS",
+      "role": "accepted_d5",
+      "notes": "E4/D5 accepted; not D6."
+    },
+    {
+      "journey_id": "GOLDEN-10",
+      "functional_result": "PASS",
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "role": "regression"
+    }
+  ],
+  "edmund_guidance": {
+    "may_merge_pr_88": false,
+    "reason_pr_88": "Already MERGED at 801b332; no further merge action on #88.",
+    "may_merge_verifier_artifact_draft": true,
+    "keep_artifact_draft_until_edmund_review": true,
+    "auto_merge": false,
+    "accepted_main_reproof": {
+      "status": "PASS_ON_MAIN_801b332",
+      "note": "Independent VP-003R.1 already exercised tip 645d31a ⊆ origin/main 801b332 (#88 merge). Separate post-merge product reproof not required for the #88 delta."
+    },
+    "field_kit_supersede_of_61": {
+      "allowed_after_edmund_accepts_vp003r1": true,
+      "note": "Edmund may proceed to field-kit supersede of #61 after accepting this Independent PASS; do not auto-start WP-005+."
+    }
+  },
+  "PHYSICAL_PENDING": true,
+  "HUMAN_VALIDATION_PENDING": true,
+  "claim_boundary": {
+    "independent_verification_for_wp003r1_integrity": true,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false,
+    "silicon_exact_emulation": false,
+    "logical_fallback_is_not_e4_g04_reference": true
+  }
+}
