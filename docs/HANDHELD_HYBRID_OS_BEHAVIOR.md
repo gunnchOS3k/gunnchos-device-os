@@ -22,8 +22,8 @@ Profile: `hardware_compat/device_profiles/handheld_hybrid.yaml`
 | Input | Controller primary; touch secondary; keyboard via dock |
 | Audio | Speakers, haptic |
 | Camera / mic | No webcam; mic present |
-| Storage | NVMe, minimum 512 GB |
-| Memory | 12 GB RAM |
+| Storage | On-module **32 GB eMMC** (RM121-D8E32) + **microSD** expansion (WP-002 Outcome A) |
+| Memory | 8 GB RAM (SoM LPDDR4X) |
 | Battery | Portable extended class |
 | Thermal | Active cooling, gaming_balanced throttle |
 | Ports | USB-C, gamepad USB |
@@ -86,12 +86,14 @@ No wearables-style Developer blockers. Steam and battery gaps surface as warning
 
 - `steam_compatibility_not_certified`
 - `battery_validation_pending`
+- `microsd_physical_endurance_pending` (WP-002 digital policy only; E5 physical pending)
 
 ---
 
 ## Hardware repo references
 
 - `../gunnchos-hardware-industrial-design/mechanical_correctness/device_mechanical_targets.json#handheld_hybrid`
+- `../gunnchos-hardware-industrial-design/npi/phase_xv/handheld_storage_headroom/HANDHELD_STORAGE_POLICY.md`
 - `../gunnchos-hardware-industrial-design/dvt/DVT_THERMAL_TEST_PLAN.md`
 - `../gunnchos-hardware-industrial-design/dvt/DVT_DISPLAY_INPUT_TEST_PLAN.md`
 - `../gunnchos-hardware-industrial-design/results/manufacturing/handheld_hybrid_package_index.md`
@@ -100,4 +102,4 @@ No wearables-style Developer blockers. Steam and battery gaps surface as warning
 
 ## Claim boundary
 
-Profile mirror — not physical hardware validation. Steam compatibility and battery runtime are **not proven**.
+Profile mirror — not physical hardware validation. Steam compatibility, battery runtime, and microSD endurance are **not proven**. WP-002 Outcome A is digital E4 only.

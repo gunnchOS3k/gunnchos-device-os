@@ -18,9 +18,18 @@ Define minimum storage/memory requirements, offline behavior, and network capabi
 | Device | Storage class | Minimum | RAM | Notes |
 |--------|---------------|---------|-----|-------|
 | Student 14.5 | NVMe | 256 GB | 8 GB | School + dev images |
-| Handheld Hybrid | NVMe | 512 GB | 12 GB | Game library headroom |
+| Handheld Hybrid | eMMC + microSD | 32 GB onboard | 8 GB | WP-002 Outcome A: eMMC is system/recovery; games/AI/offline/user media require microSD. Do not invent 512 GB NVMe or larger Radxa eMMC SKUs. |
 | DS-XL Coder | NVMe | 1024 GB | 16 GB | Toolchains + deploy cache |
 | Wearables / Arena | eMMC | 64 GB | 4 GB | Lightweight arena kit |
+
+### Handheld Hybrid (WP-002 Outcome A)
+
+- Onboard usable ≈ 29.76 GiB after format factor.
+- Reserves: `max(2.0 GiB, 10% usable)` free + 2.0 GiB update/rollback + 0.5 GiB emergency save.
+- Low-space warning below 3.5 GiB or 15% free on eMMC.
+- Reclaim caches before denying writes; never silently delete saves/docs/slots/recovery.
+- If microSD absent: allow OS boot/Nano core; deny games/Fast-Pro/WAIKE/Archive installs (fail closed).
+- Carrier NVMe remux is Class E deferred — not implemented in policy.
 
 ### Intended behaviors
 
@@ -28,6 +37,7 @@ Define minimum storage/memory requirements, offline behavior, and network capabi
 - Low free-space warnings before mode switches that require large app packs.
 - DS-XL deploy source retains staging partition for outbound packages (documented — partition map TBD per hardware contract).
 - Wearables: strict storage caps for offline arena games.
+- Handheld: large app packs (`game_pack`, etc.) expect expansion media; warn when `min_gb` onboard alone is insufficient for pack size.
 
 **Flash layout:** Hardware OS contract states *Flash layout TBD — EVT-1 docs only*. OS does not claim secure update partition proof.
 
@@ -80,6 +90,7 @@ Electrical validation: `dvt/DVT_ELECTRICAL_TEST_PLAN.md` — not executed.
 | Condition | Behavior |
 |-----------|----------|
 | Insufficient storage | Block large app pack install; suggest cleanup |
+| Handheld microSD absent | Deny games/AI Fast-Pro/WAIKE/Archive installs; keep eMMC system path |
 | Network unavailable | Offline mode; queue sync/deploy |
 | Wi-Fi module absent (lab) | Offline-only path; warn — **not tested on HW** |
 | Deploy transport fail (DS-XL) | Retry / offline bundle fallback (mock) |

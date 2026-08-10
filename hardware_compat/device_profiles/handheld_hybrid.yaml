@@ -24,10 +24,25 @@ network:
   # Research/sim NTN path only — not satellite certification or partner attach.
   ntn: simulated
 storage:
-  class: nvme
-  min_gb: 512
+  # WP-002 Outcome A — hardware truth is on-module 32GB eMMC + microSD expansion.
+  # Do not invent carrier NVMe or larger Radxa eMMC SKUs.
+  class: emmc
+  min_gb: 32
+  onboard_role: system_recovery_update_ai_nano_core
+  expansion:
+    microsd:
+      required_for_mlp_user_content: true
+      interface: SDMMC
+    usb_attached:
+      required_for_mlp: false
+      role: optional_tertiary_archive_and_import
+  reserves_gb:
+    min_free_or_10pct: 2.976
+    update_rollback: 2.0
+    emergency_save: 0.5
+  policy_ref: docs/HARDWARE_STORAGE_NETWORK_POLICY.md
 memory:
-  ram_gb: 12
+  ram_gb: 8
 battery:
   class: portable_extended
 thermal:
@@ -78,7 +93,9 @@ offline_features:
 known_gaps:
   - steam_compatibility_not_certified
   - battery_validation_pending
+  - microsd_physical_endurance_pending
 hardware_repo_source_paths:
   - gunnchos-hardware-industrial-design/mechanical_correctness/device_mechanical_targets.json#handheld_hybrid
   - gunnchos-hardware-industrial-design/docs/OS_HARDWARE_CONTRACT.md
-claim_boundary: Profile mirror — not physical hardware validation
+  - gunnchos-hardware-industrial-design/npi/phase_xv/handheld_storage_headroom/HANDHELD_STORAGE_POLICY.md
+claim_boundary: Profile mirror — not physical hardware validation. WP-002 Outcome A digital storage policy only.

@@ -50,11 +50,18 @@ def test_files_storage():
     assert result["media_endurance"] == "PHYSICAL_PENDING"
     assert result["near_full"]["overflow_denied"] is True
     assert result["failure"]["no_tmp_leftover"] is True
+    assert result["expansion_absent"]["denied"] is True
     hh = result["handheld_32g_headroom"]
     assert "required_gb" in hh
-    assert hh["safe"] is False  # overhead makes 32G unsafe
+    assert hh["legacy_all_onboard_safe"] is False  # naive 32G profile still unsafe
+    assert hh["safe"] is True  # WP-002 Outcome A system eMMC + expansion
+    assert hh["wp002_outcome"] == "A"
+    assert hh["onboard_slack_gb"] >= 0
     assert (ART / "HANDHELD_32G_HEADROOM.json").exists()
     assert (ART / "NPI_DEFECT-STORAGE-HANDHELD-32G.json").exists()
+    defect = __import__("json").loads((ART / "NPI_DEFECT-STORAGE-HANDHELD-32G.json").read_text())
+    assert defect["status"] == "CLOSED_OUTCOME_A_PENDING_V1"
+    assert defect["decision_outcome"] == "A"
 
 
 def test_accessibility():
