@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.org/schemas/device_lab_evidence_linkage.schema.json",
+  "title": "EvidenceLinkage",
+  "type": "object",
+  "required": [
+    "virtual_run_id",
+    "physical_test_id",
+    "metric_id",
+    "linkage_status",
+    "vf_status"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string"
+    },
+    "virtual_run_id": {
+      "type": "string"
+    },
+    "physical_test_id": {
+      "type": "string",
+      "pattern": "^EVT-[A-Z]+-[0-9]{3}$"
+    },
+    "evidence_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metric_id": {
+      "type": "string"
+    },
+    "linkage_status": {
+      "type": "string",
+      "enum": [
+        "LINKED",
+        "AWAITING_PHYSICAL_EVIDENCE"
+      ]
+    },
+    "vf_status": {
+      "type": "string",
+      "const": "PHYSICAL_PENDING"
+    },
+    "CALIBRATED_EVT0": {
+      "type": "boolean",
+      "const": false
+    }
+  }
+}

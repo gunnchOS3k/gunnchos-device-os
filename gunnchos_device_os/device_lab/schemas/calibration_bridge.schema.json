@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.org/schemas/device_lab_calibration_bridge.schema.json",
+  "title": "DeviceLabCalibrationBridgeRecord",
+  "type": "object",
+  "required": [
+    "virtual_run_id",
+    "physical_test_id",
+    "metric_id",
+    "prediction",
+    "measurement",
+    "error",
+    "relative_error",
+    "uncertainty",
+    "calibration_version",
+    "vf_status"
+  ],
+  "properties": {
+    "bridge_id": {
+      "type": "string"
+    },
+    "virtual_run_id": {
+      "type": "string"
+    },
+    "physical_test_id": {
+      "type": "string",
+      "pattern": "^EVT-[A-Z]+-[0-9]{3}$"
+    },
+    "metric_id": {
+      "type": "string"
+    },
+    "prediction": {},
+    "measurement": {},
+    "error": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "relative_error": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "uncertainty": {},
+    "calibration_version": {
+      "type": "string"
+    },
+    "vf_status": {
+      "type": "string",
+      "const": "PHYSICAL_PENDING"
+    },
+    "claim_boundary": {
+      "type": "string"
+    },
+    "evidence_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instrument_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CALIBRATED_EVT0": {
+      "type": "boolean",
+      "const": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

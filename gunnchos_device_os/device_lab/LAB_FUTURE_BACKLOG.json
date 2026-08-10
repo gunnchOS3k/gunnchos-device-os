@@ -26,13 +26,18 @@
       "id": "LAB-FUTURE-004",
       "title": "Public/remote hosted Device Lab",
       "status": "BLOCKED",
-      "blocked_by": ["hosting_decision", "security_review"]
+      "blocked_by": [
+        "hosting_decision",
+        "security_review"
+      ]
     },
     {
       "id": "LAB-FUTURE-005",
       "title": "Full 3D physical twin / engineering view",
       "status": "BLOCKED",
-      "blocked_by": ["accepted_CAD_assets"]
+      "blocked_by": [
+        "accepted_CAD_assets"
+      ]
     },
     {
       "id": "LAB-FUTURE-006",
@@ -44,19 +49,29 @@
       "id": "LAB-FUTURE-007",
       "title": "EVT0 calibration",
       "status": "BLOCKED",
-      "blocked_by": ["EVT0_hardware"]
+      "blocked_by": [
+        "EVT0_hardware"
+      ],
+      "wp010_interface_prep": "SCHEMA_READY_EXECUTION_BLOCKED"
     },
     {
       "id": "LAB-FUTURE-008",
       "title": "Hardware-in-the-loop",
       "status": "BLOCKED",
-      "blocked_by": ["EVT_lab_bench"]
+      "blocked_by": [
+        "EVT_lab_bench"
+      ],
+      "wp010_interface_prep": "SCHEMA_READY_EXECUTION_BLOCKED"
     },
     {
       "id": "LAB-FUTURE-009",
       "title": "Simulator-vs-physical correlation tracking",
       "status": "BLOCKED",
-      "blocked_by": ["LAB-FUTURE-007"]
+      "blocked_by": [
+        "LAB-FUTURE-007"
+      ],
+      "wp010_interface_prep": "SCHEMA_READY_EXECUTION_BLOCKED"
     }
-  ]
+  ],
+  "wp010_note": "WP-010 added measurement/calibration *interfaces* only. LAB-FUTURE-007/008/009 remain BLOCKED and not executed."
 }
