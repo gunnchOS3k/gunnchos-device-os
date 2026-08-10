@@ -1,5 +1,6 @@
 {
-  "INTERNAL_RED_TEAM_READY": true,
+  "INTERNAL_RED_TEAM_READY": false,
+  "INTERNAL_RED_TEAM_READY_CANDIDATE": true,
   "SECURITY_S0": 0,
   "SECURITY_S1": 0,
   "SECURITY_S2_OPEN": 0,
@@ -11,7 +12,7 @@
       "case_id": "SEC-OS-001",
       "error": null,
       "evidence": {
-        "session_id": "sess-24e10acf2c1448c7"
+        "session_id": "sess-5fb8e24a47e246c7"
       },
       "expected_safe_result": "valid=false reason=revoked",
       "fix": "unified_identity.revoke_session + validate_session revoked gate",
@@ -180,30 +181,209 @@
       "surface": "continuity/identity"
     },
     {
-      "actual_result": "{\"active\": \"ethernet\", \"eth\": 114.1, \"wifi\": 101.1}",
-      "attack": "Prefer open Wi-Fi via preference/signal",
+      "actual_result": "{\"HOSTILE_NETWORK_DIGITAL\": \"E4_PREPARED\", \"RF_WIFI_STATUS\": \"E5_E8_EXTERNAL_PENDING\", \"case_count\": 9, \"credential_leaks\": [], \"passed\": true}",
+      "attack": "Malicious DNS, untrusted TLS, hostname mismatch, expired cert, captive portal, HTTP downgrade, credential phishing, link loss",
       "case_id": "SEC-NET-001",
       "error": null,
-      "evidence": {},
-      "expected_safe_result": "ethernet security score wins",
-      "fix": "ConnectivityOrchestrator security_score weighting",
+      "evidence": {
+        "suite": {
+          "HOSTILE_NETWORK_DIGITAL": "E4_PREPARED",
+          "RF_WIFI_STATUS": "E5_E8_EXTERNAL_PENDING",
+          "cases": [
+            {
+              "case_id": "HN-DNS-001",
+              "evidence": {
+                "hostname": "updates.gunnchos.dev",
+                "ok": false,
+                "reason": "malicious_dns",
+                "resolved": "198.51.100.66",
+                "trusted": false
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-TLS-001",
+              "evidence": {
+                "credentials_sent": false,
+                "ok": false,
+                "reason": "untrusted_tls"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-TLS-002",
+              "evidence": {
+                "credentials_sent": false,
+                "ok": false,
+                "reason": "hostname_mismatch"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-TLS-003",
+              "evidence": {
+                "credentials_sent": false,
+                "ok": false,
+                "reason": "expired_cert"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-CAPTIVE-001",
+              "evidence": {
+                "credentials_sent": false,
+                "ok": false,
+                "portal": true,
+                "reason": "captive_portal"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-HTTP-001",
+              "evidence": {
+                "credentials_sent": false,
+                "ok": false,
+                "origin": {
+                  "hostname": "updates.gunnchos.dev",
+                  "reason": "http_downgrade",
+                  "scheme": "http",
+                  "trusted": false
+                },
+                "reason": "http_downgrade"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-CRED-001",
+              "evidence": {
+                "credentials_sent": false,
+                "ok": false,
+                "origin": {
+                  "hostname": "evil.example",
+                  "reason": "untrusted_hostname",
+                  "trusted": false
+                },
+                "reason": "untrusted_hostname"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-LINK-001",
+              "evidence": {
+                "down": {
+                  "credentials_sent": false,
+                  "ok": false,
+                  "reason": "link_down"
+                },
+                "up": {
+                  "credentials_sent": true,
+                  "ok": true,
+                  "origin": {
+                    "hostname": "api.gunnchos.dev",
+                    "scheme": "https",
+                    "trusted": true
+                  },
+                  "reason": "ok"
+                }
+              },
+              "passed": true
+            },
+            {
+              "case_id": "HN-TLS-MATERIAL-001",
+              "evidence": {
+                "expired_not_after_past": true,
+                "expired_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp007-tls-gsa7sl91/expired.pem",
+                "fingerprint_expired_sha256": "412dff3f8b733625a6a5916975e54adb1fd8fd7571dd1e8698cc97fdf0648306",
+                "mismatch_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp007-tls-gsa7sl91/hostname_mismatch.pem",
+                "mismatch_san_is_evil": true
+              },
+              "passed": true
+            }
+          ],
+          "claim_boundary": "Digital hostile-network suite (Device Lab / logical+netns-capable). Real RF/Wi-Fi E5/E8 EXTERNAL_PENDING.",
+          "credential_leak_events": [],
+          "evidence_level": "E4_DIGITAL",
+          "passed": true,
+          "schema": "gunnchos.wp007.hostile_network_digital.v1"
+        }
+      },
+      "expected_safe_result": "All HN-* cases pass; credentials never sent to untrusted origins",
+      "fix": "HostileNetworkSimulator digital E4 suite",
       "passed": true,
-      "preconditions": "Hostile Wi-Fi + trusted ethernet available",
-      "regression": "tests/test_adversarial_fuzz_starters.py",
+      "preconditions": "Digital hostile-network simulator (DNS/TLS/captive/downgrade/link)",
+      "regression": "tests/wp007/test_hostile_network_digital.py",
       "severity": "S2",
-      "surface": "network/orchestrator"
+      "surface": "network/hostile_digital"
     },
     {
-      "actual_result": "{\"reject\": true, \"stored_score\": 100}",
-      "attack": "Inflate score while keeping old integrity",
+      "actual_result": "{\"AUTHORITATIVE_MULTIPLAYER_INTEGRITY\": \"EXTERNAL_OR_OPERATIONS_PENDING\", \"LOCAL_SAVE_INTEGRITY_DIGITAL\": \"E4_PREPARED\", \"cases\": [\"GS-SAVE-001\", \"GS-TAMPER-001\", \"GS-RECOVER-001\", \"GS-DIGEST-001\", \"GS-BIND-001\"], \"passed\": true}",
+      "attack": "Tamper score, unauthenticated digest, cross-device binding",
       "case_id": "SEC-GAME-001",
       "error": null,
-      "evidence": {},
-      "expected_safe_result": "integrity mismatch detected",
-      "fix": "Digital integrity digest check (authoritative server E7)",
+      "evidence": {
+        "suite": {
+          "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING",
+          "LOCAL_SAVE_INTEGRITY_DIGITAL": "E4_PREPARED",
+          "cases": [
+            {
+              "case_id": "GS-SAVE-001",
+              "evidence": {
+                "ok": true,
+                "reason": "ok",
+                "slot": "slot1"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "GS-TAMPER-001",
+              "evidence": {
+                "ok": false,
+                "quarantined": true,
+                "reason": "tamper_detected"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "GS-RECOVER-001",
+              "evidence": {
+                "loaded_ok": true,
+                "recover": {
+                  "ok": true,
+                  "recovered_from_backup": true,
+                  "slot": "slot1"
+                },
+                "score": 100
+              },
+              "passed": true
+            },
+            {
+              "case_id": "GS-DIGEST-001",
+              "evidence": {
+                "note": "Plain integrity digest is not tamper protection",
+                "ok": false,
+                "reason": "unauthenticated_digest_rejected"
+              },
+              "passed": true
+            },
+            {
+              "case_id": "GS-BIND-001",
+              "evidence": {
+                "ok": false,
+                "reason": "binding_mismatch"
+              },
+              "passed": true
+            }
+          ],
+          "claim_boundary": "Local/offline authenticated save integrity only. AUTHORITATIVE_MULTIPLAYER_INTEGRITY=EXTERNAL_OR_OPERATIONS_PENDING.",
+          "passed": true,
+          "schema": "gunnchos.wp007.local_save_integrity_digital.v1"
+        }
+      },
+      "expected_safe_result": "tamper quarantine + digest reject + binding fail; multiplayer EXTERNAL pending",
+      "fix": "GameSaveIntegrityStore HMAC binding + quarantine/backup",
       "passed": true,
-      "preconditions": "Save with integrity digest",
-      "regression": "tests/wp007/test_red_team_harness.py",
+      "preconditions": "Authenticated local save bound to user/device/platform secret",
+      "regression": "tests/wp007/test_game_save_integrity_digital.py",
       "severity": "S2",
       "surface": "game/save"
     },
@@ -229,7 +409,8 @@
   "evidence_level_target": "E4",
   "external_pentest": "EXTERNAL_PENDING",
   "frontier_parity": false,
-  "generated_at_unix": 1786395851.126934,
+  "generated_at_unix": 1786400218.9565911,
+  "harness_s0_s1_clear": true,
   "open_s0": [],
   "open_s1": [],
   "open_s2": [],

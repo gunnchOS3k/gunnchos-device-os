@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "gunnchos_device_os/security_red_team/**"
+      - "gunnchos_device_os/security/wp007/**"
       - "gunnchos_device_os/phase_xiv/fabric/**"
       - "gunnchos_device_os/phase_xiv/continuity/**"
       - "gunnchos_device_os/phase_xiv/packages/**"
@@ -17,7 +18,9 @@ on:
       - "tests/wp007/**"
       - "docs/security/wp007/**"
       - "security/wp007_red_team/**"
+      - "artifacts/wp007/**"
       - "scripts/run_wp007_red_team.py"
+      - "scripts/validate_wp007_evidence_consistency.py"
       - ".github/workflows/wp-007-security-red-team.yml"
   workflow_dispatch:
 
@@ -32,10 +35,12 @@ jobs:
       - name: Install
         run: |
           python -m pip install -U pip
-          pip install pytest
+          pip install pytest cryptography
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: WP-007 red-team harness
         run: PYTHONPATH=.:src python3 scripts/run_wp007_red_team.py
+      - name: WP-007 evidence consistency
+        run: PYTHONPATH=.:src python3 scripts/validate_wp007_evidence_consistency.py
       - name: WP-007 pytest
         run: PYTHONPATH=.:src pytest -q tests/wp007
       - name: Related boundary regressions
@@ -45,7 +50,8 @@ jobs:
             tests/test_ota_state_machine.py \
             tests/test_sandbox_policy.py \
             tests/phase_xiv/test_phase_xiv.py \
-            tests/stage2/test_security.py
+            tests/stage2/test_security.py \
+            tests/test_continuation_vi_security.py
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
