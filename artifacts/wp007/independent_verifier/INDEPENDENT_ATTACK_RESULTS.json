@@ -1,0 +1,758 @@
+{
+  "schema": "gunnchos.vp007.independent_attack_run.v1",
+  "tip_sha": "4a51298f2338007bf224193fe96eeff4ed18f876",
+  "executed_at": "2026-08-10T21:28:37Z",
+  "case_count": 30,
+  "pass_count": 29,
+  "SECURITY_S0": 0,
+  "SECURITY_S1": 0,
+  "SECURITY_S2_residual_or_harness": 1,
+  "INTERNAL_RED_TEAM_READY_candidate": true,
+  "EXTERNAL_PENDING": true,
+  "production_ready": false,
+  "frontier_security_parity": false,
+  "blocking_findings": [],
+  "harness_failures": [],
+  "findings": [
+    {
+      "case_id": "IV-OS-001",
+      "boundary": "identity",
+      "attack": "Use revoked session token",
+      "expected_safe": "valid=false reason=revoked",
+      "actual": "{'valid': False, 'reason': 'revoked', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "post": {
+          "valid": false,
+          "reason": "revoked",
+          "mock": false,
+          "claim_boundary": "Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials."
+        }
+      },
+      "remediation_holds": true,
+      "notes": "GOLDEN-10 revoke safety path"
+    },
+    {
+      "case_id": "IV-OS-002",
+      "boundary": "identity",
+      "attack": "Replay session token on different bound device",
+      "expected_safe": "device_mismatch",
+      "actual": "{'valid': False, 'reason': 'device_mismatch', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "post": {
+          "valid": false,
+          "reason": "device_mismatch",
+          "mock": false,
+          "claim_boundary": "Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials."
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-003",
+      "boundary": "package",
+      "attack": "Publish with tampered payload vs signature",
+      "expected_safe": "PermissionError bad_signature",
+      "actual": "bad_signature",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "bad_signature"
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-004",
+      "boundary": "package",
+      "attack": "Downgrade install channel stable\u2192dev",
+      "expected_safe": "channel_downgrade_denied",
+      "actual": "channel_downgrade_denied",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-005",
+      "boundary": "package",
+      "attack": "Reinstall revoked package",
+      "expected_safe": "verify_failed / denied",
+      "actual": "denied",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-006",
+      "boundary": "package",
+      "attack": "Path-traversal app_id ../escape",
+      "expected_safe": "unsafe_package_path_component",
+      "actual": "unsafe_package_path_component",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "unsafe_package_path_component"
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-007",
+      "boundary": "sandbox",
+      "attack": "Cross-user secret_get",
+      "expected_safe": "cross_user_secret_access",
+      "actual": "cross_user_secret_access",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-008",
+      "boundary": "sandbox",
+      "attack": "Path escape via isolate_user('../etc')",
+      "expected_safe": "unsafe_path_component",
+      "actual": "unsafe_path_component",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-009",
+      "boundary": "update",
+      "attack": "Failed update path; attempt user-data loss",
+      "expected_safe": "rollback + fingerprint unchanged (GOLDEN-09)",
+      "actual": "rolled=True data_ok=True fp_match=True result_keys=['path', 'apply', 'reboot', 'finalize', 'user_data_before', 'user_data_after', 'ok']",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "result": {
+          "path": "failure_rollback",
+          "apply": {
+            "ok": true,
+            "state": "pending_reboot",
+            "active_slot": "A",
+            "inactive_slot": "B",
+            "version": "0.2.1-bad",
+            "rolled_back": false,
+            "user_data_intact": null,
+            "detail": {
+              "written_to": "B"
+            }
+          },
+          "reboot": {
+            "ok": true,
+            "state": "booted_pending",
+            "active_slot": "B",
+            "inactive_slot": "A",
+            "version": "0.2.1-bad",
+            "rolled_back": false,
+            "user_data_intact": null,
+            "detail": {}
+          },
+          "finalize": {
+            "ok": true,
+            "state": "rolled_back",
+            "active_slot": "A",
+            "inactive_slot": "B",
+            "version": "0.1.0-baseline",
+            "rolled_back": true,
+            "user_data_intact": true,
+            "detail": {
+              "failed_slot": "B",
+              "health": {
+                "ok": false,
+                "slot": "B",
+                "path": "system-b/usr/lib/gunnchos/healthcheck"
+              }
+            }
+          },
+          "user_data_before": "984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd",
+          "user_data_after": "984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd",
+          "ok": true
+        },
+        "fp_before": "984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd",
+        "fp_after": "984331076a2fe11d8760ff26300bd82f7c22c99e6bcd018124a5b6943969fffd"
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-010",
+      "boundary": "update",
+      "attack": "OTA verify with signature_valid=False",
+      "expected_safe": "signature_invalid / failed",
+      "actual": "state=failed last_error=signature_invalid",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "check": {
+          "state": "download_pending",
+          "active_slot": "a",
+          "slots": {
+            "a": {
+              "slot": "a",
+              "version": "0.1.0",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            },
+            "b": {
+              "slot": "b",
+              "version": "0.0.9",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            }
+          },
+          "pending": {
+            "version": "9.9.9",
+            "target_slot": "b",
+            "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "signature_valid": false,
+            "security_version": 1,
+            "size_bytes": 1024
+          },
+          "faults": [],
+          "last_error": null,
+          "history": [
+            {
+              "from_state": "idle",
+              "to_state": "checking",
+              "reason": "check_started",
+              "fault": null
+            },
+            {
+              "from_state": "checking",
+              "to_state": "download_pending",
+              "reason": "update_available",
+              "fault": null
+            }
+          ],
+          "mock": false,
+          "claim_boundary": "Simulated OTA/rollback state machine only. No live update channel, no fleet delivery, no production signing claim.",
+          "update_available": true,
+          "package": {
+            "version": "9.9.9",
+            "target_slot": "b",
+            "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "signature_valid": false,
+            "security_version": 1,
+            "size_bytes": 1024
+          }
+        },
+        "download": {
+          "state": "verifying",
+          "active_slot": "a",
+          "slots": {
+            "a": {
+              "slot": "a",
+              "version": "0.1.0",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            },
+            "b": {
+              "slot": "b",
+              "version": "0.0.9",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            }
+          },
+          "pending": {
+            "version": "9.9.9",
+            "target_slot": "b",
+            "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "signature_valid": false,
+            "security_version": 1,
+            "size_bytes": 1024
+          },
+          "faults": [],
+          "last_error": null,
+          "history": [
+            {
+              "from_state": "idle",
+              "to_state": "checking",
+              "reason": "check_started",
+              "fault": null
+            },
+            {
+              "from_state": "checking",
+              "to_state": "download_pending",
+              "reason": "update_available",
+              "fault": null
+            },
+            {
+              "from_state": "download_pending",
+              "to_state": "downloading",
+              "reason": "download_started",
+              "fault": null
+            },
+            {
+              "from_state": "downloading",
+              "to_state": "verifying",
+              "reason": "download_complete",
+              "fault": null
+            }
+          ],
+          "mock": false,
+          "claim_boundary": "Simulated OTA/rollback state machine only. No live update channel, no fleet delivery, no production signing claim."
+        },
+        "verify": {
+          "state": "failed",
+          "active_slot": "a",
+          "slots": {
+            "a": {
+              "slot": "a",
+              "version": "0.1.0",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            },
+            "b": {
+              "slot": "b",
+              "version": "0.0.9",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            }
+          },
+          "pending": {
+            "version": "9.9.9",
+            "target_slot": "b",
+            "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "signature_valid": false,
+            "security_version": 1,
+            "size_bytes": 1024
+          },
+          "faults": [],
+          "last_error": "signature_invalid",
+          "history": [
+            {
+              "from_state": "idle",
+              "to_state": "checking",
+              "reason": "check_started",
+              "fault": null
+            },
+            {
+              "from_state": "checking",
+              "to_state": "download_pending",
+              "reason": "update_available",
+              "fault": null
+            },
+            {
+              "from_state": "download_pending",
+              "to_state": "downloading",
+              "reason": "download_started",
+              "fault": null
+            },
+            {
+              "from_state": "downloading",
+              "to_state": "verifying",
+              "reason": "download_complete",
+              "fault": null
+            },
+            {
+              "from_state": "verifying",
+              "to_state": "failed",
+              "reason": "signature_invalid",
+              "fault": "signature_invalid"
+            }
+          ],
+          "mock": false,
+          "claim_boundary": "Simulated OTA/rollback state machine only. No live update channel, no fleet delivery, no production signing claim."
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-OS-010b",
+      "boundary": "update",
+      "attack": "Static: UpdaterService.api_verify sets verified=True without signature check",
+      "expected_safe": "Crypto verify or explicit DEV-stub; install gated by OtaStateMachine",
+      "actual": "naive verified=True stub present",
+      "severity": "S2",
+      "ok": true,
+      "evidence": {
+        "naive_verify": true,
+        "classification": "residual_stub_S2"
+      },
+      "remediation_holds": true,
+      "notes": "Does not earn production_ready; EXTERNAL_PENDING for real signing"
+    },
+    {
+      "case_id": "IV-AI-001",
+      "boundary": "ai",
+      "attack": "Prompt/tool injection strings",
+      "expected_safe": "denied=true for all probes",
+      "actual": "[{'ok': False, 'denied': True, 'reason': 'prompt_injection_suspected', 'marker': 'ignore previous instructions', 'mock': True}, {'ok': False, 'denied': True, 'reason': 'prompt_injection_suspected', 'marker': 'system:', 'mock': True}, {'ok': False, 'denied': True, 'reason': 'prompt_injection_suspected', 'marker': '<tool>', 'mock': True}]",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "results": [
+          {
+            "ok": false,
+            "denied": true,
+            "reason": "prompt_injection_suspected",
+            "marker": "ignore previous instructions",
+            "mock": true
+          },
+          {
+            "ok": false,
+            "denied": true,
+            "reason": "prompt_injection_suspected",
+            "marker": "system:",
+            "mock": true
+          },
+          {
+            "ok": false,
+            "denied": true,
+            "reason": "prompt_injection_suspected",
+            "marker": "<tool>",
+            "mock": true
+          }
+        ]
+      },
+      "remediation_holds": true,
+      "notes": "GOLDEN-08 tutoring safety"
+    },
+    {
+      "case_id": "IV-AI-002",
+      "boundary": "ai",
+      "attack": "computer_use without approval token",
+      "expected_safe": "approval_required",
+      "actual": "denied={'ok': False, 'denied': True, 'reason': 'approval_required', 'capability': 'computer_use'} allowed={'ok': True, 'capability': 'computer_use', 'prompt_chars': 13, 'response': '[local-dev] acknowledged: open terminal', 'privacy_mode': 'local_only', 'provenance': {'capability': 'computer_use', 'model': 'local-dev-stub', 'sources': ['gunnchos_device_os.gunnchai_integration'], 'privacy_mode': 'local_only', 'production_model_claimed': False}}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": {
+          "ok": false,
+          "denied": true,
+          "reason": "approval_required",
+          "capability": "computer_use"
+        },
+        "allowed": {
+          "ok": true,
+          "capability": "computer_use",
+          "prompt_chars": 13,
+          "response": "[local-dev] acknowledged: open terminal",
+          "privacy_mode": "local_only",
+          "provenance": {
+            "capability": "computer_use",
+            "model": "local-dev-stub",
+            "sources": [
+              "gunnchos_device_os.gunnchai_integration"
+            ],
+            "privacy_mode": "local_only",
+            "production_model_claimed": false
+          }
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-AI-003",
+      "boundary": "ai",
+      "attack": "Unsafe response content (api_key/password)",
+      "expected_safe": "safe_to_show=false for secrets",
+      "actual": "{'bad': {'safe_to_show': False, 'requires_educator_review': True, 'mock': True}, 'good': {'safe_to_show': True, 'requires_educator_review': False, 'mock': True}}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "bad": {
+          "safe_to_show": false,
+          "requires_educator_review": true,
+          "mock": true
+        },
+        "good": {
+          "safe_to_show": true,
+          "requires_educator_review": false,
+          "mock": true
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-RING-001",
+      "boundary": "ring",
+      "attack": "Inject ring events without auth",
+      "expected_safe": "denied not_authenticated",
+      "actual": "{'events': [], 'count': 0, 'denied': True, 'reason': 'not_authenticated', 'fallback_active': True}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "r": {
+          "events": [],
+          "count": 0,
+          "denied": true,
+          "reason": "not_authenticated",
+          "fallback_active": true
+        }
+      },
+      "remediation_holds": true,
+      "notes": "GOLDEN-07"
+    },
+    {
+      "case_id": "IV-RING-002",
+      "boundary": "ring",
+      "attack": "Low-confidence destructive gesture",
+      "expected_safe": "low_confidence_destructive",
+      "actual": "{'events': [], 'count': 0, 'denied': True, 'reason': 'low_confidence_destructive', 'fallback_active': True}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "r": {
+          "events": [],
+          "count": 0,
+          "denied": true,
+          "reason": "low_confidence_destructive",
+          "fallback_active": true
+        }
+      },
+      "remediation_holds": true,
+      "notes": "GOLDEN-07 safety"
+    },
+    {
+      "case_id": "IV-RING-003",
+      "boundary": "ring",
+      "attack": "Retarget without authentication",
+      "expected_safe": "denied",
+      "actual": "{'ok': False, 'denied': True, 'reason': 'not_authenticated', 'target_device': None}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "r": {
+          "ok": false,
+          "denied": true,
+          "reason": "not_authenticated",
+          "target_device": null
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-RING-004",
+      "boundary": "ring",
+      "attack": "Non-DEV ring auth token",
+      "expected_safe": "authenticated=false",
+      "actual": "{'authenticated': False, 'reason': 'prod_tokens_rejected'}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "r": {
+          "authenticated": false,
+          "reason": "prod_tokens_rejected"
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-FAB-001",
+      "boundary": "fabric",
+      "attack": "Unilateral trust without enrollment tokens",
+      "expected_safe": "missing_enrollment_tokens",
+      "actual": "missing_enrollment_tokens",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-FAB-002",
+      "boundary": "fabric",
+      "attack": "Lease as untrusted consumer",
+      "expected_safe": "untrusted_consumer",
+      "actual": "untrusted_consumer",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-FAB-003",
+      "boundary": "fabric",
+      "attack": "Trust with forged enrollment token",
+      "expected_safe": "bad_enrollment_token",
+      "actual": "bad_enrollment_token",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-CONT-001",
+      "boundary": "continuity",
+      "attack": "Handoff to wiped destination",
+      "expected_safe": "PermissionError",
+      "actual": "destination_wiped_or_denied",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "destination_wiped_or_denied"
+      },
+      "remediation_holds": true,
+      "notes": "GOLDEN-10 continuity denial after revoke/wipe"
+    },
+    {
+      "case_id": "IV-CONT-002",
+      "boundary": "continuity",
+      "attack": "Cross-user continuity handoff",
+      "expected_safe": "identity_mismatch",
+      "actual": "identity_mismatch",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-CONT-003",
+      "boundary": "continuity",
+      "attack": "Tamper sealed clipboard cipher bytes",
+      "expected_safe": "integrity_check_failed",
+      "actual": "integrity_check_failed",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-LAB-001",
+      "boundary": "device_lab",
+      "attack": "Session work path outside instances root",
+      "expected_safe": "device_lab_work_path_escape",
+      "actual": "device_lab_work_path_escape",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "device_lab_work_path_escape",
+        "work": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/ESCAPE_TEST"
+      },
+      "remediation_holds": true,
+      "notes": "Allowlist policy must not accept artifacts/ESCAPE_TEST"
+    },
+    {
+      "case_id": "IV-LAB-002",
+      "boundary": "device_lab",
+      "attack": "Unregistered controlled temp as session work",
+      "expected_safe": "device_lab_work_path_escape",
+      "actual": "device_lab_work_path_escape",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "device_lab_work_path_escape"
+      },
+      "remediation_holds": true,
+      "notes": "WP007-IV-DEF-001: allowlist requires explicit register"
+    },
+    {
+      "case_id": "IV-LAB-003",
+      "boundary": "device_lab",
+      "attack": "Register host-sensitive root /etc as lab work root",
+      "expected_safe": "device_lab_work_root_not_approvable",
+      "actual": "device_lab_work_root_not_approvable",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "device_lab_work_root_not_approvable"
+      },
+      "remediation_holds": true,
+      "notes": "Allowlist must not approve host-sensitive roots"
+    },
+    {
+      "case_id": "IV-LAB-004",
+      "boundary": "device_lab",
+      "attack": "Registered tmp allowed while ESCAPE_TEST still denied",
+      "expected_safe": "registered_ok + device_lab_work_path_escape",
+      "actual": "registered_ok=True escape=device_lab_work_path_escape",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "registered_ok": true,
+        "escape_denied": true,
+        "escape_reason": "device_lab_work_path_escape"
+      },
+      "remediation_holds": true,
+      "notes": "CI allowlist adaptation must not weaken SEC-LAB escape denial"
+    },
+    {
+      "case_id": "IV-NET-001",
+      "boundary": "network/fleet",
+      "attack": "Fleet command after revoke",
+      "expected_safe": "not_enrolled_or_revoked",
+      "actual": "{'ok': False, 'reason': 'not_enrolled_or_revoked'}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "cmd": {
+          "ok": false,
+          "reason": "not_enrolled_or_revoked"
+        }
+      },
+      "remediation_holds": true,
+      "notes": "GOLDEN-10 fleet revoke"
+    },
+    {
+      "case_id": "IV-GAME-001",
+      "boundary": "game",
+      "attack": "Tamper save payload after digest seal",
+      "expected_safe": "digest mismatch \u2192 reject",
+      "actual": "rejected=True module_probe=None",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "expected": "6025e197dcdaaf49f049bbc3d4e0c2f60f6524f73a6e792573b830548c96b675",
+        "actual": "d4d1f4776827cff1d4fccdd932e971584ee5c948f91b8671eee3ec84a42ef626",
+        "module_ok": null
+      },
+      "remediation_holds": true,
+      "notes": "Authoritative multiplayer remains EXTERNAL_PENDING/E7"
+    }
+  ],
+  "plan": "artifacts/wp007/independent_verifier/INDEPENDENT_ATTACK_PLAN.md"
+}
