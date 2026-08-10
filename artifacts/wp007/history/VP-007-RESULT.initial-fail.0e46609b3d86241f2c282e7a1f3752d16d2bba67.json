@@ -186,13 +186,14 @@
     "head_sha": "9d891edd8470dd19a2d77281c9fd044628ba5a86",
     "note": "Independent verifier FAIL artifacts DRAFT"
   },
-  "wp007r_implementer_note": {
-    "role": "IMPLEMENTER",
-    "branch": "operating-cycle-2/wp-007r-security-digital-closure",
-    "history_preserved": "artifacts/wp007/history/",
-    "history_note": "artifacts/wp007/HISTORY_NOTE.json",
-    "residual_prepared": "artifacts/wp007/IMPLEMENTER_RESIDUAL_STATUS.json",
-    "independent_pass_deferred": true,
-    "note": "WP-007R digital remediations prepared; canonical overall_result remains FAIL until Independent re-verify."
+  "_history_preservation": {
+    "preserved_from": "artifacts/wp007/VP-007-RESULT.json",
+    "preserved_at_main_sha": "0e46609b3d86241f2c282e7a1f3752d16d2bba67",
+    "pr_92": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/92",
+    "original_overall_result": "FAIL",
+    "original_executed_at": "2026-08-10T21:15:33Z",
+    "original_tip_verified": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
+    "failure_reason": "Digital independent attack suite shows S0=0 and S1=0, but tip fails CI jobs test/gate1 due to SEC-LAB path containment breaking device_lab foundation test. Token withheld until remediation holds under integrated CI (test adaptation or safe allowlist that does not re-enable host escape).",
+    "note": "Immutable Independent FAIL snapshot for WP-007R history. Do not erase."
   }
 }

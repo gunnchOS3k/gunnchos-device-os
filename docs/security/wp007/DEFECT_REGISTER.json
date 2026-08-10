@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.wp007.defect_register.v1",
-  "work_packet": "WP-007",
+  "work_packet": "WP-007R",
   "implementer_self_certify": false,
   "SECURITY_S0_open": 0,
   "SECURITY_S1_open": 0,
@@ -73,24 +73,39 @@
       "id": "WP007-DEF-009",
       "case_id": "SEC-NET-001",
       "severity": "S2",
-      "title": "Hostile Wi-Fi preference residual (score weighting only)",
-      "status": "MITIGATED_DIGITAL",
-      "fix": "security_score preference; live captive-portal/DNS E7 backlog"
+      "title": "Hostile network digital suite (DNS/TLS/captive/downgrade/link)",
+      "status": "CLOSED_DIGITAL_PREPARED",
+      "HOSTILE_NETWORK_DIGITAL": "E4_PREPARED",
+      "fix": "HostileNetworkSimulator; credentials blocked on untrusted origins",
+      "remaining": "Real RF/Wi-Fi E5/E8 EXTERNAL_PENDING"
     },
     {
       "id": "WP007-DEF-010",
       "case_id": "SEC-GAME-001",
       "severity": "S2",
-      "title": "Game save integrity is client-side digest only",
-      "status": "MITIGATED_DIGITAL",
-      "note": "Authoritative multiplayer anti-cheat remains E7 backlog",
-      "fix": "integrity mismatch detection in harness"
+      "title": "Game save integrity authenticated local binding",
+      "status": "CLOSED_DIGITAL_PREPARED",
+      "LOCAL_SAVE_INTEGRITY_DIGITAL": "E4_PREPARED",
+      "fix": "HMAC-SHA256 bound to user/device/platform secret; quarantine + backup/recovery; reject unauthenticated digest",
+      "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING"
+    },
+    {
+      "id": "WP007-IV-RES-001",
+      "case_id": "IV-OS-010b",
+      "severity": "S2",
+      "title": "UpdaterService.api_verify without crypto check",
+      "status": "CLOSED_DIGITAL_PREPARED",
+      "fix": "Ed25519 (cryptography) verify against pinned DEV_TEST_TRUST_ROOT; PRODUCTION_TRUST_ROOT=EXTERNAL_PENDING"
     }
   ],
   "backlog_s3_s4": [
     "Live MCP/Skills connector adversarial suite",
     "Scheduled-task abuse corpus",
     "Archive ingest parser fuzz campaign",
-    "Telemetry UI guest isolation across all surfaces"
+    "Telemetry UI guest isolation across all surfaces",
+    "EXTERNAL pentest E7",
+    "PRODUCTION_TRUST_ROOT / HSM",
+    "Real RF/Wi-Fi hostile E5/E8",
+    "Authoritative multiplayer integrity"
   ]
 }

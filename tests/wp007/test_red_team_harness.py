@@ -14,14 +14,19 @@ def test_red_team_harness_s0_s1_clear():
     report = run_red_team(write=True)
     assert report["SECURITY_S0"] == 0
     assert report["SECURITY_S1"] == 0
-    assert report["INTERNAL_RED_TEAM_READY"] is True
+    assert report["INTERNAL_RED_TEAM_READY_CANDIDATE"] is True
+    assert report["harness_s0_s1_clear"] is True
+    # Implementer must not self-certify Independent token
+    assert report["INTERNAL_RED_TEAM_READY"] is False
     assert report["external_pentest"] == "EXTERNAL_PENDING"
     assert report["production_ready_security_claimed"] is False
     assert report["cases_passed"] == report["cases_total"]
     readiness = ROOT / "artifacts" / "wp007" / "INTERNAL_RED_TEAM_READINESS.json"
     assert readiness.exists()
     data = json.loads(readiness.read_text(encoding="utf-8"))
-    assert data["INTERNAL_RED_TEAM_READY"] is True
+    assert data["INTERNAL_RED_TEAM_READY"] is False
+    assert data["implementer_prepared"] is True
+    assert data["independent_verified"] is False
     assert data["implementer_self_certify"] is False
 
 

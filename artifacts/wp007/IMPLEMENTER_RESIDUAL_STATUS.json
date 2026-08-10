@@ -1,0 +1,52 @@
+{
+  "schema": "gunnchos.wp007.implementer_residual_status.v1",
+  "work_packet": "WP-007R",
+  "cycle": 2,
+  "role": "IMPLEMENTER",
+  "independent_pass_written": false,
+  "note": "Prepared digital closures for Independent verifier. Do not treat as Independent PASS.",
+  "residuals": [
+    {
+      "id": "WP007-IV-RES-001",
+      "title": "Updater cryptographic verification",
+      "status": "CLOSED_DIGITAL_PREPARED",
+      "target": "CLOSED_DIGITAL",
+      "evidence": [
+        "gunnchos_device_os/security/wp007/update_trust.py",
+        "UpdaterService.api_verify Ed25519 verify",
+        "tests/wp007/test_update_trust_crypto.py"
+      ],
+      "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING"
+    },
+    {
+      "id": "WP007-IV-RES-002",
+      "aligns_with": "WP007-DEF-009",
+      "title": "Hostile network digital S2",
+      "status": "HOSTILE_NETWORK_DIGITAL_E4_PREPARED",
+      "target": "HOSTILE_NETWORK_DIGITAL=E4",
+      "RF_WIFI": "E5_E8_EXTERNAL_PENDING",
+      "evidence": [
+        "gunnchos_device_os/security/wp007/hostile_network.py",
+        "tests/wp007/test_hostile_network_digital.py"
+      ]
+    },
+    {
+      "id": "WP007-IV-RES-003",
+      "aligns_with": "WP007-DEF-010",
+      "title": "Local game-save integrity digital S2",
+      "status": "LOCAL_SAVE_INTEGRITY_DIGITAL_E4_PREPARED",
+      "target": "LOCAL_SAVE_INTEGRITY_DIGITAL=E4",
+      "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING",
+      "evidence": [
+        "gunnchos_device_os/security/wp007/game_save_integrity.py",
+        "tests/wp007/test_game_save_integrity_digital.py"
+      ]
+    }
+  ],
+  "EXTERNAL_PENDING": [
+    "EXTERNAL pentest / E7",
+    "PRODUCTION_TRUST_ROOT / HSM / TPM",
+    "Real RF/Wi-Fi hostile E5/E8",
+    "Authoritative multiplayer integrity"
+  ]
+}

@@ -531,101 +531,66 @@ def _case_fabric_continuity_impersonation() -> CaseResult:
 
 
 def _case_net_hostile_wifi() -> CaseResult:
-    from gunnchos_device_os.connectivity_orchestrator import (
-        BearerKind,
-        BearerMetrics,
-        ConnectivityOrchestrator,
-    )
+    from gunnchos_device_os.security.wp007.hostile_network import HostileNetworkSimulator
 
-    orch = ConnectivityOrchestrator()
-    # Hostile open Wi-Fi: high signal but low security
-    orch.update_metrics(
-        BearerKind.WIFI,
-        BearerMetrics(
-            available=True,
-            signal_dbm=-30.0,
-            latency_ms=10.0,
-            loss_pct=0.0,
-            cost_per_mb=0.0,
-            energy_mw=100.0,
-            security_score=0.05,
-            user_preference=0.9,
-        ),
-    )
-    orch.update_metrics(
-        BearerKind.ETHERNET,
-        BearerMetrics(
-            available=True,
-            signal_dbm=-10.0,
-            latency_ms=2.0,
-            loss_pct=0.0,
-            cost_per_mb=0.0,
-            energy_mw=50.0,
-            security_score=0.95,
-            user_preference=0.5,
-        ),
-    )
-    result = orch.evaluate()
-    active = str(result.get("active") or result.get("active_bearer") or "")
-    # Prefer ethernet / high security when available
-    wifi_score = orch.score(BearerKind.WIFI)
-    eth_score = orch.score(BearerKind.ETHERNET)
-    passed = eth_score >= wifi_score
+    suite = HostileNetworkSimulator().run_digital_suite()
+    passed = suite.get("passed") is True and suite.get("HOSTILE_NETWORK_DIGITAL") == "E4_PREPARED"
     return CaseResult(
         case_id="SEC-NET-001",
-        surface="network/orchestrator",
-        preconditions="Hostile Wi-Fi + trusted ethernet available",
-        attack="Prefer open Wi-Fi via preference/signal",
-        expected_safe_result="ethernet security score wins",
+        surface="network/hostile_digital",
+        preconditions="Digital hostile-network simulator (DNS/TLS/captive/downgrade/link)",
+        attack="Malicious DNS, untrusted TLS, hostname mismatch, expired cert, captive portal, HTTP downgrade, credential phishing, link loss",
+        expected_safe_result="All HN-* cases pass; credentials never sent to untrusted origins",
         actual_result=json.dumps(
-            {"active": active, "wifi": wifi_score, "eth": eth_score},
+            {
+                "HOSTILE_NETWORK_DIGITAL": suite.get("HOSTILE_NETWORK_DIGITAL"),
+                "passed": suite.get("passed"),
+                "case_count": len(suite.get("cases") or []),
+                "RF_WIFI_STATUS": suite.get("RF_WIFI_STATUS"),
+                "credential_leaks": suite.get("credential_leak_events"),
+            },
             sort_keys=True,
         ),
         severity="S2",
         passed=passed,
-        evidence={},
-        fix="ConnectivityOrchestrator security_score weighting",
-        regression="tests/test_adversarial_fuzz_starters.py",
+        evidence={"suite": suite},
+        fix="HostileNetworkSimulator digital E4 suite",
+        regression="tests/wp007/test_hostile_network_digital.py",
     )
 
 
 def _case_game_save_tamper() -> CaseResult:
-    from gunnchos_device_os.runtime.adapters import ContinuityService
-    from gunnchos_device_os.runtime.service_base import ServiceConfig
+    from gunnchos_device_os.security.wp007.game_save_integrity import run_digital_suite
 
-    # ContinuityService depends on dock/identity/display — use minimal store path
-    svc = ContinuityService(ServiceConfig(service_id="continuity", options={}))
-    try:
-        svc.on_start()
-    except Exception:
-        # If dock deps fail in isolation, exercise save dict directly
-        svc._store = {"saves": {}}
-    good = {"level": 3, "score": 100, "integrity": hashlib.sha256(b"level:3:score:100").hexdigest()}
-    svc.api_save_state("slot1", good)
-    # Tamper: change score without integrity
-    tampered = {"level": 3, "score": 99999, "integrity": good["integrity"]}
-    stored = (svc._store.get("saves") or {}).get("slot1", {}).get("payload") or {}
-    # Digital gate: verify integrity when present
-    expected = hashlib.sha256(
-        f"level:{tampered['level']}:score:{tampered['score']}".encode()
-    ).hexdigest()
-    reject = expected != tampered["integrity"]
-    passed = reject and stored.get("score") == 100
+    suite = run_digital_suite()
+    passed = (
+        suite.get("passed") is True
+        and suite.get("LOCAL_SAVE_INTEGRITY_DIGITAL") == "E4_PREPARED"
+        and suite.get("AUTHORITATIVE_MULTIPLAYER_INTEGRITY")
+        == "EXTERNAL_OR_OPERATIONS_PENDING"
+    )
     return CaseResult(
         case_id="SEC-GAME-001",
         surface="game/save",
-        preconditions="Save with integrity digest",
-        attack="Inflate score while keeping old integrity",
-        expected_safe_result="integrity mismatch detected",
+        preconditions="Authenticated local save bound to user/device/platform secret",
+        attack="Tamper score, unauthenticated digest, cross-device binding",
+        expected_safe_result="tamper quarantine + digest reject + binding fail; multiplayer EXTERNAL pending",
         actual_result=json.dumps(
-            {"reject": reject, "stored_score": stored.get("score")},
+            {
+                "LOCAL_SAVE_INTEGRITY_DIGITAL": suite.get("LOCAL_SAVE_INTEGRITY_DIGITAL"),
+                "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": suite.get(
+                    "AUTHORITATIVE_MULTIPLAYER_INTEGRITY"
+                ),
+                "passed": suite.get("passed"),
+                "cases": [c["case_id"] for c in suite.get("cases") or []],
+            },
             sort_keys=True,
         ),
         severity="S2",
         passed=passed,
-        evidence={},
-        fix="Digital integrity digest check (authoritative server E7)",
-        regression="tests/wp007/test_red_team_harness.py",
+        evidence={"suite": suite},
+        fix="GameSaveIntegrityStore HMAC binding + quarantine/backup",
+        regression="tests/wp007/test_game_save_integrity_digital.py",
     )
 
 
@@ -725,7 +690,10 @@ def run_red_team(*, write: bool = True) -> dict[str, Any]:
         "schema": "gunnchos.wp007.red_team_report.v1",
         "work_packet": "WP-007",
         "claim_boundary": CLAIM_BOUNDARY,
-        "INTERNAL_RED_TEAM_READY": internal_ready,
+        # Harness candidate only — Independent RESULT owns INTERNAL_RED_TEAM_READY token.
+        "INTERNAL_RED_TEAM_READY": False,
+        "INTERNAL_RED_TEAM_READY_CANDIDATE": internal_ready,
+        "harness_s0_s1_clear": internal_ready,
         "SECURITY_S0": len(s0),
         "SECURITY_S1": len(s1),
         "SECURITY_S2_OPEN": len(s2_fail),
@@ -755,15 +723,24 @@ def run_red_team(*, write: bool = True) -> dict[str, Any]:
             json.dumps(
                 {
                     "schema": "gunnchos.wp007.internal_red_team_readiness.v1",
-                    "INTERNAL_RED_TEAM_READY": internal_ready,
+                    "INTERNAL_RED_TEAM_READY": False,
+                    "implementer_prepared": True,
+                    "prepared_for_verifier": True,
+                    "independent_verified": False,
+                    "harness_s0_s1_clear": internal_ready,
+                    "INTERNAL_RED_TEAM_READY_CANDIDATE": internal_ready,
                     "SECURITY_S0": len(s0),
                     "SECURITY_S1": len(s1),
-                    "prepared_for_verifier": True,
                     "implementer_self_certify": False,
                     "external_pentest": "EXTERNAL_PENDING",
                     "evidence_level": "E4_TARGET",
+                    "production_ready": False,
                     "claim_boundary": CLAIM_BOUNDARY,
                     "results_path": "artifacts/wp007/RED_TEAM_RESULTS.json",
+                    "note": (
+                        "Implementer preparation only. Independent verifier owns "
+                        "INTERNAL_RED_TEAM_READY after PASS on accepted tip."
+                    ),
                 },
                 indent=2,
             )
@@ -779,6 +756,7 @@ if __name__ == "__main__":
         json.dumps(
             {
                 "INTERNAL_RED_TEAM_READY": rep["INTERNAL_RED_TEAM_READY"],
+                "INTERNAL_RED_TEAM_READY_CANDIDATE": rep["INTERNAL_RED_TEAM_READY_CANDIDATE"],
                 "SECURITY_S0": rep["SECURITY_S0"],
                 "SECURITY_S1": rep["SECURITY_S1"],
                 "cases_passed": rep["cases_passed"],

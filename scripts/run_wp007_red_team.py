@@ -17,6 +17,7 @@ def main() -> int:
     report = run_red_team(write=True)
     summary = {
         "INTERNAL_RED_TEAM_READY": report["INTERNAL_RED_TEAM_READY"],
+        "INTERNAL_RED_TEAM_READY_CANDIDATE": report["INTERNAL_RED_TEAM_READY_CANDIDATE"],
         "SECURITY_S0": report["SECURITY_S0"],
         "SECURITY_S1": report["SECURITY_S1"],
         "cases_passed": report["cases_passed"],
@@ -29,7 +30,10 @@ def main() -> int:
     print(json.dumps(summary, indent=2))
     if report["SECURITY_S0"] or report["SECURITY_S1"]:
         return 1
-    if not report["INTERNAL_RED_TEAM_READY"]:
+    # Exit on harness candidate, not Independent token (implementer must not self-certify).
+    if not report["INTERNAL_RED_TEAM_READY_CANDIDATE"]:
+        return 1
+    if not report["all_cases_passed"]:
         return 1
     return 0
 

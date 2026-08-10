@@ -470,18 +470,83 @@ class ContinuityService(RuntimeService):
             self.persist()
         return {"path": path, "state": files.get(path), "tracked": path in files}
 
+    def _save_integrity_store(self):
+        from gunnchos_device_os.security.wp007.game_save_integrity import (
+            GameSaveIntegrityStore,
+        )
+
+        store = getattr(self, "_save_integrity", None)
+        if store is None:
+            secret = self._store.get("_platform_save_secret")
+            if not isinstance(secret, str) or len(secret) < 32:
+                import secrets as _secrets
+
+                secret = _secrets.token_hex(32)
+                self._store["_platform_save_secret"] = secret
+            store = GameSaveIntegrityStore(
+                user_id=str(self._store.get("save_user_id") or "local-user"),
+                device_id=str(self._store.get("save_device_id") or "local-device"),
+                platform_secret=bytes.fromhex(secret)
+                if all(c in "0123456789abcdef" for c in secret)
+                else secret.encode(),
+            )
+            # Rehydrate prior sealed saves
+            for slot, rec in (self._store.get("saves") or {}).items():
+                payload = rec.get("payload") if isinstance(rec, dict) else None
+                if isinstance(payload, dict):
+                    store.saves[slot] = payload
+            self._save_integrity = store
+        return store
+
     def api_save_state(self, save_id: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         saves = dict(self._store.get("saves") or {})
         if payload is not None:
-            saves[save_id] = {"payload": payload, "at": time.time()}
+            store = self._save_integrity_store()
+            sealed = store.save(save_id, payload)
+            saves[save_id] = {
+                "payload": sealed["sealed"],
+                "at": time.time(),
+                "authenticated": True,
+            }
             self._store["saves"] = saves
             self.persist()
+            return {
+                "save_id": save_id,
+                "state": saves.get(save_id),
+                "found": True,
+                "authenticated": True,
+                "LOCAL_SAVE_INTEGRITY_DIGITAL": "E4_PREPARED",
+                "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING",
+            }
         return {"save_id": save_id, "state": saves.get(save_id), "found": save_id in saves}
 
     def api_resume(self, save_id: str | None = None) -> dict[str, Any]:
         snap = self.api_snapshot()
-        save = (self._store.get("saves") or {}).get(save_id) if save_id else None
-        return {"resumed": True, "snapshot": snap, "save": save, "session_id": self._store.get("session_id")}
+        if not save_id:
+            return {
+                "resumed": True,
+                "snapshot": snap,
+                "save": None,
+                "session_id": self._store.get("session_id"),
+            }
+        store = self._save_integrity_store()
+        loaded = store.load(save_id)
+        if not loaded.get("ok"):
+            return {
+                "resumed": False,
+                "snapshot": snap,
+                "save": None,
+                "session_id": self._store.get("session_id"),
+                "integrity": loaded,
+                "quarantined": loaded.get("quarantined"),
+            }
+        return {
+            "resumed": True,
+            "snapshot": snap,
+            "save": {"payload": loaded.get("payload"), "at": time.time()},
+            "session_id": self._store.get("session_id"),
+            "integrity": {"ok": True},
+        }
 
 
 class IdentityService(RuntimeService):
@@ -717,13 +782,26 @@ class UpdaterService(RuntimeService):
         return {"channel": self._store.get("channel", "dev")}
 
     def api_metadata(self, version: str = "0.1.1") -> dict[str, Any]:
-        meta = {
+        from gunnchos_device_os.security.wp007 import update_trust
+
+        digest = "a" * 64
+        security_version = int(self._store.get("security_version") or 1)
+        meta_body = {
             "channel": self._store.get("channel", "dev"),
-            "version": version,
             "size_bytes": 1024 * 1024,
-            "digest_sha256": "a" * 64,
+        }
+        signed = update_trust.sign_update_package(
+            version=version,
+            security_version=security_version,
+            digest_sha256=digest,
+            metadata=meta_body,
+        )
+        meta = {
+            **signed,
             "signature_valid_dev": True,
             "production_keys_used": False,
+            "PRODUCTION_TRUST_ROOT": update_trust.PRODUCTION_TRUST_STATUS,
+            "trust_metadata": update_trust.trust_metadata(),
         }
         self._store["metadata"] = meta
         self.persist()
@@ -731,18 +809,38 @@ class UpdaterService(RuntimeService):
 
     def api_download(self, version: str = "0.1.1") -> dict[str, Any]:
         meta = self.api_metadata(version)
-        pkg = {"version": version, "path": f"/var/lib/gunnchos/ota/{version}.pkg", "downloaded": True, **meta}
+        pkg = {
+            "version": version,
+            "path": f"/var/lib/gunnchos/ota/{version}.pkg",
+            "downloaded": True,
+            **meta,
+        }
         self._store["package"] = pkg
+        self._store["verified"] = False
         self.persist()
         return pkg
 
-    def api_verify(self) -> dict[str, Any]:
+    def api_verify(self, force_verified: bool | None = None) -> dict[str, Any]:
+        from gunnchos_device_os.security.wp007 import update_trust
+
         pkg = self._store.get("package")
-        if not pkg:
-            return {"verified": False, "reason": "no_package"}
-        self._store["verified"] = True
+        active_sv = 1
+        try:
+            active = self._ota.slots[self._ota.active_slot.value]
+            active_sv = int(active.security_version)
+        except Exception:
+            active_sv = int(self._store.get("security_version") or 1)
+        result = update_trust.verify_update_package(
+            pkg if isinstance(pkg, dict) else None,
+            active_security_version=active_sv,
+            force_verified=force_verified,
+        )
+        out = result.to_dict()
+        self._store["verified"] = bool(result.verified)
         self.persist()
-        return {"verified": True, "digest_sha256": pkg.get("digest_sha256"), "production_keys_used": False}
+        if isinstance(pkg, dict) and result.verified:
+            out["digest_sha256"] = pkg.get("digest_sha256")
+        return out
 
     def api_stage(self) -> dict[str, Any]:
         if not self._store.get("verified"):
