@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.competitor_readiness_gap_matrix.v1",
-  "work_packet": "WP-003R",
+  "work_packet": "WP-003R.1",
   "generated_by": "implementer-wp-003",
   "generated_at": "2026-08-10T18:24:17Z",
   "doctrine": {
@@ -30,7 +30,12 @@
       "human_gap": "E6 preference/usability pending",
       "external_benchmarking_gap": "No competitor timing/fidelity measurements recorded",
       "competitor_score": null,
-      "notes": "Supporting Phase XI J-STU-001 is same-stream evidence only"
+      "notes": "Supporting Phase XI J-STU-001 is same-stream evidence only",
+      "journey_refs": [
+        "GOLDEN-01"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "local_ai_help",
@@ -44,10 +49,18 @@
       "current_evidence_level": "E4",
       "current_depth_level": "D6",
       "digital_gap": "Independent PASS on tip with real llama; human tutoring E6 pending",
-      "physical_gap": "E5 pending",
-      "human_gap": "E6 tutoring usefulness pending",
-      "external_benchmarking_gap": "No head-to-head quality measurements",
-      "competitor_score": null
+      "physical_gap": "E5 HW perf pending",
+      "human_gap": "E6 pending",
+      "external_benchmarking_gap": "No competitor tutoring quality measurements",
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-08"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "recreation_resume",
@@ -64,7 +77,13 @@
       "physical_gap": "E5 handheld/dock SI pending",
       "human_gap": "E6 feel/preference pending",
       "external_benchmarking_gap": "No competitor resume latency measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-01",
+        "GOLDEN-05"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "document_integrity",
@@ -81,7 +100,13 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor corruption/fidelity measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-01",
+        "GOLDEN-02"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "offline_edit",
@@ -97,7 +122,12 @@
       "physical_gap": "E5 radio/Wi-Fi lab pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor offline duration/sync measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-02"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "conflict_safe_sync",
@@ -113,7 +143,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 conflict UX preference pending",
       "external_benchmarking_gap": "No competitor conflict-resolution measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-02"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "no_silent_overwrite",
@@ -129,7 +164,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor loss-rate measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-02"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "creator_toolchain",
@@ -141,12 +181,21 @@
       "benchmark_reference": "macOS/Windows/Linux creator laptops (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned on Lab dual-output + executed toolchain; E5 physical panels PENDING",
       "physical_gap": "E5 DS-XL pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor build-time measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-06"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json",
+        "gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "package_install_run",
@@ -162,7 +211,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor package reliability measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-03"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "ai_code_assist_api",
@@ -177,10 +231,18 @@
       "current_evidence_level": "E4",
       "current_depth_level": "D6",
       "digital_gap": "Independent PASS on tip with real llama; human tutoring E6 pending",
-      "physical_gap": "E5 pending",
+      "physical_gap": "E5 HW perf pending",
       "human_gap": "E6 pending",
-      "external_benchmarking_gap": "No competitor assist quality measurements",
-      "competitor_score": null
+      "external_benchmarking_gap": "No competitor measurements",
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-08"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "dock_undock_continuity",
@@ -193,11 +255,19 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
       "current_depth_level": "D6",
-      "digital_gap": "Independent digital dock lifecycle PASS; physical SI E5 pending",
-      "physical_gap": "E5 dock SI pending",
+      "digital_gap": "Independent digital dock lifecycle PASS; privileged net/audio E4 reference remediated in WP-003R.1 pending verifier; physical SI E5 pending",
+      "physical_gap": "E5 physical dock SI pending",
       "human_gap": "E6 pending",
-      "external_benchmarking_gap": "No competitor dock transition measurements",
-      "competitor_score": null
+      "external_benchmarking_gap": "No competitor dock continuity measurements",
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-04"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-04.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "office_docs_email_calendar",
@@ -213,7 +283,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor fidelity measurements; MS Office perfect fidelity not claimed",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-04"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "print_export",
@@ -229,7 +304,12 @@
       "physical_gap": "E5 physical printer pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor print measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-04"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "handheld_game_checkpoint",
@@ -245,7 +325,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 game feel pending",
       "external_benchmarking_gap": "No competitor checkpoint measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-05"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "docked_work_mode",
@@ -261,7 +346,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor hybrid-mode measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-05"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "game_state_resume",
@@ -277,7 +367,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor resume measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-05"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "dual_screen_layout",
@@ -288,12 +383,20 @@
       "benchmark_reference": "Dual-screen developer devices (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned on Lab dual-output window placement; E5 physical panels PENDING",
       "physical_gap": "E5 DS-XL pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor dual-screen productivity measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-06"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "ide_terminal_preview",
@@ -304,12 +407,20 @@
       "benchmark_reference": "IDE + terminal + preview layouts on laptops (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned for IDE+terminal+preview layout objects; E5 panels PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor layout measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-06"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "layout_persistence",
@@ -320,12 +431,20 @@
       "benchmark_reference": "Desktop window managers / Spaces (category)",
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned for layout persistence on Lab dual-output; E5 panels PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-06"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "ring_document_browser_game",
@@ -335,13 +454,22 @@
       "competitor_category": "spatial_ring_or_wearable_input",
       "benchmark_reference": "Wearable/spatial pointer products (category)",
       "strategy": "MUST_EXCEED",
-      "current_evidence_level": "E3",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS via Ring stack app-state mutation; E5/E6 physical pose PENDING",
+      "current_evidence_level": "E4",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned via Ring stack app-state mutation; E5/E6 physical pose PENDING",
       "physical_gap": "E5 ring hardware pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor ring accuracy measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-07"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-07.scorecard.json",
+        "gunnchos_device_os/device_lab/scenarios/ring_real_input.py"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "target_confidence_safety",
@@ -351,13 +479,21 @@
       "competitor_category": "safe_gesture_input_gating",
       "benchmark_reference": "Gesture/voice confirmation safety patterns (category)",
       "strategy": "MUST_EXCEED",
-      "current_evidence_level": "E3",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS via Ring stack app-state mutation; E5/E6 physical pose PENDING",
+      "current_evidence_level": "E4",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned for confidence gating (low_confidence not delivered); E5/E6 pose PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor false-accept measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-07"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-07.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "conventional_input_fallback",
@@ -367,13 +503,21 @@
       "competitor_category": "input_fallback_accessibility",
       "benchmark_reference": "Keyboard/mouse/trackpad fallback (category)",
       "strategy": "MUST_MATCH",
-      "current_evidence_level": "E3",
-      "current_depth_level": "D5",
-      "digital_gap": "Independent D6 PASS via Ring stack app-state mutation; E5/E6 physical pose PENDING",
+      "current_evidence_level": "E4",
+      "current_depth_level": "D6",
+      "digital_gap": "Independent E4/D6 earned with conventional HID fallback path available; E5/E6 pose PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-07"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-07.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "local_ai_tutoring",
@@ -386,10 +530,18 @@
       "current_evidence_level": "E4",
       "current_depth_level": "D6",
       "digital_gap": "Independent PASS on tip with real llama; human tutoring E6 pending",
-      "physical_gap": "E5 pending",
-      "human_gap": "E6 learning effectiveness pending",
-      "external_benchmarking_gap": "No competitor tutoring outcome measurements",
-      "competitor_score": null
+      "physical_gap": "E5 HW perf pending",
+      "human_gap": "E6 pending",
+      "external_benchmarking_gap": "No competitor tutoring quality measurements",
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-08"
+      ],
+      "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+        "quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json"
+      ],
+      "independent_verification": "PASS"
     },
     {
       "capability_id": "privacy_isolation",
@@ -406,7 +558,13 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 trust perception pending",
       "external_benchmarking_gap": "No competitor privacy measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-08",
+        "GOLDEN-10"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "cloud_denied_offline_ok",
@@ -422,7 +580,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor offline success measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-08"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "ab_or_equivalent_update",
@@ -438,7 +601,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor rollback timing measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-09"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "health_fail_rollback",
@@ -454,7 +622,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-09"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "user_data_intact",
@@ -470,7 +643,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor data-loss measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-09"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "trusted_device_identity",
@@ -486,7 +664,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-10"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "session_device_revoke",
@@ -502,7 +685,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor revoke-latency measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-10"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "private_data_unavailable_after_revoke",
@@ -518,7 +706,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-10"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "local_recovery_path",
@@ -534,7 +727,12 @@
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [
+        "GOLDEN-10"
+      ],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "apple_only_services",
@@ -548,7 +746,10 @@
       "physical_gap": "N/A",
       "human_gap": "N/A",
       "external_benchmarking_gap": "N/A",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [],
+      "evidence_refs": [],
+      "independent_verification": null
     },
     {
       "capability_id": "closed_proprietary_lock_in",
@@ -562,44 +763,57 @@
       "physical_gap": "N/A",
       "human_gap": "N/A",
       "external_benchmarking_gap": "N/A",
-      "competitor_score": null
+      "competitor_score": null,
+      "journey_refs": [],
+      "evidence_refs": [],
+      "independent_verification": null
     }
   ],
   "independent_verifier_review": {
     "status": "ACCEPT_WITH_UPDATES",
-    "reviewed_at": "2026-08-10T18:24:17Z",
-    "tip_sha": "a65ff495bf9855a4f8df88beae2a8c5241ccd8af",
+    "reviewed_at": "2026-08-10T18:56:02Z",
+    "tip_sha": "67e10ea1d329703d4764fb3799c5244e9781cd97",
+    "accepted_main_sha": "0449cbb64da416c3b702dcd880d76946e96eb16e",
     "fabricated_scores_found": false,
     "competitor_score_null_ok": true,
-    "notes": "Updated E/D for G04/G06/G07/G08 residuals; no fabricated competitor measurements.",
+    "notes": "Aligned to VP-003R competitor_matrix_review; WP-003R.1 implementer consistency (no Independent PASS claim by implementer).",
     "per_capability_delta": [
       {
         "capability": "office_dock_workflow",
+        "mapped_to": "dock_undock_continuity",
         "new_E": "E4",
         "new_D": "D6",
-        "remaining": "E5 physical dock SI"
+        "remaining": "E5 physical dock SI; GJ-DEFECT-005 privileged net/audio pending verifier"
       },
       {
         "capability": "dsxl_dual_screen",
+        "mapped_to": "dual_screen_layout+creator_toolchain+ide_terminal_preview+layout_persistence",
         "new_E": "E4",
-        "new_D": "D5 PARTIAL",
-        "remaining": "digital D6 gap GJ-DEFECT-006; E5 panels"
+        "new_D": "D6",
+        "remaining": "E5 panels"
       },
       {
         "capability": "ring_spatial_input",
-        "new_E": "E3",
-        "new_D": "D5 FAIL_D6",
-        "remaining": "GJ-DEFECT-007; E5/E6 pose"
+        "mapped_to": "ring_document_browser_game+target_confidence_safety+conventional_input_fallback",
+        "new_E": "E4",
+        "new_D": "D6",
+        "remaining": "E5/E6 physical pose"
       },
       {
         "capability": "local_ai_tutoring",
+        "mapped_to": "local_ai_tutoring",
         "new_E": "E4",
         "new_D": "D6",
-        "remaining": "E6 human quality; E5 HW perf; E7 competitor gap"
+        "remaining": "E6 human quality; E5 HW perf"
       }
     ]
   },
-  "updated_at": "2026-08-10T18:56:02Z",
-  "updated_by": "independent_verifier_vp003r",
-  "vp003r_note": "Digital gaps for DS-XL/Ring updated after Independent PASS; competitor_score remain null."
+  "updated_at": "2026-08-10T19:48:54Z",
+  "updated_by": "implementer-wp003r1-matrix-consistency",
+  "vp003r_note": "Capability E/D derived from VP-003R Independent journey evidence. Journey D6 does not auto-promote unrelated capabilities. competitor_score remain null. WP-003R.1 implementer consistency; Independent PASS left to verifier.",
+  "consistency": {
+    "COMPETITOR_MATRIX_CONTRADICTIONS_BEFORE": 7,
+    "COMPETITOR_MATRIX_CONTRADICTIONS": 0,
+    "validator": "gunnchos_device_os.golden_journeys.scorecard.validate_competitor_matrix_consistency"
+  }
 }

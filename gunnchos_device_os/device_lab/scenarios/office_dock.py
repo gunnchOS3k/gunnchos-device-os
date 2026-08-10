@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 from typing import Any
@@ -174,6 +175,15 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         and (o.get("role") == "external" or str(o.get("id", "")).startswith("external"))
         for o in session.display.outputs
     )
+    # Unprivileged smoke may use logical net/audio FALLBACK_ONLY.
+    # Privileged E4 G04 reference requires real packet + audio sink proof.
+    require_e4_ref = (
+        session.network.mode == "netns"
+        or bool(net.get("e4_reference_proof"))
+        or bool(aud.get("e4_reference_proof"))
+        or os.environ.get("GUNNCHDEVICE_LAB_REQUIRE_E4_NET_AUDIO", "").lower()
+        in {"1", "true", "yes"}
+    )
     dock_attach_ok = (
         disp["ok"]
         and net.get("ethernet_via_dock")
@@ -181,6 +191,13 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         and external_present
         and inp.get("profile") == "keyboard_mouse_desktop"
     )
+    if require_e4_ref:
+        if not net.get("e4_reference_proof"):
+            errors.append("network_not_e4_reference_proof")
+            dock_attach_ok = False
+        if not aud.get("e4_reference_proof"):
+            errors.append("audio_not_e4_reference_proof")
+            dock_attach_ok = False
     if not dock_attach_ok:
         errors.append("dock_attach_failed")
     eng.record(
@@ -188,7 +205,20 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         before,
         "virtual_dock",
         "external+eth+audio+hid",
-        {"disp": disp, "net": net, "aud": aud, "inp": inp, "boolean_only": False},
+        {
+            "disp": disp,
+            "net": net,
+            "aud": aud,
+            "inp": inp,
+            "boolean_only": False,
+            "network_mode": net.get("mode"),
+            "audio_mode": aud.get("mode"),
+            "network_e4_reference_proof": bool(net.get("e4_reference_proof")),
+            "audio_e4_reference_proof": bool(aud.get("e4_reference_proof")),
+            "VF2_UNPRIVILEGED_FALLBACK": not bool(
+                net.get("e4_reference_proof") and aud.get("e4_reference_proof")
+            ),
+        },
         dock_attach_ok,
     )
 
@@ -237,6 +267,9 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         undock_ok,
     )
 
+    net_e4 = bool(net.get("e4_reference_proof"))
+    aud_e4 = bool(aud.get("e4_reference_proof"))
+    vf2_golden = net_e4 and aud_e4
     ok = dock_attach_ok and work_ok and undock_ok and len(errors) == 0
     result = {
         "ok": ok,
@@ -249,6 +282,28 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         "print": {"ok": printer.get("ok"), "physical_printer": False},
         "undock_ok": undock_ok,
         "boolean_dock_flag_used_as_primary": False,
+        "network_backend": {
+            "mode": net.get("mode"),
+            "e4_reference_proof": net_e4,
+            "packet_transfer": net.get("packet_transfer"),
+            "FALLBACK_ONLY": bool(net.get("FALLBACK_ONLY")) or not net_e4,
+            "NOT_E4_REFERENCE_PROOF": not net_e4,
+        },
+        "audio_backend": {
+            "mode": aud.get("mode"),
+            "e4_reference_proof": aud_e4,
+            "sink_name": aud.get("sink_name"),
+            "stream_probe": aud.get("stream_probe"),
+            "FALLBACK_ONLY": bool(aud.get("FALLBACK_ONLY")) or not aud_e4,
+            "NOT_E4_REFERENCE_PROOF": not aud_e4,
+        },
+        "VF2_REQUIRED_GOLDEN_BACKENDS": "PASS" if vf2_golden else "FALLBACK_ONLY",
+        "VF2_UNPRIVILEGED_FALLBACK": "AVAILABLE",
+        "VF3": "MODELED_ONLY",
+        "VF4": "PHYSICAL_PENDING",
+        "VF5": "PHYSICAL_PENDING",
+        "VF6": "PHYSICAL_PENDING",
+        "SILICON_EXACT_EMULATION": False,
         "errors": errors,
         "steps": eng.steps,
         "PHYSICAL_DOCK_VALIDATION": "PENDING",

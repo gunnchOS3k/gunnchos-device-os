@@ -7,10 +7,12 @@ on:
     paths:
       - "quality/golden_journeys/**"
       - "gunnchos_device_os/golden_journeys/**"
+      - "gunnchos_device_os/device_lab/**"
       - "scripts/run_golden_journey_subset.py"
       - "scripts/validate_golden_journey_scorecards.py"
       - "scripts/recommend_merge_golden.py"
       - "tests/test_golden_journey_infrastructure.py"
+      - "tests/device_lab/**"
       - ".github/workflows/golden-journeys.yml"
   workflow_dispatch:
     inputs:
@@ -116,3 +118,128 @@ jobs:
             artifacts/golden_journeys/
             quality/golden_journeys/runs/
             quality/golden_journeys/scorecards/
+
+  g04-privileged-net-audio:
+    name: G04 privileged netns + virtual audio (E4 reference)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Rootful Linux reference job — must actually execute for GJ-DEFECT-005 E4 proof.
+    # Unprivileged smoke remains FALLBACK_ONLY / NOT_E4_REFERENCE_PROOF.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install net + audio tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            iproute2 iputils-ping \
+            pulseaudio pulseaudio-utils \
+            pipewire pipewire-pulse pipewire-audio-client-libraries \
+            alsa-utils
+          python -m pip install -U pip pytest pyyaml
+      - name: Start PulseAudio for null-sink lifecycle
+        run: |
+          set -euo pipefail
+          # Rootful reference: start a Pulse daemon the privileged job can talk to.
+          # If Pulse fails, snd-aloop path in AudioBackend is the accepted equivalent.
+          sudo pulseaudio --check 2>/dev/null || sudo pulseaudio --system --daemonize=true --exit-idle-time=-1 --disallow-exit || true
+          pulseaudio --check 2>/dev/null || pulseaudio --start --exit-idle-time=-1 || true
+          sleep 1
+          pactl info 2>/dev/null | head -20 || sudo pactl info 2>/dev/null | head -20 || true
+          # Prefer ALSA loopback as durable rootful fallback on runners without session Pulse.
+          sudo modprobe snd-aloop || true
+          cat /proc/asound/cards || true
+      - name: Run privileged G04 netns + audio reference proof
+        env:
+          PYTHONPATH: .:src
+          GUNNCHDEVICE_LAB_NETNS: "1"
+          GUNNCHDEVICE_LAB_AUDIO_REAL: "1"
+          GUNNCHDEVICE_LAB_PRIVILEGED_NET: "1"
+          GUNNCHDEVICE_LAB_PRIVILEGED_AUDIO: "1"
+          GUNNCHDEVICE_LAB_REQUIRE_E4_NET_AUDIO: "1"
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/device_lab/g04_privileged
+          # Network + audio backends must run as root for netns / module paths.
+          sudo -E env PYTHONPATH=.:src \
+            GUNNCHDEVICE_LAB_NETNS=1 \
+            GUNNCHDEVICE_LAB_AUDIO_REAL=1 \
+            GUNNCHDEVICE_LAB_PRIVILEGED_NET=1 \
+            GUNNCHDEVICE_LAB_PRIVILEGED_AUDIO=1 \
+            GUNNCHDEVICE_LAB_REQUIRE_E4_NET_AUDIO=1 \
+            XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" \
+            HOME="$HOME" \
+            python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          from gunnchos_device_os.device_lab.hw_backends.network import NetworkBackend
+          from gunnchos_device_os.device_lab.hw_backends.audio import AudioBackend
+          from gunnchos_device_os.device_lab.scenarios.office_dock import run
+
+          root = Path('.').resolve()
+          net = NetworkBackend()
+          start = net.start()
+          assert start['mode'] == 'netns', start
+          attach = net.dock_ethernet_attach()
+          assert attach.get('e4_reference_proof') is True, attach
+          assert (attach.get('packet_transfer') or {}).get('ok') is True, attach
+          det = net.dock_ethernet_detach()
+          assert det.get('ok') is True, det
+          assert (det.get('cleanup') or {}).get('cleanup_verified') is True, det
+
+          # Audio may need non-root Pulse; try root first then fall back to user pulse via sudo -u.
+          aud = AudioBackend()
+          astart = aud.start()
+          aattach = aud.dock_attach()
+          if not aattach.get('e4_reference_proof'):
+              # Retry without forcing failure yet — office_dock will re-run under same env.
+              print('audio_root_attempt', json.dumps(aattach, default=str)[:800])
+          else:
+              adet = aud.dock_detach()
+              assert adet.get('disappeared') is True or adet.get('ok') is True, adet
+
+          result = run(repo_root=root)
+          out = root / 'artifacts/device_lab/g04_privileged/result.json'
+          out.write_text(json.dumps(result, indent=2, default=str) + '\n', encoding='utf-8')
+          print('VF2_REQUIRED_GOLDEN_BACKENDS', result.get('VF2_REQUIRED_GOLDEN_BACKENDS'))
+          print('network', result.get('network_backend'))
+          print('audio', result.get('audio_backend'))
+          assert result['ok'] is True, result.get('errors')
+          assert result['network_backend']['e4_reference_proof'] is True, result['network_backend']
+          assert result['audio_backend']['e4_reference_proof'] is True, result['audio_backend']
+          assert result['VF2_REQUIRED_GOLDEN_BACKENDS'] == 'PASS'
+          assert result['VF2_UNPRIVILEGED_FALLBACK'] == 'AVAILABLE'
+          assert result['VF3'] == 'MODELED_ONLY'
+          assert result['VF4'] == 'PHYSICAL_PENDING'
+          assert result['SILICON_EXACT_EMULATION'] is False
+          print('G04 privileged E4 net+audio reference proof PASS (implementer; Independent pending)')
+          PY
+      - name: Unprivileged fallback remains available (NOT E4 reference)
+        env:
+          PYTHONPATH: .:src
+        run: |
+          python3 - <<'PY'
+          from gunnchos_device_os.device_lab.hw_backends.network import NetworkBackend
+          from gunnchos_device_os.device_lab.hw_backends.audio import AudioBackend
+          net = NetworkBackend()
+          net.start()
+          a = net.dock_ethernet_attach()
+          assert a.get('FALLBACK_ONLY') is True
+          assert a.get('e4_reference_proof') is False
+          assert a.get('NOT_E4_REFERENCE_PROOF') is True
+          aud = AudioBackend()
+          aud.start()
+          b = aud.dock_attach()
+          assert b.get('FALLBACK_ONLY') is True
+          assert b.get('e4_reference_proof') is False
+          print('unprivileged FALLBACK_ONLY ok')
+          PY
+      - name: Upload privileged evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g04-privileged-net-audio-evidence
+          path: artifacts/device_lab/g04_privileged/

@@ -1,11 +1,10 @@
-# WP-003 Golden Journey Defect Backlog
+# WP-003 / WP-003R.1 Golden Journey Defect Backlog
 
-## Independent VP-003 re-run (PR #81 tip `6ffab227`)
+## Independent VP-003R (accepted main tip)
 
-- **DIGITAL_INDEPENDENT_V1: PASS**
-- **Full physical/human V1: FAIL** (honesty PARTIALs remain)
-- Digitally remediated and independently confirmed: G01 (in-tree Anime/BeatLink), G02 (office+LMS offline D6), G10 (fleet MDM wipe D6)
-- Remaining S2: G04/G06/G07 PHYSICAL_PENDING; G08 HUMAN_VALIDATION_PENDING; G01 Pedestrian Godot sibling fail-closed
+- Prior Independent digital residuals G06/G07/G08 closed on tip ⊆ main (#85)
+- WP-003R.1 implementer integrity: CI claim_boundary fix; GJ-DEFECT-005 privileged net/audio remediation **pending verifier**
+- Remaining physical/human PARTIALs unchanged
 
 ## Remaining PARTIAL by design (do not fake-close)
 
@@ -16,4 +15,10 @@
 | VP003-S2-G07-PHYSICAL-RING | GOLDEN-07 | PHYSICAL_PENDING (E5) |
 | VP003-S2-G08-CITATION-HUMAN | GOLDEN-08 | HUMAN_VALIDATION_PENDING (E6) |
 
-Honesty: `frontier_parity_claimed=false`. No fabricated competitor scores.
+## GJ-DEFECT-005 (WP-003R.1)
+
+- Status: `REMEDIATED_DIGITAL_PATH` (proposed `CLOSED_INDEPENDENT_PASS` **pending verifier**)
+- Privileged CI job: netns+veth **actual packet transfer** + PipeWire/Pulse/ALSA virtual audio lifecycle
+- Unprivileged path: `FALLBACK_ONLY` / `NOT_E4_REFERENCE_PROOF` (available, not counted as E4 G04 reference)
+
+Honesty: `frontier_parity_claimed=false`. No fabricated competitor scores. Independent PASS left to verifier.

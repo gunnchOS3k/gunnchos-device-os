@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.golden_journeys.constants import CLAIM_BOUNDARY, SCHEMA_SCORECARD
+
+_EVIDENCE_RANK = {"E0": 0, "E1": 1, "E2": 2, "E3": 3, "E4": 4, "E5": 5, "E6": 6, "E7": 7}
 
 
 def _root() -> Path:
@@ -34,6 +37,84 @@ def scorecard_path(journey_id: str, root: Path | None = None) -> Path:
 
 def load_scorecard(journey_id: str, root: Path | None = None) -> dict[str, Any]:
     return json.loads(scorecard_path(journey_id, root).read_text(encoding="utf-8"))
+
+
+def validate_competitor_matrix_consistency(
+    root: Path | None = None,
+) -> dict[str, Any]:
+    """Fail on narrative vs structured E/D/IV contradictions in the competitor matrix.
+
+    Does not claim Independent PASS. Implementer/CI integrity guard only.
+    """
+    root = root or _root()
+    path = root / "quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json"
+    errors: list[str] = []
+    if not path.exists():
+        return {"ok": False, "errors": ["missing_competitor_matrix"], "contradiction_count": 1}
+
+    m = json.loads(path.read_text(encoding="utf-8"))
+    for cap in m.get("capabilities", []):
+        cid = cap.get("capability_id") or "unknown"
+        depth = cap.get("current_depth_level")
+        evid = cap.get("current_evidence_level")
+        iv = cap.get("independent_verification")
+        blob = json.dumps(cap)
+        digital = str(cap.get("digital_gap") or "")
+
+        # Narrative claims of earned D6 PASS vs structured depth != D6
+        # Do NOT flag "needs independent D6 verification" / pending language.
+        claims_d6_pass = bool(
+            re.search(
+                r"Independent\s+(?:E4/)?D6\s+(?:PASS|earned)|Independent\s+D6\s+PASS|\bD6\s+PASS\b",
+                blob,
+                re.I,
+            )
+        ) and not re.search(
+            r"needs independent D6|pending independent D6|D6 verification pending|not yet .*D6",
+            blob,
+            re.I,
+        )
+        if claims_d6_pass and depth != "D6":
+            errors.append(f"matrix_narrative_d6_vs_depth:{cid}:{depth}")
+
+        # Narrative E4 earned/PASS vs structured evidence < E4
+        if re.search(
+            r"Independent E4/D6 earned|Independent E4\b|Independent digital .* PASS|"
+            r"Independent PASS on tip|Independent digital dock lifecycle PASS",
+            digital,
+            re.I,
+        ):
+            if _EVIDENCE_RANK.get(str(evid), -1) < _EVIDENCE_RANK["E4"]:
+                if not re.search(r"\bnot yet\b|\bneeds\b|\bpending\b", digital, re.I):
+                    errors.append(f"matrix_narrative_e4_vs_evidence:{cid}:{evid}")
+
+        if iv in {"PASS", "PASS_WITH_LIMITATIONS"} and not cap.get("evidence_refs"):
+            errors.append(f"matrix_iv_pass_without_evidence_refs:{cid}")
+
+        if cap.get("competitor_score") is not None:
+            if not cap.get("benchmark_reference") or "No competitor" in str(
+                cap.get("external_benchmarking_gap") or ""
+            ):
+                errors.append(f"matrix_competitor_score_without_benchmark:{cid}")
+
+        # Physical claims from VF1-3 / digital-only paths are invalid
+        phys = str(cap.get("physical_gap") or "")
+        if re.search(r"\bPHYSICAL_(?:PASS|VALIDATED|COMPLETE)\b", phys, re.I):
+            if _EVIDENCE_RANK.get(str(evid), -1) < _EVIDENCE_RANK["E5"]:
+                errors.append(f"matrix_physical_from_digital_only:{cid}")
+
+        # Human preference without E6
+        human = str(cap.get("human_gap") or "")
+        if re.search(r"human (?:PASS|validated|complete)|preference measured", human, re.I):
+            if _EVIDENCE_RANK.get(str(evid), -1) < _EVIDENCE_RANK["E6"]:
+                errors.append(f"matrix_human_preference_without_e6:{cid}")
+
+    return {
+        "ok": len(errors) == 0,
+        "errors": errors,
+        "contradiction_count": len(errors),
+        "COMPETITOR_MATRIX_CONTRADICTIONS": len(errors),
+    }
 
 
 def validate_scorecards(root: Path | None = None) -> dict[str, Any]:
@@ -117,12 +198,17 @@ def validate_scorecards(root: Path | None = None) -> dict[str, Any]:
             if cap.get("competitor_score") is not None:
                 # Explicitly forbid fabricated scores in this implementer packet
                 errors.append(f"fabricated_or_unexpected_competitor_score:{cap.get('capability_id')}")
+        matrix_report = validate_competitor_matrix_consistency(root=root)
+        errors.extend(matrix_report["errors"])
 
     return {
         "ok": len(errors) == 0,
         "errors": errors,
         "scorecard_count": len(cards),
         "independent_verification_claimed": False,
+        "COMPETITOR_MATRIX_CONTRADICTIONS": sum(
+            1 for e in errors if e.startswith("matrix_")
+        ),
     }
 
 
