@@ -67,7 +67,7 @@
       "severity": "S1",
       "title": "Device Lab start_session allowed work path escape",
       "status": "FIXED",
-      "fix": "contain work under artifacts/device_lab/instances"
+      "fix": "contain work under artifacts/device_lab/instances via is_relative_to; explicit register_lab_work_root for approved pytest/lab temps (WP007-IV-DEF-001 CI adaptation)"
     },
     {
       "id": "WP007-DEF-009",

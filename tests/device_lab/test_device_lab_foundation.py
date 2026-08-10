@@ -110,14 +110,24 @@ def test_deterministic_tutor_not_real_model_d6():
 
 
 def test_session_start_stop_and_atomic_scenarios(tmp_path):
-    from gunnchos_device_os.device_lab.session import start_session, get_session, stop_session
+    from gunnchos_device_os.device_lab.session import (
+        clear_lab_work_roots,
+        get_session,
+        register_lab_work_root,
+        start_session,
+        stop_session,
+    )
     from gunnchos_device_os.device_lab.scenarios.engine import run_scenario
 
-    started = start_session("handheld_docked", repo_root=ROOT, work=tmp_path / "inst")
-    sess = get_session(started["instance_id"])
-    assert sess.running
-    stop = stop_session(started["instance_id"])
-    assert stop["ok"]
+    register_lab_work_root(tmp_path, repo_root=ROOT)
+    try:
+        started = start_session("handheld_docked", repo_root=ROOT, work=tmp_path / "inst")
+        sess = get_session(started["instance_id"])
+        assert sess.running
+        stop = stop_session(started["instance_id"])
+        assert stop["ok"]
+    finally:
+        clear_lab_work_roots()
 
     r = run_scenario("dock_attach", profile_id="handheld_docked", repo_root=ROOT)
     assert r["ok"] is True

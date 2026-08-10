@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -23,6 +24,63 @@ from gunnchos_device_os.device_lab.virtualization.backend import select_backend
 
 
 _INSTANCES: dict[str, "LabSession"] = {}
+# Explicit allowlist for approved lab work roots (e.g. pytest tmp_path).
+# Host escape outside instances + registered roots remains denied (SEC-LAB-001).
+_APPROVED_WORK_ROOTS: set[Path] = set()
+
+
+def instances_root(repo_root: Path) -> Path:
+    return (Path(repo_root) / "artifacts" / "device_lab" / "instances").resolve()
+
+
+def lab_artifact_root(repo_root: Path) -> Path:
+    return (Path(repo_root) / "artifacts" / "device_lab").resolve()
+
+
+def _is_under(path: Path, root: Path) -> bool:
+    try:
+        return path == root or path.is_relative_to(root)
+    except (OSError, ValueError):
+        return False
+
+
+def lab_work_root_policy_ok(root: Path, *, repo_root: Path | None = None) -> bool:
+    """Approve only controlled temp / Device Lab artifact trees — not host escape roots."""
+    resolved = Path(root).resolve()
+    temp_root = Path(tempfile.gettempdir()).resolve()
+    if _is_under(resolved, temp_root):
+        return True
+    if repo_root is not None and _is_under(resolved, lab_artifact_root(repo_root)):
+        return True
+    return False
+
+
+def register_lab_work_root(root: Path, *, repo_root: Path | None = None) -> Path:
+    """Register an approved session work root (unit tests / controlled lab temps)."""
+    resolved = Path(root).resolve()
+    if not lab_work_root_policy_ok(resolved, repo_root=repo_root):
+        raise PermissionError("device_lab_work_root_not_approvable")
+    _APPROVED_WORK_ROOTS.add(resolved)
+    return resolved
+
+
+def unregister_lab_work_root(root: Path) -> None:
+    _APPROVED_WORK_ROOTS.discard(Path(root).resolve())
+
+
+def clear_lab_work_roots() -> None:
+    _APPROVED_WORK_ROOTS.clear()
+
+
+def work_path_allowed(work: Path, *, repo_root: Path) -> bool:
+    """True iff work is under default instances root or an explicitly registered root."""
+    resolved = Path(work).resolve()
+    if _is_under(resolved, instances_root(repo_root)):
+        return True
+    for approved in _APPROVED_WORK_ROOTS:
+        if _is_under(resolved, approved):
+            return True
+    return False
 
 
 @dataclass
@@ -108,11 +166,11 @@ def start_session(profile_id: str, *, repo_root: Path, work: Path | None = None)
     profile = load_profile(profile_id)
     virt = select_backend()
     instance_id = f"dev-{uuid.uuid4().hex[:8]}"
-    base = (repo_root / "artifacts" / "device_lab" / "instances").resolve()
+    base = instances_root(repo_root)
     work = work or (base / instance_id)
     work = work.resolve()
-    # SEC-LAB: refuse path escape outside Device Lab instances root.
-    if not str(work).startswith(str(base)):
+    # SEC-LAB: refuse path escape outside instances root or registered lab work roots.
+    if not work_path_allowed(work, repo_root=repo_root):
         raise PermissionError("device_lab_work_path_escape")
     sess = LabSession(
         instance_id=instance_id,
