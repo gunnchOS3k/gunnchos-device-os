@@ -1,0 +1,180 @@
+{
+  "schema": "gunnchos.vp007.result.v1",
+  "work_packet": "WP-007",
+  "verification_packet": "VP-007",
+  "role": "INDEPENDENT_VERIFIER",
+  "executed_at": "2026-08-10T21:15:33Z",
+  "verifier": "independent_verifier_vp007",
+  "tip_claimed": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
+  "tip_verified": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
+  "tip_matches_claim": true,
+  "pr_91": {
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/91",
+    "state_at_verify": "OPEN",
+    "is_draft": true,
+    "head_sha": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
+    "head_ref": "wp-007/security-red-team-readiness"
+  },
+  "independence_attestation": {
+    "plan_written_before_treating_implementer_corpus_authoritative": true,
+    "plan_path": "artifacts/wp007/independent_verifier/INDEPENDENT_ATTACK_PLAN.md",
+    "independent_runner": "artifacts/wp007/independent_verifier/run_independent_attacks.py",
+    "independent_results": "artifacts/wp007/independent_verifier/INDEPENDENT_ATTACK_RESULTS.json",
+    "derivation_sources": [
+      "VP-007_SECURITY_RED_TEAM_READINESS.md",
+      "WP-007_SECURITY_RED_TEAM_READINESS.md asset/boundary inventory + adversarial suites",
+      "Architecture: unified_identity, PackageManager, SandboxEnforcer, GunnchFabric, ContinuityMesh, RingService, AiInterfaceService, Device Lab session, OtaStateMachine/UpdateManager",
+      "Golden Journey safety paths GOLDEN-07/08/09/10 (+ package/sandbox for G03)"
+    ],
+    "implementer_ATTACK_CORPUS_not_used_as_oracle": true,
+    "implementer_harness_rerun_for_comparison_only": true
+  },
+  "overall_result": "FAIL",
+  "SECURITY_S0": 0,
+  "SECURITY_S1": 0,
+  "SECURITY_S2_residual": [
+    {
+      "id": "WP007-IV-RES-001",
+      "severity": "S2",
+      "title": "UpdaterService.api_verify sets verified=True without crypto check",
+      "status": "RESIDUAL_DIGITAL",
+      "note": "OtaStateMachine.verify rejects signature_valid=False (IV-OS-010 PASS). Production signing EXTERNAL_PENDING."
+    },
+    {
+      "id": "WP007-IV-RES-002",
+      "severity": "S2",
+      "title": "Hostile Wi-Fi / captive-portal / live DNS-TLS",
+      "status": "EXTERNAL_PENDING",
+      "aligns_with_implementer": "WP007-DEF-009"
+    },
+    {
+      "id": "WP007-IV-RES-003",
+      "severity": "S2",
+      "title": "Game save integrity client-side digest only",
+      "status": "EXTERNAL_PENDING",
+      "aligns_with_implementer": "WP007-DEF-010"
+    }
+  ],
+  "INTERNAL_RED_TEAM_READY": false,
+  "INTERNAL_RED_TEAM_READY_rationale": "Digital independent attack suite shows S0=0 and S1=0, but tip fails CI jobs test/gate1 due to SEC-LAB path containment breaking device_lab foundation test. Token withheld until remediation holds under integrated CI (test adaptation or safe allowlist that does not re-enable host escape).",
+  "EXTERNAL_PENDING": true,
+  "production_ready": false,
+  "frontier_security_parity": false,
+  "evidence_level": "E4_DIGITAL_PARTIAL",
+  "digital_attack_suite": {
+    "result": "PASS",
+    "case_count": 27,
+    "SECURITY_S0": 0,
+    "SECURITY_S1": 0,
+    "INTERNAL_RED_TEAM_READY_candidate_from_attacks_alone": true,
+    "results_path": "artifacts/wp007/independent_verifier/INDEPENDENT_ATTACK_RESULTS.json"
+  },
+  "implementer_remediation_verification": {
+    "WP007-DEF-001_role_escalation": "HOLDS",
+    "WP007-DEF-002_package_path_channel": "HOLDS",
+    "WP007-DEF-003_sandbox_secrets": "HOLDS",
+    "WP007-DEF-004_ai_injection_approval": "HOLDS",
+    "WP007-DEF-005_ring_auth_confidence": "HOLDS",
+    "WP007-DEF-006_fabric_mutual_trust": "HOLDS",
+    "WP007-DEF-007_continuity_secrets_wipe": "HOLDS",
+    "WP007-DEF-008_device_lab_path_escape": "HOLDS_SECURITY_BUT_BREAKS_CI_TEST",
+    "WP007-DEF-009_hostile_wifi": "HONEST_S2_EXTERNAL_PENDING",
+    "WP007-DEF-010_game_save": "HONEST_S2_EXTERNAL_PENDING"
+  },
+  "independent_defects": [
+    {
+      "id": "WP007-IV-DEF-001",
+      "severity": "S2",
+      "blocking_for_merge": true,
+      "blocking_for_INTERNAL_RED_TEAM_READY": true,
+      "title": "SEC-LAB path containment not paired with Device Lab unit-test adaptation",
+      "detail": "start_session refuses work outside artifacts/device_lab/instances (correct for escape denial). tests/device_lab/test_device_lab_foundation.py::test_session_start_stop_and_atomic_scenarios still uses pytest tmp_path \u2192 CI test/gate1 RED on tip 9bf235a.",
+      "expected_fix": "Update test to place work under artifacts/device_lab/instances/<id> (or add explicit lab-temp allowlist that cannot escape to host-sensitive paths). Re-run CI; do not weaken escape denial.",
+      "status": "OPEN"
+    }
+  ],
+  "threat_model_coverage": {
+    "secure_verified_boot": "DOCUMENTED_DEV_ONLY_EXTERNAL_PENDING",
+    "os_update_rollback": "EXERCISED_IV_OS_009_010_PASS",
+    "recovery": "DOCUMENTED_STUB",
+    "identity_session": "EXERCISED_IV_OS_001_002_PASS",
+    "secret_abstraction": "EXERCISED_IV_OS_007_PASS",
+    "filesystem_encryption_continuity": "EXERCISED_IV_CONT_PASS",
+    "package_install": "EXERCISED_IV_OS_003_006_PASS",
+    "permissions_sandbox": "EXERCISED_IV_OS_007_008_PASS",
+    "developer_mode_role": "EXERCISED_INDEPENDENT_PROBE_PASS",
+    "mdm_fleet_revoke": "EXERCISED_IV_NET_001_PASS",
+    "gunnchai_memory_projects": "EXERCISED_IV_AI_CROSS_SECRET_VIA_SANDBOX",
+    "ai_tools_computer_use": "EXERCISED_IV_AI_001_002_PASS",
+    "connectors_mcp_skills": "EXTERNAL_PENDING",
+    "scheduled_tasks": "BACKLOG_S2",
+    "continuity": "EXERCISED_IV_CONT_PASS",
+    "gunnch_fabric": "EXERCISED_IV_FAB_PASS",
+    "rings_spatial": "EXERCISED_IV_RING_PASS",
+    "device_lab": "EXERCISED_IV_LAB_001_PASS_BUT_CI_REGRESSION",
+    "modem_network": "PARTIAL_FLEET_REVOKE_HOSTILE_WIFI_S2_EXTERNAL",
+    "game_online_social_save": "EXERCISED_SAVE_INTEGRITY_DIGITAL_S2_AUTHORITATIVE_E7",
+    "waike_student_data": "DOCUMENTED_PRIVACY_EXTERNAL",
+    "archive_ingest": "BACKLOG",
+    "telemetry_support": "DOCUMENTED",
+    "factory_provisioning": "DOCUMENTED_DEV",
+    "threat_model_coverage_adequate_for_e4_digital": true,
+    "gaps_honestly_external": [
+      "EXTERNAL pentest",
+      "physical fault injection",
+      "carrier approval",
+      "live MCP/Skills connectors",
+      "authoritative multiplayer anti-cheat",
+      "production signing/HSM/TPM"
+    ]
+  },
+  "golden_journey_regression": {
+    "merge_gate_local": "PASS",
+    "s0_s1_broken": false,
+    "ci_supporting_subset_s0_s1": "GREEN",
+    "ci_g04_privileged": "GREEN",
+    "note": "Local make golden-journeys-merge-gate supporting_run_ok=true; blockers=[]"
+  },
+  "ci": {
+    "observed_via": "gh pr checks 91",
+    "tip_sha": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
+    "wp007_digital_red_team": "GREEN",
+    "golden_journeys_scorecard_schema": "GREEN",
+    "golden_journeys_supporting_subset_s0_s1_merge_gate": "GREEN",
+    "golden_journeys_g04_privileged_e4": "GREEN",
+    "security_regression": "GREEN",
+    "sandbox_security": "GREEN",
+    "identity": "GREEN",
+    "atomic_update_rollback": "GREEN",
+    "test": "RED",
+    "gate1": "RED",
+    "failing_test": "tests/device_lab/test_device_lab_foundation.py::test_session_start_stop_and_atomic_scenarios",
+    "fail_reason": "PermissionError device_lab_work_path_escape \u2014 test passes work=tmp_path outside artifacts/device_lab/instances; SEC-LAB containment remediation not paired with test adaptation",
+    "relevant_security_jobs_green": true,
+    "full_required_ci_green": false
+  },
+  "external_assessment_packet": {
+    "path": "docs/security/wp007/EXTERNAL_ASSESSMENT_PACKET.md",
+    "status": "PREPARED_NOT_EXECUTED",
+    "EXTERNAL_PENDING": true
+  },
+  "claim_boundary": {
+    "independent_verification_claimed": false,
+    "INTERNAL_RED_TEAM_READY": false,
+    "production_ready": false,
+    "frontier_security_parity": false,
+    "EXTERNAL_PENDING": true,
+    "note": "E4 digital attacks survived with S0/S1=0; token not earned while CI regression from same tip remains open. External pentest remains E7."
+  },
+  "edmund_merge_recommendation": {
+    "recommendation": "DO_NOT_MERGE",
+    "keep_draft": true,
+    "never_merge_while_draft_instruction": "honored",
+    "reasons": [
+      "CI jobs test and gate1 RED on tip",
+      "WP007-IV-DEF-001 open (lab path containment vs foundation test)",
+      "INTERNAL_RED_TEAM_READY not independently earned"
+    ],
+    "after_fix": "Adapt device_lab foundation test (or safe allowlist), confirm CI green including digital-red-team + test + gate1 + GJ S0/S1 gate, then Independent re-verify for token."
+  }
+}
