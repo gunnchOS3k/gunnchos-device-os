@@ -1,0 +1,148 @@
+{
+  "schema": "gunnchos.phase_xv.os_prove_report.v1",
+  "generated_at": "2026-08-10T13:20:04.690127+00:00",
+  "accepted_main_base": "2c4fd5de439b3fcf49893eacfac38b8ec62b463e",
+  "physical_execution_freeze": true,
+  "auto_merge_request": null,
+  "frontier_os_parity_claimed": false,
+  "GUNNCHOS_FRONTIER_OS_PARITY": false,
+  "gates": {
+    "driver-hal": "DIGITALLY_VALIDATED",
+    "audio-media": "DIGITALLY_VALIDATED",
+    "identity": "DIGITALLY_VALIDATED",
+    "files-storage": "DIGITALLY_VALIDATED",
+    "accessibility": "DIGITALLY_VALIDATED",
+    "connectivity-5ga": "DIGITALLY_VALIDATED",
+    "ntn-migration": "DIGITALLY_VALIDATED",
+    "performance-power": "PHYSICAL_PENDING",
+    "support-lifecycle": "DIGITALLY_VALIDATED",
+    "user-experience": "EXTERNAL_PENDING"
+  },
+  "tokens": {
+    "DRIVER_HAL_DIGITAL_PASS": true,
+    "AUDIO_MEDIA_DIGITAL_PASS": true,
+    "IDENTITY_DIGITAL_PASS": true,
+    "FILES_STORAGE_DIGITAL_PASS": true,
+    "ACCESSIBILITY_DIGITAL_PASS": true,
+    "CONNECTIVITY_5GA_DIGITAL_PASS": true,
+    "NTN_MIGRATION_DIGITAL_PASS": true,
+    "PERFORMANCE_POWER_DIGITAL_POLICY_PASS": true,
+    "SUPPORT_LIFECYCLE_DIGITAL_PASS": true,
+    "USER_EXPERIENCE_DIGITAL_POLISH_PASS": true
+  },
+  "digitally_validated_gates": [
+    "accessibility",
+    "audio-media",
+    "connectivity-5ga",
+    "driver-hal",
+    "files-storage",
+    "identity",
+    "ntn-migration",
+    "support-lifecycle"
+  ],
+  "incomplete_gates": [],
+  "physical_pending_gates": [
+    "performance-power"
+  ],
+  "external_pending_gates": [
+    "user-experience"
+  ],
+  "pytest": {
+    "driver-hal": {
+      "rc": 0
+    },
+    "audio-media": {
+      "rc": 0
+    },
+    "identity": {
+      "rc": 0
+    },
+    "files-storage": {
+      "rc": 0
+    },
+    "accessibility": {
+      "rc": 0
+    },
+    "connectivity-5ga": {
+      "rc": 0
+    },
+    "ntn-migration": {
+      "rc": 0
+    },
+    "performance-power": {
+      "rc": 0
+    },
+    "support-lifecycle": {
+      "rc": 0
+    },
+    "user-experience": {
+      "rc": 0
+    },
+    "security-regression": {
+      "rc": 0
+    },
+    "a11y-regression": {
+      "rc": 0
+    }
+  },
+  "details": {
+    "driver-hal": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "audio-media": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "identity": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "files-storage": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "accessibility": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "connectivity-5ga": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "ntn-migration": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "performance-power": {
+      "ok": true,
+      "module_exit_state": "PHYSICAL_PENDING",
+      "assigned_exit_state": "PHYSICAL_PENDING"
+    },
+    "support-lifecycle": {
+      "ok": true,
+      "module_exit_state": "DIGITALLY_VALIDATED",
+      "assigned_exit_state": "DIGITALLY_VALIDATED"
+    },
+    "user-experience": {
+      "ok": true,
+      "module_exit_state": "EXTERNAL_PENDING",
+      "assigned_exit_state": "EXTERNAL_PENDING"
+    }
+  },
+  "handheld_storage_note": {
+    "field_kit_npi": "NPI_DEFECT-HANDHELD-STORAGE-HEADROOM-001",
+    "local_artifact": "artifacts/phase_xv/HANDHELD_32G_HEADROOM.json",
+    "local_npi": "artifacts/phase_xv/NPI_DEFECT-STORAGE-HANDHELD-32G.json"
+  },
+  "artifacts": {
+    "os_prove_report": "artifacts/phase_xv/OS_PROVE_REPORT.json"
+  }
+}

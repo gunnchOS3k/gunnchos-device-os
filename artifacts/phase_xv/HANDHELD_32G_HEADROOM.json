@@ -1,0 +1,34 @@
+{
+  "schema": "gunnchos.phase_xv.handheld_32g_headroom.v1",
+  "sku": "Handheld",
+  "hw_source": "Radxa RM121-D8E32 32GB eMMC (preferred)",
+  "capacity_gb": 32.0,
+  "profile_gb": {
+    "slot_a": 5.0,
+    "slot_b": 5.0,
+    "recovery": 2.0,
+    "apps_flatpak": 4.0,
+    "games_local_cache": 6.0,
+    "ai_nano_fast": 4.0,
+    "vision_speech": 1.0,
+    "embeddings": 0.5,
+    "project_indexes": 0.5,
+    "update_reserve": 2.0,
+    "user_reserve": 1.5
+  },
+  "profile_total_gb": 31.5,
+  "overhead_gb": {
+    "filesystem_overhead": 1.6,
+    "logs": 0.5,
+    "update_temp": 1.0,
+    "caches": 0.5,
+    "system_reserves": 0.5
+  },
+  "overhead_total_gb": 4.1,
+  "required_gb": 35.6,
+  "headroom_gb": -3.6,
+  "safe": false,
+  "mathematically_sufficient": false,
+  "note": "Phase XIV reduced profile was 31.5/32 GB before FS/logs/update-temp/cache reserves. Phase XV includes those overheads; sub-0.5 GiB headroom is treated as unsafe for EVT.",
+  "claim_boundary": "Digital storage contracts/quotas/atomic writes only. Media endurance PHYSICAL_PENDING. Handheld 32GB headroom recalculated with FS overhead."
+}
