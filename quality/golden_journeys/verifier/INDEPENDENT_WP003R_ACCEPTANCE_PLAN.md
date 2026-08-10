@@ -1,5 +1,7 @@
 # Independent WP-003R Acceptance Plan — VP-003R / Device Lab
 
+> **RECONFIRM 2026-08-10T18:56:02Z** — Independent re-run after #84/#85 merge. Tip `67e10ea1d329703d4764fb3799c5244e9781cd97` ⊆ `origin/main` `0449cbb64da416c3b702dcd880d76946e96eb16e`. Prior acceptance criteria unchanged; implementer ok=true still non-authoritative.
+
 > **VERIFIER OWNED** — independently derived **before** treating WP-003R remediation tests, Lab scenario helpers, or implementer `ok=true` as authoritative.
 
 | Field | Value |
@@ -7,8 +9,8 @@
 | Owner | Independent verifier (not implementer) |
 | Work packet | WP-003R (Cycle 1 residual; not Cycle 2; not WP-005+) |
 | Verification packet | VP-003R |
-| Tip under test (claimed) | `a65ff495bf9855a4f8df88beae2a8c5241ccd8af` (device-os DRAFT PR #84) |
-| Accepted main baseline | `44294d6485d8d82fe69191c6e585f13ab7c63f63` (post-#83; verify against PR base) |
+| Tip under test (claimed) | `67e10ea1d329703d4764fb3799c5244e9781cd97` (accepted-main content via #85; verify ⊆ origin/main `0449cbb64da416c3b702dcd880d76946e96eb16e`) |
+| Accepted main baseline | `0449cbb64da416c3b702dcd880d76946e96eb16e` (post-#85; was 44294d6 pre-lab) |
 | Companion ACTIVE_WIP | field-kit DRAFT PR #60 |
 | Derivation sources | MLP (`MINIMUM_LOVABLE_PRODUCT.md`); Product Quality Gate; GOLDEN_JOURNEYS.json; Evidence Levels; Depth Ladder; WP-003R master packet; gunnchDevice Lab Foundation v0.1 requirements; VP-003R verifier addendum; product charter / operating-model dock/DS-XL/Ring/AI promises |
 | Explicitly excluded as design source | Implementer `tests/device_lab/*`, Lab scenario self-PASS, `gunnchctl test` exit alone, scorecard FUNCTIONAL_PASS authored by implementer, prior PARTIAL D5 closure claims |

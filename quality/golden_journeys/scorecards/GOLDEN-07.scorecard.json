@@ -4,52 +4,53 @@
   "severity": "S1",
   "work_packet": "WP-003R",
   "FUNCTIONAL_PASS": {
-    "status": "PARTIAL",
+    "status": "PASS",
     "authority": "independent_verifier",
     "evidence_paths": [
       "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
+      "quality/golden_journeys/verifier/VP-003R-RESULTS.md",
       "quality/golden_journeys/verifier/VP-003R-RESULT.json"
     ],
-    "notes": "Independent FAIL for D6: no real app-state mutation (GJ-DEFECT-007)."
+    "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
   },
   "PRODUCT_QUALITY_SCORE": {
     "authority": "independent_verifier",
     "dimensions": {
       "correctness": {
         "value": 2,
-        "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "reliability": {
         "value": 2,
-        "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "latency_perceived_performance": {
         "value": 2,
-        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for latency_perceived_performance; independent re-verify required. Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "visual_quality": {
         "value": 2,
-        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for visual_quality; independent re-verify required. Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "interaction_quality": {
         "value": 2,
-        "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "discoverability": {
         "value": 2,
-        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for discoverability; independent re-verify required. Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "consistency": {
         "value": 2,
-        "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "accessibility": {
         "value": 2,
-        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for accessibility; independent re-verify required. Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "error_recovery": {
         "value": 3,
-        "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL."
+        "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
       },
       "user_preference": {
         "value": "NOT_MEASURED",
@@ -57,15 +58,15 @@
       }
     },
     "average_excluding_not_measured": 2.11,
-    "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+    "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
   },
   "INDEPENDENT_VERIFICATION": {
-    "status": "FAIL",
-    "evidence_level_claimed": "E3",
-    "depth_level_claimed": "D5",
+    "status": "PASS",
+    "evidence_level_claimed": "E4",
+    "depth_level_claimed": "D6",
     "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
     "verifier_result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json",
-    "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+    "notes": "Independent D6 PASS earned: edge-io sim\u2192authenticated packet\u2192SpatialInputService\u2192InputRouter virtual HID\u2192Document/Browser/Game surfaces with observable before\u2260after mutations (doc content RING*, browser click/scroll+playwright, game health p2 100\u219292). delivered conditional (false on low_confidence/wrong_target); without InputRouter delivery honestly app_state_changed=false; direct file write disclaimed non-D6. Lab VF2 instrumented surfaces (not physical pose SI). PHYSICAL_RING_SI PENDING."
   },
   "PHYSICAL_PENDING": {
     "pending": true,
@@ -102,11 +103,11 @@
     }
   ],
   "claim_boundary": {
-    "independent_verification_claimed": false,
+    "independent_verification_claimed": true,
     "physically_validated": false,
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "updated_at": "2026-08-10T18:24:17Z",
+  "updated_at": "2026-08-10T18:56:02Z",
   "updated_by": "independent-verifier-vp003r"
 }

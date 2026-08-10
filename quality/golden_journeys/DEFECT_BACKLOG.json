@@ -2,7 +2,7 @@
   "schema": "gunnchos.golden_journeys.defect_backlog.v1",
   "work_packet": "WP-003R",
   "updated_by": "independent_verifier_vp003r",
-  "note": "Honest PARTIAL / PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING leftovers. Do not fake-close. Implementer does not claim Independent PASS.",
+  "note": "VP-003R Independent re-run PASS on accepted main tip. Digital G06/G07/G08 D6 closed; physical/human remain PENDING.",
   "digital_remediation_shipped": [
     {
       "id": "VP003-S2-G02-D6-OFFICE-LMS",
@@ -36,7 +36,7 @@
       "journey_id": "GOLDEN-06",
       "title": "One-display DS-XL falsely green",
       "note": "LAB-SCENARIO-DSXL-DUALSCREEN requires >=2 compositor outputs; unknown transitions rejected. Independent re-verify.",
-      "independent_status": "CONFIRMED_DUAL_OUTPUT_ASSERT_PARTIAL_D6_REMAINING"
+      "independent_status": "CONFIRMED_INDEPENDENT_D6_PASS"
     },
     {
       "id": "GJ-DEFECT-003",
@@ -44,7 +44,7 @@
       "journey_id": "GOLDEN-07",
       "title": "File-write counted as ring input",
       "note": "LAB-SCENARIO-RING-REAL-INPUT enforces edge-io\u2192SpatialInputService\u2192apps; direct file write not D6.",
-      "independent_status": "FILE_WRITE_DISCLAIMED_BUT_D6_STILL_FAIL_SEE_007"
+      "independent_status": "CONFIRMED_INDEPENDENT_D6_PASS"
     },
     {
       "id": "GJ-DEFECT-004",
@@ -100,39 +100,39 @@
       "id": "GJ-DEFECT-006",
       "severity": "S2",
       "journey_id": "GOLDEN-06",
-      "status": "REMEDIATED_PENDING_INDEPENDENT",
+      "status": "CLOSED_INDEPENDENT_PASS",
       "title": "DS-XL Independent D6 blocked: stub build/test/debug; no real dual-output window workflow",
       "honest_cap": "Digital dual-output objects only until real creator toolchain + window placement proven",
       "opened_by": "independent_verifier_vp003r",
-      "note": "Implementer: real compositor windows + executed creator toolchain + unknown-transition reject; leave INDEPENDENT_VERIFICATION for verifier re-run."
+      "note": "Closed by Independent VP-003R re-run on tip 67e10ea / main 0449cbb."
     },
     {
       "id": "GJ-DEFECT-007",
       "severity": "S1",
       "journey_id": "GOLDEN-07",
-      "status": "REMEDIATED_PENDING_INDEPENDENT",
+      "status": "CLOSED_INDEPENDENT_PASS",
       "title": "Ring Lab path does not mutate real LibreOffice/browser/game state; delivered hardcoded true",
       "honest_cap": "Event-count SpatialInputService delivery \u2260 D6 cross-app input",
       "opened_by": "independent_verifier_vp003r",
-      "note": "Implementer: InputRouter + Document/Browser/Game surfaces; delivered only when app_state_changed; leave INDEPENDENT_VERIFICATION for verifier re-run."
+      "note": "Closed by Independent VP-003R re-run on tip 67e10ea / main 0449cbb."
     },
     {
       "id": "GJ-DEFECT-008",
       "severity": "S2",
       "journey_id": "GOLDEN-08",
-      "status": "REMEDIATED_PENDING_INDEPENDENT",
+      "status": "CLOSED_INDEPENDENT_PASS",
       "title": "Scenario may set ok=true when micro is primary / llama absent (harness\u2260Independent PASS)",
       "honest_cap": "Independent PASS only when primary_model_proof=PASS_REAL_RUNTIME",
       "opened_by": "independent_verifier_vp003r",
-      "note": "Implementer: overall ok fails closed on FAIL_MICRO; foundation_harness_ok remains separate."
+      "note": "Closed by Independent VP-003R re-run on tip 67e10ea / main 0449cbb."
     }
   ],
   "claim_boundary": {
-    "independent_verification_claimed": false,
+    "independent_verification_claimed": true,
     "physically_validated": false,
     "human_validated": false,
     "frontier_parity_claimed": false,
-    "vp003r_overall": "FAIL"
+    "vp003r_overall": "PASS"
   },
   "wp003r_lab": {
     "foundation": "gunnchos_device_os/device_lab",
@@ -140,12 +140,27 @@
     "GUNNCHDEVICE_LAB_FOUNDATION": "PART_OF_WP003R",
     "implementer_self_cert_forbidden": true
   },
-  "updated_at": "2026-08-10T18:40:00Z",
+  "updated_at": "2026-08-10T18:56:02Z",
   "independent_verification": {
     "packet": "VP-003R",
-    "overall_result": "FAIL",
-    "tip_sha": "a65ff495bf9855a4f8df88beae2a8c5241ccd8af",
+    "overall_result": "PASS",
+    "tip_sha": "67e10ea1d329703d4764fb3799c5244e9781cd97",
+    "accepted_main_sha": "0449cbb64da416c3b702dcd880d76946e96eb16e",
     "result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json",
-    "note": "Implementer remediated GJ-DEFECT-006/007/008 on tip after VP-003R FAIL; INDEPENDENT_VERIFICATION PENDING re-run. Do not claim Independent PASS."
-  }
+    "note": "Independent PASS E4/D6 for G04/G06/G07/G08 digital; PHYSICAL/HUMAN PENDING remain."
+  },
+  "closed_by_independent_vp003r": [
+    {
+      "id": "GJ-DEFECT-006",
+      "status": "CLOSED_INDEPENDENT_PASS"
+    },
+    {
+      "id": "GJ-DEFECT-007",
+      "status": "CLOSED_INDEPENDENT_PASS"
+    },
+    {
+      "id": "GJ-DEFECT-008",
+      "status": "CLOSED_INDEPENDENT_PASS"
+    }
+  ]
 }
