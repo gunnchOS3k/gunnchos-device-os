@@ -108,7 +108,12 @@ def start_session(profile_id: str, *, repo_root: Path, work: Path | None = None)
     profile = load_profile(profile_id)
     virt = select_backend()
     instance_id = f"dev-{uuid.uuid4().hex[:8]}"
-    work = work or (repo_root / "artifacts" / "device_lab" / "instances" / instance_id)
+    base = (repo_root / "artifacts" / "device_lab" / "instances").resolve()
+    work = work or (base / instance_id)
+    work = work.resolve()
+    # SEC-LAB: refuse path escape outside Device Lab instances root.
+    if not str(work).startswith(str(base)):
+        raise PermissionError("device_lab_work_path_escape")
     sess = LabSession(
         instance_id=instance_id,
         profile_id=profile_id,

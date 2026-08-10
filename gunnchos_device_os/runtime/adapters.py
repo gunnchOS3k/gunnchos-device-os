@@ -220,13 +220,39 @@ class RingService(RuntimeService):
         return cal
 
     def api_event_stream(self, gesture: str = "tap", limit: int = 20) -> dict[str, Any]:
+        # SEC-RING: unauthenticated rings must not inject OS input events.
+        if not self._store.get("authenticated"):
+            self.api_fallback_engage("not_authenticated")
+            return {
+                "events": [],
+                "count": 0,
+                "denied": True,
+                "reason": "not_authenticated",
+                "fallback_active": True,
+            }
+        confidence = float(self._store.get("confidence") or 0)
+        destructive = gesture in {
+            "destructive_confirm",
+            "confirm_destructive",
+            "delete",
+            "factory_reset",
+        }
+        if destructive and confidence < 0.85:
+            self.api_fallback_engage("low_confidence_destructive")
+            return {
+                "events": list(self._store.get("events") or [])[-limit:],
+                "count": len(self._store.get("events") or []),
+                "denied": True,
+                "reason": "low_confidence_destructive",
+                "fallback_active": True,
+            }
         events = list(self._store.get("events") or [])
         events.append({
             "gesture": gesture,
-            "confidence": float(self._store.get("confidence") or 0),
+            "confidence": confidence,
             "target_device": self._store.get("target_device"),
             "at": time.time(),
-            "authenticated": bool(self._store.get("authenticated")),
+            "authenticated": True,
         })
         self._store["events"] = events[-200:]
         self.persist()
@@ -239,9 +265,16 @@ class RingService(RuntimeService):
         }
 
     def api_set_target_device(self, device_id: str) -> dict[str, Any]:
+        if not self._store.get("authenticated"):
+            return {
+                "ok": False,
+                "denied": True,
+                "reason": "not_authenticated",
+                "target_device": self._store.get("target_device"),
+            }
         self._store["target_device"] = device_id
         self.persist()
-        return {"target_device": device_id}
+        return {"ok": True, "target_device": device_id}
 
 
 class DisplayService(RuntimeService):
@@ -508,12 +541,27 @@ class IdentityService(RuntimeService):
     def api_role(self) -> dict[str, Any]:
         return {"role": self._store.get("role", "student")}
 
-    def api_set_role(self, role: str) -> dict[str, Any]:
-        if role not in ("student", "educator", "developer", "admin", "guest", "guardian"):
+    def api_set_role(
+        self,
+        role: str,
+        *,
+        break_glass: bool = False,
+        session_valid: bool = False,
+    ) -> dict[str, Any]:
+        allowed = ("student", "educator", "developer", "admin", "guest", "guardian")
+        if role not in allowed:
             raise ValueError(role)
+        current = str(self._store.get("role") or "student")
+        privileged = {"admin", "developer"}
+        # SEC-OS: block silent privilege escalation / guest escape.
+        if current == "guest" and role != "guest":
+            raise PermissionError("guest_cannot_escalate")
+        if role in privileged and current not in privileged:
+            if not (break_glass and session_valid):
+                raise PermissionError("privilege_escalation_denied")
         self._store["role"] = role
         self.persist()
-        return {"role": role}
+        return {"role": role, "escalation": role in privileged and current not in privileged}
 
 
 class PermissionsService(RuntimeService):
@@ -970,10 +1018,43 @@ class AiInterfaceService(RuntimeService):
             self.persist()
         return {"privacy_mode": self._store["privacy_mode"]}
 
-    def api_local_request(self, prompt: str, capability: str = "tutor") -> dict[str, Any]:
+    def api_local_request(
+        self,
+        prompt: str,
+        capability: str = "tutor",
+        *,
+        approval_token: str | None = None,
+    ) -> dict[str, Any]:
         route = self.api_capability_route(capability)
         if not route.get("allowed"):
             return {"ok": False, "reason": route.get("reason"), "permission": route}
+        # SEC-AI: block obvious prompt/tool injection and unapproved computer use.
+        lowered = (prompt or "").lower()
+        injection_markers = (
+            "ignore previous instructions",
+            "ignore all previous",
+            "system:",
+            "<tool>",
+            "</tool>",
+            "exfiltrate",
+            "send secrets to",
+            "disable safety",
+        )
+        if any(m in lowered for m in injection_markers):
+            return {
+                "ok": False,
+                "denied": True,
+                "reason": "prompt_injection_suspected",
+                "capability": capability,
+            }
+        if capability in ("computer_use", "shell_exec", "file_write_system"):
+            if approval_token != "APPROVED_LOCAL_ACTION":
+                return {
+                    "ok": False,
+                    "denied": True,
+                    "reason": "approval_required",
+                    "capability": capability,
+                }
         answer = {
             "ok": True,
             "capability": capability,
@@ -989,12 +1070,25 @@ class AiInterfaceService(RuntimeService):
         return answer
 
     def api_capability_route(self, capability: str = "tutor") -> dict[str, Any]:
-        allowed = capability in ("tutor", "code_help", "troubleshoot", "connectivity_diag", "a11y_support")
+        local_ok = {
+            "tutor",
+            "code_help",
+            "troubleshoot",
+            "connectivity_diag",
+            "a11y_support",
+        }
+        approval_required = {"computer_use", "shell_exec", "file_write_system"}
+        if capability in local_ok:
+            allowed, reason, route = True, None, "local_gunnchai"
+        elif capability in approval_required:
+            allowed, reason, route = True, "approval_required", "gated_computer_use"
+        else:
+            allowed, reason, route = False, "unknown_capability", "unavailable"
         return {
             "capability": capability,
             "allowed": allowed,
-            "route": "local_gunnchai" if allowed else "unavailable",
-            "reason": None if allowed else "unknown_capability",
+            "route": route,
+            "reason": reason,
             "privacy_mode": self._store.get("privacy_mode"),
         }
 

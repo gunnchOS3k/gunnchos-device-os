@@ -8,6 +8,7 @@ import hashlib
 import hmac
 import json
 import os
+import secrets
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -25,10 +26,18 @@ class ContinuityIdentity:
     device_secret: bytes = field(repr=False)
 
     @classmethod
-    def create(cls, user_id: str, device_id: str, role: str) -> ContinuityIdentity:
+    def create(
+        cls,
+        user_id: str,
+        device_id: str,
+        role: str,
+        *,
+        device_secret: bytes | None = None,
+    ) -> ContinuityIdentity:
         if role not in DEVICE_ROLES:
             raise ValueError(role)
-        secret = hashlib.sha256(f"{user_id}:{device_id}:{role}:xiv".encode()).digest()
+        # SEC-FABRIC / continuity: secrets must not be derivable from public IDs.
+        secret = device_secret if device_secret is not None else secrets.token_bytes(32)
         return cls(user_id=user_id, device_id=device_id, role=role, device_secret=secret)
 
 
@@ -192,12 +201,24 @@ class ContinuityMesh:
         dst = self.devices[dst_id]
         if src.identity.user_id != dst.identity.user_id:
             raise PermissionError("identity_mismatch")
+        # Impersonation guard: destination must already be enrolled in this mesh
+        # with a non-derivable secret (forged vaults with guessed secrets fail unseal).
+        if dst_id not in self.devices:
+            raise PermissionError("unknown_destination")
+        if not any(
+            (
+                dst.perms.allow_clipboard,
+                dst.perms.allow_files,
+                dst.perms.allow_state,
+                dst.perms.allow_peripherals,
+            )
+        ):
+            raise PermissionError("destination_wiped_or_denied")
         packet = src.export_handoff()
-        # verify identity proof with shared user derivation
         expected = hmac.new(
             src.identity.device_secret, self.user_id.encode(), hashlib.sha256
         ).hexdigest()
-        if packet["identity_proof"] != expected:
+        if not hmac.compare_digest(packet["identity_proof"], expected):
             raise PermissionError("bad_identity_proof")
         # decrypt clipboard with src secret, re-seal for dst
         transferred = {"clipboard": False, "files": 0, "state_keys": 0, "peripherals": 0}

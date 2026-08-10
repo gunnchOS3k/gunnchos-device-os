@@ -1,0 +1,57 @@
+{
+  "schema": "gunnchos.wp007.golden_journey_control_map.v1",
+  "work_packet": "WP-007",
+  "claim_boundary": "Maps digital security controls to Golden Journeys. Does not claim E5 physical or EXTERNAL pentest.",
+  "journeys": [
+    {
+      "id": "GOLDEN-01",
+      "controls": ["SEC-OS-007", "SEC-AI-001"],
+      "safety_paths": ["document_integrity", "sandbox_default_deny", "ai_injection_guard"]
+    },
+    {
+      "id": "GOLDEN-02",
+      "controls": ["SEC-OS-001", "SEC-FABRIC-002"],
+      "safety_paths": ["session_validity_on_reconnect", "no_silent_overwrite"]
+    },
+    {
+      "id": "GOLDEN-03",
+      "controls": ["SEC-OS-006", "SEC-OS-007", "SEC-AI-001"],
+      "safety_paths": ["signed_package_path", "sandbox_on_install", "ai_code_assist_gated"]
+    },
+    {
+      "id": "GOLDEN-04",
+      "controls": ["SEC-FABRIC-002", "SEC-NET-001"],
+      "safety_paths": ["dock_continuity_identity", "prefer_trusted_link"]
+    },
+    {
+      "id": "GOLDEN-05",
+      "controls": ["SEC-GAME-001", "SEC-FABRIC-002"],
+      "safety_paths": ["save_integrity", "checkpoint_handoff_auth"]
+    },
+    {
+      "id": "GOLDEN-06",
+      "controls": ["SEC-OS-007", "SEC-AI-001"],
+      "safety_paths": ["ide_sandbox", "ai_tool_approval"]
+    },
+    {
+      "id": "GOLDEN-07",
+      "controls": ["SEC-RING-001"],
+      "safety_paths": ["authenticated_ring", "target_confidence_safety", "fallback_input"]
+    },
+    {
+      "id": "GOLDEN-08",
+      "controls": ["SEC-AI-001", "SEC-AI-002"],
+      "safety_paths": ["local_only_privacy", "prompt_injection_deny", "project_memory_isolation"]
+    },
+    {
+      "id": "GOLDEN-09",
+      "controls": ["SEC-OS-003", "SEC-OS-004"],
+      "safety_paths": ["anti_rollback", "signature_verify", "health_fail_rollback"]
+    },
+    {
+      "id": "GOLDEN-10",
+      "controls": ["SEC-OS-001", "SEC-OS-005", "SEC-FABRIC-002"],
+      "safety_paths": ["session_revoke", "continuity_wipe", "no_guest_escalation"]
+    }
+  ]
+}

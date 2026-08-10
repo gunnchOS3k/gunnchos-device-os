@@ -7,7 +7,8 @@
 	bootstrap build package evidence factory-station full-product-viii release-firewall \
 	full-product-ix cont-ix-evidence \
 	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate \
-	device-lab-test device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08
+	device-lab-test device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08 \
+	wp007-red-team wp007-test
 
 PY := PYTHONPATH=src:.
 
@@ -259,3 +260,16 @@ device-lab-g08:
 
 gunnchctl-devices:
 	$(PY) python3 scripts/gunnchctl devices
+
+# WP-007 independent security / red-team readiness (digital)
+wp007-red-team:
+	$(PY) python3 scripts/run_wp007_red_team.py
+
+wp007-test:
+	$(PY) python3 scripts/run_wp007_red_team.py
+	PYTHONPATH=.:src pytest -q tests/wp007 \
+		tests/test_unified_identity.py \
+		tests/test_ota_state_machine.py \
+		tests/test_sandbox_policy.py \
+		tests/phase_xiv/test_phase_xiv.py \
+		tests/stage2/test_security.py

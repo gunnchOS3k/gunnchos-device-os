@@ -1,0 +1,97 @@
+{
+  "schema": "gunnchos.wp007.attack_corpus.v1",
+  "work_packet": "WP-007",
+  "note": "Implementer corpus. Independent verifier must derive additional/different probes.",
+  "cases": [
+    {
+      "id": "SEC-OS-001",
+      "attack": "reuse_revoked_session_token",
+      "severity": "S1",
+      "surface": "identity"
+    },
+    {
+      "id": "SEC-OS-002",
+      "attack": "session_token_on_wrong_device",
+      "severity": "S1",
+      "surface": "identity"
+    },
+    {
+      "id": "SEC-OS-003",
+      "attack": "ota_security_version_downgrade",
+      "severity": "S0",
+      "surface": "update"
+    },
+    {
+      "id": "SEC-OS-004",
+      "attack": "tampered_update_signature",
+      "severity": "S0",
+      "surface": "update"
+    },
+    {
+      "id": "SEC-OS-005",
+      "attack": "silent_role_privilege_escalation",
+      "severity": "S1",
+      "surface": "identity"
+    },
+    {
+      "id": "SEC-OS-006",
+      "attack": "package_path_traversal_and_channel_downgrade",
+      "severity": "S1",
+      "surface": "package"
+    },
+    {
+      "id": "SEC-OS-007",
+      "attack": "sandbox_system_service_and_secret_escape",
+      "severity": "S1",
+      "surface": "sandbox"
+    },
+    {
+      "id": "SEC-AI-001",
+      "attack": "prompt_injection_and_computer_use_without_approval",
+      "severity": "S1",
+      "surface": "ai"
+    },
+    {
+      "id": "SEC-AI-002",
+      "attack": "cross_project_memory_read",
+      "severity": "S1",
+      "surface": "ai"
+    },
+    {
+      "id": "SEC-RING-001",
+      "attack": "unauthenticated_ring_inject_and_low_confidence_destructive",
+      "severity": "S1",
+      "surface": "ring"
+    },
+    {
+      "id": "SEC-FABRIC-001",
+      "attack": "unilateral_fabric_trust_and_lease",
+      "severity": "S1",
+      "surface": "fabric"
+    },
+    {
+      "id": "SEC-FABRIC-002",
+      "attack": "continuity_secret_forge_cross_user_post_wipe",
+      "severity": "S1",
+      "surface": "continuity"
+    },
+    {
+      "id": "SEC-NET-001",
+      "attack": "hostile_wifi_preference_over_ethernet",
+      "severity": "S2",
+      "surface": "network"
+    },
+    {
+      "id": "SEC-GAME-001",
+      "attack": "save_integrity_tamper",
+      "severity": "S2",
+      "surface": "game"
+    },
+    {
+      "id": "SEC-LAB-001",
+      "attack": "device_lab_work_path_escape",
+      "severity": "S1",
+      "surface": "device_lab"
+    }
+  ]
+}
