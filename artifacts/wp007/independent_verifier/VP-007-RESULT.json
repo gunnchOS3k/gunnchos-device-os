@@ -10,10 +10,11 @@
   "tip_matches_claim": true,
   "pr_91": {
     "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/91",
-    "state_at_verify": "OPEN",
+    "state_at_verify": "MERGED_AFTER_VERIFY_PUSH",
     "is_draft": true,
     "head_sha": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
-    "head_ref": "wp-007/security-red-team-readiness"
+    "head_ref": "wp-007/security-red-team-readiness",
+    "note": "Implementer tip merged to main as #91 despite Independent FAIL / CI red; verifier artifacts landed on new DRAFT #92."
   },
   "independence_attestation": {
     "plan_written_before_treating_implementer_corpus_authoritative": true,
@@ -175,6 +176,14 @@
       "WP007-IV-DEF-001 open (lab path containment vs foundation test)",
       "INTERNAL_RED_TEAM_READY not independently earned"
     ],
-    "after_fix": "Adapt device_lab foundation test (or safe allowlist), confirm CI green including digital-red-team + test + gate1 + GJ S0/S1 gate, then Independent re-verify for token."
+    "after_fix": "Adapt device_lab foundation test (or safe allowlist), confirm CI green including digital-red-team + test + gate1 + GJ S0/S1 gate, then Independent re-verify for token.",
+    "note_on_91": "#91 already merged to main before Independent FAIL could block; treat WP007-IV-DEF-001 as post-merge defect; do not merge #92 as readiness token."
+  },
+  "pr_92": {
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/92",
+    "state_at_verify": "OPEN",
+    "is_draft": true,
+    "head_sha": "9d891edd8470dd19a2d77281c9fd044628ba5a86",
+    "note": "Independent verifier FAIL artifacts DRAFT"
   }
 }
