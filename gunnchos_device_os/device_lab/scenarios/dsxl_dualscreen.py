@@ -107,15 +107,25 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
 
     connected = [o for o in session.display.outputs if o.get("connected")]
     two_outputs = len(connected) >= 2
+    from gunnchos_device_os.device_lab.virtualization.dsxl_outputs import high_fidelity_dual_gate
+
+    # Prefer guest dual when QEMU virtio-gpu present; fail if logical dual claimed as guest dual
+    claim_guest = any(
+        str(o.get("source") or "").startswith("qemu") or str(o.get("class") or "") == "guest"
+        for o in connected
+    )
+    dual_gate = high_fidelity_dual_gate(session.display.outputs, claim_guest_dual=claim_guest)
     if not two_outputs:
         errors.append("one_display_dsxl_fail")
+    if dual_gate.get("gate") == "FAIL_LOGICAL_DUAL_CLAIMED_AS_GUEST":
+        errors.append("logical_dual_claimed_as_guest")
     eng.record(
         "dual_output_assert",
         None,
         "start",
         ">=2 connected outputs",
-        {"connected": connected, "count": len(connected)},
-        two_outputs,
+        {"connected": connected, "count": len(connected), "dual_gate": dual_gate},
+        two_outputs and dual_gate.get("gate") != "FAIL_LOGICAL_DUAL_CLAIMED_AS_GUEST",
     )
 
     primary_id = connected[0]["id"] if connected else None
@@ -349,6 +359,8 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         "errors": errors,
         "steps": eng.steps,
         "PHYSICAL_DUAL_PANEL": "PENDING",
+        "GUEST_DUAL_OUTPUT_PASS": bool(dual_gate.get("GUEST_DUAL_OUTPUT_PASS")),
+        "dual_gate": dual_gate,
         "HUMAN_VALIDATION": "PENDING",
         "implementer_ready_for_independent_E4_D6": ok,
         "INDEPENDENT_VERIFICATION": "PENDING",

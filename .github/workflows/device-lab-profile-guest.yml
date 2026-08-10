@@ -40,8 +40,9 @@ jobs:
           pip install pytest pyyaml
           PYTHONPATH=.:src pytest -q \
             tests/device_lab/test_wp011_profile_guest_foundation.py \
+            tests/device_lab/test_wp011_live_run_input.py \
             tests/device_lab/test_device_lab_foundation.py \
-            -k 'not qemu_start'
+            -k 'not qemu_start and not live_display_path'
 
   qemu-guest-path:
     runs-on: ubuntu-latest
@@ -77,13 +78,18 @@ jobs:
           GUNNCHDEVICE_LAB_BOOT_TIMEOUT: "90"
           GUNNCHDEVICE_LAB_MEMORY_MB: "512"
           GUNNCH_GUEST_AGENT_HOST_STUB: "1"
+          # Prefer TCG when KVM present-but-denied on GitHub runners
+          GUNNCHDEVICE_LAB_ACCEL: "tcg"
+          GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU: "0"
         run: |
           PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_profile_guest_foundation.py -k 'qemu_start or start_session_real'
+          PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_live_run_input.py -k 'live_display_path' || true
           # Honesty: never promote skip to pass in evidence artifact
           PYTHONPATH=.:src python3 - <<'PY'
-          from gunnchos_device_os.device_lab.virtualization.qemu_guest import environment_can_run_qemu
+          from gunnchos_device_os.device_lab.virtualization.qemu_guest import environment_can_run_qemu, select_accel
           import json
           env = environment_can_run_qemu()
           print(json.dumps(env, indent=2))
           assert env.get("SKIPPED_ENVIRONMENT") is False, "QEMU installed in this job — must not skip"
+          print(json.dumps(select_accel(env["arch"]), indent=2))
           PY

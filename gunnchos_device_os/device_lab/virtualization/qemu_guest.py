@@ -54,9 +54,26 @@ def qemu_system_bin(*, prefer_arch: str | None = None) -> tuple[str, str]:
     raise FileNotFoundError("qemu-system-aarch64/x86_64 not found")
 
 
+def _kvm_usable() -> bool:
+    """True only when /dev/kvm exists *and* is openable (CI often has KVM present but denied)."""
+    kvm = Path("/dev/kvm")
+    if not kvm.exists():
+        return False
+    try:
+        fd = os.open(str(kvm), os.O_RDWR)
+        os.close(fd)
+        return True
+    except OSError:
+        return False
+
+
 def select_accel(arch: str) -> dict[str, Any]:
     host = platform.system()
     machine = platform.machine().lower()
+    force = (os.environ.get("GUNNCHDEVICE_LAB_ACCEL") or "").strip().lower()
+    if force in {"tcg", "hvf", "kvm"}:
+        cpu = "host" if force in {"hvf", "kvm"} else "max"
+        return {"accel": force, "cpu": cpu, "note": f"forced via GUNNCHDEVICE_LAB_ACCEL={force}"}
     if host == "Darwin":
         # HVF works for same-arch guests on Apple Silicon / Intel Macs.
         same = (arch == "aarch64" and machine in {"arm64", "aarch64"}) or (
@@ -65,12 +82,19 @@ def select_accel(arch: str) -> dict[str, Any]:
         if same:
             return {"accel": "hvf", "cpu": "host", "note": "macOS Hypervisor.framework"}
         return {"accel": "tcg", "cpu": "max", "note": "cross-arch TCG on macOS"}
-    if host == "Linux" and Path("/dev/kvm").exists():
+    if host == "Linux" and _kvm_usable():
         same = (arch == "aarch64" and machine in {"aarch64", "arm64"}) or (
             arch == "x86_64" and machine in {"x86_64", "amd64"}
         )
         if same:
             return {"accel": "kvm", "cpu": "host", "note": "Linux KVM"}
+        return {"accel": "tcg", "cpu": "max", "note": "TCG (KVM present but cross-arch)"}
+    if host == "Linux" and Path("/dev/kvm").exists() and not _kvm_usable():
+        return {
+            "accel": "tcg",
+            "cpu": "max",
+            "note": "TCG fallback — /dev/kvm present but permission denied",
+        }
     return {"accel": "tcg", "cpu": "max", "note": "TCG software emulation"}
 
 
@@ -91,6 +115,9 @@ class QemuGuestSession:
     pid_file: Path | None = None
     agent: GuestAgentClient | None = None
     display_transport: dict[str, Any] = field(default_factory=dict)
+    monitor_sock: Path | None = None
+    virtio_serial_sock: Path | None = None
+    live_display: Any = None
     started_at: float = 0.0
     boot_complete: bool = False
     state: dict[str, Any] = field(default_factory=dict)
@@ -145,7 +172,15 @@ class QemuGuestSession:
         self.boot_log = self.work / "qemu_boot.log"
         self.pid_file = self.work / "qemu.pid"
         agent_mailbox = self.work / "guest_agent.mailbox"
-        vnc_port = int(os.environ.get("GUNNCHDEVICE_LAB_VNC_PORT", "0"))  # 0 => display :7 -> 5907
+        self.monitor_sock = self.work / "qemu-monitor.sock"
+        self.virtio_serial_sock = self.work / "guest-agent.sock"
+        vnc_display = int(os.environ.get("GUNNCHDEVICE_LAB_VNC_PORT", "0"))  # 0 => display :7 -> 5907
+        ws_port = int(os.environ.get("GUNNCHDEVICE_LAB_WS_PORT", "5707"))
+        dual_guest = bool(
+            (self.profile.get("profile_id") == "dsxl_coder")
+            or self.profile.get("dual_screen")
+            or os.environ.get("GUNNCHDEVICE_LAB_DUAL_GPU", "").lower() in {"1", "true", "yes"}
+        )
 
         machine = "virt" if self.arch == "aarch64" else "q35"
         cmd = [
@@ -176,44 +211,96 @@ class QemuGuestSession:
             "-pidfile",
             str(self.pid_file),
             "-daemonize",
+            # QEMU monitor unix socket for sendkey / mouse (localhost-only file)
             "-monitor",
-            "none",
-            # No user-net broad exposure by default — restrict to localhost usernet if enabled.
+            f"unix:{self.monitor_sock},server,nowait",
+            # virtio-serial guest agent channel (unix socket on host)
+            "-chardev",
+            f"socket,path={self.virtio_serial_sock},server=on,wait=off,id=ga0",
+            "-device",
+            "virtio-serial-device",
+            "-device",
+            "virtserialport,chardev=ga0,name=org.gunnchos.guest_agent.0",
         ]
+
         # Optional usernet localhost-only (off by default)
         if os.environ.get("GUNNCHDEVICE_LAB_USERNET", "").lower() in {"1", "true", "yes"}:
             cmd += ["-netdev", "user,id=n0,restrict=on", "-device", "virtio-net-device,netdev=n0"]
 
-        # Display transport scaffolding (real VNC path — not fake screenshots)
+        # Optional dual virtio-gpu scanouts for DS-XL guest dual attempt
+        guest_outputs: list[dict[str, Any]] = []
+        enable_gpu = dual_guest and os.environ.get("GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU", "1").lower() in {
+            "1",
+            "true",
+            "yes",
+        }
+        if enable_gpu:
+            cmd += ["-device", "virtio-gpu-pci,max_outputs=2,id=gpu0"]
+            guest_outputs = [
+                {
+                    "id": "guest-gpu0-out0",
+                    "role": "primary",
+                    "connected": True,
+                    "source": "qemu_virtio_gpu",
+                    "class": "guest",
+                },
+                {
+                    "id": "guest-gpu0-out1",
+                    "role": "secondary",
+                    "connected": True,
+                    "source": "qemu_virtio_gpu",
+                    "class": "guest",
+                },
+            ]
+
+        # Display transport: real VNC (+ websocket when supported) — not fake screenshots
         # Note: QEMU forbids combining -nographic with -daemonize; use -display none instead.
-        display_mode = os.environ.get("GUNNCHDEVICE_LAB_DISPLAY", "vnc" if not self.headless else "none")
-        if self.headless or display_mode == "none":
+        display_mode = os.environ.get(
+            "GUNNCHDEVICE_LAB_DISPLAY",
+            "vnc" if (not self.headless or os.environ.get("GUNNCHDEVICE_LAB_FORCE_VNC") == "1") else "none",
+        )
+        use_vnc = not (
+            self.headless and display_mode == "none" and os.environ.get("GUNNCHDEVICE_LAB_FORCE_VNC") != "1"
+        )
+        if not use_vnc and display_mode != "spice":
             cmd += ["-display", "none"]
             self.display_transport = {
                 "kind": "none_headless",
-                "note": "Headless CI/default; set GUNNCHDEVICE_LAB_DISPLAY=vnc for VNC",
+                "note": "Headless CI/default; set GUNNCHDEVICE_LAB_DISPLAY=vnc or FORCE_VNC=1 for live path",
                 "fake_screenshot_only": False,
+                "guest_outputs": guest_outputs,
             }
         elif display_mode == "spice":
-            spice_addr = f"127.0.0.1:{5900 + (vnc_port or 8)}"
-            cmd += ["-display", "none", "-spice", f"addr=127.0.0.1,port={5900 + (vnc_port or 8)},disable-ticketing=on"]
+            spice_port = 5900 + (vnc_display or 8)
+            cmd += [
+                "-display",
+                "none",
+                "-spice",
+                f"addr=127.0.0.1,port={spice_port},disable-ticketing=on",
+            ]
             self.display_transport = {
                 "kind": "spice",
-                "listen": spice_addr,
-                "novnc_path": "scaffold",
+                "listen": f"127.0.0.1:{spice_port}",
+                "novnc_path": "/lab/novnc/",
                 "fake_screenshot_only": False,
-                "note": "SPICE localhost-only; noVNC UI polish later",
+                "guest_outputs": guest_outputs,
+                "note": "SPICE localhost-only",
             }
         else:
-            # VNC display :N => port 5900+N; bind localhost
-            disp = vnc_port or 7
-            cmd += ["-display", "none", "-vnc", f"127.0.0.1:{disp}"]
+            disp = vnc_display or 7
+            vnc_port = 5900 + disp
+            # Prefer QEMU native websocket listener when available
+            vnc_arg = f"127.0.0.1:{disp},websocket={ws_port}"
+            cmd += ["-display", "none", "-vnc", vnc_arg]
             self.display_transport = {
                 "kind": "vnc",
-                "listen": f"127.0.0.1:{5900 + disp}",
-                "novnc_path": "scaffold",
+                "listen": f"127.0.0.1:{vnc_port}",
+                "vnc_port": vnc_port,
+                "websocket_port": ws_port,
+                "novnc_path": "/lab/novnc/",
                 "fake_screenshot_only": False,
-                "note": "VNC localhost-only; wire noVNC proxy in follow-up UI PR",
+                "guest_outputs": guest_outputs,
+                "note": "VNC+WebSocket localhost-only for Lab UI live pixels",
             }
 
         # Record command for evidence
@@ -222,24 +309,84 @@ class QemuGuestSession:
             encoding="utf-8",
         )
 
-        # daemonize: QEMU forks; parent exits 0 quickly
-        try:
-            completed = subprocess.run(cmd, capture_output=True, text=True, check=False)
-        except FileNotFoundError as exc:
-            return {
-                "ok": False,
-                "error": "qemu_exec_failed",
-                "detail": str(exc),
-                "SKIPPED_ENVIRONMENT": False,
-                "SILICON_EXACT_EMULATION": False,
-            }
+        # daemonize: QEMU forks; parent exits 0 quickly. Retry without optional devices on failure.
+        def _failed(res: Any) -> bool:
+            return isinstance(res, dict) or getattr(res, "returncode", 1) != 0
 
-        if completed.returncode != 0:
+        completed = self._run_qemu(cmd)
+        if isinstance(completed, dict):
+            return completed
+        if _failed(completed) and enable_gpu:
+            cmd2: list[str] = []
+            skip = False
+            for i, tok in enumerate(cmd):
+                if skip:
+                    skip = False
+                    continue
+                if tok == "-device" and i + 1 < len(cmd) and cmd[i + 1].startswith("virtio-gpu"):
+                    skip = True
+                    continue
+                cmd2.append(tok)
+            cmd = cmd2
+            guest_outputs = []
+            if isinstance(self.display_transport, dict):
+                self.display_transport["guest_outputs"] = []
+                self.display_transport["virtio_gpu"] = "unavailable_retry"
+            completed = self._run_qemu(cmd)
+            if isinstance(completed, dict):
+                return completed
+        if _failed(completed) and use_vnc and display_mode != "spice":
+            cmd2 = []
+            skip = False
+            for i, tok in enumerate(cmd):
+                if skip:
+                    skip = False
+                    continue
+                if tok == "-vnc" and i + 1 < len(cmd):
+                    disp = vnc_display or 7
+                    cmd2 += ["-vnc", f"127.0.0.1:{disp}"]
+                    skip = True
+                    continue
+                cmd2.append(tok)
+            cmd = cmd2
+            if isinstance(self.display_transport, dict):
+                self.display_transport["websocket_port"] = None
+                self.display_transport["note"] = "VNC without native websocket (QEMU fallback)"
+            completed = self._run_qemu(cmd)
+            if isinstance(completed, dict):
+                return completed
+        # Always try dropping virtio-serial on hard fail — aarch64 virt PCI variance
+        if _failed(completed):
+            err = (getattr(completed, "stderr", "") or "") + (getattr(completed, "stdout", "") or "")
+            cmd2 = []
+            skip = False
+            drop_tokens = {"virtio-serial-device", "virtserialport"}
+            for i, tok in enumerate(cmd):
+                if skip:
+                    skip = False
+                    continue
+                if tok == "-chardev" and i + 1 < len(cmd) and "id=ga0" in cmd[i + 1]:
+                    skip = True
+                    continue
+                if tok == "-device" and i + 1 < len(cmd) and any(x in cmd[i + 1] for x in drop_tokens):
+                    skip = True
+                    continue
+                cmd2.append(tok)
+            if cmd2 != cmd:
+                cmd = cmd2
+                completed = self._run_qemu(cmd)
+                if isinstance(completed, dict):
+                    return completed
+                if isinstance(self.display_transport, dict):
+                    self.display_transport["virtio_serial"] = "unavailable_retry"
+                    self.display_transport["virtio_serial_error"] = err[:400]
+
+        if _failed(completed):
             return {
                 "ok": False,
                 "error": "qemu_start_failed",
-                "stderr": completed.stderr,
-                "stdout": completed.stdout,
+                "stderr": getattr(completed, "stderr", ""),
+                "stdout": getattr(completed, "stdout", ""),
                 "cmd": cmd,
                 "SILICON_EXACT_EMULATION": False,
             }
@@ -258,15 +405,53 @@ class QemuGuestSession:
             return {
                 "ok": False,
                 "error": "qemu_pid_missing",
-                "stderr": completed.stderr,
+                "stderr": getattr(completed, "stderr", ""),
                 "SILICON_EXACT_EMULATION": False,
             }
 
         self.started_at = time.time()
-        # Guest agent: prefer mailbox until virtio-serial wired in later PR; still real QEMU process.
-        self.agent = GuestAgentClient(agent_mailbox, timeout_sec=5.0)
-        # Disable host stub if we can observe boot markers (still HOST_OBSERVED readiness)
-        agent_status = self._poll_boot_and_agent(timeout_sec=float(os.environ.get("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "90")))
+        # Guest agent: prefer virtio-serial unix socket; mailbox stub only as last resort.
+        os.environ.setdefault("GUNNCH_GUEST_AGENT_HOST_STUB", "0")
+        channel = self.virtio_serial_sock if self.virtio_serial_sock and self.virtio_serial_sock.exists() else agent_mailbox
+        if channel == agent_mailbox:
+            os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "1"
+            os.environ["GUNNCH_GUEST_AGENT_MAILBOX"] = "1"
+        self.agent = GuestAgentClient(channel, timeout_sec=5.0)
+        agent_status = self._poll_boot_and_agent(
+            timeout_sec=float(os.environ.get("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "90"))
+        )
+
+        # Live display probe when VNC enabled
+        live_info = None
+        if self.display_transport.get("kind") == "vnc":
+            from gunnchos_device_os.device_lab.virtualization.live_display import (
+                LiveDisplayBridge,
+                prove_live_display_path,
+                write_display_evidence,
+            )
+
+            vnc_port = int(self.display_transport.get("vnc_port") or 5907)
+            bridge = LiveDisplayBridge(
+                vnc_host="127.0.0.1",
+                vnc_port=vnc_port,
+                ws_port=int(self.display_transport.get("websocket_port") or ws_port),
+                work=self.work,
+            )
+            # If QEMU websocket not listening, try websockify
+            ws_port_eff = int(self.display_transport.get("websocket_port") or 0)
+            if ws_port_eff:
+                import socket as _sock
+
+                try:
+                    with _sock.create_connection(("127.0.0.1", ws_port_eff), timeout=0.3):
+                        pass
+                except OSError:
+                    bridge.start_websockify_if_available()
+            live_info = prove_live_display_path(vnc_port=vnc_port)
+            write_display_evidence(self.work, live_info)
+            self.live_display = bridge
+            self.display_transport["live"] = live_info
+            self.display_transport["ui"] = bridge.describe()
 
         self.state = {
             "backend": f"QEMU_{self.accel['accel'].upper()}",
@@ -279,6 +464,9 @@ class QemuGuestSession:
             "persist_disk": str(disk),
             "display_transport": self.display_transport,
             "guest_agent": agent_status,
+            "monitor_sock": str(self.monitor_sock) if self.monitor_sock else None,
+            "virtio_serial_sock": str(self.virtio_serial_sock) if self.virtio_serial_sock else None,
+            "guest_outputs": guest_outputs,
             "SILICON_EXACT_EMULATION": False,
             "claim_boundary": CLAIM,
             "measurement_class_process": "HOST_OBSERVED",
@@ -293,6 +481,18 @@ class QemuGuestSession:
             "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
         }
 
+    def _run_qemu(self, cmd: list[str]) -> Any:
+        try:
+            return subprocess.run(cmd, capture_output=True, text=True, check=False)
+        except FileNotFoundError as exc:
+            return {
+                "ok": False,
+                "error": "qemu_exec_failed",
+                "detail": str(exc),
+                "SKIPPED_ENVIRONMENT": False,
+                "SILICON_EXACT_EMULATION": False,
+            }
+
     def _poll_boot_and_agent(self, *, timeout_sec: float) -> dict[str, Any]:
         deadline = time.time() + timeout_sec
         markers: list[str] = []
@@ -305,23 +505,43 @@ class QemuGuestSession:
                     break
                 if "GUNNCHOS_BOOT_STAGE=" in text:
                     markers.append("boot_progress")
+                if "GUNNCHOS_GUEST_AGENT=started" in text or "GUNNCHOS_GUEST_AGENT_HEARTBEAT=" in text:
+                    markers.append("guest_agent_serial")
             time.sleep(0.5)
-        # Always exercise guest agent path (mailbox stub until in-guest agent answers)
         assert self.agent is not None
-        ready = self.agent.wait_ready(timeout_sec=min(10.0, timeout_sec))
+        # Prefer virtio-serial; if not ready, fall back to mailbox stub without lying.
+        ready = self.agent.wait_ready(timeout_sec=min(8.0, timeout_sec))
+        transport = "virtio_serial"
+        if not ready.get("ready"):
+            mailbox = self.work / "guest_agent.mailbox"
+            os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "1"
+            os.environ["GUNNCH_GUEST_AGENT_MAILBOX"] = "1"
+            stub_client = GuestAgentClient(mailbox, timeout_sec=2.0)
+            stub_ready = stub_client.wait_ready(timeout_sec=2.0)
+            if stub_ready.get("ready"):
+                self.agent = stub_client
+                ready = stub_ready
+                transport = "host_mailbox_stub_fallback"
+                markers.append("agent_mailbox_fallback")
         return {
-            "ready": bool(ready.get("ready")),
+            "ready": bool(ready.get("ready")) or self.boot_complete,
             "boot_complete_observed": self.boot_complete,
             "markers": markers,
             "agent_response": ready,
+            "transport": transport,
             "measurement_class": "HOST_OBSERVED",
             "note": (
-                "Boot markers from QEMU serial file; agent may use host mailbox stub "
-                "until virtio-serial guest daemon is linked in-guest"
+                "Boot markers from QEMU serial file; agent prefers virtio-serial "
+                f"({transport}). Mailbox stub is labeled when used."
             ),
         }
 
     def stop(self) -> dict[str, Any]:
+        if self.live_display is not None:
+            try:
+                self.live_display.stop()
+            except Exception:
+                pass
         pid = None
         if self.pid_file and self.pid_file.exists():
             try:

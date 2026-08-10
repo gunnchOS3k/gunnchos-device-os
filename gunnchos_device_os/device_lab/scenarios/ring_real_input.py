@@ -145,6 +145,12 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         "safety": {"low": low, "wrong": wrong, "fallback": fallback},
         "direct_file_write_counts_as_d6": False,
         "real_app_state_mutation": pos_ok,
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": False,
+        "RING_SPATIAL_ACCURACY": "SIMULATED",
+        "ring_path_note": (
+            "Stack mutates Lab app surfaces via SpatialInputService→input_router; "
+            "not claimed as RING_TO_REAL_APPLICATION_INPUT_PASS (guest input stack still partial)."
+        ),
         "errors": errors,
         "steps": eng.steps,
         "PHYSICAL_RING_SI": "PENDING",

@@ -3,20 +3,31 @@
   "GUNNCHDEVICE_LAB_PROFILE_SYNC_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_IMAGE_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_AGENT_PREPARED": true,
+  "GUNNCHDEVICE_LAB_LIVE_VISUAL_PREPARED": true,
+  "GUNNCHDEVICE_LAB_REAL_RUN_PREPARED": true,
+  "GUNNCHDEVICE_LAB_CONVENTIONAL_INPUT_PREPARED": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
+  "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+  "GUEST_DUAL_OUTPUT_PASS": false,
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
+  "depends_on": ["#97", "#95"],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
   "host_tooling_observed": {
     "qemu": "QEMU emulator version 11.0.3 (Homebrew)",
     "qemu_img": "qemu-img version 11.0.3",
-    "accel_on_apple_silicon": "hvf"
+    "accel_on_apple_silicon": "hvf",
+    "live_vnc_rfb_proven": "RFB 003.008",
+    "qemu_websocket": true
   },
   "notes": [
-    "Prepared flags only — master ecosystem digital complete remains false until full program done",
+    "Wave E–G prepared flags only — master ecosystem digital complete remains false",
+    "Live visual proven on Mac via QEMU VNC+WebSocket; CI may SKIPPED_ENVIRONMENT",
+    "gunnchctl run uses hybrid host process proof when guest agent is mailbox stub",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS intentionally false; spatial accuracy SIMULATED",
     "No PRODUCTION_READY / physical measurement claims"
   ]
 }
