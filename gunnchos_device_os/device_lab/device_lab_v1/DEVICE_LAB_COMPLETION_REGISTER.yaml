@@ -1,0 +1,707 @@
+schema: gunnchos.device_lab.completion_register.v1
+title: gunnchDevice Lab Full Ecosystem Digital Completion Register
+status: AUDIT_BASELINE
+implementation_pass_claimed: false
+audited_at_utc: |
+  2026-08-10T22:27:03Z
+accepted_device_os_main: 3908de7c35882b500368475ce13d2243435f6443
+accepted_hardware_main: 45c301a3a335d4bfd54970d80ec7ee717736ad07
+claim_firewall:
+  SILICON_EXACT_EMULATION: false
+  VF4: PHYSICAL_PENDING
+  VF5: PHYSICAL_PENDING
+  VF6: PHYSICAL_PENDING
+  GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE: false
+  PRODUCTION_READY: false
+audit_summary:
+  start_session_boots_qemu_guest: false
+  ui_live_framebuffer: false
+  default_backend: HYBRID_BEHAVIORAL
+  golden_mapped:
+    - GOLDEN-04
+    - GOLDEN-06
+    - GOLDEN-07
+    - GOLDEN-08
+  profile_vs_hardware_mpn_verdict: FAILED_DIGITAL_DRIFT_ON_STUDENT_DSXL_RAM_AND_MISSING_MPN_FIELDS
+  student_lab_ram_gb: 8
+  dsxl_lab_ram_gb: 16
+  hardware_student_dsxl_expected: ADLINK COM-HPC-mMTL-155H-32G / 32GB LPDDR5x
+  handheld_lab: ram 8 / emmc min 32 capacity-aligned with RM121-D8E32; MPN field absent
+baseline_12_grades:
+  foundation:
+    grade: 7
+    axis: DIGITAL
+    evidence_notes:
+      - CLI/session/profiles/fidelity/UI on origin/main 3908de7c35882b500368475ce13d2243435f6443
+      - GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION=NOT_ACTIVE
+      - start_session does not boot QEMU guest
+  golden_journeys:
+    grade: 8
+    axis: DIGITAL
+    evidence_notes:
+      - G04/G06/G07/G08 scenarios implemented and mapped
+      - Privileged G04 CI job present; PHYSICAL_* PENDING
+      - Expanded Golden/ECO catalog absent
+  behavioral_peripherals:
+    grade: 6
+    axis: DIGITAL
+    evidence_notes:
+      - Display/network/audio/storage/rings/input backends integrated
+      - Camera stub_available
+      - Dock behavioral — not JHL8440/JHL9040R SI model
+  failure_injection:
+    grade: 7
+    axis: DIGITAL
+    evidence_notes:
+      - Scenario catalog + engine injectors present
+      - No multi-device ecosystem chaos/soak
+  evidence_reproducibility:
+    grade: 7
+    axis: DIGITAL
+    evidence_notes:
+      - run_manifest builder + gunnchctl evidence
+      - Lab sessions often lack OS_image_hash
+      - WP-010 schemas are SCHEMA_ONLY (not completion)
+  actual_virtual_gunnchos:
+    grade: 3
+    axis: DIGITAL
+    evidence_notes:
+      - bootable_reference BOOT_EVIDENCE.json ok=true exists separately
+      - device_lab start_session does not launch that guest
+      - QEMU backends cataloged; HYBRID_BEHAVIORAL default
+  avd_style_experience:
+    grade: 2
+    axis: DIGITAL
+    evidence_notes:
+      - Local control UI only — no AVD manager/snapshots
+      - gunnchctl run is intent JSON only
+  live_visual_interaction:
+    grade: 2
+    axis: DIGITAL
+    evidence_notes:
+      - UI framebuffer panel is explicit placeholder
+      - No VNC/WebRTC stream in server.py
+  hardware_spec_sync:
+    grade: 3
+    axis: DIGITAL
+    evidence_notes:
+      - |
+        EXACT_MPN_MATRIX: Student/DS-XL COM-HPC-mMTL-155H-32G 32GB; Handheld RM121-D8E32; Rings nRF52840-QIAA-R; Dock JHL8440/JHL9040R
+      - Lab student ram=8; dsxl ram=16 — FAILED_DIGITAL drift
+      - Handheld 8GB/32GB eMMC capacity aligned; MPN fields missing
+      - No generated SoT pipeline
+  performance_prediction:
+    grade: 2
+    axis: PRE_EVT_DIGITAL
+    evidence_notes:
+      - performance.py FOUNDATION_SCHEMA_ONLY
+      - Profiles power/thermal TARGET_TBD
+  full_ecosystem_simulation:
+    grade: 2
+    axis: DIGITAL
+    evidence_notes:
+      - full_ecosystem.json architecture only
+      - LAB-FUTURE-003 not executed; ECO-001..010 absent
+  physical_digital_twin_fidelity:
+    digital_pre_evt_grade: 1
+    physical_correlation_grade: null
+    axis: PRE_EVT_DIGITAL
+    evidence_notes:
+      - VF0 PARTIAL; VF4/5/6 PHYSICAL_PENDING
+      - Calibration SCHEMA_ONLY — not DIGITALLY_VALIDATED complete
+      - LAB-FUTURE-007/008/009 blocked on EVT hardware
+requirements:
+  -
+    id: DL-FOUNDATION-001
+    description: device_lab package tree on accepted main
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/
+    tests:
+      - tests/device_lab/test_device_lab_foundation.py
+    evidence_output: git ls-tree origin/main lists 51 device_lab files
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-FOUNDATION-002
+    description: gunnchctl devices/start/stop/status/test/evidence/compare/ui
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/cli.py
+      - scripts/gunnchctl
+    tests:
+
+    evidence_output: cli.py implements subcommands; scripts/gunnchctl wrapper on main
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: cmd_run records app intent JSON only
+  -
+    id: DL-FOUNDATION-003
+    description: SILICON_EXACT_EMULATION=false; HYBRID_BEHAVIORAL default
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/__init__.py
+      - gunnchos_device_os/device_lab/virtualization/backend.py
+    tests:
+      - tests/device_lab/test_device_lab_foundation.py
+    evidence_output: __init__.py False; select_backend default HYBRID_BEHAVIORAL; profiles enforce false
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-FOUNDATION-004
+    description: Fidelity VF0-VF6 honesty; VF4/5/6 PHYSICAL_PENDING
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/fidelity.py
+    tests:
+      - tests/device_lab/test_device_lab_foundation.py
+    evidence_output: fidelity.py forces VF4/5/6 PHYSICAL_PENDING
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-FOUNDATION-005
+    description: start_session boots real QEMU gunnchOS guest
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/session.py
+      - gunnchos_device_os/device_lab/virtualization/backend.py
+    tests:
+
+    evidence_output: session.start() starts behavioral backends + select_backend catalog; no qemu-system spawn in device_lab/
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Lab path does not invoke os_build/bootable_reference; default HYBRID_BEHAVIORAL
+  -
+    id: DL-FOUNDATION-006
+    description: GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION active
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/__init__.py
+    tests:
+
+    evidence_output: token NOT_ACTIVE in __init__.py/README
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Foundation v0.1 only
+  -
+    id: DL-GOLDEN-001
+    description: G04 LAB-SCENARIO-OFFICE-DOCK digital path
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/office_dock.py
+      - .github/workflows/golden-journeys.yml
+    tests:
+
+    evidence_output: office_dock.py + JOURNEY_SCENARIO_MAP GOLDEN-04; privileged G04 CI job present
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: VP003-S2-G04-PHYSICAL-DOCK PHYSICAL_PENDING
+  -
+    id: DL-GOLDEN-002
+    description: G06 LAB-SCENARIO-DSXL-DUALSCREEN digital path
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py
+    tests:
+
+    evidence_output: dsxl_dualscreen.py executes build/test/debug; stub mode rejected
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: VP003-S2-G06-PHYSICAL-DUAL PHYSICAL_PENDING
+  -
+    id: DL-GOLDEN-003
+    description: G07 LAB-SCENARIO-RING-REAL-INPUT digital path
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/ring_real_input.py
+    tests:
+
+    evidence_output: ring_real_input.py + apps/surfaces HID path; spatial SIMULATED
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: VP003-S2-G07-PHYSICAL-RING PHYSICAL_PENDING
+  -
+    id: DL-GOLDEN-004
+    description: G08 LAB-SCENARIO-LOCAL-AI-TUTOR digital path
+    owner_repo: gunnchos-device-os (+ gunnchAI3k)
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/local_ai_tutor.py
+    tests:
+
+    evidence_output: local_ai_tutor.py non-stub llama path when available
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: VP003-S2-G08-CITATION-HUMAN HUMAN_VALIDATION_PENDING
+  -
+    id: DL-GOLDEN-005
+    description: Expanded Golden catalog beyond G04/06/07/08
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/catalog.py
+    tests:
+
+    evidence_output: catalog maps only GOLDEN-04/06/07/08
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: ECO/expanded Golden IDs absent
+  -
+    id: DL-PERIPH-001
+    description: Display multi-output / dock appear-disappear
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/hw_backends/display.py
+    tests:
+
+    evidence_output: DisplayBackend WaylandSession or profile_logical; dock attach/detach APIs
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No live guest framebuffer
+  -
+    id: DL-PERIPH-002
+    description: Network dock ethernet + fault inject
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/hw_backends/network.py
+    tests:
+
+    evidence_output: NetworkBackend netns + logical fallback
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Unprivileged FALLBACK_ONLY
+  -
+    id: DL-PERIPH-003
+    description: Audio dock attach/detach
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/hw_backends/audio.py
+    tests:
+
+    evidence_output: AudioBackend virtual sink + logical fallback
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-PERIPH-004
+    description: Storage removable lifecycle
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/hw_backends/storage.py
+    tests:
+
+    evidence_output: StorageBackend start/remove_removable
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-PERIPH-005
+    description: Rings authenticated pipeline simulation
+    owner_repo: gunnchos-device-os (+ edge-io-measurement-node)
+    source_files:
+      - gunnchos_device_os/device_lab/hw_backends/rings.py
+    tests:
+
+    evidence_output: RingsBackend + input_router + surfaces
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Not physical nRF52840; spatial SIMULATED
+  -
+    id: DL-PERIPH-006
+    description: Camera virtualization beyond stub
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/hw_backends/camera.py
+    tests:
+
+    evidence_output: camera.py mode=stub_available; enabled=False
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Camera stub only
+  -
+    id: DL-PERIPH-007
+    description: USB4/JHL dock SI-grade peripheral model
+    owner_repo: gunnchos-hardware-industrial-design (+ device-os)
+    source_files:
+      - gunnchos_device_os/device_lab/profiles/handheld_docked.json
+    tests:
+
+    evidence_output: Profiles mention ADR-HW-002 USB4/TB4; no JHL8440/JHL9040R Lab model
+    state: PHYSICAL_PENDING
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Hardware freezes JHL8440/JHL9040R; Lab behavioral dock only
+  -
+    id: DL-FAULT-001
+    description: Scenario catalog fault injectors
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/catalog.py
+      - gunnchos_device_os/device_lab/scenarios/engine.py
+    tests:
+
+    evidence_output: SCENARIO_CATALOG + engine inject paths
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No multi-device chaos soak
+  -
+    id: DL-FAULT-002
+    description: Full-ecosystem simultaneous chaos
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/LAB_FUTURE_BACKLOG.json
+    tests:
+
+    evidence_output: LAB-FUTURE-003 DO_NOT_EXECUTE_IN_WP003R; full_ecosystem not executed
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: LAB-FUTURE-003 / ECO-010 absent
+  -
+    id: DL-EVIDENCE-001
+    description: Run manifest reproducibility
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/manifest.py
+    tests:
+
+    evidence_output: manifest.build_manifest + gunnchctl evidence
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: OS_image_hash often null because Lab does not boot guest
+  -
+    id: DL-EVIDENCE-002
+    description: WP-010 calibration/evidence schemas
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/calibration.py
+      - gunnchos_device_os/device_lab/schemas/
+    tests:
+      - tests/device_lab/test_wp010_calibration_interfaces.py
+    evidence_output: calibration.py status PHYSICAL_PENDING; wp010_interfaces READY_SCHEMA_ONLY
+    state: IMPLEMENTED
+    claim_boundary: SCHEMA_ONLY; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: SCHEMA_ONLY must not count as completion
+  -
+    id: DL-GUEST-001
+    description: Bootable reference image under QEMU (platform track)
+    owner_repo: gunnchos-device-os
+    source_files:
+      - os_build/bootable_reference/artifacts/BOOT_EVIDENCE.json
+    tests:
+
+    evidence_output: os_build/bootable_reference/artifacts/BOOT_EVIDENCE.json ok=true
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Not wired into device_lab.start_session
+  -
+    id: DL-GUEST-002
+    description: Lab session boots guest via QEMU_HVF/KVM/TCG
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/virtualization/backend.py
+      - gunnchos_device_os/device_lab/session.py
+    tests:
+
+    evidence_output: backend.py catalogs availability; no guest process lifecycle in session.py
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No Lab guest launcher
+  -
+    id: DL-GUEST-003
+    description: Guest agent install/launch/input/screenshot/telemetry
+    owner_repo: gunnchos-device-os
+    source_files:
+
+    tests:
+
+    evidence_output: No device_lab guest_agent module on accepted main tree
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Guest agent not implemented
+  -
+    id: DL-AVD-001
+    description: AVD-style device manager UX
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/ui/server.py
+    tests:
+
+    evidence_output: UI is Foundation control panel only
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No snapshots/wipe/skin wizard
+  -
+    id: DL-AVD-002
+    description: gunnchctl run launches real app process
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/cli.py
+    tests:
+
+    evidence_output: cmd_run writes run_app.json note only
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No application process start
+  -
+    id: DL-VISUAL-001
+    description: Live framebuffer / VNC / WebRTC
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/ui/server.py
+    tests:
+
+    evidence_output: |
+      UI placeholder: topology + optional VNC when configured; no stream impl
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No live pixels path
+  -
+    id: DL-VISUAL-002
+    description: Host-to-device input into live visual surface
+    owner_repo: gunnchos-device-os
+    source_files:
+
+    tests:
+
+    evidence_output: UI ring inject hits RingsBackend, not live framebuffer HID
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Depends on DL-VISUAL-001 + DL-GUEST-003
+  -
+    id: DL-HWSYNC-001
+    description: Lab profiles include exact MPN compute truth
+    owner_repo: gunnchos-device-os (+ gunnchos-hardware-industrial-design)
+    source_files:
+      - gunnchos_device_os/device_lab/profiles/student_14_5.json
+      - gunnchos_device_os/device_lab/profiles/dsxl_coder.json
+    tests:
+
+    evidence_output: student_14_5 ram.gb=8; dsxl_coder ram.gb=16; no COM-HPC-mMTL-155H-32G/RM121-D8E32/nRF52840/JHL fields
+    state: FAILED_DIGITAL
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: EXACT_MPN_MATRIX freezes Student/DS-XL at 32GB ADLINK; Lab drifted
+  -
+    id: DL-HWSYNC-002
+    description: Generated profile pipeline from hardware SoT
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/profiles/
+    tests:
+
+    evidence_output: Hand-authored profiles; accepted_source_revisions SHA 44294d6 stale vs main
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No generator; silent drift
+  -
+    id: DL-HWSYNC-003
+    description: Handheld RM121-D8E32 8GB/32GB eMMC alignment
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/profiles/handheld_docked.json
+      - hardware_compat/device_profiles/handheld_hybrid.yaml
+    tests:
+
+    evidence_output: handheld_docked ram 8 + emmc min_gb 32 matches capacity truth; MPN field still absent
+    state: IMPLEMENTED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: MPN fields absent; dock JHL not modeled
+  -
+    id: DL-PERF-001
+    description: Pre-EVT performance model labeled classes
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/performance.py
+    tests:
+
+    evidence_output: performance.py FOUNDATION_SCHEMA_ONLY
+    state: IMPLEMENTED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: SCHEMA_ONLY != complete; no calibrated ranges
+  -
+    id: DL-PERF-002
+    description: Thermal/power/battery/RF prediction envelopes
+    owner_repo: gunnchos-device-os
+    source_files:
+
+    tests:
+
+    evidence_output: Profiles power/thermal TARGET_TBD
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No executable prediction engine
+  -
+    id: DL-ECOSYSTEM-001
+    description: full_ecosystem profile architecture present
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/profiles/full_ecosystem.json
+    tests:
+
+    evidence_output: profiles/full_ecosystem.json VF1 aggregate TARGET_TBD
+    state: IMPLEMENTED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: LAB-FUTURE-003 not executed
+  -
+    id: DL-ECOSYSTEM-002
+    description: ECO-001..ECO-010 simultaneous workflows
+    owner_repo: gunnchos-device-os
+    source_files:
+
+    tests:
+
+    evidence_output: No ECO scenario modules on accepted main
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Continuity/handoff/soak absent
+  -
+    id: DL-ECOSYSTEM-003
+    description: Games + gunnchAI integrated in Lab ecosystem runs
+    owner_repo: gunnchos-device-os (+ games + gunnchAI3k + field-kit)
+    source_files:
+
+    tests:
+
+    evidence_output: Games/AI repos exist; Lab scenarios do not orchestrate them
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Cross-repo Lab orchestration missing
+  -
+    id: DL-TWIN-001
+    description: VF0 CAD/geometry twin
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/VF0_CAD_GEOMETRY_INDEX.json
+    tests:
+
+    evidence_output: VF0_CAD_GEOMETRY_INDEX.json PARTIAL; LAB-FUTURE-005 blocked
+    state: PHYSICAL_PENDING
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-TWIN-002
+    description: VF4/5/6 calibration/HIL/correlation executable
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/calibration.py
+    tests:
+      - tests/device_lab/test_wp010_calibration_interfaces.py
+    evidence_output: WP-010 schemas only; LAB-FUTURE-007/008/009 BLOCKED
+    state: PHYSICAL_PENDING
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: SCHEMA_ONLY interfaces; needs EVT hardware
+  -
+    id: DL-SECURITY-001
+    description: Lab work-path containment
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/session.py
+    tests:
+      - tests/device_lab/test_lab_work_path_containment.py
+    evidence_output: session.work_path_allowed + containment tests on main
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-SECURITY-002
+    description: UI loopback-only binding
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/ui/server.py
+    tests:
+
+    evidence_output: ui.server.serve rejects non-loopback
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-SECURITY-003
+    description: Public/remote hosted Device Lab
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/LAB_FUTURE_BACKLOG.json
+    tests:
+
+    evidence_output: LAB-FUTURE-004 BLOCKED hosting_decision/security_review
+    state: EXTERNAL_PENDING
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-ACCESSIBILITY-001
+    description: Lab UI accessibility audit
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/ui/server.py
+    tests:
+
+    evidence_output: Minimal HTML UI; no Device Lab a11y suite on main
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No Lab a11y tests
+  -
+    id: DL-ACCESSIBILITY-002
+    description: Bootable-reference a11y service present
+    owner_repo: gunnchos-device-os
+    source_files:
+      - os_build/bootable_reference/overlay/opt/gunnchos/services/a11y.sh
+    tests:
+
+    evidence_output: overlay services/a11y.sh exists; not Lab-session integrated
+    state: IMPLEMENTED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-DEVELOPER-001
+    description: Package registry + real install/launch contract
+    owner_repo: gunnchos-device-os
+    source_files:
+
+    tests:
+
+    evidence_output: No Lab package registry; cmd_run intent-only
+    state: TARGET
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Workstream G not started
+  -
+    id: DL-DEVELOPER-002
+    description: DS-XL creator toolchain digital path
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py
+    tests:
+
+    evidence_output: G06 rejects creator_toolchain_digital stub; executes build/test/debug
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: null
+  -
+    id: DL-CI-001
+    description: Golden Journeys CI incl. privileged G04
+    owner_repo: gunnchos-device-os
+    source_files:
+      - .github/workflows/golden-journeys.yml
+    tests:
+
+    evidence_output: .github/workflows/golden-journeys.yml G04 privileged job present
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: Unprivileged FALLBACK_ONLY; physical SI PENDING
+  -
+    id: DL-CI-002
+    description: Device Lab unit tests present
+    owner_repo: gunnchos-device-os
+    source_files:
+      - tests/device_lab/
+    tests:
+
+    evidence_output: tests/device_lab foundation, path containment, wp010
+    state: INTEGRATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: No Lab guest-boot CI job
+requirement_state_counts:
+  DIGITALLY_VALIDATED: 12
+  INTEGRATED: 9
+  TARGET: 17
+  PHYSICAL_PENDING: 3
+  IMPLEMENTED: 5
+  FAILED_DIGITAL: 1
+  EXTERNAL_PENDING: 1
