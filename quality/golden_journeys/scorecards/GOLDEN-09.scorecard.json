@@ -5,77 +5,78 @@
   "work_packet": "WP-003",
   "FUNCTIONAL_PASS": {
     "status": "PASS",
-    "authority": "implementer_supporting_harness",
+    "authority": "independent_verifier",
     "evidence_paths": [
-      "quality/golden_journeys/fixtures/GOLDEN-09.fixture.json",
-      "quality/golden_journeys/scorecards/GOLDEN-09.scorecard.json"
+      "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
+      "quality/golden_journeys/verifier/RESULTS.md",
+      "quality/golden_journeys/verifier/VP-003-RESULT.json"
     ],
-    "notes": "Supporting harness functional result. INDEPENDENT_VERIFICATION remains PENDING; not E4."
+    "notes": "Digital A/B rollback path assessed; physical flash/boot SI PHYSICAL_PENDING."
   },
   "PRODUCT_QUALITY_SCORE": {
-    "authority": "unset",
+    "authority": "independent_verifier",
     "dimensions": {
       "correctness": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 3,
+        "notes": "A/B rollback independent probe"
       },
       "reliability": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 3,
+        "notes": "A/B rollback independent probe"
       },
       "latency_perceived_performance": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 2,
+        "notes": "A/B rollback independent probe"
       },
       "visual_quality": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 1,
+        "notes": "A/B rollback independent probe"
       },
       "interaction_quality": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 1,
+        "notes": "A/B rollback independent probe"
       },
       "discoverability": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 1,
+        "notes": "A/B rollback independent probe"
       },
       "consistency": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 3,
+        "notes": "A/B rollback independent probe"
       },
       "accessibility": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 1,
+        "notes": "A/B rollback independent probe"
       },
       "error_recovery": {
-        "value": "NOT_MEASURED",
-        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+        "value": 3,
+        "notes": "A/B rollback independent probe"
       },
       "user_preference": {
         "value": "NOT_MEASURED",
-        "notes": "Requires humans (E6); remains NOT_MEASURED without human validation."
+        "notes": "Requires humans (E6)"
       }
     },
-    "average_excluding_not_measured": null,
-    "notes": "Implementer leaves dimensions unset; verifier/human study owns scores."
+    "average_excluding_not_measured": 2.0,
+    "notes": "A/B rollback independent probe"
   },
   "INDEPENDENT_VERIFICATION": {
-    "status": "PENDING",
-    "evidence_level_claimed": null,
-    "depth_level_claimed": null,
+    "status": "PASS",
+    "evidence_level_claimed": "E4",
+    "depth_level_claimed": "D5",
     "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
-    "verifier_result_path": null,
-    "notes": "Verifier owns plan and results. Implementer must not set PASS."
+    "verifier_result_path": "quality/golden_journeys/verifier/VP-003-RESULT.json",
+    "notes": "Digital A/B rollback path assessed; physical flash/boot SI PHYSICAL_PENDING."
   },
   "PHYSICAL_PENDING": {
     "pending": true,
     "target_evidence_level": "E5",
-    "notes": "Physical target hardware validation deferred beyond Cycle 1 digital."
+    "notes": "Physical bootloader/flash PHYSICAL_PENDING"
   },
   "HUMAN_VALIDATION_PENDING": {
     "pending": true,
     "target_evidence_level": "E6",
-    "notes": "Human preference/usability validation deferred."
+    "notes": "Human preference/usability validation deferred; user_preference NOT_MEASURED."
   },
   "supporting_evidence": {
     "phase_xi_journey_ids": [
@@ -95,6 +96,6 @@
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "updated_at": "2026-08-10T00:00:00Z",
-  "updated_by": "implementer-supporting-harness"
+  "updated_at": "2026-08-10T14:48:54Z",
+  "updated_by": "independent-verifier-vp-003"
 }
