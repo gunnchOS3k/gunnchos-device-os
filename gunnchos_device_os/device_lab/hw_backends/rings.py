@@ -177,6 +177,19 @@ class RingsBackend:
         }
 
     def fallback_conventional(self) -> dict[str, Any]:
-        row = {"kind": "fallback", "input": "keyboard_mouse", "reason": "ring_unavailable_or_rejected"}
+        """Fallback to conventional keyboard/mouse — not RING_TO_REAL_APPLICATION_INPUT_PASS."""
+        from gunnchos_device_os.device_lab.apps.surfaces import BrowserSurface
+        from gunnchos_device_os.device_lab.virtualization.guest_input import inject_key
+
+        surface = (self.surfaces.browser if self.surfaces else BrowserSurface())
+        inj = inject_key(monitor_sock=None, key="a", hybrid_surface=surface)
+        row = {
+            "kind": "fallback",
+            "input": "keyboard_mouse",
+            "reason": "ring_unavailable_or_rejected",
+            "injection": inj,
+            "RING_TO_REAL_APPLICATION_INPUT_PASS": False,
+            "RING_SPATIAL_ACCURACY": "SIMULATED",
+        }
         self.actions.append(row)
-        return {"ok": True, "fallback": row}
+        return {"ok": bool(inj.get("ok")), "fallback": row}

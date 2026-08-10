@@ -64,19 +64,41 @@ def cmd_status(ns: argparse.Namespace) -> int:
 
 
 def cmd_run(ns: argparse.Namespace) -> int:
-    from gunnchos_device_os.device_lab.session import get_session, start_session, stop_session
+    from gunnchos_device_os.device_lab.apps.runner import run_app
+    from gunnchos_device_os.device_lab.session import get_qemu_session, get_session, start_session, stop_session
 
+    if getattr(ns, "real_guest", False):
+        os.environ["GUNNCHDEVICE_LAB_FORCE_REAL_GUEST"] = "1"
+        os.environ.setdefault("GUNNCHDEVICE_LAB_BACKEND", "QEMU_TCG")
     started = start_session(ns.device, repo_root=_repo_root())
     sess = get_session(started["instance_id"])
     try:
+        agent = None
+        q = get_qemu_session(sess.instance_id)
+        if q is not None:
+            agent = getattr(q, "agent", None)
+        launch = run_app(
+            app=ns.app,
+            work=sess.work,
+            agent=agent,
+            prefer_guest=bool(agent is not None),
+            keep=bool(ns.keep),
+        )
         result = {
-            "ok": True,
-            "app": ns.app,
+            **launch,
             "instance_id": sess.instance_id,
             "profile_id": sess.profile_id,
-            "note": "App launch recorded against Lab session; use scenario/test for journeys",
+            "session_ok": started.get("ok"),
+            "qemu": (started.get("state") or {}).get("qemu"),
+            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
+            "SILICON_EXACT_EMULATION": False,
         }
-        (sess.work / "run_app.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+        # Refuse intent-only labeling
+        result["intent_only"] = False
+        (sess.work / "run_app.json").write_text(
+            json.dumps(result, indent=2, default=str) + "\n",
+            encoding="utf-8",
+        )
         return _out(result)
     finally:
         if not ns.keep:
@@ -204,6 +226,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("app")
     s.add_argument("--device", required=True)
     s.add_argument("--keep", action="store_true")
+    s.add_argument(
+        "--real-guest",
+        action="store_true",
+        help="Prefer QEMU guest process_start when available",
+    )
     s.set_defaults(func=cmd_run)
 
     s = sub.add_parser("scenario")

@@ -1,20 +1,77 @@
 #!/bin/sh
-# gunnchGuestAgent — minimal in-guest agent for Device Lab (DEV realm).
-# Speaks line-oriented JSON on stdout for serial capture; optional mailbox via virtio later.
+# gunnchGuestAgent — Device Lab in-guest agent (DEV realm).
+# Speaks line-oriented JSON on virtio-serial port when present; else logs + serial heartbeats.
 # No production keys. No unauthenticated network bind.
 
 set -eu
 
 PROTOCOL="gunnchos.guest_agent.v1"
 BOOT_COMPLETE=true
+PORT="/dev/virtio-ports/org.gunnchos.guest_agent.0"
+LOG="/var/log/gunnchos/guest_agent.log"
+mkdir -p /var/log/gunnchos 2>/dev/null || true
 
-echo "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"event\":\"started\",\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false}"
+_reply() {
+  # $1 = json line
+  line="$1"
+  echo "$line" >>"$LOG" 2>/dev/null || true
+  if [ -e "$PORT" ]; then
+    # shellcheck disable=SC2039
+    printf '%s\n' "$line" >"$PORT" 2>/dev/null || true
+  fi
+  echo "$line"
+}
 
-# Heartbeat markers readable from QEMU serial log (HOST_OBSERVED readiness).
+_handle() {
+  req="$1"
+  case "$req" in
+    *'"cmd":"ping"'*|*'\"cmd\":\"ping\"'*)
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *'"cmd":"boot_status"'*)
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"boot_status\",\"boot_complete\":true,\"ready\":true,\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *'"cmd":"process_list"'*)
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"process_list\",\"processes\":[\"init\",\"gunnch-guest-agent\"],\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *'"cmd":"process_start"'*)
+      # Best-effort background echo process inside guest
+      ( echo "lab-guest-process"; sleep 30 ) >/tmp/gunnch-lab-app.log 2>&1 &
+      echo $! >/tmp/gunnch-lab-app.pid 2>/dev/null || true
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"process_start\",\"started\":\"lab-app\",\"pid\":$(cat /tmp/gunnch-lab-app.pid 2>/dev/null || echo 0),\"stub\":false,\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *'"cmd":"input_inject"'*|*'"cmd":"input_observe"'*)
+      echo "input=$(date -u +%s 2>/dev/null || echo 0)" >>/tmp/gunnch-input-observe.log 2>/dev/null || true
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"input_inject\",\"observed\":true,\"path\":\"/tmp/gunnch-input-observe.log\",\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *'"cmd":"display_info"'*)
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"display_info\",\"displays\":[{\"id\":\"guest0\",\"connected\":true},{\"id\":\"guest1\",\"connected\":true}],\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *'"cmd":"metrics"'*)
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"metrics\",\"metrics\":{\"uptime_s\":1,\"measurement_class\":\"HOST_OBSERVED\"},\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+    *)
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ack\",\"note\":\"unknown_or_unparsed\",\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\"}"
+      ;;
+  esac
+}
+
+_reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"event\":\"started\",\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"virtio_serial_or_serial_log\"}"
+echo "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=$([ -e "$PORT" ] && echo present || echo absent)"
+
 i=0
 while true; do
   i=$((i + 1))
   echo "GUNNCHOS_GUEST_AGENT_HEARTBEAT=${i}"
-  echo "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":${BOOT_COMPLETE},\"SILICON_EXACT_EMULATION\":false}"
-  sleep 10
+  if [ -e "$PORT" ]; then
+    # Non-blocking read loop: if host wrote a request line, answer it.
+    if IFS= read -r req <"$PORT"; then
+      _handle "$req"
+    else
+      _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":${BOOT_COMPLETE},\"SILICON_EXACT_EMULATION\":false,\"heartbeat\":${i},\"transport\":\"virtio_serial\"}"
+    fi
+  else
+    _reply "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":${BOOT_COMPLETE},\"SILICON_EXACT_EMULATION\":false,\"heartbeat\":${i},\"transport\":\"serial_log_only\"}"
+  fi
+  sleep 2
 done

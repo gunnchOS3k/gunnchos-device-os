@@ -134,6 +134,13 @@ class LabSession:
             if sess_obj is not None:
                 _QEMU_SESSIONS[self.instance_id] = sess_obj
             qemu_info = q
+            # Merge real guest dual outputs into display honesty plane when present
+            gout = ((q.get("state") or {}).get("guest_outputs")) or (
+                (q.get("state") or {}).get("display_transport") or {}
+            ).get("guest_outputs")
+            if gout and len(gout) >= 2:
+                self.display.outputs = list(gout)
+                self.display.backend_name = "qemu_virtio_gpu"
             # If QEMU was required and skipped/failed, surface honestly (do not fake PASS).
             if not q.get("ok") and q.get("SKIPPED_ENVIRONMENT"):
                 self.state = {
@@ -248,6 +255,10 @@ def start_session(profile_id: str, *, repo_root: Path, work: Path | None = None)
     )
     _INSTANCES[instance_id] = sess
     return sess.start()
+
+
+def get_qemu_session(instance_id: str) -> Any | None:
+    return _QEMU_SESSIONS.get(instance_id)
 
 
 def get_session(instance_id: str) -> LabSession:

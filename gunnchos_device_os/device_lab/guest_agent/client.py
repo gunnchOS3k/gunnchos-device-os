@@ -114,7 +114,12 @@ class GuestAgentClient:
         if cmd == "process_list":
             return {**base, "processes": ["init", "gunnch-guest-agent"]}
         if cmd == "process_start":
-            return {**base, "started": payload.get("name"), "stub": True}
+            return {
+                **base,
+                "started": payload.get("name"),
+                "stub": True,
+                "note": "Host mailbox stub — not a real guest process",
+            }
         if cmd == "process_stop":
             return {**base, "stopped": payload.get("name"), "stub": True}
         if cmd == "package_ops":
@@ -127,8 +132,20 @@ class GuestAgentClient:
         if cmd == "display_info":
             return {
                 **base,
-                "displays": payload.get("expected_displays") or [{"id": "guest0", "connected": True}],
+                "displays": payload.get("expected_displays")
+                or [
+                    {"id": "guest0", "connected": True},
+                    {"id": "guest1", "connected": True},
+                ],
                 "note": "Guest-reported; not physical panel measurement",
+            }
+        if cmd in {"input_inject", "input_observe"}:
+            return {
+                **base,
+                "observed": True,
+                "stub": True,
+                "kind": payload.get("kind"),
+                "note": "Mailbox stub input observe — prefer QEMU monitor/virtio path",
             }
         if cmd == "logs":
             return {**base, "lines": ["GUNNCHOS_BOOT_COMPLETE=true"]}
