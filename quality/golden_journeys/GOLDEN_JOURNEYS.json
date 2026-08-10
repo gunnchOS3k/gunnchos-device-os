@@ -1,0 +1,135 @@
+{
+  "schema": "gunnchos.golden_journeys.v1",
+  "work_packet": "WP-003",
+  "cycle": 1,
+  "required_on_major_pr": true,
+  "digital_target": {
+    "evidence_level": "E4",
+    "depth_level": "D6",
+    "note": "E4 independent digital verification and D6 cross-app real user workflow are verifier targets; implementer harness does not claim them."
+  },
+  "physical_target": {
+    "evidence_level": "E5",
+    "deferred": true
+  },
+  "journeys": [
+    {
+      "id": "GOLDEN-01",
+      "name": "Student assignment then recreation",
+      "severity": "S1",
+      "description": "Complete/submit assignment, verify receipt, game, return to intact work.",
+      "capability_ids": [
+        "student_assignment_submit",
+        "local_ai_help",
+        "recreation_resume",
+        "document_integrity"
+      ]
+    },
+    {
+      "id": "GOLDEN-02",
+      "name": "Offline student reconnect",
+      "severity": "S1",
+      "description": "Work offline, reconnect, sync without data loss.",
+      "capability_ids": [
+        "offline_edit",
+        "conflict_safe_sync",
+        "no_silent_overwrite"
+      ]
+    },
+    {
+      "id": "GOLDEN-03",
+      "name": "Creator build/package/install",
+      "severity": "S1",
+      "description": "Clone/edit/test/build/package/install app.",
+      "capability_ids": [
+        "creator_toolchain",
+        "package_install_run",
+        "ai_code_assist_api"
+      ]
+    },
+    {
+      "id": "GOLDEN-04",
+      "name": "Office dock workflow",
+      "severity": "S1",
+      "description": "Dock, docs/email/calendar/meeting/print, undock safely.",
+      "capability_ids": [
+        "dock_undock_continuity",
+        "office_docs_email_calendar",
+        "print_export"
+      ]
+    },
+    {
+      "id": "GOLDEN-05",
+      "name": "Handheld play to dock to work to undock",
+      "severity": "S1",
+      "description": "Checkpoint game, work docked, resume.",
+      "capability_ids": [
+        "handheld_game_checkpoint",
+        "docked_work_mode",
+        "game_state_resume"
+      ]
+    },
+    {
+      "id": "GOLDEN-06",
+      "name": "DS-XL dual-screen coding",
+      "severity": "S1",
+      "description": "IDE + docs/logs + AI + build/test/debug.",
+      "capability_ids": [
+        "dual_screen_layout",
+        "ide_terminal_preview",
+        "layout_persistence"
+      ]
+    },
+    {
+      "id": "GOLDEN-07",
+      "name": "Ring real input",
+      "severity": "S1",
+      "description": "Ring controls real document/browser/game with target/confidence safety.",
+      "capability_ids": [
+        "ring_document_browser_game",
+        "target_confidence_safety",
+        "conventional_input_fallback"
+      ]
+    },
+    {
+      "id": "GOLDEN-08",
+      "name": "Private local AI tutoring",
+      "severity": "S1",
+      "description": "Authorized local tutoring with sources/privacy/fallback.",
+      "capability_ids": [
+        "local_ai_tutoring",
+        "privacy_isolation",
+        "cloud_denied_offline_ok"
+      ]
+    },
+    {
+      "id": "GOLDEN-09",
+      "name": "Failed update rollback",
+      "severity": "S0",
+      "description": "Bad update rolls back with zero user-data loss.",
+      "capability_ids": [
+        "ab_or_equivalent_update",
+        "health_fail_rollback",
+        "user_data_intact"
+      ]
+    },
+    {
+      "id": "GOLDEN-10",
+      "name": "Lost device revoke",
+      "severity": "S0",
+      "description": "Revoke lost device/session and protect private data.",
+      "capability_ids": [
+        "trusted_device_identity",
+        "session_device_revoke",
+        "private_data_unavailable_after_revoke",
+        "local_recovery_path"
+      ]
+    }
+  ],
+  "doctrine": {
+    "implementer_may_not_claim_independent_verification": true,
+    "phase_xi_xii_tests_are_supporting_only": true,
+    "frontier_parity_tokens_forbidden": true,
+    "human_validated_and_physically_validated_forbidden": true
+  }
+}

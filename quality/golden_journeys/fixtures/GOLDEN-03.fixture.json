@@ -1,0 +1,31 @@
+{
+  "schema": "gunnchos.golden_journey_fixture.v1",
+  "journey_id": "GOLDEN-03",
+  "name": "Creator build/package/install",
+  "severity": "S1",
+  "role": "verifier_support_fixture",
+  "not_independent_verification": true,
+  "acceptance_outcomes": [
+    "Git clone/edit of creator project",
+    "Build/test/debug cycle succeeds digitally",
+    "gunnchAI code assistance via real API path (local/dev)",
+    "Package, install, run, and collect logs/profile"
+  ],
+  "digital_depth_target": "D6",
+  "digital_evidence_target": "E4",
+  "supporting_phase_xi_ids": [
+    "J-CREATOR-001",
+    "J-APP-001"
+  ],
+  "supporting_unit_tests": [],
+  "fixture_assets": {
+    "local_only": true,
+    "commercial_cloud_creds_required": false,
+    "notes": "Reuse user_journeys/fixtures and local service stack where helpful; verifier must still design independent cases."
+  },
+  "harness_entrypoints": {
+    "subset_runner": "scripts/run_golden_journey_subset.py",
+    "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-03.scorecard.json",
+    "merge_gate": "scripts/recommend_merge_golden.py"
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "schema": "gunnchos.golden_journey_path_map.v1",
+  "description": "Maps changed paths to Golden Journey subsets for major-PR orchestration. Supporting Phase XI/XII IDs are regression hooks only — not independent acceptance designs.",
+  "default_on_unknown_major": [
+    "GOLDEN-09",
+    "GOLDEN-10"
+  ],
+  "journeys": {
+    "GOLDEN-01": {
+      "path_globs": [
+        "user_journeys/**",
+        "gunnchos_device_os/cont_viii/student*",
+        "gunnchos_device_os/first_party_apps/**",
+        "gunnchos_device_os/phase_xi/**",
+        "apps/**",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-STU-001"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os",
+        "gunnchAI3k",
+        "anime-aggressors",
+        "pedestrian-pursuit"
+      ]
+    },
+    "GOLDEN-02": {
+      "path_globs": [
+        "user_journeys/journeys/J-NET-*.json",
+        "gunnchos_device_os/connectivity/**",
+        "gunnchos_device_os/cont_viii/baselines*",
+        "gunnchos_device_os/phase_xi/**",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-NET-001",
+        "J-NET-004"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os"
+      ]
+    },
+    "GOLDEN-03": {
+      "path_globs": [
+        "user_journeys/journeys/J-CREATOR-*.json",
+        "user_journeys/journeys/J-APP-*.json",
+        "gunnchos_device_os/app_pack*",
+        "gunnchos_device_os/creator*",
+        "sdk/**",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-CREATOR-001",
+        "J-APP-001"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os",
+        "gunnchAI3k"
+      ]
+    },
+    "GOLDEN-04": {
+      "path_globs": [
+        "user_journeys/journeys/J-OFF-*.json",
+        "gunnchos_device_os/dock*",
+        "gunnchos_device_os/cont_viii/office*",
+        "gunnchos_device_os/cont_viii/dock*",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-OFF-001",
+        "J-OFF-008",
+        "J-OFF-005"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os"
+      ]
+    },
+    "GOLDEN-05": {
+      "path_globs": [
+        "user_journeys/journeys/J-HAND-*.json",
+        "user_journeys/journeys/J-GAME-*.json",
+        "gunnchos_device_os/dock*",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-HAND-001",
+        "J-GAME-006"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os",
+        "anime-aggressors",
+        "pedestrian-pursuit"
+      ]
+    },
+    "GOLDEN-06": {
+      "path_globs": [
+        "user_journeys/journeys/J-DSXL-*.json",
+        "user_journeys/journeys/J-DEVSTU-*.json",
+        "gunnchos_device_os/dual_screen*",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-DSXL-001",
+        "J-DEVSTU-001"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os",
+        "gunnchAI3k"
+      ]
+    },
+    "GOLDEN-07": {
+      "path_globs": [
+        "user_journeys/journeys/J-RING-*.json",
+        "gunnchos_device_os/edge_io*",
+        "cross_repo_firmware_bridge/**",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-RING-001",
+        "J-RING-003"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os",
+        "gunnchos-hardware-industrial-design",
+        "edge-io-measurement-node"
+      ]
+    },
+    "GOLDEN-08": {
+      "path_globs": [
+        "user_journeys/journeys/J-AI-*.json",
+        "gunnchos_device_os/gunnchai*",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-AI-001",
+        "J-AI-003"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os",
+        "gunnchAI3k"
+      ]
+    },
+    "GOLDEN-09": {
+      "path_globs": [
+        "user_journeys/journeys/J-REC-*.json",
+        "user_journeys/journeys/J-APP-002.json",
+        "gunnchos_device_os/phase_xiv/packages/**",
+        "gunnchos_device_os/boot*",
+        "os_build/**",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-REC-003",
+        "J-APP-002"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os"
+      ]
+    },
+    "GOLDEN-10": {
+      "path_globs": [
+        "gunnchos_device_os/phase_xv/identity/**",
+        "gunnchos_device_os/attestation*",
+        "gunnchos_device_os/guardian*",
+        "user_journeys/journeys/J-IDENT-*.json",
+        "user_journeys/journeys/J-SEC-*.json",
+        "quality/golden_journeys/**"
+      ],
+      "supporting_phase_xi_ids": [
+        "J-IDENT-001",
+        "J-SEC-001"
+      ],
+      "supporting_unit_tests": [
+        "tests/phase_xv/test_phase_xv.py::test_security_regression"
+      ],
+      "owner_repos": [
+        "gunnchos-device-os"
+      ]
+    }
+  }
+}

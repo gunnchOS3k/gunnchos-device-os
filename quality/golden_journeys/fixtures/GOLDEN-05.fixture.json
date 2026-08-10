@@ -1,0 +1,31 @@
+{
+  "schema": "gunnchos.golden_journey_fixture.v1",
+  "journey_id": "GOLDEN-05",
+  "name": "Handheld play to dock to work to undock",
+  "severity": "S1",
+  "role": "verifier_support_fixture",
+  "not_independent_verification": true,
+  "acceptance_outcomes": [
+    "Handheld first-party game play + checkpoint",
+    "Dock into desktop shell",
+    "Complete real work task docked",
+    "Undock resumes accepted game state"
+  ],
+  "digital_depth_target": "D6",
+  "digital_evidence_target": "E4",
+  "supporting_phase_xi_ids": [
+    "J-HAND-001",
+    "J-GAME-006"
+  ],
+  "supporting_unit_tests": [],
+  "fixture_assets": {
+    "local_only": true,
+    "commercial_cloud_creds_required": false,
+    "notes": "Reuse user_journeys/fixtures and local service stack where helpful; verifier must still design independent cases."
+  },
+  "harness_entrypoints": {
+    "subset_runner": "scripts/run_golden_journey_subset.py",
+    "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-05.scorecard.json",
+    "merge_gate": "scripts/recommend_merge_golden.py"
+  }
+}

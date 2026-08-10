@@ -1,0 +1,31 @@
+{
+  "schema": "gunnchos.golden_journey_fixture.v1",
+  "journey_id": "GOLDEN-06",
+  "name": "DS-XL dual-screen coding",
+  "severity": "S1",
+  "role": "verifier_support_fixture",
+  "not_independent_verification": true,
+  "acceptance_outcomes": [
+    "IDE/code on one display; terminal/logs/docs/preview on second",
+    "AI assist available",
+    "Build/test/debug on dual-screen layout",
+    "Layout persistence across session"
+  ],
+  "digital_depth_target": "D6",
+  "digital_evidence_target": "E4",
+  "supporting_phase_xi_ids": [
+    "J-DSXL-001",
+    "J-DEVSTU-001"
+  ],
+  "supporting_unit_tests": [],
+  "fixture_assets": {
+    "local_only": true,
+    "commercial_cloud_creds_required": false,
+    "notes": "Reuse user_journeys/fixtures and local service stack where helpful; verifier must still design independent cases."
+  },
+  "harness_entrypoints": {
+    "subset_runner": "scripts/run_golden_journey_subset.py",
+    "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json",
+    "merge_gate": "scripts/recommend_merge_golden.py"
+  }
+}
