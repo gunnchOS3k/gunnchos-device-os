@@ -56,3 +56,12 @@ artifacts/phase_xii/rj_run*.log
 # Stage 2 generated sysroots / images / prove outputs (rebuildable)
 artifacts/stage2/**
 !artifacts/stage2/.gitkeep
+
+# Phase XIV prove scratch (keep authoritative reports)
+artifacts/phase_xiv/**
+!artifacts/phase_xiv/OS_PROVE_REPORT.json
+!artifacts/phase_xiv/STAGE2_REPROOF.json
+!artifacts/phase_xiv/.gitkeep
+
+# Stage 2 local signing material (never commit)
+os_build/stage2/keys/
