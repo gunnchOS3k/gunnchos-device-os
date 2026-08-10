@@ -113,7 +113,45 @@ class ContinuityVault:
         self.audit.append({"op": "attach_peripheral", **entry})
         return {"ok": True, **entry}
 
+    def wipe(self, *, reason: str = "mdm_wipe") -> dict[str, Any]:
+        """Clear sealed continuity contents (digital revoke / wipe path)."""
+        removed_files = 0
+        for p in list(self.root.glob("*.cont")):
+            p.unlink(missing_ok=True)
+            removed_files += 1
+        self._clipboard = None
+        self._files.clear()
+        self._state.clear()
+        self._peripherals.clear()
+        # Fail-closed: deny all continuity after wipe
+        self.perms = ContinuityPermission(
+            allow_clipboard=False,
+            allow_files=False,
+            allow_state=False,
+            allow_peripherals=False,
+        )
+        entry = {
+            "ok": True,
+            "op": "wipe",
+            "device": self.identity.device_id,
+            "reason": reason,
+            "removed_files": removed_files,
+            "continuity_access": "denied",
+        }
+        self.audit.append(entry)
+        (self.root / "WIPE.json").write_text(json.dumps(entry, indent=2) + "\n", encoding="utf-8")
+        return entry
+
     def export_handoff(self) -> dict[str, Any]:
+        if not any(
+            (
+                self.perms.allow_clipboard,
+                self.perms.allow_files,
+                self.perms.allow_state,
+                self.perms.allow_peripherals,
+            )
+        ):
+            raise PermissionError("continuity_wiped_or_denied")
         return {
             "schema": "gunnchos.phase_xiv.continuity_handoff.v1",
             "user_id": self.identity.user_id,
@@ -142,6 +180,12 @@ class ContinuityMesh:
         vault = ContinuityVault(self.root / device_id, ident)
         self.devices[device_id] = vault
         return vault
+
+    def wipe_device(self, device_id: str, *, reason: str = "mdm_wipe") -> dict[str, Any]:
+        vault = self.devices.get(device_id)
+        if vault is None:
+            raise KeyError(f"unknown continuity device: {device_id}")
+        return vault.wipe(reason=reason)
 
     def handoff(self, src_id: str, dst_id: str) -> dict[str, Any]:
         src = self.devices[src_id]

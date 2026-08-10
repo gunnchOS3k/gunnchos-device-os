@@ -7,6 +7,10 @@ from gunnchos_device_os.golden_journeys.harness import run_supporting_subset
 from gunnchos_device_os.golden_journeys.merge_gate import recommend_merge
 from gunnchos_device_os.golden_journeys.path_map import select_journeys_for_paths
 from gunnchos_device_os.golden_journeys.scorecard import validate_scorecards
+from gunnchos_device_os.golden_journeys.digital_paths import (
+    fleet_mdm_wipe_continuity_denial,
+    offline_office_lms_reconnect,
+)
 
 __all__ = [
     "SCHEMA_SCORECARD",
@@ -15,4 +19,6 @@ __all__ = [
     "run_supporting_subset",
     "validate_scorecards",
     "recommend_merge",
+    "offline_office_lms_reconnect",
+    "fleet_mdm_wipe_continuity_denial",
 ]

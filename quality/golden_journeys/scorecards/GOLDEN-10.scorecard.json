@@ -84,12 +84,14 @@
       "J-SEC-001"
     ],
     "unit_or_integration_tests": [
-      "tests/phase_xv/test_phase_xv.py::test_security_regression"
+      "tests/phase_xv/test_phase_xv.py::test_security_regression",
+      "tests/test_wp003_digital_remediation.py::test_fleet_mdm_wipe_continuity_denial_d6"
     ],
     "fixture_paths": [
       "quality/golden_journeys/fixtures/GOLDEN-10.fixture.json"
     ],
-    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
+    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4).",
+    "remediation_notes": "Remediation: fleet_mdm_wipe_continuity_denial digital D6 path. IV status remains verifier-owned (do not self-claim PASS)."
   },
   "defects": [
     {

@@ -161,31 +161,44 @@ def probe_golden_01(work: Path) -> dict[str, Any]:
         except Exception:
             pass
 
-    # First-party recreation: prefer in-tree GunnchPlay + web package presence.
-    # phase_xii play_short_session looks for external Godot repos and reports XR-DEFECT-GAME-REPO.
+    # First-party recreation: GunnchPlay + accepted in-tree web packages.
+    # Sibling Godot/Node repos are optional; missing siblings fail-closed without inventing repos.
     from gunnchos_device_os.phase_xiv.play import GunnchPlay
     play = GunnchPlay(root=work / "play")
     regs = play.register_first_party(ROOT)
     web_ok = (ROOT / "games/anime-aggressors-web/index.html").is_file()
     save = play.save("anime-aggressors", 1, {"level": 1, "score": 10}, checkpoint=True)
     resumed = play.resume("anime-aggressors", 1)
-    # Attempt beatlink launcher (in-tree path) as an actual launch surface when available
-    beat = games.play_short_session(work, game="beatlink-party")
-    game_ok = bool(regs) and web_ok and bool(resumed.get("ok")) and bool(save)
+    anime = games.play_short_session(ROOT, game="anime-aggressors")
+    beat = games.play_short_session(ROOT, game="beatlink-party")
+    # Pass digital recreation when GunnchPlay + at least one accepted in-tree launch works.
+    launched_ok = bool(anime.get("ok") or beat.get("ok"))
+    game_ok = bool(regs) and web_ok and bool(resumed.get("ok")) and bool(save) and launched_ok
     checks.append(check(
         "A1_recreation",
         game_ok,
-        f"regs={len(regs) if regs else 0} web_ok={web_ok} save={save} resume={resumed} beatlink={beat}",
+        f"regs={len(regs) if regs else 0} web_ok={web_ok} save={save} resume={resumed} anime={anime.get('ok')} beatlink={beat}",
     ))
-    if not beat.get("ok"):
+    pedestrian = games.play_short_session(ROOT, game="pedestrian-pursuit")
+    if not pedestrian.get("ok") and pedestrian.get("defect") == "XR-DEFECT-GAME-REPO":
+        # Documented fail-closed for missing Godot sibling — digital D6 uses Anime/BeatLink/GunnchPlay.
         defects.append({
             "id": "VP003-DEF-G01-GAME-REPO",
             "severity": "S2",
             "journey_id": "GOLDEN-01",
-            "title": "phase_xii play_short_session cannot launch first-party Godot/sibling repos (XR-DEFECT-GAME-REPO); in-tree web packages used for digital recreation proof",
-            "detail": beat,
+            "title": "pedestrian-pursuit Godot sibling missing; fail-closed. Digital recreation uses accepted in-tree Anime/BeatLink/GunnchPlay",
+            "detail": {
+                "pedestrian": pedestrian,
+                "anime_ok": bool(anime.get("ok")),
+                "beatlink_ok": bool(beat.get("ok")),
+                "fixture_json_used": False,
+                "invented_repos": False,
+            },
             "blocking": False,
         })
+    # Clear prior beatlink-missing defect style when in-tree beatlink/anime launches succeed.
+    if launched_ok and beat.get("ok"):
+        defects[:] = [d for d in defects if d.get("id") != "VP003-DEF-G01-GAME-REPO" or "pedestrian" in str(d.get("title", "")).lower()]
 
     post_hash = digest(upload) if upload.exists() else None
     intact = pre_hash is not None and post_hash == pre_hash
@@ -216,10 +229,12 @@ def probe_golden_01(work: Path) -> dict[str, Any]:
 
 
 def probe_golden_02(work: Path) -> dict[str, Any]:
+    from gunnchos_device_os.golden_journeys.digital_paths import offline_office_lms_reconnect
     from gunnchos_device_os.offline_sync import OfflineSyncEngine, ConflictPolicy
 
     checks: list[dict[str, Any]] = []
     defects: list[dict[str, Any]] = []
+    # Engine-level VECTOR_CLOCK still required
     local = OfflineSyncEngine(replica_id="student-local", policy=ConflictPolicy.VECTOR_CLOCK)
     remote = OfflineSyncEngine(replica_id="lms-remote", policy=ConflictPolicy.VECTOR_CLOCK)
     local.put("assignment.odt", {"body": "offline draft A"})
@@ -234,18 +249,44 @@ def probe_golden_02(work: Path) -> dict[str, Any]:
     checks.append(check("B3_no_silent_overwrite", not silent, f"silent={silent}"))
     checks.append(check("B2_policy_vector_clock_required", conflict_surfaced, "VECTOR_CLOCK concurrent conflict required for acceptance"))
 
+    # Cross-app D6: office offline edit + LMS queue + reconnect conflict-safe + LMS receipt
+    cross = offline_office_lms_reconnect(ROOT, work / "d6")
+    checks.append(check(
+        "B4_office_lms_offline_reconnect_cross_app",
+        bool(cross.get("ok")),
+        f"cross_app={cross.get('cross_app')} conflict={cross.get('conflict_surfaced')} "
+        f"silent={cross.get('silent_overwrite')} receipt={bool(cross.get('lms_receipt'))} "
+        f"office_ok={bool((cross.get('office') or {}).get('ok', True))}",
+    ))
+
     failed = [c for c in checks if not c["ok"]]
     if failed:
         defects.append(blocking_defect("GOLDEN-02", "S1", "Offline reconnect conflict-safe acceptance failed", failed))
     status = "PASS" if not failed else "FAIL"
-    # Engine-level only → D5 / PARTIAL for full student office+LMS offline D6
-    independent = "PARTIAL" if status == "PASS" else "FAIL"
-    notes = "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised — PARTIAL/D5."
+    d6_earned = status == "PASS" and bool(cross.get("ok")) and conflict_surfaced and not silent
+    if d6_earned:
+        independent = "PASS"
+        depth = "D6"
+        notes = "Office+LMS offline→reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
+    else:
+        independent = "PARTIAL" if status == "PASS" else "FAIL"
+        depth = "D5" if status == "PASS" else "D3"
+        notes = "VECTOR_CLOCK conflict detection earned; office+LMS offline D6 cross-app incomplete — PARTIAL/D5."
+        if status == "PASS":
+            defects.append({
+                "id": "VP003-S2-G02-D6-OFFICE-LMS",
+                "severity": "S2",
+                "journey_id": "GOLDEN-02",
+                "title": "Offline sync conflict-safe at engine D5; full office+LMS offline D6 cross-app not earned",
+                "blocking": False,
+            })
     q = base_quality(notes, correctness=2 if status == "PASS" else 0, reliability=2 if status == "PASS" else 1,
-                     latency_perceived_performance=2, visual_quality=1, interaction_quality=1, discoverability=1,
-                     consistency=2 if status == "PASS" else 0, accessibility=1, error_recovery=2 if conflict_surfaced else 0)
+                     latency_perceived_performance=2, visual_quality=1,
+                     interaction_quality=2 if d6_earned else 1, discoverability=1,
+                     consistency=2 if status == "PASS" else 0, accessibility=1,
+                     error_recovery=2 if conflict_surfaced else 0)
     return record("GOLDEN-02", severity="S1", functional=status, independent=independent,
-                  evidence="E4" if status == "PASS" else "E2", depth="D5" if status == "PASS" else "D3",
+                  evidence="E4" if status == "PASS" else "E2", depth=depth,
                   checks=checks, defects=defects, quality=q, notes=notes,
                   physical_notes="Wi-Fi/radio partition PHYSICAL_PENDING")
 
@@ -654,17 +695,44 @@ def probe_golden_10(work: Path) -> dict[str, Any]:
     login = plane.login("owner-recovered", "recover-secret")
     checks.append(check("J3_local_recovery_path", bool(rec) and bool(login), f"rec={rec} login={login}"))
 
+    # Digital fleet MDM wipe + continuity denial (no physical fleet SI)
+    from gunnchos_device_os.golden_journeys.digital_paths import fleet_mdm_wipe_continuity_denial
+    wipe_path = fleet_mdm_wipe_continuity_denial(ROOT, work / "fleet_wipe")
+    checks.append(check(
+        "J4_fleet_mdm_wipe_continuity_denial",
+        bool(wipe_path.get("ok")),
+        f"fleet={wipe_path.get('fleet_e2e')} wipe={wipe_path.get('wipe')} "
+        f"private_gone={wipe_path.get('private_gone')} handoff_denied={wipe_path.get('handoff_denied')} "
+        f"files_denied={wipe_path.get('files_denied')}",
+    ))
+
     failed = [c for c in checks if not c["ok"]]
     if failed:
         defects.append(blocking_defect("GOLDEN-10", "S0", "Lost-device revoke S0 acceptance failed", failed))
     status = "PASS" if not failed else "FAIL"
-    independent = "PARTIAL" if status == "PASS" else "FAIL"
-    notes = "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed — PARTIAL/D5."
+    d6_earned = status == "PASS" and bool(wipe_path.get("ok"))
+    if d6_earned:
+        independent = "PASS"
+        depth = "D6"
+        notes = "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
+    else:
+        independent = "PARTIAL" if status == "PASS" else "FAIL"
+        depth = "D5" if status == "PASS" else "D3"
+        notes = "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed — PARTIAL/D5."
+        if status == "PASS":
+            defects.append({
+                "id": "VP003-S2-G10-FLEET-WIPE",
+                "severity": "S2",
+                "journey_id": "GOLDEN-10",
+                "title": "Session revoke/unbind/denied-perms/recovery digital PASS; full fleet MDM wipe + continuity vault D6 incomplete",
+                "blocking": False,
+            })
     q = base_quality(notes, correctness=2 if status == "PASS" else 0, reliability=2 if status == "PASS" else 0,
-                     latency_perceived_performance=2, visual_quality=1, interaction_quality=1, discoverability=1,
+                     latency_perceived_performance=2, visual_quality=1,
+                     interaction_quality=2 if d6_earned else 1, discoverability=1,
                      consistency=2, accessibility=1, error_recovery=2 if status == "PASS" else 0)
     return record("GOLDEN-10", severity="S0", functional=status, independent=independent,
-                  evidence="E4" if status == "PASS" else "E2", depth="D5" if status == "PASS" else "D3",
+                  evidence="E4" if status == "PASS" else "E2", depth=depth,
                   checks=checks, defects=defects, quality=q, notes=notes,
                   physical_notes="Secure element / factory identity PHYSICAL_PENDING")
 

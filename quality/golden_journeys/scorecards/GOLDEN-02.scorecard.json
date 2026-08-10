@@ -83,11 +83,14 @@
       "J-NET-001",
       "J-NET-004"
     ],
-    "unit_or_integration_tests": [],
+    "unit_or_integration_tests": [
+      "tests/test_wp003_digital_remediation.py::test_offline_office_lms_reconnect_d6"
+    ],
     "fixture_paths": [
       "quality/golden_journeys/fixtures/GOLDEN-02.fixture.json"
     ],
-    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
+    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4).",
+    "remediation_notes": "Remediation: offline_office_lms_reconnect digital D6 path. IV status remains verifier-owned (do not self-claim PASS)."
   },
   "defects": [
     {

@@ -1,0 +1,66 @@
+{
+  "schema": "gunnchos.golden_journeys.defect_backlog.v1",
+  "work_packet": "WP-003",
+  "updated_by": "implementer-wp-003-remediation",
+  "note": "Honest PARTIAL / PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING leftovers. Do not fake-close.",
+  "digital_remediation_shipped": [
+    {
+      "id": "VP003-S2-G02-D6-OFFICE-LMS",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "journey_id": "GOLDEN-02",
+      "note": "offline_office_lms_reconnect digital path added; Independent re-run required for PASS claim."
+    },
+    {
+      "id": "VP003-S2-G10-FLEET-WIPE",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "journey_id": "GOLDEN-10",
+      "note": "fleet_mdm_wipe_continuity_denial digital path added; Independent re-run required for PASS claim."
+    },
+    {
+      "id": "VP003-DEF-G01-GAME-REPO",
+      "status": "REMEDIATED_FAIL_CLOSED_IN_TREE",
+      "journey_id": "GOLDEN-01",
+      "note": "In-tree Anime/BeatLink web packages wired; pedestrian Godot sibling remains fail-closed without inventing repos."
+    }
+  ],
+  "remaining_partials_by_design": [
+    {
+      "id": "VP003-S2-G04-PHYSICAL-DOCK",
+      "severity": "S2",
+      "journey_id": "GOLDEN-04",
+      "status": "PHYSICAL_PENDING",
+      "title": "Physical dock display/Ethernet/USB/audio SI pending",
+      "honest_cap": "E5 later; keep Independent PARTIAL"
+    },
+    {
+      "id": "VP003-S2-G06-PHYSICAL-DUAL",
+      "severity": "S2",
+      "journey_id": "GOLDEN-06",
+      "status": "PHYSICAL_PENDING",
+      "title": "Physical DS-XL dual-panel hardware pending",
+      "honest_cap": "E5 later; keep Independent PARTIAL"
+    },
+    {
+      "id": "VP003-S2-G07-PHYSICAL-RING",
+      "severity": "S2",
+      "journey_id": "GOLDEN-07",
+      "status": "PHYSICAL_PENDING",
+      "title": "Physical ring SI pending",
+      "honest_cap": "E5 later; keep Independent PARTIAL"
+    },
+    {
+      "id": "VP003-S2-G08-CITATION-HUMAN",
+      "severity": "S2",
+      "journey_id": "GOLDEN-08",
+      "status": "HUMAN_VALIDATION_PENDING",
+      "title": "Citation usefulness and tutoring UX remain human-panel pending",
+      "honest_cap": "E6 later; keep Independent PARTIAL"
+    }
+  ],
+  "claim_boundary": {
+    "independent_verification_claimed": false,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false
+  }
+}
