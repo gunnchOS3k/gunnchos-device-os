@@ -1,0 +1,33 @@
+{
+  "schema": "gunnchos.golden_journey_fixture.v1",
+  "journey_id": "GOLDEN-08",
+  "name": "Private local AI tutoring",
+  "severity": "S1",
+  "role": "verifier_support_fixture",
+  "not_independent_verification": true,
+  "acceptance_outcomes": [
+    "Authorized assignment/source only",
+    "Actual OS AI API + gunnchAI local routing",
+    "Learning/project memory with citations where needed",
+    "Offline success path",
+    "Cloud denied case enforced",
+    "Privacy isolation verified"
+  ],
+  "digital_depth_target": "D6",
+  "digital_evidence_target": "E4",
+  "supporting_phase_xi_ids": [
+    "J-AI-001",
+    "J-AI-003"
+  ],
+  "supporting_unit_tests": [],
+  "fixture_assets": {
+    "local_only": true,
+    "commercial_cloud_creds_required": false,
+    "notes": "Reuse user_journeys/fixtures and local service stack where helpful; verifier must still design independent cases."
+  },
+  "harness_entrypoints": {
+    "subset_runner": "scripts/run_golden_journey_subset.py",
+    "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json",
+    "merge_gate": "scripts/recommend_merge_golden.py"
+  }
+}

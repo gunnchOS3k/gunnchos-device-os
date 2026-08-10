@@ -1,0 +1,101 @@
+{
+  "schema": "gunnchos.golden_journey_quality_scorecard.v1",
+  "journey_id": "GOLDEN-04",
+  "severity": "S1",
+  "work_packet": "WP-003",
+  "FUNCTIONAL_PASS": {
+    "status": "PASS",
+    "authority": "implementer_supporting_harness",
+    "evidence_paths": [
+      "quality/golden_journeys/fixtures/GOLDEN-04.fixture.json",
+      "quality/golden_journeys/scorecards/GOLDEN-04.scorecard.json"
+    ],
+    "notes": "Supporting harness functional result. INDEPENDENT_VERIFICATION remains PENDING; not E4."
+  },
+  "PRODUCT_QUALITY_SCORE": {
+    "authority": "unset",
+    "dimensions": {
+      "correctness": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "reliability": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "latency_perceived_performance": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "visual_quality": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "interaction_quality": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "discoverability": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "consistency": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "accessibility": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "error_recovery": {
+        "value": "NOT_MEASURED",
+        "notes": "Awaiting independent verifier / human study; implementer does not score product quality as acceptance."
+      },
+      "user_preference": {
+        "value": "NOT_MEASURED",
+        "notes": "Requires humans (E6); remains NOT_MEASURED without human validation."
+      }
+    },
+    "average_excluding_not_measured": null,
+    "notes": "Implementer leaves dimensions unset; verifier/human study owns scores."
+  },
+  "INDEPENDENT_VERIFICATION": {
+    "status": "PENDING",
+    "evidence_level_claimed": null,
+    "depth_level_claimed": null,
+    "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
+    "verifier_result_path": null,
+    "notes": "Verifier owns plan and results. Implementer must not set PASS."
+  },
+  "PHYSICAL_PENDING": {
+    "pending": true,
+    "target_evidence_level": "E5",
+    "notes": "Physical target hardware validation deferred beyond Cycle 1 digital."
+  },
+  "HUMAN_VALIDATION_PENDING": {
+    "pending": true,
+    "target_evidence_level": "E6",
+    "notes": "Human preference/usability validation deferred."
+  },
+  "supporting_evidence": {
+    "phase_xi_journey_ids": [
+      "J-OFF-001",
+      "J-OFF-008",
+      "J-OFF-005"
+    ],
+    "unit_or_integration_tests": [],
+    "fixture_paths": [
+      "quality/golden_journeys/fixtures/GOLDEN-04.fixture.json"
+    ],
+    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
+  },
+  "defects": [],
+  "claim_boundary": {
+    "independent_verification_claimed": false,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false
+  },
+  "updated_at": "2026-08-10T00:00:00Z",
+  "updated_by": "implementer-supporting-harness"
+}

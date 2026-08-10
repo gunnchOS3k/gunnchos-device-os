@@ -5,7 +5,8 @@
 	cloud-dev-plane cloud-dev-plane-test cloud-dev-plane-sbom \
 	bootable-reference full-product-iv full-product-v full-product-vi full-product-vii \
 	bootstrap build package evidence factory-station full-product-viii release-firewall \
-	full-product-ix cont-ix-evidence
+	full-product-ix cont-ix-evidence \
+	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate
 
 PY := PYTHONPATH=src:.
 
@@ -224,3 +225,17 @@ phase-xi-representative:
 
 phase-xi-test:
 	PYTHONPATH=.:src pytest -q tests/test_phase_xi_user_journeys.py
+
+# WP-003 Golden Journey infrastructure (supporting harness — NOT independent verification)
+golden-journeys-validate:
+	$(PY) python3 scripts/validate_golden_journey_scorecards.py
+	PYTHONPATH=.:src pytest -q tests/test_golden_journey_infrastructure.py
+
+golden-journeys-subset:
+	$(PY) python3 scripts/run_golden_journey_subset.py --paths-file $${PATHS_FILE:-/dev/null}
+
+golden-journeys-all:
+	$(PY) python3 scripts/run_golden_journey_subset.py --all
+
+golden-journeys-merge-gate:
+	$(PY) python3 scripts/recommend_merge_golden.py --all

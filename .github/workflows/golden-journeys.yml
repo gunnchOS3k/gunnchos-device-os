@@ -1,0 +1,118 @@
+name: Golden Journeys (WP-003)
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    paths:
+      - "quality/golden_journeys/**"
+      - "gunnchos_device_os/golden_journeys/**"
+      - "scripts/run_golden_journey_subset.py"
+      - "scripts/validate_golden_journey_scorecards.py"
+      - "scripts/recommend_merge_golden.py"
+      - "tests/test_golden_journey_infrastructure.py"
+      - ".github/workflows/golden-journeys.yml"
+  workflow_dispatch:
+    inputs:
+      run_all:
+        description: "Run all ten supporting Golden Journeys"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: golden-journeys-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scorecards:
+    name: Scorecard schema + fixtures
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install -U pip pytest pyyaml
+      - name: Validate scorecards / matrix / verifier stubs
+        env:
+          PYTHONPATH: .:src
+        run: |
+          python3 scripts/validate_golden_journey_scorecards.py
+          pytest -q tests/test_golden_journey_infrastructure.py
+
+  supporting-subset:
+    name: Supporting subset + S0/S1 merge gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install -U pip pytest pyyaml
+      - name: Collect changed paths
+        id: changes
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --name-only "origin/${{ github.base_ref }}"...HEAD > /tmp/changed_paths.txt || \
+              git diff --name-only "${{ github.event.pull_request.base.sha }}"...HEAD > /tmp/changed_paths.txt
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.run_all }}" = "true" ]; then
+            : > /tmp/changed_paths.txt
+            echo "run_all=true" >> "$GITHUB_OUTPUT"
+          else
+            git diff --name-only HEAD~1...HEAD > /tmp/changed_paths.txt || true
+          fi
+          echo "Changed paths:"
+          cat /tmp/changed_paths.txt || true
+      - name: Run supporting Golden Journey subset
+        env:
+          PYTHONPATH: .:src
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/golden_journeys
+          if [ "${{ steps.changes.outputs.run_all }}" = "true" ]; then
+            python3 scripts/run_golden_journey_subset.py --all --json | tee artifacts/golden_journeys/ci_run.json
+            python3 scripts/recommend_merge_golden.py --all
+          else
+            python3 scripts/run_golden_journey_subset.py --paths-file /tmp/changed_paths.txt --json | tee artifacts/golden_journeys/ci_run.json
+            python3 scripts/recommend_merge_golden.py --paths-file /tmp/changed_paths.txt --skip-harness
+          fi
+      - name: Assert no independent / frontier / physical claims
+        env:
+          PYTHONPATH: .:src
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('.')
+          for p in (root/'quality/golden_journeys/scorecards').glob('GOLDEN-*.scorecard.json'):
+              d = json.loads(p.read_text())
+              assert d['claim_boundary']['independent_verification_claimed'] is False
+              assert d['claim_boundary']['physically_validated'] is False
+              assert d['claim_boundary']['human_validated'] is False
+              assert d['claim_boundary']['frontier_parity_claimed'] is False
+              assert d['PHYSICAL_PENDING']['pending'] is True
+              assert d['HUMAN_VALIDATION_PENDING']['pending'] is True
+              if str(d.get('updated_by','')).startswith('implementer'):
+                  assert d['INDEPENDENT_VERIFICATION']['status'] != 'PASS'
+          print('claim boundary ok')
+          PY
+      - name: Upload supporting evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-journey-supporting-evidence
+          path: |
+            artifacts/golden_journeys/
+            quality/golden_journeys/runs/
+            quality/golden_journeys/scorecards/

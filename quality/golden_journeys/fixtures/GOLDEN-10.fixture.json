@@ -1,0 +1,34 @@
+{
+  "schema": "gunnchos.golden_journey_fixture.v1",
+  "journey_id": "GOLDEN-10",
+  "name": "Lost device revoke",
+  "severity": "S0",
+  "role": "verifier_support_fixture",
+  "not_independent_verification": true,
+  "acceptance_outcomes": [
+    "Trusted-device identity established",
+    "Revoke session/device succeeds",
+    "Continuity access denied afterward",
+    "Private files/memory unavailable to revoked identity",
+    "Local recovery path documented and exercised digitally"
+  ],
+  "digital_depth_target": "D6",
+  "digital_evidence_target": "E4",
+  "supporting_phase_xi_ids": [
+    "J-IDENT-001",
+    "J-SEC-001"
+  ],
+  "supporting_unit_tests": [
+    "tests/phase_xv/test_phase_xv.py::test_security_regression"
+  ],
+  "fixture_assets": {
+    "local_only": true,
+    "commercial_cloud_creds_required": false,
+    "notes": "Reuse user_journeys/fixtures and local service stack where helpful; verifier must still design independent cases."
+  },
+  "harness_entrypoints": {
+    "subset_runner": "scripts/run_golden_journey_subset.py",
+    "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-10.scorecard.json",
+    "merge_gate": "scripts/recommend_merge_golden.py"
+  }
+}
