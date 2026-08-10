@@ -40,8 +40,26 @@ if ! command -v llama-server >/dev/null 2>&1 && [[ ! -x "$BIN/llama-server" ]]; 
     exit 1
   fi
   install -m 755 "$LLAMA_BIN" "$BIN/llama-server"
-  # companion shared libs if present
-  find "$CACHE/llama_extract" -type f \( -name '*.so' -o -name '*.so.*' \) -exec cp -n {} "$BIN/" \; || true
+  # companion shared libs must be loadable (ubuntu tarball ships libllama*.so)
+  find "$CACHE/llama_extract" -type f \( -name '*.so' -o -name '*.so.*' \) -exec cp -f {} "$BIN/" \; || true
+  # also keep original layout dir on library path
+  LLAMA_LIB_DIR="$(dirname "$LLAMA_BIN")"
+  echo "$LLAMA_LIB_DIR" > "$CACHE/llama_lib_dir.txt"
+fi
+
+# Ensure llama shared libs are present even on cache hits
+if [[ -x "$BIN/llama-server" ]]; then
+  if ! LD_LIBRARY_PATH="$BIN${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" "$BIN/llama-server" --version >/dev/null 2>&1; then
+    echo "Cached llama-server missing libs; re-fetching ${LLAMA_TAG}..."
+    curl -fsSL -o "$CACHE/$LLAMA_TGZ" "$LLAMA_URL"
+    rm -rf "$CACHE/llama_extract"
+    mkdir -p "$CACHE/llama_extract"
+    tar -xzf "$CACHE/$LLAMA_TGZ" -C "$CACHE/llama_extract"
+    LLAMA_BIN="$(find "$CACHE/llama_extract" -type f -name 'llama-server' | head -n1)"
+    install -m 755 "$LLAMA_BIN" "$BIN/llama-server"
+    find "$CACHE/llama_extract" -type f \( -name '*.so' -o -name '*.so.*' \) -exec cp -f {} "$BIN/" \; || true
+    dirname "$LLAMA_BIN" > "$CACHE/llama_lib_dir.txt"
+  fi
 fi
 
 if [[ ! -f "$MODELS/$GGUF_NAME" ]]; then
@@ -58,10 +76,24 @@ if [[ -n "${GITHUB_ENV:-}" ]]; then
   echo "LLAMA_MODEL=$MODELS/$GGUF_NAME" >> "$GITHUB_ENV"
 fi
 export PATH="$BIN:$PATH"
+export LD_LIBRARY_PATH="$BIN${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+if [[ -f "$CACHE/llama_lib_dir.txt" ]]; then
+  libdir="$(cat "$CACHE/llama_lib_dir.txt")"
+  export LD_LIBRARY_PATH="$libdir:$LD_LIBRARY_PATH"
+fi
 export GUNNCHAI_MODEL_PATH="$MODELS/$GGUF_NAME"
 export LLAMA_MODEL="$MODELS/$GGUF_NAME"
+if [[ -n "${GITHUB_ENV:-}" ]]; then
+  echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
+fi
 
 godot --version || "$BIN/godot" --version
-llama-server --version || "$BIN/llama-server" --version || true
+if ! LD_LIBRARY_PATH="$LD_LIBRARY_PATH" "$BIN/llama-server" --version >/tmp/llama_ver.txt 2>&1; then
+  echo "llama-server failed to start:" >&2
+  cat /tmp/llama_ver.txt >&2 || true
+  ldd "$BIN/llama-server" >&2 || true
+  exit 1
+fi
+cat /tmp/llama_ver.txt
 ls -lh "$MODELS/$GGUF_NAME"
 echo "Phase XII runtimes ready"
