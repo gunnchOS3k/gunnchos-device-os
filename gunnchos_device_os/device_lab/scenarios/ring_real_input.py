@@ -25,10 +25,11 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
 
     evidence = session.work / "LAB-SCENARIO-RING-REAL-INPUT"
     evidence.mkdir(parents=True, exist_ok=True)
+    # Re-bind rings onto scenario evidence so surface mirrors land here
+    rings_info = session.rings.start(evidence_dir=evidence, repo_root=repo_root)
     eng = ScenarioEngine(session, evidence)
     errors: list[str] = []
 
-    rings_info = session.rings.start()
     pipeline = rings_info.get("pipeline") or []
     required = [
         "edge_io_sim",
@@ -43,21 +44,42 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         errors.append("pipeline_incomplete")
     eng.record("pipeline", None, "start", required, pipeline, pipeline_ok)
 
-    # Positive deliveries to document, browser, game
-    deliveries = {}
+    # Positive deliveries to document, browser, game — must mutate observable app state
+    deliveries: dict[str, Any] = {}
+    app_mutations: dict[str, Any] = {}
     for target in ("libreoffice", "browser", "games"):
         r = session.rings.inject(target=target, confidence=0.92, gesture="click")
         deliveries[target] = r
-        if not (r.get("delivered") and r.get("via_stack") and not r.get("result", {}).get("direct_file_write")):
+        mutated = bool(r.get("delivered") and r.get("app_state_changed") and r.get("via_stack"))
+        if r.get("result", {}).get("direct_file_write"):
+            mutated = False
+            errors.append(f"direct_file_write_claimed_{target}")
+        if not mutated:
             errors.append(f"deliver_fail_{target}")
-    pos_ok = len(errors) == 0 or not any(e.startswith("deliver_fail_") for e in errors)
-    # recompute pos_ok cleanly
+        app_mutations[target] = {
+            "delivered": r.get("delivered"),
+            "app_state_changed": r.get("app_state_changed"),
+            "before": r.get("before"),
+            "after": r.get("after"),
+            "via_stack": r.get("via_stack"),
+        }
     pos_ok = all(
-        deliveries[t].get("delivered") and deliveries[t].get("via_stack") for t in deliveries
+        deliveries[t].get("delivered")
+        and deliveries[t].get("app_state_changed")
+        and deliveries[t].get("via_stack")
+        for t in deliveries
     )
     if not pos_ok:
         errors.append("positive_delivery_failed")
-    eng.record("app_deliveries", None, "inject", "three_targets", deliveries, pos_ok)
+    eng.record("app_deliveries", None, "inject", "three_targets_with_state_mutation", deliveries, pos_ok)
+    eng.record(
+        "observable_app_state",
+        None,
+        "mutation_check",
+        "document+browser+game",
+        app_mutations,
+        pos_ok,
+    )
 
     # Negatives: low confidence + wrong target
     low = session.rings.inject(confidence=0.2, target="browser")
@@ -88,12 +110,28 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         not file_write_claimed_as_d6,
     )
 
-    ok = pipeline_ok and pos_ok and safety_ok and fallback.get("ok") and not file_write_claimed_as_d6
-    # filter deliver errors if pos_ok
+    # Honest delivered flag: must not be unconditionally True
+    delivered_honesty = all(
+        isinstance(deliveries[t].get("delivered"), bool) and deliveries[t].get("delivered") is True
+        for t in deliveries
+    ) and (low.get("delivered") is False)
+    if not delivered_honesty:
+        errors.append("delivered_flag_dishonest")
+
+    ok = (
+        pipeline_ok
+        and pos_ok
+        and safety_ok
+        and fallback.get("ok")
+        and not file_write_claimed_as_d6
+        and delivered_honesty
+        and len([e for e in errors if e.startswith("deliver_fail_")]) == 0
+    )
     if ok:
         errors = [e for e in errors if not e.startswith("deliver_fail_")]
     ok = ok and len(errors) == 0
 
+    snapshots = session.rings.surfaces.snapshots() if session.rings.surfaces else {}
     result = {
         "ok": ok,
         "scenario_id": "LAB-SCENARIO-RING-REAL-INPUT",
@@ -102,8 +140,11 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         "companion_profile": companion,
         "pipeline": pipeline,
         "deliveries": deliveries,
+        "app_mutations": app_mutations,
+        "app_snapshots": snapshots,
         "safety": {"low": low, "wrong": wrong, "fallback": fallback},
         "direct_file_write_counts_as_d6": False,
+        "real_app_state_mutation": pos_ok,
         "errors": errors,
         "steps": eng.steps,
         "PHYSICAL_RING_SI": "PENDING",

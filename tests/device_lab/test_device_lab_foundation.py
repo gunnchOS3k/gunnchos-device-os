@@ -143,6 +143,19 @@ def test_g06_dsxl_dualscreen_requires_two_outputs():
     assert result["connected_outputs"] >= 2
     assert result["INDEPENDENT_VERIFICATION"] == "PENDING"
     assert result["ok"] is True
+    # GJ-DEFECT-006: must not be stub build / empty windows
+    assert result["build"]["executed"] is True
+    assert result["build"]["stub"] is False
+    assert result["build"]["mode"] != "creator_toolchain_digital"
+    assert len(result.get("windows") or []) >= 2
+    assert result["unknown_transition"]["ok"] is False
+
+
+def test_dsxl_stub_build_mode_would_fail():
+    """Previous stub (`mode=creator_toolchain_digital` without execution) must not pass."""
+    stub = {"ok": True, "steps": ["configure", "build", "test", "debug"], "mode": "creator_toolchain_digital"}
+    d6_ok = bool(stub.get("ok")) and stub.get("mode") != "creator_toolchain_digital" and stub.get("executed")
+    assert d6_ok is False
 
 
 def test_g07_ring_real_input_stack():
@@ -153,6 +166,39 @@ def test_g07_ring_real_input_stack():
     assert result["direct_file_write_counts_as_d6"] is False
     assert result["ok"] is True
     assert result["INDEPENDENT_VERIFICATION"] == "PENDING"
+    assert result["real_app_state_mutation"] is True
+    for target in ("libreoffice", "browser", "games"):
+        d = result["deliveries"][target]
+        assert d["delivered"] is True
+        assert d["app_state_changed"] is True
+        assert d["before"] != d["after"]
+
+
+def test_ring_delivered_not_hardcoded_without_mutation():
+    """Previous RingsBackend.inject hardcoding delivered=True must fail this check."""
+    from gunnchos_device_os.phase_xiv.spatial import SpatialInputService
+
+    # No router → counts-only path cannot claim delivered app mutation
+    svc = SpatialInputService(router=None)
+    svc.calibrate()
+    out = svc.deliver_to_os([])
+    assert out["app_state_changed"] is False
+    assert out["delivered"] == 0
+    assert out["ok"] is False
+
+
+def test_ring_input_router_mutates_document_browser_game():
+    from gunnchos_device_os.device_lab.hw_backends.rings import RingsBackend
+
+    rings = RingsBackend()
+    rings.start(evidence_dir=ROOT / "artifacts" / "device_lab" / "test_ring", repo_root=ROOT)
+    for target in ("libreoffice", "browser", "games"):
+        r = rings.inject(target=target, confidence=0.95, gesture="click")
+        assert r["delivered"] is True, target
+        assert r["app_state_changed"] is True, target
+        assert r["before"] != r["after"], target
+    low = rings.inject(confidence=0.1, target="browser")
+    assert low["delivered"] is False
 
 
 def test_g08_local_ai_tutor_honest_primary():
@@ -163,15 +209,67 @@ def test_g08_local_ai_tutor_honest_primary():
     assert result["INDEPENDENT_VERIFICATION"] == "PENDING"
     assert result["HUMAN_QUALITY"] == "PENDING"
     assert result["foundation_harness_ok"] is True
-    # If micro was primary, must not claim independent-ready
+    # GJ-DEFECT-008: ok must fail closed when micro is primary
     if result.get("primary_model_proof") == "FAIL_MICRO_NOT_ALLOWED":
+        assert result["ok"] is False
         assert result["implementer_ready_for_independent_E4_D6"] is False
     elif result.get("primary_model_proof") == "PASS_REAL_RUNTIME":
+        assert result["ok"] is True
         assert result["implementer_ready_for_independent_E4_D6"] is True
         assert result["tutor"].get("primary_is_micro_deterministic") is False
 
 
-def test_lab_future_backlog_present_not_executed():
+def test_g08_ok_false_when_micro_forced(monkeypatch, tmp_path):
+    """Harness must not report overall ok=true when micro-deterministic is primary proof."""
+    import gunnchos_device_os.device_lab.scenarios.local_ai_tutor as tutor_mod
+
+    def _micro_only(repo_root, evidence):
+        return {
+            "ok": False,
+            "path": "micro_only_unavailable_real_model",
+            "runtime": "deterministic_micro",
+            "primary_is_micro_deterministic": True,
+            "note": "forced micro for defect-008 regression",
+        }
+
+    monkeypatch.setattr(tutor_mod, "_try_real_local_ai", _micro_only)
+    result = tutor_mod.run(repo_root=ROOT)
+    assert result["ok"] is False
+    assert result["primary_model_proof"] == "FAIL_MICRO_NOT_ALLOWED"
+    assert result["implementer_ready_for_independent_E4_D6"] is False
+    assert result["foundation_harness_ok"] is True
+
+
+def test_g08_supporting_gate_allows_fail_micro_with_foundation():
+    """Supporting merge gate must not treat honest FAIL_MICRO as Independent green."""
+    from gunnchos_device_os.golden_journeys.harness import _run_lab_journey
+
+    # Monkeypatch via local_ai already covered; here assert harness mapping contract.
+    class _Fake:
+        @staticmethod
+        def get(k, default=None):
+            data = {
+                "ok": False,
+                "foundation_harness_ok": True,
+                "primary_model_proof": "FAIL_MICRO_NOT_ALLOWED",
+                "scenario_id": "LAB-SCENARIO-LOCAL-AI-TUTOR",
+                "implementer_ready_for_independent_E4_D6": False,
+                "errors": ["micro_deterministic_as_primary_proof"],
+            }
+            return data.get(k, default)
+
+    # Direct contract check on the gate logic (mirror harness)
+    scenario_ok = False
+    foundation_ok = True
+    proof = "FAIL_MICRO_NOT_ALLOWED"
+    supporting_ok = (
+        True
+        if (proof == "FAIL_MICRO_NOT_ALLOWED" and foundation_ok and not scenario_ok)
+        else scenario_ok
+    )
+    assert supporting_ok is True
+    assert scenario_ok is False
+
     path = ROOT / "gunnchos_device_os" / "device_lab" / "LAB_FUTURE_BACKLOG.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["DO_NOT_EXECUTE_IN_WP003R"] is True

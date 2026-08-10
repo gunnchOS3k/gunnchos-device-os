@@ -241,19 +241,27 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         "duration_ms": int((time.time() - started) * 1000),
         "claim_boundary": CLAIM_BOUNDARY,
     }
-    # For Lab foundation CI without llama: still pass scenario harness if negatives+RAG ok
-    # BUT do not claim micro as D6. Expose separate foundation_harness_ok.
+    # Foundation harness (RAG/negatives) may succeed independently of primary model.
+    # GJ-DEFECT-008: overall ok MUST fail closed when micro is primary / real runtime missing.
+    # Never report ok=true with FAIL_MICRO — that soft-pass confused Independent vs harness.
     foundation_harness_ok = bool(rag.get("ok")) and bool(negs.get("ok")) and privacy_block_ok
     result["foundation_harness_ok"] = foundation_harness_ok
-    # Scenario ok for Lab v0.1 CI: harness path + honest primary status
-    if not ok and foundation_harness_ok and tutor.get("primary_is_micro_deterministic"):
-        result["ok"] = True  # harness completed with honest primary FAIL recorded
+    if ok:
+        result["primary_model_proof"] = "PASS_REAL_RUNTIME"
+        result["implementer_ready_for_independent_E4_D6"] = True
+    elif tutor.get("primary_is_micro_deterministic") or "real_local_model_unavailable" in errors:
+        result["ok"] = False
         result["primary_model_proof"] = "FAIL_MICRO_NOT_ALLOWED"
         result["implementer_ready_for_independent_E4_D6"] = False
         result["errors"] = list(dict.fromkeys(errors))
-    elif ok:
-        result["primary_model_proof"] = "PASS_REAL_RUNTIME"
-        result["implementer_ready_for_independent_E4_D6"] = True
+        result["harness_note"] = (
+            "foundation_harness_ok may be true while overall ok=false; "
+            "Independent PASS requires primary_model_proof=PASS_REAL_RUNTIME"
+        )
+    else:
+        result["ok"] = False
+        result["primary_model_proof"] = "FAIL"
+        result["implementer_ready_for_independent_E4_D6"] = False
 
     manifest = build_manifest(
         profile=session.profile,

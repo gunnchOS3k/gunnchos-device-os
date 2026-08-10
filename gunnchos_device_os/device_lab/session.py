@@ -32,6 +32,7 @@ class LabSession:
     profile: dict[str, Any]
     work: Path
     virt: dict[str, Any]
+    repo_root: Path | None = None
     display: DisplayBackend = field(default_factory=DisplayBackend)
     storage: StorageBackend = field(default_factory=lambda: StorageBackend(Path(".")))
     network: NetworkBackend = field(default_factory=NetworkBackend)
@@ -55,7 +56,8 @@ class LabSession:
         # Rings only when profile or companion asks
         rings_info = None
         if self.profile_id in {"edge_io_rings", "full_ecosystem"} or self.profile.get("ring_capabilities", {}).get("supported"):
-            rings_info = self.rings.start()
+            rings_ev = self.work / "rings"
+            rings_info = self.rings.start(evidence_dir=rings_ev, repo_root=self.repo_root)
         self.started_at = time.time()
         self.running = True
         self.state = {
@@ -107,7 +109,14 @@ def start_session(profile_id: str, *, repo_root: Path, work: Path | None = None)
     virt = select_backend()
     instance_id = f"dev-{uuid.uuid4().hex[:8]}"
     work = work or (repo_root / "artifacts" / "device_lab" / "instances" / instance_id)
-    sess = LabSession(instance_id=instance_id, profile_id=profile_id, profile=profile, work=work, virt=virt)
+    sess = LabSession(
+        instance_id=instance_id,
+        profile_id=profile_id,
+        profile=profile,
+        work=work,
+        virt=virt,
+        repo_root=repo_root,
+    )
     _INSTANCES[instance_id] = sess
     return sess.start()
 
