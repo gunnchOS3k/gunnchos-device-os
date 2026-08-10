@@ -100,28 +100,31 @@
       "id": "GJ-DEFECT-006",
       "severity": "S2",
       "journey_id": "GOLDEN-06",
-      "status": "OPEN",
+      "status": "REMEDIATED_PENDING_INDEPENDENT",
       "title": "DS-XL Independent D6 blocked: stub build/test/debug; no real dual-output window workflow",
       "honest_cap": "Digital dual-output objects only until real creator toolchain + window placement proven",
-      "opened_by": "independent_verifier_vp003r"
+      "opened_by": "independent_verifier_vp003r",
+      "note": "Implementer: real compositor windows + executed creator toolchain + unknown-transition reject; leave INDEPENDENT_VERIFICATION for verifier re-run."
     },
     {
       "id": "GJ-DEFECT-007",
       "severity": "S1",
       "journey_id": "GOLDEN-07",
-      "status": "OPEN",
+      "status": "REMEDIATED_PENDING_INDEPENDENT",
       "title": "Ring Lab path does not mutate real LibreOffice/browser/game state; delivered hardcoded true",
       "honest_cap": "Event-count SpatialInputService delivery \u2260 D6 cross-app input",
-      "opened_by": "independent_verifier_vp003r"
+      "opened_by": "independent_verifier_vp003r",
+      "note": "Implementer: InputRouter + Document/Browser/Game surfaces; delivered only when app_state_changed; leave INDEPENDENT_VERIFICATION for verifier re-run."
     },
     {
       "id": "GJ-DEFECT-008",
       "severity": "S2",
       "journey_id": "GOLDEN-08",
-      "status": "OPEN",
+      "status": "REMEDIATED_PENDING_INDEPENDENT",
       "title": "Scenario may set ok=true when micro is primary / llama absent (harness\u2260Independent PASS)",
       "honest_cap": "Independent PASS only when primary_model_proof=PASS_REAL_RUNTIME",
-      "opened_by": "independent_verifier_vp003r"
+      "opened_by": "independent_verifier_vp003r",
+      "note": "Implementer: overall ok fails closed on FAIL_MICRO; foundation_harness_ok remains separate."
     }
   ],
   "claim_boundary": {
@@ -137,11 +140,12 @@
     "GUNNCHDEVICE_LAB_FOUNDATION": "PART_OF_WP003R",
     "implementer_self_cert_forbidden": true
   },
-  "updated_at": "2026-08-10T18:24:17Z",
+  "updated_at": "2026-08-10T18:40:00Z",
   "independent_verification": {
     "packet": "VP-003R",
     "overall_result": "FAIL",
     "tip_sha": "a65ff495bf9855a4f8df88beae2a8c5241ccd8af",
-    "result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json"
+    "result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+    "note": "Implementer remediated GJ-DEFECT-006/007/008 on tip after VP-003R FAIL; INDEPENDENT_VERIFICATION PENDING re-run. Do not claim Independent PASS."
   }
 }

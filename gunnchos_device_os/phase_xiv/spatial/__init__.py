@@ -38,11 +38,13 @@ class OsPointerEvent:
 
 
 class SpatialInputService:
-    def __init__(self):
+    def __init__(self, router: Any | None = None):
         self.samples: list[EdgeSample] = []
         self.events: list[OsPointerEvent] = []
         self.fusion_state = {"x": 0.0, "y": 0.0, "calibrated": False}
         self.active_target = "browser"
+        # Optional InputRouter — when bound, deliver_to_os mutates real app surfaces
+        self.router = router
 
     def ingest_edge_sim(self, sample: EdgeSample) -> None:
         self.samples.append(sample)
@@ -103,18 +105,56 @@ class SpatialInputService:
         return out
 
     def deliver_to_os(self, events: list[OsPointerEvent] | None = None) -> dict[str, Any]:
+        """Deliver fused events into the OS input path.
+
+        When an InputRouter is bound, each accepted event is injected via virtual
+        HID / Wayland into the focused app surface and must produce an observable
+        app-state mutation. Event counts alone are NOT sufficient for D6.
+        """
         events = events if events is not None else self.events[-20:]
         by_target: dict[str, int] = {t: 0 for t in TARGETS}
         for e in events:
             by_target[e.target] = by_target.get(e.target, 0) + 1
+
+        mutations: list[dict[str, Any]] = []
+        app_state_changed = False
+        if self.router is not None:
+            for e in events:
+                # Prefer actionable kinds for mutation proof; still deliver moves
+                result = self.router.deliver(e)
+                mutations.append(result)
+                if result.get("mutated"):
+                    app_state_changed = True
+            delivered_count = sum(1 for m in mutations if m.get("delivered"))
+            return {
+                "ok": app_state_changed,
+                "delivered": delivered_count,
+                "by_target": by_target,
+                "mutations": mutations,
+                "app_state_changed": app_state_changed,
+                "via": "input_router_hid_wayland",
+                "direct_file_write": False,
+                "physical_accuracy": "PHYSICAL_PENDING",
+            }
+
+        # No router bound: honest partial — counts only, not D6 app mutation
         return {
-            "ok": True,
-            "delivered": len(events),
+            "ok": False,
+            "delivered": 0,
             "by_target": by_target,
+            "mutations": [],
+            "app_state_changed": False,
+            "via": "event_count_only",
+            "note": "SpatialInputService without InputRouter cannot claim Ring D6 app mutation",
             "physical_accuracy": "PHYSICAL_PENDING",
         }
 
     def e2e_edge_to_apps(self) -> dict[str, Any]:
+        # Bind a Lab InputRouter so delivery mutates real app surfaces (D6 path).
+        if self.router is None:
+            from gunnchos_device_os.device_lab.input_router import InputRouter
+
+            self.router = InputRouter()
         self.calibrate()
         results = {}
         for target in TARGETS:
@@ -131,5 +171,15 @@ class SpatialInputService:
                 "min_confidence": min(e.confidence for e in fused),
             }
         delivery = self.deliver_to_os()
-        ok = all(results[t]["events"] > 0 for t in TARGETS) and delivery["ok"]
-        return {"ok": ok, "targets": results, "delivery": delivery, "supported_targets": list(TARGETS)}
+        ok = (
+            all(results[t]["events"] > 0 for t in TARGETS)
+            and delivery.get("app_state_changed")
+            and bool(delivery.get("delivered", 0) > 0)
+        )
+        return {
+            "ok": ok,
+            "targets": results,
+            "delivery": delivery,
+            "supported_targets": list(TARGETS),
+            "app_snapshots": self.router.surfaces.snapshots() if self.router else None,
+        }
