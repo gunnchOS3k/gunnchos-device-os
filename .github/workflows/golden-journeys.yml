@@ -144,15 +144,13 @@ jobs:
       - name: Start PulseAudio for null-sink lifecycle
         run: |
           set -euo pipefail
-          # Rootful reference: start a Pulse daemon the privileged job can talk to.
-          # If Pulse fails, snd-aloop path in AudioBackend is the accepted equivalent.
-          sudo pulseaudio --check 2>/dev/null || sudo pulseaudio --system --daemonize=true --exit-idle-time=-1 --disallow-exit || true
+          # Prefer ALSA loopback as durable rootful reference on GH runners.
+          # Pulse user-session is optional and often unreachable under sudo.
+          sudo modprobe snd-aloop
+          cat /proc/asound/cards
           pulseaudio --check 2>/dev/null || pulseaudio --start --exit-idle-time=-1 || true
           sleep 1
-          pactl info 2>/dev/null | head -20 || sudo pactl info 2>/dev/null | head -20 || true
-          # Prefer ALSA loopback as durable rootful fallback on runners without session Pulse.
-          sudo modprobe snd-aloop || true
-          cat /proc/asound/cards || true
+          pactl info 2>/dev/null | head -20 || true
       - name: Run privileged G04 netns + audio reference proof
         env:
           PYTHONPATH: .:src
