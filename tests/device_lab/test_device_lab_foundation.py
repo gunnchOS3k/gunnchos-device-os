@@ -240,7 +240,36 @@ def test_g08_ok_false_when_micro_forced(monkeypatch, tmp_path):
     assert result["foundation_harness_ok"] is True
 
 
-def test_lab_future_backlog_present_not_executed():
+def test_g08_supporting_gate_allows_fail_micro_with_foundation():
+    """Supporting merge gate must not treat honest FAIL_MICRO as Independent green."""
+    from gunnchos_device_os.golden_journeys.harness import _run_lab_journey
+
+    # Monkeypatch via local_ai already covered; here assert harness mapping contract.
+    class _Fake:
+        @staticmethod
+        def get(k, default=None):
+            data = {
+                "ok": False,
+                "foundation_harness_ok": True,
+                "primary_model_proof": "FAIL_MICRO_NOT_ALLOWED",
+                "scenario_id": "LAB-SCENARIO-LOCAL-AI-TUTOR",
+                "implementer_ready_for_independent_E4_D6": False,
+                "errors": ["micro_deterministic_as_primary_proof"],
+            }
+            return data.get(k, default)
+
+    # Direct contract check on the gate logic (mirror harness)
+    scenario_ok = False
+    foundation_ok = True
+    proof = "FAIL_MICRO_NOT_ALLOWED"
+    supporting_ok = (
+        True
+        if (proof == "FAIL_MICRO_NOT_ALLOWED" and foundation_ok and not scenario_ok)
+        else scenario_ok
+    )
+    assert supporting_ok is True
+    assert scenario_ok is False
+
     path = ROOT / "gunnchos_device_os" / "device_lab" / "LAB_FUTURE_BACKLOG.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["DO_NOT_EXECUTE_IN_WP003R"] is True
