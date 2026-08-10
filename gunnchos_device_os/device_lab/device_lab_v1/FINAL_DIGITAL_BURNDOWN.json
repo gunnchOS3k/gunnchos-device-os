@@ -1,0 +1,365 @@
+{
+  "schema": "gunnchos.device_lab.final_digital_burndown.v1",
+  "audit_only": true,
+  "implementation_pass_claimed": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "audited_at_utc": "2026-08-10T22:27:03Z",
+  "accepted_main_baselines": {
+    "gunnchos-device-os": {
+      "origin_main": "3908de7c35882b500368475ce13d2243435f6443",
+      "branch_at_audit": "main",
+      "dirty_files": 0
+    },
+    "gunnchos-hardware-industrial-design": {
+      "origin_main": "45c301a3a335d4bfd54970d80ec7ee717736ad07",
+      "branch_at_audit": "wp-010r1/audio-camera-keyboard-evt-coverage",
+      "dirty_files": 0
+    },
+    "gunnchos-7gc-ai-ran-field-kit": {
+      "origin_main": "5ebcc7bf12942e7863927cf93118a6d84c9b243d",
+      "branch_at_audit": "operating-cycle-2/cycle-2-final-report-aggregation",
+      "dirty_files": 0,
+      "head": "4ab360f36d2d04d7f7bf44628dc4e8bd19c67585"
+    },
+    "gunnchAI3k": {
+      "origin_main": "a28c35c82b45b0a8bfb97648b5941bf0a6b52163",
+      "branch_at_audit": "main",
+      "dirty_files": 0
+    },
+    "edge-io-measurement-node": {
+      "origin_main": "a1cd2e95c62eb0eefd507b976158232b83f5b33b",
+      "branch_at_audit": "main",
+      "dirty_files": 0
+    },
+    "anime-aggressors": {
+      "origin_main": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
+      "branch_at_audit": "main",
+      "dirty_files": 12
+    },
+    "beatlink-party": {
+      "origin_main": "e0c18f3dbb964608271c14611e1068cff9c17205",
+      "branch_at_audit": "main",
+      "dirty_files": 0
+    },
+    "pedestrian-pursuit": {
+      "origin_main": "a2c6da5b4d4635af1281dbb12b8564ba70f994c6",
+      "branch_at_audit": "detached-HEAD",
+      "dirty_files": 0
+    },
+    "archive-of-life-artifact-world": {
+      "origin_main": "948ca172bb77b4caf1bd3c2d809d74ee6d4b6c75",
+      "branch_at_audit": "main",
+      "dirty_files": 7
+    }
+  },
+  "host_tools": {
+    "qemu_brew_version": "11.0.3",
+    "qemu_bins_present": [
+      "/opt/homebrew/bin/qemu-system-aarch64",
+      "/opt/homebrew/bin/qemu-system-x86_64",
+      "/opt/homebrew/bin/qemu-img"
+    ],
+    "present_brew_packages": [
+      "qemu 11.0.3",
+      "cmake 4.4.1",
+      "ninja 1.13.2",
+      "libusb 1.0.30",
+      "sdl2 2.32.10",
+      "android-platform-tools 37.0.1"
+    ],
+    "missing_or_absent_relevant": [
+      "spice-server",
+      "spice-gtk",
+      "virglrenderer",
+      "libvirt",
+      "android-commandlinetools",
+      "android-studio/emulator",
+      "hidapi",
+      "openocd"
+    ]
+  },
+  "device_lab_on_main": {
+    "path": "gunnchos_device_os/device_lab/",
+    "file_count_on_origin_main": 51,
+    "last_touch_commit_oneline": "4a51298 fix(wp-007): allow registered lab work roots without host escape",
+    "start_session_boots_qemu_guest": false,
+    "ui_live_framebuffer": false,
+    "default_backend": "HYBRID_BEHAVIORAL",
+    "SILICON_EXACT_EMULATION": false,
+    "VF4_VF5_VF6": "PHYSICAL_PENDING",
+    "golden_mapped": [
+      "GOLDEN-04",
+      "GOLDEN-06",
+      "GOLDEN-07",
+      "GOLDEN-08"
+    ],
+    "bootable_reference_separate_track": {
+      "BOOT_EVIDENCE_ok": true,
+      "wired_to_start_session": false
+    },
+    "profile_vs_hardware_mpn": {
+      "hardware_truth_source": "repos/gunnchos-hardware-industrial-design/docs/full_product_family/EXACT_MPN_MATRIX.md",
+      "hardware_main": "45c301a3a335d4bfd54970d80ec7ee717736ad07",
+      "student_expected": "ADLINK COM-HPC-mMTL-155H-32G / Ultra 7 155H / 32GB LPDDR5x",
+      "student_lab_ram_gb": 8,
+      "dsxl_expected": "ADLINK COM-HPC-mMTL-155H-32G / 32GB shared module",
+      "dsxl_lab_ram_gb": 16,
+      "handheld_expected": "Radxa RM121-D8E32 NX5 8GB/32GB eMMC",
+      "handheld_lab": "ram 8 / emmc min 32 capacity-aligned; MPN field absent",
+      "rings_expected": "nRF52840-QIAA-R",
+      "dock_expected": "JHL8440 + JHL9040R USB4/TB4",
+      "verdict": "FAILED_DIGITAL_DRIFT_ON_STUDENT_DSXL_RAM_AND_MISSING_MPN_FIELDS"
+    }
+  },
+  "baseline_12_grades": {
+    "foundation": {
+      "grade": 7,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "CLI/session/profiles/fidelity/UI on origin/main 3908de7c35882b500368475ce13d2243435f6443",
+        "GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION=NOT_ACTIVE",
+        "start_session does not boot QEMU guest"
+      ]
+    },
+    "golden_journeys": {
+      "grade": 8,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "G04/G06/G07/G08 scenarios implemented and mapped",
+        "Privileged G04 CI job present; PHYSICAL_* PENDING",
+        "Expanded Golden/ECO catalog absent"
+      ]
+    },
+    "behavioral_peripherals": {
+      "grade": 6,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "Display/network/audio/storage/rings/input backends integrated",
+        "Camera stub_available",
+        "Dock behavioral \u2014 not JHL8440/JHL9040R SI model"
+      ]
+    },
+    "failure_injection": {
+      "grade": 7,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "Scenario catalog + engine injectors present",
+        "No multi-device ecosystem chaos/soak"
+      ]
+    },
+    "evidence_reproducibility": {
+      "grade": 7,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "run_manifest builder + gunnchctl evidence",
+        "Lab sessions often lack OS_image_hash",
+        "WP-010 schemas are SCHEMA_ONLY (not completion)"
+      ]
+    },
+    "actual_virtual_gunnchos": {
+      "grade": 3,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "bootable_reference BOOT_EVIDENCE.json ok=true exists separately",
+        "device_lab start_session does not launch that guest",
+        "QEMU backends cataloged; HYBRID_BEHAVIORAL default"
+      ]
+    },
+    "avd_style_experience": {
+      "grade": 2,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "Local control UI only \u2014 no AVD manager/snapshots",
+        "gunnchctl run is intent JSON only"
+      ]
+    },
+    "live_visual_interaction": {
+      "grade": 2,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "UI framebuffer panel is explicit placeholder",
+        "No VNC/WebRTC stream in server.py"
+      ]
+    },
+    "hardware_spec_sync": {
+      "grade": 3,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "EXACT_MPN_MATRIX: Student/DS-XL COM-HPC-mMTL-155H-32G 32GB; Handheld RM121-D8E32; Rings nRF52840-QIAA-R; Dock JHL8440/JHL9040R",
+        "Lab student ram=8; dsxl ram=16 \u2014 FAILED_DIGITAL drift",
+        "Handheld 8GB/32GB eMMC capacity aligned; MPN fields missing",
+        "No generated SoT pipeline"
+      ]
+    },
+    "performance_prediction": {
+      "grade": 2,
+      "axis": "PRE_EVT_DIGITAL",
+      "evidence_notes": [
+        "performance.py FOUNDATION_SCHEMA_ONLY",
+        "Profiles power/thermal TARGET_TBD"
+      ]
+    },
+    "full_ecosystem_simulation": {
+      "grade": 2,
+      "axis": "DIGITAL",
+      "evidence_notes": [
+        "full_ecosystem.json architecture only",
+        "LAB-FUTURE-003 not executed; ECO-001..010 absent"
+      ]
+    },
+    "physical_digital_twin_fidelity": {
+      "digital_pre_evt_grade": 1,
+      "physical_correlation_grade": null,
+      "axis": "PRE_EVT_DIGITAL",
+      "evidence_notes": [
+        "VF0 PARTIAL; VF4/5/6 PHYSICAL_PENDING",
+        "Calibration SCHEMA_ONLY \u2014 not DIGITALLY_VALIDATED complete",
+        "LAB-FUTURE-007/008/009 blocked on EVT hardware"
+      ]
+    }
+  },
+  "grade_mean_of_12": 4.17,
+  "requirement_state_counts": {
+    "DIGITALLY_VALIDATED": 12,
+    "INTEGRATED": 9,
+    "TARGET": 17,
+    "PHYSICAL_PENDING": 3,
+    "IMPLEMENTED": 5,
+    "FAILED_DIGITAL": 1,
+    "EXTERNAL_PENDING": 1
+  },
+  "top_digital_blockers_by_impact": [
+    {
+      "rank": 1,
+      "id": "DL-HWSYNC-001",
+      "impact": "CRITICAL",
+      "summary": "Student/DS-XL Lab RAM/MPN drift vs EXACT_MPN_MATRIX (8/16 vs 32GB ADLINK 155H)"
+    },
+    {
+      "rank": 2,
+      "id": "DL-GUEST-002",
+      "impact": "CRITICAL",
+      "summary": "start_session does not boot QEMU guest despite host qemu 11.0.3 + separate bootable_reference"
+    },
+    {
+      "rank": 3,
+      "id": "DL-GUEST-003",
+      "impact": "CRITICAL",
+      "summary": "No Lab guest agent"
+    },
+    {
+      "rank": 4,
+      "id": "DL-VISUAL-001",
+      "impact": "HIGH",
+      "summary": "UI topology/status only \u2014 no live framebuffer/VNC"
+    },
+    {
+      "rank": 5,
+      "id": "DL-AVD-002",
+      "impact": "HIGH",
+      "summary": "gunnchctl run intent-only; no real app execution"
+    },
+    {
+      "rank": 6,
+      "id": "DL-ECOSYSTEM-002",
+      "impact": "HIGH",
+      "summary": "ECO-001..010 / LAB-FUTURE-003 simultaneous ecosystem not executed"
+    },
+    {
+      "rank": 7,
+      "id": "DL-PERIPH-006",
+      "impact": "MEDIUM",
+      "summary": "Camera stub; peripheral depth uneven"
+    },
+    {
+      "rank": 8,
+      "id": "DL-PERF-001",
+      "impact": "MEDIUM",
+      "summary": "Performance FOUNDATION_SCHEMA_ONLY"
+    },
+    {
+      "rank": 9,
+      "id": "DL-TWIN-002",
+      "impact": "PHYSICAL/EXTERNAL",
+      "summary": "VF4/5/6 SCHEMA_ONLY / PHYSICAL_PENDING \u2014 do not claim digital complete"
+    }
+  ],
+  "next_implementation_priority_C_to_J": [
+    {
+      "step": "C",
+      "title": "Fix hardware profile drift first",
+      "maps_to": [
+        "DL-HWSYNC-001",
+        "DL-HWSYNC-002",
+        "DL-HWSYNC-003"
+      ]
+    },
+    {
+      "step": "D",
+      "title": "Implement real guest image and VM boot",
+      "maps_to": [
+        "DL-GUEST-001",
+        "DL-GUEST-002",
+        "DL-FOUNDATION-005"
+      ]
+    },
+    {
+      "step": "E",
+      "title": "Implement guest agent",
+      "maps_to": [
+        "DL-GUEST-003"
+      ]
+    },
+    {
+      "step": "F",
+      "title": "Implement live display / input",
+      "maps_to": [
+        "DL-VISUAL-001",
+        "DL-VISUAL-002"
+      ]
+    },
+    {
+      "step": "G",
+      "title": "Implement real app install/launch",
+      "maps_to": [
+        "DL-AVD-002",
+        "DL-DEVELOPER-001"
+      ]
+    },
+    {
+      "step": "H",
+      "title": "Upgrade peripherals",
+      "maps_to": [
+        "DL-PERIPH-001",
+        "DL-PERIPH-006",
+        "DL-PERIPH-007"
+      ]
+    },
+    {
+      "step": "I",
+      "title": "Upgrade Golden Journeys",
+      "maps_to": [
+        "DL-GOLDEN-001",
+        "DL-GOLDEN-002",
+        "DL-GOLDEN-003",
+        "DL-GOLDEN-004",
+        "DL-GOLDEN-005"
+      ]
+    },
+    {
+      "step": "J",
+      "title": "Build full ecosystem topology",
+      "maps_to": [
+        "DL-ECOSYSTEM-001",
+        "DL-ECOSYSTEM-002",
+        "DL-ECOSYSTEM-003",
+        "DL-FAULT-002"
+      ]
+    }
+  ],
+  "notes": [
+    "AUDIT ONLY \u2014 no IMPLEMENTATION PASS",
+    "SCHEMA_ONLY recorded as IMPLEMENTED at most, never DIGITALLY_VALIDATED complete",
+    "Grades derived from accepted-main evidence; not hardcoded 10"
+  ]
+}
