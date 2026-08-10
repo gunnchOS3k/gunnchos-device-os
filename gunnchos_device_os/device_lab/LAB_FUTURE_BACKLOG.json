@@ -1,0 +1,62 @@
+{
+  "schema": "gunnchos.device_lab.future_backlog.v1",
+  "work_packet_origin": "WP-003R",
+  "DO_NOT_EXECUTE_IN_WP003R": true,
+  "executed": false,
+  "items": [
+    {
+      "id": "LAB-FUTURE-001",
+      "title": "Full Student virtual device depth",
+      "status": "READY",
+      "blocked_by": null
+    },
+    {
+      "id": "LAB-FUTURE-002",
+      "title": "Full Handheld behavioral emulator",
+      "status": "READY",
+      "blocked_by": null
+    },
+    {
+      "id": "LAB-FUTURE-003",
+      "title": "Full Ecosystem simultaneous simulation",
+      "status": "READY",
+      "blocked_by": null
+    },
+    {
+      "id": "LAB-FUTURE-004",
+      "title": "Public/remote hosted Device Lab",
+      "status": "BLOCKED",
+      "blocked_by": ["hosting_decision", "security_review"]
+    },
+    {
+      "id": "LAB-FUTURE-005",
+      "title": "Full 3D physical twin / engineering view",
+      "status": "BLOCKED",
+      "blocked_by": ["accepted_CAD_assets"]
+    },
+    {
+      "id": "LAB-FUTURE-006",
+      "title": "Target-performance model refinement",
+      "status": "READY",
+      "blocked_by": null
+    },
+    {
+      "id": "LAB-FUTURE-007",
+      "title": "EVT0 calibration",
+      "status": "BLOCKED",
+      "blocked_by": ["EVT0_hardware"]
+    },
+    {
+      "id": "LAB-FUTURE-008",
+      "title": "Hardware-in-the-loop",
+      "status": "BLOCKED",
+      "blocked_by": ["EVT_lab_bench"]
+    },
+    {
+      "id": "LAB-FUTURE-009",
+      "title": "Simulator-vs-physical correlation tracking",
+      "status": "BLOCKED",
+      "blocked_by": ["LAB-FUTURE-007"]
+    }
+  ]
+}

@@ -2,16 +2,15 @@
   "schema": "gunnchos.golden_journey_quality_scorecard.v1",
   "journey_id": "GOLDEN-04",
   "severity": "S1",
-  "work_packet": "WP-003",
+  "work_packet": "WP-003R",
   "FUNCTIONAL_PASS": {
     "status": "PASS",
     "authority": "independent_verifier",
     "evidence_paths": [
-      "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
-      "quality/golden_journeys/verifier/RESULTS.md",
-      "quality/golden_journeys/verifier/VP-003-RESULT.json"
+      "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
+      "quality/golden_journeys/verifier/VP-003R-RESULT.json"
     ],
-    "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+    "notes": "Independent: Lab virtual dock lifecycle + Cont IX office/mail/meeting/print; PHYSICAL_DOCK PENDING."
   },
   "PRODUCT_QUALITY_SCORE": {
     "authority": "independent_verifier",
@@ -29,24 +28,24 @@
         "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "visual_quality": {
-        "value": 1,
-        "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+        "value": 2,
+        "notes": "WP-003R Lab office-dock scenario + fidelity panel digitally raise silent-1; physical enclosure twin still PARTIAL/PENDING."
       },
       "interaction_quality": {
         "value": 2,
         "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "discoverability": {
-        "value": 1,
-        "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+        "value": 2,
+        "notes": "WP-003R gunnchctl + Lab UI device/dock controls make dock workflow discoverable digitally; IV re-verify required."
       },
       "consistency": {
         "value": 2,
         "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "accessibility": {
-        "value": 1,
-        "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+        "value": 2,
+        "notes": "WP-003R Lab CLI/UI + honesty dashboard improve digital a11y of dock controls; human a11y study still PENDING."
       },
       "error_recovery": {
         "value": 2,
@@ -57,16 +56,16 @@
         "notes": "Requires humans (E6)"
       }
     },
-    "average_excluding_not_measured": 1.67,
-    "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+    "average_excluding_not_measured": 2.0,
+    "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
   },
   "INDEPENDENT_VERIFICATION": {
-    "status": "PARTIAL",
+    "status": "PASS",
     "evidence_level_claimed": "E4",
-    "depth_level_claimed": "D5",
-    "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
-    "verifier_result_path": "quality/golden_journeys/verifier/VP-003-RESULT.json",
-    "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL."
+    "depth_level_claimed": "D6",
+    "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
+    "verifier_result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json",
+    "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
   },
   "PHYSICAL_PENDING": {
     "pending": true,
@@ -84,9 +83,12 @@
       "J-OFF-008",
       "J-OFF-005"
     ],
-    "unit_or_integration_tests": [],
+    "unit_or_integration_tests": [
+      "tests/device_lab/test_device_lab_foundation.py"
+    ],
     "fixture_paths": [
-      "quality/golden_journeys/fixtures/GOLDEN-04.fixture.json"
+      "quality/golden_journeys/fixtures/GOLDEN-04.fixture.json",
+      "artifacts/device_lab/"
     ],
     "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
   },
@@ -106,6 +108,6 @@
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "updated_at": "2026-08-10T15:11:48Z",
-  "updated_by": "independent-verifier-vp-003"
+  "updated_at": "2026-08-10T18:24:17Z",
+  "updated_by": "independent-verifier-vp003r"
 }

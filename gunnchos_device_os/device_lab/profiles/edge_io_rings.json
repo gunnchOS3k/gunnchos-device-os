@@ -1,0 +1,93 @@
+{
+  "schema": "gunnchos.device_lab.device_profile.v1",
+  "profile_version": "0.1.0",
+  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "SILICON_EXACT_EMULATION": false,
+  "BEHAVIORAL_DEVICE_PROFILE": true,
+  "VF0_PHYSICAL_TWIN": "PARTIAL",
+  "accepted_source_revisions": {
+    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
+    "hardware_compat_profiles": "hardware_compat/device_profiles/",
+    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
+    "config_device_classes": "config/device_classes.yaml",
+    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
+  },
+  "power_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "thermal_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "performance_model": {
+    "status": "FOUNDATION_ONLY",
+    "HOST_OBSERVED": "available_at_run",
+    "VIRTUAL_CONSTRAINED": "available_when_vm",
+    "MODELED_TARGET_RANGE": "schema_present",
+    "CALIBRATED_TARGET": "unavailable_pre_EVT",
+    "PHYSICAL_MEASURED": "unavailable_pre_EVT"
+  },
+  "profile_id": "edge_io_rings",
+  "product": "Edge I/O Rings",
+  "compute_target": {
+    "status": "TARGET_TBD",
+    "class": "edge_light",
+    "note": "Pairs with a target compute device"
+  },
+  "ram": {
+    "status": "TARGET_TBD"
+  },
+  "storage": {
+    "status": "TARGET_TBD"
+  },
+  "display_outputs": [
+    {
+      "id": "none",
+      "role": "peripheral",
+      "note": "Rings are input peripherals; attach to host profile displays"
+    }
+  ],
+  "display_geometry": {
+    "status": "N/A"
+  },
+  "touch": false,
+  "input_capabilities": {
+    "ring_pose": true,
+    "gesture": true,
+    "confidence": true
+  },
+  "audio_capabilities": {
+    "status": "N/A"
+  },
+  "network_capabilities": {
+    "authenticated_transport": true,
+    "ble_or_usb": "TARGET_TBD"
+  },
+  "cellular_target": {
+    "status": "N/A"
+  },
+  "dock_capabilities": {
+    "supported": false
+  },
+  "ring_capabilities": {
+    "supported": true,
+    "adr": "ADR-009-Ring-Spatial",
+    "pipeline": [
+      "edge_io_sim",
+      "authenticated_packet",
+      "ring_service",
+      "SpatialInputService",
+      "input_router",
+      "apps"
+    ],
+    "direct_file_write_not_valid_d6": true
+  },
+  "AI_capabilities": {
+    "status": "N/A"
+  },
+  "fidelity_level": "VF2",
+  "status_notes": [
+    "G07 LAB-SCENARIO-RING-REAL-INPUT; spatial accuracy SIMULATED; physical SI PENDING"
+  ]
+}

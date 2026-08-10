@@ -1,0 +1,986 @@
+{
+  "schema": "gunnchos.vp003r.result.v1",
+  "work_packet": "WP-003R",
+  "verification_packet": "VP-003R",
+  "tip_sha": "a65ff495bf9855a4f8df88beae2a8c5241ccd8af",
+  "baseline_main_sha": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
+  "pr": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/84",
+  "is_draft": true,
+  "executed_at": "2026-08-10T18:24:17Z",
+  "verifier": "independent_verifier_vp003r",
+  "independence_attestation": {
+    "plan_written_before_treating_remediation_tests_authoritative": true,
+    "plan_path": "quality/golden_journeys/verifier/INDEPENDENT_WP003R_ACCEPTANCE_PLAN.md",
+    "derivation_sources": [
+      "MINIMUM_LOVABLE_PRODUCT.md",
+      "PRODUCT_QUALITY_GATE.md",
+      "GOLDEN_JOURNEYS.json",
+      "EVIDENCE_LEVELS.md",
+      "DEPTH_LADDER.md",
+      "WP-003R_MASTER_CURSOR_PROMPT_WITH_GUNNCHDEVICE_LAB",
+      "gunnchDevice_Lab_FOUNDATION_V0_1_REQUIREMENTS",
+      "VP-003R_GUNNCHDEVICE_LAB_VERIFIER_ADDENDUM"
+    ],
+    "implementer_ok_true_not_treated_as_independent_pass": true,
+    "lab_scenarios_used_as_supporting_evidence_only_after_plan": true
+  },
+  "overall_result": "FAIL",
+  "digital_independent_v1_residuals_closed": false,
+  "lab_foundation": {
+    "GUNNCHDEVICE_LAB_FOUNDATION_V0_1": "DIGITALLY_VALIDATED_WITH_RESIDUALS",
+    "independent_lab_foundation": "PASS",
+    "ADR-010": "PASS",
+    "profiles_schema_catalog": "PASS",
+    "gunnchctl_test_G04_06_07_08": "PASS_INVOCABLE",
+    "local_ui_127_0_0_1": "PASS_PRESENT",
+    "run_manifests": "PASS",
+    "SILICON_EXACT_EMULATION": false,
+    "BEHAVIORAL_DEVICE_PROFILE": true,
+    "VF0": "PARTIAL",
+    "VF1": "PASS",
+    "VF2": "PASS_WITH_HYBRID_LOGICAL_FALLBACKS",
+    "VF3": "PASS_SCHEMA_MODELED_ONLY",
+    "VF4": "PHYSICAL_PENDING",
+    "VF5": "PHYSICAL_PENDING",
+    "VF6": "PHYSICAL_PENDING",
+    "fidelity_honesty_fail_conditions": {
+      "modeled_as_physical": "PASS_DETECTS",
+      "one_display_dsxl_d6": "PASS_GUARD",
+      "stub_dock_vf2": "PASS_POLICY",
+      "file_write_ring_d6": "PASS_POLICY",
+      "deterministic_tutor_primary_d6": "PASS_POLICY_TIP_HAS_LLAMA",
+      "calibration_without_evt": "PASS_DETECTS"
+    },
+    "notes": "Foundation v0.1 present and invocable. Journey Independent PASS tokens are separate and not implied by Lab harness ok=true."
+  },
+  "digital_table": {
+    "GOLDEN-01": "PASS D6",
+    "GOLDEN-02": "PASS D6",
+    "GOLDEN-03": "PASS D6",
+    "GOLDEN-04": "PASS D6 (PHYSICAL_DOCK PENDING)",
+    "GOLDEN-05": "PASS D6",
+    "GOLDEN-06": "PARTIAL D5 \u2014 dual outputs digital; build/windows D6 gap (GJ-DEFECT-006); panels E5 PENDING",
+    "GOLDEN-07": "FAIL Independent D6 \u2014 no real app-state mutation (GJ-DEFECT-007); pose E5/E6 PENDING",
+    "GOLDEN-08": "PASS D6 (HUMAN_QUALITY PENDING; TARGET_HW_PERF PENDING)",
+    "GOLDEN-09": "PASS D5",
+    "GOLDEN-10": "PASS D6"
+  },
+  "journeys": [
+    {
+      "journey_id": "GOLDEN-01",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "regression_reprobe",
+          "ok": true,
+          "detail": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+        }
+      ],
+      "defects": [],
+      "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "role": "regression"
+    },
+    {
+      "journey_id": "GOLDEN-02",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "regression_reprobe",
+          "ok": true,
+          "detail": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+        }
+      ],
+      "defects": [],
+      "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "role": "regression"
+    },
+    {
+      "journey_id": "GOLDEN-03",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "regression_reprobe",
+          "ok": true,
+          "detail": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+        }
+      ],
+      "defects": [],
+      "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "role": "regression"
+    },
+    {
+      "journey_id": "GOLDEN-04",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional)."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "lab_scenario_office_dock_invoked",
+          "ok": true,
+          "detail": "gunnchctl test GOLDEN-04 exit 0; inspected steps beneath CLI"
+        },
+        {
+          "name": "not_boolean_dock_primary",
+          "ok": true,
+          "detail": "boolean_dock_flag_used_as_primary=false; external output appear/disappear observed"
+        },
+        {
+          "name": "format_audit_explicit",
+          "ok": true,
+          "detail": "docx/xlsx/pptx/odt/ods/odp/pdf/csv/md classified; unsupported=[] on tip"
+        },
+        {
+          "name": "physical_dock_not_claimed",
+          "ok": true,
+          "detail": "PHYSICAL_DOCK_VALIDATION=PENDING"
+        }
+      ],
+      "defects": [
+        {
+          "id": "GJ-DEFECT-005",
+          "severity": "S2",
+          "journey_id": "GOLDEN-04",
+          "title": "CI logical network/audio hybrid (netns root-gated)",
+          "blocking": false,
+          "status": "OPEN"
+        },
+        {
+          "id": "VP003-S2-G04-PHYSICAL-DOCK",
+          "severity": "S2",
+          "journey_id": "GOLDEN-04",
+          "title": "Physical dock SI PENDING",
+          "blocking": false,
+          "status": "PHYSICAL_PENDING"
+        }
+      ],
+      "notes": "Lab LAB-SCENARIO-OFFICE-DOCK exercised undock\u2192attach(external display + eth + audio route + HID profile)\u2192Cont IX office format audit + email/calendar + meeting + CUPS virtual PDF\u2192detach with Lab session blob preserved. Beyond {docked:true}. SILICON_EXACT_EMULATION=false. PHYSICAL_DOCK_VALIDATION=PENDING. Host run used logical network/audio hybrid (GJ-DEFECT-005); compositor path WaylandSession objects (weston headless optional).",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "lab_scenario": "LAB-SCENARIO-OFFICE-DOCK",
+      "profile": "handheld_docked",
+      "manifest_run_id": "lab-89e63df7006e"
+    },
+    {
+      "journey_id": "GOLDEN-05",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "regression_reprobe",
+          "ok": true,
+          "detail": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+        }
+      ],
+      "defects": [],
+      "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "role": "regression"
+    },
+    {
+      "journey_id": "GOLDEN-06",
+      "severity": "S1",
+      "functional_result": "PARTIAL",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PARTIAL",
+      "checks": [
+        {
+          "name": "two_compositor_outputs",
+          "ok": true,
+          "detail": "2 connected WaylandSession DisplaySurface objects"
+        },
+        {
+          "name": "unknown_transition_not_success",
+          "ok": true,
+          "detail": "scenario records reject unknown transitions"
+        },
+        {
+          "name": "real_build_test_debug",
+          "ok": false,
+          "detail": "build stub ok:true without toolchain execution"
+        },
+        {
+          "name": "real_windows_on_outputs",
+          "ok": false,
+          "detail": "layout JSON + set_focus only; no real IDE/terminal surfaces"
+        },
+        {
+          "name": "physical_panels_not_claimed",
+          "ok": true,
+          "detail": "E5 PENDING"
+        }
+      ],
+      "defects": [
+        {
+          "id": "GJ-DEFECT-006",
+          "severity": "S2",
+          "journey_id": "GOLDEN-06",
+          "title": "DS-XL D6 blocked: stub build/test/debug and no real dual-output window workflow",
+          "blocking": true,
+          "status": "OPEN"
+        },
+        {
+          "id": "VP003-S2-G06-PHYSICAL-DUAL",
+          "severity": "S2",
+          "journey_id": "GOLDEN-06",
+          "title": "Physical DS-XL panels PENDING",
+          "blocking": false,
+          "status": "PHYSICAL_PENDING"
+        }
+      ],
+      "notes": "Dual WaylandSession outputs (dsxl_top/dsxl_bottom) asserted \u2014 prior one-display false-green closed digitally. Disconnect/reconnect + unknown-transition reject present. Independent D6 NOT earned: build/test/debug is hardcoded stub (mode=creator_toolchain_digital without execution); no real windows placed on outputs; code-help path used micro-deterministic-v1. Physical panels E5 PENDING.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "lab_scenario": "LAB-SCENARIO-DSXL-DUALSCREEN",
+      "profile": "dsxl_coder",
+      "manifest_run_id": "lab-449ec937ad99"
+    },
+    {
+      "journey_id": "GOLDEN-07",
+      "severity": "S1",
+      "functional_result": "PARTIAL",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING."
+      },
+      "evidence_level": "E3",
+      "depth_level": "D5",
+      "independent_verification": "FAIL",
+      "checks": [
+        {
+          "name": "gunnchctl_invoked",
+          "ok": true,
+          "detail": "gunnchctl test GOLDEN-07 exit 0 (CLI PASS not authoritative)"
+        },
+        {
+          "name": "file_write_not_claimed_d6",
+          "ok": true,
+          "detail": "direct_file_write_counts_as_d6=false"
+        },
+        {
+          "name": "safety_rejects",
+          "ok": true,
+          "detail": "low_confidence and wrong_target not delivered"
+        },
+        {
+          "name": "real_app_state_mutation",
+          "ok": false,
+          "detail": "deliver_to_os returns by_target counts only; no LibreOffice/browser/game state change"
+        },
+        {
+          "name": "delivered_flag_honest",
+          "ok": false,
+          "detail": "inject() returns delivered=True unconditionally"
+        }
+      ],
+      "defects": [
+        {
+          "id": "GJ-DEFECT-007",
+          "severity": "S1",
+          "journey_id": "GOLDEN-07",
+          "title": "Ring Lab path does not mutate real document/browser/game state; delivered hardcoded true",
+          "blocking": true,
+          "status": "OPEN"
+        },
+        {
+          "id": "VP003-S2-G07-PHYSICAL-RING",
+          "severity": "S2",
+          "journey_id": "GOLDEN-07",
+          "title": "Physical ring SI PENDING",
+          "blocking": false,
+          "status": "PHYSICAL_PENDING"
+        }
+      ],
+      "notes": "Pipeline labels edge-io\u2192SpatialInputService present; direct file-write correctly disclaimed as non-D6. Independent D6 FAIL: SpatialInputService.deliver_to_os only counts events by target; RingsBackend.inject hardcodes delivered=True; no observable LibreOffice/browser/game document or game-state mutation through input stack. Physical pose E5/E6 PENDING.",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "lab_scenario": "LAB-SCENARIO-RING-REAL-INPUT",
+      "profile": "edge_io_rings",
+      "manifest_run_id": "lab-5e6e533a4ced"
+    },
+    {
+      "journey_id": "GOLDEN-08",
+      "severity": "S1",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008)."
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "real_local_runtime_primary",
+          "ok": true,
+          "detail": "runtime=llama.cpp; primary_model_proof=PASS_REAL_RUNTIME"
+        },
+        {
+          "name": "citations_rag_memory",
+          "ok": true,
+          "detail": "authorized_lesson.md citation + memory turn recorded"
+        },
+        {
+          "name": "negatives",
+          "ok": true,
+          "detail": "offline + cloud_denied + isolation"
+        },
+        {
+          "name": "human_quality_not_claimed",
+          "ok": true,
+          "detail": "HUMAN_QUALITY=PENDING"
+        },
+        {
+          "name": "hw_perf_not_claimed",
+          "ok": true,
+          "detail": "measurement=HOST_OBSERVED; TARGET_HW_PERF=PENDING"
+        }
+      ],
+      "defects": [
+        {
+          "id": "GJ-DEFECT-008",
+          "severity": "S2",
+          "journey_id": "GOLDEN-08",
+          "title": "Scenario ok=true soft-pass when micro primary / llama absent \u2014 harness\u2260Independent PASS",
+          "blocking": false,
+          "status": "OPEN"
+        },
+        {
+          "id": "VP003-S2-G08-CITATION-HUMAN",
+          "severity": "S2",
+          "journey_id": "GOLDEN-08",
+          "title": "Human tutoring quality PENDING",
+          "blocking": false,
+          "status": "HUMAN_VALIDATION_PENDING"
+        }
+      ],
+      "notes": "On tip host, primary tutoring used real llama.cpp (phase_xii_llama, L4_REAL_APPLICATION_PROCESS), citations/RAG/memory + offline/cloud-denied/isolation negatives. micro-deterministic-v1 not primary. HUMAN_TUTOR_QUALITY=PENDING; TARGET_HW_PERF=PENDING (HOST_OBSERVED only). Note: scenario may set ok=true with FAIL_MICRO when llama absent \u2014 Independent must not treat that as PASS (GJ-DEFECT-008).",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "lab_scenario": "LAB-SCENARIO-LOCAL-AI-TUTOR",
+      "profile": "student_14_5",
+      "manifest_run_id": "lab-f14517258aaa"
+    },
+    {
+      "journey_id": "GOLDEN-09",
+      "severity": "S0",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D5",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "regression_reprobe",
+          "ok": true,
+          "detail": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+        }
+      ],
+      "defects": [],
+      "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "role": "regression"
+    },
+    {
+      "journey_id": "GOLDEN-10",
+      "severity": "S0",
+      "functional_result": "PASS",
+      "product_quality": {
+        "authority": "independent_verifier",
+        "dimensions": {
+          "correctness": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "reliability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "latency_perceived_performance": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "visual_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "interaction_quality": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "discoverability": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "consistency": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "accessibility": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "error_recovery": {
+            "value": 2,
+            "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+          },
+          "user_preference": {
+            "value": "NOT_MEASURED",
+            "notes": "Requires humans (E6)"
+          }
+        },
+        "average_excluding_not_measured": 2.0,
+        "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+      },
+      "evidence_level": "E4",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
+      "checks": [
+        {
+          "name": "regression_reprobe",
+          "ok": true,
+          "detail": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS"
+        }
+      ],
+      "defects": [],
+      "notes": "VP-003R regression re-probe on tip; no regression vs prior Independent PASS",
+      "PHYSICAL_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "role": "regression"
+    }
+  ],
+  "blocking_defects": [
+    {
+      "id": "GJ-DEFECT-006",
+      "severity": "S2",
+      "journey_id": "GOLDEN-06",
+      "title": "DS-XL Independent D6 blocked: stub build/test/debug; no real dual-output app windows",
+      "blocking_for_wp003r_close": true
+    },
+    {
+      "id": "GJ-DEFECT-007",
+      "severity": "S1",
+      "journey_id": "GOLDEN-07",
+      "title": "Ring path does not mutate real LibreOffice/browser/game state; delivered hardcoded true",
+      "blocking_for_wp003r_close": true
+    }
+  ],
+  "non_blocking_defects": [
+    {
+      "id": "GJ-DEFECT-005",
+      "journey_id": "GOLDEN-04",
+      "status": "OPEN"
+    },
+    {
+      "id": "GJ-DEFECT-008",
+      "journey_id": "GOLDEN-08",
+      "status": "OPEN"
+    },
+    {
+      "id": "VP003-S2-G04-PHYSICAL-DOCK",
+      "status": "PHYSICAL_PENDING"
+    },
+    {
+      "id": "VP003-S2-G06-PHYSICAL-DUAL",
+      "status": "PHYSICAL_PENDING"
+    },
+    {
+      "id": "VP003-S2-G07-PHYSICAL-RING",
+      "status": "PHYSICAL_PENDING"
+    },
+    {
+      "id": "VP003-S2-G08-CITATION-HUMAN",
+      "status": "HUMAN_VALIDATION_PENDING"
+    }
+  ],
+  "competitor_matrix_review": {
+    "status": "ACCEPT_WITH_UPDATES",
+    "fabricated_scores": false,
+    "competitor_score_null_verified": true,
+    "updates": [
+      {
+        "capability": "office_dock_workflow",
+        "new_E": "E4",
+        "new_D": "D6",
+        "remaining": "E5 physical dock SI"
+      },
+      {
+        "capability": "dsxl_dual_screen",
+        "new_E": "E4",
+        "new_D": "D5 PARTIAL",
+        "remaining": "digital D6 gap GJ-DEFECT-006; E5 panels"
+      },
+      {
+        "capability": "ring_spatial_input",
+        "new_E": "E3",
+        "new_D": "D5 FAIL_D6",
+        "remaining": "GJ-DEFECT-007; E5/E6 pose"
+      },
+      {
+        "capability": "local_ai_tutoring",
+        "new_E": "E4",
+        "new_D": "D6",
+        "remaining": "E6 human quality; E5 HW perf; E7 competitor gap"
+      }
+    ],
+    "notes": "No competitor measurements fabricated; strategy labels only."
+  },
+  "ci": {
+    "tip_sha": "a65ff495bf9855a4f8df88beae2a8c5241ccd8af",
+    "observed_at": "2026-08-10T18:24:17Z",
+    "summary": "All reported PR #84 checks green at verification time (including test, digital-lock, gate1, reality, golden journeys)",
+    "edmund_may_merge_84": false,
+    "merge_rationale": "Keep DRAFT. CI green is necessary but not sufficient: Independent FAIL on G07 D6 and PARTIAL G06 D6 (GJ-DEFECT-006/007). Do not merge as WP-003R digital closure."
+  },
+  "PHYSICAL_PENDING": true,
+  "HUMAN_VALIDATION_PENDING": true,
+  "claim_boundary": {
+    "independent_verification_claimed_for_all_G04_G06_G07_G08": false,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false,
+    "silicon_exact_emulation": false,
+    "SOFTWARE_WORKFLOW_PERIPHERAL": "digitally verified only to earned levels below",
+    "CPU_GPU_NPU_BATTERY_THERMAL_RF": "modeled or simulated only",
+    "PHYSICAL_CORRELATION": "not calibrated until EVT"
+  }
+}

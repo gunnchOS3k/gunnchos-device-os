@@ -70,6 +70,27 @@ def _run_unit_markers(markers: list[str], root: Path) -> dict[str, Any]:
     }
 
 
+def _run_lab_journey(journey_id: str, root: Path) -> dict[str, Any]:
+    """Run Device Lab scenario for G04/G06/G07/G08 when mapped."""
+    from gunnchos_device_os.device_lab.scenarios.catalog import JOURNEY_SCENARIO_MAP
+    from gunnchos_device_os.device_lab.scenarios.engine import run_scenario
+
+    if journey_id not in JOURNEY_SCENARIO_MAP:
+        return {"ok": True, "skipped": True, "note": "no_lab_scenario"}
+    result = run_scenario(journey_id, repo_root=root)
+    return {
+        "ok": bool(result.get("ok")),
+        "scenario_id": result.get("scenario_id"),
+        "implementer_ready_for_independent_E4_D6": result.get(
+            "implementer_ready_for_independent_E4_D6"
+        ),
+        "INDEPENDENT_VERIFICATION": "PENDING",
+        "primary_model_proof": result.get("primary_model_proof"),
+        "errors": result.get("errors"),
+        "disclaimer": "Device Lab supporting run — not independent verification.",
+    }
+
+
 def run_supporting_subset(
     journey_ids: list[str] | None = None,
     *,
@@ -115,20 +136,27 @@ def run_supporting_subset(
             "results": [],
             "note": "no_unit_markers",
         }
-        functional_ok = bool(phase_report.get("ok")) and bool(unit_report.get("ok"))
+        lab_report = _run_lab_journey(jid, root)
+        functional_ok = (
+            bool(phase_report.get("ok"))
+            and bool(unit_report.get("ok"))
+            and bool(lab_report.get("ok"))
+        )
         status = "PASS" if functional_ok else "FAIL"
         evidence_paths = [
             f"quality/golden_journeys/fixtures/{jid}.fixture.json",
             f"quality/golden_journeys/scorecards/{jid}.scorecard.json",
         ]
+        if lab_report.get("scenario_id"):
+            evidence_paths.append("artifacts/device_lab/")
         if write_scorecards:
             update_functional_status(
                 jid,
                 status,
                 evidence_paths=evidence_paths,
                 notes=(
-                    "Supporting harness functional result. "
-                    "INDEPENDENT_VERIFICATION remains PENDING; not E4."
+                    "Supporting harness functional result (includes Device Lab scenario when mapped). "
+                    "INDEPENDENT_VERIFICATION remains verifier-owned; not E4 self-cert."
                 ),
                 root=root,
             )
@@ -138,6 +166,7 @@ def run_supporting_subset(
             "FUNCTIONAL_PASS": status,
             "phase_xi": phase_report,
             "unit_markers": unit_report,
+            "device_lab": lab_report,
             "INDEPENDENT_VERIFICATION": "PENDING",
             "PHYSICAL_PENDING": True,
             "HUMAN_VALIDATION_PENDING": True,

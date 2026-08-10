@@ -134,9 +134,21 @@ def update_functional_status(
     notes: str = "",
     root: Path | None = None,
 ) -> dict[str, Any]:
-    """Update FUNCTIONAL_PASS from supporting harness only."""
+    """Update FUNCTIONAL_PASS from supporting harness only.
+
+    Never downgrades independent-verifier INDEPENDENT_VERIFICATION or hijacks
+    updated_by when a verifier already recorded PASS/PARTIAL/FAIL.
+    """
     root = root or _root()
     data = load_scorecard(journey_id, root)
+    prior_iv = dict(data.get("INDEPENDENT_VERIFICATION") or {})
+    prior_by = data.get("updated_by") or ""
+    verifier_owned = prior_by.startswith("independent-verifier") or prior_iv.get("status") in {
+        "PASS",
+        "PARTIAL",
+        "FAIL",
+    }
+
     data["FUNCTIONAL_PASS"] = {
         "status": status,
         "authority": "implementer_supporting_harness",
@@ -144,13 +156,19 @@ def update_functional_status(
         "notes": notes
         or "Supporting harness result only — not independent verification.",
     }
-    data["updated_by"] = "implementer-supporting-harness"
-    # Never flip independent claim
-    data["INDEPENDENT_VERIFICATION"]["status"] = data["INDEPENDENT_VERIFICATION"].get(
-        "status", "PENDING"
-    )
-    if data["INDEPENDENT_VERIFICATION"]["status"] == "PASS":
-        data["INDEPENDENT_VERIFICATION"]["status"] = "PENDING"
+    # Preserve verifier ownership metadata; never flip independent claim
+    data["INDEPENDENT_VERIFICATION"] = prior_iv or {
+        "status": "PENDING",
+        "evidence_level_claimed": None,
+        "depth_level_claimed": None,
+        "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
+        "verifier_result_path": None,
+        "notes": "Verifier owns plan and results. Implementer must not set PASS.",
+    }
+    if verifier_owned:
+        data["updated_by"] = prior_by
+    else:
+        data["updated_by"] = "implementer-supporting-harness"
     data["claim_boundary"] = dict(CLAIM_BOUNDARY)
     scorecard_path(journey_id, root).write_text(
         json.dumps(data, indent=2) + "\n", encoding="utf-8"

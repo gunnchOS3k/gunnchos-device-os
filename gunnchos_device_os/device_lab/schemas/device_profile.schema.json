@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.device_lab.device_profile.v1",
+  "title": "gunnchDevice Lab Device Profile",
+  "type": "object",
+  "required": [
+    "schema", "profile_id", "profile_version", "product", "architecture",
+    "display_outputs", "fidelity_level", "accepted_source_revisions",
+    "SILICON_EXACT_EMULATION", "BEHAVIORAL_DEVICE_PROFILE"
+  ],
+  "properties": {
+    "schema": {"const": "gunnchos.device_lab.device_profile.v1"},
+    "profile_id": {"type": "string"},
+    "profile_version": {"type": "string"},
+    "product": {"type": "string"},
+    "architecture": {"type": "string"},
+    "compute_target": {},
+    "ram": {},
+    "storage": {},
+    "display_outputs": {"type": "array", "minItems": 1},
+    "display_geometry": {},
+    "touch": {},
+    "input_capabilities": {},
+    "audio_capabilities": {},
+    "network_capabilities": {},
+    "cellular_target": {},
+    "dock_capabilities": {},
+    "ring_capabilities": {},
+    "AI_capabilities": {},
+    "power_model": {},
+    "thermal_model": {},
+    "performance_model": {},
+    "fidelity_level": {"type": "string"},
+    "accepted_source_revisions": {"type": "object"},
+    "SILICON_EXACT_EMULATION": {"type": "boolean"},
+    "BEHAVIORAL_DEVICE_PROFILE": {"type": "boolean"},
+    "VF0_PHYSICAL_TWIN": {"type": "string"},
+    "status_notes": {"type": "array"}
+  },
+  "additionalProperties": true
+}

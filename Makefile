@@ -6,7 +6,8 @@
 	bootable-reference full-product-iv full-product-v full-product-vi full-product-vii \
 	bootstrap build package evidence factory-station full-product-viii release-firewall \
 	full-product-ix cont-ix-evidence \
-	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate
+	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate \
+	device-lab-test device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08
 
 PY := PYTHONPATH=src:.
 
@@ -239,3 +240,22 @@ golden-journeys-all:
 
 golden-journeys-merge-gate:
 	$(PY) python3 scripts/recommend_merge_golden.py --all
+
+# WP-003R gunnchDevice Lab Foundation v0.1
+device-lab-test:
+	PYTHONPATH=.:src pytest -q tests/device_lab/test_device_lab_foundation.py
+
+device-lab-g04:
+	$(PY) python3 scripts/gunnchctl test GOLDEN-04 --device handheld_docked
+
+device-lab-g06:
+	$(PY) python3 scripts/gunnchctl test GOLDEN-06 --device dsxl_coder
+
+device-lab-g07:
+	$(PY) python3 scripts/gunnchctl test GOLDEN-07 --device edge_io_rings --rings
+
+device-lab-g08:
+	$(PY) python3 scripts/gunnchctl test GOLDEN-08 --device student_14_5 --offline
+
+gunnchctl-devices:
+	$(PY) python3 scripts/gunnchctl devices
