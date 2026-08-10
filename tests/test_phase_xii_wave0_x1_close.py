@@ -43,11 +43,15 @@ def test_beatlink_refuses_synthetic_html_pass(monkeypatch, tmp_path):
     from gunnchos_device_os.phase_xii.apps import games as games_mod
 
     missing = games_mod.launch_beatlink(ROOT, tmp_path / "bl")
-    # Without sibling / without vitest success, must not be ok via fake HTML
+    assert missing.get("fixture_json_used") is False
+    # Without sibling AND without accepted in-tree web, must fail closed
     if missing.get("error") == "beatlink_repo_missing":
         assert missing.get("ok") is False
+        return
+    # Sibling Node tree: vitest required. In-tree web package: real Playwright page is ok.
+    if missing.get("source") == "in_tree_web_package":
+        if missing.get("ok"):
+            assert missing.get("playwright_multi") is True or missing.get("vitest_ok") is True
     else:
-        # If sibling present locally, ok only when vitest_ok
         if missing.get("ok"):
             assert missing.get("vitest_ok") is True
-        assert missing.get("fixture_json_used") is False
