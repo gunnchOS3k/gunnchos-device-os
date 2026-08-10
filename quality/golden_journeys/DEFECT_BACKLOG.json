@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.golden_journeys.defect_backlog.v1",
-  "work_packet": "WP-003R",
-  "updated_by": "independent_verifier_vp003r",
-  "note": "VP-003R Independent re-run PASS on accepted main tip. Digital G06/G07/G08 D6 closed; physical/human remain PENDING.",
+  "work_packet": "WP-003R.1",
+  "updated_by": "implementer-wp003r1",
+  "note": "WP-003R.1 Cycle 1 integrity: CI claim_boundary fix, GJ-DEFECT-005 privileged net/audio remediation, matrix consistency. Independent PASS pending verifier.",
   "digital_remediation_shipped": [
     {
       "id": "VP003-S2-G02-D6-OFFICE-LMS",
@@ -53,6 +53,21 @@
       "title": "micro-deterministic as primary tutor proof",
       "note": "LAB-SCENARIO-LOCAL-AI-TUTOR prefers real llama.cpp/gunnchAI; micro not primary D6 proof.",
       "independent_status": "CONFIRMED_REAL_LLAMA_PRIMARY_ON_TIP"
+    },
+    {
+      "id": "GJ-DEFECT-005",
+      "severity": "S2",
+      "journey_id": "GOLDEN-04",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "title": "CI logical network/audio hybrid (netns root-gated)",
+      "honest_cap": "Privileged netns+veth packet transfer + PipeWire/Pulse/ALSA virtual audio are E4 reference; unprivileged logical remains FALLBACK_ONLY / NOT_E4_REFERENCE_PROOF",
+      "proposed_independent_status": "CLOSED_INDEPENDENT_PASS",
+      "note": "WP-003R.1 implementer remediated with privileged CI reference job. Independent CLOSED_INDEPENDENT_PASS pending verifier. VF2_REQUIRED_GOLDEN_BACKENDS=PASS when privileged job green; VF2_UNPRIVILEGED_FALLBACK=AVAILABLE; VF3 MODELED_ONLY; VF4/5/6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false.",
+      "remediation_paths": [
+        "gunnchos_device_os/device_lab/hw_backends/network.py",
+        "gunnchos_device_os/device_lab/hw_backends/audio.py",
+        ".github/workflows/golden-journeys.yml#g04-privileged-net-audio"
+      ]
     }
   ],
   "remaining_partials_by_design": [
@@ -89,14 +104,6 @@
       "honest_cap": "E6 later; TARGET_HW_PERF PENDING"
     },
     {
-      "id": "GJ-DEFECT-005",
-      "severity": "S2",
-      "journey_id": "GOLDEN-04",
-      "status": "OPEN",
-      "title": "CI netns requires root; logical network scenarios used by default",
-      "honest_cap": "Honest hybrid; enable GUNNCHDEVICE_LAB_NETNS=1 as root for real netns"
-    },
-    {
       "id": "GJ-DEFECT-006",
       "severity": "S2",
       "journey_id": "GOLDEN-06",
@@ -128,11 +135,12 @@
     }
   ],
   "claim_boundary": {
-    "independent_verification_claimed": true,
+    "independent_verification_claimed": false,
     "physically_validated": false,
     "human_validated": false,
     "frontier_parity_claimed": false,
-    "vp003r_overall": "PASS"
+    "vp003r_overall": "PRIOR_VERIFIER_PASS_ON_TIP",
+    "wp003r1_note": "Implementer integrity closure; Independent PASS for WP-003R.1 left to verifier"
   },
   "wp003r_lab": {
     "foundation": "gunnchos_device_os/device_lab",
@@ -140,7 +148,7 @@
     "GUNNCHDEVICE_LAB_FOUNDATION": "PART_OF_WP003R",
     "implementer_self_cert_forbidden": true
   },
-  "updated_at": "2026-08-10T18:56:02Z",
+  "updated_at": "2026-08-10T19:48:54Z",
   "independent_verification": {
     "packet": "VP-003R",
     "overall_result": "PASS",

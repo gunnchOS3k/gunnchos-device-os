@@ -107,6 +107,51 @@ def test_competitor_matrix_has_no_fabricated_scores():
         assert cap["competitor_score"] is None
 
 
+def test_competitor_matrix_consistency_zero():
+    from gunnchos_device_os.golden_journeys.scorecard import (
+        validate_competitor_matrix_consistency,
+    )
+
+    report = validate_competitor_matrix_consistency(root=ROOT)
+    assert report["ok"], report["errors"]
+    assert report["COMPETITOR_MATRIX_CONTRADICTIONS"] == 0
+
+
+def test_unprivileged_net_audio_are_fallback_only_not_e4():
+    from gunnchos_device_os.device_lab.hw_backends.network import NetworkBackend
+    from gunnchos_device_os.device_lab.hw_backends.audio import AudioBackend
+
+    net = NetworkBackend()
+    net.start()
+    n = net.dock_ethernet_attach()
+    assert n.get("e4_reference_proof") is False
+    assert n.get("NOT_E4_REFERENCE_PROOF") is True
+    assert n.get("FALLBACK_ONLY") is True
+    net.dock_ethernet_detach()
+
+    aud = AudioBackend()
+    aud.start()
+    a = aud.dock_attach()
+    assert a.get("e4_reference_proof") is False
+    assert a.get("FALLBACK_ONLY") is True
+    aud.dock_detach()
+
+
+def test_g04_office_dock_records_backend_honesty():
+    from gunnchos_device_os.device_lab.scenarios.office_dock import run
+
+    result = run(repo_root=ROOT)
+    assert result["ok"] is True
+    assert result["VF2_UNPRIVILEGED_FALLBACK"] == "AVAILABLE"
+    assert result["VF3"] == "MODELED_ONLY"
+    assert result["VF4"] == "PHYSICAL_PENDING"
+    assert result["SILICON_EXACT_EMULATION"] is False
+    # Default CI/dev path is logical fallback, not E4 reference proof.
+    assert result["network_backend"]["NOT_E4_REFERENCE_PROOF"] is True
+    assert result["audio_backend"]["NOT_E4_REFERENCE_PROOF"] is True
+    assert result["VF2_REQUIRED_GOLDEN_BACKENDS"] == "FALLBACK_ONLY"
+
+
 def test_verifier_owned_paths_exist():
     plan = ROOT / "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md"
     results = ROOT / "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_RESULTS.md"
