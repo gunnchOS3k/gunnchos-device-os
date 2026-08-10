@@ -50,7 +50,7 @@
             },
             "assignment.odt": {
               "kind": "doc",
-              "dirty": true
+              "dirty": false
             },
             "shared.odt": {
               "kind": "doc",
@@ -109,21 +109,23 @@
     {
       "step": "browser",
       "ok": true,
-      "ms": 7,
-      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "ms": 492,
+      "execution_depth": "L5_REAL_GUI_INTERACTION",
       "result": {
         "ok": true,
-        "browser": false,
-        "status": 200,
-        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 7,
-        "action": "browser"
+        "browser": true,
+        "title": "gunnchOS LMS Dev",
+        "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/browser/browser_home.png",
+        "execution_depth": "L5_REAL_GUI_INTERACTION",
+        "duration_ms": 492,
+        "action": "browser",
+        "path_home_dependency": true
       }
     },
     {
       "step": "email",
       "ok": true,
-      "ms": 85,
+      "ms": 22,
       "execution_depth": "L4_REAL_APPLICATION_PROCESS",
       "result": {
         "ok": true,
@@ -144,23 +146,23 @@
           "execution_depth": "L4_REAL_APPLICATION_PROCESS"
         },
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 85,
+        "duration_ms": 22,
         "action": "email"
       }
     },
     {
       "step": "calendar",
       "ok": true,
-      "ms": 2050,
+      "ms": 1520,
       "execution_depth": "L3_REAL_SERVICE_API",
       "result": {
         "ok": true,
         "status": 401,
-        "uid": "evt-1786317134",
+        "uid": "evt-1786321342",
         "fallback": "radicale_filesystem",
-        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786317134.ics",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786321342.ics",
         "execution_depth": "L3_REAL_SERVICE_API",
-        "duration_ms": 2050,
+        "duration_ms": 1520,
         "action": "calendar",
         "path_home_dependency": true
       }
@@ -168,7 +170,7 @@
     {
       "step": "docx_edit",
       "ok": true,
-      "ms": 2637,
+      "ms": 1747,
       "execution_depth": "L4_REAL_APPLICATION_PROCESS",
       "result": {
         "ok": true,
@@ -179,12 +181,12 @@
         "reopened": true,
         "exported_pdf": true,
         "checksums": {
-          "assignment.odt": "509b8ec7e79c9b620ca87ec8b633db03ff9902811893b4d64b9c0b3a710c2142",
-          "assignment_edited.odt": "d427ecede7f7e8a5a8888f857ddd752caf7932969c1eebe3e0f54ffdcc302c41",
-          "assignment_edited.pdf": "348300b34313b5f791caaf69d6c5defbcfbbb5001dedefca6689717f5a56309c"
+          "assignment.odt": "958e5bf5c1d34b69482304d17145e579fa9181b95001b1dbc75d5fa2021aa360",
+          "assignment_edited.odt": "fcc2057373fd51c58dc3947627fb8988cef6bfb91748579f602ce87e6bd64175",
+          "assignment_edited.pdf": "c369c6b5268f8d9278c60f029e8665e282a17863128faa41a5f58807ce005282"
         },
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 2637,
+        "duration_ms": 1747,
         "convert_rc": 0,
         "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
       }
@@ -192,7 +194,7 @@
     {
       "step": "xlsx_edit",
       "ok": true,
-      "ms": 1570,
+      "ms": 973,
       "execution_depth": "L4_REAL_APPLICATION_PROCESS",
       "result": {
         "ok": true,
@@ -203,12 +205,12 @@
         "reopened": true,
         "exported_pdf": true,
         "checksums": {
-          "assignment.odt": "2750b90810acac3cd64079a653b1bcfc3afb263794c57148afa09875fce5fb52",
-          "assignment_edited.odt": "05a3a510ef233b220072fa446d215fbe8bf08b25d202dbcada9bcfa63c8b750e",
-          "assignment_edited.pdf": "b6764a1a647acb273b28d41889862cc6d4bea6a5649b185f4eaa79d781004d35"
+          "assignment.odt": "772f6bc3bc11a7ec3465c3739e0b58e862747d901fc9b4d58b2c8736e7f7ce7b",
+          "assignment_edited.odt": "f8c968cb374da8c94420d4ea78d57efcbc6273a760ab66d3946eca4097cddeef",
+          "assignment_edited.pdf": "3cbed5dd0cac8c7c800bb9788e187731d023ec8fe8309492712790dc284b8e7b"
         },
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 1570,
+        "duration_ms": 972,
         "convert_rc": 0,
         "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
       }
@@ -216,7 +218,7 @@
     {
       "step": "pptx_edit",
       "ok": true,
-      "ms": 1081,
+      "ms": 969,
       "execution_depth": "L4_REAL_APPLICATION_PROCESS",
       "result": {
         "ok": true,
@@ -227,12 +229,12 @@
         "reopened": true,
         "exported_pdf": true,
         "checksums": {
-          "assignment.odt": "5097f64c5b419c619d1d22543e10aff07cdf042d8000964c3887aaed5814c4b5",
-          "assignment_edited.odt": "fb802f51dd2f20ebfa4c1631ce66177e171b5274edce175c601fe2cd9ceafd05",
-          "assignment_edited.pdf": "63e01080cd25ea2317c2576a65c041d05ec7530c5157c490f201ef5fd38fea05"
+          "assignment.odt": "772f6bc3bc11a7ec3465c3739e0b58e862747d901fc9b4d58b2c8736e7f7ce7b",
+          "assignment_edited.odt": "3c557f128fc1df3aa3087afaba297ef53e377ea7fabddfb2bce0a4d93acafd25",
+          "assignment_edited.pdf": "7577a456c08158121b2cacfdeb80ec46278afc585ca088f6bc82594c5eb5e22a"
         },
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 1081,
+        "duration_ms": 969,
         "convert_rc": 0,
         "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
       }
@@ -240,7 +242,7 @@
     {
       "step": "pdf_export",
       "ok": true,
-      "ms": 1133,
+      "ms": 955,
       "execution_depth": "L4_REAL_APPLICATION_PROCESS",
       "result": {
         "ok": true,
@@ -251,12 +253,12 @@
         "reopened": true,
         "exported_pdf": true,
         "checksums": {
-          "assignment.odt": "5097f64c5b419c619d1d22543e10aff07cdf042d8000964c3887aaed5814c4b5",
-          "assignment_edited.odt": "c0e85e8dc1ab248580f586543603128d47e528b228dc2334180afe09791765f4",
-          "assignment_edited.pdf": "a4cc4fc856a4dfbb14653ae6bcbbf0d8fcc3dd3e22db25250b28a7b42f9668a0"
+          "assignment.odt": "47b161652bf5db05498a4c1a5bfaa6d02f45993bc3195a497322bb9a0725714d",
+          "assignment_edited.odt": "cf178bdefc0e8ecce5b041320d90bcba482e1f7e6ced6d5e285ac3a4302fe759",
+          "assignment_edited.pdf": "67e501aa3a50511a4fa1714fe9bd2b0bfd998595e234fa400c301f62bf1eb8c6"
         },
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 1132,
+        "duration_ms": 955,
         "convert_rc": 0,
         "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
       }
@@ -264,79 +266,83 @@
     {
       "step": "webrtc_call",
       "ok": true,
-      "ms": 1,
-      "execution_depth": "L3_REAL_SERVICE_API",
+      "ms": 2309,
+      "execution_depth": "L5_REAL_GUI_INTERACTION",
       "result": {
         "ok": true,
-        "browser": false,
-        "signaling_url": "http://127.0.0.1:55260/",
-        "sessions": 0,
-        "execution_depth": "L3_REAL_SERVICE_API",
-        "note": "playwright not installed on host; signaling stack is live",
-        "duration_ms": 0,
-        "action": "webrtc_call"
+        "browser": true,
+        "ready": true,
+        "signals": 10,
+        "sessions": 2,
+        "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/webrtc/webrtc_peer.png",
+        "execution_depth": "L5_REAL_GUI_INTERACTION",
+        "duration_ms": 2309,
+        "action": "webrtc_call",
+        "path_home_dependency": true
       }
     },
     {
       "step": "screen_share",
       "ok": true,
-      "ms": 1,
-      "execution_depth": "L3_REAL_SERVICE_API",
+      "ms": 1924,
+      "execution_depth": "L5_REAL_GUI_INTERACTION",
       "result": {
         "ok": true,
-        "browser": false,
-        "signaling_url": "http://127.0.0.1:55260/",
-        "sessions": 0,
-        "execution_depth": "L3_REAL_SERVICE_API",
-        "note": "playwright not installed on host; signaling stack is live",
-        "duration_ms": 0,
-        "action": "screen_share"
+        "browser": true,
+        "ready": true,
+        "signals": 15,
+        "sessions": 3,
+        "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/webrtc/webrtc_peer.png",
+        "execution_depth": "L5_REAL_GUI_INTERACTION",
+        "duration_ms": 1924,
+        "action": "screen_share",
+        "path_home_dependency": true
       }
     },
     {
       "step": "save_local",
       "ok": true,
-      "ms": 5,
+      "ms": 2,
       "execution_depth": "L0_GENERIC_OK",
       "result": {
         "ok": true,
         "saved": true,
         "data_loss": false,
         "execution_depth": "L0_GENERIC_OK",
-        "duration_ms": 5,
+        "duration_ms": 2,
         "action": "save_local"
       }
     },
     {
       "step": "share_files",
       "ok": true,
-      "ms": 3128,
+      "ms": 3016,
       "execution_depth": "L3_REAL_SERVICE_API",
       "result": {
         "ok": true,
         "name": "shared.odt",
         "bytes": 18,
         "version": 1,
-        "url": "http://127.0.0.1:55258/shared.odt",
+        "url": "http://127.0.0.1:57125/shared.odt",
         "status": null,
         "share": "webdav://local/shared.odt?v=1",
         "execution_depth": "L3_REAL_SERVICE_API",
-        "duration_ms": 3128,
+        "duration_ms": 3016,
         "action": "share_files"
       }
     }
   ],
-  "duration_ms": 11702,
+  "duration_ms": 13934,
   "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
   "phase": "XII",
   "real_protocol_endpoints": {
-    "smtp": "127.0.0.1:55255",
-    "imap": "127.0.0.1:55256",
-    "caldav": "http://127.0.0.1:55257/",
-    "webdav": "http://127.0.0.1:55258/",
-    "matrix": "http://127.0.0.1:55259",
-    "webrtc": "http://127.0.0.1:55260/",
-    "lms": "http://127.0.0.1:55261/"
+    "smtp": "127.0.0.1:57122",
+    "imap": "127.0.0.1:57123",
+    "caldav": "http://127.0.0.1:57124/",
+    "webdav": "http://127.0.0.1:57125/",
+    "matrix": "http://127.0.0.1:57126",
+    "webrtc": "http://127.0.0.1:57127/",
+    "lms": "http://127.0.0.1:57128/"
   },
   "physical_followups": [],
   "mock": false

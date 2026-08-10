@@ -52,6 +52,9 @@ def browser_lms_workflow(lms_url: str, evidence_dir: Path, upload_file: Path | N
         receipt = page.evaluate("() => window.__lms_receipt || null")
         page.screenshot(path=str(evidence_dir / "lms_submit.png"))
         browser.close()
+    if receipt:
+        import json as _json
+        (evidence_dir / "last_receipt.json").write_text(_json.dumps(receipt, indent=2), encoding="utf-8")
     return {
         "ok": bool(receipt) and dest.exists(),
         "browser": True,

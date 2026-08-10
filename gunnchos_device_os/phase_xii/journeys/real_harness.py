@@ -50,6 +50,8 @@ class RealJourneyHarness(JourneyHarness):
         h["browser"] = self._real_browser
         h["lms_open"] = self._real_lms_open
         h["lms_upload"] = self._real_lms_upload
+        h["submission_receipt"] = self._real_submission_receipt
+        h["reopen_receipt"] = self._real_submission_receipt
         h["pdf_download"] = self._real_pdf_download
         h["pdf_open"] = self._real_pdf_open
         h["doc_create"] = lambda _c: self._real_doc("create")
@@ -134,6 +136,43 @@ class RealJourneyHarness(JourneyHarness):
         self.ensure_real_stack()
         upload = self.evidence / "office" / "assignment_edited.odt"
         return browser_lms_workflow(self.real.endpoints["lms"], self.evidence / "lms", upload if upload.exists() else None)
+
+    def _real_submission_receipt(self, _c: dict[str, Any]) -> dict[str, Any]:
+        """Read receipt from real LMS stack (not Phase XI in-memory stub)."""
+        self.ensure_real_stack()
+        import json as _json
+        import httpx
+
+        receipts = list(getattr(self.real.lms, "receipts", []) or [])
+        last_path = self.real.work / "lms" / "last_receipt.json"
+        if not receipts and last_path.exists():
+            receipts = [_json.loads(last_path.read_text(encoding="utf-8"))]
+        if not receipts:
+            evidence_last = self.evidence / "lms" / "last_receipt.json"
+            if evidence_last.exists():
+                receipts = [_json.loads(evidence_last.read_text(encoding="utf-8"))]
+        if not receipts:
+            r = httpx.post(
+                self.real.endpoints["lms"].rstrip("/") + "/submit",
+                content=b"phase-xii-receipt",
+                timeout=10,
+            )
+            if r.status_code == 200:
+                payload = r.json() if "application/json" in (r.headers.get("content-type") or "") else {}
+                receipt = payload.get("receipt") or payload
+                if receipt:
+                    receipts = [receipt]
+                    (self.evidence / "lms").mkdir(parents=True, exist_ok=True)
+                    (self.evidence / "lms" / "last_receipt.json").write_text(
+                        _json.dumps(receipt, indent=2), encoding="utf-8"
+                    )
+        if not receipts:
+            return {"ok": False, "error": "no_receipt", "execution_depth": "L4_REAL_APPLICATION_PROCESS"}
+        return {
+            "ok": True,
+            "receipt": receipts[-1],
+            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+        }
 
     def _real_pdf_download(self, _c: dict[str, Any]) -> dict[str, Any]:
         self.ensure_real_stack()

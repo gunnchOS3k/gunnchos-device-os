@@ -19,8 +19,8 @@
     {
       "step": "waike_open",
       "ok": true,
-      "ms": 9,
-      "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+      "ms": 514,
+      "execution_depth": "L5_REAL_GUI_INTERACTION",
       "result": {
         "ok": true,
         "app": {
@@ -65,7 +65,7 @@
                 "lesson_id": "wireless_basics_101",
                 "pct": 25.0,
                 "role": "student",
-                "updated_at": 1786317131.2757828
+                "updated_at": 1786321338.839475
               }
             },
             "content_sources": [
@@ -123,7 +123,7 @@
             "schema": "waike.portfolio.v1",
             "lesson_id": "wireless_basics_101",
             "role": "learner",
-            "exported_at": 1786317131.276028,
+            "exported_at": 1786321338.8397388,
             "session_ok": true
           },
           "accessibility": {
@@ -139,11 +139,14 @@
           "claim_boundary": "Digital WAIKE Learning app using repo lesson packs and progress store. Not a full LMS or production cloud sync."
         },
         "browser": {
-          "ok": false,
-          "error": "Request URL is missing an 'http://' or 'https://' protocol."
+          "ok": true,
+          "browser": true,
+          "title": "WAIKE Learning",
+          "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/waike/waike.png",
+          "execution_depth": "L5_REAL_GUI_INTERACTION"
         },
-        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 9,
+        "execution_depth": "L5_REAL_GUI_INTERACTION",
+        "duration_ms": 514,
         "stub": false,
         "action": "waike_open"
       }
@@ -175,18 +178,18 @@
     {
       "step": "share_pdf",
       "ok": true,
-      "ms": 3013,
+      "ms": 3010,
       "execution_depth": "L3_REAL_SERVICE_API",
       "result": {
         "ok": true,
         "name": "shared.odt",
         "bytes": 18,
         "version": 1,
-        "url": "http://127.0.0.1:55258/shared.odt",
+        "url": "http://127.0.0.1:57125/shared.odt",
         "status": null,
         "share": "webdav://local/shared.odt?v=1",
         "execution_depth": "L3_REAL_SERVICE_API",
-        "duration_ms": 3013,
+        "duration_ms": 3010,
         "action": "share_pdf"
       }
     },
@@ -205,16 +208,16 @@
     {
       "step": "class_message",
       "ok": true,
-      "ms": 31,
+      "ms": 28,
       "execution_depth": "L3_REAL_SERVICE_API",
       "result": {
         "ok": true,
-        "room_id": "!10b267ba76:localhost",
+        "room_id": "!2757d0c526:localhost",
         "event": {
-          "event_id": "$3cd3eab761e045b3b58e75417fd3359b"
+          "event_id": "$6b1519986d944fc29d6cbb3a75954453"
         },
         "execution_depth": "L3_REAL_SERVICE_API",
-        "duration_ms": 31,
+        "duration_ms": 28,
         "action": "class_message"
       }
     },
@@ -255,17 +258,17 @@
       }
     }
   ],
-  "duration_ms": 3054,
+  "duration_ms": 3554,
   "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
   "phase": "XII",
   "real_protocol_endpoints": {
-    "smtp": "127.0.0.1:55255",
-    "imap": "127.0.0.1:55256",
-    "caldav": "http://127.0.0.1:55257/",
-    "webdav": "http://127.0.0.1:55258/",
-    "matrix": "http://127.0.0.1:55259",
-    "webrtc": "http://127.0.0.1:55260/",
-    "lms": "http://127.0.0.1:55261/"
+    "smtp": "127.0.0.1:57122",
+    "imap": "127.0.0.1:57123",
+    "caldav": "http://127.0.0.1:57124/",
+    "webdav": "http://127.0.0.1:57125/",
+    "matrix": "http://127.0.0.1:57126",
+    "webrtc": "http://127.0.0.1:57127/",
+    "lms": "http://127.0.0.1:57128/"
   },
   "physical_followups": [],
   "mock": false

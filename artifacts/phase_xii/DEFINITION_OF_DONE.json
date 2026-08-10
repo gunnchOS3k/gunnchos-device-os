@@ -1,85 +1,16 @@
 {
   "schema": "gunnchos.phase_xii.definition_of_done.v1",
-  "generated_at": "2026-08-09T23:12:52.633725+00:00",
-  "matrix": {
-    "Product definition": "COMPLETE_DIGITAL",
-    "Requirements": "COMPLETE_DIGITAL",
-    "gunnchOS backend/services": "COMPLETE_DIGITAL",
-    "gunnchOS GUI/session": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Productivity apps": "COMPLETE_DIGITAL",
-    "Communication stack": "COMPLETE_DIGITAL",
-    "Media stack": "COMPLETE_DIGITAL",
-    "gunnchAI": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Games": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Ring digital input": "COMPLETE_DIGITAL",
-    "Hardware digital design": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Manufacturer package": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "NPI/RFQ package": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Real-app user journeys": "COMPLETE_CONDITIONAL_EXTERNAL",
-    "Physical EVT": "PHYSICAL_PENDING",
-    "Vendor collateral": "EXTERNAL_PENDING",
-    "DFM": "EXTERNAL_PENDING",
-    "Certification": "EXTERNAL_PENDING",
-    "Carrier acceptance": "EXTERNAL_PENDING",
-    "DVT": "PHYSICAL_PENDING",
-    "PVT": "PHYSICAL_PENDING",
-    "Deployment": "EXTERNAL_PENDING",
-    "Operations/support": "INCOMPLETE_DIGITAL"
-  },
-  "notes": {
-    "gunnchOS GUI/session": "Weston/Xvfb integrated for Linux CI; macOS host lacks Wayland compositor binary \u2014 GUI CI path is Linux workflow",
-    "Real-app user journeys": "CI reality may exit 0 with X0=0 while X1=5 open; REAL_*_DAY_DIGITAL_PASS=FALSE until residuals clear",
-    "gunnchAI": "CI X1 residual: llama/runtime CONDITIONAL_EXTERNAL (RJ-STUDENT-001)",
-    "Games": "CI X1 residual: Godot/sibling repos CONDITIONAL_EXTERNAL (RJ-GAME-001..004)"
-  },
-  "session_config": {
-    "schema": "gunnchos.phase_xii.gui_session.v1",
-    "compositor": "weston",
-    "alternatives_documented": [
-      "wlroots/sway",
-      "plasma",
-      "gnome",
-      "xfce"
-    ],
-    "selection_rationale": [
-      "ARM + x86 CI support",
-      "Wayland maturity with headless backend",
-      "Low resource use for Student/Handheld profiles",
-      "Accessible via weston-terminal + AT-SPI hooks",
-      "Branded via gunnchOS shell/launcher overlays"
-    ],
-    "branding": {
-      "session_name": "gunnchOS",
-      "launcher": "apps/gunnchos_shell",
-      "not_stock_distro_desktop": true
-    },
-    "ci": {
-      "xvfb": true,
-      "weston_headless": true,
-      "qemu_optional": true
-    },
-    "config_path": "os_build/phase_xii/gui/weston.ini"
-  },
-  "rj_tokens": {
-    "RJ_STUDENT_PASS": true,
-    "RJ_OFFICE_PASS": true,
-    "RJ_CREATOR_PASS": true,
-    "RJ_EDUCATOR_PASS": true,
-    "RJ_RECREATION_PASS": true,
-    "RJ_OFFLINE_PASS": true,
-    "RJ_RING_DIGITAL_PASS": true,
-    "RJ_RECOVERY_PASS": true,
-    "RJ_ACCESSIBILITY_PASS": true
-  },
-  "REAL_APP_X0_OPEN": 0,
-  "REAL_APP_X1_OPEN": 5,
-  "REAL_APP_X2_OPEN": 0,
-  "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": false,
-  "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": false,
-  "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": false,
-  "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": false,
-  "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
-  "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN",
+  "physical_execution_freeze": true,
   "auto_merge_request": null,
-  "physical_execution_freeze": true
+  "REAL_APP_X0_OPEN": 0,
+  "REAL_APP_X1_OPEN": 0,
+  "REAL_APP_X2_OPEN": 0,
+  "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": true,
+  "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
+  "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "PROVEN",
+  "wave": "phase-xii/wave0-x1-close",
+  "note": "Local prove with sibling repos + Godot + llama. CI must reconfirm before accepted-main pin."
 }

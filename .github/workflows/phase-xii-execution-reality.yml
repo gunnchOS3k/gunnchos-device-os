@@ -1,46 +1,124 @@
 name: phase-xii-execution-reality
 on:
   push:
-    branches: [phase-xii/execution-reality, main]
+    branches: [phase-xii/execution-reality, phase-xii/wave0-x1-close, main]
   pull_request:
     branches: [main]
 
 jobs:
   reality:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     env:
       REAL_APP_EXECUTION_MODE: ACTIVE
       GUNNCHOS_REPOS_ROOT: ${{ github.workspace }}/../repos
+      REQUIRE_REAL_APP_X1_ZERO: "1"
       PYTHONPATH: .:src
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Checkout sibling game + AI repos
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$GUNNCHOS_REPOS_ROOT" .deps
+          owner="${GITHUB_REPOSITORY_OWNER}"
+          for repo in anime-aggressors pedestrian-pursuit archive-of-life-artifact-world beatlink-party gunnchAI3k; do
+            dest="$GUNNCHOS_REPOS_ROOT/$repo"
+            if [[ ! -d "$dest/.git" ]]; then
+              git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${owner}/${repo}.git" "$dest"
+            fi
+            ln -sfn "$dest" ".deps/$repo"
+            # Also link next to workspace for code that resolves ../repo
+            ln -sfn "$dest" "$(dirname "$GITHUB_WORKSPACE")/$repo" || true
+          done
+          ls -la "$GUNNCHOS_REPOS_ROOT"
+
       - name: Install GUI + productivity stack
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            weston xvfb xauth \
+            weston xvfb xauth unzip curl ca-certificates \
             libreoffice-writer libreoffice-calc libreoffice-impress \
             ffmpeg mpv chromium-browser || true
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            chromium ffmpeg mpv python3-pip python3-venv git curl
+            chromium ffmpeg mpv python3-pip python3-venv git curl unzip poppler-utils
+
+      - name: Cache Phase XII runtimes
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/phase_xii_runtimes
+            artifacts/phase_xii/models
+          key: phase-xii-runtimes-godot-4.4.1-llama-b10333-smollm2-135m
+
+      - name: Install Godot + llama-server + GGUF
+        run: bash scripts/ci/install_phase_xii_runtimes.sh
+
+      - name: Enable corepack / pnpm
+        run: |
+          corepack enable || true
+          npm install -g pnpm@9 || true
+          node -v
+          npm -v
+          pnpm -v || true
+
+      - name: Install web game dependencies
+        run: |
+          set -euo pipefail
+          for repo in archive-of-life-artifact-world beatlink-party; do
+            dir="$GUNNCHOS_REPOS_ROOT/$repo"
+            if [[ -f "$dir/pnpm-lock.yaml" ]]; then
+              (cd "$dir" && pnpm install --frozen-lockfile) || (cd "$dir" && pnpm install)
+            elif [[ -f "$dir/package-lock.json" ]]; then
+              (cd "$dir" && npm ci) || (cd "$dir" && npm install)
+            elif [[ -f "$dir/package.json" ]]; then
+              (cd "$dir" && npm install)
+            fi
+          done
+
       - name: Python deps
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
           python3 -m pip install playwright
           python3 -m playwright install --with-deps chromium || true
+
       - name: Optional protocol compose
         run: |
           if command -v docker >/dev/null; then
             docker compose -f os_build/phase_xii/protocols/docker-compose.yml up -d || true
           fi
+
       - name: Build depth ledger
         run: python3 scripts/build_reality_depth_ledger.py
+
       - name: Run RJ acceptance
         run: python3 scripts/run_phase_xii_rj.py
+
       - name: Prove phase xii
         run: python3 scripts/prove_phase_xii.py
+
+      - name: Assert X1 residual register closed
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          p = Path("artifacts/phase_xii/CI_X1_RESIDUALS.json")
+          data = json.loads(p.read_text())
+          x0 = int(data.get("REAL_APP_X0_OPEN") or 0)
+          x1 = int(data.get("REAL_APP_X1_OPEN") or 0)
+          x2 = int(data.get("REAL_APP_X2_OPEN") or 0)
+          print(json.dumps({"X0": x0, "X1": x1, "X2": x2, "open_x1": data.get("open_x1")}, indent=2))
+          if x0 or x1:
+              sys.exit(1)
+          PY
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
