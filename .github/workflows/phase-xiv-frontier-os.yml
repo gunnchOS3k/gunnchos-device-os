@@ -1,0 +1,225 @@
+name: phase-xiv-frontier-os
+
+on:
+  push:
+    branches: [phase-xiv/os-frontier-convergence, main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHONPATH: .:src
+  PHYSICAL_EXECUTION_FREEZE: ACTIVE
+
+jobs:
+  stage2-reproof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --upgrade pip && python3 -m pip install -r requirements.txt
+      - name: Reproof Stage 2 on accepted main lineage
+        run: python3 scripts/prove_stage2_os.py
+      - name: Persist STAGE2_REPROOF
+        run: |
+          mkdir -p artifacts/phase_xiv
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          r = json.loads(Path("artifacts/stage2/OS_PROVE_REPORT.json").read_text())
+          assert r.get("GUNNCHOS_FRONTIER_OS_PARITY") is False
+          out = {
+            "schema": "gunnchos.phase_xiv.stage2_reproof.v1",
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "accepted_main": "a2d3a2aec6d3089cdcda29212bc2b839931ad61b",
+            "ok": bool(r.get("digitally_validated_gates")),
+            "digitally_validated_gates": r.get("digitally_validated_gates"),
+            "tokens": r.get("tokens"),
+            "GUNNCHOS_FRONTIER_OS_PARITY": False,
+            "physical_execution_freeze": True,
+            "auto_merge_request": None,
+          }
+          Path("artifacts/phase_xiv/STAGE2_REPROOF.json").write_text(json.dumps(out, indent=2) + "\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase-xiv-stage2-reproof
+          path: artifacts/phase_xiv/STAGE2_REPROOF.json
+
+  graphics-compositor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Optional Weston/Xvfb
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends weston xvfb || true
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_compositor_form_factor_e2e
+
+  ai-system-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_ai_system_api_no_model_paths
+
+  local-ai:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Local AI registry + micro tier (llama optional)
+        run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_local_ai_registry_hash_fallback tests/phase_xiv/test_phase_xiv.py::test_local_ai_llama_tier_if_available
+
+  cross-product-callers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_cross_product_callers
+
+  continuity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_continuity_handheld_student_dsxl
+
+  gunnchplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_gunnchplay_first_party
+
+  fabric:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_fabric_camera_npu_fallback
+
+  spatial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_spatial_edge_to_apps
+
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_package_channels_sign_rollback_revoke
+
+  sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_sdk_templates
+
+  mdm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_mdm_ten_device_fleet
+
+  prove-phase-xiv:
+    runs-on: ubuntu-latest
+    needs:
+      [
+        stage2-reproof,
+        graphics-compositor,
+        ai-system-api,
+        local-ai,
+        cross-product-callers,
+        continuity,
+        gunnchplay,
+        fabric,
+        spatial,
+        package,
+        sdk,
+        mdm,
+      ]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Prove Phase XIV OS
+        run: python3 scripts/prove_phase_xiv_os.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase-xiv-os-prove-report
+          path: |
+            artifacts/phase_xiv/OS_PROVE_REPORT.json
+            artifacts/phase_xiv/STAGE2_REPROOF.json
+      - name: Assert claim boundaries
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          r = json.loads(Path("artifacts/phase_xiv/OS_PROVE_REPORT.json").read_text())
+          assert r.get("GUNNCHOS_FRONTIER_OS_PARITY") is False
+          assert r.get("frontier_os_parity_claimed") is False
+          assert r.get("auto_merge_request") is None
+          assert r.get("physical_execution_freeze") is True
+          assert "physical-accuracy" in r.get("physical_pending_gates", [])
+          if r.get("incomplete_gates"):
+              print("incomplete:", r["incomplete_gates"])
+              sys.exit(1)
+          print("digitally_validated:", r.get("digitally_validated_gates"))
+          PY
