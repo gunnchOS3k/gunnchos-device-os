@@ -255,7 +255,7 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
       "current_depth_level": "D6",
-      "digital_gap": "Independent digital dock lifecycle PASS; privileged net/audio E4 reference remediated in WP-003R.1 pending verifier; physical SI E5 pending",
+      "digital_gap": "Independent digital dock lifecycle PASS; GJ-DEFECT-005 privileged net/audio E4 reference CLOSED_INDEPENDENT_PASS (VP-003R.1); physical SI E5 pending",
       "physical_gap": "E5 physical dock SI pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor dock continuity measurements",
@@ -264,6 +264,7 @@
         "GOLDEN-04"
       ],
       "evidence_refs": [
+        "quality/golden_journeys/verifier/VP-003R.1-RESULT.json",
         "quality/golden_journeys/verifier/VP-003R-RESULT.json",
         "quality/golden_journeys/scorecards/GOLDEN-04.scorecard.json"
       ],
@@ -771,19 +772,19 @@
   ],
   "independent_verifier_review": {
     "status": "ACCEPT_WITH_UPDATES",
-    "reviewed_at": "2026-08-10T18:56:02Z",
-    "tip_sha": "67e10ea1d329703d4764fb3799c5244e9781cd97",
-    "accepted_main_sha": "0449cbb64da416c3b702dcd880d76946e96eb16e",
+    "reviewed_at": "2026-08-10T20:22:00Z",
+    "tip_sha": "645d31a6b795b461afb1c66982b1402ffa373237",
+    "accepted_main_sha": "801b332ba2025b5ddfd8f85cebbafa2c2c368e02",
     "fabricated_scores_found": false,
     "competitor_score_null_ok": true,
-    "notes": "Aligned to VP-003R competitor_matrix_review; WP-003R.1 implementer consistency (no Independent PASS claim by implementer).",
+    "notes": "Aligned to VP-003R.1 Independent; GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS; no bulk-inconsistent promotions; competitor_score remain null.",
     "per_capability_delta": [
       {
         "capability": "office_dock_workflow",
         "mapped_to": "dock_undock_continuity",
         "new_E": "E4",
         "new_D": "D6",
-        "remaining": "E5 physical dock SI; GJ-DEFECT-005 privileged net/audio pending verifier"
+        "remaining": "E5 physical dock SI"
       },
       {
         "capability": "dsxl_dual_screen",
@@ -810,7 +811,7 @@
   },
   "updated_at": "2026-08-10T19:48:54Z",
   "updated_by": "implementer-wp003r1-matrix-consistency",
-  "vp003r_note": "Capability E/D derived from VP-003R Independent journey evidence. Journey D6 does not auto-promote unrelated capabilities. competitor_score remain null. WP-003R.1 implementer consistency; Independent PASS left to verifier.",
+  "vp003r_note": "Capability E/D derived from VP-003R / VP-003R.1 Independent journey evidence. Journey D6 does not auto-promote unrelated capabilities. competitor_score remain null. VP-003R.1 Independent PASS; GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS.",
   "consistency": {
     "COMPETITOR_MATRIX_CONTRADICTIONS_BEFORE": 7,
     "COMPETITOR_MATRIX_CONTRADICTIONS": 0,

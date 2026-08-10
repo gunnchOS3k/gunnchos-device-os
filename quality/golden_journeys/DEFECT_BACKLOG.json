@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.golden_journeys.defect_backlog.v1",
   "work_packet": "WP-003R.1",
-  "updated_by": "implementer-wp003r1",
-  "note": "WP-003R.1 Cycle 1 integrity: CI claim_boundary fix, GJ-DEFECT-005 privileged net/audio remediation, matrix consistency. Independent PASS pending verifier.",
+  "updated_by": "independent-verifier-vp003r1",
+  "note": "WP-003R.1 Independent PASS on tip 645d31a / main 801b332. GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS. PHYSICAL/HUMAN PENDING unchanged.",
   "digital_remediation_shipped": [
     {
       "id": "VP003-S2-G02-D6-OFFICE-LMS",
@@ -58,11 +58,12 @@
       "id": "GJ-DEFECT-005",
       "severity": "S2",
       "journey_id": "GOLDEN-04",
-      "status": "REMEDIATED_DIGITAL_PATH",
+      "status": "CLOSED_INDEPENDENT_PASS",
       "title": "CI logical network/audio hybrid (netns root-gated)",
       "honest_cap": "Privileged netns+veth packet transfer + PipeWire/Pulse/ALSA virtual audio are E4 reference; unprivileged logical remains FALLBACK_ONLY / NOT_E4_REFERENCE_PROOF",
-      "proposed_independent_status": "CLOSED_INDEPENDENT_PASS",
-      "note": "WP-003R.1 implementer remediated with privileged CI reference job. Independent CLOSED_INDEPENDENT_PASS pending verifier. VF2_REQUIRED_GOLDEN_BACKENDS=PASS when privileged job green; VF2_UNPRIVILEGED_FALLBACK=AVAILABLE; VF3 MODELED_ONLY; VF4/5/6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false.",
+      "independent_status": "CLOSED_INDEPENDENT_PASS",
+      "note": "VP-003R.1 Independent closed on tip 645d31a / main 801b332. Privileged CI G04 job green; local unprivileged remains FALLBACK_ONLY. VF2_REQUIRED_GOLDEN_BACKENDS=PASS on privileged path; VF2_UNPRIVILEGED_FALLBACK=AVAILABLE; VF3 MODELED_ONLY; VF4/5/6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false.",
+      "result_path": "quality/golden_journeys/verifier/VP-003R.1-RESULT.json",
       "remediation_paths": [
         "gunnchos_device_os/device_lab/hw_backends/network.py",
         "gunnchos_device_os/device_lab/hw_backends/audio.py",
@@ -140,7 +141,7 @@
     "human_validated": false,
     "frontier_parity_claimed": false,
     "vp003r_overall": "PRIOR_VERIFIER_PASS_ON_TIP",
-    "wp003r1_note": "Implementer integrity closure; Independent PASS for WP-003R.1 left to verifier"
+    "wp003r1_note": "VP-003R.1 Independent PASS; GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS"
   },
   "wp003r_lab": {
     "foundation": "gunnchos_device_os/device_lab",
@@ -148,14 +149,15 @@
     "GUNNCHDEVICE_LAB_FOUNDATION": "PART_OF_WP003R",
     "implementer_self_cert_forbidden": true
   },
-  "updated_at": "2026-08-10T19:48:54Z",
+  "updated_at": "2026-08-10T20:22:00Z",
+  "updated_by": "independent-verifier-vp003r1",
   "independent_verification": {
-    "packet": "VP-003R",
+    "packet": "VP-003R.1",
     "overall_result": "PASS",
-    "tip_sha": "67e10ea1d329703d4764fb3799c5244e9781cd97",
-    "accepted_main_sha": "0449cbb64da416c3b702dcd880d76946e96eb16e",
-    "result_path": "quality/golden_journeys/verifier/VP-003R-RESULT.json",
-    "note": "Independent PASS E4/D6 for G04/G06/G07/G08 digital; PHYSICAL/HUMAN PENDING remain."
+    "tip_sha": "645d31a6b795b461afb1c66982b1402ffa373237",
+    "accepted_main_sha": "801b332ba2025b5ddfd8f85cebbafa2c2c368e02",
+    "result_path": "quality/golden_journeys/verifier/VP-003R.1-RESULT.json",
+    "note": "Independent PASS WP-003R.1 integrity; GJ-DEFECT-005 CLOSED_INDEPENDENT_PASS; PHYSICAL/HUMAN PENDING remain."
   },
   "closed_by_independent_vp003r": [
     {
@@ -168,6 +170,12 @@
     },
     {
       "id": "GJ-DEFECT-008",
+      "status": "CLOSED_INDEPENDENT_PASS"
+    }
+  ],
+  "closed_by_independent_vp003r1": [
+    {
+      "id": "GJ-DEFECT-005",
       "status": "CLOSED_INDEPENDENT_PASS"
     }
   ]
