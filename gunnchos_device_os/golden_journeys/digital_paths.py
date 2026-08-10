@@ -120,8 +120,17 @@ def offline_office_lms_reconnect(root: Path, work: Path) -> dict[str, Any]:
             pass
 
     receipt_ok = bool(receipt and (receipt.get("ok") or receipt.get("receipt")))
+    # CI test/gate1 do not install LibreOffice. office_workflow still mutates a real
+    # on-disk ODT (L3) and sets ok=False + libreoffice_not_installed; that durable
+    # offline edit is enough for this D6 composition path (L4 when soffice present).
+    office_step_ok = bool(ow.get("ok")) or (
+        edited.exists()
+        and bool(ow.get("edited"))
+        and bool(ow.get("saved"))
+        and ow.get("error") == "libreoffice_not_installed"
+    )
     ok = (
-        bool(ow.get("ok", True))
+        office_step_ok
         and offline_durable
         and offline_queue_ok
         and conflict_surfaced
@@ -134,6 +143,7 @@ def offline_office_lms_reconnect(root: Path, work: Path) -> dict[str, Any]:
         "schema": "gunnchos.golden_journeys.digital_path.offline_office_lms.v1",
         "network_end": network["state"],
         "office": ow,
+        "office_step_ok": office_step_ok,
         "offline_durable": offline_durable,
         "offline_queue": queued,
         "sync": sync,

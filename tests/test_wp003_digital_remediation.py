@@ -29,12 +29,29 @@ def test_offline_office_lms_reconnect_d6(tmp_path: Path):
 
     out = offline_office_lms_reconnect(ROOT, tmp_path / "g02")
     assert out["ok"] is True
+    assert out["office_step_ok"] is True
     assert out["conflict_surfaced"] is True
     assert out["silent_overwrite"] is False
     assert out["lms_receipt"]
     assert out["cross_app"] == ["office", "offline_sync", "lms"]
     assert out["claim_boundary"]
     assert "independent verification" in out["claim_boundary"].lower() or "Not independent" in out["claim_boundary"] or "not independent" in out["claim_boundary"].lower()
+
+
+def test_offline_office_lms_reconnect_d6_without_libreoffice(tmp_path: Path, monkeypatch):
+    """CI test/gate1 runners do not install soffice; durable ODT edit must still pass."""
+    from gunnchos_device_os.golden_journeys.digital_paths import offline_office_lms_reconnect
+    import gunnchos_device_os.phase_xii.apps.office as office_mod
+
+    monkeypatch.setattr(office_mod, "_soffice", lambda: None)
+    out = offline_office_lms_reconnect(ROOT, tmp_path / "g02_no_lo")
+    assert out["ok"] is True
+    assert out["office_step_ok"] is True
+    assert out["office"].get("ok") is False
+    assert out["office"].get("error") == "libreoffice_not_installed"
+    assert out["conflict_surfaced"] is True
+    assert out["silent_overwrite"] is False
+    assert out["lms_receipt"]
 
 
 def test_fleet_mdm_wipe_continuity_denial_d6(tmp_path: Path):
