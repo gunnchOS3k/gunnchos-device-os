@@ -2,18 +2,20 @@
   "schema": "gunnchos.wp007.implementer_residual_status.v1",
   "work_packet": "WP-007R",
   "cycle": 2,
-  "role": "IMPLEMENTER",
-  "independent_pass_written": false,
-  "note": "Prepared digital closures for Independent verifier. Do not treat as Independent PASS.",
+  "role": "INDEPENDENT_VERIFIER_CONFIRMED",
+  "independent_pass_written": true,
+  "note": "Independent verifier confirmed digital closures on accepted main 3908de7. Implementer PREPARED labels superseded by Independent CLOSED_DIGITAL / E4_PASS.",
   "residuals": [
     {
       "id": "WP007-IV-RES-001",
       "title": "Updater cryptographic verification",
-      "status": "CLOSED_DIGITAL_PREPARED",
+      "status": "CLOSED_DIGITAL",
       "target": "CLOSED_DIGITAL",
       "evidence": [
+        "IV-OS-011",
+        "IV-OS-012",
+        "IV-OS-013",
         "gunnchos_device_os/security/wp007/update_trust.py",
-        "UpdaterService.api_verify Ed25519 verify",
         "tests/wp007/test_update_trust_crypto.py"
       ],
       "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING"
@@ -22,10 +24,12 @@
       "id": "WP007-IV-RES-002",
       "aligns_with": "WP007-DEF-009",
       "title": "Hostile network digital S2",
-      "status": "HOSTILE_NETWORK_DIGITAL_E4_PREPARED",
-      "target": "HOSTILE_NETWORK_DIGITAL=E4",
+      "status": "HOSTILE_NETWORK_DIGITAL_E4_PASS",
+      "target": "HOSTILE_NETWORK_DIGITAL=E4_PASS",
+      "HOSTILE_NETWORK_DIGITAL": "E4_PASS",
       "RF_WIFI": "E5_E8_EXTERNAL_PENDING",
       "evidence": [
+        "IV-NET-002",
         "gunnchos_device_os/security/wp007/hostile_network.py",
         "tests/wp007/test_hostile_network_digital.py"
       ]
@@ -34,10 +38,13 @@
       "id": "WP007-IV-RES-003",
       "aligns_with": "WP007-DEF-010",
       "title": "Local game-save integrity digital S2",
-      "status": "LOCAL_SAVE_INTEGRITY_DIGITAL_E4_PREPARED",
-      "target": "LOCAL_SAVE_INTEGRITY_DIGITAL=E4",
+      "status": "LOCAL_SAVE_INTEGRITY_DIGITAL_E4_PASS",
+      "target": "LOCAL_SAVE_INTEGRITY_DIGITAL=E4_PASS",
+      "LOCAL_SAVE_INTEGRITY_DIGITAL": "E4_PASS",
       "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING",
       "evidence": [
+        "IV-GAME-001",
+        "IV-GAME-002",
         "gunnchos_device_os/security/wp007/game_save_integrity.py",
         "tests/wp007/test_game_save_integrity_digital.py"
       ]

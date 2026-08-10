@@ -1,11 +1,18 @@
 {
   "schema": "gunnchos.wp007.history_pointer.v1",
-  "note": "Canonical VP-007-RESULT.json remains Independent FAIL pending Independent re-verify after WP-007R. Implementer does not write PASS / does not self-certify INTERNAL_RED_TEAM_READY as independent.",
+  "note": "Canonical VP-007-RESULT.json is Independent PASS on accepted main after WP-007R. Historical FAIL is preserved and not erased.",
   "preserved_fail_history": "artifacts/wp007/history/VP-007-RESULT.initial-fail.0e46609b3d86241f2c282e7a1f3752d16d2bba67.json",
   "original_overall_result": "FAIL",
   "original_executed_at": "2026-08-10T21:15:33Z",
   "original_tip_verified": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
   "pr_92_reference": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/92",
-  "failure_reason_summary": "Digital independent attack suite shows S0=0 and S1=0, but tip fails CI jobs test/gate1 due to SEC-LAB path containment breaking device_lab foundation test. Token withheld until remediation holds under integrated CI (test adaptation or safe allowlist that does not re-enable host escape).",
-  "independent_pass_deferred_to_verifier": true
+  "failure_reason_summary": "Digital independent attack suite showed S0=0 and S1=0, but tip failed CI jobs test/gate1 due to SEC-LAB path containment breaking device_lab foundation test; residual digital S2 updater stub / hostile-net / game-save remained.",
+  "superseded_by": {
+    "overall_result": "PASS",
+    "executed_at": "2026-08-10T22:27:47Z",
+    "accepted_main_sha": "3908de7c35882b500368475ce13d2243435f6443",
+    "remediation_tip": "7e5ab2f290704ea3fde3b05a23cc171bc901fefb",
+    "pr_94": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/94"
+  },
+  "independent_pass_deferred_to_verifier": false
 }

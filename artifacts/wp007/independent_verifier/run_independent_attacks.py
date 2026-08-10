@@ -357,10 +357,6 @@ def iv_os_010_updater_verify_stub() -> None:
     hist = json.dumps(verify.get("history") or verify).lower()
     last_error = str(verify.get("last_error") or "").lower()
     state = str(verify.get("state") or "").lower()
-    ok = last_error == "signature_invalid" or "signature_invalid" in hist or state == "failed"
-    # Must not have advanced to staging/commit
-    ok = ok and state in {"failed", "verifying"} or last_error == "signature_invalid"
-    # tighten: explicit signature_invalid
     ok = last_error == "signature_invalid" or (
         state == "failed" and "signature_invalid" in hist
     )
@@ -377,24 +373,199 @@ def iv_os_010_updater_verify_stub() -> None:
             remediation_holds=ok,
         )
     )
-    # Residual: UpdaterService.api_verify naive stub (S2 informational, non-blocking)
+
+
+def iv_os_011_updater_ed25519_happy() -> None:
+    """WP007-IV-RES-001: real asymmetric verify via UpdaterService (not boolean stub)."""
+    import base64
+
+    from gunnchos_device_os.runtime.adapters import UpdaterService
+    from gunnchos_device_os.runtime.service_base import ServiceConfig
+    from gunnchos_device_os.security.wp007 import update_trust
+
     src = (REPO / "gunnchos_device_os" / "runtime" / "adapters.py").read_text(encoding="utf-8")
-    naive_verify = 'self._store["verified"] = True' in src
-    if naive_verify:
-        record(
-            Finding(
-                case_id="IV-OS-010b",
-                boundary="update",
-                attack="Static: UpdaterService.api_verify sets verified=True without signature check",
-                expected_safe="Crypto verify or explicit DEV-stub; install gated by OtaStateMachine",
-                actual="naive verified=True stub present",
-                severity="S2",
-                ok=True,
-                evidence={"naive_verify": True, "classification": "residual_stub_S2"},
-                remediation_holds=True,
-                notes="Does not earn production_ready; EXTERNAL_PENDING for real signing",
-            )
+    # Reject naive stub that sets verified=True without calling update_trust
+    naive = 'self._store["verified"] = True' in src and "verify_update_package" not in src
+    uses_crypto = "verify_update_package" in src and "update_trust" in src
+
+    svc = UpdaterService(ServiceConfig(service_id="updater-iv", options={"channel": "dev"}))
+    svc.on_start()
+    forced_empty = svc.api_verify(force_verified=True)
+    svc.api_download(version="0.2.0-iv")
+    happy = svc.api_verify()
+    forced_ok = svc.api_verify(force_verified=True)
+
+    # Signature must be real 64-byte Ed25519 over canonical bytes
+    pkg = svc._store.get("package") or {}
+    sig_ok = False
+    try:
+        sig = base64.b64decode(pkg.get("signature_b64") or "", validate=True)
+        sig_ok = len(sig) == 64
+    except Exception:
+        sig_ok = False
+
+    meta = update_trust.trust_metadata()
+    ok = (
+        not naive
+        and uses_crypto
+        and forced_empty.get("verified") is False
+        and happy.get("verified") is True
+        and happy.get("reason") == "ok"
+        and happy.get("trust_realm") == update_trust.DEV_TEST_TRUST_ROOT
+        and happy.get("PRODUCTION_TRUST_ROOT") == "EXTERNAL_PENDING"
+        and happy.get("production_keys_used") is False
+        and forced_ok.get("verified") is True  # still requires real crypto, not force
+        and sig_ok
+        and meta["PRODUCTION_TRUST_ROOT"] == "EXTERNAL_PENDING"
+        and meta["production_private_key_committed"] is False
+        and meta["DEV_TEST_TRUST_ROOT"]["algorithm"] == "Ed25519"
+    )
+    record(
+        Finding(
+            case_id="IV-OS-011",
+            boundary="update",
+            attack="UpdaterService Ed25519 happy-path + force_verified ignored on empty",
+            expected_safe="verified via cryptography Ed25519; PRODUCTION EXTERNAL_PENDING",
+            actual=(
+                f"naive={naive} uses_crypto={uses_crypto} happy={happy.get('reason')} "
+                f"forced_empty_verified={forced_empty.get('verified')} sig_ok={sig_ok}"
+            ),
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={
+                "forced_empty": forced_empty,
+                "happy": happy,
+                "meta": meta,
+                "sig_ok": sig_ok,
+            },
+            remediation_holds=ok,
+            notes="WP007-IV-RES-001 CLOSED_DIGITAL candidate",
         )
+    )
+
+
+def iv_os_012_updater_negative_corpus() -> None:
+    """All required crypto negatives — cannot force verified=True on tamper."""
+    from gunnchos_device_os.runtime.adapters import UpdaterService
+    from gunnchos_device_os.runtime.service_base import ServiceConfig
+    from gunnchos_device_os.security.wp007 import update_trust
+
+    cases: dict[str, bool] = {}
+
+    wrong = update_trust.sign_update_package(
+        version="1.0.0",
+        security_version=1,
+        digest_sha256="c" * 64,
+        private_key=update_trust.alternate_untrusted_private_key(),
+    )
+    cases["wrong_key"] = (
+        update_trust.verify_update_package(wrong).reason == "signature_invalid"
+    )
+
+    payload = update_trust.sign_update_package(
+        version="1.0.0", security_version=1, digest_sha256="d" * 64
+    )
+    payload["digest_sha256"] = "e" * 64
+    cases["tampered_payload"] = (
+        update_trust.verify_update_package(payload).reason == "signature_invalid"
+    )
+
+    meta_pkg = update_trust.sign_update_package(
+        version="1.0.0",
+        security_version=1,
+        digest_sha256="f" * 64,
+        metadata={"channel": "dev", "size_bytes": 1},
+    )
+    meta_pkg["metadata"] = {"channel": "dev", "size_bytes": 999}
+    cases["tampered_metadata"] = (
+        update_trust.verify_update_package(meta_pkg).reason == "signature_invalid"
+    )
+
+    missing = update_trust.sign_update_package(
+        version="1.0.0", security_version=1, digest_sha256="a" * 64
+    )
+    missing.pop("signature_b64")
+    cases["missing_signature"] = (
+        update_trust.verify_update_package(missing).reason == "missing_signature"
+    )
+
+    malformed = update_trust.sign_update_package(
+        version="1.0.0", security_version=1, digest_sha256="a" * 64
+    )
+    malformed["signature_b64"] = "%%%not-base64%%%"
+    cases["malformed_signature"] = (
+        update_trust.verify_update_package(malformed).reason == "malformed_signature"
+    )
+
+    rollback = update_trust.sign_update_package(
+        version="0.0.1", security_version=1, digest_sha256="a" * 64
+    )
+    cases["rollback"] = (
+        update_trust.verify_update_package(
+            rollback, active_security_version=5
+        ).reason
+        == "anti_rollback_security_version"
+    )
+
+    # force_verified cannot override tamper
+    svc = UpdaterService(ServiceConfig(service_id="updater-iv-neg", options={"channel": "dev"}))
+    svc.on_start()
+    svc.api_download(version="0.9.9-iv")
+    pkg = dict(svc._store["package"])
+    pkg["digest_sha256"] = "b" * 64
+    svc._store["package"] = pkg
+    forced = svc.api_verify(force_verified=True)
+    cases["force_cannot_override_tamper"] = (
+        forced.get("verified") is False and forced.get("reason") == "signature_invalid"
+    )
+    # Direct API: force_verified ignored by verify_update_package
+    direct = update_trust.verify_update_package(pkg, force_verified=True)
+    cases["force_flag_ignored"] = direct.verified is False
+
+    ok = all(cases.values())
+    record(
+        Finding(
+            case_id="IV-OS-012",
+            boundary="update",
+            attack="Crypto negatives + force_verified cannot set verified=True",
+            expected_safe="all negatives fail; force ignored",
+            actual=str(cases),
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={"cases": cases, "forced": forced},
+            remediation_holds=ok,
+            notes="WP007-IV-RES-001 negative corpus",
+        )
+    )
+
+
+def iv_os_013_production_trust_external() -> None:
+    from gunnchos_device_os.security.wp007 import update_trust
+
+    pkg = update_trust.sign_update_package(
+        version="1.0.0", security_version=1, digest_sha256="a" * 64
+    )
+    pkg["trust_realm"] = update_trust.PRODUCTION_TRUST_ROOT
+    result = update_trust.verify_update_package(pkg)
+    ok = (
+        result.verified is False
+        and result.reason == "production_trust_external_pending"
+        and update_trust.PRODUCTION_TRUST_STATUS == "EXTERNAL_PENDING"
+    )
+    record(
+        Finding(
+            case_id="IV-OS-013",
+            boundary="update",
+            attack="PRODUCTION_TRUST_ROOT realm presented as signed package",
+            expected_safe="production_trust_external_pending",
+            actual=str(result.to_dict()),
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence=result.to_dict(),
+            remediation_holds=ok,
+            notes="Production HSM/ceremony remains EXTERNAL_PENDING",
+        )
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -767,8 +938,9 @@ def iv_cont_003_hmac_tamper() -> None:
 
 
 def iv_lab_001_path_escape() -> None:
-    from gunnchos_device_os.device_lab.session import start_session
+    from gunnchos_device_os.device_lab.session import clear_lab_work_roots, start_session
 
+    clear_lab_work_roots()
     denied = False
     reason = ""
     escape_work = (REPO / "artifacts" / "ESCAPE_TEST").resolve()
@@ -785,12 +957,183 @@ def iv_lab_001_path_escape() -> None:
         Finding(
             case_id="IV-LAB-001",
             boundary="device_lab",
-            attack="Session work path outside instances root",
+            attack="Unapproved session work path outside instances root",
             expected_safe="device_lab_work_path_escape",
             actual=reason or "ACCEPTED",
             severity="PASS" if ok else "S1",
             ok=ok,
             evidence={"denied": denied, "reason": reason, "work": str(escape_work)},
+            remediation_holds=ok,
+            notes="Allowlist must not accept artifacts/ESCAPE_TEST",
+        )
+    )
+
+
+def iv_lab_002_unregistered_tmp_denied() -> None:
+    from gunnchos_device_os.device_lab.session import clear_lab_work_roots, start_session
+
+    clear_lab_work_roots()
+    denied = False
+    reason = ""
+    with tempfile.TemporaryDirectory(prefix="vp007r-iv-unreg-") as td:
+        work = Path(td) / "inst"
+        try:
+            start_session("handheld_docked", repo_root=REPO, work=work)
+        except PermissionError as e:
+            denied = True
+            reason = str(e)
+        except Exception as e:
+            reason = _exc(e)
+            denied = "device_lab_work_path_escape" in reason
+    ok = denied and reason == "device_lab_work_path_escape"
+    record(
+        Finding(
+            case_id="IV-LAB-002",
+            boundary="device_lab",
+            attack="Unregistered controlled temp as session work",
+            expected_safe="device_lab_work_path_escape",
+            actual=reason or "ACCEPTED",
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={"denied": denied, "reason": reason},
+            remediation_holds=ok,
+        )
+    )
+
+
+def iv_lab_003_host_root_not_approvable() -> None:
+    from gunnchos_device_os.device_lab.session import (
+        clear_lab_work_roots,
+        register_lab_work_root,
+    )
+
+    clear_lab_work_roots()
+    denied = False
+    reason = ""
+    try:
+        register_lab_work_root(Path("/etc"), repo_root=REPO)
+    except PermissionError as e:
+        denied = True
+        reason = str(e)
+    except Exception as e:
+        reason = _exc(e)
+        denied = "device_lab_work_root_not_approvable" in reason
+    ok = denied and reason == "device_lab_work_root_not_approvable"
+    record(
+        Finding(
+            case_id="IV-LAB-003",
+            boundary="device_lab",
+            attack="Register host-sensitive root /etc as lab work root",
+            expected_safe="device_lab_work_root_not_approvable",
+            actual=reason or "ACCEPTED",
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={"denied": denied, "reason": reason},
+            remediation_holds=ok,
+            notes="No host escape via allowlist registration",
+        )
+    )
+
+
+def iv_lab_004_registered_tmp_allowed_escape_still_denied() -> None:
+    from gunnchos_device_os.device_lab.session import (
+        clear_lab_work_roots,
+        register_lab_work_root,
+        start_session,
+        stop_session,
+        unregister_lab_work_root,
+    )
+
+    clear_lab_work_roots()
+    escape_denied = False
+    escape_reason = ""
+    registered_ok = False
+    with tempfile.TemporaryDirectory(prefix="vp007r-iv-reg-") as td:
+        tmp = Path(td)
+        register_lab_work_root(tmp, repo_root=REPO)
+        try:
+            started = start_session("handheld_docked", repo_root=REPO, work=tmp / "inst")
+            registered_ok = bool(started.get("ok"))
+            started_id = started.get("instance_id")
+            if started_id:
+                stop_session(started_id)
+            escape_work = (REPO / "artifacts" / "ESCAPE_TEST").resolve()
+            try:
+                start_session("handheld_docked", repo_root=REPO, work=escape_work)
+            except PermissionError as e:
+                escape_denied = True
+                escape_reason = str(e)
+            except Exception as e:
+                escape_reason = _exc(e)
+                escape_denied = "device_lab_work_path_escape" in escape_reason
+        finally:
+            unregister_lab_work_root(tmp)
+            clear_lab_work_roots()
+    ok = (
+        registered_ok
+        and escape_denied
+        and escape_reason == "device_lab_work_path_escape"
+    )
+    record(
+        Finding(
+            case_id="IV-LAB-004",
+            boundary="device_lab",
+            attack="Registered tmp allowed while ESCAPE_TEST still denied",
+            expected_safe="registered_ok + device_lab_work_path_escape",
+            actual=(
+                f"registered_ok={registered_ok} escape={escape_reason or 'ACCEPTED'}"
+            ),
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={
+                "registered_ok": registered_ok,
+                "escape_denied": escape_denied,
+                "escape_reason": escape_reason,
+            },
+            remediation_holds=ok,
+        )
+    )
+
+
+def iv_lab_005_default_instances_allowed() -> None:
+    from gunnchos_device_os.device_lab.session import (
+        clear_lab_work_roots,
+        instances_root,
+        start_session,
+        stop_session,
+    )
+
+    clear_lab_work_roots()
+    base = instances_root(REPO)
+    work = base / f"iv-default-{int(time.time())}"
+    started_ok = False
+    started_id = None
+    try:
+        started = start_session("handheld_docked", repo_root=REPO, work=work)
+        started_ok = bool(started.get("ok"))
+        started_id = started.get("instance_id")
+    except Exception as e:
+        started_ok = False
+        err = _exc(e)
+    else:
+        err = ""
+    finally:
+        if started_id:
+            try:
+                stop_session(started_id)
+            except Exception:
+                pass
+    ok = started_ok and work.resolve().is_relative_to(base)
+    record(
+        Finding(
+            case_id="IV-LAB-005",
+            boundary="device_lab",
+            attack="Default Device Lab instances root session start",
+            expected_safe="session ok under artifacts/device_lab/instances",
+            actual=f"ok={started_ok} err={err}",
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={"work": str(work), "started_ok": started_ok, "err": err},
             remediation_holds=ok,
         )
     )
@@ -801,7 +1144,6 @@ def iv_net_001_fleet_revoke() -> None:
 
     fleet = FleetAgentService()
     fleet.on_start()
-    # enroll signature may vary
     try:
         fleet.api_enroll(device_id="dev-iv", cohort="canary")
     except TypeError:
@@ -828,53 +1170,195 @@ def iv_net_001_fleet_revoke() -> None:
     )
 
 
-def iv_game_001_save_tamper() -> None:
-    """Digital save integrity: digest mismatch must refuse load."""
-    with tempfile.TemporaryDirectory() as td:
-        root = Path(td)
-        save = {"player": "p1", "score": 10, "inventory": ["sword"]}
-        raw = json.dumps(save, sort_keys=True).encode()
-        digest = hashlib.sha256(raw).hexdigest()
-        path = root / "save.json"
-        meta = root / "save.meta.json"
-        path.write_bytes(raw)
-        meta.write_text(json.dumps({"sha256": digest}), encoding="utf-8")
+def iv_net_002_hostile_network_digital() -> None:
+    """Independent hostile-network probes — derive verdict; do not trust E4_PREPARED label."""
+    from gunnchos_device_os.security.wp007.hostile_network import HostileNetworkSimulator
 
-        # Tamper
-        tampered = dict(save)
-        tampered["score"] = 999999
-        path.write_text(json.dumps(tampered, sort_keys=True), encoding="utf-8")
-        loaded_raw = path.read_bytes()
-        actual = hashlib.sha256(loaded_raw).hexdigest()
-        expected = json.loads(meta.read_text())["sha256"]
-        rejected = not (actual == expected)
+    sim = HostileNetworkSimulator()
+    probes: dict[str, bool] = {}
 
-        # Prefer real game module if present
-        module_ok = None
-        try:
-            # search for save integrity helpers
-            from gunnchos_device_os.phase_xiv import play
+    dns = sim.resolve_dns("updates.gunnchos.dev", poisoned={"updates.gunnchos.dev": "198.51.100.66"})
+    probes["malicious_dns"] = dns.get("reason") == "malicious_dns"
 
-            if hasattr(play, "verify_save") or hasattr(play, "load_save"):
-                module_ok = True
-        except Exception:
-            module_ok = None
+    tls_untrusted = sim.request(
+        "https://updates.gunnchos.dev/pkg",
+        resolved_ip=sim.trusted_dns["updates.gunnchos.dev"],
+        tls_status="untrusted_ca",
+    )
+    probes["untrusted_tls"] = (
+        tls_untrusted.get("reason") == "untrusted_tls"
+        and tls_untrusted.get("credentials_sent") is False
+    )
 
-        ok = rejected
-        record(
-            Finding(
-                case_id="IV-GAME-001",
-                boundary="game",
-                attack="Tamper save payload after digest seal",
-                expected_safe="digest mismatch → reject",
-                actual=f"rejected={rejected} module_probe={module_ok}",
-                severity="PASS" if ok else "S1",
-                ok=ok,
-                evidence={"expected": expected, "actual": actual, "module_ok": module_ok},
-                remediation_holds=ok,
-                notes="Authoritative multiplayer remains EXTERNAL_PENDING/E7",
-            )
+    mismatch = sim.request(
+        "https://updates.gunnchos.dev/pkg",
+        resolved_ip=sim.trusted_dns["updates.gunnchos.dev"],
+        tls_status="hostname_mismatch",
+    )
+    probes["hostname_mismatch"] = (
+        mismatch.get("reason") == "hostname_mismatch"
+        and mismatch.get("credentials_sent") is False
+    )
+
+    expired = sim.request(
+        "https://updates.gunnchos.dev/pkg",
+        resolved_ip=sim.trusted_dns["updates.gunnchos.dev"],
+        tls_status="expired_cert",
+    )
+    probes["expired_cert"] = (
+        expired.get("reason") == "expired_cert" and expired.get("credentials_sent") is False
+    )
+
+    captive = sim.request("https://updates.gunnchos.dev/pkg", captive_portal=True)
+    probes["captive_portal"] = (
+        captive.get("reason") == "captive_portal" and captive.get("credentials_sent") is False
+    )
+
+    http = sim.request("http://updates.gunnchos.dev/pkg")
+    probes["http_downgrade"] = (
+        http.get("reason") == "http_downgrade" and http.get("credentials_sent") is False
+    )
+
+    evil = sim.request("https://evil.example/phish")
+    probes["no_cred_leak"] = evil.get("credentials_sent") is False and evil.get("ok") is False
+
+    sim.set_link(False)
+    down = sim.request("https://api.gunnchos.dev/v1")
+    sim.set_link(True)
+    up = sim.request(
+        "https://api.gunnchos.dev/v1",
+        resolved_ip=sim.trusted_dns["api.gunnchos.dev"],
+    )
+    probes["link_loss_restore"] = (
+        down.get("reason") == "link_down"
+        and down.get("credentials_sent") is False
+        and up.get("ok") is True
+    )
+
+    # Suite runner for completeness (label may still say PREPARED — Independent owns E4_PASS)
+    suite = sim.run_digital_suite()
+    probes["suite_passed"] = suite.get("passed") is True
+    probes["no_suite_cred_leaks"] = not bool(suite.get("credential_leak_events"))
+    probes["rf_external"] = suite.get("RF_WIFI_STATUS") == "E5_E8_EXTERNAL_PENDING"
+
+    ok = all(probes.values())
+    record(
+        Finding(
+            case_id="IV-NET-002",
+            boundary="network/hostile",
+            attack="Hostile DNS/TLS/captive/downgrade + credential non-leak",
+            expected_safe="all digital probes deny/leak-free; RF EXTERNAL_PENDING",
+            actual=str(probes),
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={"probes": probes, "suite_passed": suite.get("passed")},
+            remediation_holds=ok,
+            notes="Independent HOSTILE_NETWORK_DIGITAL=E4_PASS if ok; RF field pending",
         )
+    )
+
+
+def iv_game_001_save_tamper() -> None:
+    """Authenticated local save — reject unauthenticated digest + HMAC tamper."""
+    from gunnchos_device_os.security.wp007.game_save_integrity import (
+        AUTHORITATIVE_MULTIPLAYER_INTEGRITY,
+        GameSaveIntegrityStore,
+    )
+
+    platform = b"iv-platform-secret-not-prod"
+    store = GameSaveIntegrityStore(
+        user_id="user-iv",
+        device_id="dev-iv-1",
+        platform_secret=platform,
+    )
+    sealed = store.seal({"level": 1, "score": 100, "inventory": ["sword"]})
+    ok_load = store.verify(sealed)
+    store.save("slot1", {"level": 1, "score": 100})
+    store.inject_tamper("slot1", lambda s: s.__setitem__("score", 99999))
+    bad = store.load("slot1")
+
+    digest_only = {
+        "level": 1,
+        "score": 1,
+        "integrity": hashlib.sha256(b"level:1:score:1").hexdigest(),
+        "user_id": "user-iv",
+        "device_id": "dev-iv-1",
+    }
+    rejected = store.verify(digest_only)
+
+    ok = (
+        ok_load.get("ok") is True
+        and bad.get("ok") is False
+        and bad.get("reason") == "tamper_detected"
+        and bad.get("quarantined") is True
+        and rejected.get("reason") == "unauthenticated_digest_rejected"
+        and AUTHORITATIVE_MULTIPLAYER_INTEGRITY == "EXTERNAL_OR_OPERATIONS_PENDING"
+    )
+    record(
+        Finding(
+            case_id="IV-GAME-001",
+            boundary="game",
+            attack="HMAC tamper + unauthenticated digest as integrity",
+            expected_safe="tamper_detected + unauthenticated_digest_rejected",
+            actual=(
+                f"load_ok={ok_load.get('ok')} bad={bad.get('reason')} "
+                f"digest={rejected.get('reason')}"
+            ),
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={
+                "ok_load": ok_load,
+                "bad": bad,
+                "rejected": rejected,
+                "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": AUTHORITATIVE_MULTIPLAYER_INTEGRITY,
+            },
+            remediation_holds=ok,
+            notes="Independent LOCAL_SAVE_INTEGRITY_DIGITAL=E4_PASS if ok",
+        )
+    )
+
+
+def iv_game_002_binding_and_recover() -> None:
+    from gunnchos_device_os.security.wp007.game_save_integrity import GameSaveIntegrityStore
+
+    platform = b"iv-platform-secret-not-prod"
+    store = GameSaveIntegrityStore(
+        user_id="user-iv",
+        device_id="dev-iv-1",
+        platform_secret=platform,
+    )
+    store.save("slot1", {"level": 2, "score": 50})
+    foreign = GameSaveIntegrityStore(
+        user_id="user-iv",
+        device_id="dev-OTHER",
+        platform_secret=platform,
+    )
+    sealed = store.seal({"level": 2, "score": 50})
+    cross = foreign.verify(sealed)
+    # recover after tamper
+    store.inject_tamper("slot1", lambda s: s.__setitem__("score", 1))
+    store.load("slot1")  # quarantine
+    rec = store.recover("slot1")
+    loaded = store.load("slot1")
+    ok = (
+        cross.get("reason") == "binding_mismatch"
+        and rec.get("ok") is True
+        and loaded.get("ok") is True
+        and loaded["payload"]["score"] == 50
+    )
+    record(
+        Finding(
+            case_id="IV-GAME-002",
+            boundary="game",
+            attack="Cross-device binding + backup recover after tamper",
+            expected_safe="binding_mismatch + recover restores score",
+            actual=f"cross={cross.get('reason')} score={(loaded.get('payload') or {}).get('score')}",
+            severity="PASS" if ok else "S1",
+            ok=ok,
+            evidence={"cross": cross, "recover": rec, "loaded": loaded},
+            remediation_holds=ok,
+        )
+    )
 
 
 CASES = [
@@ -888,6 +1372,9 @@ CASES = [
     iv_os_008_sandbox_path_escape,
     iv_os_009_update_rollback,
     iv_os_010_updater_verify_stub,
+    iv_os_011_updater_ed25519_happy,
+    iv_os_012_updater_negative_corpus,
+    iv_os_013_production_trust_external,
     iv_ai_001_prompt_injection,
     iv_ai_002_computer_use_approval,
     iv_ai_003_unsafe_response,
@@ -902,8 +1389,14 @@ CASES = [
     iv_cont_002_identity_mismatch,
     iv_cont_003_hmac_tamper,
     iv_lab_001_path_escape,
+    iv_lab_002_unregistered_tmp_denied,
+    iv_lab_003_host_root_not_approvable,
+    iv_lab_004_registered_tmp_allowed_escape_still_denied,
+    iv_lab_005_default_instances_allowed,
     iv_net_001_fleet_revoke,
+    iv_net_002_hostile_network_digital,
     iv_game_001_save_tamper,
+    iv_game_002_binding_and_recover,
 ]
 
 

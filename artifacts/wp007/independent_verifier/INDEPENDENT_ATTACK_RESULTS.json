@@ -1,12 +1,12 @@
 {
   "schema": "gunnchos.vp007.independent_attack_run.v1",
-  "tip_sha": "9bf235af607c3a6d192e2dda2ea7b6d73b903f0e",
-  "executed_at": "2026-08-10T21:13:43Z",
-  "case_count": 27,
-  "pass_count": 26,
+  "tip_sha": "3908de7c35882b500368475ce13d2243435f6443",
+  "executed_at": "2026-08-10T22:26:18Z",
+  "case_count": 35,
+  "pass_count": 35,
   "SECURITY_S0": 0,
   "SECURITY_S1": 0,
-  "SECURITY_S2_residual_or_harness": 1,
+  "SECURITY_S2_residual_or_harness": 0,
   "INTERNAL_RED_TEAM_READY_candidate": true,
   "EXTERNAL_PENDING": true,
   "production_ready": false,
@@ -389,19 +389,97 @@
       "notes": ""
     },
     {
-      "case_id": "IV-OS-010b",
+      "case_id": "IV-OS-011",
       "boundary": "update",
-      "attack": "Static: UpdaterService.api_verify sets verified=True without signature check",
-      "expected_safe": "Crypto verify or explicit DEV-stub; install gated by OtaStateMachine",
-      "actual": "naive verified=True stub present",
-      "severity": "S2",
+      "attack": "UpdaterService Ed25519 happy-path + force_verified ignored on empty",
+      "expected_safe": "verified via cryptography Ed25519; PRODUCTION EXTERNAL_PENDING",
+      "actual": "naive=False uses_crypto=True happy=ok forced_empty_verified=False sig_ok=True",
+      "severity": "PASS",
       "ok": true,
       "evidence": {
-        "naive_verify": true,
-        "classification": "residual_stub_S2"
+        "forced_empty": {
+          "verified": false,
+          "reason": "no_package",
+          "trust_realm": null,
+          "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING",
+          "production_keys_used": false
+        },
+        "happy": {
+          "verified": true,
+          "reason": "ok",
+          "trust_realm": "DEV_TEST_TRUST_ROOT",
+          "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING",
+          "production_keys_used": false,
+          "digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "meta": {
+          "schema": "gunnchos.wp007.update_trust.v1",
+          "DEV_TEST_TRUST_ROOT": {
+            "algorithm": "Ed25519",
+            "public_key_b64": "LRO+dMs53dMEOwcx5c009wbp309iXY+yLw45g8rW+Ew=",
+            "realm": "DEV_TEST_TRUST_ROOT",
+            "library": "cryptography",
+            "note": "Pinned DEV/TEST trust root only"
+          },
+          "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING",
+          "production_private_key_committed": false,
+          "claim_boundary": "DEV/TEST asymmetric verification only. PRODUCTION_TRUST_ROOT=EXTERNAL_PENDING."
+        },
+        "sig_ok": true
       },
       "remediation_holds": true,
-      "notes": "Does not earn production_ready; EXTERNAL_PENDING for real signing"
+      "notes": "WP007-IV-RES-001 CLOSED_DIGITAL candidate"
+    },
+    {
+      "case_id": "IV-OS-012",
+      "boundary": "update",
+      "attack": "Crypto negatives + force_verified cannot set verified=True",
+      "expected_safe": "all negatives fail; force ignored",
+      "actual": "{'wrong_key': True, 'tampered_payload': True, 'tampered_metadata': True, 'missing_signature': True, 'malformed_signature': True, 'rollback': True, 'force_cannot_override_tamper': True, 'force_flag_ignored': True}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "cases": {
+          "wrong_key": true,
+          "tampered_payload": true,
+          "tampered_metadata": true,
+          "missing_signature": true,
+          "malformed_signature": true,
+          "rollback": true,
+          "force_cannot_override_tamper": true,
+          "force_flag_ignored": true
+        },
+        "forced": {
+          "verified": false,
+          "reason": "signature_invalid",
+          "trust_realm": "DEV_TEST_TRUST_ROOT",
+          "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING",
+          "production_keys_used": false
+        }
+      },
+      "remediation_holds": true,
+      "notes": "WP007-IV-RES-001 negative corpus"
+    },
+    {
+      "case_id": "IV-OS-013",
+      "boundary": "update",
+      "attack": "PRODUCTION_TRUST_ROOT realm presented as signed package",
+      "expected_safe": "production_trust_external_pending",
+      "actual": "{'verified': False, 'reason': 'production_trust_external_pending', 'trust_realm': 'PRODUCTION_TRUST_ROOT', 'PRODUCTION_TRUST_ROOT': 'EXTERNAL_PENDING', 'production_keys_used': False, 'details': {'PRODUCTION_TRUST_ROOT': 'EXTERNAL_PENDING'}}",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "verified": false,
+        "reason": "production_trust_external_pending",
+        "trust_realm": "PRODUCTION_TRUST_ROOT",
+        "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING",
+        "production_keys_used": false,
+        "details": {
+          "PRODUCTION_TRUST_ROOT": "EXTERNAL_PENDING"
+        }
+      },
+      "remediation_holds": true,
+      "notes": "Production HSM/ceremony remains EXTERNAL_PENDING"
     },
     {
       "case_id": "IV-AI-001",
@@ -661,7 +739,7 @@
     {
       "case_id": "IV-LAB-001",
       "boundary": "device_lab",
-      "attack": "Session work path outside instances root",
+      "attack": "Unapproved session work path outside instances root",
       "expected_safe": "device_lab_work_path_escape",
       "actual": "device_lab_work_path_escape",
       "severity": "PASS",
@@ -669,7 +747,69 @@
       "evidence": {
         "denied": true,
         "reason": "device_lab_work_path_escape",
-        "work": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-007/artifacts/ESCAPE_TEST"
+        "work": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/ESCAPE_TEST"
+      },
+      "remediation_holds": true,
+      "notes": "Allowlist must not accept artifacts/ESCAPE_TEST"
+    },
+    {
+      "case_id": "IV-LAB-002",
+      "boundary": "device_lab",
+      "attack": "Unregistered controlled temp as session work",
+      "expected_safe": "device_lab_work_path_escape",
+      "actual": "device_lab_work_path_escape",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "device_lab_work_path_escape"
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-LAB-003",
+      "boundary": "device_lab",
+      "attack": "Register host-sensitive root /etc as lab work root",
+      "expected_safe": "device_lab_work_root_not_approvable",
+      "actual": "device_lab_work_root_not_approvable",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "denied": true,
+        "reason": "device_lab_work_root_not_approvable"
+      },
+      "remediation_holds": true,
+      "notes": "No host escape via allowlist registration"
+    },
+    {
+      "case_id": "IV-LAB-004",
+      "boundary": "device_lab",
+      "attack": "Registered tmp allowed while ESCAPE_TEST still denied",
+      "expected_safe": "registered_ok + device_lab_work_path_escape",
+      "actual": "registered_ok=True escape=device_lab_work_path_escape",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "registered_ok": true,
+        "escape_denied": true,
+        "escape_reason": "device_lab_work_path_escape"
+      },
+      "remediation_holds": true,
+      "notes": ""
+    },
+    {
+      "case_id": "IV-LAB-005",
+      "boundary": "device_lab",
+      "attack": "Default Device Lab instances root session start",
+      "expected_safe": "session ok under artifacts/device_lab/instances",
+      "actual": "ok=True err=",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "work": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/device_lab/instances/iv-default-1786400778",
+        "started_ok": true,
+        "err": ""
       },
       "remediation_holds": true,
       "notes": ""
@@ -692,20 +832,95 @@
       "notes": "GOLDEN-10 fleet revoke"
     },
     {
-      "case_id": "IV-GAME-001",
-      "boundary": "game",
-      "attack": "Tamper save payload after digest seal",
-      "expected_safe": "digest mismatch \u2192 reject",
-      "actual": "rejected=True module_probe=None",
+      "case_id": "IV-NET-002",
+      "boundary": "network/hostile",
+      "attack": "Hostile DNS/TLS/captive/downgrade + credential non-leak",
+      "expected_safe": "all digital probes deny/leak-free; RF EXTERNAL_PENDING",
+      "actual": "{'malicious_dns': True, 'untrusted_tls': True, 'hostname_mismatch': True, 'expired_cert': True, 'captive_portal': True, 'http_downgrade': True, 'no_cred_leak': True, 'link_loss_restore': True, 'suite_passed': True, 'no_suite_cred_leaks': True, 'rf_external': True}",
       "severity": "PASS",
       "ok": true,
       "evidence": {
-        "expected": "6025e197dcdaaf49f049bbc3d4e0c2f60f6524f73a6e792573b830548c96b675",
-        "actual": "d4d1f4776827cff1d4fccdd932e971584ee5c948f91b8671eee3ec84a42ef626",
-        "module_ok": null
+        "probes": {
+          "malicious_dns": true,
+          "untrusted_tls": true,
+          "hostname_mismatch": true,
+          "expired_cert": true,
+          "captive_portal": true,
+          "http_downgrade": true,
+          "no_cred_leak": true,
+          "link_loss_restore": true,
+          "suite_passed": true,
+          "no_suite_cred_leaks": true,
+          "rf_external": true
+        },
+        "suite_passed": true
       },
       "remediation_holds": true,
-      "notes": "Authoritative multiplayer remains EXTERNAL_PENDING/E7"
+      "notes": "Independent HOSTILE_NETWORK_DIGITAL=E4_PASS if ok; RF field pending"
+    },
+    {
+      "case_id": "IV-GAME-001",
+      "boundary": "game",
+      "attack": "HMAC tamper + unauthenticated digest as integrity",
+      "expected_safe": "tamper_detected + unauthenticated_digest_rejected",
+      "actual": "load_ok=True bad=tamper_detected digest=unauthenticated_digest_rejected",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "ok_load": {
+          "ok": true,
+          "reason": "ok"
+        },
+        "bad": {
+          "ok": false,
+          "quarantined": true,
+          "reason": "tamper_detected"
+        },
+        "rejected": {
+          "ok": false,
+          "reason": "unauthenticated_digest_rejected",
+          "note": "Plain integrity digest is not tamper protection"
+        },
+        "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING"
+      },
+      "remediation_holds": true,
+      "notes": "Independent LOCAL_SAVE_INTEGRITY_DIGITAL=E4_PASS if ok"
+    },
+    {
+      "case_id": "IV-GAME-002",
+      "boundary": "game",
+      "attack": "Cross-device binding + backup recover after tamper",
+      "expected_safe": "binding_mismatch + recover restores score",
+      "actual": "cross=binding_mismatch score=50",
+      "severity": "PASS",
+      "ok": true,
+      "evidence": {
+        "cross": {
+          "ok": false,
+          "reason": "binding_mismatch"
+        },
+        "recover": {
+          "ok": true,
+          "slot": "slot1",
+          "recovered_from_backup": true
+        },
+        "loaded": {
+          "ok": true,
+          "slot": "slot1",
+          "payload": {
+            "level": 2,
+            "score": 50,
+            "user_id": "user-iv",
+            "device_id": "dev-iv-1",
+            "alg": "HMAC-SHA256",
+            "mac": "2e59e5c9196bdf52a9cd24e48d5fcf8f84063d897f7d0acad41eb91abb603ea6",
+            "authenticated": true
+          },
+          "reason": "ok"
+        }
+      },
+      "remediation_holds": true,
+      "notes": ""
     }
   ],
   "plan": "artifacts/wp007/independent_verifier/INDEPENDENT_ATTACK_PLAN.md"
