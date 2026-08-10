@@ -18,6 +18,27 @@ def _run(cmd: list[str], *, check: bool = False) -> subprocess.CompletedProcess[
     return subprocess.run(cmd, check=check, capture_output=True, text=True)
 
 
+def _can_escalate() -> bool:
+    if os.geteuid() == 0:
+        return True
+    sudo = shutil.which("sudo")
+    if not sudo:
+        return False
+    # Passwordless sudo probe (GH runners).
+    probe = _run([sudo, "-n", "true"])
+    return probe.returncode == 0
+
+
+def _priv(cmd: list[str]) -> list[str]:
+    """Prefix with sudo -n when not root but escalation is available."""
+    if os.geteuid() == 0:
+        return cmd
+    sudo = shutil.which("sudo")
+    if sudo:
+        return [sudo, "-n", *cmd]
+    return cmd
+
+
 @dataclass
 class NetworkBackend:
     state: str = "online"
@@ -39,7 +60,7 @@ class NetworkBackend:
         want_netns = _env_truthy("GUNNCHDEVICE_LAB_NETNS") or _env_truthy(
             "GUNNCHDEVICE_LAB_PRIVILEGED_NET"
         )
-        if want_netns and ip and os.geteuid() == 0:
+        if want_netns and ip and _can_escalate():
             self.ns_name = "gchos-lab0"
             self.host_if = "gchos-veth0"
             self.peer_if = "gchos-veth1"
@@ -47,7 +68,7 @@ class NetworkBackend:
             self.peer_addr = "10.67.0.2"
             # Clean any leftover namespace/ifaces from a prior crashed run.
             self._force_cleanup(ip)
-            add = _run([ip, "netns", "add", self.ns_name])
+            add = _run(_priv([ip, "netns", "add", self.ns_name]))
             if add.returncode != 0 and "File exists" not in (add.stderr or ""):
                 self.mode = "logical"
                 self.e4_reference_proof = False
@@ -65,14 +86,14 @@ class NetworkBackend:
             self.mode = "logical"
             self.e4_reference_proof = False
         self.state = "online"
-        self.events.append({"kind": "start", "mode": self.mode})
+        self.events.append({"kind": "start", "mode": self.mode, "euid": os.geteuid()})
         return {
             "ok": True,
             "mode": self.mode,
             "state": self.state,
             "e4_reference_proof": self.e4_reference_proof,
             "note": (
-                "Privileged ip netns+veth with actual packet transfer when root and "
+                "Privileged ip netns+veth with actual packet transfer when root/sudo and "
                 "GUNNCHDEVICE_LAB_NETNS=1 (or GUNNCHDEVICE_LAB_PRIVILEGED_NET=1); "
                 "otherwise logical FALLBACK_ONLY / NOT_E4_REFERENCE_PROOF."
             ),
@@ -80,9 +101,9 @@ class NetworkBackend:
 
     def _force_cleanup(self, ip: str) -> None:
         if self.host_if:
-            _run([ip, "link", "del", self.host_if])
+            _run(_priv([ip, "link", "del", self.host_if]))
         if self.ns_name:
-            _run([ip, "netns", "del", self.ns_name])
+            _run(_priv([ip, "netns", "del", self.ns_name]))
 
     def _netns_attach(self) -> dict[str, Any]:
         assert self.ns_name and self.host_if and self.peer_if
@@ -94,7 +115,7 @@ class NetworkBackend:
         steps: list[dict[str, Any]] = []
 
         def step(label: str, cmd: list[str]) -> bool:
-            r = _run(cmd)
+            r = _run(_priv(cmd))
             steps.append(
                 {
                     "step": label,
@@ -106,7 +127,13 @@ class NetworkBackend:
             return r.returncode == 0
 
         ok = True
-        ok = step("veth_add", [ip, "link", "add", self.host_if, "type", "veth", "peer", "name", self.peer_if]) and ok
+        ok = (
+            step(
+                "veth_add",
+                [ip, "link", "add", self.host_if, "type", "veth", "peer", "name", self.peer_if],
+            )
+            and ok
+        )
         ok = step("peer_to_ns", [ip, "link", "set", self.peer_if, "netns", self.ns_name]) and ok
         ok = step(
             "host_addr",
@@ -152,8 +179,9 @@ class NetworkBackend:
             ],
         ) and ok
 
-        # Prove interface visibility inside the namespace.
-        link_show = _run([ip, "netns", "exec", self.ns_name, ip, "link", "show", self.peer_if])
+        link_show = _run(
+            _priv([ip, "netns", "exec", self.ns_name, ip, "link", "show", self.peer_if])
+        )
         iface_visible = link_show.returncode == 0 and self.peer_if in (link_show.stdout or "")
         steps.append(
             {
@@ -196,7 +224,6 @@ class NetworkBackend:
     def _packet_transfer_probe(self, ip: str) -> dict[str, Any]:
         """Actual packet transfer host ↔ netns (not an in-memory flag)."""
         assert self.ns_name and self.host_addr and self.peer_addr
-        # UDP echo: host listens, netns sends a datagram, host receives it.
         payload = b"GUNNCH-LAB-NET-E4"
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -204,34 +231,37 @@ class NetworkBackend:
         sock.settimeout(2.0)
         try:
             sender = _run(
-                [
-                    ip,
-                    "netns",
-                    "exec",
-                    self.ns_name,
-                    "python3",
-                    "-c",
-                    (
-                        "import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); "
-                        f"s.sendto({payload!r}, ({self.host_addr!r}, 19670)); s.close()"
-                    ),
-                ]
-            )
-            if sender.returncode != 0:
-                # Fallback: ICMP ping from ns to host (still real packets).
-                ping = _run(
+                _priv(
                     [
                         ip,
                         "netns",
                         "exec",
                         self.ns_name,
-                        "ping",
+                        "python3",
                         "-c",
-                        "1",
-                        "-W",
-                        "2",
-                        self.host_addr,
+                        (
+                            "import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); "
+                            f"s.sendto({payload!r}, ({self.host_addr!r}, 19670)); s.close()"
+                        ),
                     ]
+                )
+            )
+            if sender.returncode != 0:
+                ping = _run(
+                    _priv(
+                        [
+                            ip,
+                            "netns",
+                            "exec",
+                            self.ns_name,
+                            "ping",
+                            "-c",
+                            "1",
+                            "-W",
+                            "2",
+                            self.host_addr,
+                        ]
+                    )
                 )
                 return {
                     "ok": ping.returncode == 0,
@@ -250,18 +280,20 @@ class NetworkBackend:
             }
         except (TimeoutError, OSError, socket.timeout) as exc:
             ping = _run(
-                [
-                    ip,
-                    "netns",
-                    "exec",
-                    self.ns_name,
-                    "ping",
-                    "-c",
-                    "1",
-                    "-W",
-                    "2",
-                    self.host_addr,
-                ]
+                _priv(
+                    [
+                        ip,
+                        "netns",
+                        "exec",
+                        self.ns_name,
+                        "ping",
+                        "-c",
+                        "1",
+                        "-W",
+                        "2",
+                        self.host_addr,
+                    ]
+                )
             )
             return {
                 "ok": ping.returncode == 0,
@@ -277,7 +309,6 @@ class NetworkBackend:
         if self.mode == "netns" and self.ns_name:
             return self._netns_attach()
 
-        # Unprivileged / CI smoke path — honest logical fallback, not E4 reference.
         self.ethernet_via_dock = True
         self.state = "online_ethernet_dock"
         self.e4_reference_proof = False
@@ -310,16 +341,15 @@ class NetworkBackend:
         cleanup = {"ok": True, "cleaned": True}
         if self.mode == "netns":
             cleanup = self.cleanup()
-            # Verify interfaces/ns are gone.
             ip = shutil.which("ip")
             gone = True
             details: dict[str, Any] = {}
             if ip and self.host_if:
-                show = _run([ip, "link", "show", self.host_if])
+                show = _run(_priv([ip, "link", "show", self.host_if]))
                 details["host_if_gone"] = show.returncode != 0
                 gone = gone and details["host_if_gone"]
             if ip and self.ns_name:
-                nss = _run([ip, "netns", "list"])
+                nss = _run(_priv([ip, "netns", "list"]))
                 details["ns_gone"] = self.ns_name not in (nss.stdout or "")
                 gone = gone and details["ns_gone"]
             cleanup["cleanup_verified"] = gone
@@ -365,8 +395,8 @@ class NetworkBackend:
         ip = shutil.which("ip")
         if self.mode == "netns" and ip:
             if self.host_if:
-                _run([ip, "link", "del", self.host_if])
+                _run(_priv([ip, "link", "del", self.host_if]))
             if self.ns_name:
-                _run([ip, "netns", "del", self.ns_name])
+                _run(_priv([ip, "netns", "del", self.ns_name]))
             time.sleep(0.05)
         return {"ok": True, "cleaned": True, "mode": self.mode}
