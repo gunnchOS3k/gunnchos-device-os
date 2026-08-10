@@ -83,8 +83,9 @@ class AudioBackend:
     def _create_null_sink(self) -> dict[str, Any]:
         pactl = shutil.which("pactl")
         sink = "gchos-dock-null"
+        pulse_error: str | None = None
         if pactl:
-            # Prefer PulseAudio compatibility layer (works under PipeWire too).
+            # Prefer PulseAudio compatibility layer when a reachable daemon exists.
             before = set(self._list_sinks())
             r = _run(
                 [
@@ -102,6 +103,7 @@ class AudioBackend:
                 time.sleep(0.15)
                 after = set(self._list_sinks())
                 appeared = sink in after or bool(after - before)
+                self.mode = "pulse_null"
                 return {
                     "ok": appeared,
                     "mode": "pulse_null",
@@ -112,57 +114,34 @@ class AudioBackend:
                     "sinks_before": sorted(before),
                     "sinks_after": sorted(after),
                 }
-            return {
-                "ok": False,
-                "mode": "pulse_null",
-                "error": (r.stderr or r.stdout or "").strip()[:400],
-            }
+            pulse_error = (r.stderr or r.stdout or "").strip()[:400]
 
-        # ALSA loopback if snd-aloop is available
+        # ALSA loopback if snd-aloop is available (rootful CI reference path).
         aplay = shutil.which("aplay")
-        if aplay:
-            cards = Path("/proc/asound/cards")
+        cards = Path("/proc/asound/cards")
+        text = cards.read_text(encoding="utf-8") if cards.exists() else ""
+        if "Loopback" not in text and os.geteuid() == 0 and shutil.which("modprobe"):
+            _run(["modprobe", "snd-aloop"])
+            time.sleep(0.2)
             text = cards.read_text(encoding="utf-8") if cards.exists() else ""
-            if "Loopback" in text or _env_truthy("GUNNCHDEVICE_LAB_FORCE_ALSA_LOOP"):
-                self.sink_name = "hw:Loopback,0,0"
-                self.source_name = "hw:Loopback,1,0"
-                self.mode = "alsa_loopback"
-                return {
-                    "ok": True,
-                    "mode": "alsa_loopback",
-                    "sink_name": self.sink_name,
-                    "source_name": self.source_name,
-                    "appeared": True,
-                    "note": "ALSA snd-aloop present",
-                }
-            # Try loading module (needs root/CAP_SYS_MODULE)
-            if os.geteuid() == 0 and shutil.which("modprobe"):
-                _run(["modprobe", "snd-aloop"])
-                time.sleep(0.2)
-                text2 = cards.read_text(encoding="utf-8") if cards.exists() else ""
-                if "Loopback" in text2:
-                    self.sink_name = "hw:Loopback,0,0"
-                    self.source_name = "hw:Loopback,1,0"
-                    self.mode = "alsa_loopback"
-                    return {
-                        "ok": True,
-                        "mode": "alsa_loopback",
-                        "sink_name": self.sink_name,
-                        "source_name": self.source_name,
-                        "appeared": True,
-                        "modprobe": True,
-                    }
+        if aplay and ("Loopback" in text or _env_truthy("GUNNCHDEVICE_LAB_FORCE_ALSA_LOOP")):
+            self.sink_name = "hw:Loopback,0,0"
+            self.source_name = "hw:Loopback,1,0"
+            self.mode = "alsa_loopback"
             return {
-                "ok": False,
+                "ok": True,
                 "mode": "alsa_loopback",
-                "error": "snd-aloop_unavailable",
-                "FALLBACK_ONLY": True,
-                "NOT_E4_REFERENCE_PROOF": True,
+                "sink_name": self.sink_name,
+                "source_name": self.source_name,
+                "appeared": True,
+                "modprobe": "Loopback" in text,
+                "pulse_error": pulse_error,
+                "note": "ALSA snd-aloop used as accepted virtual-audio equivalent",
             }
 
         return {
             "ok": False,
-            "error": "no_pipewire_pulse_or_alsa",
+            "error": pulse_error or "no_pulse_or_alsa_loopback",
             "FALLBACK_ONLY": True,
             "NOT_E4_REFERENCE_PROOF": True,
         }
