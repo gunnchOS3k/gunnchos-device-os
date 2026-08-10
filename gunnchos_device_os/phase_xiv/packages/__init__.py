@@ -13,6 +13,14 @@ from typing import Any
 CHANNELS = ("dev", "beta", "stable")
 
 
+def _safe_pkg_component(value: str) -> str:
+    if not value or value in {".", ".."} or "/" in value or "\\" in value or ".." in value:
+        raise ValueError("unsafe_package_path_component")
+    if "\x00" in value or value.startswith("."):
+        raise ValueError("unsafe_package_path_component")
+    return value
+
+
 def _dev_key() -> bytes:
     return hashlib.sha256(b"gunnchos-phase-xiv-dev-signing-v1").digest()
 
@@ -80,8 +88,13 @@ class PackageManager:
     def publish(self, art: PackageArtifact, payload: bytes) -> Path:
         if not self.verify(art, payload):
             raise PermissionError("bad_signature")
-        dest = self.store / art.channel / art.app_id / art.version
+        app_id = _safe_pkg_component(art.app_id)
+        version = _safe_pkg_component(art.version)
+        channel = _safe_pkg_component(art.channel)
+        dest = self.store / channel / app_id / version
         dest.mkdir(parents=True, exist_ok=True)
+        if not dest.resolve().is_relative_to(self.store.resolve()):
+            raise PermissionError("path_escape")
         (dest / "payload.bin").write_bytes(payload)
         (dest / "META.json").write_text(
             json.dumps(art.__dict__, indent=2) + "\n", encoding="utf-8"
@@ -89,16 +102,24 @@ class PackageManager:
         return dest
 
     def install(self, app_id: str, version: str, channel: str = "stable") -> dict[str, Any]:
+        app_id = _safe_pkg_component(app_id)
+        version = _safe_pkg_component(version)
+        channel = _safe_pkg_component(channel)
         meta_path = self.store / channel / app_id / version / "META.json"
         payload_path = self.store / channel / app_id / version / "payload.bin"
         if not meta_path.exists():
             raise FileNotFoundError(meta_path)
+        if not meta_path.resolve().is_relative_to(self.store.resolve()):
+            raise PermissionError("path_escape")
         meta = json.loads(meta_path.read_text())
         art = PackageArtifact(**meta)
         payload = payload_path.read_bytes()
         if not self.verify(art, payload):
             raise PermissionError("verify_failed")
         prev = self.installed.get(app_id)
+        # SEC-OS: refuse security-irrelevant channel downgrade from stable→dev without explicit flag.
+        if prev and prev.get("channel") == "stable" and channel == "dev":
+            raise PermissionError("channel_downgrade_denied")
         install_dir = self.root / "apps" / app_id
         if install_dir.exists():
             shutil.rmtree(install_dir)

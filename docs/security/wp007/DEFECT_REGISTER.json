@@ -1,0 +1,96 @@
+{
+  "schema": "gunnchos.wp007.defect_register.v1",
+  "work_packet": "WP-007",
+  "implementer_self_certify": false,
+  "SECURITY_S0_open": 0,
+  "SECURITY_S1_open": 0,
+  "defects": [
+    {
+      "id": "WP007-DEF-001",
+      "case_id": "SEC-OS-005",
+      "severity": "S1",
+      "title": "IdentityService.api_set_role allowed silent privilege escalation",
+      "status": "FIXED",
+      "fix": "break_glass + guest_cannot_escalate gates"
+    },
+    {
+      "id": "WP007-DEF-002",
+      "case_id": "SEC-OS-006",
+      "severity": "S1",
+      "title": "PackageManager path traversal / stable→dev downgrade",
+      "status": "FIXED",
+      "fix": "path sanitize + channel_downgrade_denied"
+    },
+    {
+      "id": "WP007-DEF-003",
+      "case_id": "SEC-OS-007",
+      "severity": "S1",
+      "title": "Sandbox secrets lacked caller isolation / path checks",
+      "status": "FIXED",
+      "fix": "caller_id + _safe_component + resolve containment"
+    },
+    {
+      "id": "WP007-DEF-004",
+      "case_id": "SEC-AI-001",
+      "severity": "S1",
+      "title": "AI interface lacked injection/computer-use approval gates",
+      "status": "FIXED",
+      "fix": "prompt markers + APPROVED_LOCAL_ACTION"
+    },
+    {
+      "id": "WP007-DEF-005",
+      "case_id": "SEC-RING-001",
+      "severity": "S1",
+      "title": "RingService accepted unauthenticated events and retarget",
+      "status": "FIXED",
+      "fix": "auth required + low-confidence destructive deny"
+    },
+    {
+      "id": "WP007-DEF-006",
+      "case_id": "SEC-FABRIC-001",
+      "severity": "S1",
+      "title": "GunnchFabric unilateral trust without enrollment tokens",
+      "status": "FIXED",
+      "fix": "mutual enrollment token establish_trust + untrusted lease deny"
+    },
+    {
+      "id": "WP007-DEF-007",
+      "case_id": "SEC-FABRIC-002",
+      "severity": "S1",
+      "title": "ContinuityIdentity secrets derivable from public IDs",
+      "status": "FIXED",
+      "fix": "secrets.token_bytes(32) + wipe blocks handoff"
+    },
+    {
+      "id": "WP007-DEF-008",
+      "case_id": "SEC-LAB-001",
+      "severity": "S1",
+      "title": "Device Lab start_session allowed work path escape",
+      "status": "FIXED",
+      "fix": "contain work under artifacts/device_lab/instances"
+    },
+    {
+      "id": "WP007-DEF-009",
+      "case_id": "SEC-NET-001",
+      "severity": "S2",
+      "title": "Hostile Wi-Fi preference residual (score weighting only)",
+      "status": "MITIGATED_DIGITAL",
+      "fix": "security_score preference; live captive-portal/DNS E7 backlog"
+    },
+    {
+      "id": "WP007-DEF-010",
+      "case_id": "SEC-GAME-001",
+      "severity": "S2",
+      "title": "Game save integrity is client-side digest only",
+      "status": "MITIGATED_DIGITAL",
+      "note": "Authoritative multiplayer anti-cheat remains E7 backlog",
+      "fix": "integrity mismatch detection in harness"
+    }
+  ],
+  "backlog_s3_s4": [
+    "Live MCP/Skills connector adversarial suite",
+    "Scheduled-task abuse corpus",
+    "Archive ingest parser fuzz campaign",
+    "Telemetry UI guest isolation across all surfaces"
+  ]
+}

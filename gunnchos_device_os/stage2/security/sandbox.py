@@ -109,21 +109,51 @@ class SandboxEnforcer:
         return rec
 
     def isolate_user(self, user_id: str) -> Path:
-        home = self.users_dir / user_id
+        safe = self._safe_component(user_id)
+        home = self.users_dir / safe
         home.mkdir(parents=True, exist_ok=True)
-        (home / "PRIVATE").write_text(f"user={user_id}\n")
-        self._audit("user_isolated", {"user_id": user_id, "home": user_id})
+        (home / "PRIVATE").write_text(f"user={safe}\n")
+        self._audit("user_isolated", {"user_id": safe, "home": safe})
         return home
 
-    def secret_put(self, user_id: str, key: str, value: str) -> None:
-        udir = self.secrets_dir / user_id
-        udir.mkdir(parents=True, exist_ok=True)
-        (udir / f"{key}.secret").write_text(value, encoding="utf-8")
-        os.chmod(udir / f"{key}.secret", 0o600)
-        self._audit("secret_put", {"user_id": user_id, "key": key})
+    @staticmethod
+    def _safe_component(value: str) -> str:
+        if not value or value in {".", ".."} or "/" in value or "\\" in value or ".." in value:
+            raise ValueError("unsafe_path_component")
+        if value.startswith(".") or "\x00" in value:
+            raise ValueError("unsafe_path_component")
+        return value
 
-    def secret_get(self, user_id: str, key: str) -> str | None:
-        path = self.secrets_dir / user_id / f"{key}.secret"
+    def secret_put(self, user_id: str, key: str, value: str, *, caller_id: str | None = None) -> None:
+        safe_user = self._safe_component(user_id)
+        safe_key = self._safe_component(key)
+        caller = caller_id if caller_id is not None else safe_user
+        if caller != safe_user:
+            self._audit(
+                "secret_put_denied",
+                {"user_id": safe_user, "caller_id": caller, "reason": "cross_user"},
+            )
+            raise PermissionError("cross_user_secret_access")
+        udir = self.secrets_dir / safe_user
+        udir.mkdir(parents=True, exist_ok=True)
+        (udir / f"{safe_key}.secret").write_text(value, encoding="utf-8")
+        os.chmod(udir / f"{safe_key}.secret", 0o600)
+        self._audit("secret_put", {"user_id": safe_user, "key": safe_key})
+
+    def secret_get(self, user_id: str, key: str, *, caller_id: str | None = None) -> str | None:
+        safe_user = self._safe_component(user_id)
+        safe_key = self._safe_component(key)
+        caller = caller_id if caller_id is not None else safe_user
+        if caller != safe_user:
+            self._audit(
+                "secret_get_denied",
+                {"user_id": safe_user, "caller_id": caller, "reason": "cross_user"},
+            )
+            raise PermissionError("cross_user_secret_access")
+        path = self.secrets_dir / safe_user / f"{safe_key}.secret"
+        # Defense in depth: resolved path must stay under secrets_dir.
+        if not path.resolve().is_relative_to(self.secrets_dir.resolve()):
+            raise PermissionError("path_escape")
         if not path.exists():
             return None
         return path.read_text(encoding="utf-8")

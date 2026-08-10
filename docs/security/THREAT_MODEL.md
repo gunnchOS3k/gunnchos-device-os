@@ -80,3 +80,4 @@ No boundary may be labeled production-trusted without external keys and hardware
 - `gunnchos_device_os/connectivity_orchestrator.py` + `radio_capability.py`
 - `tests/test_adversarial_fuzz_starters.py` — adversarial / fuzz starters
 - `docs/LANE_H_EXISTS_VS_STUB.md` — honest inventory
+- **WP-007 (Cycle 2):** `docs/security/wp007/THREAT_MODEL.md` + `gunnchos_device_os/security_red_team/` — internal digital red-team readiness (EXTERNAL pentest still pending)
