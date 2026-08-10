@@ -142,7 +142,7 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
       "current_depth_level": "D5",
-      "digital_gap": "Dual outputs digital; Independent D6 blocked by GJ-DEFECT-006",
+      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
       "physical_gap": "E5 DS-XL pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor build-time measurements",
@@ -289,7 +289,7 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
       "current_depth_level": "D5",
-      "digital_gap": "Dual outputs digital; Independent D6 blocked by GJ-DEFECT-006",
+      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
       "physical_gap": "E5 DS-XL pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor dual-screen productivity measurements",
@@ -305,7 +305,7 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
       "current_depth_level": "D5",
-      "digital_gap": "Dual outputs digital; Independent D6 blocked by GJ-DEFECT-006",
+      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor layout measurements",
@@ -321,7 +321,7 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E4",
       "current_depth_level": "D5",
-      "digital_gap": "Dual outputs digital; Independent D6 blocked by GJ-DEFECT-006",
+      "digital_gap": "Independent D6 PASS on Lab dual-output + executed toolchain; E5 panels PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
@@ -337,7 +337,7 @@
       "strategy": "MUST_EXCEED",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Independent D6 FAIL GJ-DEFECT-007 (no real app-state mutation)",
+      "digital_gap": "Independent D6 PASS via Ring stack app-state mutation; E5/E6 physical pose PENDING",
       "physical_gap": "E5 ring hardware pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor ring accuracy measurements",
@@ -353,7 +353,7 @@
       "strategy": "MUST_EXCEED",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Independent D6 FAIL GJ-DEFECT-007 (no real app-state mutation)",
+      "digital_gap": "Independent D6 PASS via Ring stack app-state mutation; E5/E6 physical pose PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor false-accept measurements",
@@ -369,7 +369,7 @@
       "strategy": "MUST_MATCH",
       "current_evidence_level": "E3",
       "current_depth_level": "D5",
-      "digital_gap": "Independent D6 FAIL GJ-DEFECT-007 (no real app-state mutation)",
+      "digital_gap": "Independent D6 PASS via Ring stack app-state mutation; E5/E6 physical pose PENDING",
       "physical_gap": "E5 pending",
       "human_gap": "E6 pending",
       "external_benchmarking_gap": "No competitor measurements",
@@ -598,5 +598,8 @@
         "remaining": "E6 human quality; E5 HW perf; E7 competitor gap"
       }
     ]
-  }
+  },
+  "updated_at": "2026-08-10T18:56:02Z",
+  "updated_by": "independent_verifier_vp003r",
+  "vp003r_note": "Digital gaps for DS-XL/Ring updated after Independent PASS; competitor_score remain null."
 }
