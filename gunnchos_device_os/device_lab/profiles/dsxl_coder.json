@@ -1,0 +1,100 @@
+{
+  "schema": "gunnchos.device_lab.device_profile.v1",
+  "profile_version": "0.1.0",
+  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "SILICON_EXACT_EMULATION": false,
+  "BEHAVIORAL_DEVICE_PROFILE": true,
+  "VF0_PHYSICAL_TWIN": "PARTIAL",
+  "accepted_source_revisions": {
+    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
+    "hardware_compat_profiles": "hardware_compat/device_profiles/",
+    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
+    "config_device_classes": "config/device_classes.yaml",
+    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
+  },
+  "power_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "thermal_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "performance_model": {
+    "status": "FOUNDATION_ONLY",
+    "HOST_OBSERVED": "available_at_run",
+    "VIRTUAL_CONSTRAINED": "available_when_vm",
+    "MODELED_TARGET_RANGE": "schema_present",
+    "CALIBRATED_TARGET": "unavailable_pre_EVT",
+    "PHYSICAL_MEASURED": "unavailable_pre_EVT"
+  },
+  "profile_id": "dsxl_coder",
+  "product": "DS-XL Coder",
+  "compute_target": {
+    "status": "TARGET_TBD",
+    "class": "developer",
+    "source": "hardware_compat/device_profiles/ds_xl_coder.yaml"
+  },
+  "ram": {
+    "gb": 16,
+    "source": "hardware_compat/device_profiles/ds_xl_coder.yaml"
+  },
+  "storage": {
+    "class": "nvme",
+    "min_gb": 1024,
+    "source": "hardware_compat/device_profiles/ds_xl_coder.yaml"
+  },
+  "display_outputs": [
+    {
+      "id": "dsxl_top",
+      "role": "primary",
+      "resolution": "1280x720",
+      "size_inches": 7.0
+    },
+    {
+      "id": "dsxl_bottom",
+      "role": "secondary",
+      "resolution": "1280x720",
+      "size_inches": 7.0
+    }
+  ],
+  "display_geometry": {
+    "dual_screen": true,
+    "per_panel_resolution": "1280x720",
+    "size_inches_each": 7.0,
+    "note": "hardware_compat dual_screen authority; OS device_classes 15.6in single-panel figure is NOT used as Lab dual-output truth"
+  },
+  "touch": true,
+  "input_capabilities": {
+    "keyboard": true,
+    "touch": true,
+    "controller": false
+  },
+  "audio_capabilities": {
+    "speakers": true,
+    "mic": true
+  },
+  "network_capabilities": {
+    "wifi": "wifi_6e",
+    "ethernet_dock_optional": true,
+    "offline_capable": true
+  },
+  "cellular_target": {
+    "status": "none"
+  },
+  "dock_capabilities": {
+    "supported": true,
+    "deploy_source": true
+  },
+  "ring_capabilities": {
+    "supported": false
+  },
+  "AI_capabilities": {
+    "local_code_assist": true,
+    "tier": "local_plus"
+  },
+  "fidelity_level": "VF2",
+  "status_notes": [
+    "Two compositor outputs REQUIRED; one-output instance MUST FAIL D6"
+  ]
+}

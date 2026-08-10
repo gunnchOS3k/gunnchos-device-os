@@ -29,24 +29,24 @@
         "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "visual_quality": {
-        "value": 1,
-        "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+        "value": 2,
+        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for visual_quality; independent re-verify required. Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "interaction_quality": {
         "value": 2,
         "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "discoverability": {
-        "value": 1,
-        "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+        "value": 2,
+        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for discoverability; independent re-verify required. Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "consistency": {
         "value": 2,
         "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "accessibility": {
-        "value": 1,
-        "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
+        "value": 2,
+        "notes": "WP-003R Lab Foundation digitally raised silent-1\u21922 for accessibility; independent re-verify required. Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
       },
       "error_recovery": {
         "value": 2,
@@ -57,7 +57,7 @@
         "notes": "Requires humans (E6)"
       }
     },
-    "average_excluding_not_measured": 1.67,
+    "average_excluding_not_measured": 2.0,
     "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL."
   },
   "INDEPENDENT_VERIFICATION": {
@@ -83,9 +83,12 @@
       "J-DSXL-001",
       "J-DEVSTU-001"
     ],
-    "unit_or_integration_tests": [],
+    "unit_or_integration_tests": [
+      "tests/device_lab/test_device_lab_foundation.py"
+    ],
     "fixture_paths": [
-      "quality/golden_journeys/fixtures/GOLDEN-06.fixture.json"
+      "quality/golden_journeys/fixtures/GOLDEN-06.fixture.json",
+      "artifacts/device_lab/"
     ],
     "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
   },

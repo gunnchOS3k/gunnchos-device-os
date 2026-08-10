@@ -1,0 +1,93 @@
+{
+  "schema": "gunnchos.device_lab.device_profile.v1",
+  "profile_version": "0.1.0",
+  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "SILICON_EXACT_EMULATION": false,
+  "BEHAVIORAL_DEVICE_PROFILE": true,
+  "VF0_PHYSICAL_TWIN": "PARTIAL",
+  "accepted_source_revisions": {
+    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
+    "hardware_compat_profiles": "hardware_compat/device_profiles/",
+    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
+    "config_device_classes": "config/device_classes.yaml",
+    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
+  },
+  "power_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "thermal_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "performance_model": {
+    "status": "FOUNDATION_ONLY",
+    "HOST_OBSERVED": "available_at_run",
+    "VIRTUAL_CONSTRAINED": "available_when_vm",
+    "MODELED_TARGET_RANGE": "schema_present",
+    "CALIBRATED_TARGET": "unavailable_pre_EVT",
+    "PHYSICAL_MEASURED": "unavailable_pre_EVT"
+  },
+  "profile_id": "student_14_5",
+  "product": "Student 14.5",
+  "compute_target": {
+    "status": "TARGET_TBD",
+    "class": "balanced",
+    "source": "config/device_classes.yaml"
+  },
+  "ram": {
+    "gb": 8,
+    "source": "config/device_classes.yaml#student_14_5.ram_target_gb"
+  },
+  "storage": {
+    "class": "nvme_256gb",
+    "status": "TARGET_TBD",
+    "source": "config/device_classes.yaml"
+  },
+  "display_outputs": [
+    {
+      "id": "internal-14.5",
+      "role": "primary",
+      "resolution": "1920x1200",
+      "size_inches": 14.5
+    }
+  ],
+  "display_geometry": {
+    "size_inches": 14.5,
+    "resolution": "1920x1200",
+    "ppi": 157
+  },
+  "touch": true,
+  "input_capabilities": {
+    "keyboard": true,
+    "touch": true,
+    "stylus": true
+  },
+  "audio_capabilities": {
+    "speakers": true,
+    "mic": true
+  },
+  "network_capabilities": {
+    "wifi": "wifi_6e",
+    "ethernet_dock_optional": true,
+    "offline_capable": true
+  },
+  "cellular_target": {
+    "status": "TARGET_TBD"
+  },
+  "dock_capabilities": {
+    "supported": true
+  },
+  "ring_capabilities": {
+    "supported": false
+  },
+  "AI_capabilities": {
+    "local_tutor": true,
+    "cloud_default": false,
+    "tier": "local"
+  },
+  "fidelity_level": "VF1",
+  "status_notes": [
+    "Derived from accepted OS device_classes + hardware_compat; enclosure CAD VF0 PARTIAL"
+  ]
+}

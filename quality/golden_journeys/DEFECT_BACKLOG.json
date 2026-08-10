@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.golden_journeys.defect_backlog.v1",
-  "work_packet": "WP-003",
-  "updated_by": "implementer-wp-003-remediation",
-  "note": "Honest PARTIAL / PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING leftovers. Do not fake-close.",
+  "work_packet": "WP-003R",
+  "updated_by": "implementer-wp-003r-device-lab",
+  "note": "Honest PARTIAL / PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING leftovers. Do not fake-close. Implementer does not claim Independent PASS.",
   "digital_remediation_shipped": [
     {
       "id": "VP003-S2-G02-D6-OFFICE-LMS",
@@ -21,6 +21,34 @@
       "status": "REMEDIATED_FAIL_CLOSED_IN_TREE",
       "journey_id": "GOLDEN-01",
       "note": "In-tree Anime/BeatLink web packages wired; pedestrian Godot sibling remains fail-closed without inventing repos."
+    },
+    {
+      "id": "GJ-DEFECT-001",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "journey_id": "GOLDEN-04",
+      "title": "Stub dock boolean insufficient for D6",
+      "note": "LAB-SCENARIO-OFFICE-DOCK virtual peripheral lifecycle (display/net/audio/HID/CUPS). Independent re-verify for E4/D6."
+    },
+    {
+      "id": "GJ-DEFECT-002",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "journey_id": "GOLDEN-06",
+      "title": "One-display DS-XL falsely green",
+      "note": "LAB-SCENARIO-DSXL-DUALSCREEN requires >=2 compositor outputs; unknown transitions rejected. Independent re-verify."
+    },
+    {
+      "id": "GJ-DEFECT-003",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "journey_id": "GOLDEN-07",
+      "title": "File-write counted as ring input",
+      "note": "LAB-SCENARIO-RING-REAL-INPUT enforces edge-io→SpatialInputService→apps; direct file write not D6."
+    },
+    {
+      "id": "GJ-DEFECT-004",
+      "status": "REMEDIATED_DIGITAL_PATH",
+      "journey_id": "GOLDEN-08",
+      "title": "micro-deterministic as primary tutor proof",
+      "note": "LAB-SCENARIO-LOCAL-AI-TUTOR prefers real llama.cpp/gunnchAI; micro not primary D6 proof."
     }
   ],
   "remaining_partials_by_design": [
@@ -30,7 +58,7 @@
       "journey_id": "GOLDEN-04",
       "status": "PHYSICAL_PENDING",
       "title": "Physical dock display/Ethernet/USB/audio SI pending",
-      "honest_cap": "E5 later; keep Independent PARTIAL"
+      "honest_cap": "E5 later; VF4/5/6 PHYSICAL_PENDING"
     },
     {
       "id": "VP003-S2-G06-PHYSICAL-DUAL",
@@ -38,7 +66,7 @@
       "journey_id": "GOLDEN-06",
       "status": "PHYSICAL_PENDING",
       "title": "Physical DS-XL dual-panel hardware pending",
-      "honest_cap": "E5 later; keep Independent PARTIAL"
+      "honest_cap": "E5 later; VF4/5/6 PHYSICAL_PENDING"
     },
     {
       "id": "VP003-S2-G07-PHYSICAL-RING",
@@ -46,7 +74,7 @@
       "journey_id": "GOLDEN-07",
       "status": "PHYSICAL_PENDING",
       "title": "Physical ring SI pending",
-      "honest_cap": "E5 later; keep Independent PARTIAL"
+      "honest_cap": "E5 later; spatial accuracy SIMULATED"
     },
     {
       "id": "VP003-S2-G08-CITATION-HUMAN",
@@ -54,7 +82,15 @@
       "journey_id": "GOLDEN-08",
       "status": "HUMAN_VALIDATION_PENDING",
       "title": "Citation usefulness and tutoring UX remain human-panel pending",
-      "honest_cap": "E6 later; keep Independent PARTIAL"
+      "honest_cap": "E6 later; TARGET_HW_PERF PENDING"
+    },
+    {
+      "id": "GJ-DEFECT-005",
+      "severity": "S2",
+      "journey_id": "GOLDEN-04",
+      "status": "OPEN",
+      "title": "CI netns requires root; logical network scenarios used by default",
+      "honest_cap": "Honest hybrid; enable GUNNCHDEVICE_LAB_NETNS=1 as root for real netns"
     }
   ],
   "claim_boundary": {
@@ -63,12 +99,10 @@
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "independent_verifier_rerun": {
-    "verification_packet": "VP-003",
-    "tip_sha": "6ffab227bfe314903dfd7018e35b6524f2136503",
-    "executed_at": "2026-08-10T15:11:48Z",
-    "digital_independent_v1": "PASS",
-    "full_physical_human_v1": "FAIL",
-    "notes": "Independent re-run after digital remediation. G01/G02/G10 Independent PASS at E4/D6 earned on tip; G04/G06/G07 PHYSICAL_PENDING and G08 HUMAN_VALIDATION_PENDING remain PARTIAL S2."
+  "wp003r_lab": {
+    "foundation": "gunnchos_device_os/device_lab",
+    "adr": "docs/adr/ADR-010-gunnchDevice-Lab.md",
+    "GUNNCHDEVICE_LAB_FOUNDATION": "PART_OF_WP003R",
+    "implementer_self_cert_forbidden": true
   }
 }

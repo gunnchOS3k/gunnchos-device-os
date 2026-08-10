@@ -1,0 +1,98 @@
+{
+  "schema": "gunnchos.device_lab.device_profile.v1",
+  "profile_version": "0.1.0",
+  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "SILICON_EXACT_EMULATION": false,
+  "BEHAVIORAL_DEVICE_PROFILE": true,
+  "VF0_PHYSICAL_TWIN": "PARTIAL",
+  "accepted_source_revisions": {
+    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
+    "hardware_compat_profiles": "hardware_compat/device_profiles/",
+    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
+    "config_device_classes": "config/device_classes.yaml",
+    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
+  },
+  "power_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "thermal_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "performance_model": {
+    "status": "FOUNDATION_ONLY",
+    "HOST_OBSERVED": "available_at_run",
+    "VIRTUAL_CONSTRAINED": "available_when_vm",
+    "MODELED_TARGET_RANGE": "schema_present",
+    "CALIBRATED_TARGET": "unavailable_pre_EVT",
+    "PHYSICAL_MEASURED": "unavailable_pre_EVT"
+  },
+  "profile_id": "full_ecosystem",
+  "product": "Full Ecosystem (Student + DS-XL + Handheld + Dock + Rings + gunnchAI)",
+  "compute_target": {
+    "status": "FOUNDATION_ARCHITECTURE",
+    "note": "LAB-FUTURE-003; smoke only in v0.1"
+  },
+  "ram": {
+    "status": "aggregate_TARGET_TBD"
+  },
+  "storage": {
+    "status": "aggregate_TARGET_TBD"
+  },
+  "display_outputs": [
+    {
+      "id": "student",
+      "role": "member"
+    },
+    {
+      "id": "dsxl_top",
+      "role": "member"
+    },
+    {
+      "id": "dsxl_bottom",
+      "role": "member"
+    },
+    {
+      "id": "handheld",
+      "role": "member"
+    },
+    {
+      "id": "dock_external",
+      "role": "member"
+    }
+  ],
+  "display_geometry": {
+    "status": "multi_device"
+  },
+  "touch": true,
+  "input_capabilities": {
+    "multi_device": true,
+    "rings": true
+  },
+  "audio_capabilities": {
+    "multi_device": true
+  },
+  "network_capabilities": {
+    "5g_a_sim": "FUTURE",
+    "ntn_sim": "FUTURE"
+  },
+  "cellular_target": {
+    "status": "FUTURE"
+  },
+  "dock_capabilities": {
+    "supported": true
+  },
+  "ring_capabilities": {
+    "supported": true,
+    "count": 2
+  },
+  "AI_capabilities": {
+    "local": true,
+    "shared_context": "FUTURE"
+  },
+  "fidelity_level": "VF1",
+  "status_notes": [
+    "Architecture present; full simultaneous sim is LAB-FUTURE-003 READY/BLOCKED \u2014 DO NOT EXECUTE in WP-003R"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "gunnchos.device_lab.device_profile.v1",
+  "profile_version": "0.1.0",
+  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "SILICON_EXACT_EMULATION": false,
+  "BEHAVIORAL_DEVICE_PROFILE": true,
+  "VF0_PHYSICAL_TWIN": "PARTIAL",
+  "accepted_source_revisions": {
+    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
+    "hardware_compat_profiles": "hardware_compat/device_profiles/",
+    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
+    "config_device_classes": "config/device_classes.yaml",
+    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
+  },
+  "power_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "thermal_model": {
+    "status": "TARGET_TBD",
+    "measurement": "MODELED_TARGET_RANGE"
+  },
+  "performance_model": {
+    "status": "FOUNDATION_ONLY",
+    "HOST_OBSERVED": "available_at_run",
+    "VIRTUAL_CONSTRAINED": "available_when_vm",
+    "MODELED_TARGET_RANGE": "schema_present",
+    "CALIBRATED_TARGET": "unavailable_pre_EVT",
+    "PHYSICAL_MEASURED": "unavailable_pre_EVT"
+  },
+  "profile_id": "handheld_hybrid",
+  "product": "Handheld Hybrid",
+  "compute_target": {
+    "status": "TARGET_TBD",
+    "class": "gaming_balanced"
+  },
+  "ram": {
+    "gb": 8,
+    "source": "hardware_compat/device_profiles/handheld_hybrid.yaml"
+  },
+  "storage": {
+    "class": "emmc",
+    "min_gb": 32,
+    "note": "WP-002 Outcome A \u2014 on-module 32GB eMMC + microSD; do not invent NVMe",
+    "source": "hardware_compat/device_profiles/handheld_hybrid.yaml"
+  },
+  "display_outputs": [
+    {
+      "id": "internal-8.4",
+      "role": "primary",
+      "resolution": "1920x1200",
+      "size_inches": 8.4
+    }
+  ],
+  "display_geometry": {
+    "size_inches": 8.4,
+    "resolution": "1920x1200"
+  },
+  "touch": true,
+  "input_capabilities": {
+    "keyboard": "dock_optional",
+    "touch": true,
+    "controller": true
+  },
+  "audio_capabilities": {
+    "speakers": true,
+    "haptic": true,
+    "mic": true
+  },
+  "network_capabilities": {
+    "wifi": "wifi_6e",
+    "ethernet_dock_optional": true,
+    "cellular": "simulated_generic",
+    "ntn": "simulated"
+  },
+  "cellular_target": {
+    "status": "simulated_generic"
+  },
+  "dock_capabilities": {
+    "supported": true,
+    "usb_c_dp_alt_mode": true
+  },
+  "ring_capabilities": {
+    "supported": false
+  },
+  "AI_capabilities": {
+    "local": true,
+    "tier": "local"
+  },
+  "fidelity_level": "VF1",
+  "status_notes": [
+    "Undocked handheld baseline; use handheld_docked for office dock"
+  ]
+}
