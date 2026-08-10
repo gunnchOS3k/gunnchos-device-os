@@ -1,24 +1,20 @@
 {
   "schema": "gunnchos.device_lab.device_profile.v1",
-  "profile_version": "0.1.0",
-  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "profile_version": "0.2.0",
+  "profile_id": "student_14_5",
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "VF0_PHYSICAL_TWIN": "PARTIAL",
-  "accepted_source_revisions": {
-    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
-    "hardware_compat_profiles": "hardware_compat/device_profiles/",
-    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
-    "config_device_classes": "config/device_classes.yaml",
-    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
-  },
+  "VF4": "PHYSICAL_PENDING",
+  "VF5": "PHYSICAL_PENDING",
+  "VF6": "PHYSICAL_PENDING",
   "power_model": {
     "status": "TARGET_TBD",
-    "measurement": "MODELED_TARGET_RANGE"
+    "measurement_class": "MODELED_TARGET_RANGE"
   },
   "thermal_model": {
     "status": "TARGET_TBD",
-    "measurement": "MODELED_TARGET_RANGE"
+    "measurement_class": "MODELED_TARGET_RANGE"
   },
   "performance_model": {
     "status": "FOUNDATION_ONLY",
@@ -28,22 +24,54 @@
     "CALIBRATED_TARGET": "unavailable_pre_EVT",
     "PHYSICAL_MEASURED": "unavailable_pre_EVT"
   },
-  "profile_id": "student_14_5",
+  "hardware_truth_pin": {
+    "hardware_repo_sha": "b4eee53c9483849904af056c4dd020da7a8e3417",
+    "truth_schema": "gunnchos.device_lab.accepted_hardware_truth.v1",
+    "sources": [
+      "EXACT_MPN_MATRIX",
+      "STUDENT_BOM",
+      "DEVICE_COMPARISON_MATRIX",
+      "DOCK_ARCHITECTURE_FREEZE"
+    ]
+  },
+  "accepted_source_revisions": {
+    "hardware_industrial_design_sha": "b4eee53c9483849904af056c4dd020da7a8e3417",
+    "exact_mpn_matrix": "docs/full_product_family/EXACT_MPN_MATRIX.md",
+    "note": "SHAs recorded at sync; do not invent hardware specs"
+  },
   "product": "Student 14.5",
-  "compute_target": {
-    "status": "TARGET_TBD",
-    "class": "balanced",
-    "source": "config/device_classes.yaml"
+  "compute": {
+    "role": "COM module",
+    "vendor": "ADLINK",
+    "mpn": "COM-HPC-mMTL-155H-32G",
+    "notes": "Ultra 7 155H + 32GB LPDDR5x; COM-HPC Mini 95×70",
+    "source": "EXACT_MPN_MATRIX",
+    "status": "DESIGN_FREEZE_MPN",
+    "measurement_class": "MODELED_TARGET_RANGE"
+  },
+  "exact_mpns": {
+    "compute": "COM-HPC-mMTL-155H-32G",
+    "wifi": "BE200",
+    "wwan": "RM520N-GL",
+    "tpm": "SLB9672XQ2.0"
   },
   "ram": {
-    "gb": 8,
-    "source": "config/device_classes.yaml#student_14_5.ram_target_gb"
+    "gb": 32,
+    "kind": "LPDDR5x_on_module",
+    "derived_from_mpn": "COM-HPC-mMTL-155H-32G",
+    "source": "EXACT_MPN_MATRIX",
+    "measurement_class": "MODELED_TARGET_RANGE"
   },
   "storage": {
-    "class": "nvme_256gb",
-    "status": "TARGET_TBD",
-    "source": "config/device_classes.yaml"
+    "class": "nvme",
+    "min_gb": 512,
+    "mpn": "PC801 512GB",
+    "vendor": "Phison/OEM",
+    "source": "STUDENT_BOM",
+    "measurement_class": "MODELED_TARGET_RANGE",
+    "avl_note": "AVL_CANDIDATE alternate WD SN740 512GB"
   },
+  "architecture": "x86_64_preferred_emulation_host_hybrid",
   "display_outputs": [
     {
       "id": "internal-14.5",
@@ -68,12 +96,13 @@
     "mic": true
   },
   "network_capabilities": {
-    "wifi": "wifi_6e",
+    "wifi": "wifi_7_target_BE200",
     "ethernet_dock_optional": true,
     "offline_capable": true
   },
   "cellular_target": {
-    "status": "TARGET_TBD"
+    "status": "WWAN_OPTIONAL",
+    "mpn": "RM520N-GL"
   },
   "dock_capabilities": {
     "supported": true
@@ -88,6 +117,7 @@
   },
   "fidelity_level": "VF1",
   "status_notes": [
-    "Derived from accepted OS device_classes + hardware_compat; enclosure CAD VF0 PARTIAL"
+    "RAM/storage/MPN synced from accepted EXACT_MPN_MATRIX + student BOM",
+    "SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING"
   ]
 }

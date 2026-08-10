@@ -1,24 +1,20 @@
 {
   "schema": "gunnchos.device_lab.device_profile.v1",
-  "profile_version": "0.1.0",
-  "architecture": "aarch64_or_x86_64_host_hybrid",
+  "profile_version": "0.2.0",
+  "profile_id": "full_ecosystem",
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "VF0_PHYSICAL_TWIN": "PARTIAL",
-  "accepted_source_revisions": {
-    "device_os_main_at_branch": "44294d6485d8d82fe69191c6e585f13ab7c63f63",
-    "hardware_compat_profiles": "hardware_compat/device_profiles/",
-    "operating_model_adrs": "ADR-001..ADR-009 accepted; ADR-010 this packet",
-    "config_device_classes": "config/device_classes.yaml",
-    "note": "SHAs recorded in run manifests at execution time; do not invent hardware specs"
-  },
+  "VF4": "PHYSICAL_PENDING",
+  "VF5": "PHYSICAL_PENDING",
+  "VF6": "PHYSICAL_PENDING",
   "power_model": {
     "status": "TARGET_TBD",
-    "measurement": "MODELED_TARGET_RANGE"
+    "measurement_class": "MODELED_TARGET_RANGE"
   },
   "thermal_model": {
     "status": "TARGET_TBD",
-    "measurement": "MODELED_TARGET_RANGE"
+    "measurement_class": "MODELED_TARGET_RANGE"
   },
   "performance_model": {
     "status": "FOUNDATION_ONLY",
@@ -28,17 +24,96 @@
     "CALIBRATED_TARGET": "unavailable_pre_EVT",
     "PHYSICAL_MEASURED": "unavailable_pre_EVT"
   },
-  "profile_id": "full_ecosystem",
+  "hardware_truth_pin": {
+    "hardware_repo_sha": "b4eee53c9483849904af056c4dd020da7a8e3417",
+    "truth_schema": "gunnchos.device_lab.accepted_hardware_truth.v1",
+    "sources": [
+      "EXACT_MPN_MATRIX",
+      "STUDENT_BOM",
+      "DEVICE_COMPARISON_MATRIX",
+      "DOCK_ARCHITECTURE_FREEZE"
+    ]
+  },
+  "accepted_source_revisions": {
+    "hardware_industrial_design_sha": "b4eee53c9483849904af056c4dd020da7a8e3417",
+    "exact_mpn_matrix": "docs/full_product_family/EXACT_MPN_MATRIX.md",
+    "note": "SHAs recorded at sync; do not invent hardware specs"
+  },
   "product": "Full Ecosystem (Student + DS-XL + Handheld + Dock + Rings + gunnchAI)",
+  "architecture": "multi_device_aggregate",
   "compute_target": {
     "status": "FOUNDATION_ARCHITECTURE",
-    "note": "LAB-FUTURE-003; smoke only in v0.1"
+    "note": "Aggregate; smoke only — not simultaneous physical claim"
   },
   "ram": {
-    "status": "aggregate_TARGET_TBD"
+    "status": "aggregate",
+    "members_gb": {
+      "student_14_5": 32,
+      "dsxl_coder": 32,
+      "handheld_hybrid": 8
+    },
+    "measurement_class": "MODELED_TARGET_RANGE"
   },
   "storage": {
-    "status": "aggregate_TARGET_TBD"
+    "status": "aggregate",
+    "members": {
+      "student_14_5": {
+        "class": "nvme",
+        "min_gb": 512,
+        "mpn": "PC801 512GB",
+        "vendor": "Phison/OEM",
+        "source": "STUDENT_BOM",
+        "measurement_class": "MODELED_TARGET_RANGE",
+        "avl_note": "AVL_CANDIDATE alternate WD SN740 512GB"
+      },
+      "dsxl_coder": {
+        "class": "nvme",
+        "min_gb": 256,
+        "mpn": null,
+        "source": "DEVICE_COMPARISON_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE",
+        "note": "BOM ds_xl_coder rows still TBD for SSD MPN — capacity from accepted comparison matrix only; do not invent SSD MPN"
+      },
+      "handheld_hybrid": {
+        "class": "emmc",
+        "min_gb": 32,
+        "mpn": null,
+        "on_module": true,
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE",
+        "note": "WP-002 Outcome A — on-module 32GB eMMC + microSD; do not invent NVMe"
+      }
+    },
+    "measurement_class": "MODELED_TARGET_RANGE"
+  },
+  "exact_mpns": {
+    "student_14_5": {
+      "compute": "COM-HPC-mMTL-155H-32G",
+      "wifi": "BE200",
+      "wwan": "RM520N-GL",
+      "tpm": "SLB9672XQ2.0"
+    },
+    "dsxl_coder": {
+      "compute": "COM-HPC-mMTL-155H-32G",
+      "wifi": "BE200",
+      "wwan": "RM520N-GL",
+      "tpm": "SLB9672XQ2.0"
+    },
+    "handheld_hybrid": {
+      "compute": "RM121-D8E32"
+    },
+    "dock": {
+      "compute": "JHL8440",
+      "ethernet": "RTL8156",
+      "usb_hub": "VL817",
+      "retimer": "JHL9040R"
+    },
+    "edge_io_rings": {
+      "compute": "nRF52840-QIAA-R",
+      "cap_touch": "IQS7222A",
+      "uwb": "DWM3001C",
+      "se": "SE050C1HQ1"
+    }
   },
   "display_outputs": [
     {
@@ -93,6 +168,7 @@
   },
   "fidelity_level": "VF1",
   "status_notes": [
-    "Architecture present; full simultaneous sim is LAB-FUTURE-003 READY/BLOCKED \u2014 DO NOT EXECUTE in WP-003R"
+    "Architecture present; full simultaneous sim is LAB-FUTURE — not claimed complete",
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE remains false"
   ]
 }

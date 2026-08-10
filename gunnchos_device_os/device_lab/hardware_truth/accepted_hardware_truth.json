@@ -1,0 +1,216 @@
+{
+  "schema": "gunnchos.device_lab.accepted_hardware_truth.v1",
+  "generated_by": "gunnchos_device_os.device_lab.profile_sync",
+  "SILICON_EXACT_EMULATION": false,
+  "PHYSICAL_PENDING": true,
+  "claim_boundary": "Vendored snapshot of accepted hardware industrial-design freezes. Not physical measurement. Not PRODUCTION_READY. MPNs copied from EXACT_MPN_MATRIX / BOM — never invented.",
+  "hardware_repo": {
+    "name": "gunnchos-hardware-industrial-design",
+    "pinned_sha": "b4eee53c9483849904af056c4dd020da7a8e3417",
+    "pin_note": "Local checkout at sync time (matches accepted main tip used for WP-011). CI drift gate re-verifies committed profiles against this snapshot."
+  },
+  "sources": [
+    {
+      "id": "EXACT_MPN_MATRIX",
+      "path": "docs/full_product_family/EXACT_MPN_MATRIX.md",
+      "authority": "primary_compute_modem_dock_mpn"
+    },
+    {
+      "id": "STUDENT_BOM",
+      "path": "bom/student_14_5/bom.csv",
+      "authority": "student_storage_wifi_wwan_tpm"
+    },
+    {
+      "id": "DEVICE_COMPARISON_MATRIX",
+      "path": "architecture/DEVICE_COMPARISON_MATRIX.md",
+      "authority": "storage_min_when_bom_mpn_absent"
+    },
+    {
+      "id": "DOCK_ARCHITECTURE_FREEZE",
+      "path": "docs/full_product_family/DOCK_ARCHITECTURE_FREEZE_USB4_TB4.md",
+      "authority": "dock_controller_role"
+    }
+  ],
+  "products": {
+    "student_14_5": {
+      "product": "Student 14.5",
+      "compute": {
+        "role": "COM module",
+        "vendor": "ADLINK",
+        "mpn": "COM-HPC-mMTL-155H-32G",
+        "notes": "Ultra 7 155H + 32GB LPDDR5x; COM-HPC Mini 95×70",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "ram": {
+        "gb": 32,
+        "kind": "LPDDR5x_on_module",
+        "derived_from_mpn": "COM-HPC-mMTL-155H-32G",
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE"
+      },
+      "storage": {
+        "class": "nvme",
+        "min_gb": 512,
+        "mpn": "PC801 512GB",
+        "vendor": "Phison/OEM",
+        "source": "STUDENT_BOM",
+        "measurement_class": "MODELED_TARGET_RANGE",
+        "avl_note": "AVL_CANDIDATE alternate WD SN740 512GB"
+      },
+      "display": {
+        "size_inches": 14.5,
+        "resolution": "1920x1200",
+        "outputs": 1,
+        "source": "os_compatibility/device_class_exports/student_14_5_os_export.yaml"
+      },
+      "radios": {
+        "wifi_mpn": "BE200",
+        "wwan_mpn": "RM520N-GL",
+        "tpm_mpn": "SLB9672XQ2.0",
+        "source": "EXACT_MPN_MATRIX+STUDENT_BOM"
+      },
+      "architecture_guest": "x86_64_preferred_emulation_host_hybrid"
+    },
+    "dsxl_coder": {
+      "product": "DS-XL Coder",
+      "compute": {
+        "role": "COM module (shared with Student)",
+        "vendor": "ADLINK",
+        "mpn": "COM-HPC-mMTL-155H-32G",
+        "notes": "Same module as Student; dual-eDP is carrier differentiator",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "ram": {
+        "gb": 32,
+        "kind": "LPDDR5x_on_module",
+        "derived_from_mpn": "COM-HPC-mMTL-155H-32G",
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE"
+      },
+      "storage": {
+        "class": "nvme",
+        "min_gb": 256,
+        "mpn": null,
+        "source": "DEVICE_COMPARISON_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE",
+        "note": "BOM ds_xl_coder rows still TBD for SSD MPN — capacity from accepted comparison matrix only; do not invent SSD MPN"
+      },
+      "display": {
+        "dual_screen": true,
+        "per_panel_resolution": "1280x720",
+        "size_inches_each": 7.0,
+        "outputs": 2,
+        "source": "hardware_compat dual_screen authority + Lab dsxl_coder profile contract"
+      },
+      "radios": {
+        "wifi_mpn": "BE200",
+        "wwan_mpn": "RM520N-GL",
+        "tpm_mpn": "SLB9672XQ2.0",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "architecture_guest": "x86_64_preferred_emulation_host_hybrid"
+    },
+    "handheld_hybrid": {
+      "product": "Handheld Hybrid",
+      "compute": {
+        "role": "SoM",
+        "vendor": "Radxa",
+        "mpn": "RM121-D8E32",
+        "notes": "Radxa NX5 RK3588S; 8GB LPDDR4X + 32GB eMMC; 260-pin SODIMM",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "ram": {
+        "gb": 8,
+        "kind": "LPDDR4X_on_module",
+        "derived_from_mpn": "RM121-D8E32",
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE"
+      },
+      "storage": {
+        "class": "emmc",
+        "min_gb": 32,
+        "mpn": null,
+        "on_module": true,
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE",
+        "note": "WP-002 Outcome A — on-module 32GB eMMC + microSD; do not invent NVMe"
+      },
+      "display": {
+        "size_inches": 8.4,
+        "resolution": "1920x1200",
+        "outputs": 1,
+        "source": "Lab handheld_hybrid accepted geometry"
+      },
+      "architecture_guest": "aarch64_preferred_emulation_host_hybrid"
+    },
+    "edge_io_rings": {
+      "product": "Edge I/O Rings",
+      "compute": {
+        "role": "MCU",
+        "vendor": "Nordic",
+        "mpn": "nRF52840-QIAA-R",
+        "notes": "aQFN-73",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "ram": {
+        "status": "MCU_CLASS",
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE"
+      },
+      "storage": {
+        "status": "MCU_FLASH",
+        "source": "EXACT_MPN_MATRIX",
+        "measurement_class": "MODELED_TARGET_RANGE"
+      },
+      "peripherals": {
+        "cap_touch_mpn": "IQS7222A",
+        "uwb_mpn": "DWM3001C",
+        "se_mpn": "SE050C1HQ1",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "architecture_guest": "peripheral_not_full_guest"
+    },
+    "dock": {
+      "product": "Dock (USB4/TB4)",
+      "compute": {
+        "role": "USB4/TB4 controller",
+        "vendor": "Intel",
+        "mpn": "JHL8440",
+        "notes": "Goshen Ridge peripheral/dock controller @ 40 Gbps (ADR-HW-002)",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "retimer": {
+        "role": "TB4 retimer",
+        "vendor": "Intel",
+        "mpn": "JHL9040R",
+        "notes": "Hayden Bridge retimer — not the dock controller; not Maple Ridge",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "ram": {
+        "status": "N/A_controller",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "storage": {
+        "status": "N/A_controller",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "peripherals": {
+        "ethernet_mpn": "RTL8156",
+        "usb_hub_mpn": "VL817",
+        "pd_class": "TPS65994",
+        "source": "EXACT_MPN_MATRIX"
+      },
+      "architecture_guest": "peripheral_not_full_guest"
+    }
+  },
+  "derived_profiles": {
+    "handheld_docked": {
+      "inherits": ["handheld_hybrid", "dock"],
+      "note": "Composite Lab profile — handheld compute + dock peripherals"
+    },
+    "full_ecosystem": {
+      "inherits": ["student_14_5", "dsxl_coder", "handheld_hybrid", "dock", "edge_io_rings"],
+      "note": "Aggregate architecture smoke; not simultaneous physical claim"
+    }
+  }
+}

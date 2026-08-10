@@ -1,0 +1,89 @@
+name: Device Lab profile drift + guest foundation
+
+on:
+  push:
+    paths:
+      - 'gunnchos_device_os/device_lab/**'
+      - 'tests/device_lab/**'
+      - 'os_build/bootable_reference/overlay/**'
+      - '.github/workflows/device-lab-profile-guest.yml'
+  pull_request:
+    paths:
+      - 'gunnchos_device_os/device_lab/**'
+      - 'tests/device_lab/**'
+      - 'os_build/bootable_reference/overlay/**'
+      - '.github/workflows/device-lab-profile-guest.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: device-lab-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  profile-drift-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Profile sync verify (fail on stale RAM/storage/MPN)
+        run: |
+          PYTHONPATH=.:src python3 scripts/gunnchctl profile verify
+          PYTHONPATH=.:src python3 -c "from gunnchos_device_os.device_lab import GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE as t; assert t is False"
+      - name: Unit tests — profile + fidelity honesty
+        run: |
+          pip install pytest pyyaml
+          PYTHONPATH=.:src pytest -q \
+            tests/device_lab/test_wp011_profile_guest_foundation.py \
+            tests/device_lab/test_device_lab_foundation.py \
+            -k 'not qemu_start'
+
+  qemu-guest-path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-arm qemu-system-x86 qemu-utils
+          qemu-system-aarch64 --version || true
+          qemu-system-x86_64 --version || true
+      - name: Install pytest
+        run: pip install pytest pyyaml
+      - name: Image inspect/verify (use cached bootable_reference if present)
+        run: |
+          PYTHONPATH=.:src python3 scripts/gunnchctl image inspect || true
+          # Build only if cache/artifacts allow; offline if Alpine already cached
+          if [ -f os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz ]; then
+            PYTHONPATH=.:src python3 scripts/gunnchctl image build --offline || \
+              PYTHONPATH=.:src python3 scripts/gunnchctl image build
+            PYTHONPATH=.:src python3 scripts/gunnchctl image verify
+          else
+            echo "Reference artifacts absent — attempting fetch build"
+            PYTHONPATH=.:src python3 scripts/gunnchctl image build
+            PYTHONPATH=.:src python3 scripts/gunnchctl image verify
+          fi
+      - name: QEMU live path test (PASS only if QEMU alive; else SKIPPED_ENVIRONMENT)
+        env:
+          GUNNCHDEVICE_LAB_BOOT_TIMEOUT: "90"
+          GUNNCHDEVICE_LAB_MEMORY_MB: "512"
+          GUNNCH_GUEST_AGENT_HOST_STUB: "1"
+        run: |
+          PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_profile_guest_foundation.py -k 'qemu_start or start_session_real'
+          # Honesty: never promote skip to pass in evidence artifact
+          PYTHONPATH=.:src python3 - <<'PY'
+          from gunnchos_device_os.device_lab.virtualization.qemu_guest import environment_can_run_qemu
+          import json
+          env = environment_can_run_qemu()
+          print(json.dumps(env, indent=2))
+          assert env.get("SKIPPED_ENVIRONMENT") is False, "QEMU installed in this job — must not skip"
+          PY

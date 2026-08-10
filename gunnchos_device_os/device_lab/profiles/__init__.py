@@ -13,6 +13,7 @@ CATALOG = (
     "handheld_docked",
     "edge_io_rings",
     "full_ecosystem",
+    "dock",
 )
 
 
@@ -30,7 +31,7 @@ def load_profile(profile_id: str) -> dict[str, Any]:
     if data.get("SILICON_EXACT_EMULATION") is not False:
         raise ValueError("SILICON_EXACT_EMULATION must be false")
     if data.get("BEHAVIORAL_DEVICE_PROFILE") is not True:
-        raise ValueError("BEHAVIORAL_DEVICE_PROFILE must be true for v0.1")
+        raise ValueError("BEHAVIORAL_DEVICE_PROFILE must be true for Lab foundation")
     return data
 
 

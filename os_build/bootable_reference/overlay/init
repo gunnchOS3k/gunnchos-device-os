@@ -188,6 +188,27 @@ echo "FULL_GUNNCHOS_PLATFORM_DIGITAL_COMPLETE=true"
 echo "GUNNCHOS_BOOT_MARKER=OK"
 echo "GUNNCHOS_BOOT_COMPLETE=true"
 
+# Device Lab persist mode: keep guest alive + optional guest agent (no production keys).
+CMDLINE="$(cat /proc/cmdline 2>/dev/null || true)"
+LAB_PERSIST=0
+case " ${CMDLINE} " in
+  *" gunnchos.lab_persist=1 "*|*" gunnchos.lab_persist=true "*) LAB_PERSIST=1 ;;
+esac
+if [ "${LAB_PERSIST}" = "1" ]; then
+  echo "GUNNCHOS_LAB_PERSIST=true"
+  if [ -x /opt/gunnchos/bin/gunnch-guest-agent ]; then
+    /opt/gunnchos/bin/gunnch-guest-agent >/var/log/gunnchos/guest_agent.log 2>&1 &
+    echo "GUNNCHOS_GUEST_AGENT=started"
+  else
+    echo "GUNNCHOS_GUEST_AGENT=missing"
+  fi
+  # Stay up for Lab sessions (host stops QEMU). Avoid unauthenticated network listeners.
+  while true; do
+    sleep 30
+    echo "GUNNCHOS_LAB_HEARTBEAT=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo ok)"
+  done
+fi
+
 # Keep guest alive briefly so QEMU serial capture finishes, then halt.
 sleep 2
 # Prefer clean poweroff; fall back to busybox poweroff/halt.

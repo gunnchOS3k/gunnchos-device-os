@@ -24,6 +24,7 @@ from gunnchos_device_os.device_lab.virtualization.backend import select_backend
 
 
 _INSTANCES: dict[str, "LabSession"] = {}
+_QEMU_SESSIONS: dict[str, Any] = {}
 # Explicit allowlist for approved lab work roots (e.g. pytest tmp_path).
 # Host escape outside instances + registered roots remains denied (SEC-LAB-001).
 _APPROVED_WORK_ROOTS: set[Path] = set()
@@ -116,6 +117,60 @@ class LabSession:
         if self.profile_id in {"edge_io_rings", "full_ecosystem"} or self.profile.get("ring_capabilities", {}).get("supported"):
             rings_ev = self.work / "rings"
             rings_info = self.rings.start(evidence_dir=rings_ev, repo_root=self.repo_root)
+        qemu_info = None
+        selected = (self.virt.get("selected") or {})
+        backend_name = selected.get("name") or ""
+        prefer_qemu = backend_name.startswith("QEMU_") or bool(self.virt.get("prefer_real_guest"))
+        if prefer_qemu and self.repo_root is not None:
+            from gunnchos_device_os.device_lab.virtualization.qemu_guest import start_qemu_guest
+
+            q = start_qemu_guest(
+                work=self.work / "qemu",
+                profile=self.profile,
+                repo_root=self.repo_root,
+                headless=True,
+            )
+            sess_obj = q.pop("_session", None)
+            if sess_obj is not None:
+                _QEMU_SESSIONS[self.instance_id] = sess_obj
+            qemu_info = q
+            # If QEMU was required and skipped/failed, surface honestly (do not fake PASS).
+            if not q.get("ok") and q.get("SKIPPED_ENVIRONMENT"):
+                self.state = {
+                    "display": disp,
+                    "storage": stor,
+                    "network": net,
+                    "audio": aud,
+                    "camera": cam,
+                    "rings": rings_info,
+                    "virtualization": self.virt,
+                    "qemu": qemu_info,
+                    "SILICON_EXACT_EMULATION": SILICON_EXACT_EMULATION,
+                    "result": "SKIPPED_ENVIRONMENT",
+                }
+                (self.work / "session.json").write_text(
+                    json.dumps(
+                        {
+                            "instance_id": self.instance_id,
+                            "profile_id": self.profile_id,
+                            "state": self.state,
+                        },
+                        indent=2,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+                return {
+                    "ok": False,
+                    "instance_id": self.instance_id,
+                    "profile_id": self.profile_id,
+                    "state": self.state,
+                    "result": "SKIPPED_ENVIRONMENT",
+                    "SKIPPED_ENVIRONMENT": True,
+                    "fidelity": self.fidelity.to_dict(),
+                    "claim_boundary": CLAIM_BOUNDARY,
+                    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
+                }
         self.started_at = time.time()
         self.running = True
         self.state = {
@@ -126,6 +181,7 @@ class LabSession:
             "camera": cam,
             "rings": rings_info,
             "virtualization": self.virt,
+            "qemu": qemu_info,
             "SILICON_EXACT_EMULATION": SILICON_EXACT_EMULATION,
         }
         (self.work / "session.json").write_text(
@@ -133,20 +189,30 @@ class LabSession:
             encoding="utf-8",
         )
         return {
-            "ok": True,
+            "ok": True if (qemu_info is None or qemu_info.get("ok")) else False,
             "instance_id": self.instance_id,
             "profile_id": self.profile_id,
             "state": self.state,
             "fidelity": self.fidelity.to_dict(),
             "claim_boundary": CLAIM_BOUNDARY,
+            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
         }
 
     def stop(self) -> dict[str, Any]:
+        q = _QEMU_SESSIONS.pop(self.instance_id, None)
+        qemu_stop = None
+        if q is not None:
+            qemu_stop = q.stop()
         self.network.cleanup()
         self.storage.reset()
         self.running = False
         _INSTANCES.pop(self.instance_id, None)
-        return {"ok": True, "instance_id": self.instance_id, "stopped": True}
+        return {
+            "ok": True,
+            "instance_id": self.instance_id,
+            "stopped": True,
+            "qemu": qemu_stop,
+        }
 
     def status(self) -> dict[str, Any]:
         return {

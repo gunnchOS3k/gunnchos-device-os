@@ -80,7 +80,8 @@ def describe_backends() -> dict[str, Any]:
     return {
         "schema": "gunnchos.device_lab.virtualization.v1",
         "backends": [b.to_dict() for b in backends],
-        "default": "HYBRID_BEHAVIORAL",
+        "default": os.environ.get("GUNNCHDEVICE_LAB_BACKEND", "HYBRID_BEHAVIORAL"),
+        "prefer_real_guest_env": os.environ.get("GUNNCHDEVICE_LAB_FORCE_REAL_GUEST", ""),
         "claim_boundary": (
             "Generic QEMU machine != transistor-level Radxa/RK3588. "
             "SILICON_EXACT_EMULATION=false unless actually supported."
@@ -96,9 +97,34 @@ def Path_exists(p: str) -> bool:
 def select_backend(prefer: str | None = None) -> dict[str, Any]:
     prefer = prefer or os.environ.get("GUNNCHDEVICE_LAB_BACKEND", "HYBRID_BEHAVIORAL")
     catalog = describe_backends()
+    # Prefer real QEMU guest when explicitly requested or when FORCE_REAL_GUEST=1
+    force_real = os.environ.get("GUNNCHDEVICE_LAB_FORCE_REAL_GUEST", "").lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    if force_real and prefer == "HYBRID_BEHAVIORAL":
+        for name in ("QEMU_HVF", "QEMU_KVM", "QEMU_TCG"):
+            for b in catalog["backends"]:
+                if b["name"] == name and b["available"]:
+                    prefer = name
+                    break
+            else:
+                continue
+            break
     for b in catalog["backends"]:
         if b["name"] == prefer and b["available"]:
-            return {"selected": b, "catalog": catalog}
+            return {
+                "selected": b,
+                "catalog": catalog,
+                "prefer_real_guest": force_real or prefer.startswith("QEMU_"),
+            }
     # fallback hybrid always available
     hybrid = next(b for b in catalog["backends"] if b["name"] == "HYBRID_BEHAVIORAL")
-    return {"selected": hybrid, "requested": prefer, "fallback": True, "catalog": catalog}
+    return {
+        "selected": hybrid,
+        "requested": prefer,
+        "fallback": True,
+        "catalog": catalog,
+        "prefer_real_guest": False,
+    }
