@@ -24,7 +24,7 @@
   "failed": [],
   "pass_count": 18,
   "fail_count": 0,
-  "duration_ms": 85950,
+  "duration_ms": 81624,
   "defects": [],
   "host_audit": {
     "schema": "gunnchos.phase_xii.host_audit.v1",
@@ -121,7 +121,7 @@
     "RJ-STUDENT-001": {
       "rj_id": "RJ-STUDENT-001",
       "mapped_journey": "J-STU-001",
-      "started_at": "2026-08-09T23:11:53Z",
+      "started_at": "2026-08-10T00:22:01Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -176,9 +176,9 @@
         "pass_requires_no_users_gunnchos_path": true
       },
       "journey_id": "J-STU-001",
-      "status": "FAIL",
-      "ok": false,
-      "fail_reason": "submission_receipt: no_receipt",
+      "status": "PASS",
+      "ok": true,
+      "fail_reason": null,
       "steps": [
         {
           "step": "wake",
@@ -222,42 +222,46 @@
         {
           "step": "browser",
           "ok": true,
-          "ms": 36,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 357,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "status": 200,
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 36,
-            "action": "browser"
+            "browser": true,
+            "title": "gunnchOS LMS Dev",
+            "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/browser/browser_home.png",
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 357,
+            "action": "browser",
+            "path_home_dependency": true
           }
         },
         {
           "step": "lms_open",
           "ok": true,
-          "ms": 24,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 367,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "status": 200,
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 24,
-            "action": "lms_open"
+            "browser": true,
+            "title": "gunnchOS LMS Dev",
+            "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/lms_open.png",
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 367,
+            "action": "lms_open",
+            "path_home_dependency": true
           }
         },
         {
           "step": "pdf_download",
           "ok": true,
-          "ms": 5,
+          "ms": 11,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
             "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/assignment.pdf",
             "bytes": 45,
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 5,
+            "duration_ms": 11,
             "action": "pdf_download",
             "path_home_dependency": true
           }
@@ -280,7 +284,7 @@
         {
           "step": "doc_create",
           "ok": true,
-          "ms": 3944,
+          "ms": 2138,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -291,12 +295,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "dd4fd0f15b632787557b0ec3b7037abe778d6679cb734d0b0214a37f8db70375",
-              "assignment_edited.odt": "133ff43ec14e170c6bff6181fe32a937102ed018eb5ebd931f9eaa6d00327334",
-              "assignment_edited.pdf": "45bbb93e32d4c55f289e3f28e35ff838bcc974db331dcd90f0c78f0b4bde3ad7"
+              "assignment.odt": "92d5135edc7c8b90e99da09699f3c3755536be150af5b613d0a34dfc04a2e72d",
+              "assignment_edited.odt": "f30a53a8b03579a90cb42a1c9385af9408c8da11406c14434048f323a13333f4",
+              "assignment_edited.pdf": "2417d71d7e5cd94c233a2a7f0e3ece856101d0f7bafe061906c24970f6ec6220"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 3941,
+            "duration_ms": 2138,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -304,7 +308,7 @@
         {
           "step": "music_study",
           "ok": true,
-          "ms": 304,
+          "ms": 179,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -314,7 +318,7 @@
             },
             "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/user_journeys/fixtures/study_track.wav",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 303,
+            "duration_ms": 179,
             "action": "music_study",
             "path_home_dependency": true
           }
@@ -322,8 +326,8 @@
         {
           "step": "waike_search",
           "ok": true,
-          "ms": 22,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 555,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
             "app": {
@@ -368,7 +372,7 @@
                     "lesson_id": "wireless_basics_101",
                     "pct": 25.0,
                     "role": "student",
-                    "updated_at": 1786317117.387433
+                    "updated_at": 1786321324.8780868
                   }
                 },
                 "content_sources": [
@@ -426,7 +430,7 @@
                 "schema": "waike.portfolio.v1",
                 "lesson_id": "wireless_basics_101",
                 "role": "learner",
-                "exported_at": 1786317117.38767,
+                "exported_at": 1786321324.878318,
                 "session_ok": true
               },
               "accessibility": {
@@ -442,11 +446,14 @@
               "claim_boundary": "Digital WAIKE Learning app using repo lesson packs and progress store. Not a full LMS or production cloud sync."
             },
             "browser": {
-              "ok": false,
-              "error": "Request URL is missing an 'http://' or 'https://' protocol."
+              "ok": true,
+              "browser": true,
+              "title": "WAIKE Learning",
+              "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/waike/waike.png",
+              "execution_depth": "L5_REAL_GUI_INTERACTION"
             },
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 21,
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 554,
             "stub": false,
             "action": "waike_search"
           }
@@ -454,19 +461,19 @@
         {
           "step": "ai_tutor",
           "ok": true,
-          "ms": 527,
+          "ms": 330,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
             "answered": true,
             "blocked_private_clipboard": false,
-            "reply": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy. It's a crucial process that helps plants grow and produce oxygen. Here's a brief explanation:\n\nWhen sunlight hits a plant, it triggers a series of chemical reactions that ultimately lead to the production of glucose (",
+            "reply": "Photosynthesis is a process that plants, algae, and some bacteria use to convert light energy from the sun into chemical energy stored in glucose. This process is essential for life on Earth as it provides the primary source of energy for nearly all living organisms.\n\nIn photosynthesis, plants absorb sunlight, which is absorbed by chlorophyll",
             "backend": "llama.cpp",
             "endpoint": "http://127.0.0.1:8091",
             "stub": false,
             "ai_stub_as_gunnchai_proof": false,
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 527,
+            "duration_ms": 329,
             "action": "ai_tutor"
           }
         },
@@ -489,14 +496,14 @@
         {
           "step": "notes_cite",
           "ok": true,
-          "ms": 5,
+          "ms": 1,
           "execution_depth": "L0_GENERIC_OK",
           "result": {
             "ok": true,
             "cursor": 1,
             "version": 1,
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 5,
+            "duration_ms": 1,
             "action": "notes_cite"
           }
         },
@@ -510,7 +517,7 @@
             "saved": true,
             "data_loss": false,
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 1,
+            "duration_ms": 0,
             "action": "save_local"
           }
         },
@@ -537,7 +544,7 @@
             "queued": true,
             "cursor": 1,
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 1,
+            "duration_ms": 0,
             "action": "edit_offline"
           }
         },
@@ -574,59 +581,200 @@
         {
           "step": "lms_upload",
           "ok": true,
-          "ms": 24,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 1089,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "playwright": false,
+            "browser": true,
+            "playwright": true,
             "downloaded": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/assignment.pdf",
-            "bytes": 45,
             "receipt": {
               "ok": true,
               "receipt": {
-                "id": "10ae69cf-9b7d-4757-bbc6-42c775005a66",
+                "id": "f51813ce-0ca3-4f8a-a799-84d405c0e723",
                 "status": "submitted",
-                "bytes": 16
+                "bytes": 1272
               }
             },
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 24,
-            "note": "playwright missing; used real HTTP client against HTML LMS",
+            "screenshots": [
+              "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/lms_open.png",
+              "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/lms/lms_submit.png"
+            ],
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 1089,
             "action": "lms_upload",
             "path_home_dependency": true
           }
         },
         {
           "step": "submission_receipt",
-          "ok": false,
+          "ok": true,
+          "ms": 1,
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "result": {
+            "ok": true,
+            "receipt": {
+              "id": "f51813ce-0ca3-4f8a-a799-84d405c0e723",
+              "status": "submitted",
+              "bytes": 1272
+            },
+            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+            "duration_ms": 0,
+            "action": "submission_receipt"
+          }
+        },
+        {
+          "step": "session_preserve",
+          "ok": true,
+          "ms": 1,
+          "execution_depth": "L1_POLICY_MODEL",
+          "result": {
+            "ok": true,
+            "keys": [
+              "ai_sync_permitted",
+              "authenticated",
+              "battery_pct",
+              "chat_state",
+              "cursor_position",
+              "doc_versions",
+              "focus_mode",
+              "game_save",
+              "music_position",
+              "network",
+              "open_files",
+              "storage_used_pct",
+              "video_position"
+            ],
+            "execution_depth": "L1_POLICY_MODEL",
+            "duration_ms": 0,
+            "action": "session_preserve"
+          }
+        },
+        {
+          "step": "game_launch",
+          "ok": true,
+          "ms": 693,
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "result": {
+            "ok": true,
+            "launched": true,
+            "saved": true,
+            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/save.json",
+            "fixture": false,
+            "fixture_json_used": false,
+            "godot": {
+              "name": "godot",
+              "path": "/opt/homebrew/bin/godot"
+            },
+            "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
+            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+            "duration_ms": 693,
+            "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
+            "action": "game_launch"
+          }
+        },
+        {
+          "step": "game_play",
+          "ok": true,
+          "ms": 352,
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "result": {
+            "ok": true,
+            "launched": true,
+            "saved": true,
+            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/save.json",
+            "fixture": false,
+            "fixture_json_used": false,
+            "godot": {
+              "name": "godot",
+              "path": "/opt/homebrew/bin/godot"
+            },
+            "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
+            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+            "duration_ms": 351,
+            "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
+            "action": "game_play"
+          }
+        },
+        {
+          "step": "game_save",
+          "ok": true,
+          "ms": 352,
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "result": {
+            "ok": true,
+            "launched": true,
+            "saved": true,
+            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/save.json",
+            "fixture": false,
+            "fixture_json_used": false,
+            "godot": {
+              "name": "godot",
+              "path": "/opt/homebrew/bin/godot"
+            },
+            "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
+            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+            "duration_ms": 351,
+            "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
+            "action": "game_save"
+          }
+        },
+        {
+          "step": "return_assignment",
+          "ok": true,
           "ms": 1,
           "execution_depth": "L0_GENERIC_OK",
-          "error": "no_receipt",
-          "trace": "Traceback (most recent call last):\n  File \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/phase_xii/journeys/real_harness.py\", line 239, in run_journey\n    raise RuntimeError(result.get(\"error\") or f\"step_failed:{action}\")\nRuntimeError: no_receipt\n"
+          "result": {
+            "ok": true,
+            "file": "assignment.odt",
+            "kind": "doc",
+            "execution_depth": "L0_GENERIC_OK",
+            "duration_ms": 0,
+            "action": "return_assignment"
+          }
+        },
+        {
+          "step": "reopen_receipt",
+          "ok": true,
+          "ms": 1,
+          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "result": {
+            "ok": true,
+            "receipt": {
+              "id": "f51813ce-0ca3-4f8a-a799-84d405c0e723",
+              "status": "submitted",
+              "bytes": 1272
+            },
+            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+            "duration_ms": 0,
+            "action": "reopen_receipt"
+          }
         }
       ],
-      "duration_ms": 4943,
+      "duration_ms": 6441,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
+      "journey_ok": true,
+      "component_ok": true,
+      "ai_ok": true,
       "pass": true,
-      "ended_at": "2026-08-09T23:11:57Z"
+      "ended_at": "2026-08-10T00:22:08Z"
     },
     "RJ-STUDENT-002": {
       "rj_id": "RJ-STUDENT-002",
       "mapped_journey": "J-STU-002",
-      "started_at": "2026-08-09T23:11:57Z",
+      "started_at": "2026-08-10T00:22:08Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -688,7 +836,7 @@
         {
           "step": "doc_create",
           "ok": true,
-          "ms": 1744,
+          "ms": 1657,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -699,12 +847,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "eac165c4e8a8b96985e410d8128be0b4fe2b044a3ff65abe92e3e8f55ae23920",
-              "assignment_edited.odt": "5abc410f162408f4da8b5c3d9b6f8a94890fdbfc834ec82a076ea4bef2564099",
-              "assignment_edited.pdf": "3c9ead8f9a91f9c64d49dc2fd307fd98cd1bd5f0649bbffc6d12ce7ce64941d2"
+              "assignment.odt": "c846c2efba0e582785ea641e5df2c2b10ca55a4477890f8a0356678d4e030fb1",
+              "assignment_edited.odt": "17d97bcf411e90889ff5267467dc295542a77329aa6b8e1b92c17d00b22b6e56",
+              "assignment_edited.pdf": "f23b132f71149fbb1b7bc84d554583a0aad0a6bd1723c149a9cc18d1e45639ec"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1744,
+            "duration_ms": 1656,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -712,25 +860,25 @@
         {
           "step": "share_folder",
           "ok": true,
-          "ms": 3027,
+          "ms": 3012,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
             "name": "shared.odt",
             "bytes": 18,
             "version": 1,
-            "url": "http://127.0.0.1:55258/shared.odt",
+            "url": "http://127.0.0.1:57125/shared.odt",
             "status": null,
             "share": "webdav://local/shared.odt?v=1",
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 3027,
+            "duration_ms": 3012,
             "action": "share_folder"
           }
         },
         {
           "step": "share_link",
           "ok": true,
-          "ms": 3066,
+          "ms": 3011,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
@@ -740,36 +888,36 @@
               "name": "shared.odt",
               "bytes": 18,
               "version": 2,
-              "url": "http://127.0.0.1:55258/shared.odt",
+              "url": "http://127.0.0.1:57125/shared.odt",
               "status": null,
               "share": "webdav://local/shared.odt?v=2",
               "execution_depth": "L3_REAL_SERVICE_API"
             },
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 3065,
+            "duration_ms": 3011,
             "action": "share_link"
           }
         },
         {
           "step": "message_send",
           "ok": true,
-          "ms": 47,
+          "ms": 16,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
-            "room_id": "!3b6316b547:localhost",
+            "room_id": "!8aacb3b9db:localhost",
             "event": {
-              "event_id": "$af56150d0b764c9ab76d0c747e416083"
+              "event_id": "$ec66096c919745a587b603377f06d776"
             },
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 46,
+            "duration_ms": 16,
             "action": "message_send"
           }
         },
         {
           "step": "music_continue",
           "ok": true,
-          "ms": 304,
+          "ms": 194,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -779,7 +927,7 @@
             },
             "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/user_journeys/fixtures/study_track.wav",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 304,
+            "duration_ms": 194,
             "action": "music_continue",
             "path_home_dependency": true
           }
@@ -830,7 +978,7 @@
         {
           "step": "doc_edit",
           "ok": true,
-          "ms": 4261,
+          "ms": 1107,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -841,12 +989,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "e48e951f2cdf7223f36c3471d967c050585f3cb2d9a10bcb8eb03b7cf199df36",
-              "assignment_edited.odt": "6e6df2567474d8a8063e2e9f9705bb1520ef83ed0d84bcd1b8fa59f7b0368dd8",
-              "assignment_edited.pdf": "842ae1a88169a689ac1c577a7bc34db8588fcc2ea62b7fe7a8fbee86033e50d3"
+              "assignment.odt": "bba4bfab7deadef0801d6f3662bfd0b9696cf3f8bb2602f018a57a4c836cc953",
+              "assignment_edited.odt": "b39c0ca7088f842d8b55b68d8aee6bb120816f64f805b418fde692a2b227d822",
+              "assignment_edited.pdf": "fb873388783e20b9d34df57fb21b46d5d73638388b7c933dc3aec057dc867eee"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 4260,
+            "duration_ms": 1107,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -854,21 +1002,21 @@
         {
           "step": "version_save",
           "ok": true,
-          "ms": 3,
+          "ms": 1,
           "execution_depth": "L0_GENERIC_OK",
           "result": {
             "ok": true,
             "cursor": 1,
             "version": 1,
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 3,
+            "duration_ms": 1,
             "action": "version_save"
           }
         },
         {
           "step": "share_verify",
           "ok": true,
-          "ms": 47,
+          "ms": 9,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
@@ -876,7 +1024,7 @@
               "bytes": 18
             },
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 47,
+            "duration_ms": 9,
             "action": "share_verify"
           }
         },
@@ -907,27 +1055,27 @@
           }
         }
       ],
-      "duration_ms": 12505,
+      "duration_ms": 9012,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:10Z"
+      "ended_at": "2026-08-10T00:22:17Z"
     },
     "RJ-STUDENT-003": {
       "rj_id": "RJ-STUDENT-003",
       "mapped_journey": "J-STU-003",
-      "started_at": "2026-08-09T23:12:10Z",
+      "started_at": "2026-08-10T00:22:17Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -989,7 +1137,7 @@
         {
           "step": "music_study",
           "ok": true,
-          "ms": 379,
+          "ms": 109,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -999,7 +1147,7 @@
             },
             "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/user_journeys/fixtures/study_track.wav",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 379,
+            "duration_ms": 109,
             "action": "music_study",
             "path_home_dependency": true
           }
@@ -1036,33 +1184,35 @@
         {
           "step": "browser",
           "ok": true,
-          "ms": 6,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 1102,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "status": 200,
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 6,
-            "action": "browser"
+            "browser": true,
+            "title": "gunnchOS LMS Dev",
+            "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/browser/browser_home.png",
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 1102,
+            "action": "browser",
+            "path_home_dependency": true
           }
         },
         {
           "step": "ai_tutor",
           "ok": true,
-          "ms": 392,
+          "ms": 343,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
             "answered": true,
             "blocked_private_clipboard": false,
-            "reply": "Photosynthesis is a process by which plants, algae, and some bacteria convert light energy into chemical energy. It's a vital process that helps plants grow and produce oxygen.\n\nHere's a brief explanation:\n\n- Photosynthesis occurs in the chloroplasts of plant cells, where sunlight is absorbed and converted into chemical",
+            "reply": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy. It's a vital process that sustains life on Earth, as it provides the primary energy source for nearly all living organisms.\n\nIn photosynthesis, plants absorb sunlight, which is a form of energy that comes from the",
             "backend": "llama.cpp",
             "endpoint": "http://127.0.0.1:8091",
             "stub": false,
             "ai_stub_as_gunnchai_proof": false,
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 391,
+            "duration_ms": 342,
             "action": "ai_tutor"
           }
         },
@@ -1072,30 +1222,30 @@
           "ms": 1,
           "execution_depth": "L0_GENERIC_OK",
           "error": "no_session",
-          "trace": "Traceback (most recent call last):\n  File \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/phase_xii/journeys/real_harness.py\", line 239, in run_journey\n    raise RuntimeError(result.get(\"error\") or f\"step_failed:{action}\")\nRuntimeError: no_session\n"
+          "trace": "Traceback (most recent call last):\n  File \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/phase_xii/journeys/real_harness.py\", line 278, in run_journey\n    raise RuntimeError(result.get(\"error\") or f\"step_failed:{action}\")\nRuntimeError: no_session\n"
         }
       ],
-      "duration_ms": 783,
+      "duration_ms": 1561,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:11Z"
+      "ended_at": "2026-08-10T00:22:18Z"
     },
     "RJ-CREATOR-001": {
       "rj_id": "RJ-CREATOR-001",
       "mapped_journey": "J-CREATOR-001",
-      "started_at": "2026-08-09T23:12:11Z",
+      "started_at": "2026-08-10T00:22:18Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -1212,7 +1362,7 @@
             "ok": true,
             "packet": {
               "schema": "gunnchos.ring.packet.v1",
-              "ts": 1786317131.271869,
+              "ts": 1786321338.835464,
               "gesture": "confirm",
               "axis": {
                 "x": 0.1,
@@ -1321,27 +1471,27 @@
           }
         }
       ],
-      "duration_ms": 2,
+      "duration_ms": 1,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:11Z"
+      "ended_at": "2026-08-10T00:22:18Z"
     },
     "RJ-EDU-001": {
       "rj_id": "RJ-EDU-001",
       "mapped_journey": "J-EDU-001",
-      "started_at": "2026-08-09T23:12:11Z",
+      "started_at": "2026-08-10T00:22:18Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -1415,8 +1565,8 @@
         {
           "step": "waike_open",
           "ok": true,
-          "ms": 9,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 514,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
             "app": {
@@ -1461,7 +1611,7 @@
                     "lesson_id": "wireless_basics_101",
                     "pct": 25.0,
                     "role": "student",
-                    "updated_at": 1786317131.2757828
+                    "updated_at": 1786321338.839475
                   }
                 },
                 "content_sources": [
@@ -1519,7 +1669,7 @@
                 "schema": "waike.portfolio.v1",
                 "lesson_id": "wireless_basics_101",
                 "role": "learner",
-                "exported_at": 1786317131.276028,
+                "exported_at": 1786321338.8397388,
                 "session_ok": true
               },
               "accessibility": {
@@ -1535,11 +1685,14 @@
               "claim_boundary": "Digital WAIKE Learning app using repo lesson packs and progress store. Not a full LMS or production cloud sync."
             },
             "browser": {
-              "ok": false,
-              "error": "Request URL is missing an 'http://' or 'https://' protocol."
+              "ok": true,
+              "browser": true,
+              "title": "WAIKE Learning",
+              "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/waike/waike.png",
+              "execution_depth": "L5_REAL_GUI_INTERACTION"
             },
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 9,
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 514,
             "stub": false,
             "action": "waike_open"
           }
@@ -1571,18 +1724,18 @@
         {
           "step": "share_pdf",
           "ok": true,
-          "ms": 3013,
+          "ms": 3010,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
             "name": "shared.odt",
             "bytes": 18,
             "version": 1,
-            "url": "http://127.0.0.1:55258/shared.odt",
+            "url": "http://127.0.0.1:57125/shared.odt",
             "status": null,
             "share": "webdav://local/shared.odt?v=1",
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 3013,
+            "duration_ms": 3010,
             "action": "share_pdf"
           }
         },
@@ -1601,16 +1754,16 @@
         {
           "step": "class_message",
           "ok": true,
-          "ms": 31,
+          "ms": 28,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
-            "room_id": "!10b267ba76:localhost",
+            "room_id": "!2757d0c526:localhost",
             "event": {
-              "event_id": "$3cd3eab761e045b3b58e75417fd3359b"
+              "event_id": "$6b1519986d944fc29d6cbb3a75954453"
             },
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 31,
+            "duration_ms": 28,
             "action": "class_message"
           }
         },
@@ -1651,27 +1804,27 @@
           }
         }
       ],
-      "duration_ms": 3055,
+      "duration_ms": 3555,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:14Z"
+      "ended_at": "2026-08-10T00:22:22Z"
     },
     "RJ-OFFICE-001": {
       "rj_id": "RJ-OFFICE-001",
       "mapped_journey": "J-OFF-001",
-      "started_at": "2026-08-09T23:12:14Z",
+      "started_at": "2026-08-10T00:22:22Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -1776,7 +1929,7 @@
                 },
                 "assignment.odt": {
                   "kind": "doc",
-                  "dirty": true
+                  "dirty": false
                 },
                 "shared.odt": {
                   "kind": "doc",
@@ -1835,21 +1988,23 @@
         {
           "step": "browser",
           "ok": true,
-          "ms": 7,
-          "execution_depth": "L4_REAL_APPLICATION_PROCESS",
+          "ms": 492,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "status": 200,
-            "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 7,
-            "action": "browser"
+            "browser": true,
+            "title": "gunnchOS LMS Dev",
+            "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/browser/browser_home.png",
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 492,
+            "action": "browser",
+            "path_home_dependency": true
           }
         },
         {
           "step": "email",
           "ok": true,
-          "ms": 85,
+          "ms": 22,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -1870,23 +2025,23 @@
               "execution_depth": "L4_REAL_APPLICATION_PROCESS"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 85,
+            "duration_ms": 22,
             "action": "email"
           }
         },
         {
           "step": "calendar",
           "ok": true,
-          "ms": 2050,
+          "ms": 1520,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
             "status": 401,
-            "uid": "evt-1786317134",
+            "uid": "evt-1786321342",
             "fallback": "radicale_filesystem",
-            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786317134.ics",
+            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786321342.ics",
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 2050,
+            "duration_ms": 1520,
             "action": "calendar",
             "path_home_dependency": true
           }
@@ -1894,7 +2049,7 @@
         {
           "step": "docx_edit",
           "ok": true,
-          "ms": 2637,
+          "ms": 1747,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -1905,12 +2060,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "509b8ec7e79c9b620ca87ec8b633db03ff9902811893b4d64b9c0b3a710c2142",
-              "assignment_edited.odt": "d427ecede7f7e8a5a8888f857ddd752caf7932969c1eebe3e0f54ffdcc302c41",
-              "assignment_edited.pdf": "348300b34313b5f791caaf69d6c5defbcfbbb5001dedefca6689717f5a56309c"
+              "assignment.odt": "958e5bf5c1d34b69482304d17145e579fa9181b95001b1dbc75d5fa2021aa360",
+              "assignment_edited.odt": "fcc2057373fd51c58dc3947627fb8988cef6bfb91748579f602ce87e6bd64175",
+              "assignment_edited.pdf": "c369c6b5268f8d9278c60f029e8665e282a17863128faa41a5f58807ce005282"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 2637,
+            "duration_ms": 1747,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -1918,7 +2073,7 @@
         {
           "step": "xlsx_edit",
           "ok": true,
-          "ms": 1570,
+          "ms": 973,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -1929,12 +2084,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "2750b90810acac3cd64079a653b1bcfc3afb263794c57148afa09875fce5fb52",
-              "assignment_edited.odt": "05a3a510ef233b220072fa446d215fbe8bf08b25d202dbcada9bcfa63c8b750e",
-              "assignment_edited.pdf": "b6764a1a647acb273b28d41889862cc6d4bea6a5649b185f4eaa79d781004d35"
+              "assignment.odt": "772f6bc3bc11a7ec3465c3739e0b58e862747d901fc9b4d58b2c8736e7f7ce7b",
+              "assignment_edited.odt": "f8c968cb374da8c94420d4ea78d57efcbc6273a760ab66d3946eca4097cddeef",
+              "assignment_edited.pdf": "3cbed5dd0cac8c7c800bb9788e187731d023ec8fe8309492712790dc284b8e7b"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1570,
+            "duration_ms": 972,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -1942,7 +2097,7 @@
         {
           "step": "pptx_edit",
           "ok": true,
-          "ms": 1081,
+          "ms": 969,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -1953,12 +2108,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "5097f64c5b419c619d1d22543e10aff07cdf042d8000964c3887aaed5814c4b5",
-              "assignment_edited.odt": "fb802f51dd2f20ebfa4c1631ce66177e171b5274edce175c601fe2cd9ceafd05",
-              "assignment_edited.pdf": "63e01080cd25ea2317c2576a65c041d05ec7530c5157c490f201ef5fd38fea05"
+              "assignment.odt": "772f6bc3bc11a7ec3465c3739e0b58e862747d901fc9b4d58b2c8736e7f7ce7b",
+              "assignment_edited.odt": "3c557f128fc1df3aa3087afaba297ef53e377ea7fabddfb2bce0a4d93acafd25",
+              "assignment_edited.pdf": "7577a456c08158121b2cacfdeb80ec46278afc585ca088f6bc82594c5eb5e22a"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1081,
+            "duration_ms": 969,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -1966,7 +2121,7 @@
         {
           "step": "pdf_export",
           "ok": true,
-          "ms": 1133,
+          "ms": 955,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -1977,12 +2132,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "5097f64c5b419c619d1d22543e10aff07cdf042d8000964c3887aaed5814c4b5",
-              "assignment_edited.odt": "c0e85e8dc1ab248580f586543603128d47e528b228dc2334180afe09791765f4",
-              "assignment_edited.pdf": "a4cc4fc856a4dfbb14653ae6bcbbf0d8fcc3dd3e22db25250b28a7b42f9668a0"
+              "assignment.odt": "47b161652bf5db05498a4c1a5bfaa6d02f45993bc3195a497322bb9a0725714d",
+              "assignment_edited.odt": "cf178bdefc0e8ecce5b041320d90bcba482e1f7e6ced6d5e285ac3a4302fe759",
+              "assignment_edited.pdf": "67e501aa3a50511a4fa1714fe9bd2b0bfd998595e234fa400c301f62bf1eb8c6"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1132,
+            "duration_ms": 955,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -1990,89 +2145,93 @@
         {
           "step": "webrtc_call",
           "ok": true,
-          "ms": 1,
-          "execution_depth": "L3_REAL_SERVICE_API",
+          "ms": 2309,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "signaling_url": "http://127.0.0.1:55260/",
-            "sessions": 0,
-            "execution_depth": "L3_REAL_SERVICE_API",
-            "note": "playwright not installed on host; signaling stack is live",
-            "duration_ms": 0,
-            "action": "webrtc_call"
+            "browser": true,
+            "ready": true,
+            "signals": 10,
+            "sessions": 2,
+            "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/webrtc/webrtc_peer.png",
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 2309,
+            "action": "webrtc_call",
+            "path_home_dependency": true
           }
         },
         {
           "step": "screen_share",
           "ok": true,
-          "ms": 1,
-          "execution_depth": "L3_REAL_SERVICE_API",
+          "ms": 1924,
+          "execution_depth": "L5_REAL_GUI_INTERACTION",
           "result": {
             "ok": true,
-            "browser": false,
-            "signaling_url": "http://127.0.0.1:55260/",
-            "sessions": 0,
-            "execution_depth": "L3_REAL_SERVICE_API",
-            "note": "playwright not installed on host; signaling stack is live",
-            "duration_ms": 0,
-            "action": "screen_share"
+            "browser": true,
+            "ready": true,
+            "signals": 15,
+            "sessions": 3,
+            "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/webrtc/webrtc_peer.png",
+            "execution_depth": "L5_REAL_GUI_INTERACTION",
+            "duration_ms": 1924,
+            "action": "screen_share",
+            "path_home_dependency": true
           }
         },
         {
           "step": "save_local",
           "ok": true,
-          "ms": 5,
+          "ms": 2,
           "execution_depth": "L0_GENERIC_OK",
           "result": {
             "ok": true,
             "saved": true,
             "data_loss": false,
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 5,
+            "duration_ms": 2,
             "action": "save_local"
           }
         },
         {
           "step": "share_files",
           "ok": true,
-          "ms": 3128,
+          "ms": 3016,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
             "name": "shared.odt",
             "bytes": 18,
             "version": 1,
-            "url": "http://127.0.0.1:55258/shared.odt",
+            "url": "http://127.0.0.1:57125/shared.odt",
             "status": null,
             "share": "webdav://local/shared.odt?v=1",
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 3128,
+            "duration_ms": 3016,
             "action": "share_files"
           }
         }
       ],
-      "duration_ms": 11713,
+      "duration_ms": 13936,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:26Z"
+      "ended_at": "2026-08-10T00:22:36Z"
     },
     "RJ-OFFICE-002": {
       "rj_id": "RJ-OFFICE-002",
       "mapped_journey": "J-OFF-006",
-      "started_at": "2026-08-09T23:12:26Z",
+      "started_at": "2026-08-10T00:22:36Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -2194,27 +2353,27 @@
           }
         }
       ],
-      "duration_ms": 4,
+      "duration_ms": 1,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:26Z"
+      "ended_at": "2026-08-10T00:22:36Z"
     },
     "RJ-HANDHELD-001": {
       "rj_id": "RJ-HANDHELD-001",
       "mapped_journey": "J-HAND-001",
-      "started_at": "2026-08-09T23:12:26Z",
+      "started_at": "2026-08-10T00:22:36Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -2350,27 +2509,28 @@
           }
         }
       ],
-      "duration_ms": 2,
+      "duration_ms": 1,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:26Z"
+      "ended_at": "2026-08-10T00:22:36Z",
+      "duration_note": "clamped_nonzero"
     },
     "RJ-DSXL-001": {
       "rj_id": "RJ-DSXL-001",
       "mapped_journey": "J-DSXL-001",
-      "started_at": "2026-08-09T23:12:26Z",
+      "started_at": "2026-08-10T00:22:36Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -2497,23 +2657,23 @@
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:26Z"
+      "ended_at": "2026-08-10T00:22:36Z"
     },
     "RJ-GAME-001": {
       "rj_id": "RJ-GAME-001",
       "mapped_journey": "J-GAME-001",
-      "started_at": "2026-08-09T23:12:26Z",
+      "started_at": "2026-08-10T00:22:36Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -2575,7 +2735,7 @@
         {
           "step": "game_launch",
           "ok": true,
-          "ms": 1234,
+          "ms": 901,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -2590,7 +2750,7 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1232,
+            "duration_ms": 900,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_launch"
           }
@@ -2598,7 +2758,7 @@
         {
           "step": "game_play",
           "ok": true,
-          "ms": 1147,
+          "ms": 349,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -2613,7 +2773,7 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1145,
+            "duration_ms": 348,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_play"
           }
@@ -2621,7 +2781,7 @@
         {
           "step": "game_save",
           "ok": true,
-          "ms": 2883,
+          "ms": 352,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -2636,7 +2796,7 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 2717,
+            "duration_ms": 352,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_save"
           }
@@ -2650,7 +2810,7 @@
             "ok": true,
             "action": "exit_clean",
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 1
+            "duration_ms": 0
           }
         },
         {
@@ -2666,17 +2826,17 @@
           }
         }
       ],
-      "duration_ms": 5276,
+      "duration_ms": 1604,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
@@ -2693,16 +2853,16 @@
         },
         "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/game/godot",
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 3332,
+        "duration_ms": 781,
         "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/anime_aggressors/godot.log"
       },
       "pass": true,
-      "ended_at": "2026-08-09T23:12:31Z"
+      "ended_at": "2026-08-10T00:22:37Z"
     },
     "RJ-GAME-002": {
       "rj_id": "RJ-GAME-002",
       "mapped_journey": "J-GAME-002",
-      "started_at": "2026-08-09T23:12:31Z",
+      "started_at": "2026-08-10T00:22:37Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -2764,7 +2924,7 @@
         {
           "step": "game_launch",
           "ok": true,
-          "ms": 928,
+          "ms": 344,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -2779,7 +2939,7 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 927,
+            "duration_ms": 344,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_launch"
           }
@@ -2823,7 +2983,7 @@
         {
           "step": "game_save",
           "ok": true,
-          "ms": 1120,
+          "ms": 352,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -2838,23 +2998,23 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 1118,
+            "duration_ms": 351,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_save"
           }
         }
       ],
-      "duration_ms": 2057,
+      "duration_ms": 697,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
@@ -2871,16 +3031,16 @@
         },
         "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
         "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 484,
+        "duration_ms": 356,
         "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log"
       },
       "pass": true,
-      "ended_at": "2026-08-09T23:12:33Z"
+      "ended_at": "2026-08-10T00:22:38Z"
     },
     "RJ-GAME-003": {
       "rj_id": "RJ-GAME-003",
       "mapped_journey": "J-GAME-003",
-      "started_at": "2026-08-09T23:12:33Z",
+      "started_at": "2026-08-10T00:22:38Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -2942,7 +3102,7 @@
         {
           "step": "game_launch",
           "ok": true,
-          "ms": 643,
+          "ms": 350,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -2957,7 +3117,7 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 642,
+            "duration_ms": 349,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_launch"
           }
@@ -3001,7 +3161,7 @@
         {
           "step": "game_save",
           "ok": true,
-          "ms": 357,
+          "ms": 347,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3016,23 +3176,23 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 357,
+            "duration_ms": 346,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_save"
           }
         }
       ],
-      "duration_ms": 1003,
+      "duration_ms": 698,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
@@ -3042,20 +3202,21 @@
         "runtime": "vite_web",
         "test_rc": 0,
         "test_ok": true,
-        "playwright": false,
-        "playwright_error": "No module named 'playwright'",
+        "playwright": true,
+        "title": "Archive of Life: Artifact World",
+        "screenshot": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/archive_of_life/archive_session.png",
         "ok": true,
         "launched": true,
-        "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-        "duration_ms": 9408
+        "execution_depth": "L5_REAL_GUI_INTERACTION",
+        "duration_ms": 7566
       },
       "pass": true,
-      "ended_at": "2026-08-09T23:12:34Z"
+      "ended_at": "2026-08-10T00:22:39Z"
     },
     "RJ-GAME-004": {
       "rj_id": "RJ-GAME-004",
       "mapped_journey": "J-GAME-004",
-      "started_at": "2026-08-09T23:12:34Z",
+      "started_at": "2026-08-10T00:22:39Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -3117,7 +3278,7 @@
         {
           "step": "music_study",
           "ok": true,
-          "ms": 829,
+          "ms": 180,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3127,7 +3288,7 @@
             },
             "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/user_journeys/fixtures/study_track.wav",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 827,
+            "duration_ms": 180,
             "action": "music_study",
             "path_home_dependency": true
           }
@@ -3135,7 +3296,7 @@
         {
           "step": "game_launch",
           "ok": true,
-          "ms": 392,
+          "ms": 350,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3150,7 +3311,7 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 390,
+            "duration_ms": 350,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_launch"
           }
@@ -3183,7 +3344,7 @@
         {
           "step": "game_save",
           "ok": true,
-          "ms": 359,
+          "ms": 349,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3198,23 +3359,23 @@
             },
             "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 358,
+            "duration_ms": 348,
             "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/pedestrian_pursuit/godot.log",
             "action": "game_save"
           }
         }
       ],
-      "duration_ms": 1583,
+      "duration_ms": 881,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
@@ -3223,20 +3384,31 @@
         "fixture_json_used": false,
         "vitest_rc": 0,
         "vitest_ok": true,
-        "playwright_multi": false,
-        "playwright_error": "No module named 'playwright'",
-        "duration_ms": 1291,
+        "vitest_cmd": [
+          "pnpm",
+          "exec",
+          "vitest",
+          "run",
+          "tests/redis_ci.test.ts"
+        ],
+        "playwright_multi": true,
+        "playwright_source": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/beatlink-party/apps/web/index.html",
+        "screenshots": [
+          "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/beatlink_party/beatlink_client_a.png",
+          "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/games/beatlink_party/beatlink_client_b.png"
+        ],
+        "duration_ms": 1381,
         "ok": true,
         "launched": true,
-        "execution_depth": "L4_REAL_APPLICATION_PROCESS"
+        "execution_depth": "L5_REAL_GUI_INTERACTION"
       },
       "pass": true,
-      "ended_at": "2026-08-09T23:12:36Z"
+      "ended_at": "2026-08-10T00:22:40Z"
     },
     "RJ-RING-001": {
       "rj_id": "RJ-RING-001",
       "mapped_journey": "J-RING-001",
-      "started_at": "2026-08-09T23:12:36Z",
+      "started_at": "2026-08-10T00:22:40Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -3298,13 +3470,13 @@
         {
           "step": "ring_sim_connect",
           "ok": true,
-          "ms": 2,
+          "ms": 1,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
             "packet": {
               "schema": "gunnchos.ring.packet.v1",
-              "ts": 1786317156.024668,
+              "ts": 1786321360.2272582,
               "gesture": "confirm",
               "axis": {
                 "x": 0.1,
@@ -3323,7 +3495,7 @@
             "bytes_written": 41,
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
             "physical_device": false,
-            "duration_ms": 1,
+            "duration_ms": 0,
             "action": "ring_sim_connect",
             "path_home_dependency": true
           }
@@ -3337,7 +3509,7 @@
             "ok": true,
             "packet": {
               "schema": "gunnchos.ring.packet.v1",
-              "ts": 1786317156.0267808,
+              "ts": 1786321360.227638,
               "gesture": "confirm",
               "axis": {
                 "x": 0.1,
@@ -3382,7 +3554,7 @@
             "ok": true,
             "packet": {
               "schema": "gunnchos.ring.packet.v1",
-              "ts": 1786317156.027036,
+              "ts": 1786321360.22784,
               "gesture": "confirm",
               "axis": {
                 "x": 0.1,
@@ -3419,27 +3591,27 @@
           }
         }
       ],
-      "duration_ms": 4,
+      "duration_ms": 1,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:36Z"
+      "ended_at": "2026-08-10T00:22:40Z"
     },
     "RJ-OFFLINE-001": {
       "rj_id": "RJ-OFFLINE-001",
       "mapped_journey": "J-STU-005",
-      "started_at": "2026-08-09T23:12:36Z",
+      "started_at": "2026-08-10T00:22:40Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -3501,16 +3673,16 @@
         {
           "step": "calendar_reminder",
           "ok": true,
-          "ms": 1311,
+          "ms": 1810,
           "execution_depth": "L3_REAL_SERVICE_API",
           "result": {
             "ok": true,
             "status": 401,
-            "uid": "evt-1786317156",
+            "uid": "evt-1786321360",
             "fallback": "radicale_filesystem",
-            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786317156.ics",
+            "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/protocol_work/caldav/radicale/collection-root/dev/calendar/evt-1786321360.ics",
             "execution_depth": "L3_REAL_SERVICE_API",
-            "duration_ms": 1311,
+            "duration_ms": 1810,
             "action": "calendar_reminder",
             "path_home_dependency": true
           }
@@ -3545,14 +3717,14 @@
         {
           "step": "notes_cite",
           "ok": true,
-          "ms": 6,
+          "ms": 2,
           "execution_depth": "L0_GENERIC_OK",
           "result": {
             "ok": true,
             "cursor": 5,
             "version": 5,
             "execution_depth": "L0_GENERIC_OK",
-            "duration_ms": 6,
+            "duration_ms": 2,
             "action": "notes_cite"
           }
         },
@@ -3584,7 +3756,7 @@
         {
           "step": "run_tests",
           "ok": true,
-          "ms": 247,
+          "ms": 212,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3592,7 +3764,7 @@
               "ok": true,
               "app_id": "creator_studio",
               "entry": "apps/creator_studio/index.html",
-              "workspace": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/gchos-studio-nj1kfm_d",
+              "workspace": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/gchos-studio-t8i7ia59",
               "files": [
                 "Makefile",
                 "hello.py"
@@ -3607,19 +3779,26 @@
                 "code": 0
               },
               "git_status_preview": [
-                "M gunnchos_device_os/phase_xi/__init__.py",
-                " M gunnchos_device_os/phase_xi/adapters/ai_local.py",
-                " M gunnchos_device_os/phase_xi/adapters/games.py",
-                " M user_journeys/services/DISCOVERY.json",
-                "?? .github/workflows/phase-xii-execution-reality.yml",
-                "?? artifacts/phase_xii/",
-                "?? gunnchos_device_os/phase_xii/",
-                "?? os_build/phase_xii/",
-                "?? scripts/build_reality_depth_ledger.py",
-                "?? scripts/build_screenshot_gallery.py",
-                "?? scripts/prove_phase_xii.py",
-                "?? scripts/run_phase_xii_rj.py",
-                "?? tests/test_phase_xii_execution_reality.py"
+                "M .github/workflows/phase-xii-execution-reality.yml",
+                " M artifacts/phase_xii/JOURNEY_TOKENS.json",
+                " M artifacts/phase_xii/PHASE_XI_CLAIM_RESCOPE.json",
+                " M artifacts/phase_xii/rj/DEDICATED_PROOFS.json",
+                " M artifacts/phase_xii/rj/RJ-CREATOR-001.json",
+                " M artifacts/phase_xii/rj/RJ-DSXL-001.json",
+                " M artifacts/phase_xii/rj/RJ-EDU-001.json",
+                " M artifacts/phase_xii/rj/RJ-GAME-001.json",
+                " M artifacts/phase_xii/rj/RJ-GAME-002.json",
+                " M artifacts/phase_xii/rj/RJ-GAME-003.json",
+                " M artifacts/phase_xii/rj/RJ-GAME-004.json",
+                " M artifacts/phase_xii/rj/RJ-HANDHELD-001.json",
+                " M artifacts/phase_xii/rj/RJ-OFFICE-001.json",
+                " M artifacts/phase_xii/rj/RJ-OFFICE-002.json",
+                " M artifacts/phase_xii/rj/RJ-RING-001.json",
+                " M artifacts/phase_xii/rj/RJ-STUDENT-001.json",
+                " M artifacts/phase_xii/rj/RJ-STUDENT-002.json",
+                " M artifacts/phase_xii/rj/RJ-STUDENT-003.json",
+                " M artifacts/phase_xii/rj/ai/gunnchai_reply.json",
+                " M artifacts/phase_xii/rj/creator/creator.json"
               ],
               "device_debug": {
                 "serial": "DEV-UART-0",
@@ -3641,7 +3820,7 @@
             "test_out": "ok\n",
             "git": "git version 2.51.0",
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 246,
+            "duration_ms": 212,
             "action": "run_tests"
           }
         },
@@ -3685,27 +3864,27 @@
           }
         }
       ],
-      "duration_ms": 1566,
+      "duration_ms": 2027,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:37Z"
+      "ended_at": "2026-08-10T00:22:42Z"
     },
     "RJ-ADMIN-001": {
       "rj_id": "RJ-ADMIN-001",
       "mapped_journey": "J-ADMIN-001",
-      "started_at": "2026-08-09T23:12:37Z",
+      "started_at": "2026-08-10T00:22:42Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -3767,7 +3946,7 @@
         {
           "step": "mdm_policy",
           "ok": true,
-          "ms": 2742,
+          "ms": 2720,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3790,7 +3969,7 @@
               },
               "bundle": {
                 "schema": "gunnchos.diagnostics_bundle.v1",
-                "created_at": 1786317160.33778,
+                "created_at": 1786321364.976995,
                 "role": "student",
                 "surfaces": [
                   "hardware_inventory",
@@ -3837,23 +4016,23 @@
               "claim_boundary": "Digital device management surfaces over real runtime service APIs. Not production MDM and not physical hardware attestation."
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 2741,
+            "duration_ms": 2719,
             "action": "mdm_policy"
           }
         },
         {
           "step": "push_config",
           "ok": true,
-          "ms": 8,
+          "ms": 7,
           "execution_depth": "L2_PROTOCOL_SIMULATION",
           "result": {
             "ok": true,
             "policy": {
-              "id": "25e9c3d8-d72e-49cd-8f84-7d0b32a42870",
+              "id": "35c613b3-e1a2-439f-8645-2850f256ad25",
               "policy": "school_safe"
             },
             "execution_depth": "L2_PROTOCOL_SIMULATION",
-            "duration_ms": 8,
+            "duration_ms": 7,
             "action": "push_config"
           }
         },
@@ -3882,27 +4061,27 @@
           }
         }
       ],
-      "duration_ms": 2752,
+      "duration_ms": 2728,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:40Z"
+      "ended_at": "2026-08-10T00:22:44Z"
     },
     "RJ-RECOVERY-001": {
       "rj_id": "RJ-RECOVERY-001",
       "mapped_journey": "J-REC-001",
-      "started_at": "2026-08-09T23:12:40Z",
+      "started_at": "2026-08-10T00:22:44Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -3964,7 +4143,7 @@
         {
           "step": "doc_edit",
           "ok": true,
-          "ms": 3611,
+          "ms": 2312,
           "execution_depth": "L4_REAL_APPLICATION_PROCESS",
           "result": {
             "ok": true,
@@ -3975,12 +4154,12 @@
             "reopened": true,
             "exported_pdf": true,
             "checksums": {
-              "assignment.odt": "d88d4018ecb6bf91aa002e56dd34a72640e820e75c4a71ca14bd0c33ea42988a",
-              "assignment_edited.odt": "2a3a20f8b3bd421ef2938ec4b5c85bab0d4417b8dcf2a98e82f798e5fa6ea8af",
-              "assignment_edited.pdf": "e83d33a08cb49781587fc58808d811e486ea274afd32b980311dd35425c21768"
+              "assignment.odt": "e279e5b32a279b3ef9ea18c10712146ca35041869d133e44b9e75796e11e20bd",
+              "assignment_edited.odt": "808132ed1852eeca92349bd7961d59404cccfdf845b0fd0985be58588cc807e8",
+              "assignment_edited.pdf": "b9f09738030085e9c682f97404800ee17ec1497207d972c6ff2d8fd44f394304"
             },
             "execution_depth": "L4_REAL_APPLICATION_PROCESS",
-            "duration_ms": 3611,
+            "duration_ms": 2311,
             "convert_rc": 0,
             "convert_out": "convert /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.odt as a Writer document -> /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/phase_xii/rj/office/assignment_edited.pdf using filter : writer_pdf_Export\nOverwriting: /Users/gunnchos/Downloads/gunnchos-7gc-resea"
           }
@@ -4027,27 +4206,27 @@
           }
         }
       ],
-      "duration_ms": 3613,
+      "duration_ms": 2314,
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:43Z"
+      "ended_at": "2026-08-10T00:22:47Z"
     },
     "RJ-A11Y-001": {
       "rj_id": "RJ-A11Y-001",
       "mapped_journey": "J-UX-001",
-      "started_at": "2026-08-09T23:12:43Z",
+      "started_at": "2026-08-10T00:22:47Z",
       "host_audit": {
         "schema": "gunnchos.phase_xii.host_audit.v1",
         "binaries": {
@@ -4171,18 +4350,18 @@
       "claim_boundary": "Phase XI digital user-journey behavioral/policy harness lock. REAL application-day proof is Phase XII scope (NOT_YET_PROVEN here). No physical EVT/DVT/PVT runtime/thermal/RF claims. No commercial cloud credentials required. Mocks only at irreducible physical/external boundaries.",
       "phase": "XII",
       "real_protocol_endpoints": {
-        "smtp": "127.0.0.1:55255",
-        "imap": "127.0.0.1:55256",
-        "caldav": "http://127.0.0.1:55257/",
-        "webdav": "http://127.0.0.1:55258/",
-        "matrix": "http://127.0.0.1:55259",
-        "webrtc": "http://127.0.0.1:55260/",
-        "lms": "http://127.0.0.1:55261/"
+        "smtp": "127.0.0.1:57122",
+        "imap": "127.0.0.1:57123",
+        "caldav": "http://127.0.0.1:57124/",
+        "webdav": "http://127.0.0.1:57125/",
+        "matrix": "http://127.0.0.1:57126",
+        "webrtc": "http://127.0.0.1:57127/",
+        "lms": "http://127.0.0.1:57128/"
       },
       "physical_followups": [],
       "mock": false,
       "pass": true,
-      "ended_at": "2026-08-09T23:12:43Z",
+      "ended_at": "2026-08-10T00:22:47Z",
       "duration_note": "clamped_nonzero"
     }
   },
@@ -4198,12 +4377,10 @@
     "RJ_ACCESSIBILITY_PASS": true
   },
   "REAL_APP_X0_OPEN": 0,
-  "REAL_APP_X1_OPEN": 5,
+  "REAL_APP_X1_OPEN": 0,
   "REAL_APP_X2_OPEN": 0,
-  "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": false,
-  "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": false,
-  "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": false,
-  "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": false,
-  "ci_x1_residuals": "CI_X1_RESIDUALS.json",
-  "honesty_note": "Post-merge honesty: CI X1 residuals (games/AI) remain CONDITIONAL_EXTERNAL; REAL_*_DAY_DIGITAL_PASS forced false despite local-host campaign snapshot."
+  "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": true,
+  "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": true
 }

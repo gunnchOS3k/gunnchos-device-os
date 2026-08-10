@@ -23,10 +23,14 @@ def main() -> int:
         "REAL_APP_X2_OPEN": summary.get("REAL_APP_X2_OPEN"),
         "tokens": summary.get("tokens"),
     }, indent=2))
-    # Non-zero if X0 open. X1/X2 are reported but do not fail CI exit.
-    # Honesty: X1 residuals (games/AI) are CONDITIONAL/EXTERNAL — consumers must
-    # not treat exit 0 as REAL_APP_X1_OPEN==0 or REAL_*_DAY_DIGITAL_PASS.
-    return 1 if summary.get("REAL_APP_X0_OPEN", 0) else 0
+    # Non-zero if X0 open. Wave 0 CI sets REQUIRE_REAL_APP_X1_ZERO=1 so X1 also fails closed.
+    import os
+    require_x1_zero = os.environ.get("REQUIRE_REAL_APP_X1_ZERO", "").strip() in {"1", "true", "TRUE", "yes"}
+    if summary.get("REAL_APP_X0_OPEN", 0):
+        return 1
+    if require_x1_zero and summary.get("REAL_APP_X1_OPEN", 0):
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

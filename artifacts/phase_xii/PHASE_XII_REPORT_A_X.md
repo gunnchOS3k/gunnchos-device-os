@@ -202,3 +202,14 @@ Behavioral harness tokens preserved. REAL_*_DAY_DIGITAL_PASS remains FALSE while
 2. Linux GUI CI green with Weston screenshots.
 3. Optional Conduit/GreenMail compose in CI for protocol parity.
 4. Physical EVT / vendor collateral remain outside digital freeze path.
+
+## Wave 0 (phase-xii/wave0-x1-close) — 2026-08-10T00:23Z
+
+- Closed CI X1 residuals locally with sibling game repos + Godot + llama-server + SmolLM2 GGUF.
+- Fixed RJ-STUDENT-001 composite overlay (fail-closed; journey FAIL no longer masked).
+- Fixed LMS `submission_receipt` to read real LMS receipts.
+- CI installs Godot 4.4.1, llama.cpp b10333, GGUF; checkouts sibling repos; asserts `REAL_APP_X1_OPEN==0`.
+- `PHYSICAL_EXECUTION_FREEZE=ACTIVE`; `auto_merge_request=null`; DRAFT PR only.
+
+Counts after local prove: X0=0 X1=0 X2=0; all 18 RJ pass; REAL_*_DAY_DIGITAL_PASS true pending CI confirm.
+

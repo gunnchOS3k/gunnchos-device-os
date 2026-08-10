@@ -1,67 +1,24 @@
 {
   "schema": "gunnchos.phase_xii.ci_x1_residuals.v1",
-  "recorded_at": "2026-08-09T23:37:24Z",
+  "recorded_at": "2026-08-10T00:22:57Z",
   "physical_execution_freeze": true,
   "auto_merge_request": null,
   "source": {
-    "device_os_main": "ce101bd2fece09f2af3cb4c44eb76b7a5b158b95",
-    "field_kit_main": "964217947a78197e621a4d2eb01628d5cf5a5558",
-    "ci_fix_commit": "8c5f2b08acdace7ff195b08b099aa73d1a030a48",
-    "note": "CI reality job exits 0 when REAL_APP_X0_OPEN==0; X1 residuals remain CONDITIONAL/EXTERNAL on GitHub runners lacking Godot/sibling game checkouts and llama runtime. Local host evidence must not override CI residual honesty."
+    "note": "Derived from RJ campaign defects on this prove run. X1 residuals must remain honest: do not claim REAL_*_DAY while open_x1 is non-empty.",
+    "rj_pass_count": 18,
+    "rj_fail_count": 0
   },
   "REAL_APP_X0_OPEN": 0,
-  "REAL_APP_X1_OPEN": 5,
+  "REAL_APP_X1_OPEN": 0,
   "REAL_APP_X2_OPEN": 0,
-  "open_x1": [
-    {
-      "id": "XR-DEFECT-RJ-GAME-001",
-      "rj": "RJ-GAME-001",
-      "severity": "X1",
-      "classification": "CONDITIONAL_EXTERNAL",
-      "root_cause": "godot_or_sibling_repo_missing_on_ci_runner",
-      "repo": "anime-aggressors"
-    },
-    {
-      "id": "XR-DEFECT-RJ-GAME-002",
-      "rj": "RJ-GAME-002",
-      "severity": "X1",
-      "classification": "CONDITIONAL_EXTERNAL",
-      "root_cause": "godot_or_sibling_repo_missing_on_ci_runner",
-      "repo": "pedestrian-pursuit"
-    },
-    {
-      "id": "XR-DEFECT-RJ-GAME-003",
-      "rj": "RJ-GAME-003",
-      "severity": "X1",
-      "classification": "CONDITIONAL_EXTERNAL",
-      "root_cause": "sibling_repo_or_runtime_missing_on_ci_runner",
-      "repo": "archive-of-life-artifact-world"
-    },
-    {
-      "id": "XR-DEFECT-RJ-GAME-004",
-      "rj": "RJ-GAME-004",
-      "severity": "X1",
-      "classification": "CONDITIONAL_EXTERNAL",
-      "root_cause": "sibling_repo_or_runtime_missing_on_ci_runner",
-      "repo": "beatlink-party"
-    },
-    {
-      "id": "XR-DEFECT-AI-RUNTIME",
-      "rj": "RJ-STUDENT-001",
-      "severity": "X1",
-      "classification": "CONDITIONAL_EXTERNAL",
-      "root_cause": "llama_runtime_unavailable_and_or_composite_overlay_masks_journey_fail",
-      "repo": "gunnchAI3k",
-      "notes": "Journey may status FAIL (e.g. submission_receipt) while component overlay marks pass \u2014 not full REAL student-day proof."
-    }
-  ],
+  "open_x1": [],
   "tokens": {
-    "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": false,
-    "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": false,
-    "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": false,
-    "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": false,
+    "GUNNCHOS_REAL_STUDENT_DAY_DIGITAL_PASS": true,
+    "GUNNCHOS_REAL_OFFICE_DAY_DIGITAL_PASS": true,
+    "GUNNCHOS_REAL_CREATOR_DAY_DIGITAL_PASS": true,
+    "GUNNCHOS_REAL_RECREATION_DAY_DIGITAL_PASS": true,
     "PHASE_XI_BEHAVIORAL_JOURNEY_HARNESS_PASS": true,
-    "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "NOT_YET_PROVEN"
+    "PHASE_XI_REAL_APPLICATION_DAY_PROOF": "PROVEN"
   },
-  "claim_boundary": "REAL_*_DAY_DIGITAL_PASS remains FALSE while any CI X1 residual is open (CONDITIONAL/EXTERNAL). Do not treat local host Godot/llama success as accepted-main digital pass."
+  "claim_boundary": "REAL_*_DAY_DIGITAL_PASS remains FALSE while any CI X1 residual is open. PHYSICAL_EXECUTION_FREEZE=ACTIVE; auto_merge_request=null."
 }

@@ -25,18 +25,24 @@ def sibling_root(device_os_root: Path) -> Path:
 
 def resolve_game_dir(device_os_root: Path, game: str) -> Path | None:
     name = GAME_REPOS.get(game, game)
-    # Prefer sibling checkout; also allow GUNNCHOS_REPOS_ROOT
+    # Prefer sibling checkout / CI repos root / vendored launchable tree under .deps or fixtures
     roots = [
         Path(os.environ["GUNNCHOS_REPOS_ROOT"]) if os.environ.get("GUNNCHOS_REPOS_ROOT") else None,
         sibling_root(device_os_root),
         device_os_root.parent,
+        device_os_root / ".deps",
+        device_os_root / "gunnchos_device_os" / "phase_xii" / "fixtures" / "games",
     ]
     for root in roots:
         if root is None:
             continue
-        cand = root / name
-        if cand.is_dir():
-            return cand
+        for cand in (root / name, root / GAME_REPOS.get(game, game)):
+            if cand.is_dir() and (
+                (cand / "project.godot").exists()
+                or (cand / "package.json").exists()
+                or any(cand.rglob("project.godot"))
+            ):
+                return cand
     return None
 
 
@@ -115,60 +121,67 @@ def launch_beatlink(device_os_root: Path, evidence: Path) -> dict[str, Any]:
     game_dir = resolve_game_dir(device_os_root, "beatlink-party")
     if not game_dir:
         return {"ok": False, "error": "beatlink_repo_missing", "fixture_json_used": False}
-    # Prefer vitest redis-ci / emit path as real node processes; Redis via compose when available
-    node = shutil.which("node")
-    pnpm = shutil.which("pnpm") or shutil.which("npm")
     started = time.time()
     results: dict[str, Any] = {"repo": str(game_dir), "fixture_json_used": False}
-    if (game_dir / "package.json").exists() and pnpm:
-        # Run a focused real test that exercises server code paths
-        cmd = [pnpm, "test"] if pnpm.endswith("pnpm") else [pnpm, "test"]
-        # keep short: vitest run already in package scripts — use vitest if present
-        if (game_dir / "node_modules").exists() or True:
-            r = subprocess.run(
-                ["pnpm", "exec", "vitest", "run", "tests/redis_ci.test.ts"],
-                cwd=str(game_dir),
-                capture_output=True,
-                text=True,
-                timeout=180,
-                env={**os.environ, "CI": "1"},
-            )
-            (evidence / "beatlink_vitest.log").write_text((r.stdout or "") + "\\n" + (r.stderr or ""), encoding="utf-8")
-            results["vitest_rc"] = r.returncode
-            results["vitest_ok"] = r.returncode == 0
-    # Multi-context Playwright against local static/dev if available
-    try:
-        from playwright.sync_api import sync_playwright
-        html = evidence / "beatlink_room.html"
-        html.write_text(
-            "<!doctype html><html><body><h1>Beat Link Room</h1><div id=room>phase-xii</div></body></html>",
-            encoding="utf-8",
+    # Prefer package-manager + vitest as real Node process proof (not synthetic HTML).
+    runner = shutil.which("pnpm") or shutil.which("npm")
+    if (game_dir / "package.json").exists() and runner:
+        if runner.endswith("pnpm"):
+            cmd = ["pnpm", "exec", "vitest", "run", "tests/redis_ci.test.ts"]
+        else:
+            cmd = [runner, "exec", "--", "vitest", "run", "tests/redis_ci.test.ts"]
+        r = subprocess.run(
+            cmd,
+            cwd=str(game_dir),
+            capture_output=True,
+            text=True,
+            timeout=240,
+            env={**os.environ, "CI": "1"},
         )
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            c1 = browser.new_context()
-            c2 = browser.new_context()
-            p1 = c1.new_page()
-            p2 = c2.new_page()
-            url = html.as_uri()
-            p1.goto(url)
-            p2.goto(url)
-            p1.screenshot(path=str(evidence / "beatlink_client_a.png"))
-            p2.screenshot(path=str(evidence / "beatlink_client_b.png"))
-            browser.close()
-        results["playwright_multi"] = True
-        results["screenshots"] = [str(evidence / "beatlink_client_a.png"), str(evidence / "beatlink_client_b.png")]
-    except Exception as exc:
+        (evidence / "beatlink_vitest.log").write_text((r.stdout or "") + "\n" + (r.stderr or ""), encoding="utf-8")
+        results["vitest_rc"] = r.returncode
+        results["vitest_ok"] = r.returncode == 0
+        results["vitest_cmd"] = cmd
+    # Optional Playwright against a real package page if present (never invent a fake room HTML pass).
+    page_candidates = [
+        game_dir / "apps" / "web" / "index.html",
+        game_dir / "index.html",
+        game_dir / "apps" / "web" / "dist" / "index.html",
+    ]
+    page_path = next((p for p in page_candidates if p.exists()), None)
+    if page_path is not None:
+        try:
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                c1 = browser.new_context()
+                c2 = browser.new_context()
+                p1 = c1.new_page()
+                p2 = c2.new_page()
+                url = page_path.as_uri()
+                p1.goto(url, wait_until="domcontentloaded", timeout=30000)
+                p2.goto(url, wait_until="domcontentloaded", timeout=30000)
+                p1.screenshot(path=str(evidence / "beatlink_client_a.png"))
+                p2.screenshot(path=str(evidence / "beatlink_client_b.png"))
+                browser.close()
+            results["playwright_multi"] = True
+            results["playwright_source"] = str(page_path)
+            results["screenshots"] = [str(evidence / "beatlink_client_a.png"), str(evidence / "beatlink_client_b.png")]
+        except Exception as exc:
+            results["playwright_multi"] = False
+            results["playwright_error"] = str(exc)
+    else:
         results["playwright_multi"] = False
-        results["playwright_error"] = str(exc)
+        results["playwright_note"] = "no_real_web_entry_skipped_synthetic_html"
 
     results["duration_ms"] = int((time.time() - started) * 1000)
-    results["ok"] = bool(results.get("vitest_ok") or results.get("playwright_multi"))
+    results["ok"] = bool(results.get("vitest_ok"))
     results["launched"] = results["ok"]
-    results["execution_depth"] = "L5_REAL_GUI_INTERACTION" if results.get("playwright_multi") else "L4_REAL_APPLICATION_PROCESS"
+    results["execution_depth"] = (
+        "L5_REAL_GUI_INTERACTION" if results.get("playwright_multi") else "L4_REAL_APPLICATION_PROCESS"
+    )
     (evidence / "beatlink_result.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
     return results
-
 
 
 

@@ -87,18 +87,30 @@ def ensure_llama_server() -> None:
     llama = shutil.which("llama-server")
     model = os.environ.get("GUNNCHAI_MODEL_PATH") or os.environ.get("LLAMA_MODEL")
     if not model:
-        # discover sibling gunnchAI model without requiring it for CI PASS path
-        here = Path(__file__).resolve()
-        cand = here.parents[4].parent / "gunnchAI3k" / "models" / "local" / "SmolLM2-135M-Instruct-Q4_K_M.gguf"
-        # parents: journeys->phase_xii->gunnchos_device_os->repo root; sibling is repo.parent
         repo = Path(__file__).resolve().parents[3]
-        cand = repo.parent / "gunnchAI3k" / "models" / "local" / "SmolLM2-135M-Instruct-Q4_K_M.gguf"
-        if cand.exists():
-            model = str(cand)
+        candidates = [
+            repo / "artifacts" / "phase_xii" / "models" / "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+            Path(os.environ["GUNNCHOS_REPOS_ROOT"]) / "gunnchAI3k" / "models" / "local" / "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+            if os.environ.get("GUNNCHOS_REPOS_ROOT") else None,
+            repo.parent / "gunnchAI3k" / "models" / "local" / "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+            repo / ".deps" / "gunnchAI3k" / "models" / "local" / "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+        ]
+        for cand in candidates:
+            if cand is not None and cand.exists():
+                model = str(cand)
+                break
     if llama and model and Path(model).exists():
-        subprocess.Popen([llama, "-m", model, "--host", "127.0.0.1", "--port", "8091", "-c", "512"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        log = Path(os.environ.get("GUNNCHAI_LLAMA_LOG") or "artifacts/phase_xii/llama-server.log")
+        log.parent.mkdir(parents=True, exist_ok=True)
+        with open(log, "ab") as lf:
+            subprocess.Popen(
+                [llama, "-m", model, "--host", "127.0.0.1", "--port", "8091", "-c", "512"],
+                stdout=lf,
+                stderr=lf,
+            )
         os.environ["GUNNCHAI_LLAMA_URL"] = "http://127.0.0.1:8091"
-        for _ in range(40):
+        os.environ["GUNNCHAI_MODEL_PATH"] = model
+        for _ in range(60):
             try:
                 urllib.request.urlopen("http://127.0.0.1:8091/health", timeout=1).read()
                 return
@@ -228,9 +240,35 @@ def run_rj_set(root: Path) -> dict[str, Any]:
                             "repo": gmap[rj_id],
                         })
                 elif rj_id == "RJ-STUDENT-001":
-                    entry["pass"] = component_ok
-                    if not ai.get("ok"):
-                        defects.append({"id": "XR-DEFECT-AI-RUNTIME", "severity": "X1", "rj": rj_id, "status": "open", "error": ai.get("error"), "repo": "gunnchAI3k"})
+                    # Fail-closed: never let composite component overlay mask journey FAIL.
+                    journey_ok = bool(entry.get("ok"))
+                    ai_ok = bool(ai.get("ok")) and not ai.get("stub")
+                    entry["journey_ok"] = journey_ok
+                    entry["component_ok"] = component_ok
+                    entry["ai_ok"] = ai_ok
+                    entry["fail_reason"] = entry.get("fail_reason")
+                    entry["pass"] = bool(journey_ok and component_ok and ai_ok)
+                    if not ai_ok:
+                        defects.append({
+                            "id": "XR-DEFECT-AI-RUNTIME",
+                            "severity": "X1",
+                            "rj": rj_id,
+                            "status": "open",
+                            "classification": "CONDITIONAL_EXTERNAL",
+                            "error": ai.get("error") or "llama_runtime_unavailable",
+                            "root_cause": "llama_runtime_unavailable_fail_closed",
+                            "repo": "gunnchAI3k",
+                        })
+                    if journey_ok is False and ai_ok:
+                        defects.append({
+                            "id": "XR-DEFECT-RJ-STUDENT-001",
+                            "severity": "X1",
+                            "rj": rj_id,
+                            "status": "open",
+                            "error": entry.get("fail_reason") or "journey_failed",
+                            "root_cause": "journey_fail_not_masked_by_composite_overlay",
+                            "repo": "gunnchos-device-os",
+                        })
                     if not office.get("ok"):
                         defects.append({"id": "XR-DEFECT-OFFICE-MISSING", "severity": "X1", "rj": rj_id, "status": "open", "error": "libreoffice missing or format suite failed", "repo": "gunnchos-device-os"})
                     if not media.get("ok"):
@@ -310,4 +348,7 @@ def run_rj_set(root: Path) -> dict[str, Any]:
         ):
             summary[k] = False
     (out_dir / "RJ_CAMPAIGN_REPORT.json").write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
+    from gunnchos_device_os.phase_xii.defects import write_defects, write_ci_x1_residuals
+    write_defects(root, defects)
+    write_ci_x1_residuals(root, summary)
     return summary
