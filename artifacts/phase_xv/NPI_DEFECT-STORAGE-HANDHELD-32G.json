@@ -1,0 +1,16 @@
+{
+  "schema": "gunnchos.npi_defect.v1",
+  "id": "NPI_DEFECT-STORAGE-HANDHELD-32G",
+  "field_kit_cross_ref": "NPI_DEFECT-HANDHELD-STORAGE-HEADROOM-001",
+  "severity": "high",
+  "sku": "Handheld",
+  "title": "Handheld 32GB eMMC operational headroom insufficient after FS/log/update reserves",
+  "summary": "Required 35.60 GiB vs capacity 32.0 GiB (headroom -3.60 GiB). Cross-ref field-kit NPI_DEFECT-HANDHELD-STORAGE-HEADROOM-001 for hardware follow-up (larger eMMC/NVMe or further profile cuts).",
+  "evidence": "artifacts/phase_xv/HANDHELD_32G_HEADROOM.json",
+  "follow_up": [
+    "field-kit",
+    "hardware",
+    "NPI"
+  ],
+  "physical_execution_freeze": true
+}

@@ -1,0 +1,190 @@
+name: phase-xv-final-os
+
+on:
+  push:
+    branches: [phase-xv/final-os-gates, main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHONPATH: .:src
+  PHYSICAL_EXECUTION_FREEZE: ACTIVE
+
+jobs:
+  driver-hal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Optional CI virtual devices
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            v4l2loopback-dkms v4l-utils alsa-utils || true
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_driver_hal
+
+  audio-media:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_audio_media
+
+  identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_identity
+
+  files-storage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_files_storage
+
+  accessibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_accessibility tests/phase_xv/test_phase_xv.py::test_accessibility_regression
+
+  connectivity-5ga:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_connectivity_5ga
+
+  ntn-migration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_ntn_migration
+
+  performance-power:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_performance_power
+
+  support-lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_support_lifecycle
+
+  user-experience:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_user_experience
+
+  security-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - run: python3 -m pytest -q tests/phase_xv/test_phase_xv.py::test_security_regression tests/phase_xv/test_phase_xv.py::test_no_frontier_parity_claim
+
+  prove-phase-xv:
+    runs-on: ubuntu-latest
+    needs:
+      [
+        driver-hal,
+        audio-media,
+        identity,
+        files-storage,
+        accessibility,
+        connectivity-5ga,
+        ntn-migration,
+        performance-power,
+        support-lifecycle,
+        user-experience,
+        security-regression,
+      ]
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Prove Phase XV OS
+        run: python3 scripts/prove_phase_xv_os.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase-xv-os-prove-report
+          path: |
+            artifacts/phase_xv/OS_PROVE_REPORT.json
+            artifacts/phase_xv/HANDHELD_32G_HEADROOM.json
+            artifacts/phase_xv/NPI_DEFECT-STORAGE-HANDHELD-32G.json
+      - name: Assert claim boundaries and zero INCOMPLETE_DIGITAL
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          r = json.loads(Path("artifacts/phase_xv/OS_PROVE_REPORT.json").read_text())
+          assert r.get("GUNNCHOS_FRONTIER_OS_PARITY") is False
+          assert r.get("frontier_os_parity_claimed") is False
+          assert r.get("auto_merge_request") is None
+          assert r.get("physical_execution_freeze") is True
+          if r.get("incomplete_gates"):
+              print("incomplete:", r["incomplete_gates"])
+              sys.exit(1)
+          assert "performance-power" in r.get("physical_pending_gates", [])
+          assert "user-experience" in r.get("external_pending_gates", [])
+          print("digitally_validated:", r.get("digitally_validated_gates"))
+          print("physical_pending:", r.get("physical_pending_gates"))
+          print("external_pending:", r.get("external_pending_gates"))
+          PY
