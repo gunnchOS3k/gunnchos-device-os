@@ -368,6 +368,15 @@ def probe_golden_04(work: Path) -> dict[str, Any]:
     status = "PASS" if not failed else "FAIL"
     independent = "PARTIAL" if status == "PASS" else "FAIL"
     notes = "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING — PARTIAL."
+    if independent == "PARTIAL":
+        defects.append({
+            "id": "VP003-S2-G04-PHYSICAL-DOCK",
+            "severity": "S2",
+            "journey_id": "GOLDEN-04",
+            "title": "Digital dock plane PASS; physical display/Ethernet/USB/audio SI pending (caps independent at PARTIAL)",
+            "blocking": False,
+            "honesty_token": "PHYSICAL_PENDING",
+        })
     q = base_quality(notes, correctness=2 if status == "PASS" else 0, reliability=2, latency_perceived_performance=2,
                      visual_quality=1, interaction_quality=2, discoverability=1, consistency=2, accessibility=1, error_recovery=2)
     return record("GOLDEN-04", severity="S1", functional=status, independent=independent,
@@ -488,6 +497,15 @@ def probe_golden_06(work: Path) -> dict[str, Any]:
     status = "PASS" if not failed else "FAIL"
     independent = "PARTIAL" if status == "PASS" else "FAIL"
     notes = "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING — PARTIAL."
+    if independent == "PARTIAL":
+        defects.append({
+            "id": "VP003-S2-G06-PHYSICAL-DUAL",
+            "severity": "S2",
+            "journey_id": "GOLDEN-06",
+            "title": "Logical DS-XL dual-plane PASS; physical dual-panel hardware pending",
+            "blocking": False,
+            "honesty_token": "PHYSICAL_PENDING",
+        })
     q = base_quality(notes, correctness=2 if status == "PASS" else 0, reliability=2, latency_perceived_performance=2,
                      visual_quality=1, interaction_quality=2, discoverability=1, consistency=2, accessibility=1, error_recovery=2)
     return record("GOLDEN-06", severity="S1", functional=status, independent=independent,
@@ -534,6 +552,15 @@ def probe_golden_07(work: Path) -> dict[str, Any]:
     status = "PASS" if not failed_core else "FAIL"
     independent = "PARTIAL" if status == "PASS" else "FAIL"
     notes = "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING — PARTIAL."
+    if independent == "PARTIAL":
+        defects.append({
+            "id": "VP003-S2-G07-PHYSICAL-RING",
+            "severity": "S2",
+            "journey_id": "GOLDEN-07",
+            "title": "Digital ring packet+confidence guard PASS; physical ring SI pending",
+            "blocking": False,
+            "honesty_token": "PHYSICAL_PENDING",
+        })
     q = base_quality(notes, correctness=2 if status == "PASS" else 0, reliability=2, latency_perceived_performance=1,
                      visual_quality=1, interaction_quality=2 if status == "PASS" else 0, discoverability=1,
                      consistency=2, accessibility=1, error_recovery=3 if status == "PASS" else 1)
@@ -580,6 +607,15 @@ def probe_golden_08(work: Path) -> dict[str, Any]:
     status = "PASS" if not failed else "FAIL"
     independent = "PARTIAL" if status == "PASS" else "FAIL"
     notes = "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING — PARTIAL."
+    if independent == "PARTIAL":
+        defects.append({
+            "id": "VP003-S2-G08-CITATION-HUMAN",
+            "severity": "S2",
+            "journey_id": "GOLDEN-08",
+            "title": "Local tutor+isolation digital PASS; citation usefulness and tutoring UX remain HUMAN_VALIDATION_PENDING",
+            "blocking": False,
+            "honesty_token": "HUMAN_VALIDATION_PENDING",
+        })
     q = base_quality(notes, correctness=2 if status == "PASS" else 0, reliability=2, latency_perceived_performance=2,
                      visual_quality=1, interaction_quality=2, discoverability=1, consistency=2, accessibility=1, error_recovery=2)
     return record("GOLDEN-08", severity="S1", functional=status, independent=independent,
@@ -843,8 +879,51 @@ def main() -> int:
                              "journey_id": r["journey_id"], "title": f"{r['journey_id']} independent FAIL", "blocking": True})
 
     iv_statuses = [r["independent_verification"] for r in results]
-    # Overall PASS only if all independent PASS (PARTIAL is not full Pass for readiness)
-    overall = "PASS" if all(s == "PASS" for s in iv_statuses) and not any(r["independent_verification"] == "FAIL" for r in results) else "FAIL"
+    by_id = {r["journey_id"]: r for r in results}
+
+    # Cycle 1 digital policy: PHYSICAL/HUMAN honesty PARTIALs may remain without blocking
+    # DIGITAL_INDEPENDENT_V1. Full physical/human V1 still requires all Independent PASS.
+    digital_required_pass = ("GOLDEN-01", "GOLDEN-02", "GOLDEN-03", "GOLDEN-05", "GOLDEN-09", "GOLDEN-10")
+    physical_human_allowed_partial = {
+        "GOLDEN-04": "PHYSICAL_PENDING",
+        "GOLDEN-06": "PHYSICAL_PENDING",
+        "GOLDEN-07": "PHYSICAL_PENDING",
+        "GOLDEN-08": "HUMAN_VALIDATION_PENDING",
+    }
+
+    no_fails = all(s != "FAIL" for s in iv_statuses)
+    digital_core_pass = all(by_id[j]["independent_verification"] == "PASS" for j in digital_required_pass if j in by_id)
+    allowed_partials_ok = True
+    for jid, token in physical_human_allowed_partial.items():
+        r = by_id.get(jid)
+        if r is None:
+            allowed_partials_ok = False
+            break
+        iv = r["independent_verification"]
+        if iv == "FAIL":
+            allowed_partials_ok = False
+        elif iv == "PARTIAL":
+            # Must remain honesty-capped (E5/E6), not a silent digital FAIL rebranded as PARTIAL.
+            if token == "PHYSICAL_PENDING" and not r.get("PHYSICAL_PENDING", True):
+                allowed_partials_ok = False
+            if token == "HUMAN_VALIDATION_PENDING" and not r.get("HUMAN_VALIDATION_PENDING", True):
+                allowed_partials_ok = False
+        # PASS also acceptable if digital+physical later earned
+    digital_independent_v1 = (
+        "PASS"
+        if no_fails and digital_core_pass and allowed_partials_ok and not blocking
+        else "FAIL"
+    )
+    # Full V1 (physical/human inclusive): all Independent PASS
+    overall_full_v1 = "PASS" if all(s == "PASS" for s in iv_statuses) and not blocking else "FAIL"
+    # overall_result remains full-V1 honesty (PARTIAL ≠ full Pass). Digital gate is separate.
+    overall = overall_full_v1
+
+    s2_backlog = []
+    for r in results:
+        for d in r["defects"]:
+            if not d.get("blocking") and d.get("severity") == "S2":
+                s2_backlog.append(d)
 
     payload = {
         "schema": "gunnchos.vp003_independent_result.v1",
@@ -857,12 +936,27 @@ def main() -> int:
             "Acceptance plan derived from MLP/Product Quality Gate/GOLDEN_JOURNEYS/Evidence+Depth/"
             "Independent Verification Policy/WP-003/Requirements before treating implementer Phase XI/XII "
             "journey tests as authoritative. Execution composed OS APIs directly; did not invoke "
-            "phase_xi harness or phase_xii journey acceptance runners as the design oracle."
+            "phase_xi harness or phase_xii journey acceptance runners as the design oracle. "
+            "Implementer supporting harness PASS and scorecard FUNCTIONAL_PASS are not V1 certification. "
+            "Re-run after digital remediation on PR tip; DIGITAL_INDEPENDENT_V1 distinguished from full physical/human V1."
         ),
         "overall_result": overall,
+        "digital_independent_v1": digital_independent_v1,
+        "full_physical_human_v1": overall_full_v1,
+        "digital_cycle1_policy": {
+            "required_independent_pass": list(digital_required_pass),
+            "allowed_partial_with_honesty": physical_human_allowed_partial,
+            "notes": (
+                "Award DIGITAL_INDEPENDENT_V1 PASS only when digital-core journeys earn Independent PASS "
+                "at E4/D6 (G09 may remain D5 digital A/B) and G04/G06/G07/G08 are PASS or honesty PARTIAL "
+                "(PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING). Full physical/human V1 remains FAIL while "
+                "any PARTIAL remains."
+            ),
+        },
         "competitor_matrix_review": matrix,
         "journeys": results,
         "blocking_defects": blocking,
+        "s2_backlog": s2_backlog,
         "PHYSICAL_PENDING": True,
         "HUMAN_VALIDATION_PENDING": True,
         "claim_boundary": {
@@ -879,27 +973,40 @@ def main() -> int:
         "",
         f"- Tip SHA: `{TIP_SHA}`",
         f"- Executed: {payload['executed_at']}",
-        f"- Overall: **{overall}**",
+        f"- DIGITAL_INDEPENDENT_V1: **{digital_independent_v1}**",
+        f"- Full physical/human V1 (`overall_result`): **{overall}**",
         f"- Competitor matrix: **{matrix['verdict']}**",
         "",
         "## Independence attestation",
         "",
         payload["independence_attestation"],
         "",
+        "## Overall rationale",
+        "",
+        (
+            f"DIGITAL_INDEPENDENT_V1={digital_independent_v1}: digital-core journeys "
+            f"{', '.join(digital_required_pass)} must Independent PASS; "
+            "G04/G06/G07 PHYSICAL_PENDING and G08 HUMAN_VALIDATION_PENDING may remain PARTIAL "
+            "without blocking Cycle 1 digital. Full physical/human V1 requires all 10 Independent PASS."
+        ),
+        "",
         "## Per-journey summary",
         "",
-        "| Journey | Sev | Functional | Product-quality avg | E | D | Independent | Blocking defects |",
+        "| Journey | Sev | Functional | Product-quality avg | E | D | Independent | Verifier notes |",
         "|---|---|---|---|---|---|---|---|",
     ]
     for r in results:
         avg = r["product_quality"].get("average_excluding_not_measured")
-        nd = len([d for d in r["defects"] if d.get("blocking")])
+        note = (r.get("notes") or "").replace("|", "/")
+        if len(note) > 90:
+            note = note[:87] + "..."
         lines.append(
-            f"| {r['journey_id']} | {r['severity']} | {r['functional_result']} | {avg} | {r['evidence_level']} | {r['depth_level']} | {r['independent_verification']} | {nd} |"
+            f"| {r['journey_id']} | {r['severity']} | {r['functional_result']} | {avg} | "
+            f"{r['evidence_level']} | {r['depth_level']} | {r['independent_verification']} | {note} |"
         )
-    lines += ["", "## Defects", ""]
+    lines += ["", "## Defects", "", "### Blocking S0/S1", ""]
     if not blocking:
-        lines.append("None blocking.")
+        lines.append("None. No S0/S1 independent functional FAIL remains after probe execution.")
     else:
         seen = set()
         for d in blocking:
@@ -908,12 +1015,42 @@ def main() -> int:
                 continue
             seen.add(key)
             lines.append(f"- `{d.get('id')}` [{d.get('severity')}] {d.get('journey_id')}: {d.get('title')}")
-    lines += ["", "## Honesty tokens", "", "- PHYSICAL_PENDING: true (E5 not claimed)",
-              "- HUMAN_VALIDATION_PENDING: true (E6 not claimed)", "- frontier_parity_claimed: false", ""]
+    lines += ["", "### S2 backlog (PARTIAL caps / non-blocking)", ""]
+    if not s2_backlog:
+        lines.append("None.")
+    else:
+        seen = set()
+        for d in s2_backlog:
+            key = d.get("id")
+            if key in seen:
+                continue
+            seen.add(key)
+            lines.append(f"- `{d.get('id')}` [S2] {d.get('journey_id')}: {d.get('title')}")
+    lines += [
+        "",
+        "## Honesty tokens",
+        "",
+        "- PHYSICAL_PENDING: true (E5 not claimed)",
+        "- HUMAN_VALIDATION_PENDING: true (E6 not claimed)",
+        "- frontier_parity_claimed: false",
+        "- claim_boundary.independent_verification_claimed: false (IV status recorded in scorecard INDEPENDENT_VERIFICATION only)",
+        "",
+        "## Competitor readiness",
+        "",
+        f"- Review verdict: **{matrix['verdict']}**",
+        f"- Fabricated competitor scores found: {matrix['fabricated_competitor_scores'] or 'none'}",
+        "",
+    ]
     RESULT_MD.write_text("\n".join(lines) + "\n")
     (ROOT / "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_RESULTS.md").write_text(RESULT_MD.read_text())
-    print(json.dumps({"overall": overall, "tip": TIP_SHA, "iv": iv_statuses}, indent=2))
-    return 0 if overall == "PASS" else 1
+    print(json.dumps({
+        "digital_independent_v1": digital_independent_v1,
+        "overall_full_v1": overall,
+        "tip": TIP_SHA,
+        "iv": {r["journey_id"]: r["independent_verification"] for r in results},
+    }, indent=2))
+    # Exit 0 when Cycle 1 digital independent gate passes (physical/human PARTIAL allowed).
+    return 0 if digital_independent_v1 == "PASS" else 1
 
 
 if __name__ == "__main__":

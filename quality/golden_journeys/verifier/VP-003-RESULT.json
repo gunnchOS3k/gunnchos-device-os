@@ -2,11 +2,30 @@
   "schema": "gunnchos.vp003_independent_result.v1",
   "work_packet": "WP-003",
   "verification_packet": "VP-003",
-  "tip_sha": "aa13f2c51413327ec84e67f1640bf6ee0070d827",
-  "executed_at": "2026-08-10T14:48:54Z",
+  "tip_sha": "6ffab227bfe314903dfd7018e35b6524f2136503",
+  "executed_at": "2026-08-10T15:11:48Z",
   "verifier": "independent-verifier-vp-003",
-  "independence_attestation": "Acceptance plan derived from MLP/Product Quality Gate/GOLDEN_JOURNEYS/Evidence+Depth/Independent Verification Policy/WP-003/Requirements before treating implementer Phase XI/XII journey tests as authoritative. Execution composed OS APIs directly; did not invoke phase_xi harness or phase_xii journey acceptance runners as the design oracle.",
+  "independence_attestation": "Acceptance plan derived from MLP/Product Quality Gate/GOLDEN_JOURNEYS/Evidence+Depth/Independent Verification Policy/WP-003/Requirements before treating implementer Phase XI/XII journey tests as authoritative. Execution composed OS APIs directly; did not invoke phase_xi harness or phase_xii journey acceptance runners as the design oracle. Implementer supporting harness PASS and scorecard FUNCTIONAL_PASS are not V1 certification. Re-run after digital remediation on PR tip; DIGITAL_INDEPENDENT_V1 distinguished from full physical/human V1.",
   "overall_result": "FAIL",
+  "digital_independent_v1": "PASS",
+  "full_physical_human_v1": "FAIL",
+  "digital_cycle1_policy": {
+    "required_independent_pass": [
+      "GOLDEN-01",
+      "GOLDEN-02",
+      "GOLDEN-03",
+      "GOLDEN-05",
+      "GOLDEN-09",
+      "GOLDEN-10"
+    ],
+    "allowed_partial_with_honesty": {
+      "GOLDEN-04": "PHYSICAL_PENDING",
+      "GOLDEN-06": "PHYSICAL_PENDING",
+      "GOLDEN-07": "PHYSICAL_PENDING",
+      "GOLDEN-08": "HUMAN_VALIDATION_PENDING"
+    },
+    "notes": "Award DIGITAL_INDEPENDENT_V1 PASS only when digital-core journeys earn Independent PASS at E4/D6 (G09 may remain D5 digital A/B) and G04/G06/G07/G08 are PASS or honesty PARTIAL (PHYSICAL_PENDING / HUMAN_VALIDATION_PENDING). Full physical/human V1 remains FAIL while any PARTIAL remains."
+  },
   "competitor_matrix_review": {
     "path": "quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json",
     "capability_count": 34,
@@ -74,7 +93,7 @@
         {
           "name": "A1_office_document",
           "ok": true,
-          "detail": "office={'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'vp003_assignment.odt': '9267227d0732f0df7f54044d0457a8165e8c5b2b7a56f4fab47a48baeccca320', 'vp003_assignment_edited.odt': '94e0ebbbdcae22680daf78e909220e2048160df2bdb547cbbb4ff1f179ca6b0e', 'vp003_assignment_edited.pdf': '0b295b0e14d350d1e94d306eb000e2f7e6df8114688197ffcbb5d2cf6bca9fb7'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 1775, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.pdf', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment.odt']} doc=/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/docs/vp003_assignment_edited.pdf"
+          "detail": "office={'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'vp003_assignment.odt': '827b80c9389c6fc93b9752607e775d6d9f0a96beef61cd40a917e2bd2d8d1104', 'vp003_assignment_edited.odt': 'b63b08467d359ff8ded980b4d54a6e1089ff21b457802c33f2fcc767a7ba6deb', 'vp003_assignment_edited.pdf': 'b217359763129f78fa0dc937be7e3f9cc334820f463f9ec962978b73d70c00c7'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 2469, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/docs/vp003_assignment_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/docs/vp003_assignment_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/docs/vp003_assignment_edited.pdf', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/docs/vp003_assignment_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/docs/vp003_assignment.odt']} doc=/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/docs/vp003_assignment_edited.pdf"
         },
         {
           "name": "A3_os_ai_api",
@@ -84,17 +103,17 @@
         {
           "name": "A1_submit_receipt",
           "ok": true,
-          "detail": "url=http://127.0.0.1:62348 browser_lms={'ok': True, 'browser': True, 'playwright': True, 'downloaded': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/evidence/assignment.pdf', 'receipt': {'ok': True, 'receipt': {'id': 'cc3ff920-75bc-4c28-9c7c-2f1036f52ce5', 'status': 'submitted', 'bytes': 14565}}, 'screenshots': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/evidence/lms_open.png', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-01/evidence/lms_submit.png'], 'execution_depth': 'L5_REAL_GUI_INTERACTION', 'duration_ms': 1737}"
+          "detail": "url=http://127.0.0.1:62893 browser_lms={'ok': True, 'browser': True, 'playwright': True, 'downloaded': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/evidence/assignment.pdf', 'receipt': {'ok': True, 'receipt': {'id': '014fa3c4-441f-446d-8d2a-5d1e537f51cc', 'status': 'submitted', 'bytes': 14722}}, 'screenshots': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/evidence/lms_open.png', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-01/evidence/lms_submit.png'], 'execution_depth': 'L5_REAL_GUI_INTERACTION', 'duration_ms': 1825}"
         },
         {
           "name": "A1_recreation",
           "ok": true,
-          "detail": "regs=4 web_ok=True save=SaveSlot(game_id='anime-aggressors', slot=1, payload={'level': 1, 'score': 10}, checkpoint=True, at=1786373326.496207) resume={'ok': True, 'session_id': 'f0047d340587', 'payload': {'level': 1, 'score': 10}} beatlink={'ok': False, 'error': 'beatlink_repo_missing', 'fixture_json_used': False}"
+          "detail": "regs=4 web_ok=True save=SaveSlot(game_id='anime-aggressors', slot=1, payload={'level': 1, 'score': 10}, checkpoint=True, at=1786374697.920148) resume={'ok': True, 'session_id': 'a99bc7767de0', 'payload': {'level': 1, 'score': 10}} anime=True beatlink={'repo': '/private/tmp/gunnchos-device-os-vp003-verify/games/beatlink-party-web', 'fixture_json_used': False, 'source': 'in_tree_web_package', 'playwright_multi': True, 'playwright_source': '/private/tmp/gunnchos-device-os-vp003-verify/games/beatlink-party-web/index.html', 'screenshots': ['/private/tmp/gunnchos-device-os-vp003-verify/artifacts/phase_xii/rj/games/beatlink_party/beatlink_client_a.png', '/private/tmp/gunnchos-device-os-vp003-verify/artifacts/phase_xii/rj/games/beatlink_party/beatlink_client_b.png'], 'duration_ms': 412, 'ok': True, 'launched': True, 'execution_depth': 'L5_REAL_GUI_INTERACTION'}"
         },
         {
           "name": "A2_document_intact_after_recreation",
           "ok": true,
-          "detail": "pre=0b295b0e14d350d1e94d306eb000e2f7e6df8114688197ffcbb5d2cf6bca9fb7 post=0b295b0e14d350d1e94d306eb000e2f7e6df8114688197ffcbb5d2cf6bca9fb7"
+          "detail": "pre=b217359763129f78fa0dc937be7e3f9cc334820f463f9ec962978b73d70c00c7 post=b217359763129f78fa0dc937be7e3f9cc334820f463f9ec962978b73d70c00c7"
         }
       ],
       "defects": [
@@ -102,11 +121,23 @@
           "id": "VP003-DEF-G01-GAME-REPO",
           "severity": "S2",
           "journey_id": "GOLDEN-01",
-          "title": "phase_xii play_short_session cannot launch first-party Godot/sibling repos (XR-DEFECT-GAME-REPO); in-tree web packages used for digital recreation proof",
+          "title": "pedestrian-pursuit Godot sibling missing; fail-closed. Digital recreation uses accepted in-tree Anime/BeatLink/GunnchPlay",
           "detail": {
-            "ok": false,
-            "error": "beatlink_repo_missing",
-            "fixture_json_used": false
+            "pedestrian": {
+              "ok": false,
+              "launched": false,
+              "saved": false,
+              "fixture": false,
+              "fixture_json_used": false,
+              "error": "game_repo_missing:pedestrian-pursuit",
+              "defect": "XR-DEFECT-GAME-REPO",
+              "execution_depth": "L0_GENERIC_OK",
+              "claim_boundary": "Fail-closed: sibling missing and no accepted in-tree web package."
+            },
+            "anime_ok": true,
+            "beatlink_ok": true,
+            "fixture_json_used": false,
+            "invented_repos": false
           },
           "blocking": false
         }
@@ -125,51 +156,51 @@
         "dimensions": {
           "correctness": {
             "value": 2,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "reliability": {
             "value": 2,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "latency_perceived_performance": {
             "value": 2,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "visual_quality": {
             "value": 1,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "interaction_quality": {
-            "value": 1,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "value": 2,
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "discoverability": {
             "value": 1,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "consistency": {
             "value": 2,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "accessibility": {
             "value": 1,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "error_recovery": {
             "value": 2,
-            "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+            "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
           },
           "user_preference": {
             "value": "NOT_MEASURED",
             "notes": "Requires humans (E6)"
           }
         },
-        "average_excluding_not_measured": 1.56,
-        "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5."
+        "average_excluding_not_measured": 1.67,
+        "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt)."
       },
       "evidence_level": "E4",
-      "depth_level": "D5",
-      "independent_verification": "PARTIAL",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
       "checks": [
         {
           "name": "B1_offline_local_durable",
@@ -179,7 +210,7 @@
         {
           "name": "B2_conflict_safe_sync",
           "ok": true,
-          "detail": "sync_result={'replica_id': 'student-local', 'policy': 'vector_clock', 'results': [{'status': 'conflict', 'key': 'assignment.odt', 'conflict': {'key': 'assignment.odt', 'local': {'key': 'assignment.odt', 'value': {'body': 'offline draft A'}, 'replica_id': 'student-local', 'wall_time_ms': 1786373326499, 'vector': {'student-local': 1}, 'version': 1, 'tombstone': False}, 'remote': {'key': 'assignment.odt', 'value': {'body': 'server draft B'}, 'replica_id': 'lms-remote', 'wall_time_ms': 1786373326499, 'vector': {'lms-remote': 1}, 'version': 1, 'tombstone': False}, 'policy': 'vector_clock', 'winner': 'merged_lww_fallback', 'reason': 'concurrent_then_tie_break_replica_id'}, 'resolved_value': {'body': 'offline draft A'}, 'mock': False}], 'store_size': 1, 'conflicts': [{'key': 'assignment.odt', 'local': {'key': 'assignment.odt', 'value': {'body': 'offline draft A'}, 'replica_id': 'student-local', 'wall_time_ms': 1786373326499, 'vector': {'student-local': 1}, 'version': 1, 'tombstone': False}, 'remote': {'key': 'assignment.odt', 'value': {'body': 'server draft B'}, 'replica_id': 'lms-remote', 'wall_time_ms': 1786373326499, 'vector': {'lms-remote': 1}, 'version': 1, 'tombstone': False}, 'policy': 'vector_clock', 'winner': 'merged_lww_fallback', 'reason': 'concurrent_then_tie_break_replica_id'}], 'mock': False}"
+          "detail": "sync_result={'replica_id': 'student-local', 'policy': 'vector_clock', 'results': [{'status': 'conflict', 'key': 'assignment.odt', 'conflict': {'key': 'assignment.odt', 'local': {'key': 'assignment.odt', 'value': {'body': 'offline draft A'}, 'replica_id': 'student-local', 'wall_time_ms': 1786374698795, 'vector': {'student-local': 1}, 'version': 1, 'tombstone': False}, 'remote': {'key': 'assignment.odt', 'value': {'body': 'server draft B'}, 'replica_id': 'lms-remote', 'wall_time_ms': 1786374698795, 'vector': {'lms-remote': 1}, 'version': 1, 'tombstone': False}, 'policy': 'vector_clock', 'winner': 'merged_lww_fallback', 'reason': 'concurrent_then_tie_break_replica_id'}, 'resolved_value': {'body': 'offline draft A'}, 'mock': False}], 'store_size': 1, 'conflicts': [{'key': 'assignment.odt', 'local': {'key': 'assignment.odt', 'value': {'body': 'offline draft A'}, 'replica_id': 'student-local', 'wall_time_ms': 1786374698795, 'vector': {'student-local': 1}, 'version': 1, 'tombstone': False}, 'remote': {'key': 'assignment.odt', 'value': {'body': 'server draft B'}, 'replica_id': 'lms-remote', 'wall_time_ms': 1786374698795, 'vector': {'lms-remote': 1}, 'version': 1, 'tombstone': False}, 'policy': 'vector_clock', 'winner': 'merged_lww_fallback', 'reason': 'concurrent_then_tie_break_replica_id'}], 'mock': False}"
         },
         {
           "name": "B3_no_silent_overwrite",
@@ -190,18 +221,15 @@
           "name": "B2_policy_vector_clock_required",
           "ok": true,
           "detail": "VECTOR_CLOCK concurrent conflict required for acceptance"
-        }
-      ],
-      "defects": [
+        },
         {
-          "id": "VP003-S2-G02-D6-OFFICE-LMS",
-          "severity": "S2",
-          "journey_id": "GOLDEN-02",
-          "title": "Offline sync conflict-safe at engine D5; full office+LMS offline D6 cross-app not earned",
-          "blocking": false
+          "name": "B4_office_lms_offline_reconnect_cross_app",
+          "ok": true,
+          "detail": "cross_app=['office', 'offline_sync', 'lms'] conflict=True silent=False receipt=True office_ok=True"
         }
       ],
-      "notes": "VECTOR_CLOCK conflict detection earned independently; full office+LMS offline D6 not fully exercised \u2014 PARTIAL/D5.",
+      "defects": [],
+      "notes": "Office+LMS offline\u2192reconnect cross-app path earned independently (VECTOR_CLOCK + durable office + LMS receipt).",
       "PHYSICAL_PENDING": true,
       "HUMAN_VALIDATION_PENDING": true,
       "physical_notes": "Wi-Fi/radio partition PHYSICAL_PENDING"
@@ -264,7 +292,7 @@
         {
           "name": "C1_creator_build_surface",
           "ok": true,
-          "detail": "{'ok': True, 'app': {'ok': True, 'app_id': 'creator_studio', 'entry': 'apps/creator_studio/index.html', 'workspace': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/gchos-studio-6crg7u7y', 'files': ['Makefile', 'hello.py'], 'run': {'stdout': 'hello from Creator Studio', 'stderr': '', 'code': 0}, 'build': {'stdout': 'build-ok', 'code': 0}, 'git_status_preview': ['M quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json', ' M quality/golden_journeys/scorecards/GOLDEN-01.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-02.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-03.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-04.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-05.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-07.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-09.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-10.scorecard.json', ' M quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md', ' M quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_RESULTS.md', '?? quality/golden_journeys/verifier/RESULTS.md', '?? quality/golden_journeys/verifier/VP-003-RESULT.json', '?? quality/golden_journeys/verifier/run_independent_acceptance.py'], 'device_debug': {'serial': 'DEV-UART-0', 'layout': ['single', 'dsxl']}, 'gunnchai_assist': {'available': True, 'mode': 'local_dev_hint'}, 'ui_present': True, 'mock': False, 'stub_content': False, 'claim_boundary': 'Digital Creator/Coder Studio with real local file/git/run paths. Not a full IDE distribution or production signing toolchain.'}, 'test_rc': 0, 'test_out': 'ok\\n', 'git': 'git version 2.51.0', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 92}"
+          "detail": "{'ok': True, 'app': {'ok': True, 'app_id': 'creator_studio', 'entry': 'apps/creator_studio/index.html', 'workspace': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/gchos-studio-w4mew5s0', 'files': ['Makefile', 'hello.py'], 'run': {'stdout': 'hello from Creator Studio', 'stderr': '', 'code': 0}, 'build': {'stdout': 'build-ok', 'code': 0}, 'git_status_preview': ['M artifacts/phase_xii/rj/games/beatlink_party/beatlink_result.json', ' M quality/golden_journeys/COMPETITOR_READINESS_GAP_MATRIX.json', ' M quality/golden_journeys/scorecards/GOLDEN-01.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-02.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-03.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-04.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-05.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-06.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-07.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-08.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-09.scorecard.json', ' M quality/golden_journeys/scorecards/GOLDEN-10.scorecard.json', ' M quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md', ' M quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_RESULTS.md', ' M quality/golden_journeys/verifier/RESULTS.md', ' M quality/golden_journeys/verifier/VP-003-RESULT.json', ' M quality/golden_journeys/verifier/run_independent_acceptance.py', '?? artifacts/phase_xii/rj/games/anime_aggressors/anime_aggressors_session.png', '?? artifacts/phase_xii/rj/games/anime_aggressors/anime_aggressors_web_result.json'], 'device_debug': {'serial': 'DEV-UART-0', 'layout': ['single', 'dsxl']}, 'gunnchai_assist': {'available': True, 'mode': 'local_dev_hint'}, 'ui_present': True, 'mock': False, 'stub_content': False, 'claim_boundary': 'Digital Creator/Coder Studio with real local file/git/run paths. Not a full IDE distribution or production signing toolchain.'}, 'test_rc': 0, 'test_out': 'ok\\n', 'git': 'git version 2.51.0', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 221}"
         },
         {
           "name": "C2_package_install_run",
@@ -351,7 +379,7 @@
         {
           "name": "D1_office_formats",
           "ok": true,
-          "detail": "{'ok': True, 'formats': {'odt': {'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'sample.odt': '50a9ae22c1d1435128ce1b4acd6fdecb04b2e36c406b8debcb735ef941117abf', 'sample_edited.odt': '3eb11e0af74fa3ec44b4b13dd643c3927472eb7c48c36066517770029f661246', 'sample_edited.pdf': '50e3adb94154feaa83d177a6f597d88a5a676da199a444c59a4a8a1dbc29463c'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 978, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample_edited.pdf', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/odt/sample.odt']}, 'ods': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'odp': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'docx': {'ok': True, 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/docx/seed.docx'], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'xlsx': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'pptx': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'pdf': {'ok': True, 'via': 'odt_export', 'checksums': {'sample.odt': '9aa70ba72dfe493cce9761194869be55b49153e73cc6928eb966136ff797e5e8', 'sample_edited.odt': '29c0d4f06250b9060cff14930aa978ca08bd692bcd31536feb3f8d9a1b4b3358', 'sample_edited.pdf': '59a37c1163f35e9c8fda55b8ec9b7a041a1badd74d2c2636ee3001731141d319'}, 'error': None, 'soffice': '/opt/homebrew/bin/soffice'}, 'csv': {'ok': True, 'path': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/csv/sample.csv', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'md': {'ok': True, 'path': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-04/office/md/sample.md', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}}, 'soffice': '/opt/homebrew/bin/soffice'}"
+          "detail": "{'ok': True, 'formats': {'odt': {'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'sample.odt': '5436c74a1c8eedcb0c5a36cfef9601446d90d03c50d705ac2cb00b040895f676', 'sample_edited.odt': '8254df29066319dc3de5bc9cbdee1bb62ca5bfb22a130af41fdf2293563d5436', 'sample_edited.pdf': 'eff57f8dbd4d0f689a37741d1a0e17c08cd5536c822b017a69515b6965fe5e50'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 972, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/odt/sample_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/odt/sample_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/odt/sample_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/odt/sample_edited.pdf', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/odt/sample.odt']}, 'ods': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'odp': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'docx': {'ok': True, 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/docx/seed.docx'], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'xlsx': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'pptx': {'ok': False, 'files': [], 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'pdf': {'ok': True, 'via': 'odt_export', 'checksums': {'sample.odt': 'fe414c2fd9e39fce79fd77d16b141a7e07388075156d0f08b812ec518ab78e24', 'sample_edited.odt': '8961c71a9ac831720244dcc04e3fde0e7b98d2230e56f3115c14bad8ab55d713', 'sample_edited.pdf': 'be6295f6c1ffdaa191afd32d249e13764b4927736d29d4ec39fd4ecc40f494a3'}, 'error': None, 'soffice': '/opt/homebrew/bin/soffice'}, 'csv': {'ok': True, 'path': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/csv/sample.csv', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}, 'md': {'ok': True, 'path': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-04/office/md/sample.md', 'execution_depth': 'L4_REAL_APPLICATION_PROCESS'}}, 'soffice': '/opt/homebrew/bin/soffice'}"
         },
         {
           "name": "D1_email",
@@ -370,7 +398,8 @@
           "severity": "S2",
           "journey_id": "GOLDEN-04",
           "title": "Digital dock plane PASS; physical display/Ethernet/USB/audio SI pending (caps independent at PARTIAL)",
-          "blocking": false
+          "blocking": false,
+          "honesty_token": "PHYSICAL_PENDING"
         }
       ],
       "notes": "Digital dock plane + office/mail earned; external display/Ethernet/USB power PHYSICAL_PENDING \u2014 PARTIAL.",
@@ -436,22 +465,22 @@
         {
           "name": "E0_register_games",
           "ok": true,
-          "detail": "[GameRegistration(game_id='anime-aggressors', title='Anime Aggressors', path='games/anime-aggressors-web', kind='web', registered_at=1786373333.336087), GameRegistration(game_id='beatlink-party', title='BeatLink Party', path='games/beatlink-party-web', kind='web', registered_at=1786373333.33633), GameRegistration(game_id='earth-species', title='Earth Species', path='games/earth-species-web', kind='web', registered_at=1786373333.336469), GameRegistration(game_id='foot-racing', title='Foot Racing', path='games/foot-racing-web', kind='web', registered_at=1786373333.336598)]"
+          "detail": "[GameRegistration(game_id='anime-aggressors', title='Anime Aggressors', path='games/anime-aggressors-web', kind='web', registered_at=1786374707.6471438), GameRegistration(game_id='beatlink-party', title='BeatLink Party', path='games/beatlink-party-web', kind='web', registered_at=1786374707.647379), GameRegistration(game_id='earth-species', title='Earth Species', path='games/earth-species-web', kind='web', registered_at=1786374707.647543), GameRegistration(game_id='foot-racing', title='Foot Racing', path='games/foot-racing-web', kind='web', registered_at=1786374707.647653)]"
         },
         {
           "name": "E1_checkpoint",
           "ok": true,
-          "detail": "SaveSlot(game_id='anime-aggressors', slot=1, payload={'level': 3, 'score': 1200}, checkpoint=True, at=1786373333.336818)"
+          "detail": "SaveSlot(game_id='anime-aggressors', slot=1, payload={'level': 3, 'score': 1200}, checkpoint=True, at=1786374707.647895)"
         },
         {
           "name": "E2_docked_work_task",
           "ok": true,
-          "detail": "{'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'docked_work.odt': '9aa70ba72dfe493cce9761194869be55b49153e73cc6928eb966136ff797e5e8', 'docked_work_edited.odt': 'ca7f4498fcc46e9b49a79e3b7f27b3751428c34f803ae269c5e68886f2ed15bd', 'docked_work_edited.pdf': '08e36af39262295de91ebb628fdc2e7157f1a3ee0a39f57ee5a6c8dffa24b620'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 971, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-05/worktask/docked_work_edited.pdf']}"
+          "detail": "{'ok': True, 'soffice': '/opt/homebrew/bin/soffice', 'opened': True, 'edited': True, 'saved': True, 'reopened': True, 'exported_pdf': True, 'checksums': {'docked_work.odt': 'fe414c2fd9e39fce79fd77d16b141a7e07388075156d0f08b812ec518ab78e24', 'docked_work_edited.odt': '2c8b378f7ae762bbbf9aa541d9ab59f08d2bface9072147ad68bc5510fc2b09c', 'docked_work_edited.pdf': 'a4231f57b2f84bf5d1d1450a20ca6832066c74f2a0f88903c5b0413b66aac158'}, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'duration_ms': 927, 'convert_rc': 0, 'convert_out': 'convert /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-05/worktask/docked_work_edited.odt as a Writer document -> /private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-05/worktask/docked_work_edited.pdf using filter : writer_pdf_Export\\n', 'process': '/opt/homebrew/bin/soffice', 'files': ['/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-05/worktask/docked_work.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-05/worktask/docked_work_edited.odt', '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-05/worktask/docked_work_edited.pdf']}"
         },
         {
           "name": "E3_resume_game_state",
           "ok": true,
-          "detail": "{'ok': True, 'session_id': 'b7762a2d9493', 'payload': {'level': 3, 'score': 1200}}"
+          "detail": "{'ok': True, 'session_id': '1c1435556b30', 'payload': {'level': 3, 'score': 1200}}"
         }
       ],
       "defects": [],
@@ -518,7 +547,7 @@
         {
           "name": "F1_dual_planes",
           "ok": true,
-          "detail": "ext=ProfileConfig(profile=<AdaptiveProfile.DSXL_DUAL_SCREEN: 'DSXL_DUAL_SCREEN'>, device_role='dsxl', input_modality=['keyboard', 'touch', 'stylus'], chrome='dual', docked=False, dual_screen=True, launcher_density='comfortable', window_mode='tiled_dual') snap={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-3334309', 'profile': 'HANDHELD_DOCKED', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': False, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False} log=[{'error': 'unknown transition: dock_attach'}] displays=[{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}]"
+          "detail": "ext=ProfileConfig(profile=<AdaptiveProfile.DSXL_DUAL_SCREEN: 'DSXL_DUAL_SCREEN'>, device_role='dsxl', input_modality=['keyboard', 'touch', 'stylus'], chrome='dual', docked=False, dual_screen=True, launcher_density='comfortable', window_mode='tiled_dual') snap={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-4708575', 'profile': 'STUDENT_DESKTOP', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 1.0, 'touch': False, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': False, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False} log=[{'error': 'unknown transition: dock_attach'}] displays=[{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 1.0, 'touch': False, 'connected': True}]"
         },
         {
           "name": "F2_build_test_from_layout",
@@ -533,7 +562,7 @@
         {
           "name": "F3_layout_persistence",
           "ok": true,
-          "detail": "before={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-3334309', 'profile': 'HANDHELD_DOCKED', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': False, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False} after={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-3334309', 'profile': 'HANDHELD_DOCKED', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 2.0, 'touch': True, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': True, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False}"
+          "detail": "before={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-4708575', 'profile': 'STUDENT_DESKTOP', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 1.0, 'touch': False, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': False, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False} after={'schema': 'gunnchos.phase_xiv.wayland_session.v1', 'stack': 'weston+wlroots', 'backend': 'weston', 'session_id': 'sess-4708575', 'profile': 'STUDENT_DESKTOP', 'displays': [{'id': 'internal', 'role': 'primary', 'width': 1920, 'height': 1080, 'scale': 1.0, 'touch': False, 'connected': True}], 'focus': {'surface_id': None, 'app_id': None}, 'frame_callbacks_done': 0, 'capture_audit_len': 0, 'a11y': {'screen_reader': False, 'high_contrast': False, 'reduce_motion': False, 'magnifier': 1.0, 'at_spi_hooks': True}, 'recovered': True, 'physical_accuracy': 'PHYSICAL_PENDING', 'frontier_parity_claimed': False}"
         }
       ],
       "defects": [
@@ -542,7 +571,8 @@
           "severity": "S2",
           "journey_id": "GOLDEN-06",
           "title": "Logical DS-XL dual-plane PASS; physical dual-panel hardware pending",
-          "blocking": false
+          "blocking": false,
+          "honesty_token": "PHYSICAL_PENDING"
         }
       ],
       "notes": "Logical dual-plane / external-display digital path; physical DS-XL panels PHYSICAL_PENDING \u2014 PARTIAL.",
@@ -608,7 +638,7 @@
         {
           "name": "G1_ring_document",
           "ok": true,
-          "detail": "{'ok': True, 'packet': {'schema': 'gunnchos.ring.packet.v1', 'ts': 1786373334.317138, 'gesture': 'confirm', 'axis': {'x': 0.1, 'y': -0.2, 'z': 0.95}, 'source': 'edge_io_firmware_sim', 'validated': False}, 'mapped': {'action': 'confirm', 'target': 'document', 'from': 'phase_xii_mapper'}, 'target_file': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-szotqqmn/GOLDEN-07/evidence/ring_target.txt', 'bytes_written': 41, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'physical_device': False, 'duration_ms': 12}"
+          "detail": "{'ok': True, 'packet': {'schema': 'gunnchos.ring.packet.v1', 'ts': 1786374708.584364, 'gesture': 'confirm', 'axis': {'x': 0.1, 'y': -0.2, 'z': 0.95}, 'source': 'edge_io_firmware_sim', 'validated': False}, 'mapped': {'action': 'confirm', 'target': 'document', 'from': 'phase_xii_mapper'}, 'target_file': '/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/vp003-ul1fh5u0/GOLDEN-07/evidence/ring_target.txt', 'bytes_written': 41, 'execution_depth': 'L4_REAL_APPLICATION_PROCESS', 'physical_device': False, 'duration_ms': 12}"
         },
         {
           "name": "G2_low_confidence_destructive_rejected",
@@ -632,7 +662,8 @@
           "severity": "S2",
           "journey_id": "GOLDEN-07",
           "title": "Digital ring packet+confidence guard PASS; physical ring SI pending",
-          "blocking": false
+          "blocking": false,
+          "honesty_token": "PHYSICAL_PENDING"
         }
       ],
       "notes": "Digital ring packet/app path + confidence guard; physical ring SI PHYSICAL_PENDING \u2014 PARTIAL.",
@@ -727,7 +758,8 @@
           "severity": "S2",
           "journey_id": "GOLDEN-08",
           "title": "Local tutor+isolation digital PASS; citation usefulness and tutoring UX remain HUMAN_VALIDATION_PENDING",
-          "blocking": false
+          "blocking": false,
+          "honesty_token": "HUMAN_VALIDATION_PENDING"
         }
       ],
       "notes": "Local AI + cloud-denied + isolation probed; citation/UX HUMAN_VALIDATION_PENDING \u2014 PARTIAL.",
@@ -816,56 +848,56 @@
         "dimensions": {
           "correctness": {
             "value": 2,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "reliability": {
             "value": 2,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "latency_perceived_performance": {
             "value": 2,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "visual_quality": {
             "value": 1,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "interaction_quality": {
-            "value": 1,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "value": 2,
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "discoverability": {
             "value": 1,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "consistency": {
             "value": 2,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "accessibility": {
             "value": 1,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "error_recovery": {
             "value": 2,
-            "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+            "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
           },
           "user_preference": {
             "value": "NOT_MEASURED",
             "notes": "Requires humans (E6)"
           }
         },
-        "average_excluding_not_measured": 1.56,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "average_excluding_not_measured": 1.67,
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "evidence_level": "E4",
-      "depth_level": "D5",
-      "independent_verification": "PARTIAL",
+      "depth_level": "D6",
+      "independent_verification": "PASS",
       "checks": [
         {
           "name": "J1_trusted_device_identity",
           "ok": true,
-          "detail": "binding=DeviceBinding(binding_id='bind-2c01e8d575cf90a3', account_id='acct-536bb3f2c690', device_id='handhe-335a86b4cd64', state=<BindingState.BOUND: 'bound'>, bound_at='2026-08-10T14:48:54Z', trust_level='trusted') session={'session_id': 'sess-5158c5be21f149f9', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'binding_id': 'bind-2c01e8d575cf90a3', 'state': 'active', 'issued_at_ms': 1786373334344, 'expires_at_ms': 1786376934344, 'token_hash': '31681c55f468f938405adea9a0eef367c802b5b41e5587ff361b0cc829af4990', 'roles': ['owner'], 'token': 'eAT3tVS9SOcqGQ1LYUB4_NrqmM8h_0tK', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'} valid={'valid': True, 'session_id': 'sess-5158c5be21f149f9', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'roles': ['owner'], 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}"
+          "detail": "binding=DeviceBinding(binding_id='bind-b55f3299f7fa4207', account_id='acct-536bb3f2c690', device_id='handhe-335a86b4cd64', state=<BindingState.BOUND: 'bound'>, bound_at='2026-08-10T15:11:48Z', trust_level='trusted') session={'session_id': 'sess-3320e99836044915', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'binding_id': 'bind-b55f3299f7fa4207', 'state': 'active', 'issued_at_ms': 1786374708612, 'expires_at_ms': 1786378308612, 'token_hash': '20462a888c23be4340d6fb2852a270e30fc654cc1fe4b645d2ace4c2a39733c1', 'roles': ['owner'], 'token': 'GZYcMt6Rx-y8RlLc0xoeLTM9th4yFxsM', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'} valid={'valid': True, 'session_id': 'sess-3320e99836044915', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'roles': ['owner'], 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}"
         },
         {
           "name": "J1_private_continuity_file",
@@ -875,12 +907,12 @@
         {
           "name": "J2_revoke_denies_session",
           "ok": true,
-          "detail": "rev={'session_id': 'sess-5158c5be21f149f9', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'binding_id': 'bind-2c01e8d575cf90a3', 'state': 'revoked', 'issued_at_ms': 1786373334344, 'expires_at_ms': 1786376934344, 'token_hash': '31681c55f468f938405adea9a0eef367c802b5b41e5587ff361b0cc829af4990', 'roles': ['owner'], 'mock': False} post={'valid': False, 'reason': 'revoked', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}"
+          "detail": "rev={'session_id': 'sess-3320e99836044915', 'account_id': 'acct-536bb3f2c690', 'device_id': 'handhe-335a86b4cd64', 'binding_id': 'bind-b55f3299f7fa4207', 'state': 'revoked', 'issued_at_ms': 1786374708612, 'expires_at_ms': 1786378308612, 'token_hash': '20462a888c23be4340d6fb2852a270e30fc654cc1fe4b645d2ace4c2a39733c1', 'roles': ['owner'], 'mock': False} post={'valid': False, 'reason': 'revoked', 'mock': False, 'claim_boundary': 'Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials.'}"
         },
         {
           "name": "J2_unbind_blocks_continuity_access",
           "ok": true,
-          "detail": "unbound=DeviceBinding(binding_id='bind-2c01e8d575cf90a3', account_id='acct-536bb3f2c690', device_id='handhe-335a86b4cd64', state=<BindingState.REVOKED: 'revoked'>, bound_at='2026-08-10T14:48:54Z', trust_level='trusted') reissue={'error': 'device_not_bound_to_account'}"
+          "detail": "unbound=DeviceBinding(binding_id='bind-b55f3299f7fa4207', account_id='acct-536bb3f2c690', device_id='handhe-335a86b4cd64', state=<BindingState.REVOKED: 'revoked'>, bound_at='2026-08-10T15:11:48Z', trust_level='trusted') reissue={'error': 'device_not_bound_to_account'}"
         },
         {
           "name": "J2_private_files_unavailable_when_revoked_perms",
@@ -890,39 +922,45 @@
         {
           "name": "J3_local_recovery_path",
           "ok": true,
-          "detail": "rec=Principal(principal_id='owner-recovered', kind='user', display_name='Owner Recovered', roles=['owner'], revoked=False, salt='415c1f31464e79fe1f2a2e30cc87d01a', secret_hash='f305f600115c086ab17cab023b68783d3a0bdb1abc2b83f53bb271665ce8f865') login=Session(session_id='dafe2774529268d4b8d31e87', principal_id='owner-recovered', state='active', roles=['owner'], created_at=1786373334.359798, locked_at=None)"
-        }
-      ],
-      "defects": [
+          "detail": "rec=Principal(principal_id='owner-recovered', kind='user', display_name='Owner Recovered', roles=['owner'], revoked=False, salt='d635099910334698fb9e0c102b50d3c1', secret_hash='375423c74aa788fb89cadde9ae2d90f0af832344dd684e36d844b086fa582fda') login=Session(session_id='83c819d6dfc125a9fa892211', principal_id='owner-recovered', state='active', roles=['owner'], created_at=1786374708.6268868, locked_at=None)"
+        },
         {
-          "id": "VP003-S2-G10-FLEET-WIPE",
-          "severity": "S2",
-          "journey_id": "GOLDEN-10",
-          "title": "Session revoke/unbind/denied-perms/recovery digital PASS; full fleet MDM wipe + continuity vault D6 incomplete",
-          "blocking": false
+          "name": "J4_fleet_mdm_wipe_continuity_denial",
+          "ok": true,
+          "detail": "fleet={'ok': True, 'size': 10} wipe={'ok': True, 'op': 'wipe', 'device_id': 'edu-04', 'reason': 'reported_lost', 'mode': 'digital_factory_reset_sim', 'destructive_physical': False, 'continuity_denied': True, 'claim_boundary': 'Simulated education MDM wipe only. No remote production MDM, no secure-element erase, no physical fleet SI.'} private_gone=True handoff_denied=True files_denied=True"
         }
       ],
-      "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5.",
+      "defects": [],
+      "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI).",
       "PHYSICAL_PENDING": true,
       "HUMAN_VALIDATION_PENDING": true,
       "physical_notes": "Secure element / factory identity PHYSICAL_PENDING"
     }
   ],
   "blocking_defects": [],
-  "PHYSICAL_PENDING": true,
-  "HUMAN_VALIDATION_PENDING": true,
-  "claim_boundary": {
-    "independent_verification_claimed": false,
-    "physically_validated": false,
-    "human_validated": false,
-    "frontier_parity_claimed": false
-  },
-  "s2_backlog_defects": [
+  "s2_backlog": [
     {
-      "id": "VP003-S2-G02-D6-OFFICE-LMS",
+      "id": "VP003-DEF-G01-GAME-REPO",
       "severity": "S2",
-      "journey_id": "GOLDEN-02",
-      "title": "Offline sync conflict-safe at engine D5; full office+LMS offline D6 cross-app not earned",
+      "journey_id": "GOLDEN-01",
+      "title": "pedestrian-pursuit Godot sibling missing; fail-closed. Digital recreation uses accepted in-tree Anime/BeatLink/GunnchPlay",
+      "detail": {
+        "pedestrian": {
+          "ok": false,
+          "launched": false,
+          "saved": false,
+          "fixture": false,
+          "fixture_json_used": false,
+          "error": "game_repo_missing:pedestrian-pursuit",
+          "defect": "XR-DEFECT-GAME-REPO",
+          "execution_depth": "L0_GENERIC_OK",
+          "claim_boundary": "Fail-closed: sibling missing and no accepted in-tree web package."
+        },
+        "anime_ok": true,
+        "beatlink_ok": true,
+        "fixture_json_used": false,
+        "invented_repos": false
+      },
       "blocking": false
     },
     {
@@ -930,36 +968,40 @@
       "severity": "S2",
       "journey_id": "GOLDEN-04",
       "title": "Digital dock plane PASS; physical display/Ethernet/USB/audio SI pending (caps independent at PARTIAL)",
-      "blocking": false
+      "blocking": false,
+      "honesty_token": "PHYSICAL_PENDING"
     },
     {
       "id": "VP003-S2-G06-PHYSICAL-DUAL",
       "severity": "S2",
       "journey_id": "GOLDEN-06",
       "title": "Logical DS-XL dual-plane PASS; physical dual-panel hardware pending",
-      "blocking": false
+      "blocking": false,
+      "honesty_token": "PHYSICAL_PENDING"
     },
     {
       "id": "VP003-S2-G07-PHYSICAL-RING",
       "severity": "S2",
       "journey_id": "GOLDEN-07",
       "title": "Digital ring packet+confidence guard PASS; physical ring SI pending",
-      "blocking": false
+      "blocking": false,
+      "honesty_token": "PHYSICAL_PENDING"
     },
     {
       "id": "VP003-S2-G08-CITATION-HUMAN",
       "severity": "S2",
       "journey_id": "GOLDEN-08",
       "title": "Local tutor+isolation digital PASS; citation usefulness and tutoring UX remain HUMAN_VALIDATION_PENDING",
-      "blocking": false
-    },
-    {
-      "id": "VP003-S2-G10-FLEET-WIPE",
-      "severity": "S2",
-      "journey_id": "GOLDEN-10",
-      "title": "Session revoke/unbind/denied-perms/recovery digital PASS; full fleet MDM wipe + continuity vault D6 incomplete",
-      "blocking": false
+      "blocking": false,
+      "honesty_token": "HUMAN_VALIDATION_PENDING"
     }
   ],
-  "overall_rationale": "Overall FAIL: V1 readiness requires all 10 journeys Independent PASS. 4 journeys PASS; 6 PARTIAL (no S0/S1 blocking functional failures). PARTIAL reflects honest depth/physical/human caps, not silent overwrite of failures."
+  "PHYSICAL_PENDING": true,
+  "HUMAN_VALIDATION_PENDING": true,
+  "claim_boundary": {
+    "independent_verification_claimed": false,
+    "physically_validated": false,
+    "human_validated": false,
+    "frontier_parity_claimed": false
+  }
 }

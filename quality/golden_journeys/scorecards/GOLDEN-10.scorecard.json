@@ -11,62 +11,62 @@
       "quality/golden_journeys/verifier/RESULTS.md",
       "quality/golden_journeys/verifier/VP-003-RESULT.json"
     ],
-    "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+    "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
   },
   "PRODUCT_QUALITY_SCORE": {
     "authority": "independent_verifier",
     "dimensions": {
       "correctness": {
         "value": 2,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "reliability": {
         "value": 2,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "latency_perceived_performance": {
         "value": 2,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "visual_quality": {
         "value": 1,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "interaction_quality": {
-        "value": 1,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "value": 2,
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "discoverability": {
         "value": 1,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "consistency": {
         "value": 2,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "accessibility": {
         "value": 1,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "error_recovery": {
         "value": 2,
-        "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+        "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
       },
       "user_preference": {
         "value": "NOT_MEASURED",
         "notes": "Requires humans (E6)"
       }
     },
-    "average_excluding_not_measured": 1.56,
-    "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+    "average_excluding_not_measured": 1.67,
+    "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
   },
   "INDEPENDENT_VERIFICATION": {
-    "status": "PARTIAL",
+    "status": "PASS",
     "evidence_level_claimed": "E4",
-    "depth_level_claimed": "D5",
+    "depth_level_claimed": "D6",
     "verifier_plan_path": "quality/golden_journeys/verifier/INDEPENDENT_GOLDEN_ACCEPTANCE_PLAN.md",
     "verifier_result_path": "quality/golden_journeys/verifier/VP-003-RESULT.json",
-    "notes": "Session revoke + unbind + permission-denied vault + recovery probed. Full fleet MDM wipe path not claimed \u2014 PARTIAL/D5."
+    "notes": "Session revoke/unbind + digital fleet MDM wipe + continuity denial + recovery earned independently (no physical fleet SI)."
   },
   "PHYSICAL_PENDING": {
     "pending": true,
@@ -93,21 +93,13 @@
     "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4).",
     "remediation_notes": "Remediation: fleet_mdm_wipe_continuity_denial digital D6 path. IV status remains verifier-owned (do not self-claim PASS)."
   },
-  "defects": [
-    {
-      "id": "VP003-S2-G10-FLEET-WIPE",
-      "severity": "S2",
-      "journey_id": "GOLDEN-10",
-      "title": "Session revoke/unbind/denied-perms/recovery digital PASS; full fleet MDM wipe + continuity vault D6 incomplete",
-      "blocking": false
-    }
-  ],
+  "defects": [],
   "claim_boundary": {
     "independent_verification_claimed": false,
     "physically_validated": false,
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "updated_at": "2026-08-10T14:49:46Z",
+  "updated_at": "2026-08-10T15:11:48Z",
   "updated_by": "independent-verifier-vp-003"
 }

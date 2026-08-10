@@ -96,11 +96,23 @@
       "id": "VP003-DEF-G01-GAME-REPO",
       "severity": "S2",
       "journey_id": "GOLDEN-01",
-      "title": "phase_xii play_short_session cannot launch first-party Godot/sibling repos (XR-DEFECT-GAME-REPO); in-tree web packages used for digital recreation proof",
+      "title": "pedestrian-pursuit Godot sibling missing; fail-closed. Digital recreation uses accepted in-tree Anime/BeatLink/GunnchPlay",
       "detail": {
-        "ok": false,
-        "error": "beatlink_repo_missing",
-        "fixture_json_used": false
+        "pedestrian": {
+          "ok": false,
+          "launched": false,
+          "saved": false,
+          "fixture": false,
+          "fixture_json_used": false,
+          "error": "game_repo_missing:pedestrian-pursuit",
+          "defect": "XR-DEFECT-GAME-REPO",
+          "execution_depth": "L0_GENERIC_OK",
+          "claim_boundary": "Fail-closed: sibling missing and no accepted in-tree web package."
+        },
+        "anime_ok": true,
+        "beatlink_ok": true,
+        "fixture_json_used": false,
+        "invented_repos": false
       },
       "blocking": false
     }
@@ -111,6 +123,6 @@
     "human_validated": false,
     "frontier_parity_claimed": false
   },
-  "updated_at": "2026-08-10T14:48:54Z",
+  "updated_at": "2026-08-10T15:11:48Z",
   "updated_by": "independent-verifier-vp-003"
 }

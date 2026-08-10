@@ -7,8 +7,8 @@
 | Owner | Independent verifier (not implementer) |
 | Work packet | WP-003 |
 | Verification class | V1 |
-| Tip under test (claimed) | `aa13f2c51413327ec84e67f1640bf6ee0070d827` |
-| Accepted main baseline (parent) | Merge base of PR #79 / last accepted `main` at plan time |
+| Tip under test (claimed) | `6ffab227bfe314903dfd7018e35b6524f2136503` (PR #81 digital remediation re-run; prior: `aa13f2c` / merged #80 `3f230ff`) |
+| Accepted main baseline (parent) | Merge base of PR #81 / last accepted `main` at re-run time |
 | Derivation sources | MLP, Product Quality Gate, GOLDEN_JOURNEYS.json, Evidence Levels, Depth Ladder, Independent Verification Policy, WP-003 packet, GunnchOS Requirements v0.1, Cycle 1 product promises (Student 14.5, DS-XL, Handheld, Rings, Dock, Ecosystem) |
 | Explicitly excluded as design source | Implementer Phase XI/XII journey tests, supporting fixtures/harness runs, scorecard FUNCTIONAL_PASS authored by implementer |
 | Digital Cycle 1 target | Evidence **E4**, Depth **D6** where genuinely earned |
@@ -277,11 +277,11 @@ Score dimensions 0–4 per Product Quality Gate from independently observed digi
 
 ## Environment record (filled at execution)
 
-- Verifier identity: independent VP-003 verifier agent
+- Verifier identity: independent VP-003 verifier agent (re-run after digital remediation)
 - Date: 2026-08-10
-- Repo path / worktree: `repos/gate-worktrees/device-os-wp-003`
-- Tip SHA: (confirm at execution)
-- Method: contract-derived checks; probe OS APIs/runtimes/packages; optional supporting harness only as secondary citation
+- Repo path / worktree: `/tmp/gunnchos-device-os-vp003-verify` (PR #81 tip)
+- Tip SHA: confirm via `git rev-parse HEAD` at execution (`6ffab227…` claimed)
+- Method: contract-derived checks; probe OS APIs/runtimes/packages; optional supporting harness only as secondary citation; implementer `digital_paths` helpers treated as tip surfaces under test, not as V1 certification
 
 ## Exit criteria for VP-003 digital
 
@@ -289,4 +289,6 @@ Score dimensions 0–4 per Product Quality Gate from independently observed digi
 2. Per-journey RESULTS + scorecard INDEPENDENT_VERIFICATION updated honestly (PASS/FAIL/PARTIAL).
 3. COMPETITOR_READINESS_GAP_MATRIX reviewed; reject fabricated scores.
 4. S0/S1 failures filed as blocking defects.
-5. Overall PASS only if all 10 journeys independently PASS at earned E/D without honesty violations; otherwise FAIL with defect list.
+5. Distinguish gates:
+   - **DIGITAL_INDEPENDENT_V1 PASS** when digital-core journeys (G01/G02/G03/G05/G09/G10) independently PASS at earned E4/D6 (G09 may remain digital A/B D5) and G04/G06/G07/G08 are PASS or honesty PARTIAL with explicit PHYSICAL_PENDING (E5) / HUMAN_VALIDATION_PENDING (E6).
+   - **Full physical/human V1 PASS** only if all 10 journeys independently PASS without PARTIAL caps; otherwise FAIL with defect list while DIGITAL_INDEPENDENT_V1 may still PASS.
