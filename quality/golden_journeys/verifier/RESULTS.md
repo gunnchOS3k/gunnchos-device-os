@@ -55,3 +55,21 @@ None. No S0/S1 independent functional FAIL remains after probe execution.
 - Review verdict: **ACCEPT**
 - Fabricated competitor scores found: none
 
+
+
+---
+
+## Accepted-main reproof (post #82)
+
+- Reproof artifact: `quality/golden_journeys/verifier/ACCEPTED_MAIN_REPROOF.json`
+- Accepted main SHA: `d0fdd8c3ac66c927f6d83962e82de22b2ca9a1cc` (merge of device-os #82)
+- Executed: 2026-08-10T15:40:59Z
+- DIGITAL_INDEPENDENT_V1: **PASS**
+- Full physical/human V1: **FAIL**
+- PHYSICAL_PENDING: true · HUMAN_VALIDATION_PENDING: true · frontier_parity_claimed: false
+- G02 LibreOffice honesty: **holds** (CI may omit soffice; durable ODT edit path remains valid; L4 when soffice present)
+- CI on tip: Gate 1 post-merge integrity **success**; Golden Journeys (WP-003) **success**; CI workflow **success**
+- Local `make gate1-test`: host `network_unhealthy` (2 boot-probe fails) — not used to overturn CI Gate 1 green
+- Baseline: hardware main `3db7836` includes VP-002 (#55); field-kit draft #58 remains open for report addendum
+- Per-journey Independent: G01 PASS · G02 PASS · G03 PASS · G04 PARTIAL · G05 PASS · G06 PARTIAL · G07 PARTIAL · G08 PARTIAL · G09 PASS · G10 PASS
+- No WP-005+; no frontier parity claim. If DIGITAL_INDEPENDENT_V1 PASS on accepted main, Edmund may merge field-kit #58 after review.
