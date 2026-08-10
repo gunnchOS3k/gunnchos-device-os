@@ -1,0 +1,136 @@
+name: stage2-frontier-os
+
+on:
+  push:
+    branches: [phase-xiii/stage2-os-foundations, main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHONPATH: .:src
+  PHYSICAL_EXECUTION_FREEZE: ACTIVE
+
+jobs:
+  frontier-os-base:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+      - name: Build Stage 2 image
+        run: make -C os_build/stage2 image
+      - name: Test OS base
+        run: python3 -m pytest -q tests/stage2/test_os_base.py
+
+  atomic-update-rollback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Test atomic update + rollback
+        run: python3 -m pytest -q tests/stage2/test_atomic_update.py
+
+  recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Test recovery
+        run: python3 -m pytest -q tests/stage2/test_recovery.py
+
+  shell-profiles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Test shell profiles
+        run: python3 -m pytest -q tests/stage2/test_shell.py
+
+  compatibility-corpus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install sample tools (best-effort)
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            git ffmpeg poppler-utils vim-tiny || true
+      - run: python3 -m pip install -r requirements.txt
+      - name: Test compatibility corpus
+        run: python3 -m pytest -q tests/stage2/test_compat.py
+
+  sandbox-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Optional bubblewrap
+        run: sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bubblewrap || true
+      - run: python3 -m pip install -r requirements.txt
+      - name: Test sandbox security
+        run: python3 -m pytest -q tests/stage2/test_security.py
+
+  prove-stage2:
+    runs-on: ubuntu-latest
+    needs:
+      [
+        frontier-os-base,
+        atomic-update-rollback,
+        recovery,
+        shell-profiles,
+        compatibility-corpus,
+        sandbox-security,
+      ]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install -r requirements.txt
+      - name: Prove Stage 2 OS
+        run: python3 scripts/prove_stage2_os.py
+      - name: Upload prove report
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage2-os-prove-report
+          path: artifacts/stage2/OS_PROVE_REPORT.json
+      - name: Assert no frontier parity claim
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          r = json.loads(Path("artifacts/stage2/OS_PROVE_REPORT.json").read_text())
+          assert r.get("GUNNCHOS_FRONTIER_OS_PARITY") is False
+          assert r.get("frontier_os_parity_claimed") is False
+          assert r.get("auto_merge_request") is None
+          assert r.get("physical_execution_freeze") is True
+          print("gates:", r.get("digitally_validated_gates"))
+          if not r.get("digitally_validated_gates"):
+              sys.exit(1)
+          PY
