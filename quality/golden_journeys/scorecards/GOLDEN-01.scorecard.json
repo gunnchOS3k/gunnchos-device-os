@@ -82,11 +82,14 @@
     "phase_xi_journey_ids": [
       "J-STU-001"
     ],
-    "unit_or_integration_tests": [],
+    "unit_or_integration_tests": [
+      "tests/test_wp003_digital_remediation.py::test_in_tree_beatlink_and_anime_launch"
+    ],
     "fixture_paths": [
       "quality/golden_journeys/fixtures/GOLDEN-01.fixture.json"
     ],
-    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4)."
+    "disclaimer": "Supporting Phase XI/XII and unit evidence is same-stream regression support only. It is NOT independent verification (E4).",
+    "remediation_notes": "Remediation: in-tree Anime/BeatLink web launch + fail-closed Pedestrian sibling. IV status remains verifier-owned."
   },
   "defects": [
     {

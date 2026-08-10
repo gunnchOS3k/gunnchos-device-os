@@ -20,6 +20,9 @@ class ManagedDevice:
     enrolled: bool = False
     policy_id: str | None = None
     compliance: dict[str, Any] = field(default_factory=dict)
+    wiped: bool = False
+    wipe_reason: str | None = None
+    wiped_at: float | None = None
 
 
 class EducationMdm:
@@ -70,15 +73,56 @@ class EducationMdm:
         decision = evaluate_app(policy, app_id)
         return {"device_id": device_id, "app_id": app_id, "allowed": decision.allowed, "reason": decision.reason}
 
+    def wipe_device(self, device_id: str, *, reason: str = "admin_wipe") -> dict[str, Any]:
+        """Digital fleet wipe / factory-reset sim for a managed device.
+
+        Clears enrollment + policy compliance and marks the device wiped.
+        Not a physical secure-element wipe (PHYSICAL_PENDING).
+        """
+        dev = self.devices.get(device_id)
+        if dev is None:
+            raise KeyError(f"unknown device: {device_id}")
+        if not dev.enrolled and not dev.wiped:
+            raise PermissionError("device_not_enrolled")
+        dev.enrolled = False
+        dev.wiped = True
+        dev.wipe_reason = reason
+        dev.wiped_at = time.time()
+        dev.policy_id = None
+        dev.compliance = {
+            "wiped": True,
+            "reason": reason,
+            "checked_at": dev.wiped_at,
+            "continuity_access": "denied",
+        }
+        entry = {
+            "ok": True,
+            "op": "wipe",
+            "device_id": device_id,
+            "reason": reason,
+            "mode": "digital_factory_reset_sim",
+            "destructive_physical": False,
+            "continuity_denied": True,
+            "claim_boundary": (
+                "Simulated education MDM wipe only. No remote production MDM, "
+                "no secure-element erase, no physical fleet SI."
+            ),
+        }
+        self.audit.append(entry)
+        (self.root / f"WIPE_{device_id}.json").write_text(json.dumps(entry, indent=2) + "\n")
+        return entry
+
     def fleet_status(self) -> dict[str, Any]:
         return {
             "schema": "gunnchos.phase_xiv.mdm_fleet.v1",
             "size": len(self.devices),
             "enrolled": sum(1 for d in self.devices.values() if d.enrolled),
+            "wiped": sum(1 for d in self.devices.values() if d.wiped),
             "devices": {
                 k: {
                     "role": v.role,
                     "enrolled": v.enrolled,
+                    "wiped": v.wiped,
                     "policy_id": v.policy_id,
                     "mode": (v.compliance or {}).get("deployment_mode"),
                 }

@@ -7,9 +7,11 @@
   "not_independent_verification": true,
   "acceptance_outcomes": [
     "Trusted-device identity established",
+    "Education MDM fleet enroll (digital 10-device sim)",
     "Revoke session/device succeeds",
+    "Fleet MDM wipe clears continuity vault (digital factory-reset sim)",
     "Continuity access denied afterward",
-    "Private files/memory unavailable to revoked identity",
+    "Private files/memory unavailable to revoked/wiped identity",
     "Local recovery path documented and exercised digitally"
   ],
   "digital_depth_target": "D6",
@@ -19,6 +21,7 @@
     "J-SEC-001"
   ],
   "supporting_unit_tests": [
+    "tests/test_wp003_digital_remediation.py::test_fleet_mdm_wipe_continuity_denial_d6",
     "tests/phase_xv/test_phase_xv.py::test_security_regression"
   ],
   "fixture_assets": {
@@ -30,5 +33,6 @@
     "subset_runner": "scripts/run_golden_journey_subset.py",
     "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-10.scorecard.json",
     "merge_gate": "scripts/recommend_merge_golden.py"
-  }
+  },
+  "digital_path_notes": "Cross-app digital path: gunnchos_device_os.golden_journeys.digital_paths.fleet_mdm_wipe_continuity_denial (no physical fleet SI)."
 }

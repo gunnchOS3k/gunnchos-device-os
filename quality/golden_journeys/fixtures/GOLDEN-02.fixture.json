@@ -6,10 +6,11 @@
   "role": "verifier_support_fixture",
   "not_independent_verification": true,
   "acceptance_outcomes": [
-    "Lose network while editing; local continue works",
-    "Reconnect triggers conflict-safe sync",
+    "Lose network while editing; local office continue works",
+    "LMS submit queued while offline (not silently delivered)",
+    "Reconnect triggers conflict-safe VECTOR_CLOCK sync across office\u2194LMS",
     "No silent overwrite of concurrent edits",
-    "User-visible conflict resolution when required"
+    "LMS receipt after reconnect"
   ],
   "digital_depth_target": "D6",
   "digital_evidence_target": "E4",
@@ -17,7 +18,9 @@
     "J-NET-001",
     "J-NET-004"
   ],
-  "supporting_unit_tests": [],
+  "supporting_unit_tests": [
+    "tests/test_wp003_digital_remediation.py::test_offline_office_lms_reconnect_d6"
+  ],
   "fixture_assets": {
     "local_only": true,
     "commercial_cloud_creds_required": false,
@@ -27,5 +30,6 @@
     "subset_runner": "scripts/run_golden_journey_subset.py",
     "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-02.scorecard.json",
     "merge_gate": "scripts/recommend_merge_golden.py"
-  }
+  },
+  "digital_path_notes": "Cross-app digital path: gunnchos_device_os.golden_journeys.digital_paths.offline_office_lms_reconnect"
 }

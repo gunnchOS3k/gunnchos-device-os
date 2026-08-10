@@ -18,15 +18,18 @@
   "supporting_phase_xi_ids": [
     "J-STU-001"
   ],
-  "supporting_unit_tests": [],
+  "supporting_unit_tests": [
+    "tests/test_wp003_digital_remediation.py::test_in_tree_beatlink_and_anime_launch"
+  ],
   "fixture_assets": {
     "local_only": true,
     "commercial_cloud_creds_required": false,
-    "notes": "Reuse user_journeys/fixtures and local service stack where helpful; verifier must still design independent cases."
+    "notes": "Accepted in-tree web packages under games/*-web; sibling Godot/Node optional. Verifier must still design independent cases."
   },
   "harness_entrypoints": {
     "subset_runner": "scripts/run_golden_journey_subset.py",
     "scorecard_path": "quality/golden_journeys/scorecards/GOLDEN-01.scorecard.json",
     "merge_gate": "scripts/recommend_merge_golden.py"
-  }
+  },
+  "digital_path_notes": "Digital D6 recreation uses GunnchPlay + accepted in-tree web packages (games/anime-aggressors-web, games/beatlink-party-web). Missing Godot sibling pedestrian-pursuit fails closed (XR-DEFECT-GAME-REPO); do not invent repos."
 }
