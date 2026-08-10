@@ -1,5 +1,7 @@
 # Independent Golden Acceptance Plan — VP-003 / WP-003
 
+> **VERIFIER OWNED** — independently derived acceptance plan (not an implementer stub).
+
 | Field | Value |
 |---|---|
 | Owner | Independent verifier (not implementer) |
