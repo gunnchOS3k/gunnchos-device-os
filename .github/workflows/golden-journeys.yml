@@ -141,16 +141,19 @@ jobs:
             pulseaudio pulseaudio-utils \
             alsa-utils
           python -m pip install -U pip pytest pyyaml
-      - name: Start PulseAudio for null-sink lifecycle
+      - name: Start user PulseAudio for null-sink lifecycle
         run: |
           set -euo pipefail
-          # Prefer ALSA loopback as durable rootful reference on GH runners.
-          # Pulse user-session is optional and often unreachable under sudo.
-          sudo modprobe snd-aloop
-          cat /proc/asound/cards
-          pulseaudio --check 2>/dev/null || pulseaudio --start --exit-idle-time=-1 || true
+          # Azure GH kernels often lack snd-aloop. Use user-session Pulse null-sink.
+          # Network netns uses passwordless sudo from the same non-root process.
+          export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+          mkdir -p "$XDG_RUNTIME_DIR"
+          pulseaudio --check 2>/dev/null || pulseaudio --start --exit-idle-time=-1
           sleep 1
-          pactl info 2>/dev/null | head -20 || true
+          pactl info | head -20
+          # Confirm passwordless sudo for ip netns (required for non-root net proof).
+          sudo -n true
+          sudo -n ip netns list >/dev/null
       - name: Run privileged G04 netns + audio reference proof
         env:
           PYTHONPATH: .:src
@@ -162,17 +165,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts/device_lab/g04_privileged
-          # Network + audio backends must run as root for netns / module paths.
-          sudo -E env PYTHONPATH=.:src \
-            GUNNCHDEVICE_LAB_NETNS=1 \
-            GUNNCHDEVICE_LAB_AUDIO_REAL=1 \
-            GUNNCHDEVICE_LAB_PRIVILEGED_NET=1 \
-            GUNNCHDEVICE_LAB_PRIVILEGED_AUDIO=1 \
-            GUNNCHDEVICE_LAB_REQUIRE_E4_NET_AUDIO=1 \
-            XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" \
-            HOME="$HOME" \
-            python3 - <<'PY'
-          import json, os
+          export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+          # Non-root process: Pulse works; NetworkBackend escalates ip/netns via sudo -n.
+          python3 - <<'PY'
+          import json
           from pathlib import Path
           from gunnchos_device_os.device_lab.hw_backends.network import NetworkBackend
           from gunnchos_device_os.device_lab.hw_backends.audio import AudioBackend
@@ -189,16 +185,13 @@ jobs:
           assert det.get('ok') is True, det
           assert (det.get('cleanup') or {}).get('cleanup_verified') is True, det
 
-          # Audio may need non-root Pulse; try root first then fall back to user pulse via sudo -u.
           aud = AudioBackend()
           astart = aud.start()
           aattach = aud.dock_attach()
-          if not aattach.get('e4_reference_proof'):
-              # Retry without forcing failure yet — office_dock will re-run under same env.
-              print('audio_root_attempt', json.dumps(aattach, default=str)[:800])
-          else:
-              adet = aud.dock_detach()
-              assert adet.get('disappeared') is True or adet.get('ok') is True, adet
+          print('audio_attach', json.dumps(aattach, default=str)[:1000])
+          assert aattach.get('e4_reference_proof') is True, aattach
+          adet = aud.dock_detach()
+          assert adet.get('disappeared') is True or adet.get('ok') is True, adet
 
           result = run(repo_root=root)
           out = root / 'artifacts/device_lab/g04_privileged/result.json'
