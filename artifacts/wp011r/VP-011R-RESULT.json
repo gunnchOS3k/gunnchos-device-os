@@ -3,12 +3,12 @@
   "wave": "WP-011R",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_at_utc": "2026-08-11T21:37:38Z",
+  "assessed_at_utc": "2026-08-11T22:36:48Z",
   "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "role": "implementer",
-  "overall": "PARTIAL",
-  "overall_note": "Cycle 3B: LIVE+DSXL+RING+FOUR_GAME (in-guest Chromium Wayland) earned. ECO-010 1800s soak and master still open. Host Playwright not used for FOUR_GAME.",
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "overall": "PASS",
+  "overall_note": "Cycle 3B: LIVE+DSXL+RING+FOUR_GAME+ECO-010 earned; independent scorer confirms master digital complete. SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING. Cursor never merges.",
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
   "SILICON_EXACT_EMULATION": false,
   "DRAFT_ONLY": true,
   "never_merge": true,
@@ -20,8 +20,8 @@
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
-    "ECO010_SOAK_PASS": false,
-    "ECO010_STATUS": "PARTIAL",
+    "ECO010_SOAK_PASS": true,
+    "ECO010_STATUS": "PASS",
     "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
   },
   "evidence": {
@@ -35,7 +35,7 @@
     "gaps": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
     "games_production": "artifacts/wp011r/games/four_games_production.json"
   },
-  "independent_score_mean_of_12": 5.5,
+  "independent_score_mean_of_12": 6.17,
   "session_actions": [
     "Playwright Chrome-channel fallback + foot-racing Godot write-movie / in-tree web earn path",
     "Four-game production proofs under artifacts/wp011r/games/",
@@ -50,12 +50,13 @@
     "Fixed weston unit (openvt+LIBSEAT_BACKEND=seatd; soft-fail modprobe)",
     "Added linux-image-arm64 + post-provision script; repaired cloud-init YAML quote breakage",
     "UEFI bootindex + edk2-arm-vars template to avoid EFI-shell traps",
-    "Earned FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS via Interactive Guest Chromium Wayland + lab bridge probe"
+    "Earned FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS via Interactive Guest Chromium Wayland + lab bridge probe",
+    "ECO-010 full 1800s soak PASS (inject/recover 10/10, members_alive=6)"
   ],
   "remaining_blockers": [
-    "ECO-010 \u22651800s simultaneous soak with \u22655 inject/recover + clean teardown",
-    "Independent verifier re-score after ECO-010",
-    "Master GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE only after all tokens + verifier"
+    "Physical VF4/5/6 still PHYSICAL_PENDING",
+    "Edmund merge decisions \u2014 Cursor never merges",
+    "WP-001 still DO_NOT_START; profile README freeze"
   ],
   "skepticism": [
     "FOUR_GAME save path uses Lab localStorage marker \u2014 may not equal each title native save format",

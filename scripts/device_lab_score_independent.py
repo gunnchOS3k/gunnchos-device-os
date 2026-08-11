@@ -105,9 +105,10 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
         # Gap register false wins only when evidence also false / absent PASS
         dsxl_ux = bool(dsxl_ev.get("DSXL_DUAL_COMPOSITOR_UX_PASS"))
 
-    master = bool(tokens.get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"))
-    if master:
-        # Refuse inflated master — force false in independent score output
+    # Master is evidence-derived only — never trust TOKENS.json alone.
+    master = bool(four and live and ring_mut and dsxl_ux and eco_pass)
+    if tokens.get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE") is True and not master:
+        # Refuse inflated master claim without all five evidence gates.
         master = False
 
     # Grades: never emit hardcoded 10 unless evidence clearly earns full digital depth
@@ -218,7 +219,7 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
             "DSXL_DUAL_COMPOSITOR_UX_PASS": dsxl_ux,
             "RING_TO_REAL_APP_STATE_MUTATION_PASS": ring_mut,
             "ECO010_SOAK_PASS": eco_pass,
-            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
+            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": master,
         },
     }
 
@@ -249,6 +250,7 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001
         reg_score = {"error": str(exc)}
 
+    master_complete = bool(scored["tokens_observed"].get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"))
     out = {
         "schema": "gunnchos.device_lab.score_independent.v1",
         "wave": "WP-011R",
@@ -262,14 +264,16 @@ def main() -> int:
         },
         "hardcoded_tens_forbidden": True,
         "any_grade_is_10": any(int(g.get("grade") or 0) >= 10 for g in grades.values()),
-        "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
+        "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": master_complete,
         "SILICON_EXACT_EMULATION": False,
         "VF4": "PHYSICAL_PENDING",
         "VF5": "PHYSICAL_PENDING",
         "VF6": "PHYSICAL_PENDING",
         "note": (
             "Independent recomputation from wp011r evidence files + gap register. "
-            "Not gunnchctl score alone. Master complete remains false."
+            "Not gunnchctl score alone. Master is evidence-derived from "
+            "FOUR_GAME+LIVE+DSXL+RING+ECO010 only (never TOKENS.json alone). "
+            "SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING."
         ),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)

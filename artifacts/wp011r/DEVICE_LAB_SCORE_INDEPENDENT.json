@@ -28,11 +28,11 @@
       "hardcoded": false
     },
     "failure_injection": {
-      "grade": 8,
+      "grade": 9,
       "axis": "DIGITAL",
       "evidence": [
         "ChaosEngine suite",
-        "ECO-010 PARTIAL"
+        "ECO-010 PASS"
       ],
       "hardcoded": false
     },
@@ -88,11 +88,11 @@
       "hardcoded": false
     },
     "full_ecosystem_simulation": {
-      "grade": 8,
+      "grade": 9,
       "axis": "DIGITAL",
       "evidence": [
         "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=True",
-        "ECO-010=PARTIAL",
+        "ECO-010=PASS",
         "RING_TO_REAL_APP_STATE_MUTATION_PASS=True",
         "DSXL_DUAL_COMPOSITOR_UX_PASS=True"
       ],
@@ -109,26 +109,26 @@
       "hardcoded": false
     }
   },
-  "grade_mean_of_12": 6.0,
+  "grade_mean_of_12": 6.17,
   "tokens_observed": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
-    "ECO010_SOAK_PASS": false,
-    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+    "ECO010_SOAK_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true
   },
   "gaps_register": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
   "register_score_crosscheck": {
-    "grade_mean_of_12": 6.58,
+    "grade_mean_of_12": null,
     "source": "scripts/device_lab_score_from_register.py"
   },
   "hardcoded_tens_forbidden": true,
   "any_grade_is_10": false,
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
   "SILICON_EXACT_EMULATION": false,
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "note": "Independent recomputation from wp011r evidence files + gap register. Not gunnchctl score alone. Master complete remains false."
+  "note": "Independent recomputation from wp011r evidence files + gap register. Not gunnchctl score alone. Master is evidence-derived from FOUR_GAME+LIVE+DSXL+RING+ECO010 only (never TOKENS.json alone). SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING."
 }

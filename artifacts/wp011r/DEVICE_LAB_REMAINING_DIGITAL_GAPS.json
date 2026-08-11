@@ -1,14 +1,14 @@
 {
   "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
   "wave": "WP-011R",
-  "audited_at_utc": "2026-08-11T21:37:38Z",
+  "audited_at_utc": "2026-08-11T22:36:48Z",
   "base_sha": "71c4b16+",
   "claim_firewall": {
     "SILICON_EXACT_EMULATION": false,
     "VF4": "PHYSICAL_PENDING",
     "VF5": "PHYSICAL_PENDING",
     "VF6": "PHYSICAL_PENDING",
-    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
     "PRODUCTION_READY": false,
     "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image",
     "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": "Interactive guest scaffolding added this wave (os_build/device_lab_interactive_guest/) \u2014 also a development guest, never a shipping image",
@@ -31,7 +31,9 @@
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
-    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
+    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
+    "ECO010_SOAK_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true
   },
   "gaps": [
     {
