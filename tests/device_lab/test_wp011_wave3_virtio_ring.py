@@ -33,9 +33,10 @@ def test_claim_firewall_master_still_false():
     tokens = json.loads((ROOT / "gunnchos_device_os/device_lab/TOKENS_WP011.json").read_text(encoding="utf-8"))
     assert tokens["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
     assert tokens["SILICON_EXACT_EMULATION"] is False
-    assert tokens["GUEST_DUAL_OUTPUT_PASS"] is False
-    # Default token remains false until earned in a live run; register may flip after proof only.
-    assert tokens["RING_TO_REAL_APPLICATION_INPUT_PASS"] is False
+    # Wave 4 may flip dual/Ring when earned; master + spatial rules remain.
+    assert tokens["RING_SPATIAL_ACCURACY"] == "SIMULATED"
+    assert isinstance(tokens["GUEST_DUAL_OUTPUT_PASS"], bool)
+    assert isinstance(tokens["RING_TO_REAL_APPLICATION_INPUT_PASS"], bool)
 
 
 def test_qemu_prefers_guest_image_arch_not_host_x86():

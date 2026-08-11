@@ -27,6 +27,57 @@ _reply_line() {
   fi
 }
 
+_json_escape() {
+  # Minimal escape for connector ids (no quotes/newlines expected).
+  printf '%s' "$1" | tr -d '"\\\n\r'
+}
+
+_display_info_payload() {
+  # Enumerate real DRM connectors — never hardcode dual from /dev/dri presence alone.
+  displays="["
+  count=0
+  connected=0
+  if [ -d /sys/class/drm ]; then
+    for conn in /sys/class/drm/card*-*; do
+      [ -e "$conn" ] || continue
+      base="$(basename "$conn")"
+      case "$base" in
+        card*-*) ;;
+        *) continue ;;
+      esac
+      status="unknown"
+      if [ -f "$conn/status" ]; then
+        status="$(tr -d '\n' <"$conn/status" 2>/dev/null || echo unknown)"
+      fi
+      is_conn=false
+      if [ "$status" = "connected" ]; then
+        is_conn=true
+        connected=$((connected + 1))
+      fi
+      id="$(_json_escape "$base")"
+      if [ "$count" -gt 0 ]; then
+        displays="${displays},"
+      fi
+      displays="${displays}{\"id\":\"${id}\",\"connected\":${is_conn},\"status\":\"${status}\",\"source\":\"guest_agent\",\"class\":\"guest_drm\"}"
+      count=$((count + 1))
+    done
+  fi
+  displays="${displays}]"
+  guest_proven=false
+  note="drm_enumerated"
+  if [ "$connected" -ge 2 ]; then
+    guest_proven=true
+    note="two_or_more_drm_connectors_connected"
+  elif [ "$connected" -eq 1 ]; then
+    note="single_drm_connector_connected"
+  elif [ "$count" -eq 0 ]; then
+    note="no_drm_connectors"
+  else
+    note="drm_connectors_present_but_none_connected"
+  fi
+  _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"display_info\",\"displays\":${displays},\"connected_count\":${connected},\"connector_count\":${count},\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"guest_proven\":${guest_proven},\"note\":\"${note}\",\"agent_path_label\":\"virtio-serial\",\"stub\":false}"
+}
+
 _handle() {
   req="$1"
   case "$req" in
@@ -55,11 +106,7 @@ _handle() {
       _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"${_cmdname}\",\"observed\":true,\"path\":\"/tmp/gunnch-input-observe.log\",\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\",\"stub\":false}"
       ;;
     *'"cmd":"display_info"'*)
-      if [ -e /sys/class/drm ] || [ -e /dev/dri ]; then
-        _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"display_info\",\"displays\":[{\"id\":\"guest0\",\"connected\":true,\"source\":\"guest_agent\",\"class\":\"guest\"},{\"id\":\"guest1\",\"connected\":true,\"source\":\"guest_agent\",\"class\":\"guest\"}],\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"guest_proven\":true,\"agent_path_label\":\"virtio-serial\"}"
-      else
-        _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"display_info\",\"displays\":[{\"id\":\"guest0\",\"connected\":true,\"source\":\"guest_agent\",\"class\":\"guest\"}],\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"guest_proven\":false,\"note\":\"single_or_no_drm_node\",\"agent_path_label\":\"virtio-serial\"}"
-      fi
+      _display_info_payload
       ;;
     *'"cmd":"metrics"'*)
       _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"metrics\",\"metrics\":{\"uptime_s\":1,\"measurement_class\":\"HOST_OBSERVED\"},\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"

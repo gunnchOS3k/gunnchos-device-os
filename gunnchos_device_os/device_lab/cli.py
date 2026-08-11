@@ -199,6 +199,16 @@ def cmd_image(ns: argparse.Namespace) -> int:
     return _out({"ok": False, "error": f"unknown_image_cmd:{ns.image_cmd}"})
 
 
+def cmd_ecosystem(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.device_lab.ecosystem import ecosystem_topology, run_eco001_smoke
+
+    if ns.ecosystem_cmd == "topology":
+        return _out(ecosystem_topology())
+    if ns.ecosystem_cmd == "eco001":
+        return _out(run_eco001_smoke(repo_root=_repo_root()))
+    return _out({"ok": False, "error": f"unknown_ecosystem_cmd:{ns.ecosystem_cmd}"})
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="gunnchctl", description="gunnchDevice Lab CLI")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -275,6 +285,11 @@ def build_parser() -> argparse.ArgumentParser:
     build_i.set_defaults(func=cmd_image)
     si_sub.add_parser("inspect").set_defaults(func=cmd_image)
     si_sub.add_parser("verify").set_defaults(func=cmd_image)
+
+    se = sub.add_parser("ecosystem")
+    se_sub = se.add_subparsers(dest="ecosystem_cmd", required=True)
+    se_sub.add_parser("topology").set_defaults(func=cmd_ecosystem)
+    se_sub.add_parser("eco001").set_defaults(func=cmd_ecosystem)
 
     return p
 

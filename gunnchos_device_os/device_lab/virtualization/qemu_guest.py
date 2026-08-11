@@ -277,7 +277,17 @@ class QemuGuestSession:
             "yes",
         }
         if enable_gpu:
-            cmd += ["-device", "virtio-gpu-pci,max_outputs=2,id=gpu0"]
+            # QEMU ≥11: set outputs[].xres/yres so scanouts start Connected in guest DRM.
+            # max_outputs alone leaves Virtual-2 disconnected under headless/single-head.
+            # Output names must be ≤12 chars (QEMU virtio-gpu EDID name limit).
+            gpu_dev = (
+                '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":2,'
+                '"outputs":['
+                '{"name":"lab0","xres":1280,"yres":800},'
+                '{"name":"lab1","xres":1280,"yres":800}'
+                "]}"
+            )
+            cmd += ["-device", gpu_dev]
             # Device attached ≠ guest-proven dual. Keep GUEST_DUAL_OUTPUT_PASS false
             # until guest agent display_info proves two guest outputs.
             guest_outputs = [
@@ -287,7 +297,7 @@ class QemuGuestSession:
                     "connected": False,
                     "source": "qemu_virtio_gpu_device_attached",
                     "class": "host_device_intent",
-                    "note": "virtio-gpu max_outputs=2 attached; awaiting guest proof",
+                    "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
                 },
                 {
                     "id": "guest-gpu0-out1",
@@ -295,7 +305,7 @@ class QemuGuestSession:
                     "connected": False,
                     "source": "qemu_virtio_gpu_device_attached",
                     "class": "host_device_intent",
-                    "note": "virtio-gpu max_outputs=2 attached; awaiting guest proof",
+                    "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
                 },
             ]
 
@@ -369,9 +379,13 @@ class QemuGuestSession:
                 if skip:
                     skip = False
                     continue
-                if tok == "-device" and i + 1 < len(cmd) and cmd[i + 1].startswith("virtio-gpu"):
-                    skip = True
-                    continue
+                if tok == "-device" and i + 1 < len(cmd):
+                    nxt = cmd[i + 1]
+                    if nxt.startswith("virtio-gpu") or (
+                        nxt.lstrip().startswith("{") and "virtio-gpu" in nxt
+                    ):
+                        skip = True
+                        continue
                 cmd2.append(tok)
             cmd = cmd2
             guest_outputs = []
@@ -481,17 +495,32 @@ class QemuGuestSession:
                     if d.get("connected")
                     and (
                         str(d.get("class") or "").startswith("guest")
-                        or str(d.get("source") or "") in {"guest_agent", "qemu_virtio_gpu", "virtio-gpu"}
+                        or str(d.get("source") or "")
+                        in {"guest_agent", "qemu_virtio_gpu", "virtio-gpu", "guest_drm"}
                     )
                 ]
-                if len(guest_connected) >= 2 and disp.get("transport") == "virtio_serial" and not disp.get("stub"):
+                agent_status["display_info"] = {
+                    "connected_count": disp.get("connected_count"),
+                    "connector_count": disp.get("connector_count"),
+                    "note": disp.get("note"),
+                    "guest_proven": disp.get("guest_proven"),
+                    "transport": disp.get("transport"),
+                    "stub": disp.get("stub"),
+                }
+                if (
+                    len(guest_connected) >= 2
+                    and disp.get("transport") == "virtio_serial"
+                    and not disp.get("stub")
+                    and disp.get("guest_proven") is not False
+                ):
                     guest_outputs = [
                         {
                             "id": str(d.get("id") or f"guest{i}"),
                             "role": "primary" if i == 0 else "secondary",
                             "connected": True,
                             "source": "guest_agent",
-                            "class": "guest",
+                            "class": "guest_drm",
+                            "status": d.get("status") or "connected",
                         }
                         for i, d in enumerate(guest_connected[:2])
                     ]
@@ -501,7 +530,8 @@ class QemuGuestSession:
                 else:
                     agent_status["guest_dual_proven"] = False
                     agent_status["guest_dual_blocker"] = (
-                        "Guest display_info did not prove two guest outputs over virtio-serial"
+                        disp.get("note")
+                        or "Guest display_info did not prove two guest DRM outputs over virtio-serial"
                     )
             except Exception as exc:  # noqa: BLE001
                 agent_status["guest_dual_proven"] = False

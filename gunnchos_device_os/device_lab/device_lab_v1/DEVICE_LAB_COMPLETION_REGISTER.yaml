@@ -1,14 +1,15 @@
 schema: gunnchos.device_lab.completion_register.v1
 title: gunnchDevice Lab Full Ecosystem Digital Completion Register
-status: IMPLEMENTATION_PARTIAL_WAVE_3
+status: IMPLEMENTATION_PARTIAL_WAVE_4
 implementation_pass_claimed: false
 wave_eg_note: |
-  Wave 3 stacked on WP-011 #98/#97/#95. Virtio-serial agent primary path,
-  aarch64 QEMU arch match (CI TCG), ring OS-input wiring, DS-XL guest-dual
-  honesty (device-attach ≠ PASS). Master complete token remains false.
-  depends_on: [#98, #97, #95]
+  Wave 4 stacked on WP-011 #100/#98/#97. Guest DRM dual proven over virtio-serial
+  display_info (Alpine virtio-gpu modules + QEMU outputs xres/yres). Ring→OS input
+  virtio-serial input_observe earned on Mac with FORCE_REAL_GUEST; spatial SIMULATED.
+  Master complete token remains false — ECO/games/chaos still open.
+  depends_on: [#100, #98, #97]
 audited_at_utc: |
-  2026-08-10T23:20:00Z
+  2026-08-11T04:10:00Z
 accepted_device_os_main: 3908de7c35882b500368475ce13d2243435f6443
 accepted_hardware_main: 45c301a3a335d4bfd54970d80ec7ee717736ad07
 claim_firewall:
@@ -18,8 +19,8 @@ claim_firewall:
   VF6: PHYSICAL_PENDING
   GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE: false
   PRODUCTION_READY: false
-  RING_TO_REAL_APPLICATION_INPUT_PASS: false
-  GUEST_DUAL_OUTPUT_PASS: false
+  RING_TO_REAL_APPLICATION_INPUT_PASS: true
+  GUEST_DUAL_OUTPUT_PASS: true
   RING_SPATIAL_ACCURACY: SIMULATED
 audit_summary:
   start_session_boots_qemu_guest: true
@@ -228,12 +229,31 @@ requirements:
     tests:
 
     evidence_output: |
-      Wave 3: ring_real_input mutates Lab surfaces via SpatialInputService→input_router;
-      conventional fallback fixed; OS input path wired (hybrid + optional guest).
-      RING_TO_REAL_APPLICATION_INPUT_PASS only if virtio-serial observe earned; spatial SIMULATED.
+      Wave 4: RING_TO_REAL_APPLICATION_INPUT_PASS earned on Mac with
+      GUNNCHDEVICE_LAB_FORCE_REAL_GUEST — ring→SpatialInput→OS input→guest
+      virtio-serial input_observe (stub=false). Lab surfaces still mutate via stack.
+      RING_SPATIAL_ACCURACY remains SIMULATED. Physical ring SI PENDING.
     state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; RING_SPATIAL_ACCURACY=SIMULATED
-    remaining_blocker: VP003-S2-G07-PHYSICAL-RING PHYSICAL_PENDING; RING_TO_REAL not earned until guest virtio observe
+    remaining_blocker: VP003-S2-G07-PHYSICAL-RING PHYSICAL_PENDING; spatial accuracy SIMULATED
+  -
+    id: DL-GOLDEN-002b
+    description: G06 guest-proven dual DRM outputs over virtio-serial
+    owner_repo: gunnchos-device-os
+    source_files:
+      - gunnchos_device_os/device_lab/virtualization/qemu_guest.py
+      - gunnchos_device_os/device_lab/virtualization/dsxl_outputs.py
+      - os_build/bootable_reference/overlay/opt/gunnchos/bin/gunnch-guest-agent
+    tests:
+      - tests/device_lab/test_wp011_wave4_dual_ring.py
+    evidence_output: |
+      Wave 4: Alpine DRM/virtio-gpu modules staged into Lab initramfs; QEMU 11
+      outputs xres/yres enables both scanouts; guest agent display_info enumerates
+      two connected guest_drm connectors over virtio-serial. Device-attach alone
+      still insufficient. PHYSICAL_DUAL_PANEL PENDING.
+    state: DIGITALLY_VALIDATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; PHYSICAL_DUAL_PANEL=PENDING
+    remaining_blocker: VP003-S2-G06-PHYSICAL-DUAL PHYSICAL_PENDING
   -
     id: DL-GOLDEN-004
     description: G08 LAB-SCENARIO-LOCAL-AI-TUTOR digital path
@@ -493,11 +513,11 @@ requirements:
       - tests/device_lab/test_wp011_live_run_input.py
     evidence_output: |
       Conventional QEMU monitor sendkey proven on Mac live guest; UI /api/input wired.
-      Wave 3: Ring→OS input path wired (hybrid process + optional guest); spatial SIMULATED.
-      RING_TO_REAL_APPLICATION_INPUT_PASS only when virtio-serial input_observe earned.
+      Wave 4: RING_TO_REAL_APPLICATION_INPUT_PASS earned via virtio-serial input_observe
+      on FORCE_REAL_GUEST Mac path; spatial remains SIMULATED.
     state: DIGITALLY_VALIDATED
-    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; conventional input ≠ ring-to-real-app PASS unless earned
-    remaining_blocker: Ring-to-guest virtio-serial observe not yet earned on all hosts; spatial SIMULATED
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; RING_SPATIAL_ACCURACY=SIMULATED
+    remaining_blocker: Spatial accuracy SIMULATED; physical ring SI PENDING
   -
     id: DL-HWSYNC-001
     description: Lab profiles include exact MPN compute truth
@@ -566,24 +586,28 @@ requirements:
     owner_repo: gunnchos-device-os
     source_files:
       - gunnchos_device_os/device_lab/profiles/full_ecosystem.json
+      - gunnchos_device_os/device_lab/ecosystem/topology.py
     tests:
-
-    evidence_output: profiles/full_ecosystem.json VF1 aggregate TARGET_TBD
-    state: IMPLEMENTED
+      - tests/device_lab/test_wp011_wave4_dual_ring.py
+    evidence_output: |
+      Wave 4 scaffold: gunnchctl ecosystem topology lists member profiles;
+      ECO-001 smoke is honest depth (session start + topology assert), not full soak.
+    state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: LAB-FUTURE-003 not executed
+    remaining_blocker: LAB-FUTURE-003 simultaneous multi-device soak not executed
   -
     id: DL-ECOSYSTEM-002
     description: ECO-001..ECO-010 simultaneous workflows
     owner_repo: gunnchos-device-os
     source_files:
-
+      - gunnchos_device_os/device_lab/ecosystem/eco001_smoke.py
     tests:
-
-    evidence_output: No ECO scenario modules on accepted main
-    state: TARGET
+      - tests/device_lab/test_wp011_wave4_dual_ring.py
+    evidence_output: |
+      Wave 4: ECO-001 smoke scaffold only (topology + session). ECO-002..010 absent.
+    state: IMPLEMENTED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: Continuity/handoff/soak absent
+    remaining_blocker: Continuity/handoff/soak and ECO-002..010 absent
   -
     id: DL-ECOSYSTEM-003
     description: Games + gunnchAI integrated in Lab ecosystem runs
@@ -729,9 +753,9 @@ requirements:
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
     remaining_blocker: No Lab guest-boot CI job
 requirement_state_counts:
-  DIGITALLY_VALIDATED: 17
+  DIGITALLY_VALIDATED: 19
   EXTERNAL_PENDING: 1
   IMPLEMENTED: 5
   INTEGRATED: 10
   PHYSICAL_PENDING: 3
-  TARGET: 12
+  TARGET: 11
