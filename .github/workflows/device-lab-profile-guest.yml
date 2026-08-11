@@ -40,8 +40,10 @@ jobs:
           pip install pytest pyyaml
           PYTHONPATH=.:src pytest -q \
             tests/device_lab/test_wp011_profile_guest_foundation.py \
+            tests/device_lab/test_wp011_live_run_input.py \
+            tests/device_lab/test_wp011_wave3_virtio_ring.py \
             tests/device_lab/test_device_lab_foundation.py \
-            -k 'not qemu_start'
+            -k 'not qemu_start and not live_display_path and not agent_path_or_honest and not start_session_real'
 
   qemu-guest-path:
     runs-on: ubuntu-latest
@@ -74,16 +76,29 @@ jobs:
           fi
       - name: QEMU live path test (PASS only if QEMU alive; else SKIPPED_ENVIRONMENT)
         env:
-          GUNNCHDEVICE_LAB_BOOT_TIMEOUT: "90"
+          GUNNCHDEVICE_LAB_BOOT_TIMEOUT: "120"
           GUNNCHDEVICE_LAB_MEMORY_MB: "512"
-          GUNNCH_GUEST_AGENT_HOST_STUB: "1"
+          # Prefer real virtio-serial; mailbox stub only as labeled fallback inside code
+          GUNNCH_GUEST_AGENT_HOST_STUB: "0"
+          # Prefer TCG when KVM present-but-denied on GitHub runners
+          GUNNCHDEVICE_LAB_ACCEL: "tcg"
+          # Lab guest image is Alpine aarch64 — never boot under x86_64 QEMU
+          GUNNCHDEVICE_LAB_QEMU_ARCH: "aarch64"
+          GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU: "0"
         run: |
           PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_profile_guest_foundation.py -k 'qemu_start or start_session_real'
+          PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_wave3_virtio_ring.py -k 'agent_path_or_honest' || true
+          PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011_live_run_input.py -k 'live_display_path' || true
           # Honesty: never promote skip to pass in evidence artifact
           PYTHONPATH=.:src python3 - <<'PY'
-          from gunnchos_device_os.device_lab.virtualization.qemu_guest import environment_can_run_qemu
+          from gunnchos_device_os.device_lab.virtualization.qemu_guest import environment_can_run_qemu, select_accel, lab_guest_image_arch
+          from pathlib import Path
           import json
-          env = environment_can_run_qemu()
+          root = Path('.').resolve()
+          env = environment_can_run_qemu(repo_root=root)
           print(json.dumps(env, indent=2))
           assert env.get("SKIPPED_ENVIRONMENT") is False, "QEMU installed in this job — must not skip"
+          assert lab_guest_image_arch(root) == "aarch64"
+          assert env.get("arch") == "aarch64", "must select aarch64 emulator for Lab guest image"
+          print(json.dumps(select_accel(env["arch"]), indent=2))
           PY

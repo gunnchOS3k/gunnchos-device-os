@@ -48,24 +48,69 @@ class GuestAgentClient:
         return self._mailbox_roundtrip(path, payload)
 
     def _unix_roundtrip(self, path: Path, payload: dict[str, Any]) -> dict[str, Any]:
+        """QEMU virtio-serial chardev is a host unix socket (server=on).
+
+        Guest agent may emit unsolicited heartbeats; drain until matching cmd/pong.
+        """
         deadline = time.time() + self.timeout_sec
         last_err = None
+        want_cmd = payload.get("cmd")
         while time.time() < deadline:
             try:
                 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
                     sock.settimeout(min(5.0, self.timeout_sec))
                     sock.connect(str(path))
+                    # Drain any pending guest heartbeats before request.
+                    sock.settimeout(0.15)
+                    try:
+                        while True:
+                            peek = sock.recv(4096)
+                            if not peek:
+                                break
+                    except (OSError, TimeoutError):
+                        pass
+                    sock.settimeout(min(5.0, max(0.5, deadline - time.time())))
                     line = (json.dumps(payload, separators=(",", ":")) + "\n").encode("utf-8")
                     sock.sendall(line)
                     buf = b""
-                    while b"\n" not in buf:
-                        chunk = sock.recv(4096)
+                    matched: dict[str, Any] | None = None
+                    read_deadline = time.time() + min(8.0, max(1.0, deadline - time.time()))
+                    while time.time() < read_deadline:
+                        try:
+                            chunk = sock.recv(4096)
+                        except (OSError, TimeoutError):
+                            break
                         if not chunk:
                             break
                         buf += chunk
-                    if not buf:
-                        return {"ok": False, "error": "empty_response"}
-                    return json.loads(buf.split(b"\n", 1)[0].decode("utf-8"))
+                        while b"\n" in buf:
+                            raw, buf = buf.split(b"\n", 1)
+                            if not raw.strip():
+                                continue
+                            try:
+                                obj = json.loads(raw.decode("utf-8"))
+                            except json.JSONDecodeError:
+                                continue
+                            # Accept pong / matching cmd / boot_complete
+                            if want_cmd == "ping" and (obj.get("pong") or obj.get("cmd") == "ping"):
+                                matched = obj
+                                break
+                            if want_cmd and obj.get("cmd") == want_cmd:
+                                matched = obj
+                                break
+                            if want_cmd is None and obj.get("ok") is True:
+                                matched = obj
+                                break
+                            # Keep scanning past unsolicited heartbeats
+                        if matched is not None:
+                            break
+                    if matched is not None:
+                        # Label transport honestly for virtio-serial path.
+                        if "transport" not in matched:
+                            matched["transport"] = "virtio_serial"
+                        matched.setdefault("agent_path_label", "virtio-serial")
+                        return matched
+                    last_err = "empty_or_unmatched_response"
             except (OSError, json.JSONDecodeError) as exc:
                 last_err = str(exc)
                 time.sleep(0.2)
@@ -74,9 +119,6 @@ class GuestAgentClient:
     def _mailbox_roundtrip(self, path: Path, payload: dict[str, Any]) -> dict[str, Any]:
         """File mailbox used when virtio-serial socket is unavailable (unit tests / hybrid)."""
         path.parent.mkdir(parents=True, exist_ok=True)
-        req = path.with_suffix(path.suffix + ".req") if path.suffix else Path(str(path) + ".req")
-        rsp = path.with_suffix(path.suffix + ".rsp") if path.suffix else Path(str(path) + ".rsp")
-        # Simpler: path is base
         base = path
         req = Path(str(base) + ".req")
         rsp = Path(str(base) + ".rsp")
@@ -105,6 +147,7 @@ class GuestAgentClient:
             "SILICON_EXACT_EMULATION": False,
             "production_keys": False,
             "transport": "host_mailbox_stub",
+            "agent_path_label": "host_mailbox_stub",
             "measurement_class": "HOST_OBSERVED",
         }
         if cmd == "ping":
@@ -114,7 +157,12 @@ class GuestAgentClient:
         if cmd == "process_list":
             return {**base, "processes": ["init", "gunnch-guest-agent"]}
         if cmd == "process_start":
-            return {**base, "started": payload.get("name"), "stub": True}
+            return {
+                **base,
+                "started": payload.get("name"),
+                "stub": True,
+                "note": "Host mailbox stub — not a real guest process",
+            }
         if cmd == "process_stop":
             return {**base, "stopped": payload.get("name"), "stub": True}
         if cmd == "package_ops":
@@ -127,8 +175,21 @@ class GuestAgentClient:
         if cmd == "display_info":
             return {
                 **base,
-                "displays": payload.get("expected_displays") or [{"id": "guest0", "connected": True}],
-                "note": "Guest-reported; not physical panel measurement",
+                "displays": payload.get("expected_displays")
+                or [
+                    {"id": "guest0", "connected": True},
+                    {"id": "guest1", "connected": True},
+                ],
+                "stub": True,
+                "note": "Mailbox stub displays — not guest-proven dual",
+            }
+        if cmd in {"input_inject", "input_observe"}:
+            return {
+                **base,
+                "observed": True,
+                "stub": True,
+                "kind": payload.get("kind"),
+                "note": "Mailbox stub input observe — prefer QEMU monitor/virtio path",
             }
         if cmd == "logs":
             return {**base, "lines": ["GUNNCHOS_BOOT_COMPLETE=true"]}

@@ -132,6 +132,11 @@ class BootableReferenceBuilder:
     def kernel_path(self) -> Path:
         return self.paths.cache / "vmlinuz-virt"
 
+    @property
+    def alpine_initramfs_virt(self) -> Path:
+        """Alpine netboot initramfs-virt — source of DRM/virtio-gpu modules for Lab dual."""
+        return self.paths.cache / "initramfs-virt"
+
     def ensure_cache(self, *, fetch: bool = True) -> dict[str, Any]:
         needed = {
             "minirootfs": (
@@ -141,6 +146,10 @@ class BootableReferenceBuilder:
             "kernel": (
                 self.kernel_path,
                 f"{ALPINE_MIRROR}/netboot/vmlinuz-virt",
+            ),
+            "initramfs_virt": (
+                self.alpine_initramfs_virt,
+                f"{ALPINE_MIRROR}/netboot/initramfs-virt",
             ),
         }
         status = {}
@@ -157,6 +166,99 @@ class BootableReferenceBuilder:
             )
             status[name] = {"path": str(dest), "fetched": True, "sha256": _sha256_file(dest)}
         return status
+
+    def stage_drm_modules(self, rootfs: Path) -> dict[str, Any]:
+        """Copy Alpine virt DRM/virtio-gpu modules into Lab rootfs for guest dual proof.
+
+        Lab minirootfs alone has no /lib/modules — virtio-gpu PCI attach without a
+        guest driver cannot earn GUEST_DUAL_OUTPUT_PASS. Modules come from the same
+        Alpine netboot initramfs-virt paired with vmlinuz-virt.
+        """
+        src_initrd = self.alpine_initramfs_virt
+        if not src_initrd.exists():
+            return {"ok": False, "error": "initramfs_virt_missing", "staged": 0}
+        wanted_suffixes = (
+            "virtio/virtio-gpu.ko",
+            "drm/drm.ko",
+            "drm/drm_kms_helper.ko",
+            "drm/drm_shmem_helper.ko",
+            "drm/drm_panel_orientation_quirks.ko",
+            "virtio/virtio_dma_buf.ko",
+            "fbdev/core/fb.ko",
+            "fbdev/core/syscopyarea.ko",
+            "fbdev/core/sysfillrect.ko",
+            "fbdev/core/sysimgblt.ko",
+            "fbdev/core/fb_sys_fops.ko",
+            "backlight/backlight.ko",
+            "i2c/i2c-core.ko",
+        )
+        meta_names = (
+            "modules.dep",
+            "modules.alias",
+            "modules.builtin",
+            "modules.order",
+            "modules.symbols",
+            "modules.devname",
+        )
+        staged: list[str] = []
+        with tempfile.TemporaryDirectory() as td:
+            extract = Path(td) / "initrd"
+            extract.mkdir()
+            # Alpine initramfs-virt is gzip+cpio
+            raw = Path(td) / "initrd.cpio"
+            with gzip.open(src_initrd, "rb") as src, raw.open("wb") as dst:
+                shutil.copyfileobj(src, dst)
+            proc = subprocess.run(
+                ["cpio", "-idm"],
+                cwd=extract,
+                stdin=raw.open("rb"),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if proc.returncode != 0:
+                return {
+                    "ok": False,
+                    "error": "cpio_extract_failed",
+                    "detail": (proc.stderr or b"").decode("utf-8", errors="replace")[:400],
+                    "staged": 0,
+                }
+            mod_roots = list((extract / "lib" / "modules").glob("*"))
+            if not mod_roots:
+                return {"ok": False, "error": "no_modules_tree", "staged": 0}
+            mod_root = mod_roots[0]
+            kver = mod_root.name
+            dest_root = rootfs / "lib" / "modules" / kver
+            for path in mod_root.rglob("*.ko"):
+                rel = path.relative_to(mod_root).as_posix()
+                if not any(rel.endswith(suf) or suf in rel for suf in wanted_suffixes):
+                    continue
+                dst = dest_root / path.relative_to(mod_root)
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(path, dst)
+                staged.append(rel)
+            for name in meta_names:
+                src = mod_root / name
+                if src.exists():
+                    dest_root.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(src, dest_root / name)
+                    staged.append(name)
+            # Narrow modules.dep to staged modules only (faster + honest).
+            dep_src = mod_root / "modules.dep"
+            if dep_src.exists():
+                lines = []
+                for line in dep_src.read_text(encoding="utf-8", errors="replace").splitlines():
+                    head = line.split(":", 1)[0].strip()
+                    if any(head.endswith(suf) or suf in head for suf in wanted_suffixes):
+                        lines.append(line)
+                (dest_root / "modules.dep").write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
+        return {
+            "ok": bool(staged),
+            "kernel_release": kver if staged else None,
+            "staged": len(staged),
+            "modules": staged[:40],
+            "note": "DRM/virtio-gpu modules staged for guest-proven dual outputs",
+        }
 
     def _copy_overlay(self, rootfs: Path) -> None:
         overlay = self.paths.overlay
@@ -185,6 +287,8 @@ class BootableReferenceBuilder:
         for d in ("proc", "sys", "dev", "tmp", "run", "var/lib/gunnchos/state"):
             (rootfs / d).mkdir(parents=True, exist_ok=True)
         self._copy_overlay(rootfs)
+        # Stage DRM/virtio-gpu modules so guest display_info can prove dual outputs.
+        self._last_drm_stage = self.stage_drm_modules(rootfs)
         # Make /init executable.
         init = rootfs / "init"
         if not init.exists():
@@ -278,6 +382,7 @@ class BootableReferenceBuilder:
 
     def build(self, *, fetch: bool = True) -> dict[str, Any]:
         cache_status = self.ensure_cache(fetch=fetch)
+        self._last_drm_stage = {"ok": False, "staged": 0}
         rootfs = self.assemble_rootfs()
         initramfs = self.pack_initramfs(rootfs)
         manifest_path = self.write_manifest(initramfs=initramfs, cache_status=cache_status)
@@ -288,6 +393,7 @@ class BootableReferenceBuilder:
             "manifest": str(manifest_path),
             "rootfs": str(rootfs),
             "bootable": True,
+            "drm_modules": getattr(self, "_last_drm_stage", {}),
             "production_keys_used": False,
             "claim_boundary": CLAIM_BOUNDARY,
         }

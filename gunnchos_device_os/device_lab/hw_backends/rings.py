@@ -18,6 +18,10 @@ class RingsBackend:
     repo_root: Path | None = None
     actions: list[dict[str, Any]] = field(default_factory=list)
     last_reject: dict[str, Any] | None = None
+    # Optional live guest injection path (QEMU monitor / guest agent)
+    guest_monitor_sock: Path | None = None
+    guest_agent: Any = None
+    guest_process: Any = None  # hybrid host process with observable state
 
     def start(self, *, evidence_dir: Path | None = None, repo_root: Path | None = None) -> dict[str, Any]:
         from gunnchos_device_os.device_lab.apps.surfaces import (
@@ -153,6 +157,12 @@ class RingsBackend:
         mutated = bool(delivery.get("app_state_changed")) and before != after
         # delivered is honest: only True when app state actually changed via stack
         delivered = mutated and bool(delivery.get("delivered", 0) > 0)
+
+        # Optional: also push through OS input path into live guest / hybrid process.
+        guest_or_hybrid: dict[str, Any] = {"attempted": False}
+        if delivered:
+            guest_or_hybrid = self._inject_os_input_path(target=target, gesture=gesture)
+
         row = {
             "kind": "deliver",
             "packet": packet,
@@ -164,6 +174,7 @@ class RingsBackend:
             "after": after,
             "via_stack": True,
             "direct_file_write": False,
+            "os_input_path": guest_or_hybrid,
         }
         self.actions.append(row)
         return {
@@ -174,9 +185,95 @@ class RingsBackend:
             "app_state_changed": mutated,
             "before": before,
             "after": after,
+            "os_input_path": guest_or_hybrid,
         }
 
+    def _inject_os_input_path(self, *, target: str, gesture: str) -> dict[str, Any]:
+        """Wire Ring event through conventional OS input into guest or hybrid process.
+
+        RING_TO_REAL_APPLICATION_INPUT_PASS is only earned when guest virtio-serial
+        (non-stub) observes the input. Hybrid surface mutation alone is not enough.
+        Spatial accuracy remains SIMULATED.
+        """
+        from gunnchos_device_os.device_lab.virtualization.guest_input import inject_key, inject_pointer
+
+        out: dict[str, Any] = {
+            "attempted": True,
+            "RING_SPATIAL_ACCURACY": "SIMULATED",
+            "RING_TO_REAL_APPLICATION_INPUT_PASS": False,
+        }
+        # Hybrid process path (observable host process / surface already mutated via stack)
+        if self.guest_process is not None and hasattr(self.guest_process, "apply_hid"):
+            before = self.guest_process.snapshot() if hasattr(self.guest_process, "snapshot") else None
+            applied = self.guest_process.apply_hid({"kind": "click" if gesture == "click" else "key", "text": "r"})
+            after = self.guest_process.snapshot() if hasattr(self.guest_process, "snapshot") else None
+            out["hybrid_process"] = {
+                "ok": bool(applied.get("mutated")) or before != after,
+                "before": before,
+                "after": after,
+                "path": "hybrid_process",
+            }
+
+        if self.guest_monitor_sock is not None or self.guest_agent is not None:
+            if gesture == "click":
+                inj = inject_pointer(
+                    monitor_sock=self.guest_monitor_sock,
+                    agent=self.guest_agent,
+                    x=40,
+                    y=40,
+                )
+            else:
+                inj = inject_key(
+                    monitor_sock=self.guest_monitor_sock,
+                    key="r",
+                    agent=self.guest_agent,
+                )
+            out["guest_injection"] = inj
+            transport = None
+            stub = True
+            if self.guest_agent is not None:
+                try:
+                    observe = self.guest_agent.call("input_observe", kind=gesture, target=target)
+                    out["guest_observe"] = observe
+                    transport = observe.get("transport")
+                    stub = bool(observe.get("stub", True))
+                except Exception as exc:  # noqa: BLE001
+                    out["guest_observe_error"] = str(exc)
+            # Earn PASS only with non-stub virtio-serial observation + accepted injection
+            if (
+                inj.get("ok")
+                and transport in {"virtio_serial", "virtio-serial"}
+                and not stub
+                and (out.get("guest_observe") or {}).get("observed")
+            ):
+                out["RING_TO_REAL_APPLICATION_INPUT_PASS"] = True
+                out["earned_via"] = "ring→SpatialInput→OS_input→guest_agent_virtio_serial"
+            else:
+                out["blocker"] = (
+                    "Guest virtio-serial input_observe not proven (stub or missing); "
+                    "spatial remains SIMULATED"
+                )
+        else:
+            out["blocker"] = "No guest monitor/agent bound; hybrid Lab surfaces only"
+        return out
+
     def fallback_conventional(self) -> dict[str, Any]:
-        row = {"kind": "fallback", "input": "keyboard_mouse", "reason": "ring_unavailable_or_rejected"}
+        """Fallback to conventional keyboard/mouse — not RING_TO_REAL_APPLICATION_INPUT_PASS."""
+        from gunnchos_device_os.device_lab.apps.surfaces import BrowserSurface
+        from gunnchos_device_os.device_lab.virtualization.guest_input import inject_key, inject_pointer
+
+        surface = (self.surfaces.browser if self.surfaces else BrowserSurface())
+        # Prefer click on browser (keyboard alone used to no-op on BrowserSurface).
+        inj = inject_pointer(monitor_sock=None, hybrid_surface=surface, x=12, y=12)
+        if not inj.get("ok"):
+            inj = inject_key(monitor_sock=None, key="a", hybrid_surface=surface)
+        row = {
+            "kind": "fallback",
+            "input": "keyboard_mouse",
+            "reason": "ring_unavailable_or_rejected",
+            "injection": inj,
+            "RING_TO_REAL_APPLICATION_INPUT_PASS": False,
+            "RING_SPATIAL_ACCURACY": "SIMULATED",
+        }
         self.actions.append(row)
-        return {"ok": True, "fallback": row}
+        return {"ok": bool(inj.get("ok")), "fallback": row}

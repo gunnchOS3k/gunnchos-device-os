@@ -1,20 +1,178 @@
 #!/bin/sh
-# gunnchGuestAgent — minimal in-guest agent for Device Lab (DEV realm).
-# Speaks line-oriented JSON on stdout for serial capture; optional mailbox via virtio later.
+# gunnchGuestAgent — Device Lab in-guest agent (DEV realm).
+# Speaks line-oriented JSON on virtio-serial port when present; else serial log only.
 # No production keys. No unauthenticated network bind.
 
 set -eu
 
 PROTOCOL="gunnchos.guest_agent.v1"
 BOOT_COMPLETE=true
+PORT="/dev/virtio-ports/org.gunnchos.guest_agent.0"
+LOG="/var/log/gunnchos/guest_agent.log"
+CONSOLE="/dev/console"
+mkdir -p /var/log/gunnchos /dev/virtio-ports /tmp 2>/dev/null || true
 
-echo "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"event\":\"started\",\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false}"
+_serial() {
+  # Best-effort serial/console marker for host boot-log evidence.
+  echo "$1" >>"$LOG" 2>/dev/null || true
+  echo "$1" >"$CONSOLE" 2>/dev/null || echo "$1"
+}
 
-# Heartbeat markers readable from QEMU serial log (HOST_OBSERVED readiness).
+_reply_line() {
+  line="$1"
+  echo "$line" >>"$LOG" 2>/dev/null || true
+  if [ -n "${HAVE_PORT:-}" ]; then
+    # shellcheck disable=SC2039
+    printf '%s\n' "$line" >"$PORT" 2>/dev/null || true
+  fi
+}
+
+_json_escape() {
+  # Minimal escape for connector ids (no quotes/newlines expected).
+  printf '%s' "$1" | tr -d '"\\\n\r'
+}
+
+_display_info_payload() {
+  # Enumerate real DRM connectors — never hardcode dual from /dev/dri presence alone.
+  displays="["
+  count=0
+  connected=0
+  if [ -d /sys/class/drm ]; then
+    for conn in /sys/class/drm/card*-*; do
+      [ -e "$conn" ] || continue
+      base="$(basename "$conn")"
+      case "$base" in
+        card*-*) ;;
+        *) continue ;;
+      esac
+      status="unknown"
+      if [ -f "$conn/status" ]; then
+        status="$(tr -d '\n' <"$conn/status" 2>/dev/null || echo unknown)"
+      fi
+      is_conn=false
+      if [ "$status" = "connected" ]; then
+        is_conn=true
+        connected=$((connected + 1))
+      fi
+      id="$(_json_escape "$base")"
+      if [ "$count" -gt 0 ]; then
+        displays="${displays},"
+      fi
+      displays="${displays}{\"id\":\"${id}\",\"connected\":${is_conn},\"status\":\"${status}\",\"source\":\"guest_agent\",\"class\":\"guest_drm\"}"
+      count=$((count + 1))
+    done
+  fi
+  displays="${displays}]"
+  guest_proven=false
+  note="drm_enumerated"
+  if [ "$connected" -ge 2 ]; then
+    guest_proven=true
+    note="two_or_more_drm_connectors_connected"
+  elif [ "$connected" -eq 1 ]; then
+    note="single_drm_connector_connected"
+  elif [ "$count" -eq 0 ]; then
+    note="no_drm_connectors"
+  else
+    note="drm_connectors_present_but_none_connected"
+  fi
+  _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"display_info\",\"displays\":${displays},\"connected_count\":${connected},\"connector_count\":${count},\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"guest_proven\":${guest_proven},\"note\":\"${note}\",\"agent_path_label\":\"virtio-serial\",\"stub\":false}"
+}
+
+_handle() {
+  req="$1"
+  case "$req" in
+    *'"cmd":"ping"'*|*'\"cmd\":\"ping\"'*)
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      ;;
+    *'"cmd":"boot_status"'*)
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"boot_status\",\"boot_complete\":true,\"ready\":true,\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      ;;
+    *'"cmd":"process_list"'*)
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"process_list\",\"processes\":[\"init\",\"gunnch-guest-agent\"],\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      ;;
+    *'"cmd":"process_start"'*)
+      ( echo "lab-guest-process"; sleep 30 ) >/tmp/gunnch-lab-app.log 2>&1 &
+      echo $! >/tmp/gunnch-lab-app.pid 2>/dev/null || true
+      pid="$(cat /tmp/gunnch-lab-app.pid 2>/dev/null || echo 0)"
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"process_start\",\"started\":\"lab-app\",\"pid\":${pid},\"stub\":false,\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      ;;
+    *'"cmd":"input_inject"'*|*'"cmd":"input_observe"'*)
+      echo "input=$(date -u +%s 2>/dev/null || echo 0) req=${req}" >>/tmp/gunnch-input-observe.log 2>/dev/null || true
+      # Echo requested cmd name so host matching succeeds for either inject/observe.
+      case "$req" in
+        *input_observe*) _cmdname="input_observe" ;;
+        *) _cmdname="input_inject" ;;
+      esac
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"${_cmdname}\",\"observed\":true,\"path\":\"/tmp/gunnch-input-observe.log\",\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\",\"stub\":false}"
+      ;;
+    *'"cmd":"display_info"'*)
+      _display_info_payload
+      ;;
+    *'"cmd":"metrics"'*)
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"metrics\",\"metrics\":{\"uptime_s\":1,\"measurement_class\":\"HOST_OBSERVED\"},\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      ;;
+    *)
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ack\",\"note\":\"unknown_or_unparsed\",\"SILICON_EXACT_EMULATION\":false,\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      ;;
+  esac
+}
+
+# Wait for virtio-ports after PCI probe.
+i=0
+HAVE_PORT=""
+while [ "$i" -lt 40 ]; do
+  if [ -e "$PORT" ]; then
+    HAVE_PORT=1
+    break
+  fi
+  # Also accept sysfs virtio-console ports symlink layouts
+  if ls /sys/class/virtio-ports 1>/dev/null 2>&1; then
+    for p in /sys/class/virtio-ports/*/name; do
+      [ -f "$p" ] || continue
+      if [ "$(cat "$p" 2>/dev/null || true)" = "org.gunnchos.guest_agent.0" ]; then
+        # Resolve device node
+        base="$(dirname "$p")"
+        devname="$(basename "$(readlink -f "$base" 2>/dev/null || echo "")")"
+        if [ -n "$devname" ] && [ -e "/dev/$devname" ]; then
+          PORT="/dev/$devname"
+          HAVE_PORT=1
+          break
+        fi
+      fi
+    done
+  fi
+  [ -n "$HAVE_PORT" ] && break
+  i=$((i + 1))
+  sleep 0.25 2>/dev/null || sleep 1
+done
+
+if [ -n "$HAVE_PORT" ]; then
+  _serial "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=present"
+  START_TRANSPORT="virtio_serial"
+  START_LABEL="virtio-serial"
+else
+  _serial "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=absent"
+  START_TRANSPORT="serial_log_only"
+  START_LABEL="serial_log_only"
+fi
+
+_serial "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"event\":\"started\",\"boot_complete\":true,\"SILICON_EXACT_EMULATION\":false,\"production_keys\":false,\"transport\":\"${START_TRANSPORT}\",\"agent_path_label\":\"${START_LABEL}\"}"
+
 i=0
 while true; do
   i=$((i + 1))
-  echo "GUNNCHOS_GUEST_AGENT_HEARTBEAT=${i}"
-  echo "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":${BOOT_COMPLETE},\"SILICON_EXACT_EMULATION\":false}"
-  sleep 10
+  _serial "GUNNCHOS_GUEST_AGENT_HEARTBEAT=${i}"
+  if [ -n "$HAVE_PORT" ]; then
+    # Blocking read — host request wakes us; unsolicited ping keeps channel warm.
+    if IFS= read -r req <"$PORT"; then
+      if [ -n "$req" ]; then
+        _handle "$req"
+      fi
+    else
+      _reply_line "{\"ok\":true,\"protocol\":\"${PROTOCOL}\",\"cmd\":\"ping\",\"pong\":true,\"boot_complete\":${BOOT_COMPLETE},\"SILICON_EXACT_EMULATION\":false,\"heartbeat\":${i},\"transport\":\"virtio_serial\",\"agent_path_label\":\"virtio-serial\"}"
+      sleep 1
+    fi
+  else
+    sleep 2
+  fi
 done

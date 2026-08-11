@@ -133,6 +133,19 @@ def evaluate_evidence_consistency(root: Path | None = None) -> dict[str, Any]:
             ok_sha = tip_verified in permitted or (
                 head is not None and _git_merge_base_is_ancestor(str(tip_verified), "HEAD")
             )
+            # PR CI often checks out a merge ref; accept verifier tip if it is an
+            # ancestor of the PR base (origin/main) once history is available.
+            if not ok_sha and origin_main is not None:
+                ok_sha = _git_merge_base_is_ancestor(str(tip_verified), origin_main)
+            # GitHub Actions supplies the PR base SHA even when origin/main is missing.
+            if not ok_sha:
+                import os
+
+                base_sha = os.environ.get("GITHUB_BASE_SHA")
+                if base_sha:
+                    ok_sha = tip_verified == base_sha or _git_merge_base_is_ancestor(
+                        str(tip_verified), base_sha
+                    )
             if not ok_sha:
                 violations.append(
                     {

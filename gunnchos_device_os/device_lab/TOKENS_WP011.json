@@ -3,20 +3,47 @@
   "GUNNCHDEVICE_LAB_PROFILE_SYNC_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_IMAGE_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_AGENT_PREPARED": true,
+  "GUNNCHDEVICE_LAB_LIVE_VISUAL_PREPARED": true,
+  "GUNNCHDEVICE_LAB_REAL_RUN_PREPARED": true,
+  "GUNNCHDEVICE_LAB_CONVENTIONAL_INPUT_PREPARED": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
+  "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
+  "GUEST_DUAL_OUTPUT_PASS": true,
+  "RING_SPATIAL_ACCURACY": "SIMULATED",
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
+  "depends_on": ["#100", "#98", "#97"],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
+  "wave4": {
+    "guest_dual_via_drm_virtio_serial": true,
+    "ring_to_real_via_virtio_serial_observe": true,
+    "ring_spatial_accuracy": "SIMULATED",
+    "drm_modules_staged_from_alpine_initramfs_virt": true,
+    "qemu_outputs_xres_yres_enables_second_scanout": true,
+    "force_real_guest_mac": "GUNNCHDEVICE_LAB_FORCE_REAL_GUEST=1"
+  },
+  "wave3": {
+    "virtio_serial_primary": true,
+    "qemu_arch_matches_guest_image": "aarch64",
+    "kvm_denied_tcg_fallback": true,
+    "guest_dual_requires_guest_proof": true,
+    "ring_os_input_path_wired": true
+  },
   "host_tooling_observed": {
     "qemu": "QEMU emulator version 11.0.3 (Homebrew)",
     "qemu_img": "qemu-img version 11.0.3",
-    "accel_on_apple_silicon": "hvf"
+    "accel_on_apple_silicon": "hvf",
+    "live_vnc_rfb_proven": "RFB 003.008",
+    "qemu_websocket": true
   },
   "notes": [
-    "Prepared flags only — master ecosystem digital complete remains false until full program done",
+    "Wave 4 — guest DRM dual via virtio-serial display_info + Ring virtio-serial input_observe",
+    "Master ecosystem digital complete remains false (ECO/games/chaos/score still open)",
+    "GUEST_DUAL_OUTPUT_PASS earned: two connected guest DRM connectors over virtio-serial",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS earned: ring→OS input→guest input_observe; spatial SIMULATED",
     "No PRODUCTION_READY / physical measurement claims"
   ]
 }

@@ -24,6 +24,65 @@ mkdir -p /run/gunnchos/ipc /var/log/gunnchos /var/lib/gunnchos/state
 
 echo "GUNNCHOS_BOOT_STAGE=fs_mounted"
 
+# Load DRM/virtio-gpu when Lab modules are staged (needed for guest dual proof).
+# Honest: without modules, virtio-gpu PCI attach alone cannot earn GUEST_DUAL_OUTPUT_PASS.
+if [ -d /lib/modules ]; then
+  KVER="$(uname -r 2>/dev/null || true)"
+  if [ -n "$KVER" ] && [ -d "/lib/modules/${KVER}" ]; then
+    echo "GUNNCHOS_DRM_MODULES_KVER=${KVER}"
+    if command -v depmod >/dev/null 2>&1; then
+      depmod -a "$KVER" >/run/gunnchos-depmod.log 2>&1 || true
+    fi
+    if command -v modprobe >/dev/null 2>&1; then
+      modprobe virtio-gpu >/run/gunnchos-modprobe-virtio-gpu.log 2>&1 && echo "GUNNCHOS_VIRTIO_GPU=loaded" || echo "GUNNCHOS_VIRTIO_GPU=modprobe_failed"
+    else
+      # Fallback: ordered insmod of staged deps (best-effort).
+      MODBASE="/lib/modules/${KVER}/kernel"
+      for m in \
+        drivers/i2c/i2c-core.ko \
+        drivers/video/backlight/backlight.ko \
+        drivers/video/fbdev/core/fb.ko \
+        drivers/video/fbdev/core/syscopyarea.ko \
+        drivers/video/fbdev/core/sysfillrect.ko \
+        drivers/video/fbdev/core/sysimgblt.ko \
+        drivers/video/fbdev/core/fb_sys_fops.ko \
+        drivers/gpu/drm/drm_panel_orientation_quirks.ko \
+        drivers/gpu/drm/drm.ko \
+        drivers/gpu/drm/drm_kms_helper.ko \
+        drivers/gpu/drm/drm_shmem_helper.ko \
+        drivers/virtio/virtio_dma_buf.ko \
+        drivers/gpu/drm/virtio/virtio-gpu.ko
+      do
+        if [ -f "${MODBASE}/${m}" ]; then
+          insmod "${MODBASE}/${m}" 2>/dev/null || true
+        fi
+      done
+      if [ -e /sys/module/virtio_gpu ] || [ -e /sys/class/drm ]; then
+        echo "GUNNCHOS_VIRTIO_GPU=insmod_ok"
+      else
+        echo "GUNNCHOS_VIRTIO_GPU=insmod_failed"
+      fi
+    fi
+  else
+    echo "GUNNCHOS_DRM_MODULES_KVER=mismatch_or_missing uname=${KVER}"
+  fi
+  if [ -d /sys/class/drm ]; then
+    DRM_CONN=0
+    for c in /sys/class/drm/card*-*; do
+      [ -e "$c/status" ] || continue
+      st="$(cat "$c/status" 2>/dev/null || true)"
+      if [ "$st" = "connected" ]; then
+        DRM_CONN=$((DRM_CONN + 1))
+      fi
+    done
+    echo "GUNNCHOS_DRM_CONNECTED=${DRM_CONN}"
+  else
+    echo "GUNNCHOS_DRM_CONNECTED=0"
+  fi
+else
+  echo "GUNNCHOS_VIRTIO_GPU=modules_absent"
+fi
+
 # Loopback networking (userspace path; no carrier claim).
 ifcommand() { command -v "$1" >/dev/null 2>&1; }
 if ifcommand ip; then
@@ -197,8 +256,15 @@ esac
 if [ "${LAB_PERSIST}" = "1" ]; then
   echo "GUNNCHOS_LAB_PERSIST=true"
   if [ -x /opt/gunnchos/bin/gunnch-guest-agent ]; then
-    /opt/gunnchos/bin/gunnch-guest-agent >/var/log/gunnchos/guest_agent.log 2>&1 &
+    # Run without pipe so missing `tee` cannot kill the agent (Alpine busybox variance).
+    /opt/gunnchos/bin/gunnch-guest-agent >>/var/log/gunnchos/guest_agent.log 2>&1 &
     echo "GUNNCHOS_GUEST_AGENT=started"
+    # Mirror virtio presence marker to serial for host evidence.
+    if [ -e /dev/virtio-ports/org.gunnchos.guest_agent.0 ]; then
+      echo "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=present"
+    else
+      echo "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=absent_at_start"
+    fi
   else
     echo "GUNNCHOS_GUEST_AGENT=missing"
   fi

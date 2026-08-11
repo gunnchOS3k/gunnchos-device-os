@@ -36,6 +36,26 @@ class VirtualizationBackend:
         }
 
 
+def Path_exists(p: str) -> bool:
+    from pathlib import Path
+    return Path(p).exists()
+
+
+def kvm_usable() -> bool:
+    from pathlib import Path
+    import os
+
+    kvm = Path("/dev/kvm")
+    if not kvm.exists():
+        return False
+    try:
+        fd = os.open(str(kvm), os.O_RDWR)
+        os.close(fd)
+        return True
+    except OSError:
+        return False
+
+
 def describe_backends() -> dict[str, Any]:
     host = platform.system()
     machine = platform.machine()
@@ -59,16 +79,16 @@ def describe_backends() -> dict[str, Any]:
         ),
         VirtualizationBackend(
             "QEMU_KVM",
-            host == "Linux" and Path_exists("/dev/kvm") and bool(qemu_arm or qemu_x86),
+            host == "Linux" and kvm_usable() and bool(qemu_arm or qemu_x86),
             f"{host}/{machine}",
-            "Linux KVM acceleration when available. Not silicon-exact.",
-            extras={"qemu_arm": bool(qemu_arm), "qemu_x86": bool(qemu_x86)},
+            "Linux KVM acceleration when /dev/kvm is usable. Not silicon-exact.",
+            extras={"qemu_arm": bool(qemu_arm), "qemu_x86": bool(qemu_x86), "kvm_usable": kvm_usable()},
         ),
         VirtualizationBackend(
             "QEMU_TCG",
             bool(qemu_arm or qemu_x86),
             f"{host}/{machine}",
-            "TCG software emulation fallback for cross-arch. Slow; not silicon-exact.",
+            "TCG software emulation fallback for cross-arch or denied KVM. Slow; not silicon-exact.",
         ),
         VirtualizationBackend(
             "OCI_CONTAINER",
@@ -87,12 +107,6 @@ def describe_backends() -> dict[str, Any]:
             "SILICON_EXACT_EMULATION=false unless actually supported."
         ),
     }
-
-
-def Path_exists(p: str) -> bool:
-    from pathlib import Path
-    return Path(p).exists()
-
 
 def select_backend(prefer: str | None = None) -> dict[str, Any]:
     prefer = prefer or os.environ.get("GUNNCHDEVICE_LAB_BACKEND", "HYBRID_BEHAVIORAL")

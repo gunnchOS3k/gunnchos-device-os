@@ -150,12 +150,15 @@ def test_image_inspect_or_verify_hashes():
 
 def test_qemu_start_stop_or_skipped_environment(tmp_path: Path):
     register_lab_work_root(tmp_path, repo_root=ROOT)
+    # Clear forced TCG from prior tests so Mac HVF can run; CI sets ACCEL via job env.
+    prior_accel = os.environ.pop("GUNNCHDEVICE_LAB_ACCEL", None)
     try:
-        env = environment_can_run_qemu()
+        env = environment_can_run_qemu(repo_root=ROOT)
         profile = load_profile("handheld_hybrid")
         # Cap boot wait for CI/local
-        os.environ["GUNNCHDEVICE_LAB_BOOT_TIMEOUT"] = "45"
+        os.environ["GUNNCHDEVICE_LAB_BOOT_TIMEOUT"] = "90"
         os.environ["GUNNCHDEVICE_LAB_MEMORY_MB"] = "512"
+        os.environ.setdefault("GUNNCHDEVICE_LAB_QEMU_ARCH", "aarch64")
         result = start_qemu_guest(
             work=tmp_path / "qemu",
             profile=profile,
@@ -181,13 +184,16 @@ def test_qemu_start_stop_or_skipped_environment(tmp_path: Path):
                 assert stop.get("ok") is True
     finally:
         unregister_lab_work_root(tmp_path)
+        if prior_accel is not None:
+            os.environ["GUNNCHDEVICE_LAB_ACCEL"] = prior_accel
 
 
 def test_start_session_real_guest_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     register_lab_work_root(tmp_path, repo_root=ROOT)
     monkeypatch.setenv("GUNNCHDEVICE_LAB_FORCE_REAL_GUEST", "1")
-    monkeypatch.setenv("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "40")
+    monkeypatch.setenv("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "90")
     monkeypatch.setenv("GUNNCHDEVICE_LAB_MEMORY_MB", "512")
+    monkeypatch.setenv("GUNNCHDEVICE_LAB_QEMU_ARCH", "aarch64")
     try:
         # Point instances under approved tmp by monkeypatching via work=
         from gunnchos_device_os.device_lab import session as session_mod
@@ -204,10 +210,12 @@ def test_start_session_real_guest_env(tmp_path: Path, monkeypatch: pytest.Monkey
                 assert started.get("result") == "SKIPPED_ENVIRONMENT"
             else:
                 qemu = (started.get("state") or {}).get("qemu") or {}
-                # Real guest path engaged
-                assert qemu.get("ok") is True or qemu.get("SKIPPED_ENVIRONMENT") is True
+                # Real guest path engaged — PASS only if alive; else honest FAIL (not PASS)
                 if qemu.get("ok"):
                     assert qemu.get("qemu_alive") is True
+                else:
+                    assert qemu.get("result") != "PASS"
+                    assert qemu.get("ok") is False or qemu.get("SKIPPED_ENVIRONMENT") is True or qemu.get("error")
         finally:
             if inst in session_mod._INSTANCES:
                 stop_session(inst)
