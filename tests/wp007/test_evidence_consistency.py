@@ -93,14 +93,17 @@ def test_ready_true_with_fail_is_contradiction(tmp_path: Path):
 
 
 def test_repo_tip_honest_state_zero_contradictions():
-    # After harness rewrite + FAIL RESULT preserved, repo should be consistent.
     report = evaluate_evidence_consistency(ROOT)
-    # May fail until readiness rewritten — harness write happens in other tests.
     readiness = json.loads(
         (ROOT / "artifacts/wp007/INTERNAL_RED_TEAM_READINESS.json").read_text(encoding="utf-8")
     )
     result = json.loads((ROOT / "artifacts/wp007/VP-007-RESULT.json").read_text(encoding="utf-8"))
     if readiness.get("INTERNAL_RED_TEAM_READY") and result.get("overall_result") != "PASS":
         assert report["ok"] is False
+        assert report["WP007_CANONICAL_EVIDENCE_CONTRADICTIONS"] > 0
     else:
-        assert report["WP007_CANONICAL_EVIDENCE_CONTRADICTIONS"] >= 0
+        assert report["ok"] is True
+        assert report["WP007_CANONICAL_EVIDENCE_CONTRADICTIONS"] == 0
+        if result.get("overall_result") == "PASS":
+            assert readiness.get("independent_verified") is True
+            assert readiness.get("INTERNAL_RED_TEAM_READY") is True

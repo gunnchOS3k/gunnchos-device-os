@@ -74,28 +74,31 @@
       "case_id": "SEC-NET-001",
       "severity": "S2",
       "title": "Hostile network digital suite (DNS/TLS/captive/downgrade/link)",
-      "status": "CLOSED_DIGITAL_PREPARED",
-      "HOSTILE_NETWORK_DIGITAL": "E4_PREPARED",
-      "fix": "HostileNetworkSimulator; credentials blocked on untrusted origins",
-      "remaining": "Real RF/Wi-Fi E5/E8 EXTERNAL_PENDING"
+      "status": "CLOSED_DIGITAL",
+      "HOSTILE_NETWORK_DIGITAL": "E4_PASS",
+      "fix": "HostileNetworkSimulator; credentials blocked on untrusted origins; Independent IV-NET-002",
+      "remaining": "Real RF/Wi-Fi E5/E8 EXTERNAL_PENDING",
+      "independent_verified_on": "3908de7c35882b500368475ce13d2243435f6443"
     },
     {
       "id": "WP007-DEF-010",
       "case_id": "SEC-GAME-001",
       "severity": "S2",
       "title": "Game save integrity authenticated local binding",
-      "status": "CLOSED_DIGITAL_PREPARED",
-      "LOCAL_SAVE_INTEGRITY_DIGITAL": "E4_PREPARED",
-      "fix": "HMAC-SHA256 bound to user/device/platform secret; quarantine + backup/recovery; reject unauthenticated digest",
-      "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING"
+      "status": "CLOSED_DIGITAL",
+      "LOCAL_SAVE_INTEGRITY_DIGITAL": "E4_PASS",
+      "fix": "HMAC-SHA256 bound to user/device/platform secret; quarantine + backup/recovery; reject unauthenticated digest; Independent IV-GAME-001/002",
+      "AUTHORITATIVE_MULTIPLAYER_INTEGRITY": "EXTERNAL_OR_OPERATIONS_PENDING",
+      "independent_verified_on": "3908de7c35882b500368475ce13d2243435f6443"
     },
     {
       "id": "WP007-IV-RES-001",
-      "case_id": "IV-OS-010b",
+      "case_id": "IV-OS-011",
       "severity": "S2",
       "title": "UpdaterService.api_verify without crypto check",
-      "status": "CLOSED_DIGITAL_PREPARED",
-      "fix": "Ed25519 (cryptography) verify against pinned DEV_TEST_TRUST_ROOT; PRODUCTION_TRUST_ROOT=EXTERNAL_PENDING"
+      "status": "CLOSED_DIGITAL",
+      "fix": "Ed25519 (cryptography) verify against pinned DEV_TEST_TRUST_ROOT; PRODUCTION_TRUST_ROOT=EXTERNAL_PENDING; Independent IV-OS-011/012/013",
+      "independent_verified_on": "3908de7c35882b500368475ce13d2243435f6443"
     }
   ],
   "backlog_s3_s4": [
