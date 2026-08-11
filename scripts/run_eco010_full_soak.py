@@ -10,12 +10,19 @@ import argparse
 import json
 import os
 import resource
+import sys
 import time
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# Running this file directly (`python3 scripts/run_eco010_full_soak.py`) sets
+# sys.path[0] to this script's own directory, not the repo root, so the
+# `gunnchos_device_os` package import below would otherwise fail regardless
+# of the invoking cwd or PYTHONPATH.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 def _rss_mb() -> float:

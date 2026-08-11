@@ -39,7 +39,15 @@ def test_master_complete_false():
             assert data.get("guest_os_input_present") is True
         if data.get("RING_HYBRID_LAB_SURFACE_MUTATION_PASS") is True:
             assert data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
-            assert data.get("guest_os_input_present") is False
+            # Real guest OS input may have been observed over virtio-serial
+            # while the app-state mutation still landed on Lab-surface
+            # simulacra (not real in-guest apps) — that nuance must be
+            # explicitly labeled via RING_GUEST_OBSERVE_WITH_LAB_MUTATION,
+            # never silently upgraded into the real state-mutation PASS.
+            if data.get("guest_os_input_present") is True:
+                assert data.get("RING_GUEST_OBSERVE_WITH_LAB_MUTATION") is True
+            else:
+                assert data.get("RING_GUEST_OBSERVE_WITH_LAB_MUTATION") is not True
 
 
 def test_independent_score_exists():

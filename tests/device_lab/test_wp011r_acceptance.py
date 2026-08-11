@@ -73,7 +73,15 @@ def test_master_and_silicon_tokens_remain_false():
             assert ring.get("guest_os_input_present") is True
         if ring.get("RING_HYBRID_LAB_SURFACE_MUTATION_PASS") is True:
             assert ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
-            assert ring.get("guest_os_input_present") is False
+            # Real guest OS input may have been observed over virtio-serial
+            # while the app-state mutation still landed on Lab-surface
+            # simulacra (not real in-guest apps) — that nuance must be
+            # explicitly labeled via RING_GUEST_OBSERVE_WITH_LAB_MUTATION,
+            # never silently upgraded into the real state-mutation PASS.
+            if ring.get("guest_os_input_present") is True:
+                assert ring.get("RING_GUEST_OBSERVE_WITH_LAB_MUTATION") is True
+            else:
+                assert ring.get("RING_GUEST_OBSERVE_WITH_LAB_MUTATION") is not True
 
 
 def test_http_server_labeled_process_proof_only(lab_artifacts: Path):
