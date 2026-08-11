@@ -10,7 +10,7 @@
     "VF6": "PHYSICAL_PENDING",
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
     "PRODUCTION_READY": false,
-    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST — not a shipping image"
+    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image"
   },
   "pass_tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
@@ -79,7 +79,7 @@
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "status": "OPEN",
       "earned": false,
-      "summary": "input_observe alone is insufficient. Need Ring simulator → authenticated packet → RingService → SpatialInputService → confidence gate → guest/hybrid input → ACTUAL app state mutation for document, browser, and one game.",
+      "summary": "input_observe alone is insufficient. Need Ring simulator \u2192 authenticated packet \u2192 RingService \u2192 SpatialInputService \u2192 confidence gate \u2192 guest/hybrid input \u2192 ACTUAL app state mutation for document, browser, and one game.",
       "required_to_earn": [
         "Full pipeline stages recorded",
         "Document buffer mutation via stack (not direct file write)",
@@ -116,8 +116,19 @@
     "script": "scripts/device_lab_score_independent.py",
     "output": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
     "hardcoded_tens_forbidden": true,
-    "note": "Recompute 12 categories from evidence files — not gunnchctl score alone"
+    "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Initial audit from Wave 5 code on daf8e54. Tokens stay false until evidence earns them on this host."
+  "note": "Initial audit from Wave 5 code on daf8e54. Tokens stay false until evidence earns them on this host.",
+  "independent_audit": {
+    "source": "Cycle3A_WP-011R_code_audit",
+    "accepted_tip_audited": "daf8e540998eeb62352e4292516ede89ca7715a2",
+    "verdict": "DOES_NOT_SATISFY_ORIGINAL_10_10_DIGITAL_CONTRACT",
+    "register_score_mean_of_12": 6.83,
+    "note": "Register may mark live_visual/actual_virtual_gunnchos DIGITALLY_VALIDATED on RFB/DRM-level evidence; WP-011R bar rejects that as UX proof."
+  },
+  "score_inflation_risk": [
+    "live_visual_interaction grade 10 from RFB banner DIGITALLY_VALIDATED",
+    "actual_virtual_gunnchos grade 10 from development guest DIGITALLY_VALIDATED"
+  ]
 }

@@ -1,36 +1,68 @@
 # gunnchos-device-os
 
-**GunnchOS** — an education-first, creator-first, gamer-first operating system for affordable handheld devices.
+**gunnchOS** — first-party OS for the gunnchOS3k device family (Student 14.5, Handheld Hybrid, DS-XL Coder) plus **gunnchDevice Lab** digital verification.
 
-> Phase 4 beta completion train — **beta_ready: false**. See [Beta Status Dashboard](docs/BETA_STATUS_DASHBOARD.md).
+> **Current state:** digitally integrated / partially validated. **Not** a finished shipping OS. **Not** production-ready. Device Lab guest = `DEVICE_LAB_DEVELOPMENT_GUEST` (Alpine + gunnchOS-services overlay), not the shipping image.
 
-## Run GunnchOS
+Ecosystem portal: [gunnchos-research-portal](https://github.com/gunnchOS3k/gunnchos-research-portal) · Product charter: [field-kit charter](https://github.com/gunnchOS3k/gunnchos-7gc-ai-ran-field-kit/blob/main/program/charter/gunnchOS3k_PRODUCT_CHARTER.md)
+
+## What is this?
+
+Operating system, Device Lab, continuity/fabric hooks, Ring/input paths, update/recovery, and Golden Journey digital evidence for first-party devices.
+
+## Why does it exist?
+
+So every first-party device runs one coherent gunnchOS stack with reproducible digital evidence before physical EVT claims.
+
+## Where does it fit?
+
+Layer 4 (gunnchOS) + Device Lab evidence in the Product Charter. Consumed by portal navigation; depends on hardware BOM truth.
+
+## What is real today?
+
+- Device Lab QEMU/HVF guest path (development guest)
+- Profile sync from hardware truth (Student/DS-XL/Handheld)
+- Golden Journey digital evidence (WP-003)
+- Internal security red-team readiness (WP-007)
+- Wave 4/5 Lab tokens as documented in the completion register (challenge depth in WP-011R)
+
+## What is simulated / modelled?
+
+- Ring spatial accuracy (`SIMULATED`)
+- Performance prediction / twin correlation
+- Some app surfaces in Lab behavioral mode
+
+## What is physical / external pending?
+
+- VF4/VF5/VF6, HIL, battery/thermal/RF
+- Shipping OS image, certification, carrier acceptance
+- ECO-010 full soak and four-game *production* Lab runtimes (WP-011R open)
+
+## Try / inspect in 5 minutes
 
 ```bash
+# Launcher prototype (historical UI path — not shipping proof)
 python3 scripts/export_launcher_contract.py
 cd apps/launcher_mock && npm install && npm run dev
-# → http://localhost:5173 — onboarding → Campus → Media Mode → Game Mode
+# → http://localhost:5173
+
+# Device Lab score from register (not independent 10/10)
+PYTHONPATH=.:src python3 scripts/device_lab_score_from_register.py
 ```
 
-Tests:
+## Claim boundary
 
-```bash
-make validate-full
-# or: pytest -q && cd apps/launcher_mock && npm test
-```
+`SILICON_EXACT_EMULATION=false` · no PRODUCTION_READY · no CERTIFIED · Cursor opens DRAFT PRs only.
 
-Linux container prototype:
+---
 
-```bash
-docker compose -f os_build/linux_desktop/docker-compose.yml up --build
-# → http://localhost:8080
-```
+## HISTORICAL — Phase / beta train
 
-See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [docs/PHASE2_PLAN.md](docs/PHASE2_PLAN.md), [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md).
+Older “Phase 4 beta completion train” framing and phase docs live under `docs/` (e.g. `docs/BETA_STATUS_DASHBOARD.md`, `docs/PHASE0.md`). Treat as **HISTORICAL/LEGACY** relative to Cycle 3A current-state language above. `beta_ready` remains **false**.
 
 ## Operational status (honest)
 
-**GunnchOS is not a finished shipping OS.** Phase 0–1 provide a runnable shell prototype with policy framework and tests.
+**gunnchOS is not a finished shipping OS.**
 
 | Category | Real today | Prototype today | Mock today | Missing for beta | Missing for GA |
 |----------|------------|-----------------|------------|------------------|----------------|
@@ -43,140 +75,23 @@ See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHASE1.md](docs/PHASE1.md), [docs/PH
 
 Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) · Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) · Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md) · **Beta status:** [docs/BETA_STATUS_DASHBOARD.md](docs/BETA_STATUS_DASHBOARD.md)
 
----
-
-A user-focused operating system alpha and launcher/customization framework for gunnchOS modular student devices.
-
 ## Start here
 
+- [gunnchos_device_os/device_lab/README.md](gunnchos_device_os/device_lab/README.md) — Device Lab
 - [docs/USER_FOCUSED_OS_ARCHITECTURE.md](docs/USER_FOCUSED_OS_ARCHITECTURE.md)
 - [docs/DEVICE_CLASSES.md](docs/DEVICE_CLASSES.md)
 - [docs/MODES_OVERVIEW.md](docs/MODES_OVERVIEW.md)
-- [docs/LAUNCHER_MOCK_ARCHITECTURE.md](docs/LAUNCHER_MOCK_ARCHITECTURE.md)
-- [docs/DS_XL_DEPLOY_CONTRACT.md](docs/DS_XL_DEPLOY_CONTRACT.md)
-- [docs/PRIVACY_SECURITY_MODEL.md](docs/PRIVACY_SECURITY_MODEL.md)
-- [docs/WAIKE_INTEGRATION.md](docs/WAIKE_INTEGRATION.md)
-- [docs/ISSUE_CLOSURE_MATRIX.md](docs/ISSUE_CLOSURE_MATRIX.md)
-- [hardware_compat/HARDWARE_COMPATIBILITY_CONTRACT.md](hardware_compat/HARDWARE_COMPATIBILITY_CONTRACT.md)
-- [docs/HARDWARE_OS_TRACEABILITY.md](docs/HARDWARE_OS_TRACEABILITY.md)
+- [GUNNCHOS_REQUIREMENTS_v0.1.md](GUNNCHOS_REQUIREMENTS_v0.1.md)
 
-## Run demos
+## Tests
 
 ```bash
-python scripts/run_user_focused_os_demo.py
-python scripts/run_mode_policy_demo.py
-python scripts/run_deploy_contract_demo.py
-python scripts/run_privacy_security_demo.py
-python scripts/run_edge_io_contract_demo.py
-python scripts/run_waike_integration_demo.py
-python scripts/run_guardian_policy_demo.py
-python scripts/run_hardware_compatibility_demo.py
-python scripts/run_hardware_boot_readiness_demo.py
-python scripts/run_device_specific_mode_demo.py
-python scripts/run_firmware_probe_demo.py
-python scripts/run_firmware_compatibility_demo.py
-python scripts/run_capsule_update_client_demo.py
+make validate-full
+# or: pytest -q && cd apps/launcher_mock && npm test
+PYTHONPATH=.:src pytest -q tests/device_lab/test_wp011r_tokens.py
 ```
 
-## Validations
+## Evidence
 
-```bash
-python scripts/validate_user_focused_os.py
-python scripts/validate_issue_closure.py
-python scripts/validate_shippable_requirements.py
-python scripts/validate_release_gates.py
-python scripts/validate_release_artifacts.py
-python scripts/validate_qa_package.py
-python scripts/validate_hardware_manifests.py
-python scripts/validate_hardware_compatibility.py
-python scripts/validate_hardware_release_evidence.py
-python scripts/validate_firmware_compat.py
-python scripts/validate_cross_repo_firmware_bridge.py
-pytest -q
-```
-
-## Firmware compatibility track
-
-gunnchos-device-os mirrors firmware manifests and interface contracts from [gunnchos-hardware-industrial-design](https://github.com/gunnchOS3k/gunnchos-hardware-industrial-design) and validates host-side firmware compatibility in a harness.
-
-Start here:
-- [firmware_compat/README.md](firmware_compat/README.md)
-- [firmware_compat/CLAIM_BOUNDARY.md](firmware_compat/CLAIM_BOUNDARY.md)
-- [cross_repo_firmware_bridge/README.md](cross_repo_firmware_bridge/README.md)
-- [results/REAL_FIRMWARE_COMPATIBILITY_IMPLEMENTATION_REPORT.md](results/REAL_FIRMWARE_COMPATIBILITY_IMPLEMENTATION_REPORT.md)
-
-Current status:
-- Firmware compatibility harness exists (host/emulated probes and contract sync).
-- Capsule update client is simulation-only (never flashes real firmware).
-- Implemented in firmware compatibility harness / OS firmware probe / cross-repo contract sync. Physical-board validation remains pending.
-
-## Hardware compatibility track
-
-gunnchos-device-os mirrors device families from [gunnchos-hardware-industrial-design](https://github.com/gunnchOS3k/gunnchos-hardware-industrial-design) and validates profile-based OS compatibility.
-
-Start here:
-- [hardware_compat/README.md](hardware_compat/README.md)
-- [hardware_compat/HARDWARE_CLAIM_BOUNDARY.md](hardware_compat/HARDWARE_CLAIM_BOUNDARY.md)
-- [docs/HARDWARE_REPO_INTEGRATION.md](docs/HARDWARE_REPO_INTEGRATION.md)
-- [hardware_release/HARDWARE_COMPATIBILITY_EVIDENCE_MATRIX.md](hardware_release/HARDWARE_COMPATIBILITY_EVIDENCE_MATRIX.md)
-
-Current status:
-- Hardware-aware OS alpha exists (simulated detection).
-- Four device profiles: Student 14.5, Handheld Hybrid, DS-XL Coder, Wearables/Arena Set.
-- Physical hardware boot and HLK-style validation **not proven**.
-
-## Shippable OS track
-
-This repo now includes a shippable OS requirements package and release-gate model.
-
-Start here:
-- [requirements/SHIPPABLE_OS_REQUIREMENTS.md](requirements/SHIPPABLE_OS_REQUIREMENTS.md)
-- [release_gates/RELEASE_GATE_MATRIX.md](release_gates/RELEASE_GATE_MATRIX.md)
-- [release_artifacts/ARTIFACT_MANIFEST_REQUIRED.md](release_artifacts/ARTIFACT_MANIFEST_REQUIRED.md)
-- [qa/QA_MASTER_TEST_PLAN.md](qa/QA_MASTER_TEST_PLAN.md)
-- [roadmap/SHIPPABLE_OS_ROADMAP.md](roadmap/SHIPPABLE_OS_ROADMAP.md)
-
-Current status:
-- User-focused OS alpha exists.
-- Issue backlog OS alpha exists.
-- Shippable requirements exist.
-- Installable image is not yet proven.
-- GA release is not claimed.
-- Finished shipping OS is not claimed.
-
-CI order (clean checkout):
-1. Generate demo outputs
-2. Run validators
-3. Run pytest
-
-See [docs/CI_FAILURE_ANALYSIS.md](docs/CI_FAILURE_ANALYSIS.md).
-
-## Launcher mock
-
-```bash
-cd apps/launcher_mock && npm install && npm run dev
-```
-
-Open **Your device (scooter → spaceship)** for the user-focused customization route, or use the fleet launcher view for campus/device modes.
-
-## Integrations
-
-- [edge-io-measurement-node](https://github.com/gunnchOS3k/edge-io-measurement-node)
-- [7gc-digital-twin](https://github.com/gunnchOS3k/7gc-digital-twin)
-- [waike-research-ops](https://github.com/gunnchOS3k/waike-research-ops)
-
-## Claim boundary
-
-This is a **device OS alpha** — a validated config-driven framework with launcher mock, mode policies, deploy contracts, guardian stubs, and privacy models. It does **not** claim:
-
-- Finished shipping OS image
-- Production MDM or parental-control enforcement
-- Certified accessibility compliance
-- Complete secure boot
-- Official Steam or media app certification
-
-See [product/CLAIM_BOUNDARY.md](product/CLAIM_BOUNDARY.md) and [docs/WHAT_IS_REAL_TODAY.md](docs/WHAT_IS_REAL_TODAY.md).
-
-## Historical note
-
-gunnchAI3k tutor integration is referenced as a learning companion bridge within this device OS layer — not as the identity of this repository.
+- `artifacts/wp011r/` — WP-011R gaps, independent score, acceptance matrix
+- Golden Journey scorecards / WP-007 artifacts under `artifacts/`
