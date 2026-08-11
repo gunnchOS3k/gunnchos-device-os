@@ -11,11 +11,19 @@
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
   "GUEST_DUAL_OUTPUT_PASS": false,
+  "RING_SPATIAL_ACCURACY": "SIMULATED",
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "depends_on": ["#97", "#95"],
+  "depends_on": ["#98", "#97", "#95"],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
+  "wave3": {
+    "virtio_serial_primary": true,
+    "qemu_arch_matches_guest_image": "aarch64",
+    "kvm_denied_tcg_fallback": true,
+    "guest_dual_requires_guest_proof": true,
+    "ring_os_input_path_wired": true
+  },
   "host_tooling_observed": {
     "qemu": "QEMU emulator version 11.0.3 (Homebrew)",
     "qemu_img": "qemu-img version 11.0.3",
@@ -24,10 +32,10 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Wave E–G prepared flags only — master ecosystem digital complete remains false",
-    "Live visual proven on Mac via QEMU VNC+WebSocket; CI may SKIPPED_ENVIRONMENT",
-    "gunnchctl run uses hybrid host process proof when guest agent is mailbox stub",
-    "RING_TO_REAL_APPLICATION_INPUT_PASS intentionally false; spatial accuracy SIMULATED",
+    "Wave 3 — virtio-serial primary + aarch64 arch match + ring OS-input wiring",
+    "Master ecosystem digital complete remains false",
+    "GUEST_DUAL_OUTPUT_PASS false until guest agent proves two outputs",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS false until virtio-serial observe earned; spatial SIMULATED",
     "No PRODUCTION_READY / physical measurement claims"
   ]
 }

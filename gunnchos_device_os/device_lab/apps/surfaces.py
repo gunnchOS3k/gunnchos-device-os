@@ -138,6 +138,14 @@ class BrowserSurface:
             self.page_state["pointer"] = {"x": event.get("x"), "y": event.get("y")}
             self.page_state["last_action"] = "move"
             mutated = True
+        elif kind in {"key", "text", "type"}:
+            # Conventional keyboard fallback into browser page state
+            text = str(event.get("text") or event.get("key") or "")
+            self.page_state["last_action"] = "key"
+            self.page_state["last_key"] = text
+            self.page_state["counter"] = int(self.page_state.get("counter") or 0) + 1
+            self.focused_element = self.focused_element or "keyboard"
+            mutated = True
         after = self.snapshot()
         row = {
             "ok": mutated,
