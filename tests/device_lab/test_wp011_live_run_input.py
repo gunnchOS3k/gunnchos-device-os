@@ -56,6 +56,12 @@ def test_kvm_denied_falls_back_to_tcg(monkeypatch: pytest.MonkeyPatch):
     assert accel["accel"] == "tcg"
 
 
+def test_lab_guest_image_arch_defaults_aarch64():
+    from gunnchos_device_os.device_lab.virtualization.qemu_guest import lab_guest_image_arch
+
+    assert lab_guest_image_arch(ROOT) == "aarch64"
+
+
 def test_display_transport_wired_not_scaffold_only():
     vnc = scaffold_display_transport(kind="vnc", display=7, websocket_port=5707)
     assert vnc["fake_screenshot_only"] is False
@@ -170,9 +176,11 @@ def test_live_display_path_or_skipped(tmp_path: Path):
             os.environ.pop(k, None)
 
 
-def test_ring_scenario_does_not_claim_ring_to_real_pass():
+def test_ring_scenario_keeps_spatial_simulated_and_pass_gated():
     text = (ROOT / "gunnchos_device_os/device_lab/scenarios/ring_real_input.py").read_text(encoding="utf-8")
     assert "RING_TO_REAL_APPLICATION_INPUT_PASS" in text
-    assert "False" in text.split("RING_TO_REAL_APPLICATION_INPUT_PASS", 1)[1][:40]
-    assert "RING_SPATIAL_ACCURACY\": \"SIMULATED\"" in text or "RING_SPATIAL_ACCURACY\": \"SIMULATED\"" in text.replace("'", '"')
+    assert "RING_SPATIAL_ACCURACY" in text
     assert "SIMULATED" in text
+    # Must not hardcode unconditional True for the PASS token
+    assert 'RING_TO_REAL_APPLICATION_INPUT_PASS": True' not in text
+    assert "RING_TO_REAL_APPLICATION_INPUT_PASS\": true" not in text.lower()

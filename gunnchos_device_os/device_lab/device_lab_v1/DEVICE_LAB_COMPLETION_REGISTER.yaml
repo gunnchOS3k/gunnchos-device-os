@@ -1,14 +1,14 @@
 schema: gunnchos.device_lab.completion_register.v1
 title: gunnchDevice Lab Full Ecosystem Digital Completion Register
-status: IMPLEMENTATION_PARTIAL_WAVE_EG
+status: IMPLEMENTATION_PARTIAL_WAVE_3
 implementation_pass_claimed: false
 wave_eg_note: |
-  Stacked on WP-011 #97. Live VNC+WS, hybrid gunnchctl run, QEMU monitor input,
-  DS-XL guest-dual honesty gate, virtio-serial host channel + agent overlay.
-  GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE remains false.
-  depends_on: [#97, #95]
+  Wave 3 stacked on WP-011 #98/#97/#95. Virtio-serial agent primary path,
+  aarch64 QEMU arch match (CI TCG), ring OS-input wiring, DS-XL guest-dual
+  honesty (device-attach ≠ PASS). Master complete token remains false.
+  depends_on: [#98, #97, #95]
 audited_at_utc: |
-  2026-08-10T22:27:03Z
+  2026-08-10T23:20:00Z
 accepted_device_os_main: 3908de7c35882b500368475ce13d2243435f6443
 accepted_hardware_main: 45c301a3a335d4bfd54970d80ec7ee717736ad07
 claim_firewall:
@@ -18,6 +18,9 @@ claim_firewall:
   VF6: PHYSICAL_PENDING
   GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE: false
   PRODUCTION_READY: false
+  RING_TO_REAL_APPLICATION_INPUT_PASS: false
+  GUEST_DUAL_OUTPUT_PASS: false
+  RING_SPATIAL_ACCURACY: SIMULATED
 audit_summary:
   start_session_boots_qemu_guest: true
   ui_live_framebuffer: true
@@ -224,10 +227,13 @@ requirements:
       - gunnchos_device_os/device_lab/scenarios/ring_real_input.py
     tests:
 
-    evidence_output: ring_real_input.py + apps/surfaces HID path; spatial SIMULATED
+    evidence_output: |
+      Wave 3: ring_real_input mutates Lab surfaces via SpatialInputService→input_router;
+      conventional fallback fixed; OS input path wired (hybrid + optional guest).
+      RING_TO_REAL_APPLICATION_INPUT_PASS only if virtio-serial observe earned; spatial SIMULATED.
     state: DIGITALLY_VALIDATED
-    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: VP003-S2-G07-PHYSICAL-RING PHYSICAL_PENDING
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; RING_SPATIAL_ACCURACY=SIMULATED
+    remaining_blocker: VP003-S2-G07-PHYSICAL-RING PHYSICAL_PENDING; RING_TO_REAL not earned until guest virtio observe
   -
     id: DL-GOLDEN-004
     description: G08 LAB-SCENARIO-LOCAL-AI-TUTOR digital path
@@ -422,12 +428,17 @@ requirements:
       - gunnchos_device_os/device_lab/virtualization/qemu_guest.py
     tests:
       - tests/device_lab/test_wp011_profile_guest_foundation.py
+      - tests/device_lab/test_wp011_wave3_virtio_ring.py
     evidence_output: |
-      Host virtio-serial chardev wired; overlay agent speaks virtio-ports when present.
-      Current Lab guest image still falls back to labeled host_mailbox_stub until image rebuild.
-    state: INTEGRATED
+      Wave 3: rebuilt overlay agent keeps persistent RDWR on virtio-ports;
+      host client prefers virtio-serial unix chardev; agent_path_label exposed.
+      Mailbox stub only as labeled fallback. CI forces aarch64+TCG.
+    state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: Rebuild guest initramfs so in-guest virtio-serial answers without mailbox stub
+    remaining_blocker: |
+      Earn agent_path_label=virtio-serial on every host (TCG boot latency /
+      missing virtio-ports → labeled host_mailbox_stub_fallback). process_start
+      via virtio when label earned; else PARTIAL.
   -
     id: DL-AVD-001
     description: AVD-style device manager UX
@@ -451,10 +462,10 @@ requirements:
       - tests/device_lab/test_wp011_live_run_input.py
     evidence_output: |
       Real host process proof (lab-echo) with PID; prefers guest process_start when non-stub agent available.
-      Intent-only path removed. Hybrid claim_boundary explicit.
+      Intent-only path removed. Hybrid claim_boundary explicit. Wave 3 virtio path preferred.
     state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; HYBRID host-guest boundary when guest stub
-    remaining_blocker: Full in-guest process_start awaits virtio-serial agent image rebuild
+    remaining_blocker: Full in-guest process_start when agent_path_label≠virtio-serial
   -
     id: DL-VISUAL-001
     description: Live framebuffer / VNC / WebRTC
@@ -482,10 +493,11 @@ requirements:
       - tests/device_lab/test_wp011_live_run_input.py
     evidence_output: |
       Conventional QEMU monitor sendkey proven on Mac live guest; UI /api/input wired.
-      Ring path still SIMULATED spatial accuracy; RING_TO_REAL_APPLICATION_INPUT_PASS=false.
+      Wave 3: Ring→OS input path wired (hybrid process + optional guest); spatial SIMULATED.
+      RING_TO_REAL_APPLICATION_INPUT_PASS only when virtio-serial input_observe earned.
     state: DIGITALLY_VALIDATED
-    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; conventional input ≠ ring-to-real-app PASS
-    remaining_blocker: Ring-to-guest-app HID stack still partial
+    claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; conventional input ≠ ring-to-real-app PASS unless earned
+    remaining_blocker: Ring-to-guest virtio-serial observe not yet earned on all hosts; spatial SIMULATED
   -
     id: DL-HWSYNC-001
     description: Lab profiles include exact MPN compute truth

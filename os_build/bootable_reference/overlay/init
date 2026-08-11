@@ -197,8 +197,15 @@ esac
 if [ "${LAB_PERSIST}" = "1" ]; then
   echo "GUNNCHOS_LAB_PERSIST=true"
   if [ -x /opt/gunnchos/bin/gunnch-guest-agent ]; then
-    /opt/gunnchos/bin/gunnch-guest-agent >/var/log/gunnchos/guest_agent.log 2>&1 &
+    # Run without pipe so missing `tee` cannot kill the agent (Alpine busybox variance).
+    /opt/gunnchos/bin/gunnch-guest-agent >>/var/log/gunnchos/guest_agent.log 2>&1 &
     echo "GUNNCHOS_GUEST_AGENT=started"
+    # Mirror virtio presence marker to serial for host evidence.
+    if [ -e /dev/virtio-ports/org.gunnchos.guest_agent.0 ]; then
+      echo "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=present"
+    else
+      echo "GUNNCHOS_GUEST_AGENT_VIRTIO_PORT=absent_at_start"
+    fi
   else
     echo "GUNNCHOS_GUEST_AGENT=missing"
   fi

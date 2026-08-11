@@ -27,16 +27,38 @@ CLAIM = (
 )
 
 
-def qemu_system_bin(*, prefer_arch: str | None = None) -> tuple[str, str]:
-    """Return (binary_path, arch_label). Prefer host-native arch for acceleration."""
-    machine = platform.machine().lower()
-    host = platform.system()
-    prefer = prefer_arch or os.environ.get("GUNNCHDEVICE_LAB_QEMU_ARCH")
-    if not prefer:
-        if machine in {"arm64", "aarch64"}:
-            prefer = "aarch64"
-        else:
-            prefer = "x86_64"
+def lab_guest_image_arch(repo_root: Path | None = None) -> str:
+    """Lab/bootable reference guest is Alpine aarch64 — never boot it under x86_64 QEMU."""
+    forced = (os.environ.get("GUNNCHDEVICE_LAB_QEMU_ARCH") or "").strip().lower()
+    if forced in {"aarch64", "x86_64"}:
+        return forced
+    root = repo_root or Path(__file__).resolve().parents[3]
+    for manifest in (
+        root / "os_build" / "device_lab_guest" / "artifacts" / "LAB_GUEST_MANIFEST.json",
+        root / "os_build" / "bootable_reference" / "artifacts" / "MANIFEST.json",
+    ):
+        if not manifest.exists():
+            continue
+        try:
+            data = json.loads(manifest.read_text(encoding="utf-8"))
+            arch = ((data.get("target") or {}).get("arch")) or (
+                (data.get("upstream_bootable_reference") or {}).get("arch")
+            )
+            if arch in {"aarch64", "x86_64"}:
+                return str(arch)
+        except (OSError, json.JSONDecodeError, TypeError):
+            continue
+    # SoT for Lab guest image builder is Alpine aarch64.
+    return "aarch64"
+
+
+def qemu_system_bin(*, prefer_arch: str | None = None, repo_root: Path | None = None) -> tuple[str, str]:
+    """Return (binary_path, arch_label). Prefer guest-image arch (aarch64), not host-native.
+
+    CI x86 runners previously selected qemu-system-x86_64 against an aarch64
+    initramfs → 'linux kernel too old to load a ram disk'. Match the image.
+    """
+    prefer = prefer_arch or lab_guest_image_arch(repo_root)
     candidates = {
         "aarch64": ["qemu-system-aarch64", "/opt/homebrew/bin/qemu-system-aarch64"],
         "x86_64": ["qemu-system-x86_64", "/opt/homebrew/bin/qemu-system-x86_64"],
@@ -165,15 +187,34 @@ class QemuGuestSession:
 
     def start(self) -> dict[str, Any]:
         self.work.mkdir(parents=True, exist_ok=True)
-        self.qemu_bin, self.arch = qemu_system_bin()
+        self.qemu_bin, self.arch = qemu_system_bin(repo_root=self.repo_root)
         self.accel = select_accel(self.arch)
         kernel, initrd = self._resolve_images()
+        # Hard fail early if arch mismatch would produce cryptic QEMU errors.
+        image_arch = lab_guest_image_arch(self.repo_root)
+        if self.arch != image_arch and not os.environ.get("GUNNCHDEVICE_LAB_QEMU_ARCH"):
+            # Re-resolve strictly for image arch.
+            self.qemu_bin, self.arch = qemu_system_bin(prefer_arch=image_arch, repo_root=self.repo_root)
+            self.accel = select_accel(self.arch)
         disk = self._ensure_persist_disk()
         self.boot_log = self.work / "qemu_boot.log"
         self.pid_file = self.work / "qemu.pid"
         agent_mailbox = self.work / "guest_agent.mailbox"
-        self.monitor_sock = self.work / "qemu-monitor.sock"
-        self.virtio_serial_sock = self.work / "guest-agent.sock"
+        # macOS UNIX socket path limit is ~104 bytes; pytest tmp paths are often longer.
+        # Keep QEMU sockets under a short /tmp prefix and symlink from work for discovery.
+        sock_dir = Path(f"/tmp/gdl-{os.getpid()}-{abs(hash(str(self.work))) % 10_000_000:x}")
+        sock_dir.mkdir(parents=True, exist_ok=True)
+        self.monitor_sock = sock_dir / "mon.sock"
+        self.virtio_serial_sock = sock_dir / "ga.sock"
+        for name, target in (("qemu-monitor.sock", self.monitor_sock), ("guest-agent.sock", self.virtio_serial_sock)):
+            link = self.work / name
+            try:
+                if link.exists() or link.is_symlink():
+                    link.unlink()
+                link.symlink_to(target)
+            except OSError:
+                pass
+        self.state["sock_dir"] = str(sock_dir)
         vnc_display = int(os.environ.get("GUNNCHDEVICE_LAB_VNC_PORT", "0"))  # 0 => display :7 -> 5907
         ws_port = int(os.environ.get("GUNNCHDEVICE_LAB_WS_PORT", "5707"))
         dual_guest = bool(
@@ -215,12 +256,13 @@ class QemuGuestSession:
             "-monitor",
             f"unix:{self.monitor_sock},server,nowait",
             # virtio-serial guest agent channel (unix socket on host)
+            # aarch64 virt uses PCI: virtio-serial-pci (not bare virtio-serial-device)
             "-chardev",
             f"socket,path={self.virtio_serial_sock},server=on,wait=off,id=ga0",
             "-device",
-            "virtio-serial-device",
+            "virtio-serial-pci,id=virtio-serial0",
             "-device",
-            "virtserialport,chardev=ga0,name=org.gunnchos.guest_agent.0",
+            "virtserialport,bus=virtio-serial0.0,chardev=ga0,name=org.gunnchos.guest_agent.0",
         ]
 
         # Optional usernet localhost-only (off by default)
@@ -236,20 +278,24 @@ class QemuGuestSession:
         }
         if enable_gpu:
             cmd += ["-device", "virtio-gpu-pci,max_outputs=2,id=gpu0"]
+            # Device attached ≠ guest-proven dual. Keep GUEST_DUAL_OUTPUT_PASS false
+            # until guest agent display_info proves two guest outputs.
             guest_outputs = [
                 {
                     "id": "guest-gpu0-out0",
                     "role": "primary",
-                    "connected": True,
-                    "source": "qemu_virtio_gpu",
-                    "class": "guest",
+                    "connected": False,
+                    "source": "qemu_virtio_gpu_device_attached",
+                    "class": "host_device_intent",
+                    "note": "virtio-gpu max_outputs=2 attached; awaiting guest proof",
                 },
                 {
                     "id": "guest-gpu0-out1",
                     "role": "secondary",
-                    "connected": True,
-                    "source": "qemu_virtio_gpu",
-                    "class": "guest",
+                    "connected": False,
+                    "source": "qemu_virtio_gpu_device_attached",
+                    "class": "host_device_intent",
+                    "note": "virtio-gpu max_outputs=2 attached; awaiting guest proof",
                 },
             ]
 
@@ -360,7 +406,7 @@ class QemuGuestSession:
             err = (getattr(completed, "stderr", "") or "") + (getattr(completed, "stdout", "") or "")
             cmd2 = []
             skip = False
-            drop_tokens = {"virtio-serial-device", "virtserialport"}
+            drop_tokens = {"virtio-serial-device", "virtio-serial-pci", "virtserialport"}
             for i, tok in enumerate(cmd):
                 if skip:
                     skip = False
@@ -416,10 +462,56 @@ class QemuGuestSession:
         if channel == agent_mailbox:
             os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "1"
             os.environ["GUNNCH_GUEST_AGENT_MAILBOX"] = "1"
-        self.agent = GuestAgentClient(channel, timeout_sec=5.0)
+        self.agent = GuestAgentClient(
+            channel,
+            timeout_sec=5.0,
+            extras={"transport_preference": "virtio_serial"},
+        )
         agent_status = self._poll_boot_and_agent(
             timeout_sec=float(os.environ.get("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "90"))
         )
+        # Attempt guest-proven dual outputs via agent (never claim from host device attach alone).
+        if enable_gpu and self.agent is not None and agent_status.get("transport") == "virtio_serial":
+            try:
+                disp = self.agent.call("display_info")
+                displays = disp.get("displays") or []
+                guest_connected = [
+                    d
+                    for d in displays
+                    if d.get("connected")
+                    and (
+                        str(d.get("class") or "").startswith("guest")
+                        or str(d.get("source") or "") in {"guest_agent", "qemu_virtio_gpu", "virtio-gpu"}
+                    )
+                ]
+                if len(guest_connected) >= 2 and disp.get("transport") == "virtio_serial" and not disp.get("stub"):
+                    guest_outputs = [
+                        {
+                            "id": str(d.get("id") or f"guest{i}"),
+                            "role": "primary" if i == 0 else "secondary",
+                            "connected": True,
+                            "source": "guest_agent",
+                            "class": "guest",
+                        }
+                        for i, d in enumerate(guest_connected[:2])
+                    ]
+                    if isinstance(self.display_transport, dict):
+                        self.display_transport["guest_outputs"] = guest_outputs
+                    agent_status["guest_dual_proven"] = True
+                else:
+                    agent_status["guest_dual_proven"] = False
+                    agent_status["guest_dual_blocker"] = (
+                        "Guest display_info did not prove two guest outputs over virtio-serial"
+                    )
+            except Exception as exc:  # noqa: BLE001
+                agent_status["guest_dual_proven"] = False
+                agent_status["guest_dual_blocker"] = f"display_info_failed: {exc}"
+        elif enable_gpu:
+            agent_status["guest_dual_proven"] = False
+            agent_status["guest_dual_blocker"] = (
+                "virtio-gpu attached but agent transport is not virtio-serial; "
+                "GUEST_DUAL_OUTPUT_PASS remains false"
+            )
 
         # Live display probe when VNC enabled
         live_info = None
@@ -510,8 +602,16 @@ class QemuGuestSession:
             time.sleep(0.5)
         assert self.agent is not None
         # Prefer virtio-serial; if not ready, fall back to mailbox stub without lying.
-        ready = self.agent.wait_ready(timeout_sec=min(8.0, timeout_sec))
+        ready = self.agent.wait_ready(timeout_sec=min(12.0, timeout_sec))
         transport = "virtio_serial"
+        agent_path_label = "virtio-serial"
+        rsp = ready.get("response") or {}
+        if ready.get("ready") and str(rsp.get("transport") or "") in {"virtio_serial", "virtio-serial"}:
+            transport = "virtio_serial"
+            agent_path_label = "virtio-serial"
+        elif ready.get("ready") and str(rsp.get("transport") or "") == "host_mailbox_stub":
+            transport = "host_mailbox_stub"
+            agent_path_label = "host_mailbox_stub"
         if not ready.get("ready"):
             mailbox = self.work / "guest_agent.mailbox"
             os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "1"
@@ -522,17 +622,23 @@ class QemuGuestSession:
                 self.agent = stub_client
                 ready = stub_ready
                 transport = "host_mailbox_stub_fallback"
+                agent_path_label = "host_mailbox_stub_fallback"
                 markers.append("agent_mailbox_fallback")
+            else:
+                transport = "FAIL_NO_AGENT"
+                agent_path_label = "FAIL_NO_AGENT"
+                markers.append("agent_unavailable")
         return {
             "ready": bool(ready.get("ready")) or self.boot_complete,
             "boot_complete_observed": self.boot_complete,
             "markers": markers,
             "agent_response": ready,
             "transport": transport,
+            "agent_path_label": agent_path_label,
             "measurement_class": "HOST_OBSERVED",
             "note": (
                 "Boot markers from QEMU serial file; agent prefers virtio-serial "
-                f"({transport}). Mailbox stub is labeled when used."
+                f"({agent_path_label}). Mailbox stub is labeled when used."
             ),
         }
 
@@ -562,6 +668,21 @@ class QemuGuestSession:
                     os.kill(pid, signal.SIGKILL)
                 except OSError:
                     pass
+        # Best-effort cleanup of short socket dir
+        for sock in (self.monitor_sock, self.virtio_serial_sock):
+            if sock is None:
+                continue
+            try:
+                if sock.exists():
+                    sock.unlink()
+                parent = sock.parent
+                if parent.name.startswith("gdl-") and parent.exists():
+                    try:
+                        parent.rmdir()
+                    except OSError:
+                        pass
+            except OSError:
+                pass
         return {"ok": True, "stopped_pid": pid, "alive": bool(pid and _pid_alive(pid))}
 
     def status(self) -> dict[str, Any]:
@@ -598,9 +719,9 @@ def _qemu_version(bin_path: str) -> str:
         return "unknown"
 
 
-def environment_can_run_qemu() -> dict[str, Any]:
+def environment_can_run_qemu(repo_root: Path | None = None) -> dict[str, Any]:
     try:
-        bin_path, arch = qemu_system_bin()
+        bin_path, arch = qemu_system_bin(repo_root=repo_root)
         accel = select_accel(arch)
         return {
             "ok": True,
@@ -608,6 +729,7 @@ def environment_can_run_qemu() -> dict[str, Any]:
             "arch": arch,
             "accel": accel,
             "version": _qemu_version(bin_path),
+            "image_arch": lab_guest_image_arch(repo_root),
             "SKIPPED_ENVIRONMENT": False,
         }
     except FileNotFoundError as exc:
@@ -626,7 +748,7 @@ def start_qemu_guest(
     repo_root: Path,
     headless: bool = True,
 ) -> dict[str, Any]:
-    env = environment_can_run_qemu()
+    env = environment_can_run_qemu(repo_root=repo_root)
     if not env.get("ok"):
         return {
             "ok": False,
@@ -649,4 +771,8 @@ def start_qemu_guest(
     result = sess.start()
     result["environment"] = env
     result["_session"] = sess
+    # Honesty: qemu_start_failed is FAIL, never PASS/SKIPPED unless environment truly missing.
+    if not result.get("ok") and not result.get("SKIPPED_ENVIRONMENT"):
+        result["result"] = "FAIL"
+        result.setdefault("ok", False)
     return result
