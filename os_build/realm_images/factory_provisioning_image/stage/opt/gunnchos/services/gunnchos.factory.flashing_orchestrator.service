@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.factory.flashing_orchestrator
+Realm=FACTORY_PROVISIONING_IMAGE
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.factory.flashing_orchestrator
+Restart=on-failure

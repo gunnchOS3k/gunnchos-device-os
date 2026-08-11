@@ -1,0 +1,84 @@
+schema: gunnchos.image_realm.v1
+realm_id: DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST
+status: ACTIVE_DEV
+description: >-
+  Interactive lab guest for day-to-day gunnchOS service development inside
+  the Device Lab (QEMU/hybrid). Maximum introspection, no restrictions.
+
+packages:
+  included:
+    - gunnchos.core.hal
+    - gunnchos.core.input
+    - gunnchos.core.ring
+    - gunnchos.core.display
+    - gunnchos.core.dock
+    - gunnchos.core.continuity
+    - gunnchos.core.identity
+    - gunnchos.core.permissions
+    - gunnchos.core.sandbox
+    - gunnchos.core.connectivity
+    - gunnchos.core.ai_interface
+    - gunnchos.core.profile_manager
+    - gunnchos.core.a11y
+    - gunnchos.core.diagnostics
+    - gunnchos.dev.updater_debug
+    - gunnchos.dev.recovery_debug
+    - gunnchos.dev.fleet_agent_stub
+    - gunnchos.dev.ssh_shell
+    - gunnchos.dev.python_toolchain
+    - gunnchos.dev.gunnchctl
+    - gunnchos.dev.gunnchsdk
+  excluded:
+    - gunnchos.factory.calibration_import
+    - gunnchos.factory.esim_provisioning
+
+debug_access:
+  enabled: true
+  methods: [ssh, serial_console, gunnchctl_debug_bridge, remote_python_repl]
+  requires_unlock: false
+
+developer_mode:
+  enabled: true
+  unlock_policy: always_on
+  persists_across_updates: true
+
+logging:
+  level: DEBUG
+  remote_upload: false
+  retention_days: 14
+  redaction_required: false
+
+telemetry:
+  enabled: false
+  scope: none
+  opt_out_supported: true
+
+update_channel: dev-lab
+
+trust_roots:
+  key_source: dev
+  signing_keys: [release_engineering_ed25519_dev]
+  production_private_keys_present: false
+  anti_rollback_enforced: false
+
+secrets_policy:
+  allowed_secret_classes: [dev_test_only]
+  forbidden: [production_signing_key, production_device_identity, real_esim_credential]
+
+recovery_behavior:
+  auto_recovery_on_boot_failure: false
+  recovery_partition_required: false
+  factory_reset_available: true
+
+factory_only_services: []
+
+production_restrictions:
+  shell_access: unrestricted
+  adb_equivalent: enabled
+  root_access: enabled
+  allow_unsigned_updates: true
+  debug_access_allowed: true
+
+claim_boundary: >-
+  DEV_LAB realm for interactive engineering work. Full debug access, no
+  telemetry upload, no production keys ever present. Not a shippable image.

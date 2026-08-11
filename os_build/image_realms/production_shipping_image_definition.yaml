@@ -1,0 +1,101 @@
+schema: gunnchos.image_realm.v1
+realm_id: PRODUCTION_SHIPPING_IMAGE_DEFINITION
+status: NOT_RELEASED
+description: >-
+  Contract-complete definition of the production shipping image. Defines
+  every field a real production build would need. This repository never
+  builds a signed, releasable production image: `gunnchctl os-image build
+  production` always runs `--unsigned` and always stamps
+  status=NOT_RELEASED. Real production signing happens outside this repo
+  with HSM-backed keys and a separate audit trail (see
+  security/secure_boot/CLAIM_BOUNDARY.md).
+
+packages:
+  included:
+    - gunnchos.core.hal
+    - gunnchos.core.input
+    - gunnchos.core.ring
+    - gunnchos.core.display
+    - gunnchos.core.dock
+    - gunnchos.core.continuity
+    - gunnchos.core.identity
+    - gunnchos.core.permissions
+    - gunnchos.core.sandbox
+    - gunnchos.core.connectivity
+    - gunnchos.core.ai_interface
+    - gunnchos.core.profile_manager
+    - gunnchos.core.a11y
+    - gunnchos.core.diagnostics
+    - gunnchos.core.updater
+    - gunnchos.core.recovery
+    - gunnchos.core.fleet_agent
+  excluded:
+    - gunnchos.dev.ssh_shell
+    - gunnchos.dev.python_toolchain
+    - gunnchos.dev.gunnchctl
+    - gunnchos.evt.hardware_validation_suite
+    - gunnchos.evt.telemetry_debug_agent
+    - gunnchos.factory.serial_issuer
+    - gunnchos.factory.mac_allocator
+    - gunnchos.factory.key_injection_interface
+    - gunnchos.factory.calibration_import
+
+debug_access:
+  enabled: false
+  methods: []
+  requires_unlock: true
+
+developer_mode:
+  enabled: false
+  unlock_policy: fused_unlock_flag_voids_warranty
+  persists_across_updates: false
+
+logging:
+  level: WARN
+  remote_upload: true
+  retention_days: 30
+  redaction_required: true
+
+telemetry:
+  enabled: true
+  scope: privacy_reviewed_product_only
+  opt_out_supported: true
+
+update_channel: production-stable
+
+trust_roots:
+  key_source: none
+  signing_keys: []
+  production_private_keys_present: false
+  anti_rollback_enforced: true
+
+secrets_policy:
+  allowed_secret_classes: []
+  forbidden:
+    - production_signing_key
+    - dev_test_only
+    - factory_dummy_identity
+    - real_esim_credential_placeholder
+
+recovery_behavior:
+  auto_recovery_on_boot_failure: true
+  recovery_partition_required: true
+  factory_reset_available: true
+
+factory_only_services: []
+
+production_restrictions:
+  shell_access: disabled
+  adb_equivalent: disabled
+  root_access: unlock_gated_voids_warranty
+  allow_unsigned_updates: false
+  debug_access_allowed: false
+
+claim_boundary: >-
+  PRODUCTION_SHIPPING_IMAGE_DEFINITION is a complete CONTRACT, not a
+  release. status is always NOT_RELEASED in this repository.
+  trust_roots.key_source is "none" — no production signing key exists, is
+  generated, or is referenced anywhere in this repo. `gunnchctl os-image
+  build production` refuses to run without --unsigned and always emits
+  signing_realm=NOT_RELEASED, claim_boundary=this text, and
+  PRODUCTION_RELEASE_CLAIMED=false.

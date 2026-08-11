@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.core.hal
+Realm=FACTORY_PROVISIONING_IMAGE
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.core.hal
+Restart=on-failure

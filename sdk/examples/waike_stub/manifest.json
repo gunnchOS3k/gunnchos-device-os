@@ -1,0 +1,19 @@
+{
+  "schema": "gunnchos.sdk.app_manifest.v1",
+  "app_id": "gunnchos.waike_stub",
+  "name": "WAIKE Learning Mode (stub)",
+  "version": "0.1.0",
+  "api_version": "1.0.0",
+  "min_os_version": "0.1.0",
+  "max_os_version": null,
+  "arch_targets": ["aarch64", "x86_64"],
+  "entrypoint": "main.py",
+  "permissions": ["storage_read", "storage_write", "ai_interface"],
+  "capabilities_required": ["storage.read", "storage.write", "ai_interface.query"],
+  "dependencies": [],
+  "sandbox_profile": {
+    "network_policy": "deny_all",
+    "filesystem_scope": "/data/apps/gunnchos.waike_stub",
+    "allow_ipc": false
+  }
+}

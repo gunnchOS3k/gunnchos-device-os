@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.dev.gunnchsdk
+Realm=DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.dev.gunnchsdk
+Restart=on-failure

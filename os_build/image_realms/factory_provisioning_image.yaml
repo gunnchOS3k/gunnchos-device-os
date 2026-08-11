@@ -1,0 +1,90 @@
+schema: gunnchos.image_realm.v1
+realm_id: FACTORY_PROVISIONING_IMAGE
+status: ACTIVE_DEV
+description: >-
+  Line-station image used only during factory provisioning: identity
+  issuance, calibration import, eSIM stub provisioning, flashing hand-off.
+  Never shipped to end users.
+
+packages:
+  included:
+    - gunnchos.core.hal
+    - gunnchos.core.diagnostics
+    - gunnchos.factory.serial_issuer
+    - gunnchos.factory.mac_allocator
+    - gunnchos.factory.identity_request_response
+    - gunnchos.factory.key_injection_interface
+    - gunnchos.factory.esim_provisioning
+    - gunnchos.factory.calibration_import
+    - gunnchos.factory.flashing_orchestrator
+    - gunnchos.factory.device_record_export
+    - gunnchos.factory.repair_traceability
+  excluded:
+    - gunnchos.dev.ssh_shell
+    - gunnchos.dev.python_toolchain
+    - gunnchos.core.ai_interface
+    - gunnchos.core.ring
+    - gunnchos.core.dock
+
+debug_access:
+  enabled: true
+  methods: [line_station_console]
+  requires_unlock: false
+
+developer_mode:
+  enabled: false
+  unlock_policy: not_applicable
+  persists_across_updates: false
+
+logging:
+  level: INFO
+  remote_upload: true
+  retention_days: 90
+  redaction_required: true
+
+telemetry:
+  enabled: true
+  scope: factory_line_only
+  opt_out_supported: false
+
+update_channel: factory-line
+
+trust_roots:
+  key_source: dev
+  signing_keys: [release_engineering_ed25519_dev]
+  production_private_keys_present: false
+  anti_rollback_enforced: false
+
+secrets_policy:
+  allowed_secret_classes: [dev_test_only, factory_dummy_identity]
+  forbidden: [production_signing_key, real_esim_credential, real_customer_data]
+
+recovery_behavior:
+  auto_recovery_on_boot_failure: true
+  recovery_partition_required: false
+  factory_reset_available: true
+
+factory_only_services:
+  - serial_issuer
+  - mac_allocator
+  - identity_request_response
+  - key_injection_interface
+  - esim_provisioning_stub
+  - calibration_import
+  - flashing_orchestrator
+  - device_record_export
+  - repair_traceability
+
+production_restrictions:
+  shell_access: line_station_only
+  adb_equivalent: disabled
+  root_access: line_station_only
+  allow_unsigned_updates: false
+  debug_access_allowed: false
+
+claim_boundary: >-
+  FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities,
+  MAC ranges, and eSIM credentials issued through this realm in this repo
+  are DEV/TEST dummies (see factory_provisioning module claim boundary).
+  No production key material and no real eSIM/carrier credentials exist
+  here.

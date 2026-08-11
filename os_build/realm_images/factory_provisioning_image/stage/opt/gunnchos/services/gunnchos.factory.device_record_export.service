@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.factory.device_record_export
+Realm=FACTORY_PROVISIONING_IMAGE
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.factory.device_record_export
+Restart=on-failure

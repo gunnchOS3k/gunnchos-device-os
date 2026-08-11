@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.recovery.minimal_init
+Realm=RECOVERY_IMAGE
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.recovery.minimal_init
+Restart=on-failure

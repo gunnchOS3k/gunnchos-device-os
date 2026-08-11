@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.core.a11y
+Realm=EVT_ENGINEERING_IMAGE
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.core.a11y
+Restart=on-failure

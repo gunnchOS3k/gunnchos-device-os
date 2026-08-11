@@ -1,0 +1,8 @@
+[Unit]
+Description=gunnchOS service package gunnchos.core.ai_interface
+Realm=DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST
+
+[Service]
+Type=notify
+ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.core.ai_interface
+Restart=on-failure

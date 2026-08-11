@@ -1,0 +1,95 @@
+{
+  "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here.",
+  "debug_access": {
+    "enabled": true,
+    "methods": [
+      "line_station_console"
+    ],
+    "requires_unlock": false
+  },
+  "description": "Line-station image used only during factory provisioning: identity issuance, calibration import, eSIM stub provisioning, flashing hand-off. Never shipped to end users.",
+  "developer_mode": {
+    "enabled": false,
+    "persists_across_updates": false,
+    "unlock_policy": "not_applicable"
+  },
+  "factory_only_services": [
+    "serial_issuer",
+    "mac_allocator",
+    "identity_request_response",
+    "key_injection_interface",
+    "esim_provisioning_stub",
+    "calibration_import",
+    "flashing_orchestrator",
+    "device_record_export",
+    "repair_traceability"
+  ],
+  "logging": {
+    "level": "INFO",
+    "redaction_required": true,
+    "remote_upload": true,
+    "retention_days": 90
+  },
+  "packages": {
+    "excluded": [
+      "gunnchos.dev.ssh_shell",
+      "gunnchos.dev.python_toolchain",
+      "gunnchos.core.ai_interface",
+      "gunnchos.core.ring",
+      "gunnchos.core.dock"
+    ],
+    "included": [
+      "gunnchos.core.hal",
+      "gunnchos.core.diagnostics",
+      "gunnchos.factory.serial_issuer",
+      "gunnchos.factory.mac_allocator",
+      "gunnchos.factory.identity_request_response",
+      "gunnchos.factory.key_injection_interface",
+      "gunnchos.factory.esim_provisioning",
+      "gunnchos.factory.calibration_import",
+      "gunnchos.factory.flashing_orchestrator",
+      "gunnchos.factory.device_record_export",
+      "gunnchos.factory.repair_traceability"
+    ]
+  },
+  "production_restrictions": {
+    "adb_equivalent": "disabled",
+    "allow_unsigned_updates": false,
+    "debug_access_allowed": false,
+    "root_access": "line_station_only",
+    "shell_access": "line_station_only"
+  },
+  "realm_id": "FACTORY_PROVISIONING_IMAGE",
+  "recovery_behavior": {
+    "auto_recovery_on_boot_failure": true,
+    "factory_reset_available": true,
+    "recovery_partition_required": false
+  },
+  "schema": "gunnchos.image_realm.v1",
+  "secrets_policy": {
+    "allowed_secret_classes": [
+      "dev_test_only",
+      "factory_dummy_identity"
+    ],
+    "forbidden": [
+      "production_signing_key",
+      "real_esim_credential",
+      "real_customer_data"
+    ]
+  },
+  "status": "ACTIVE_DEV",
+  "telemetry": {
+    "enabled": true,
+    "opt_out_supported": false,
+    "scope": "factory_line_only"
+  },
+  "trust_roots": {
+    "anti_rollback_enforced": false,
+    "key_source": "dev",
+    "production_private_keys_present": false,
+    "signing_keys": [
+      "release_engineering_ed25519_dev"
+    ]
+  },
+  "update_channel": "factory-line"
+}
