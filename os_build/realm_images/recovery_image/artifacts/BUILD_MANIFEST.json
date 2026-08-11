@@ -13,7 +13,7 @@
     "rootfs_tarball": {
       "file_count": 10,
       "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
-      "sha256": "24c60d5c30f49ba9cea83e7d97fc8e043997d7e8782c0583219e82f1f8826793",
+      "sha256": "6b922fd84f414ce052f85d7dd4b20774299db051db80faf79c4339647302ede4",
       "size_bytes": 1647
     }
   },
@@ -98,7 +98,7 @@
     },
     "update_channel": "recovery"
   },
-  "image_hash": "20b889598802ffbf917ab1f0ffc37ee94eab02f3a1e80a4b638087905633555f",
+  "image_hash": "60d9090242365118a034d078493885bdcc166561e15650ebc6c2ba9c7bc63baa",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -156,7 +156,7 @@
   "reproducibility": {
     "file_count": 10,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "24c60d5c30f49ba9cea83e7d97fc8e043997d7e8782c0583219e82f1f8826793",
+    "rootfs_sha256": "6b922fd84f414ce052f85d7dd4b20774299db051db80faf79c4339647302ede4",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4107,16 +4107,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "c2c3b18c0607c160738912ef4e8c5b8a07e1086f9d9bbd448e05315702f2c3bed1936cc47a5984d6dbfafc3adee25416b6fa52e77d52d891acb059690d5def0a"
+    "signature_hex": "2e3c6e6c1ac037292854c21d42a75b9977ed4b2906a9166efc317f01b56f92281f0af116d5e6a16cc6c81ad4435b72e7e5efb6b8741db334eb43a10359f84c07"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "eb96edf0ff5b7e587aa5e7526314aa602bc637eb",
+    "repo_head_sha": "5cfb0b364e24c763026ebf8ce35f8b3d755f0e61",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T19:26:08Z",
+  "timestamp_utc": "2026-08-11T19:30:54Z",
   "unsigned_requested": false
 }

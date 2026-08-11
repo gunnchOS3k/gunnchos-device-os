@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.core.hal
-Realm=PRODUCTION_SHIPPING_IMAGE_DEFINITION
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.core.hal
-Restart=on-failure

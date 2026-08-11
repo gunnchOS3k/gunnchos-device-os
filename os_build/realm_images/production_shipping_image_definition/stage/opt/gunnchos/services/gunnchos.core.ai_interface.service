@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.core.ai_interface
-Realm=PRODUCTION_SHIPPING_IMAGE_DEFINITION
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.core.ai_interface
-Restart=on-failure

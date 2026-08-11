@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.dev.recovery_debug
-Realm=DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.dev.recovery_debug
-Restart=on-failure

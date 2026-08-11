@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.core.recovery
-Realm=EVT_ENGINEERING_IMAGE
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.core.recovery
-Restart=on-failure

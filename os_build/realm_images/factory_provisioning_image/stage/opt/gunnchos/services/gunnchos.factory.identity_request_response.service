@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.factory.identity_request_response
-Realm=FACTORY_PROVISIONING_IMAGE
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.factory.identity_request_response
-Restart=on-failure

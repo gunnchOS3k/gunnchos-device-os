@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.recovery.ab_rollback_agent
-Realm=RECOVERY_IMAGE
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.recovery.ab_rollback_agent
-Restart=on-failure

@@ -1,8 +1,0 @@
-[Unit]
-Description=gunnchOS service package gunnchos.recovery.user_data_migration
-Realm=RECOVERY_IMAGE
-
-[Service]
-Type=notify
-ExecStart=/opt/gunnchos/bin/gunnchos-svc --package gunnchos.recovery.user_data_migration
-Restart=on-failure
