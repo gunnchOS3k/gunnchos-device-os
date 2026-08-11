@@ -187,17 +187,49 @@ def run_live_visual_proof(
     before_ok = bool(cap_b.get("ok")) and not cap_b.get("synthetic", False)
     after_ok = bool(cap_a.get("ok")) and not cap_a.get("synthetic", False)
     bytes_differ = False
+    diff_bytes = 0
+    non_black_before = 0
+    non_black_after = 0
     if before_ok and after_ok:
         try:
-            bytes_differ = Path(cap_b["path"]).read_bytes() != Path(cap_a["path"]).read_bytes()
+            bb = Path(cap_b["path"]).read_bytes()
+            aa = Path(cap_a["path"]).read_bytes()
+            bytes_differ = bb != aa
+            diff_bytes = sum(1 for x, y in zip(bb, aa) if x != y)
+            # Skip PPM ASCII header when counting lit pixels
+            def _lit(raw: bytes) -> int:
+                if raw.startswith(b"P6") or raw.startswith(b"P3"):
+                    parts = raw.split(b"\n", 3)
+                    body = parts[3] if len(parts) >= 4 else raw
+                else:
+                    body = raw
+                # Sample stride for speed on large frames
+                step = max(1, len(body) // 200_000)
+                return sum(1 for i in range(0, len(body), step) if body[i] != 0)
+
+            non_black_before = _lit(bb)
+            non_black_after = _lit(aa)
         except OSError:
             bytes_differ = False
+
+    # Meaningful visual change: not a near-black framebuffer with noise-level diffs.
+    meaningful_change = bool(
+        bytes_differ
+        and diff_bytes >= 500
+        and max(non_black_before, non_black_after) >= 50
+    )
     input_ok = bool((input_result.get("result") or {}).get("ok")) or bool(
         input_result.get("result")
     )
 
     # Require real captures of shell/app surface + input-visible change
-    earned = bool(before_ok and after_ok and bytes_differ and input_result.get("attempted"))
+    earned = bool(
+        before_ok
+        and after_ok
+        and meaningful_change
+        and input_result.get("attempted")
+        and input_ok
+    )
     if require_guest and not (monitor_sock or guest_agent or vnc_port):
         earned = False
 
@@ -206,27 +238,42 @@ def run_live_visual_proof(
         earned = False
 
     force = os.environ.get("GUNNCHDEVICE_LAB_FORCE_REAL_GUEST", "").lower() in {"1", "true", "yes"}
+    blocker = None
+    if not earned:
+        if before_ok and after_ok and not meaningful_change:
+            blocker = (
+                "QEMU screendump captured but framebuffer is blank/near-black or "
+                f"diff too small (diff_bytes={diff_bytes}, lit_before={non_black_before}, "
+                f"lit_after={non_black_after}). No shell/compositor+app window proof. "
+                "RFB handshake alone does not earn PASS."
+            )
+        else:
+            blocker = (
+                "PASS false — need guest DRM/fb or QEMU screendump of shell+app "
+                "with input-visible before/after change; no synthetic PNGs"
+            )
     result = {
         "ok": earned,
         PASS_TOKEN: earned,
         "guest": guest_label,
         "captures": captures,
         "input": input_result,
-        "input_visible_change": bytes_differ,
-        "shell_compositor_surface": before_ok,
-        "app_window_capture": after_ok,
+        "input_visible_change": meaningful_change,
+        "input_bytes_differ_raw": bytes_differ,
+        "diff_bytes": diff_bytes,
+        "non_black_samples": {"before": non_black_before, "after": non_black_after},
+        "shell_compositor_surface": bool(earned),
+        "app_window_capture": bool(earned),
         "synthetic_screenshots": False,
         "FORCE_REAL_GUEST": force,
         "evidence_dir": str(out_dir),
         "SILICON_EXACT_EMULATION": False,
         "claim_boundary": CLAIM,
+        "blocker": blocker,
         "note": (
             "LIVE_GUNNCHOS_VISUAL_PASS earned"
             if earned
-            else (
-                "PASS false — need guest DRM/fb or QEMU screendump of shell+app "
-                "with input-visible before/after change; no synthetic PNGs"
-            )
+            else blocker
         ),
     }
     meta_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")

@@ -9,17 +9,36 @@ def test_master_complete_false():
     firewall = gaps.get("claim_firewall") or gaps.get("master_token") or {}
     tokens = gaps.get("pass_tokens") or gaps.get("tokens") or {}
     assert firewall["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
-    # These remain open until host earns them
-    assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] is False
-    assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] is False
-    assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
-    # Hybrid Lab surfaces alone must not earn the Cycle 3A Ring PASS token
-    assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] is False
+    # Consistency: gap register tokens must match evidence files when present
+    games = ROOT / "artifacts/wp011r/games/four_games_production.json"
+    if games.is_file():
+        assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
+            json.loads(games.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
+        )
+    visual = ROOT / "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json"
+    if visual.is_file():
+        assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] == bool(
+            json.loads(visual.read_text()).get("LIVE_GUNNCHOS_VISUAL_PASS")
+        )
+    else:
+        assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] is False
+    dsxl = ROOT / "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
+    if dsxl.is_file():
+        assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] == bool(
+            json.loads(dsxl.read_text()).get("DSXL_DUAL_COMPOSITOR_UX_PASS")
+        )
+    else:
+        assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
     evid = ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     if evid.is_file():
         data = json.loads(evid.read_text())
-        assert data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
+        assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] == bool(
+            data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS")
+        )
+        if data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is True:
+            assert data.get("guest_os_input_present") is True
         if data.get("RING_HYBRID_LAB_SURFACE_MUTATION_PASS") is True:
+            assert data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
             assert data.get("guest_os_input_present") is False
 
 

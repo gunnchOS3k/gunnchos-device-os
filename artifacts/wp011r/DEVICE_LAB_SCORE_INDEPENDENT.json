@@ -32,7 +32,7 @@
       "axis": "DIGITAL",
       "evidence": [
         "ChaosEngine suite",
-        "ECO-010 not_run"
+        "ECO-010 PARTIAL"
       ],
       "hardcoded": false
     },
@@ -88,11 +88,11 @@
       "hardcoded": false
     },
     "full_ecosystem_simulation": {
-      "grade": 6,
+      "grade": 9,
       "axis": "DIGITAL",
       "evidence": [
-        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=False",
-        "ECO-010=OPEN",
+        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=True",
+        "ECO-010=PARTIAL",
         "RING_TO_REAL_APP_STATE_MUTATION_PASS=True",
         "DSXL_DUAL_COMPOSITOR_UX_PASS=False"
       ],
@@ -109,9 +109,9 @@
       "hardcoded": false
     }
   },
-  "grade_mean_of_12": 5.5,
+  "grade_mean_of_12": 5.75,
   "tokens_observed": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,

@@ -1,0 +1,86 @@
+{
+  "ok": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "guest": {
+    "image_class": "DEVICE_LAB_DEVELOPMENT_GUEST",
+    "shipping_image": false,
+    "note": "Alpine/dev guest is development-only \u2014 not a shipping gunnchOS image"
+  },
+  "captures": {
+    "before": {
+      "ok": true,
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/visual/shell_app_before.ppm",
+      "format": "ppm",
+      "bytes": 737295,
+      "synthetic": false,
+      "source": "qemu_monitor_screendump"
+    },
+    "after": {
+      "ok": true,
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/visual/shell_app_after.ppm",
+      "format": "ppm",
+      "bytes": 737295,
+      "synthetic": false,
+      "source": "qemu_monitor_screendump"
+    },
+    "vnc": {
+      "ok": true,
+      "live_rfb": true,
+      "banner": "RFB 003.008",
+      "host": "127.0.0.1",
+      "port": 5907,
+      "synthetic": false,
+      "source": "vnc_rfb_probe",
+      "note": "RFB live probe \u2014 full pixel decode optional when screendump available"
+    }
+  },
+  "input": {
+    "attempted": true,
+    "result": {
+      "ok": true,
+      "path": "qemu_monitor_sendkey",
+      "key": "a",
+      "observed": {
+        "monitor_accepted": true,
+        "key": "a",
+        "agent": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_observe",
+          "observed": true,
+          "path": "/tmp/gunnch-input-observe.log",
+          "SILICON_EXACT_EMULATION": false,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "stub": false
+        }
+      },
+      "attempts": [
+        {
+          "ok": true,
+          "command": "sendkey a",
+          "reply": "(qemu) s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
+          "via": "qemu_monitor"
+        }
+      ],
+      "SILICON_EXACT_EMULATION": false,
+      "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+    }
+  },
+  "input_visible_change": false,
+  "input_bytes_differ_raw": false,
+  "diff_bytes": 0,
+  "non_black_samples": {
+    "before": 446,
+    "after": 446
+  },
+  "shell_compositor_surface": false,
+  "app_window_capture": false,
+  "synthetic_screenshots": false,
+  "FORCE_REAL_GUEST": true,
+  "evidence_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/visual",
+  "SILICON_EXACT_EMULATION": false,
+  "claim_boundary": "Live visual evidence is guest/QEMU framebuffer or VNC capture \u2014 not synthetic PNGs. Alpine/dev guest = DEVICE_LAB_DEVELOPMENT_GUEST (not shipping image). SILICON_EXACT_EMULATION=false.",
+  "blocker": "QEMU screendump captured but framebuffer is blank/near-black or diff too small (diff_bytes=0, lit_before=446, lit_after=446). No shell/compositor+app window proof. RFB handshake alone does not earn PASS.",
+  "note": "QEMU screendump captured but framebuffer is blank/near-black or diff too small (diff_bytes=0, lit_before=446, lit_after=446). No shell/compositor+app window proof. RFB handshake alone does not earn PASS."
+}

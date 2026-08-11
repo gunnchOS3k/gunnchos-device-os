@@ -346,15 +346,18 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
 
     from gunnchos_device_os.device_lab.virtualization.dsxl_outputs import compositor_ux_gate
 
-    # Tag compositor surfaces for UX gate (WaylandSession / guest sources already count)
+    # Tag compositor surfaces only when a real compositor plane is evidenced.
+    # guest_agent DRM connector enum / guest_drm class alone must NOT earn UX PASS.
     ux_outputs = []
     for o in session.display.outputs:
         row = dict(o)
         src = str(row.get("source") or "")
-        if src in {"WaylandSession", "qemu_virtio_gpu", "virtio-gpu", "guest_agent"} or str(
-            row.get("class") or ""
-        ).startswith("guest"):
+        cls = str(row.get("class") or "")
+        if src in {"WaylandSession", "qemu_virtio_gpu", "virtio-gpu"} and cls != "guest_drm":
             row["compositor_surface"] = True
+        elif row.get("compositor_surface") is True and cls == "guest_drm":
+            row["compositor_surface"] = False
+            row["compositor_surface_rejected"] = "guest_drm_enum_alone"
         ux_outputs.append(row)
     ux_gate = compositor_ux_gate(
         outputs=ux_outputs,

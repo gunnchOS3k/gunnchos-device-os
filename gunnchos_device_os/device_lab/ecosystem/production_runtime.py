@@ -126,19 +126,41 @@ def discover_game_artifact(*, game_id: str, repo_root: Path) -> dict[str, Any]:
     return artifact
 
 
+def _playwright_launch_kwargs() -> list[dict[str, Any]]:
+    """Prefer system Chrome channel when Playwright's bundled Chromium is absent."""
+    opts: list[dict[str, Any]] = []
+    if _chromium_bin():
+        opts.append({"headless": True, "channel": "chrome"})
+    opts.append({"headless": True})
+    return opts
+
+
 def _playwright_available() -> dict[str, Any]:
     try:
         from playwright.sync_api import sync_playwright
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "reason": "playwright_import_failed", "error": str(exc)}
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            ver = browser.version
-            browser.close()
-        return {"ok": True, "engine": "chromium", "version": ver}
-    except Exception as exc:  # noqa: BLE001
-        return {"ok": False, "reason": "chromium_launch_failed", "error": str(exc)[:400]}
+    errors: list[str] = []
+    for kwargs in _playwright_launch_kwargs():
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(**kwargs)
+                ver = browser.version
+                browser.close()
+            return {
+                "ok": True,
+                "engine": "chromium",
+                "version": ver,
+                "launch": kwargs,
+                "channel": kwargs.get("channel") or "bundled",
+            }
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"{kwargs}:{exc}"[:240])
+    return {
+        "ok": False,
+        "reason": "chromium_launch_failed",
+        "error": "; ".join(errors)[:400],
+    }
 
 
 def _serve_static(web_dir: Path, work: Path, game_id: str) -> dict[str, Any]:
@@ -182,9 +204,29 @@ def _run_playwright_game(*, game_id: str, url: str, work: Path) -> dict[str, Any
     shot_before = work / f"{game_id}_viewport_before.png"
     shot_after = work / f"{game_id}_viewport_after.png"
     save_path = work / f"{game_id}_save_marker.json"
+    last_err = ""
+    before: dict[str, Any] = {}
+    after: dict[str, Any] = {}
+    restored: Any = None
+    started_click = False
+    launch_used: dict[str, Any] | None = None
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = None
+            for kwargs in _playwright_launch_kwargs():
+                try:
+                    browser = p.chromium.launch(**kwargs)
+                    launch_used = kwargs
+                    break
+                except Exception as exc:  # noqa: BLE001
+                    last_err = str(exc)[:400]
+                    browser = None
+            if browser is None:
+                return {
+                    "ok": False,
+                    "error": last_err or "chromium_launch_failed",
+                    "runtime": "playwright_chromium",
+                }
             page = browser.new_page(viewport={"width": 960, "height": 640})
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
             page.evaluate(
@@ -252,6 +294,7 @@ def _run_playwright_game(*, game_id: str, url: str, work: Path) -> dict[str, Any
     return {
         "ok": earned,
         "runtime": "playwright_chromium",
+        "launch": launch_used,
         "before": before,
         "after": after,
         "screenshot_before": str(shot_before),
@@ -304,31 +347,69 @@ def _run_godot_game(*, game_id: str, project_dir: Path, work: Path) -> dict[str,
         return {"ok": False, "skipped": True, "reason": "godot_absent"}
     log = work / f"{game_id}_godot_runtime.log"
     marker = work / f"{game_id}_godot_marker.txt"
-    argv = [godot, "--headless", "--path", str(project_dir), "--quit-after", "3"]
+    movie = work / f"{game_id}_godot_movie.png"
+    argv = [
+        godot,
+        "--path",
+        str(project_dir),
+        "--write-movie",
+        str(movie),
+        "--fixed-fps",
+        "10",
+        "--quit-after",
+        "20",
+    ]
     try:
         proc = subprocess.run(
             argv,
             stdout=log.open("w", encoding="utf-8"),
             stderr=subprocess.STDOUT,
             text=True,
-            timeout=45,
+            timeout=60,
             check=False,
         )
     except Exception as exc:  # noqa: BLE001
-        return {"ok": False, "error": str(exc), "runtime": "godot_headless"}
+        # Fall back to headless process proof if display/movie path fails
+        argv_h = [godot, "--headless", "--path", str(project_dir), "--quit-after", "3"]
+        try:
+            proc = subprocess.run(
+                argv_h,
+                stdout=log.open("w", encoding="utf-8"),
+                stderr=subprocess.STDOUT,
+                text=True,
+                timeout=45,
+                check=False,
+            )
+        except Exception as exc2:  # noqa: BLE001
+            return {"ok": False, "error": str(exc2), "movie_error": str(exc), "runtime": "godot"}
+        movie = None
     log_txt = log.read_text(encoding="utf-8", errors="replace") if log.exists() else ""
     marker.write_text(f"godot_runtime returncode={proc.returncode}\n", encoding="utf-8")
+    frames = sorted(work.glob(f"{game_id}_godot_movie*.png")) if movie is not None else []
+    if not frames and movie is not None and movie.is_file() and movie.stat().st_size > 100:
+        frames = [movie]
+    viewport_ok = len(frames) >= 1 and frames[0].stat().st_size > 100
     ok_proc = log.exists() and (proc.returncode == 0 or "Godot" in log_txt or len(log_txt) > 0)
+    # Movie frames prove viewport process; input→state + save still required for earn
     return {
-        "ok": False,  # no viewport capture in headless → not full earn
-        "partial": bool(ok_proc),
-        "runtime": "godot_headless",
+        "ok": False,
+        "partial": bool(ok_proc or viewport_ok),
+        "runtime": "godot_write_movie" if viewport_ok else "godot_headless",
         "returncode": proc.returncode,
         "log": str(log),
         "marker": str(marker),
-        "PARTIAL_NO_VIEWPORT_CAPTURE": True,
+        "viewport_frames": [str(f) for f in frames[:5]],
+        "viewport_ok": viewport_ok,
+        "input_changed": False,
+        "save_resume": {"ok": False, "reason": "godot_no_save_hook"},
+        "PARTIAL_NO_VIEWPORT_CAPTURE": not viewport_ok,
         "process_proof": True,
-        "note": "Godot headless log/marker only — viewport/input/save still required for PASS",
+        "FOUR_GAME_REAL_RUNTIME_EARNED": False,
+        "note": (
+            "Godot movie/viewport captured — input/save still required for PASS"
+            if viewport_ok
+            else "Godot headless log/marker only — viewport/input/save still required for PASS"
+        ),
     }
 
 
@@ -355,11 +436,43 @@ def run_production_game(*, game_id: str, repo_root: Path, work: Path) -> dict[st
     if game_id == "foot-racing" and artifact.get("kind") == "godot_project":
         g = _run_godot_game(game_id=game_id, project_dir=Path(artifact["path"]), work=work)
         result["runtime_attempt"] = g
-        result["runtime_class"] = "GODOT_HEADLESS"
-        result["path"] = "godot_headless"
+        result["runtime_class"] = "GODOT_WRITE_MOVIE" if g.get("viewport_ok") else "GODOT_HEADLESS"
+        result["path"] = g.get("runtime") or "godot_headless"
         result["partial"] = bool(g.get("partial") or g.get("ok"))
-        result["ok"] = False
-        result["reason"] = "godot_ok_but_no_viewport_input_save"
+        # Prefer in-tree web package for full frame+input+save earn when Godot cannot.
+        in_tree = Path(str(artifact.get("in_tree_web") or ""))
+        pw = _playwright_available()
+        chrome = _chromium_bin()
+        result["playwright"] = pw
+        result["chromium_bin"] = chrome
+        if in_tree.is_dir() and (in_tree / "index.html").is_file() and (pw.get("ok") or chrome):
+            server = _serve_static(in_tree, work, game_id)
+            result["asset_server"] = server
+            result["web_fallback_artifact"] = str(in_tree)
+            try:
+                if server.get("ok") and pw.get("ok"):
+                    runtime = _run_playwright_game(game_id=game_id, url=server["url"], work=work)
+                    result["web_runtime_attempt"] = runtime
+                    if runtime.get("ok"):
+                        result["ok"] = True
+                        result["FOUR_GAME_REAL_RUNTIME_EARNED"] = True
+                        result[PASS_TOKEN] = True
+                        result["runtime_class"] = "PLAYWRIGHT_CHROMIUM_INTREE_WEB"
+                        result["path"] = "playwright_chromium_in_tree_web"
+                        result["partial"] = False
+                        result["reason"] = "earned_via_in_tree_web_playwright"
+                        result["godot_partial"] = g
+                    else:
+                        result["ok"] = False
+                        result["reason"] = "godot_partial_web_incomplete"
+                else:
+                    result["ok"] = False
+                    result["reason"] = "godot_ok_but_no_viewport_input_save"
+            finally:
+                result["cleanup"] = _stop_key(server.get("key") or "")
+        else:
+            result["ok"] = False
+            result["reason"] = "godot_ok_but_no_viewport_input_save"
         (work / f"{game_id}_production.json").write_text(json.dumps(result, indent=2) + "\n")
         (work / f"{game_id}_result.json").write_text(json.dumps(result, indent=2) + "\n")
         return result

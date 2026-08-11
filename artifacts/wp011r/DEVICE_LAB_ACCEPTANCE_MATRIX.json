@@ -1,32 +1,32 @@
 {
   "schema": "gunnchos.device_lab.acceptance_matrix.v1",
-  "recorded_at_utc": "2026-08-11T13:44:36Z",
-  "accepted_device_os_main_baseline": "daf8e540998eeb62352e4292516ede89ca7715a2",
+  "recorded_at_utc": "2026-08-11T16:35:00Z",
+  "accepted_device_os_main_baseline": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "requirements": [
     {
       "id": "FOUR_GAME_REAL_RUNTIME",
-      "result": "FAIL",
-      "note": "http.server rejected; production_runtime harness added"
+      "result": "PASS_HOST",
+      "note": "Playwright Chrome channel + Godot movie/web fallback; aggregate token true on this Mac"
     },
     {
       "id": "LIVE_GUNNCHOS_VISUAL",
       "result": "FAIL",
-      "note": "harness added; proof not earned"
+      "note": "QEMU screendump exists but blank/near-black; no shell+app input-visible UX"
     },
     {
       "id": "DSXL_DUAL_COMPOSITOR_UX",
       "result": "PARTIAL",
-      "note": "beyond DRM enum in progress"
+      "note": "GUEST_DUAL_OUTPUT_PASS via DRM; compositor UX PASS false (guest_drm ≠ surface)"
     },
     {
       "id": "RING_APP_STATE_MUTATION",
-      "result": "PARTIAL",
-      "note": "Hybrid Lab surfaces mutated; guest OS path not bound \u2014 PASS false"
+      "result": "PASS_HOST",
+      "note": "FORCE_REAL_GUEST virtio-serial path=guest + Lab surface mutations"
     },
     {
       "id": "ECO010_FULL_SOAK",
       "result": "PARTIAL",
-      "note": "light soak only"
+      "note": "dry-check capability PARTIAL; 1800s full soak not earned"
     },
     {
       "id": "DEVICE_LAB_DEVELOPMENT_GUEST",
@@ -35,8 +35,12 @@
     }
   ],
   "tokens": {
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false,
+    "GUEST_DUAL_OUTPUT_PASS": true
   },
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
 }

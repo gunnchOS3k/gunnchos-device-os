@@ -16,13 +16,13 @@
     "cursor": 8,
     "focused": true,
     "len": 8,
-    "checksum": 15393253
+    "checksum": 1933137561
   },
   "via_stack": true,
   "os_input_path": {
     "attempted": true,
     "RING_SPATIAL_ACCURACY": "SIMULATED",
-    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
     "hybrid_process": {
       "ok": true,
       "before": {
@@ -45,15 +45,50 @@
         "page_state": {
           "counter": 1,
           "last_action": "click",
-          "playwright_counter": 1,
-          "playwright_scroll": 0,
-          "playwright": true
+          "playwright": false,
+          "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d"
         }
       },
       "path": "hybrid_process"
     },
-    "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+    "guest_injection": {
+      "ok": true,
+      "path": "qemu_monitor_mouse",
+      "x": 40,
+      "y": 40,
+      "button": "left",
+      "attempts": [
+        {
+          "ok": true,
+          "command": "mouse_move 40 40",
+          "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+          "via": "qemu_monitor"
+        },
+        {
+          "ok": true,
+          "command": "mouse_button 1",
+          "reply": "m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+          "via": "qemu_monitor"
+        }
+      ],
+      "SILICON_EXACT_EMULATION": false,
+      "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+    },
+    "guest_observe": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "input_observe",
+      "observed": true,
+      "path": "/tmp/gunnch-input-observe.log",
+      "SILICON_EXACT_EMULATION": false,
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "stub": false
+    },
+    "path": "guest",
+    "earned_via": "ring\u2192SpatialInput\u2192OS_input\u2192guest_agent_virtio_serial"
   },
   "observe_only_rejected": false,
-  "direct_file_write": false
+  "direct_file_write": false,
+  "path_kind": "guest"
 }

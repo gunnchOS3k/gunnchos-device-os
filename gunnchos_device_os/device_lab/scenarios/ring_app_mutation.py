@@ -45,6 +45,8 @@ def _ring_dir(repo_root: Path) -> Path:
 
 
 def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_rings") -> dict[str, Any]:
+    import os
+
     from gunnchos_device_os.device_lab.session import get_session, start_session, stop_session
 
     started_at = time.time()
@@ -54,10 +56,48 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
     companion = start_session("student_14_5", repo_root=repo_root)
     companion_sess = get_session(companion["instance_id"])
     evidence = out_dir
+    qemu_sess = None
+    guest_bind: dict[str, Any] = {"bound": False}
     try:
         rings_info = session.rings.start(evidence_dir=evidence, repo_root=repo_root)
         if session.rings.surfaces is not None:
             session.rings.guest_process = session.rings.surfaces.browser
+
+        # Bind live guest OS input when FORCE_REAL_GUEST (required for Cycle 3A PASS).
+        if os.environ.get("GUNNCHDEVICE_LAB_FORCE_REAL_GUEST", "").lower() in {"1", "true", "yes"}:
+            try:
+                from gunnchos_device_os.device_lab.profiles import load_profile
+                from gunnchos_device_os.device_lab.virtualization.qemu_guest import start_qemu_guest
+
+                os.environ.setdefault("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "60")
+                os.environ.setdefault("GUNNCHDEVICE_LAB_MEMORY_MB", "512")
+                q = start_qemu_guest(
+                    work=evidence / "qemu-ring",
+                    profile=load_profile("handheld_hybrid"),
+                    repo_root=repo_root,
+                    headless=True,
+                )
+                qemu_sess = q.pop("_session", None)
+                ga = ((q.get("state") or {}).get("guest_agent") or {})
+                if q.get("ok") and qemu_sess is not None:
+                    session.rings.guest_monitor_sock = getattr(qemu_sess, "monitor_sock", None)
+                    session.rings.guest_agent = getattr(qemu_sess, "agent", None)
+                    guest_bind = {
+                        "bound": True,
+                        "agent_path_label": ga.get("agent_path_label") or ga.get("transport"),
+                        "transport": ga.get("transport"),
+                        "qemu_ok": True,
+                        "monitor_sock": str(getattr(qemu_sess, "monitor_sock", "") or ""),
+                    }
+                else:
+                    guest_bind = {
+                        "bound": False,
+                        "qemu_ok": False,
+                        "error": q.get("error") or q.get("result"),
+                        "note": "Guest bind failed — hybrid Lab surfaces only",
+                    }
+            except Exception as exc:  # noqa: BLE001
+                guest_bind = {"bound": False, "error": str(exc)[:400]}
 
         pipeline_raw = rings_info.get("pipeline") or []
         stage_map = {
@@ -109,17 +149,9 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
         all_mutated = all(mutations[t]["mutated"] for t in targets)
         hybrid_earned = bool(all_mutated and gate_ok)
 
+        # Require path==guest (virtio-serial observe + accepted injection). Hybrid alone ≠ PASS.
         guest_ok = any(
             str((mutations[t].get("os_input_path") or {}).get("path") or "") == "guest"
-            or (
-                bool(
-                    ((mutations[t].get("os_input_path") or {}).get("guest_observe") or {}).get(
-                        "observed"
-                    )
-                )
-                and mutations[t]["mutated"]
-                and not mutations[t]["observe_only_rejected"]
-            )
             for t in targets
         )
         if guest_ok:
@@ -142,6 +174,7 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
             "pipeline_ok": pipeline_ok,
             "guest_os_input_required": True,
             "guest_os_input_present": guest_ok,
+            "guest_bind": guest_bind,
             "mutations": mutations,
             "confidence_gate": {"low": low, "wrong": wrong, "ok": gate_ok},
             "app_snapshots": snapshots,
@@ -175,5 +208,10 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
             )
         return result
     finally:
+        if qemu_sess is not None:
+            try:
+                qemu_sess.stop()
+            except Exception:
+                pass
         stop_session(session.instance_id)
         stop_session(companion_sess.instance_id)

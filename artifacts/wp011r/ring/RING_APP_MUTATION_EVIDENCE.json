@@ -1,7 +1,7 @@
 {
-  "ok": false,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+  "ok": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false,
   "pipeline_required": [
     "ring_simulator",
     "authenticated_packet",
@@ -17,7 +17,7 @@
     "RingService",
     "SpatialInputService",
     "confidence_gate",
-    "guest_or_hybrid_input",
+    "guest_os_input",
     "app_state_mutation"
   ],
   "pipeline_raw": [
@@ -28,9 +28,16 @@
     "input_router_hid_wayland",
     "apps"
   ],
-  "pipeline_ok": false,
+  "pipeline_ok": true,
   "guest_os_input_required": true,
-  "guest_os_input_present": false,
+  "guest_os_input_present": true,
+  "guest_bind": {
+    "bound": true,
+    "agent_path_label": "virtio-serial",
+    "transport": "virtio_serial",
+    "qemu_ok": true,
+    "monitor_sock": "/tmp/gdl-10270-32c22b/mon.sock"
+  },
   "mutations": {
     "libreoffice": {
       "delivered": true,
@@ -50,13 +57,13 @@
         "cursor": 8,
         "focused": true,
         "len": 8,
-        "checksum": 108629678
+        "checksum": 1933137561
       },
       "via_stack": true,
       "os_input_path": {
         "attempted": true,
         "RING_SPATIAL_ACCURACY": "SIMULATED",
-        "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
         "hybrid_process": {
           "ok": true,
           "before": {
@@ -80,16 +87,51 @@
               "counter": 1,
               "last_action": "click",
               "playwright": false,
-              "playwright_error": "No module named 'playwright'"
+              "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d"
             }
           },
           "path": "hybrid_process"
         },
-        "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+        "guest_injection": {
+          "ok": true,
+          "path": "qemu_monitor_mouse",
+          "x": 40,
+          "y": 40,
+          "button": "left",
+          "attempts": [
+            {
+              "ok": true,
+              "command": "mouse_move 40 40",
+              "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+              "via": "qemu_monitor"
+            },
+            {
+              "ok": true,
+              "command": "mouse_button 1",
+              "reply": "m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+              "via": "qemu_monitor"
+            }
+          ],
+          "SILICON_EXACT_EMULATION": false,
+          "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+        },
+        "guest_observe": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_observe",
+          "observed": true,
+          "path": "/tmp/gunnch-input-observe.log",
+          "SILICON_EXACT_EMULATION": false,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "stub": false
+        },
+        "path": "guest",
+        "earned_via": "ring\u2192SpatialInput\u2192OS_input\u2192guest_agent_virtio_serial"
       },
       "observe_only_rejected": false,
       "direct_file_write": false,
-      "path_kind": "hybrid_process"
+      "path_kind": "guest"
     },
     "browser": {
       "delivered": true,
@@ -105,7 +147,7 @@
           "counter": 1,
           "last_action": "click",
           "playwright": false,
-          "playwright_error": "No module named 'playwright'"
+          "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d"
         }
       },
       "after": {
@@ -118,7 +160,7 @@
           "counter": 2,
           "last_action": "scroll",
           "playwright": false,
-          "playwright_error": "No module named 'playwright'",
+          "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
           "pointer": {
             "x": 0.08000000000000002,
             "y": 0.0
@@ -130,7 +172,7 @@
       "os_input_path": {
         "attempted": true,
         "RING_SPATIAL_ACCURACY": "SIMULATED",
-        "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
         "hybrid_process": {
           "ok": true,
           "before": {
@@ -143,7 +185,7 @@
               "counter": 2,
               "last_action": "scroll",
               "playwright": false,
-              "playwright_error": "No module named 'playwright'",
+              "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -161,7 +203,7 @@
               "counter": 3,
               "last_action": "click",
               "playwright": false,
-              "playwright_error": "No module named 'playwright'",
+              "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -171,11 +213,46 @@
           },
           "path": "hybrid_process"
         },
-        "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+        "guest_injection": {
+          "ok": true,
+          "path": "qemu_monitor_mouse",
+          "x": 40,
+          "y": 40,
+          "button": "left",
+          "attempts": [
+            {
+              "ok": true,
+              "command": "mouse_move 40 40",
+              "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+              "via": "qemu_monitor"
+            },
+            {
+              "ok": true,
+              "command": "mouse_button 1",
+              "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+              "via": "qemu_monitor"
+            }
+          ],
+          "SILICON_EXACT_EMULATION": false,
+          "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+        },
+        "guest_observe": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_observe",
+          "observed": true,
+          "path": "/tmp/gunnch-input-observe.log",
+          "SILICON_EXACT_EMULATION": false,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "stub": false
+        },
+        "path": "guest",
+        "earned_via": "ring\u2192SpatialInput\u2192OS_input\u2192guest_agent_virtio_serial"
       },
       "observe_only_rejected": false,
       "direct_file_write": false,
-      "path_kind": "hybrid_process"
+      "path_kind": "guest"
     },
     "games": {
       "delivered": true,
@@ -215,7 +292,7 @@
       "os_input_path": {
         "attempted": true,
         "RING_SPATIAL_ACCURACY": "SIMULATED",
-        "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
         "hybrid_process": {
           "ok": true,
           "before": {
@@ -228,7 +305,7 @@
               "counter": 3,
               "last_action": "click",
               "playwright": false,
-              "playwright_error": "No module named 'playwright'",
+              "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -246,7 +323,7 @@
               "counter": 4,
               "last_action": "click",
               "playwright": false,
-              "playwright_error": "No module named 'playwright'",
+              "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -256,11 +333,46 @@
           },
           "path": "hybrid_process"
         },
-        "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+        "guest_injection": {
+          "ok": true,
+          "path": "qemu_monitor_mouse",
+          "x": 40,
+          "y": 40,
+          "button": "left",
+          "attempts": [
+            {
+              "ok": true,
+              "command": "mouse_move 40 40",
+              "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+              "via": "qemu_monitor"
+            },
+            {
+              "ok": true,
+              "command": "mouse_button 1",
+              "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+              "via": "qemu_monitor"
+            }
+          ],
+          "SILICON_EXACT_EMULATION": false,
+          "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+        },
+        "guest_observe": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_observe",
+          "observed": true,
+          "path": "/tmp/gunnch-input-observe.log",
+          "SILICON_EXACT_EMULATION": false,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "stub": false
+        },
+        "path": "guest",
+        "earned_via": "ring\u2192SpatialInput\u2192OS_input\u2192guest_agent_virtio_serial"
       },
       "observe_only_rejected": false,
       "direct_file_write": false,
-      "path_kind": "hybrid_process"
+      "path_kind": "guest"
     }
   },
   "confidence_gate": {
@@ -291,7 +403,7 @@
       "cursor": 8,
       "focused": false,
       "len": 8,
-      "checksum": 108629678
+      "checksum": 1933137561
     },
     "browser": {
       "app_id": "browser",
@@ -303,7 +415,7 @@
         "counter": 4,
         "last_action": "click",
         "playwright": false,
-        "playwright_error": "No module named 'playwright'",
+        "playwright_error": "BrowserType.launch: Executable doesn't exist at /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/cursor-sandbox-cache/574fd4f3ce2eab1d4ccdd20b3305fcbd/playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     playwright install                                     \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
         "pointer": {
           "x": 0.08000000000000002,
           "y": 0.0
@@ -327,13 +439,13 @@
       "last_action": "attack"
     },
     "focus": "games",
-    "ts": 1786457553.104297
+    "ts": 1786465693.312184
   },
   "RING_SPATIAL_ACCURACY": "SIMULATED",
   "RING_TO_REAL_APPLICATION_INPUT_PASS_note": "Wave4 input_observe token is separate; Cycle 3A PASS requires guest OS input plus document/browser/game mutation. Hybrid Lab surfaces alone set RING_HYBRID_LAB_SURFACE_MUTATION_PASS only.",
-  "companion_instance": "dev-969002bd",
-  "duration_ms": 14,
+  "companion_instance": "dev-7243bca6",
+  "duration_ms": 17583,
   "SILICON_EXACT_EMULATION": false,
   "claim_boundary": "Ring Lab path mutates observable app surfaces via SpatialInputService. input_observe alone does not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. Hybrid Lab surfaces alone do not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. RING_SPATIAL_ACCURACY=SIMULATED. SILICON_EXACT_EMULATION=false. Physical ring SI PENDING.",
-  "note": "HYBRID Lab surface mutation only \u2014 PASS false until guest OS input mutates document+browser+game"
+  "note": "RING_TO_REAL_APP_STATE_MUTATION_PASS earned"
 }

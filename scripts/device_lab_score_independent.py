@@ -80,7 +80,12 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
 
     # Also allow explicit wp011r evidence
     dsxl_ev = _load_json(ROOT / "artifacts/wp011r/DSXL_COMPOSITOR_UX.json")
+    if not dsxl_ev:
+        dsxl_ev = _load_json(ROOT / "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json")
     if dsxl_ev:
+        dsxl_ux = bool(dsxl_ev.get("DSXL_DUAL_COMPOSITOR_UX_PASS"))
+    if pass_tokens.get("DSXL_DUAL_COMPOSITOR_UX_PASS") is False and dsxl_ev:
+        # Gap register false wins only when evidence also false / absent PASS
         dsxl_ux = bool(dsxl_ev.get("DSXL_DUAL_COMPOSITOR_UX_PASS"))
 
     master = bool(tokens.get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"))

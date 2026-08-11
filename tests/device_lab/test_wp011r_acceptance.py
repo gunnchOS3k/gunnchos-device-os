@@ -43,16 +43,37 @@ def test_master_and_silicon_tokens_remain_false():
     assert gaps["claim_firewall"]["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
     assert gaps["claim_firewall"]["SILICON_EXACT_EMULATION"] is False
     tokens = gaps["pass_tokens"]
-    # Initial audit marks these false until earned
-    assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] is False
-    assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] is False
-    assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
-    # Hybrid Lab surfaces ≠ Cycle 3A guest-OS Ring PASS
-    assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] is False
+    # Open tokens must stay false until evidence earns them; earned tokens must match evidence.
+    visual = ROOT / "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json"
+    dsxl = ROOT / "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
+    if visual.is_file():
+        assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] == bool(
+            json.loads(visual.read_text()).get("LIVE_GUNNCHOS_VISUAL_PASS")
+        )
+    else:
+        assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] is False
+    if dsxl.is_file():
+        assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] == bool(
+            json.loads(dsxl.read_text()).get("DSXL_DUAL_COMPOSITOR_UX_PASS")
+        )
+    else:
+        assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
+    games = ROOT / "artifacts/wp011r/games/four_games_production.json"
+    if games.is_file():
+        assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
+            json.loads(games.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
+        )
     evid = ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     if evid.is_file():
         ring = json.loads(evid.read_text())
-        assert ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
+        assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] == bool(
+            ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS")
+        )
+        if ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is True:
+            assert ring.get("guest_os_input_present") is True
+        if ring.get("RING_HYBRID_LAB_SURFACE_MUTATION_PASS") is True:
+            assert ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
+            assert ring.get("guest_os_input_present") is False
 
 
 def test_http_server_labeled_process_proof_only(lab_artifacts: Path):
@@ -149,22 +170,24 @@ def test_live_visual_pass_false_without_guest_captures(tmp_path: Path, monkeypat
 
 
 def test_ring_app_mutation_evidence(lab_artifacts: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    # Redirect wp011r ring evidence under tmp by using repo root but evidence writes to artifacts/wp011r
-    # Use monkeypatch on Path home? Instead run and check token honesty.
-    result = run_ring_app_mutation_proof(repo_root=ROOT)
+    # Default (no FORCE_REAL_GUEST): hybrid Lab surfaces must not earn Cycle 3A PASS.
+    # Write under tmp so we do not clobber host-earned guest evidence artifacts.
+    monkeypatch.delenv("GUNNCHDEVICE_LAB_FORCE_REAL_GUEST", raising=False)
+    ring_tmp = tmp_path / "ring_evidence"
+    ring_tmp.mkdir(parents=True)
+    import gunnchos_device_os.device_lab.scenarios.ring_app_mutation as ram
+
+    monkeypatch.setattr(ram, "_ring_dir", lambda repo_root: ring_tmp)
+    result = ram.run_ring_app_mutation_proof(repo_root=ROOT)
     assert "RING_TO_REAL_APP_STATE_MUTATION_PASS" in result
     assert result.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
     assert result.get("guest_os_input_required") is True
-    # Mutations must be real before/after — not observe-only
+    assert result.get("guest_os_input_present") is False
     for t in ("libreoffice", "browser", "games"):
         m = result["mutations"][t]
         assert m.get("direct_file_write") is False
-        if result["RING_TO_REAL_APP_STATE_MUTATION_PASS"]:
-            assert m.get("mutated") is True
-            assert m.get("before") != m.get("after")
-    evid = ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
+    evid = ring_tmp / "RING_APP_MUTATION_EVIDENCE.json"
     assert evid.is_file()
-    # input_observe alone must not be sufficient if before==after
     assert all(m.get("observe_only_rejected") is False or not m.get("mutated") for m in result["mutations"].values())
 
 

@@ -35,12 +35,16 @@ def classify_outputs(outputs: list[dict[str, Any]]) -> dict[str, Any]:
         if str(o.get("source") or "") in logical_sources
         or "logical" in str(o.get("source") or "").lower()
     )
-    compositor_sources = {"WaylandSession", "qemu_virtio_gpu", "virtio-gpu", "guest_agent"}
+    # guest_agent DRM connector enum alone is NOT a compositor surface (WP-011R).
+    compositor_sources = {"WaylandSession", "qemu_virtio_gpu", "virtio-gpu"}
     compositor_surfaces = sum(
         1
         for o in connected
-        if str(o.get("source") or "") in compositor_sources
-        or o.get("compositor_surface") is True
+        if o.get("compositor_surface") is True
+        or (
+            str(o.get("source") or "") in compositor_sources
+            and str(o.get("class") or "") != "guest_drm"
+        )
     )
     return {
         "connected": len(connected),

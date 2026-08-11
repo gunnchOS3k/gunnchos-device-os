@@ -1,26 +1,58 @@
 {
-  "schema": "gunnchos.vp011r.result.v1",
-  "role": "IMPLEMENTER_SELF_ASSESSMENT_NOT_INDEPENDENT",
-  "recorded_at_utc": "2026-08-11T16:15:16Z",
-  "tip": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
-  "overall_result": "FAIL",
+  "schema": "gunnchos.wp011r.implementer_self_assessment.v1",
+  "wave": "WP-011R",
+  "pr": 103,
+  "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
+  "assessed_at_utc": "2026-08-11T16:35:00Z",
+  "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
+  "role": "implementer",
+  "overall": "PARTIAL",
+  "overall_note": "Skeptical self-assessment. Host earned FOUR_GAME + RING tokens; LIVE visual and DSXL compositor UX remain false; ECO-010 PARTIAL; master complete false. Independent verifier required before any DRAFT→ready claim.",
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "DRAFT_ONLY": true,
+  "never_merge": true,
   "tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
-    "ECO010_FULL_SOAK_PASS": false,
-    "DEVICE_LAB_DEVELOPMENT_GUEST": true
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false,
+    "ECO010_SOAK_PASS": false,
+    "ECO010_STATUS": "PARTIAL"
   },
-  "rejected_false_positives": [
-    "http.server as game runtime",
-    "RFB handshake as UI proof",
-    "input_observe as app-state proof",
-    "DRM enumeration as dual-screen UX proof",
-    "hybrid Lab surfaces as Ring guest-app PASS"
+  "evidence": {
+    "games": "artifacts/wp011r/games/four_games_production.json",
+    "visual": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
+    "visual_blocker": "artifacts/wp011r/visual/LIVE_VISUAL_BLOCKER.json",
+    "dsxl": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+    "ring": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
+    "eco010": "artifacts/wp011r/ECO010_SOAK.json",
+    "score": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
+    "gaps": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json"
+  },
+  "independent_score_mean_of_12": 5.75,
+  "session_actions": [
+    "Playwright Chrome-channel fallback + foot-racing Godot write-movie / in-tree web earn path",
+    "Four-game production proofs under artifacts/wp011r/games/",
+    "QEMU HVF guest screendump + VNC attempted; blank fb honesty gate keeps LIVE false",
+    "DSXL guest dual DRM earned; compositor UX gate rejects guest_drm-as-surface",
+    "FORCE_REAL_GUEST virtio-serial Ring bind → RING_TO_REAL_APP_STATE_MUTATION_PASS",
+    "ECO-010 dry-check PARTIAL (requested 1800s, not shortened to pass)",
+    "device_lab_score_independent.py recomputed"
   ],
-  "independent_score_mean": 5.42,
-  "note": "Independent verifier agent must re-derive; this file is implementer honesty snapshot only."
+  "remaining_blockers": [
+    "LIVE_GUNNCHOS_VISUAL_PASS: development guest framebuffer blank/near-black — need lit shell+app compositor with meaningful input-visible change",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS: need real compositor surfaces (Wayland/virtio-gpu plane), not guest_drm enum + Lab windows",
+    "ECO-010: full 1800s multi-guest continuous soak not run/earned (dry-check PARTIAL only)",
+    "Independent verifier must sample FOUR_GAME viewports/saves and RING guest-vs-Lab app boundary",
+    "Master digital complete remains false"
+  ],
+  "skepticism": [
+    "FOUR_GAME save path uses Lab localStorage marker — may not equal each title native save format",
+    "RING mutates Lab document/browser/game surfaces while guest proves input_observe — apps-in-guest still unverified",
+    "Prior session nearly inflated LIVE via 48-byte blank-fb noise and DSXL via DRM enum; honesty gates tightened"
+  ]
 }
