@@ -6,6 +6,8 @@
 
 Ecosystem portal: [gunnchos-research-portal](https://github.com/gunnchOS3k/gunnchos-research-portal) · Product charter: [field-kit charter](https://github.com/gunnchOS3k/gunnchos-7gc-ai-ran-field-kit/blob/main/program/charter/gunnchOS3k_PRODUCT_CHARTER.md)
 
+Issue closure matrix: [docs/ISSUE_CLOSURE_MATRIX.md](docs/ISSUE_CLOSURE_MATRIX.md)
+
 ## What is this?
 
 Operating system, Device Lab, continuity/fabric hooks, Ring/input paths, update/recovery, and Golden Journey digital evidence for first-party devices.
