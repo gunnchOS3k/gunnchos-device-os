@@ -20,8 +20,8 @@
     },
     {
       "id": "RING_APP_STATE_MUTATION",
-      "result": "FAIL",
-      "note": "scenario module added; not earned"
+      "result": "PARTIAL",
+      "note": "Hybrid Lab surfaces mutated; guest OS path not bound \u2014 PASS false"
     },
     {
       "id": "ECO010_FULL_SOAK",
@@ -34,6 +34,9 @@
       "note": "explicitly labeled; not shipping"
     }
   ],
-  "tokens": null,
+  "tokens": {
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true
+  },
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
 }

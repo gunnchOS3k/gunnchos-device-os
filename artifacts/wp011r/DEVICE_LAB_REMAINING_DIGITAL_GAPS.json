@@ -16,9 +16,10 @@
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": "retained_from_wave4_drm_enum_only_insufficient_for_dsxl_ux",
-    "RING_TO_REAL_APPLICATION_INPUT_PASS": "wave4_input_observe_alone_insufficient_for_app_mutation_token"
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": "wave4_input_observe_alone_insufficient_for_app_mutation_token",
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true
   },
   "gaps": [
     {
@@ -77,9 +78,9 @@
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "EARNED_HYBRID_LAB_SURFACES",
+      "status": "OPEN",
       "earned": true,
-      "summary": "Earned on hybrid Lab surfaces: Ring simulator → authenticated packet → RingService → SpatialInputService → confidence gate → input_router → document/browser/game state mutation. Evidence under artifacts/wp011r/ring/. input_observe alone still insufficient; WAVE4 observe token remains separate. Spatial SIMULATED; physical ring SI PENDING.",
+      "summary": "Hybrid Lab surface mutation earned RING_HYBRID_LAB_SURFACE_MUTATION_PASS only. Cycle 3A RING_TO_REAL_APP_STATE_MUTATION_PASS still requires guest OS input \u2192 actual running application mutation.",
       "required_to_earn": [
         "Full pipeline stages recorded",
         "Document buffer mutation via stack (not direct file write)",

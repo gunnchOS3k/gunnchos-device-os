@@ -15,14 +15,20 @@
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "LIVE_GUNNCHOS_VISUAL_PASS": false,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "depends_on": ["#102", "#101", "#100", "#98", "#97"],
+  "depends_on": [
+    "#102",
+    "#101",
+    "#100",
+    "#98",
+    "#97"
+  ],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
   "wave011r": {
     "gap_register": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
@@ -39,7 +45,11 @@
     "eco010": "PARTIAL_light_simultaneous",
     "four_games_process_proof": true,
     "chaos_engine": true,
-    "golden_expanded": ["GOLDEN-01", "GOLDEN-05", "GOLDEN-09"],
+    "golden_expanded": [
+      "GOLDEN-01",
+      "GOLDEN-05",
+      "GOLDEN-09"
+    ],
     "score_from_register": true,
     "pre_evt_twin_handoff_docs": true,
     "master_complete": false
@@ -68,11 +78,12 @@
     "qemu_websocket": true
   },
   "notes": [
-    "WP-011R remediations toward independent 10/10 digital acceptance — tokens stay false until earned",
+    "WP-011R remediations toward independent 10/10 digital acceptance \u2014 tokens stay false until earned",
     "http.server alone rejected as FOUR_GAME_REAL_RUNTIME proof",
-    "Alpine/dev guest labeled DEVICE_LAB_DEVELOPMENT_GUEST — not shipping image",
+    "Alpine/dev guest labeled DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not shipping image",
     "ECO-010 remains PARTIAL until full soak; master complete false",
     "RING_SPATIAL_ACCURACY=SIMULATED; VF4/5/6 PHYSICAL_PENDING",
     "No PRODUCTION_READY / fabrication / RFQ / certification claims"
-  ]
+  ],
+  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true
 }
