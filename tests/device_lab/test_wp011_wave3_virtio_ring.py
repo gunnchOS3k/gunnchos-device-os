@@ -44,7 +44,10 @@ def test_qemu_prefers_guest_image_arch_not_host_x86():
     assert arch == "aarch64"
     env = os.environ.pop("GUNNCHDEVICE_LAB_QEMU_ARCH", None)
     try:
-        _bin, selected = qemu_system_bin(repo_root=ROOT)
+        try:
+            _bin, selected = qemu_system_bin(repo_root=ROOT)
+        except FileNotFoundError:
+            pytest.skip("QEMU not installed in this job (arch preference still aarch64)")
         assert selected == "aarch64"
         assert "aarch64" in _bin
     finally:
