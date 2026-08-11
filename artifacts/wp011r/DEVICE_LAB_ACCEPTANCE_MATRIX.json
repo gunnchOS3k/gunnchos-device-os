@@ -1,0 +1,39 @@
+{
+  "schema": "gunnchos.device_lab.acceptance_matrix.v1",
+  "recorded_at_utc": "2026-08-11T13:44:36Z",
+  "accepted_device_os_main_baseline": "daf8e540998eeb62352e4292516ede89ca7715a2",
+  "requirements": [
+    {
+      "id": "FOUR_GAME_REAL_RUNTIME",
+      "result": "FAIL",
+      "note": "http.server rejected; production_runtime harness added"
+    },
+    {
+      "id": "LIVE_GUNNCHOS_VISUAL",
+      "result": "FAIL",
+      "note": "harness added; proof not earned"
+    },
+    {
+      "id": "DSXL_DUAL_COMPOSITOR_UX",
+      "result": "PARTIAL",
+      "note": "beyond DRM enum in progress"
+    },
+    {
+      "id": "RING_APP_STATE_MUTATION",
+      "result": "FAIL",
+      "note": "scenario module added; not earned"
+    },
+    {
+      "id": "ECO010_FULL_SOAK",
+      "result": "PARTIAL",
+      "note": "light soak only"
+    },
+    {
+      "id": "DEVICE_LAB_DEVELOPMENT_GUEST",
+      "result": "PASS",
+      "note": "explicitly labeled; not shipping"
+    }
+  ],
+  "tokens": null,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+}

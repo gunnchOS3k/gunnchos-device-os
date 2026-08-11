@@ -1,0 +1,123 @@
+{
+  "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
+  "wave": "WP-011R",
+  "audited_at_utc": "2026-08-11T13:35:00Z",
+  "base_sha": "daf8e54",
+  "claim_firewall": {
+    "SILICON_EXACT_EMULATION": false,
+    "VF4": "PHYSICAL_PENDING",
+    "VF5": "PHYSICAL_PENDING",
+    "VF6": "PHYSICAL_PENDING",
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "PRODUCTION_READY": false,
+    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST — not a shipping image"
+  },
+  "pass_tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "GUEST_DUAL_OUTPUT_PASS": "retained_from_wave4_drm_enum_only_insufficient_for_dsxl_ux",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": "wave4_input_observe_alone_insufficient_for_app_mutation_token"
+  },
+  "gaps": [
+    {
+      "id": "GAP-FOUR-GAME-RUNTIME",
+      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "status": "OPEN",
+      "severity": false,
+      "summary": "Wave 5 four-game path used python -m http.server as process proof. That is PROCESS_PROOF_ONLY / NOT_PRODUCTION_RUNTIME and is rejected as FOUR_GAME_REAL_RUNTIME evidence.",
+      "required_to_earn": [
+        "Discover/build real artifact per game (sibling repo when present, else in-tree package)",
+        "Start intended runtime (Chromium/playwright headless or native; Godot for foot-racing when present)",
+        "Verify process + capture real viewport screenshot (not synthetic)",
+        "Send input and observe DOM/score/savefile/log state change",
+        "Save/suspend-resume equivalent when possible",
+        "Clean stop with logs"
+      ],
+      "code_refs": [
+        "gunnchos_device_os/device_lab/ecosystem/games.py",
+        "gunnchos_device_os/device_lab/ecosystem/production_runtime.py"
+      ]
+    },
+    {
+      "id": "GAP-LIVE-VISUAL",
+      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
+      "status": "OPEN",
+      "earned": false,
+      "summary": "Live VNC/RFB path exists, but WP-011R requires guest DRM/fb screenshot of shell/compositor surface + app window + input-visible change under artifacts/wp011r/visual/. No synthetic screenshots.",
+      "required_to_earn": [
+        "Guest DRM or framebuffer capture of compositor/shell surface",
+        "App window visible in capture",
+        "Input-visible state change between before/after captures",
+        "Evidence stored under artifacts/wp011r/visual/"
+      ],
+      "code_refs": [
+        "gunnchos_device_os/device_lab/virtualization/live_display.py",
+        "gunnchos_device_os/device_lab/virtualization/live_visual_proof.py"
+      ]
+    },
+    {
+      "id": "GAP-DSXL-COMPOSITOR-UX",
+      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "status": "OPEN",
+      "earned": false,
+      "summary": "GUEST_DUAL_OUTPUT_PASS via DRM enum is insufficient. Need two outputs with compositor surfaces, window placement, focus move, disconnect/reconnect/layout restore.",
+      "required_to_earn": [
+        "Two connected outputs with compositor surface evidence",
+        "Window placement on each output",
+        "Focus move between outputs",
+        "Secondary disconnect + reconnect with layout restore"
+      ],
+      "code_refs": [
+        "gunnchos_device_os/device_lab/virtualization/dsxl_outputs.py",
+        "gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py"
+      ]
+    },
+    {
+      "id": "GAP-RING-APP-MUTATION",
+      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+      "status": "OPEN",
+      "earned": false,
+      "summary": "input_observe alone is insufficient. Need Ring simulator → authenticated packet → RingService → SpatialInputService → confidence gate → guest/hybrid input → ACTUAL app state mutation for document, browser, and one game.",
+      "required_to_earn": [
+        "Full pipeline stages recorded",
+        "Document buffer mutation via stack (not direct file write)",
+        "Browser page-state mutation via stack",
+        "One game state mutation via stack",
+        "Evidence JSON under artifacts/wp011r/ring/"
+      ],
+      "code_refs": [
+        "gunnchos_device_os/device_lab/scenarios/ring_real_input.py",
+        "gunnchos_device_os/device_lab/hw_backends/rings.py",
+        "gunnchos_device_os/device_lab/apps/surfaces.py"
+      ]
+    },
+    {
+      "id": "GAP-ECO010-SOAK",
+      "token": "ECO-010",
+      "status": "PARTIAL",
+      "earned": false,
+      "summary": "ECO-010 remains PARTIAL until a full configurable soak (default 1800s) with health polling, resource telemetry, >=5 inject/recover cycles, and clean shutdown. Do not shorten duration to pass after failures.",
+      "required_to_earn": [
+        "scripts/run_eco010_full_soak.py default 1800s",
+        "Health polling + resource telemetry",
+        ">=5 inject/recover cycles",
+        "Clean shutdown",
+        "If host cannot run full multi-guest soak: fail honestly PARTIAL"
+      ],
+      "code_refs": [
+        "scripts/run_eco010_full_soak.py",
+        "gunnchos_device_os/device_lab/ecosystem/scenarios.py"
+      ]
+    }
+  ],
+  "independent_score": {
+    "script": "scripts/device_lab_score_independent.py",
+    "output": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
+    "hardcoded_tens_forbidden": true,
+    "note": "Recompute 12 categories from evidence files — not gunnchctl score alone"
+  },
+  "master_complete": false,
+  "note": "Initial audit from Wave 5 code on daf8e54. Tokens stay false until evidence earns them on this host."
+}
