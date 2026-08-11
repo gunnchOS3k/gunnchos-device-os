@@ -13,7 +13,7 @@
     "rootfs_tarball": {
       "file_count": 10,
       "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
-      "sha256": "a586c36f13d4d6a1630770e8cf3572d7a8d80f2c0e2d61d286ac9830c3549d9a",
+      "sha256": "24c60d5c30f49ba9cea83e7d97fc8e043997d7e8782c0583219e82f1f8826793",
       "size_bytes": 1647
     }
   },
@@ -98,7 +98,7 @@
     },
     "update_channel": "recovery"
   },
-  "image_hash": "a5caf504e456daf9b4aed91b3512ba6f94423cd8f775168d3eaafabbded3be1b",
+  "image_hash": "20b889598802ffbf917ab1f0ffc37ee94eab02f3a1e80a4b638087905633555f",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -156,7 +156,7 @@
   "reproducibility": {
     "file_count": 10,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "a586c36f13d4d6a1630770e8cf3572d7a8d80f2c0e2d61d286ac9830c3549d9a",
+    "rootfs_sha256": "24c60d5c30f49ba9cea83e7d97fc8e043997d7e8782c0583219e82f1f8826793",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4107,16 +4107,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "77b52998b72d8526da0a41925f1ff34c7e22c60f8f0269576958440714833809d49a8e2af518e7c4664f4647783e9a8aabf048308cb3d188fe29bbc104f99a05"
+    "signature_hex": "c2c3b18c0607c160738912ef4e8c5b8a07e1086f9d9bbd448e05315702f2c3bed1936cc47a5984d6dbfafc3adee25416b6fa52e77d52d891acb059690d5def0a"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
-    "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-    "repo_head_sha": "71c4b16b01e93f27cab06415de479714c50ac159",
+    "branch": "operating-cycle-3b/wp-013-release-engineering",
+    "repo_head_sha": "eb96edf0ff5b7e587aa5e7526314aa602bc637eb",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T18:57:23Z",
+  "timestamp_utc": "2026-08-11T19:26:08Z",
   "unsigned_requested": false
 }

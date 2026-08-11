@@ -78,3 +78,20 @@ artifacts/device_lab/
 
 # Stage 2 local signing material (never commit)
 os_build/stage2/keys/
+
+# WP-011R / Device Lab interactive guest runtime (qcow2, cache, work, sockets)
+# Keep provisioned disks on disk for WP-011R; never commit to WP-013.
+os_build/device_lab_interactive_guest/artifacts/*.qcow2
+os_build/device_lab_interactive_guest/cache/
+os_build/device_lab_interactive_guest/work/
+artifacts/wp011r/**/*.qcow2
+artifacts/wp011r/**/*.sock
+artifacts/wp011r/**/edk2-*-vars.fd
+artifacts/wp011r/interactive_guest_session/
+artifacts/wp011r/ring/qemu-ring/
+artifacts/wp011r/visual/qemu/
+artifacts/wp011r/visual/qemu_recheck/
+artifacts/wp011r/visual/qemu_vnc/
+artifacts/wp011r/visual/interactive_live_serial.log
+*.qcow2
+*.sock

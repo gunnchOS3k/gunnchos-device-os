@@ -67,6 +67,13 @@ def cmd_run(ns: argparse.Namespace) -> int:
     from gunnchos_device_os.device_lab.apps.runner import run_app
     from gunnchos_device_os.device_lab.session import get_qemu_session, get_session, start_session, stop_session
 
+    if not getattr(ns, "device", None):
+        # No --device: this is a gunnchSDK package run, not a Device Lab
+        # session run (WP-013).
+        from gunnchos_device_os.release_engineering.cli import cmd_run_sdk_package
+
+        return _out(cmd_run_sdk_package(ns, _repo_root()))
+
     if getattr(ns, "real_guest", False):
         os.environ["GUNNCHDEVICE_LAB_FORCE_REAL_GUEST"] = "1"
         os.environ.setdefault("GUNNCHDEVICE_LAB_BACKEND", "QEMU_TCG")
@@ -283,6 +290,36 @@ def cmd_chaos(ns: argparse.Namespace) -> int:
         stop_session(sess.instance_id)
 
 
+def cmd_os_image(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.release_engineering.cli import cmd_os_image as _impl
+
+    return _out(_impl(ns, _repo_root()))
+
+
+def cmd_sdk(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.release_engineering.cli import cmd_sdk as _impl
+
+    return _out(_impl(ns, _repo_root()))
+
+
+def cmd_package(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.release_engineering.cli import cmd_package as _impl
+
+    return _out(_impl(ns, _repo_root()))
+
+
+def cmd_install(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.release_engineering.cli import cmd_install as _impl
+
+    return _out(_impl(ns, _repo_root()))
+
+
+def cmd_uninstall(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.release_engineering.cli import cmd_uninstall as _impl
+
+    return _out(_impl(ns, _repo_root()))
+
+
 def time_tag() -> str:
     import time as _time
 
@@ -333,13 +370,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("run")
     s.add_argument("app")
-    s.add_argument("--device", required=True)
+    s.add_argument("--device", required=False, help="Device Lab profile id; omit to run an installed gunnchSDK package")
     s.add_argument("--keep", action="store_true")
     s.add_argument(
         "--real-guest",
         action="store_true",
         help="Prefer QEMU guest process_start when available",
     )
+    s.add_argument("--install-root", help="gunnchSDK install root (only used without --device)")
     s.set_defaults(func=cmd_run)
 
     s = sub.add_parser("scenario")
@@ -416,6 +454,55 @@ def build_parser() -> argparse.ArgumentParser:
     suite.set_defaults(func=cmd_chaos)
 
     sub.add_parser("score").set_defaults(func=cmd_score)
+
+    # -- WP-013: release engineering + developer platform -----------------
+    oi = sub.add_parser("os-image")
+    oi_sub = oi.add_subparsers(dest="os_image_cmd", required=True)
+    oi_build = oi_sub.add_parser("build")
+    oi_build.add_argument("realm", help="lab|evt|factory|recovery|production (or full REALM_ID)")
+    oi_build.add_argument("--unsigned", action="store_true", help="Skip DEV signing (always true for production)")
+    oi_build.set_defaults(func=cmd_os_image)
+    oi_inspect = oi_sub.add_parser("inspect")
+    oi_inspect.add_argument("realm")
+    oi_inspect.set_defaults(func=cmd_os_image)
+    oi_verify = oi_sub.add_parser("verify")
+    oi_verify.add_argument("realm")
+    oi_verify.set_defaults(func=cmd_os_image)
+
+    sd = sub.add_parser("sdk")
+    sd_sub = sd.add_subparsers(dest="sdk_cmd", required=True)
+    sd_init = sd_sub.add_parser("init")
+    sd_init.add_argument("app_id")
+    sd_init.add_argument("path")
+    sd_init.add_argument("--name")
+    sd_init.set_defaults(func=cmd_sdk)
+    sd_build = sd_sub.add_parser("build")
+    sd_build.add_argument("path")
+    sd_build.add_argument("--out")
+    sd_build.add_argument("--unsigned", action="store_true")
+    sd_build.set_defaults(func=cmd_sdk)
+    sd_test = sd_sub.add_parser("test")
+    sd_test.add_argument("path")
+    sd_test.set_defaults(func=cmd_sdk)
+
+    pk = sub.add_parser("package")
+    pk.add_argument("app_dir")
+    pk.add_argument("--out")
+    pk.add_argument("--unsigned", action="store_true")
+    pk.set_defaults(func=cmd_package)
+
+    inst = sub.add_parser("install")
+    inst.add_argument("package")
+    inst.add_argument("--install-root")
+    inst.add_argument("--force", action="store_true")
+    inst.add_argument("--update", action="store_true")
+    inst.set_defaults(func=cmd_install)
+
+    uninst = sub.add_parser("uninstall")
+    uninst.add_argument("app_id")
+    uninst.add_argument("--install-root")
+    uninst.add_argument("--keep-logs", action="store_true")
+    uninst.set_defaults(func=cmd_uninstall)
 
     return p
 
