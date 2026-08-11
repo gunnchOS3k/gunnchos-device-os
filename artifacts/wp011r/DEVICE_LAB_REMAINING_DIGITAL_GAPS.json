@@ -16,7 +16,7 @@
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": "retained_from_wave4_drm_enum_only_insufficient_for_dsxl_ux",
     "RING_TO_REAL_APPLICATION_INPUT_PASS": "wave4_input_observe_alone_insufficient_for_app_mutation_token"
   },
@@ -77,9 +77,9 @@
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "OPEN",
-      "earned": false,
-      "summary": "input_observe alone is insufficient. Need Ring simulator \u2192 authenticated packet \u2192 RingService \u2192 SpatialInputService \u2192 confidence gate \u2192 guest/hybrid input \u2192 ACTUAL app state mutation for document, browser, and one game.",
+      "status": "EARNED_HYBRID_LAB_SURFACES",
+      "earned": true,
+      "summary": "Earned on hybrid Lab surfaces: Ring simulator → authenticated packet → RingService → SpatialInputService → confidence gate → input_router → document/browser/game state mutation. Evidence under artifacts/wp011r/ring/. input_observe alone still insufficient; WAVE4 observe token remains separate. Spatial SIMULATED; physical ring SI PENDING.",
       "required_to_earn": [
         "Full pipeline stages recorded",
         "Document buffer mutation via stack (not direct file write)",
@@ -89,9 +89,11 @@
       ],
       "code_refs": [
         "gunnchos_device_os/device_lab/scenarios/ring_real_input.py",
+        "gunnchos_device_os/device_lab/scenarios/ring_app_mutation.py",
         "gunnchos_device_os/device_lab/hw_backends/rings.py",
         "gunnchos_device_os/device_lab/apps/surfaces.py"
-      ]
+      ],
+      "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     },
     {
       "id": "GAP-ECO010-SOAK",

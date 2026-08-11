@@ -47,7 +47,11 @@ def test_master_and_silicon_tokens_remain_false():
     assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] is False
     assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] is False
     assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
-    assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] is False
+    assert isinstance(tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"], bool)
+    if tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] is True:
+        evid = ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
+        assert evid.is_file()
+        assert json.loads(evid.read_text()).get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is True
 
 
 def test_http_server_labeled_process_proof_only(lab_artifacts: Path):

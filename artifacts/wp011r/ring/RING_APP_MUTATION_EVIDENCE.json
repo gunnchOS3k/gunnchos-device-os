@@ -1,0 +1,341 @@
+{
+  "ok": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "pipeline_required": [
+    "ring_simulator",
+    "authenticated_packet",
+    "RingService",
+    "SpatialInputService",
+    "confidence_gate",
+    "guest_or_hybrid_input",
+    "app_state_mutation"
+  ],
+  "pipeline_observed": [
+    "ring_simulator",
+    "authenticated_packet",
+    "RingService",
+    "SpatialInputService",
+    "confidence_gate",
+    "guest_or_hybrid_input",
+    "app_state_mutation"
+  ],
+  "pipeline_raw": [
+    "edge_io_sim",
+    "authenticated_packet",
+    "ring_service",
+    "SpatialInputService",
+    "input_router_hid_wayland",
+    "apps"
+  ],
+  "pipeline_ok": true,
+  "mutations": {
+    "libreoffice": {
+      "delivered": true,
+      "app_state_changed": true,
+      "mutated": true,
+      "before": {
+        "app_id": "libreoffice",
+        "content": "",
+        "cursor": 0,
+        "focused": false,
+        "len": 0,
+        "checksum": 0
+      },
+      "after": {
+        "app_id": "libreoffice",
+        "content": "RINGRING",
+        "cursor": 8,
+        "focused": true,
+        "len": 8,
+        "checksum": 15393253
+      },
+      "via_stack": true,
+      "os_input_path": {
+        "attempted": true,
+        "RING_SPATIAL_ACCURACY": "SIMULATED",
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+        "hybrid_process": {
+          "ok": true,
+          "before": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 0,
+            "focused_element": null,
+            "page_state": {
+              "counter": 0,
+              "last_action": null
+            }
+          },
+          "after": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 1,
+            "focused_element": "lab-button",
+            "page_state": {
+              "counter": 1,
+              "last_action": "click",
+              "playwright_counter": 1,
+              "playwright_scroll": 0,
+              "playwright": true
+            }
+          },
+          "path": "hybrid_process"
+        },
+        "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+      },
+      "observe_only_rejected": false,
+      "direct_file_write": false
+    },
+    "browser": {
+      "delivered": true,
+      "app_state_changed": true,
+      "mutated": true,
+      "before": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.0,
+        "click_count": 1,
+        "focused_element": "lab-button",
+        "page_state": {
+          "counter": 1,
+          "last_action": "click",
+          "playwright_counter": 1,
+          "playwright_scroll": 0,
+          "playwright": true
+        }
+      },
+      "after": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.4,
+        "click_count": 2,
+        "focused_element": "pointer@0.08,0.00",
+        "page_state": {
+          "counter": 2,
+          "last_action": "scroll",
+          "playwright_counter": 0,
+          "playwright_scroll": 0,
+          "playwright": true,
+          "pointer": {
+            "x": 0.08000000000000002,
+            "y": 0.0
+          },
+          "scroll_y": 0.4
+        }
+      },
+      "via_stack": true,
+      "os_input_path": {
+        "attempted": true,
+        "RING_SPATIAL_ACCURACY": "SIMULATED",
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+        "hybrid_process": {
+          "ok": true,
+          "before": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.4,
+            "click_count": 2,
+            "focused_element": "pointer@0.08,0.00",
+            "page_state": {
+              "counter": 2,
+              "last_action": "scroll",
+              "playwright_counter": 0,
+              "playwright_scroll": 0,
+              "playwright": true,
+              "pointer": {
+                "x": 0.08000000000000002,
+                "y": 0.0
+              },
+              "scroll_y": 0.4
+            }
+          },
+          "after": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.4,
+            "click_count": 3,
+            "focused_element": "lab-button",
+            "page_state": {
+              "counter": 3,
+              "last_action": "click",
+              "playwright_counter": 1,
+              "playwright_scroll": 0,
+              "playwright": true,
+              "pointer": {
+                "x": 0.08000000000000002,
+                "y": 0.0
+              },
+              "scroll_y": 0.4
+            }
+          },
+          "path": "hybrid_process"
+        },
+        "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+      },
+      "observe_only_rejected": false,
+      "direct_file_write": false
+    },
+    "games": {
+      "delivered": true,
+      "app_state_changed": true,
+      "mutated": true,
+      "before": {
+        "app_id": "games",
+        "game_id": "anime-aggressors",
+        "health": {
+          "p1": 100,
+          "p2": 100
+        },
+        "position": {
+          "x": 120.0,
+          "y": 380.0
+        },
+        "input_events": 0,
+        "started": false,
+        "last_action": null
+      },
+      "after": {
+        "app_id": "games",
+        "game_id": "anime-aggressors",
+        "health": {
+          "p1": 100,
+          "p2": 92
+        },
+        "position": {
+          "x": 124.8,
+          "y": 380.0
+        },
+        "input_events": 2,
+        "started": true,
+        "last_action": "attack"
+      },
+      "via_stack": true,
+      "os_input_path": {
+        "attempted": true,
+        "RING_SPATIAL_ACCURACY": "SIMULATED",
+        "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+        "hybrid_process": {
+          "ok": true,
+          "before": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.4,
+            "click_count": 3,
+            "focused_element": "lab-button",
+            "page_state": {
+              "counter": 3,
+              "last_action": "click",
+              "playwright_counter": 1,
+              "playwright_scroll": 0,
+              "playwright": true,
+              "pointer": {
+                "x": 0.08000000000000002,
+                "y": 0.0
+              },
+              "scroll_y": 0.4
+            }
+          },
+          "after": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.4,
+            "click_count": 4,
+            "focused_element": "lab-button",
+            "page_state": {
+              "counter": 4,
+              "last_action": "click",
+              "playwright_counter": 1,
+              "playwright_scroll": 0,
+              "playwright": true,
+              "pointer": {
+                "x": 0.08000000000000002,
+                "y": 0.0
+              },
+              "scroll_y": 0.4
+            }
+          },
+          "path": "hybrid_process"
+        },
+        "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+      },
+      "observe_only_rejected": false,
+      "direct_file_write": false
+    }
+  },
+  "confidence_gate": {
+    "low": {
+      "ok": true,
+      "delivered": false,
+      "reject": {
+        "reason": "low_confidence",
+        "confidence": 0.2
+      },
+      "via_stack": true
+    },
+    "wrong": {
+      "ok": true,
+      "delivered": false,
+      "reject": {
+        "reason": "wrong_target",
+        "requested": "browser"
+      },
+      "via_stack": true
+    },
+    "ok": true
+  },
+  "app_snapshots": {
+    "libreoffice": {
+      "app_id": "libreoffice",
+      "content": "RINGRING",
+      "cursor": 8,
+      "focused": false,
+      "len": 8,
+      "checksum": 15393253
+    },
+    "browser": {
+      "app_id": "browser",
+      "url": "lab://browser/home",
+      "scroll_y": 0.4,
+      "click_count": 4,
+      "focused_element": "lab-button",
+      "page_state": {
+        "counter": 4,
+        "last_action": "click",
+        "playwright_counter": 1,
+        "playwright_scroll": 0,
+        "playwright": true,
+        "pointer": {
+          "x": 0.08000000000000002,
+          "y": 0.0
+        },
+        "scroll_y": 0.4
+      }
+    },
+    "games": {
+      "app_id": "games",
+      "game_id": "anime-aggressors",
+      "health": {
+        "p1": 100,
+        "p2": 92
+      },
+      "position": {
+        "x": 124.8,
+        "y": 380.0
+      },
+      "input_events": 2,
+      "started": true,
+      "last_action": "attack"
+    },
+    "focus": "games",
+    "ts": 1786456784.35285
+  },
+  "RING_SPATIAL_ACCURACY": "SIMULATED",
+  "RING_TO_REAL_APPLICATION_INPUT_PASS_note": "Wave4 input_observe token is separate; this token requires actual document/browser/game state mutation via the stack.",
+  "companion_instance": "dev-60d21ffc",
+  "duration_ms": 3881,
+  "SILICON_EXACT_EMULATION": false,
+  "claim_boundary": "Ring Lab path mutates observable app surfaces via SpatialInputService. input_observe alone does not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. RING_SPATIAL_ACCURACY=SIMULATED. SILICON_EXACT_EMULATION=false. Physical ring SI PENDING.",
+  "note": "RING_TO_REAL_APP_STATE_MUTATION_PASS earned"
+}

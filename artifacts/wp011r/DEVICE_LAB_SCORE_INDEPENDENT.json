@@ -1,27 +1,134 @@
 {
   "schema": "gunnchos.device_lab.score_independent.v1",
-  "accepted_device_os_main": null,
-  "categories": {
-    "foundation": 7,
-    "golden_journeys": 7,
-    "behavioral_peripheral_simulation": 6,
-    "failure_scenario_injection": 6,
-    "evidence_reproducibility": 7,
-    "actual_virtual_gunnchos": 4,
-    "avd_style_experience": 4,
-    "live_visual_interaction": 3,
-    "hardware_spec_synchronization": 8,
-    "performance_prediction": 4,
-    "full_ecosystem_simulation": 5,
+  "wave": "WP-011R",
+  "baseline_12_grades": {
+    "foundation": {
+      "grade": 8,
+      "axis": "DIGITAL",
+      "evidence": [
+        "CLI/session/profiles present",
+        "WP-011R gap register added"
+      ],
+      "hardcoded": false
+    },
+    "golden_journeys": {
+      "grade": 8,
+      "axis": "DIGITAL",
+      "evidence": [
+        "G01/G04/G05/G06/G07/G08/G09 Lab-mapped"
+      ],
+      "hardcoded": false
+    },
+    "behavioral_peripherals": {
+      "grade": 6,
+      "axis": "DIGITAL",
+      "evidence": [
+        "Display/network/audio/storage/rings integrated"
+      ],
+      "hardcoded": false
+    },
+    "failure_injection": {
+      "grade": 8,
+      "axis": "DIGITAL",
+      "evidence": [
+        "ChaosEngine suite",
+        "ECO-010 not_run"
+      ],
+      "hardcoded": false
+    },
+    "evidence_reproducibility": {
+      "grade": 7,
+      "axis": "DIGITAL",
+      "evidence": [
+        "run_manifest",
+        "wp011r artifacts"
+      ],
+      "hardcoded": false
+    },
+    "actual_virtual_gunnchos": {
+      "grade": 6,
+      "axis": "DIGITAL",
+      "evidence": [
+        "DEVICE_LAB_DEVELOPMENT_GUEST (Alpine/dev \u2014 not shipping image)",
+        "QEMU guest path prepared"
+      ],
+      "hardcoded": false
+    },
+    "avd_style_experience": {
+      "grade": 2,
+      "axis": "DIGITAL",
+      "evidence": [
+        "Control UI only \u2014 no AVD manager"
+      ],
+      "hardcoded": false
+    },
+    "live_visual_interaction": {
+      "grade": 4,
+      "axis": "DIGITAL",
+      "evidence": [
+        "LIVE_GUNNCHOS_VISUAL_PASS=False",
+        "VNC path prepared; screendump evidence required for PASS"
+      ],
+      "hardcoded": false
+    },
+    "hardware_spec_sync": {
+      "grade": 7,
+      "axis": "DIGITAL",
+      "evidence": [
+        "Profile MPN sync from WP-011"
+      ],
+      "hardcoded": false
+    },
+    "performance_prediction": {
+      "grade": 2,
+      "axis": "PRE_EVT_DIGITAL",
+      "evidence": [
+        "FOUNDATION_SCHEMA_ONLY"
+      ],
+      "hardcoded": false
+    },
+    "full_ecosystem_simulation": {
+      "grade": 6,
+      "axis": "DIGITAL",
+      "evidence": [
+        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=False",
+        "ECO-010=OPEN",
+        "RING_TO_REAL_APP_STATE_MUTATION_PASS=True",
+        "DSXL_DUAL_COMPOSITOR_UX_PASS=False"
+      ],
+      "hardcoded": false
+    },
     "physical_digital_twin_fidelity": {
-      "digital_pre_evt_grade": 5,
+      "grade": 2,
+      "axis": "PRE_EVT_DIGITAL",
+      "digital_pre_evt_grade": 2,
       "physical_correlation_grade": null,
-      "physical_state": "PHYSICAL_PENDING"
+      "evidence": [
+        "VF4/5/6 PHYSICAL_PENDING"
+      ],
+      "hardcoded": false
     }
   },
-  "grade_mean_of_numeric_categories": 5.55,
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "grade_mean_of_12": 5.5,
+  "tokens_observed": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "ECO010_SOAK_PASS": false,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "gaps_register": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+  "register_score_crosscheck": {
+    "grade_mean_of_12": 6.58,
+    "source": "scripts/device_lab_score_from_register.py"
+  },
   "hardcoded_tens_forbidden": true,
-  "note": "Independent of gunnchctl score; master complete stays false until digital gates earned."
+  "any_grade_is_10": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "VF4": "PHYSICAL_PENDING",
+  "VF5": "PHYSICAL_PENDING",
+  "VF6": "PHYSICAL_PENDING",
+  "note": "Independent recomputation from wp011r evidence files + gap register. Not gunnchctl score alone. Master complete remains false."
 }

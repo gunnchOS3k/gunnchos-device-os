@@ -1,0 +1,59 @@
+{
+  "delivered": true,
+  "app_state_changed": true,
+  "mutated": true,
+  "before": {
+    "app_id": "libreoffice",
+    "content": "",
+    "cursor": 0,
+    "focused": false,
+    "len": 0,
+    "checksum": 0
+  },
+  "after": {
+    "app_id": "libreoffice",
+    "content": "RINGRING",
+    "cursor": 8,
+    "focused": true,
+    "len": 8,
+    "checksum": 15393253
+  },
+  "via_stack": true,
+  "os_input_path": {
+    "attempted": true,
+    "RING_SPATIAL_ACCURACY": "SIMULATED",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+    "hybrid_process": {
+      "ok": true,
+      "before": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.0,
+        "click_count": 0,
+        "focused_element": null,
+        "page_state": {
+          "counter": 0,
+          "last_action": null
+        }
+      },
+      "after": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.0,
+        "click_count": 1,
+        "focused_element": "lab-button",
+        "page_state": {
+          "counter": 1,
+          "last_action": "click",
+          "playwright_counter": 1,
+          "playwright_scroll": 0,
+          "playwright": true
+        }
+      },
+      "path": "hybrid_process"
+    },
+    "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+  },
+  "observe_only_rejected": false,
+  "direct_file_write": false
+}

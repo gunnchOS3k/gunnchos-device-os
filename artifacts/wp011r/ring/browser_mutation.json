@@ -1,0 +1,89 @@
+{
+  "delivered": true,
+  "app_state_changed": true,
+  "mutated": true,
+  "before": {
+    "app_id": "browser",
+    "url": "lab://browser/home",
+    "scroll_y": 0.0,
+    "click_count": 1,
+    "focused_element": "lab-button",
+    "page_state": {
+      "counter": 1,
+      "last_action": "click",
+      "playwright_counter": 1,
+      "playwright_scroll": 0,
+      "playwright": true
+    }
+  },
+  "after": {
+    "app_id": "browser",
+    "url": "lab://browser/home",
+    "scroll_y": 0.4,
+    "click_count": 2,
+    "focused_element": "pointer@0.08,0.00",
+    "page_state": {
+      "counter": 2,
+      "last_action": "scroll",
+      "playwright_counter": 0,
+      "playwright_scroll": 0,
+      "playwright": true,
+      "pointer": {
+        "x": 0.08000000000000002,
+        "y": 0.0
+      },
+      "scroll_y": 0.4
+    }
+  },
+  "via_stack": true,
+  "os_input_path": {
+    "attempted": true,
+    "RING_SPATIAL_ACCURACY": "SIMULATED",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+    "hybrid_process": {
+      "ok": true,
+      "before": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.4,
+        "click_count": 2,
+        "focused_element": "pointer@0.08,0.00",
+        "page_state": {
+          "counter": 2,
+          "last_action": "scroll",
+          "playwright_counter": 0,
+          "playwright_scroll": 0,
+          "playwright": true,
+          "pointer": {
+            "x": 0.08000000000000002,
+            "y": 0.0
+          },
+          "scroll_y": 0.4
+        }
+      },
+      "after": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.4,
+        "click_count": 3,
+        "focused_element": "lab-button",
+        "page_state": {
+          "counter": 3,
+          "last_action": "click",
+          "playwright_counter": 1,
+          "playwright_scroll": 0,
+          "playwright": true,
+          "pointer": {
+            "x": 0.08000000000000002,
+            "y": 0.0
+          },
+          "scroll_y": 0.4
+        }
+      },
+      "path": "hybrid_process"
+    },
+    "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+  },
+  "observe_only_rejected": false,
+  "direct_file_write": false
+}

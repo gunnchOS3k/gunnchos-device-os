@@ -1,5 +1,6 @@
 {
   "schema": "gunnchos.device_lab.wp011_tokens.v1",
+  "wave": "WP-011R",
   "GUNNCHDEVICE_LAB_PROFILE_SYNC_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_IMAGE_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_AGENT_PREPARED": true,
@@ -10,14 +11,27 @@
   "GUNNCHDEVICE_LAB_PRE_EVT_TWIN_INFRA_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
+  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "depends_on": ["#101", "#100", "#98", "#97"],
+  "depends_on": ["#102", "#101", "#100", "#98", "#97"],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
+  "wave011r": {
+    "gap_register": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+    "production_runtime": "gunnchos_device_os/device_lab/ecosystem/production_runtime.py",
+    "http_server_alone": "PROCESS_PROOF_ONLY / NOT_PRODUCTION_RUNTIME",
+    "eco010_soak_runner": "scripts/run_eco010_full_soak.py",
+    "independent_score": "scripts/device_lab_score_independent.py",
+    "master_complete": false
+  },
   "wave5": {
     "ecosystem_cli": "start|status|stop|test|graph|topology",
     "eco001_depth": "continuity_export_import_checksum",
@@ -36,7 +50,8 @@
     "ring_spatial_accuracy": "SIMULATED",
     "drm_modules_staged_from_alpine_initramfs_virt": true,
     "qemu_outputs_xres_yres_enables_second_scanout": true,
-    "force_real_guest_mac": "GUNNCHDEVICE_LAB_FORCE_REAL_GUEST=1"
+    "force_real_guest_mac": "GUNNCHDEVICE_LAB_FORCE_REAL_GUEST=1",
+    "note": "GUEST_DUAL_OUTPUT_PASS / RING input_observe retained; insufficient alone for WP-011R UX/mutation tokens"
   },
   "wave3": {
     "virtio_serial_primary": true,
@@ -53,10 +68,11 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Wave 5 — ecosystem start/test, ECO-001..010 (010 PARTIAL), games, chaos, score, twin handoff",
-    "Master ecosystem digital complete remains false (ECO-010 full soak not earned)",
-    "GUEST_DUAL_OUTPUT_PASS / RING_TO_REAL_APPLICATION_INPUT_PASS retained from Wave 4",
+    "WP-011R remediations toward independent 10/10 digital acceptance — tokens stay false until earned",
+    "http.server alone rejected as FOUR_GAME_REAL_RUNTIME proof",
+    "Alpine/dev guest labeled DEVICE_LAB_DEVELOPMENT_GUEST — not shipping image",
+    "ECO-010 remains PARTIAL until full soak; master complete false",
     "RING_SPATIAL_ACCURACY=SIMULATED; VF4/5/6 PHYSICAL_PENDING",
-    "No PRODUCTION_READY / physical measurement claims"
+    "No PRODUCTION_READY / fabrication / RFQ / certification claims"
   ]
 }

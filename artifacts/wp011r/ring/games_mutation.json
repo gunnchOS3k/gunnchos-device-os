@@ -1,0 +1,86 @@
+{
+  "delivered": true,
+  "app_state_changed": true,
+  "mutated": true,
+  "before": {
+    "app_id": "games",
+    "game_id": "anime-aggressors",
+    "health": {
+      "p1": 100,
+      "p2": 100
+    },
+    "position": {
+      "x": 120.0,
+      "y": 380.0
+    },
+    "input_events": 0,
+    "started": false,
+    "last_action": null
+  },
+  "after": {
+    "app_id": "games",
+    "game_id": "anime-aggressors",
+    "health": {
+      "p1": 100,
+      "p2": 92
+    },
+    "position": {
+      "x": 124.8,
+      "y": 380.0
+    },
+    "input_events": 2,
+    "started": true,
+    "last_action": "attack"
+  },
+  "via_stack": true,
+  "os_input_path": {
+    "attempted": true,
+    "RING_SPATIAL_ACCURACY": "SIMULATED",
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+    "hybrid_process": {
+      "ok": true,
+      "before": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.4,
+        "click_count": 3,
+        "focused_element": "lab-button",
+        "page_state": {
+          "counter": 3,
+          "last_action": "click",
+          "playwright_counter": 1,
+          "playwright_scroll": 0,
+          "playwright": true,
+          "pointer": {
+            "x": 0.08000000000000002,
+            "y": 0.0
+          },
+          "scroll_y": 0.4
+        }
+      },
+      "after": {
+        "app_id": "browser",
+        "url": "lab://browser/home",
+        "scroll_y": 0.4,
+        "click_count": 4,
+        "focused_element": "lab-button",
+        "page_state": {
+          "counter": 4,
+          "last_action": "click",
+          "playwright_counter": 1,
+          "playwright_scroll": 0,
+          "playwright": true,
+          "pointer": {
+            "x": 0.08000000000000002,
+            "y": 0.0
+          },
+          "scroll_y": 0.4
+        }
+      },
+      "path": "hybrid_process"
+    },
+    "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
+  },
+  "observe_only_rejected": false,
+  "direct_file_write": false
+}
