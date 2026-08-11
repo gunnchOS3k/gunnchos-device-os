@@ -85,6 +85,9 @@ def _require_real_virtio_serial(resp: dict[str, Any]) -> bool:
 
 
 def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]:
+    import hashlib
+    import socket as _socket
+
     result: dict[str, Any] = {"LIVE_GUNNCHOS_VISUAL_PASS": False, "claim_boundary": CLAIM}
     ping = _agent_call(session, "ping")
     result["ping"] = ping
@@ -108,6 +111,30 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     result["framebuffer_before"] = {k: v for k, v in before.items() if k != "bytes_b64"}
     before_bytes = base64.b64decode(before["bytes_b64"]) if before.get("bytes_b64") else b""
 
+    host_before = evidence_dir / "host_fb_before.ppm"
+    host_after = evidence_dir / "host_fb_after.ppm"
+    host_cap: dict[str, Any] = {"ok": False, "RFB_HANDSHAKE_ALONE_ACCEPTED": False}
+    mon = getattr(session, "monitor_sock", None)
+
+    def _mon(cmd_line: str) -> None:
+        s = _socket.socket(_socket.AF_UNIX, _socket.SOCK_STREAM)
+        s.settimeout(8)
+        s.connect(str(mon))
+        try:
+            s.recv(4096)
+            s.sendall((cmd_line + "\n").encode())
+            time.sleep(0.5)
+            s.recv(8192)
+        finally:
+            s.close()
+
+    if mon:
+        try:
+            _mon(f"screendump {host_before}")
+            host_cap["before_exists"] = host_before.exists()
+        except OSError as exc:
+            host_cap["before_error"] = str(exc)
+
     inj = guest_input.inject_key(monitor_sock=getattr(session, "monitor_sock", None), key="a", agent=session.agent)
     result["input_injection"] = inj
     _agent_call(session, "input_inject", kind="text", text="gunnchOS live visual proof")
@@ -117,32 +144,70 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     result["framebuffer_after"] = {k: v for k, v in after.items() if k != "bytes_b64"}
     after_bytes = base64.b64decode(after["bytes_b64"]) if after.get("bytes_b64") else b""
 
+    if mon:
+        try:
+            _mon(f"screendump {host_after}")
+            host_cap["after_exists"] = host_after.exists()
+        except OSError as exc:
+            host_cap["after_error"] = str(exc)
+
     if before_bytes:
         (evidence_dir / "shell_app_before.png").write_bytes(before_bytes)
     if after_bytes:
         (evidence_dir / "shell_app_after.png").write_bytes(after_bytes)
 
-    non_blank = len(before_bytes) > 2048 or len(after_bytes) > 2048
-    diff_bytes = abs(len(after_bytes) - len(before_bytes)) if (before_bytes and after_bytes) else 0
-    changed = before_bytes != after_bytes if (before_bytes and after_bytes) else False
+    def _ppm_nonblank(path: Path) -> tuple[bool, str]:
+        if not path.exists():
+            return False, ""
+        data = path.read_bytes()
+        if not data.startswith(b"P6") or len(data) < 64:
+            return False, ""
+        try:
+            _, body = data.split(b"\n255\n", 1)
+        except ValueError:
+            return False, hashlib.sha256(data).hexdigest()
+        ratio = (sum(1 for b in body if b != 0) / len(body)) if body else 0.0
+        return ratio > 0.01, hashlib.sha256(data).hexdigest()
 
+    host_nb_b, host_sha_b = _ppm_nonblank(host_before)
+    host_nb_a, host_sha_a = _ppm_nonblank(host_after)
+    host_cap.update(
+        {
+            "ok": bool(host_nb_b and host_nb_a),
+            "before_nonblank": host_nb_b,
+            "after_nonblank": host_nb_a,
+            "before_sha256": host_sha_b,
+            "after_sha256": host_sha_a,
+            "changed": bool(host_sha_b and host_sha_a and host_sha_b != host_sha_a),
+            "measurement_class": "HOST_OBSERVED",
+            "note": "QEMU monitor screendump PPM — real virtio-gpu pixels, not RFB handshake alone",
+        }
+    )
+    result["host_screendump"] = host_cap
+
+    non_blank = len(before_bytes) > 2048 or len(after_bytes) > 2048 or bool(host_cap.get("ok"))
+    changed = (
+        (before_bytes != after_bytes if (before_bytes and after_bytes) else False)
+        or bool(host_cap.get("changed"))
+    )
     earned = bool(
         comp.get("available")
         and comp.get("compositor") == "weston"
         and launch.get("ok")
+        and launch.get("alive_after_500ms")
         and non_blank
-        and (before_bytes or after_bytes)
+        and changed
     )
     result.update(
         {
             "LIVE_GUNNCHOS_VISUAL_PASS": earned,
             "non_blank_capture": non_blank,
-            "diff_bytes": diff_bytes,
+            "diff_bytes": abs(len(after_bytes) - len(before_bytes)) if (before_bytes and after_bytes) else 0,
             "before_after_changed": changed,
             "note": (
-                "Real weston + real app launch + non-blank guest-side capture"
+                "Real weston + alive app + non-blank FB (guest and/or QEMU screendump) with input-visible delta"
                 if earned
-                else "Not earned — see compositor_info/app_launch/framebuffer_* fields for the honest blocker"
+                else "Not earned — see compositor_info/app_launch/framebuffer_*/host_screendump"
             ),
         }
     )
@@ -190,17 +255,22 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
 
     launch = _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
     result["app_launch"] = launch
-    time.sleep(2.0)
+    time.sleep(3.0)
+    # Click to focus the editor surface, then End to append (avoid overwriting).
+    _agent_call(session, "input_inject", kind="pointer", dx=200, dy=200, button="left", timeout_sec=10.0)
+    time.sleep(0.3)
+    _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
+    time.sleep(0.2)
 
     before = _agent_call(session, "logs", path=doc_path, lines=50)
     result["document_before"] = before
 
-    mutation_text = f"RING_MUTATION_{int(time.time())}"
+    mutation_text = f"RINGMUTATION{int(time.time())}"
     inject = _agent_call(session, "input_inject", kind="text", text=mutation_text, timeout_sec=15.0)
     result["ring_input_inject"] = inject
     save = _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
     result["save_keystroke"] = save
-    time.sleep(1.5)
+    time.sleep(2.0)
 
     after = _agent_call(session, "logs", path=doc_path, lines=50)
     result["document_after"] = after

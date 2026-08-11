@@ -14,8 +14,8 @@
     "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
     "note": "qcow2 with backing_file=base cloud image; base image cached separately, never committed to git",
     "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
-    "sha256": "75f832c62d4cfb0d58b2f2ca02da006ab4b4ca9b6584d076ca458dc168a75aa7",
-    "size_bytes": 2288320512
+    "sha256": "33df3dec365310f832be2500ef875186f6865a01eb75ccedb23c984dda78c964",
+    "size_bytes": 2870018048
   },
   "download": {
     "cached": true,
@@ -55,6 +55,7 @@
   "provision_method": "qemu_debian_genericcloud_cloud_init_guest_native",
   "provision_ok": true,
   "required_packages": [
+    "linux-image-arm64",
     "weston",
     "seatd",
     "libseat1",

@@ -101,9 +101,10 @@ REQUIRED_APT_PACKAGES: tuple[str, ...] = (
     "wireplumber",
     "openssh-server",
     "foot",
+    "grim",
 )
 # Best-effort only — the mission explicitly allows godot as "optional / document if unavailable".
-OPTIONAL_APT_PACKAGES: tuple[str, ...] = ("godot3", "grim")
+OPTIONAL_APT_PACKAGES: tuple[str, ...] = ("godot3",)
 
 CLAIM_BOUNDARY = (
     "gunnchOS Device Lab Interactive Development Guest: Debian 12 genericcloud "
@@ -267,6 +268,9 @@ write_files:
       #!/bin/bash
       set -eux
       ls -1 /boot/vmlinuz-* 2>/dev/null | tee /var/log/gunnchos-kernels.txt || true
+      # Cloud kernel lacks DRM/uinput — remove it so GRUB boots linux-image-arm64.
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get remove -y 'linux-image-*-cloud-arm64' 'linux-image-cloud-arm64' || true
       if grep -qv cloud /var/log/gunnchos-kernels.txt 2>/dev/null; then
         sed -i 's/^GRUB_DEFAULT=.*/GRUB_DEFAULT=0/' /etc/default/grub || true
         sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="console=ttyAMA0 console=tty0"/' /etc/default/grub || true

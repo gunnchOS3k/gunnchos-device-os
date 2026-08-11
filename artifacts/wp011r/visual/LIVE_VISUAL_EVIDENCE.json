@@ -1,5 +1,5 @@
 {
-  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "ping": {
     "ok": true,
@@ -22,11 +22,122 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "available": false,
-    "compositor": null,
-    "outputs": 0,
-    "surfaces": 0,
-    "note": "weston process or wayland socket not found in guest right now"
+    "available": true,
+    "compositor": "weston",
+    "socket": "wayland-0",
+    "outputs": 2,
+    "surfaces": null,
+    "detail": {
+      "wayland_info_returncode": 0,
+      "wayland_info_output_globals": 2
+    },
+    "note": "Real registry query via wayland-info against the running weston socket."
   },
-  "blocker": "compositor_not_available"
+  "app_launch": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "app_launch",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "app": "mousepad",
+    "pid": 429,
+    "started": true,
+    "alive_after_500ms": true,
+    "argv": [
+      "mousepad",
+      "/root/gunnchos-lab-document.txt"
+    ]
+  },
+  "framebuffer_before": {
+    "ok": false,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "reason": "no_screenshot_produced",
+    "transport": "virtio_serial",
+    "measurement_class": "GUEST_OBSERVED",
+    "note": "grim failed/absent and Ctrl+S weston-screenshooter produced no PNG under /var/lib/gunnchos/screenshots within 5s.",
+    "agent_path_label": "virtio-serial"
+  },
+  "input_injection": {
+    "ok": true,
+    "path": "qemu_monitor_sendkey",
+    "key": "a",
+    "observed": {
+      "monitor_accepted": true,
+      "key": "a",
+      "agent": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "input_observe",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "devices": [
+          {
+            "path": "/dev/input/event4",
+            "name": "gunnchos-uinput-mouse"
+          },
+          {
+            "path": "/dev/input/event3",
+            "name": "gunnchos-uinput-kbd"
+          },
+          {
+            "path": "/dev/input/event2",
+            "name": "QEMU Virtio Tablet"
+          },
+          {
+            "path": "/dev/input/event1",
+            "name": "QEMU Virtio Keyboard"
+          },
+          {
+            "path": "/dev/input/event0",
+            "name": "Power Button"
+          }
+        ],
+        "count": 5
+      }
+    },
+    "attempts": [
+      {
+        "ok": true,
+        "command": "sendkey a",
+        "reply": "(qemu) s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
+        "via": "qemu_monitor"
+      }
+    ],
+    "SILICON_EXACT_EMULATION": false,
+    "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+  },
+  "framebuffer_after": {
+    "ok": false,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "reason": "no_screenshot_produced",
+    "transport": "virtio_serial",
+    "measurement_class": "GUEST_OBSERVED",
+    "note": "grim failed/absent and Ctrl+S weston-screenshooter produced no PNG under /var/lib/gunnchos/screenshots within 5s.",
+    "agent_path_label": "virtio-serial"
+  },
+  "host_screendump": {
+    "ok": true,
+    "RFB_HANDSHAKE_ALONE_ACCEPTED": false,
+    "before_exists": true,
+    "after_exists": true,
+    "before_nonblank": true,
+    "after_nonblank": true,
+    "before_sha256": "b8a02a5c889d1f38af41c577f6902108b1601f0310976501fd19c5317e69d267",
+    "after_sha256": "46904bd8f0217db9eb614c0b840d48b844961f368c9faa701f5b542f2fb45347",
+    "changed": true,
+    "measurement_class": "HOST_OBSERVED",
+    "note": "QEMU monitor screendump PPM \u2014 real virtio-gpu pixels, not RFB handshake alone"
+  },
+  "non_blank_capture": true,
+  "diff_bytes": 0,
+  "before_after_changed": true,
+  "note": "Real weston + alive app + non-blank FB (guest and/or QEMU screendump) with input-visible delta"
 }

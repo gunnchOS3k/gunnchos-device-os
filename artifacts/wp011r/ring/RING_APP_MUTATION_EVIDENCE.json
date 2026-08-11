@@ -1,5 +1,5 @@
 {
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "app_launch": {
     "ok": true,
@@ -11,9 +11,9 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "app": "mousepad",
-    "pid": 418,
+    "pid": 463,
     "started": true,
-    "alive_after_500ms": false,
+    "alive_after_500ms": true,
     "argv": [
       "mousepad",
       "/root/gunnchos-lab-document.txt"
@@ -30,26 +30,37 @@
     "measurement_class": "GUEST_OBSERVED",
     "path": "/root/gunnchos-lab-document.txt",
     "lines": [
-      "gunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
+      "agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
     ]
   },
   "ring_input_inject": {
-    "ok": false,
+    "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
     "cmd": "input_inject",
-    "reason": "handler_exception:\"/dev/uinput\" does not exist or is not a character device file - verify that the uinput module is loaded",
     "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "agent_path_label": "virtio-serial"
+    "kind": "text",
+    "text": "RINGMUTATION1786482831",
+    "injected_via": "uinput"
   },
   "save_keystroke": {
-    "ok": false,
+    "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
     "cmd": "input_inject",
-    "reason": "handler_exception:\"/dev/uinput\" does not exist or is not a character device file - verify that the uinput module is loaded",
     "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "agent_path_label": "virtio-serial"
+    "kind": "key",
+    "key": "s",
+    "mods": [
+      "ctrl"
+    ],
+    "injected_via": "uinput"
   },
   "document_after": {
     "ok": true,
@@ -62,10 +73,10 @@
     "measurement_class": "GUEST_OBSERVED",
     "path": "/root/gunnchos-lab-document.txt",
     "lines": [
-      "gunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
+      "agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786482831"
     ]
   },
-  "mutation_marker": "RING_MUTATION_1786479620",
-  "marker_found_in_after": false,
-  "note": "Not earned \u2014 marker not found in guest document after injection; app_launch/input_inject/save fields above show the honest blocker"
+  "mutation_marker": "RINGMUTATION1786482831",
+  "marker_found_in_after": true,
+  "note": "Real guest uinput text injection landed in the real in-guest mousepad document via HID->libinput->weston->app, verified by reading the saved file"
 }

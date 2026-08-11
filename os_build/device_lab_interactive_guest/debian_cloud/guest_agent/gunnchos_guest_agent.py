@@ -73,7 +73,16 @@ def _log(msg: str) -> None:
 
 def _env_for_gui() -> dict[str, str]:
     env = os.environ.copy()
-    env["WAYLAND_DISPLAY"] = WAYLAND_DISPLAY
+    # Prefer the live weston socket (may be wayland-1 when wayland-0 is taken).
+    sock = None
+    try:
+        for entry in sorted(Path(RUNTIME_DIR).glob("wayland-*")):
+            if entry.is_socket() and not entry.name.endswith(".lock"):
+                sock = entry.name
+                break
+    except OSError:
+        sock = None
+    env["WAYLAND_DISPLAY"] = sock or WAYLAND_DISPLAY
     env["XDG_RUNTIME_DIR"] = RUNTIME_DIR
     env.pop("DISPLAY", None)
     return env
@@ -225,7 +234,7 @@ def cmd_display_info(_req: dict[str, Any]) -> dict[str, Any]:
 def _wayland_socket_present() -> str | None:
     try:
         for entry in sorted(Path(RUNTIME_DIR).glob("wayland-*")):
-            if entry.is_socket():
+            if entry.is_socket() and not entry.name.endswith(".lock"):
                 return entry.name
     except OSError:
         pass
@@ -449,7 +458,34 @@ def cmd_reboot(_req: dict[str, Any]) -> dict[str, Any]:
 
 
 def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
+    import base64
+
     SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    # Prefer grim against the live Wayland socket (honest guest-side capture).
+    grim_path = SCREENSHOT_DIR / f"grim_{int(time.time() * 1000)}.png"
+    try:
+        grim = subprocess.run(
+            ["grim", str(grim_path)],
+            capture_output=True,
+            text=True,
+            timeout=8,
+            env=_env_for_gui(),
+            check=False,
+        )
+        if grim.returncode == 0 and grim_path.is_file() and grim_path.stat().st_size > 0:
+            raw = grim_path.read_bytes()
+            return _ok(
+                "framebuffer_capture",
+                path=str(grim_path),
+                bytes=len(raw),
+                format="png",
+                bytes_b64=base64.b64encode(raw).decode("ascii"),
+                synthetic=False,
+                via="grim_wayland",
+            )
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
     before = set(SCREENSHOT_DIR.glob("*.png"))
     try:
         kbd, _mouse = _get_uinput_devices()
@@ -479,16 +515,14 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
             "framebuffer_capture",
             "no_screenshot_produced",
             note=(
-                "Sent Ctrl+S via guest uinput to trigger weston-screenshooter keybinding but "
-                f"no new PNG appeared under {SCREENSHOT_DIR} within 5s. Compositor may not be "
-                "running the drm-backend, or screenshooter keybinding not active."
+                "grim failed/absent and Ctrl+S weston-screenshooter produced no PNG under "
+                f"{SCREENSHOT_DIR} within 5s."
             ),
         )
     try:
         raw = new_file.read_bytes()
     except OSError as exc:
         return _fail("framebuffer_capture", f"read_failed:{exc}")
-    import base64
 
     return _ok(
         "framebuffer_capture",

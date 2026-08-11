@@ -1,5 +1,5 @@
 {
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "display_info": {
     "ok": true,
@@ -10,23 +10,52 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "displays": [],
-    "connected_count": 0,
-    "connector_count": 0,
+    "displays": [
+      {
+        "id": "card0-Virtual-1",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      },
+      {
+        "id": "card0-Virtual-2",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      }
+    ],
+    "connected_count": 2,
+    "connector_count": 2,
     "guest_proven": true,
     "note": "Enumerated from /sys/class/drm/*/status inside guest (real DRM connector state)."
   },
   "dual_output_gate": {
-    "ok": false,
-    "gate": "FAIL_ONE_DISPLAY",
-    "GUEST_DUAL_OUTPUT_PASS": false,
+    "ok": true,
+    "gate": "PASS_GUEST_DUAL",
+    "GUEST_DUAL_OUTPUT_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "connected": 0,
-    "guest_connected": 0,
+    "note": "DRM/guest dual enum earned GUEST_DUAL_OUTPUT_PASS only; DSXL_DUAL_COMPOSITOR_UX_PASS requires compositor_ux_gate evidence.",
+    "connected": 2,
+    "guest_connected": 2,
     "logical_connected": 0,
     "compositor_surfaces": 0,
-    "sources": [],
-    "outputs": [],
+    "sources": [
+      "guest_drm"
+    ],
+    "outputs": [
+      {
+        "id": "card0-Virtual-1",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      },
+      {
+        "id": "card0-Virtual-2",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      }
+    ],
     "SILICON_EXACT_EMULATION": false,
     "PHYSICAL_DUAL_PANEL": "PENDING"
   },
@@ -39,12 +68,17 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "available": false,
-    "compositor": null,
-    "outputs": 0,
-    "surfaces": 0,
-    "note": "weston process or wayland socket not found in guest right now"
+    "available": true,
+    "compositor": "weston",
+    "socket": "wayland-0",
+    "outputs": 2,
+    "surfaces": null,
+    "detail": {
+      "wayland_info_returncode": 0,
+      "wayland_info_output_globals": 2
+    },
+    "note": "Real registry query via wayland-info against the running weston socket."
   },
-  "compositor_output_count": 0,
-  "note": "Not earned \u2014 guest_dual_output=False compositor_outputs=0. Two connected DRM connectors alone is insufficient; weston must report >=2 real compositor output globals via wayland-info."
+  "compositor_output_count": 2,
+  "note": "Two guest DRM outputs AND weston reporting >=2 real wl_output globals"
 }
