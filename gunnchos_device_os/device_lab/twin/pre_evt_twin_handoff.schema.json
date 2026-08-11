@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.device_lab.pre_evt_twin_handoff.v1",
+  "title": "Pre-EVT Twin Handoff Contract",
+  "type": "object",
+  "required": [
+    "schema",
+    "SILICON_EXACT_EMULATION",
+    "VF4",
+    "VF5",
+    "VF6",
+    "measurement_class",
+    "evidence_paths"
+  ],
+  "properties": {
+    "schema": { "const": "gunnchos.device_lab.pre_evt_twin_handoff.v1" },
+    "SILICON_EXACT_EMULATION": { "const": false },
+    "VF4": { "const": "PHYSICAL_PENDING" },
+    "VF5": { "const": "PHYSICAL_PENDING" },
+    "VF6": { "const": "PHYSICAL_PENDING" },
+    "RING_SPATIAL_ACCURACY": { "const": "SIMULATED" },
+    "measurement_class": {
+      "type": "string",
+      "enum": [
+        "HOST_OBSERVED",
+        "GUEST_OBSERVED",
+        "VIRTUAL_CONSTRAINED",
+        "MODELED_FROM_PUBLIC_SPEC",
+        "SYNTHETIC_SCENARIO",
+        "CALIBRATED_EVT",
+        "PHYSICAL_MEASURED"
+      ]
+    },
+    "evidence_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "physical_test_id": { "type": ["string", "null"] },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": true
+}

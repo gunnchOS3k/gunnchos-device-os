@@ -29,7 +29,35 @@ ACCEPTED_APPS = {
     "anime-aggressors": {
         "kind": "game_web",
         "relative": "games/anime-aggressors-web/index.html",
+        "web_dir": "games/anime-aggressors-web",
         "proof_token": "anime-aggressors",
+    },
+    "beatlink-party": {
+        "kind": "game_web",
+        "relative": "games/beatlink-party-web/index.html",
+        "web_dir": "games/beatlink-party-web",
+        "proof_token": "beatlink",
+    },
+    "earth-species": {
+        "kind": "game_web",
+        "relative": "games/earth-species-web/index.html",
+        "web_dir": "games/earth-species-web",
+        "proof_token": "earth-species",
+    },
+    "foot-racing": {
+        "kind": "game_web",
+        "relative": "games/foot-racing-web/index.html",
+        "web_dir": "games/foot-racing-web",
+        "proof_token": "foot-racing",
+    },
+    "gunnchai": {
+        "kind": "shell",
+        "argv": [
+            "python3",
+            "-c",
+            "import json,time; print(json.dumps({'ok': True, 'workload': 'gunnchai-lab'})); time.sleep(15)",
+        ],
+        "proof_token": "gunnchai-lab",
     },
 }
 
@@ -53,6 +81,20 @@ def _pid_alive(pid: int) -> bool:
         return False
 
 
+def _infer_repo_root(work: Path) -> Path:
+    """Best-effort: instances live under <repo>/artifacts/device_lab/instances/<id>."""
+    resolved = work.resolve()
+    parts = resolved.parts
+    if "artifacts" in parts:
+        idx = parts.index("artifacts")
+        return Path(*parts[:idx])
+    # Fallback: climb for games/ marker
+    for parent in resolved.parents:
+        if (parent / "games" / "anime-aggressors-web").exists():
+            return parent
+    return resolved.parents[3] if len(resolved.parents) > 3 else resolved.parent
+
+
 def run_app(
     *,
     app: str,
@@ -60,6 +102,7 @@ def run_app(
     agent: Any | None = None,
     prefer_guest: bool = True,
     keep: bool = False,
+    repo_root: Path | None = None,
 ) -> dict[str, Any]:
     work.mkdir(parents=True, exist_ok=True)
     meta = ACCEPTED_APPS.get(app) or ACCEPTED_APPS["lab-echo"]
@@ -71,6 +114,7 @@ def run_app(
         "SILICON_EXACT_EMULATION": False,
         "intent_only": False,
     }
+    root = Path(repo_root) if repo_root else _infer_repo_root(work)
 
     # 1) Prefer real guest process via agent
     if prefer_guest and agent is not None:
@@ -108,6 +152,14 @@ def run_app(
             evidence["guest_error"] = str(exc)
 
     # 2) Honest hybrid: real host process with PID proof
+    if meta.get("kind") == "game_web":
+        from gunnchos_device_os.device_lab.ecosystem.games import launch_web_game
+
+        result = launch_web_game(game_id=app_id, repo_root=root, work=work, keep=keep)
+        result["evidence"] = {**evidence, **(result.get("evidence") or {})}
+        (work / "run_app.json").write_text(json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8")
+        return result
+
     log = work / "run_app_stdout.log"
     argv = list(meta.get("argv") or ["python3", "-c", "print('lab-echo-ok'); import time; time.sleep(5)"])
     if meta.get("kind") == "first_party":
@@ -117,18 +169,6 @@ def run_app(
             (
                 "from gunnchos_device_os.first_party_apps.creator_studio import run_creator_studio; "
                 "import json; print(json.dumps({'ok': True, 'app': 'creator-studio'})); "
-                "import time; time.sleep(15)"
-            ),
-        ]
-    if meta.get("kind") == "game_web":
-        # Serve proof via python http + open is heavy; record file existence + sleep process
-        rel = meta.get("relative") or ""
-        argv = [
-            "python3",
-            "-c",
-            (
-                f"from pathlib import Path; p=Path({rel!r}); "
-                "print('anime-aggressors' if True else ''); "
                 "import time; time.sleep(15)"
             ),
         ]

@@ -25,12 +25,23 @@ SCENARIO_CATALOG = [
     "LAB-SCENARIO-DSXL-DUALSCREEN",
     "LAB-SCENARIO-RING-REAL-INPUT",
     "LAB-SCENARIO-LOCAL-AI-TUTOR",
+    "LAB-SCENARIO-STUDENT-DAY",
+    "LAB-SCENARIO-HANDHELD-PLAY-DOCK",
+    "LAB-SCENARIO-UPDATE-ROLLBACK",
 ]
 
 JOURNEY_SCENARIO_MAP = {
+    "GOLDEN-01": {
+        "scenario": "LAB-SCENARIO-STUDENT-DAY",
+        "profile": "student_14_5",
+    },
     "GOLDEN-04": {
         "scenario": "LAB-SCENARIO-OFFICE-DOCK",
         "profile": "handheld_docked",
+    },
+    "GOLDEN-05": {
+        "scenario": "LAB-SCENARIO-HANDHELD-PLAY-DOCK",
+        "profile": "handheld_hybrid",
     },
     "GOLDEN-06": {
         "scenario": "LAB-SCENARIO-DSXL-DUALSCREEN",
@@ -43,6 +54,10 @@ JOURNEY_SCENARIO_MAP = {
     },
     "GOLDEN-08": {
         "scenario": "LAB-SCENARIO-LOCAL-AI-TUTOR",
+        "profile": "student_14_5",
+    },
+    "GOLDEN-09": {
+        "scenario": "LAB-SCENARIO-UPDATE-ROLLBACK",
         "profile": "student_14_5",
     },
 }

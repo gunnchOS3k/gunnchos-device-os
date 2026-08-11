@@ -7,6 +7,7 @@
   "GUNNCHDEVICE_LAB_REAL_RUN_PREPARED": true,
   "GUNNCHDEVICE_LAB_CONVENTIONAL_INPUT_PREPARED": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "GUNNCHDEVICE_LAB_PRE_EVT_TWIN_INFRA_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
@@ -15,8 +16,20 @@
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "depends_on": ["#100", "#98", "#97"],
+  "depends_on": ["#101", "#100", "#98", "#97"],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
+  "wave5": {
+    "ecosystem_cli": "start|status|stop|test|graph|topology",
+    "eco001_depth": "continuity_export_import_checksum",
+    "eco002_to_009": "digitally_executable",
+    "eco010": "PARTIAL_light_simultaneous",
+    "four_games_process_proof": true,
+    "chaos_engine": true,
+    "golden_expanded": ["GOLDEN-01", "GOLDEN-05", "GOLDEN-09"],
+    "score_from_register": true,
+    "pre_evt_twin_handoff_docs": true,
+    "master_complete": false
+  },
   "wave4": {
     "guest_dual_via_drm_virtio_serial": true,
     "ring_to_real_via_virtio_serial_observe": true,
@@ -40,10 +53,10 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Wave 4 — guest DRM dual via virtio-serial display_info + Ring virtio-serial input_observe",
-    "Master ecosystem digital complete remains false (ECO/games/chaos/score still open)",
-    "GUEST_DUAL_OUTPUT_PASS earned: two connected guest DRM connectors over virtio-serial",
-    "RING_TO_REAL_APPLICATION_INPUT_PASS earned: ring→OS input→guest input_observe; spatial SIMULATED",
+    "Wave 5 — ecosystem start/test, ECO-001..010 (010 PARTIAL), games, chaos, score, twin handoff",
+    "Master ecosystem digital complete remains false (ECO-010 full soak not earned)",
+    "GUEST_DUAL_OUTPUT_PASS / RING_TO_REAL_APPLICATION_INPUT_PASS retained from Wave 4",
+    "RING_SPATIAL_ACCURACY=SIMULATED; VF4/5/6 PHYSICAL_PENDING",
     "No PRODUCTION_READY / physical measurement claims"
   ]
 }

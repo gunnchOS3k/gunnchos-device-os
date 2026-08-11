@@ -68,11 +68,13 @@ def test_ecosystem_topology_scaffold():
     assert len(topo["members"]) >= 5
 
 
-def test_eco001_smoke(tmp_path: Path):
-    # Keep evidence under repo artifacts via session; register work root for containment.
+def test_eco001_smoke(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    # Keep evidence under writable artifact root (sandbox / CI).
+    art = tmp_path / "device_lab"
+    art.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setenv("GUNNCHDEVICE_LAB_ARTIFACT_ROOT", str(art))
     register_lab_work_root(tmp_path, repo_root=ROOT)
     try:
-        # Point session work via env if supported; otherwise run against repo root artifacts.
         result = run_eco001_smoke(repo_root=ROOT)
         assert result["ok"] is True
         assert result["scenario_id"] == "ECO-001"

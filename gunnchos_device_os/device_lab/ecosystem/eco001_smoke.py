@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.device_lab.ecosystem.topology import ecosystem_topology
-from gunnchos_device_os.device_lab.session import start_session, stop_session
+from gunnchos_device_os.device_lab.session import lab_artifact_root, start_session, stop_session
 
 
 def run_eco001_smoke(*, repo_root: Path) -> dict[str, Any]:
@@ -35,7 +35,7 @@ def run_eco001_smoke(*, repo_root: Path) -> dict[str, Any]:
             "Master digital complete remains false."
         ),
     }
-    evidence = repo_root / "artifacts" / "device_lab" / "ecosystem" / "ECO-001"
+    evidence = lab_artifact_root(repo_root) / "ecosystem" / "ECO-001"
     evidence.mkdir(parents=True, exist_ok=True)
     (evidence / "result.json").write_text(
         json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8"

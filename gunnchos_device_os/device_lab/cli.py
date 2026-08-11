@@ -83,6 +83,7 @@ def cmd_run(ns: argparse.Namespace) -> int:
             agent=agent,
             prefer_guest=bool(agent is not None),
             keep=bool(ns.keep),
+            repo_root=_repo_root(),
         )
         result = {
             **launch,
@@ -200,13 +201,111 @@ def cmd_image(ns: argparse.Namespace) -> int:
 
 
 def cmd_ecosystem(ns: argparse.Namespace) -> int:
-    from gunnchos_device_os.device_lab.ecosystem import ecosystem_topology, run_eco001_smoke
+    from gunnchos_device_os.device_lab.ecosystem import (
+        active_ecosystem,
+        ecosystem_topology,
+        list_ecosystems,
+        run_all_eco,
+        run_eco001_smoke,
+        run_eco_scenario,
+        start_ecosystem,
+        stop_ecosystem,
+    )
 
-    if ns.ecosystem_cmd == "topology":
+    cmd = ns.ecosystem_cmd
+    if cmd == "topology":
         return _out(ecosystem_topology())
-    if ns.ecosystem_cmd == "eco001":
+    if cmd == "eco001":
+        # Legacy smoke retained; prefer `ecosystem test ECO-001` for real depth.
         return _out(run_eco001_smoke(repo_root=_repo_root()))
-    return _out({"ok": False, "error": f"unknown_ecosystem_cmd:{ns.ecosystem_cmd}"})
+    if cmd == "start":
+        return _out(
+            start_ecosystem(
+                repo_root=_repo_root(),
+                preset=getattr(ns, "preset", "full") or "full",
+            )
+        )
+    if cmd == "status":
+        if getattr(ns, "eco_id", None):
+            from gunnchos_device_os.device_lab.ecosystem import get_ecosystem
+
+            return _out(get_ecosystem(ns.eco_id).status())
+        rt = active_ecosystem()
+        if rt is None:
+            return _out({"ok": True, "running": False, "ecosystems": list_ecosystems()})
+        return _out(rt.status())
+    if cmd == "stop":
+        eco_id = getattr(ns, "eco_id", None)
+        if not eco_id:
+            rt = active_ecosystem()
+            if rt is None:
+                return _out({"ok": False, "error": "no_active_ecosystem"})
+            eco_id = rt.eco_id
+        return _out(stop_ecosystem(eco_id))
+    if cmd == "graph":
+        rt = active_ecosystem()
+        if rt is None:
+            return _out({"ok": False, "error": "no_active_ecosystem"})
+        return _out(rt.graph())
+    if cmd == "test":
+        scenario = getattr(ns, "scenario", None) or "ECO-001"
+        if scenario.upper() in {"ALL", "ECO-ALL"}:
+            return _out(run_all_eco(repo_root=_repo_root()))
+        return _out(run_eco_scenario(scenario, repo_root=_repo_root()))
+    return _out({"ok": False, "error": f"unknown_ecosystem_cmd:{cmd}"})
+
+
+def cmd_chaos(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.device_lab.chaos import ChaosEngine
+    from gunnchos_device_os.device_lab.session import get_session, start_session, stop_session
+
+    root = _repo_root()
+    from gunnchos_device_os.device_lab.session import lab_artifact_root
+
+    evid = lab_artifact_root(root) / "chaos"
+    engine = ChaosEngine(repo_root=root, evidence_dir=evid / time_tag())
+    if ns.chaos_cmd == "catalog":
+        return _out({"ok": True, "catalog": engine.catalog()})
+    profile = getattr(ns, "device", None) or "handheld_hybrid"
+    started = start_session(profile, repo_root=root)
+    sess = get_session(started["instance_id"])
+    try:
+        if ns.chaos_cmd == "inject":
+            result = engine.inject(ns.fault, session=sess)
+            cleanup = engine.cleanup_all()
+            result["cleanup"] = cleanup
+            return _out(result)
+        if ns.chaos_cmd == "suite":
+            faults = ns.faults.split(",") if getattr(ns, "faults", None) else None
+            return _out(engine.run_suite(session=sess, faults=faults))
+        return _out({"ok": False, "error": f"unknown_chaos_cmd:{ns.chaos_cmd}"})
+    finally:
+        stop_session(sess.instance_id)
+
+
+def time_tag() -> str:
+    import time as _time
+
+    return _time.strftime("%Y%m%dT%H%M%S", _time.gmtime())
+
+
+def cmd_score(_: argparse.Namespace) -> int:
+    import subprocess
+
+    script = _repo_root() / "scripts" / "device_lab_score_from_register.py"
+    proc = subprocess.run(
+        [sys.executable, str(script)],
+        cwd=str(_repo_root()),
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PYTHONPATH": str(_repo_root())},
+        check=False,
+    )
+    if proc.stdout:
+        print(proc.stdout, end="")
+    if proc.returncode != 0 and proc.stderr:
+        print(proc.stderr, file=sys.stderr)
+    return int(proc.returncode)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -250,7 +349,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.set_defaults(func=cmd_scenario)
 
     s = sub.add_parser("test")
-    s.add_argument("journey", help="GOLDEN-04/06/07/08")
+    s.add_argument("journey", help="GOLDEN-01/04/05/06/07/08/09")
     s.add_argument("--device")
     s.add_argument("--rings", action="store_true")
     s.add_argument("--offline", action="store_true")
@@ -290,6 +389,33 @@ def build_parser() -> argparse.ArgumentParser:
     se_sub = se.add_subparsers(dest="ecosystem_cmd", required=True)
     se_sub.add_parser("topology").set_defaults(func=cmd_ecosystem)
     se_sub.add_parser("eco001").set_defaults(func=cmd_ecosystem)
+    start_e = se_sub.add_parser("start")
+    start_e.add_argument("--preset", default="full", choices=["full", "compute"])
+    start_e.set_defaults(func=cmd_ecosystem)
+    st_e = se_sub.add_parser("status")
+    st_e.add_argument("eco_id", nargs="?")
+    st_e.set_defaults(func=cmd_ecosystem)
+    stop_e = se_sub.add_parser("stop")
+    stop_e.add_argument("eco_id", nargs="?")
+    stop_e.set_defaults(func=cmd_ecosystem)
+    se_sub.add_parser("graph").set_defaults(func=cmd_ecosystem)
+    test_e = se_sub.add_parser("test")
+    test_e.add_argument("scenario", nargs="?", default="ECO-001", help="ECO-001..010 or ALL")
+    test_e.set_defaults(func=cmd_ecosystem)
+
+    sc = sub.add_parser("chaos")
+    sc_sub = sc.add_subparsers(dest="chaos_cmd", required=True)
+    sc_sub.add_parser("catalog").set_defaults(func=cmd_chaos)
+    inj = sc_sub.add_parser("inject")
+    inj.add_argument("fault")
+    inj.add_argument("--device", default="handheld_hybrid")
+    inj.set_defaults(func=cmd_chaos)
+    suite = sc_sub.add_parser("suite")
+    suite.add_argument("--device", default="handheld_hybrid")
+    suite.add_argument("--faults", help="Comma-separated fault ids")
+    suite.set_defaults(func=cmd_chaos)
+
+    sub.add_parser("score").set_defaults(func=cmd_score)
 
     return p
 

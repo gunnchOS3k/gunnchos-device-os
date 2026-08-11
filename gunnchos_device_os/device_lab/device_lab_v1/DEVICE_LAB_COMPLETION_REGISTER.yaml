@@ -1,15 +1,17 @@
 schema: gunnchos.device_lab.completion_register.v1
 title: gunnchDevice Lab Full Ecosystem Digital Completion Register
-status: IMPLEMENTATION_PARTIAL_WAVE_4
+status: IMPLEMENTATION_PARTIAL_WAVE_5
 implementation_pass_claimed: false
 wave_eg_note: |
-  Wave 4 stacked on WP-011 #100/#98/#97. Guest DRM dual proven over virtio-serial
-  display_info (Alpine virtio-gpu modules + QEMU outputs xres/yres). Ring→OS input
-  virtio-serial input_observe earned on Mac with FORCE_REAL_GUEST; spatial SIMULATED.
-  Master complete token remains false — ECO/games/chaos still open.
-  depends_on: [#100, #98, #97]
+  Wave 5 stacked on #101 tip 187e39e. Ecosystem CLI start|status|stop|test|graph with
+  isolated Lab vnet; ECO-001 continuity depth earned; ECO-002..009 digitally executable;
+  ECO-010 honest PARTIAL (light simultaneous — not full soak). Four games + gunnchAI
+  process-proof launches; chaos engine with inject+cleanup+evidence; Golden G01/G05/G09
+  wired; gunnchctl score from register; pre-EVT twin handoff schemas/docs.
+  Master complete token remains false — ECO-010 full soak / physical VF4/5/6 open.
+  depends_on: [#101, #100, #98, #97]
 audited_at_utc: |
-  2026-08-11T04:10:00Z
+  2026-08-11T12:45:00Z
 accepted_device_os_main: 3908de7c35882b500368475ce13d2243435f6443
 accepted_hardware_main: 45c301a3a335d4bfd54970d80ec7ee717736ad07
 claim_firewall:
@@ -27,10 +29,13 @@ audit_summary:
   ui_live_framebuffer: true
   default_backend: HYBRID_BEHAVIORAL
   golden_mapped:
+    - GOLDEN-01
     - GOLDEN-04
+    - GOLDEN-05
     - GOLDEN-06
     - GOLDEN-07
     - GOLDEN-08
+    - GOLDEN-09
   profile_vs_hardware_mpn_verdict: FAILED_DIGITAL_DRIFT_ON_STUDENT_DSXL_RAM_AND_MISSING_MPN_FIELDS
   student_lab_ram_gb: 8
   dsxl_lab_ram_gb: 16
@@ -48,9 +53,9 @@ baseline_12_grades:
     grade: 8
     axis: DIGITAL
     evidence_notes:
-      - G04/G06/G07/G08 scenarios implemented and mapped
+      - G01/G04/G05/G06/G07/G08/G09 Lab scenarios mapped
       - Privileged G04 CI job present; PHYSICAL_* PENDING
-      - Expanded Golden/ECO catalog absent
+      - G02/G03/G10 not yet Lab-wired this wave
   behavioral_peripherals:
     grade: 6
     axis: DIGITAL
@@ -59,11 +64,11 @@ baseline_12_grades:
       - Camera stub_available
       - Dock behavioral — not JHL8440/JHL9040R SI model
   failure_injection:
-    grade: 7
+    grade: 8
     axis: DIGITAL
     evidence_notes:
-      - Scenario catalog + engine injectors present
-      - No multi-device ecosystem chaos/soak
+      - Unified chaos engine with process/network/storage/display/audio/AI/Ring/update/resource
+      - ECO-010 light chaos path; full continuous soak still PARTIAL
   evidence_reproducibility:
     grade: 7
     axis: DIGITAL
@@ -106,18 +111,19 @@ baseline_12_grades:
       - performance.py FOUNDATION_SCHEMA_ONLY
       - Profiles power/thermal TARGET_TBD
   full_ecosystem_simulation:
-    grade: 2
+    grade: 6
     axis: DIGITAL
     evidence_notes:
-      - full_ecosystem.json architecture only
-      - LAB-FUTURE-003 not executed; ECO-001..010 absent
+      - gunnchctl ecosystem start|status|stop|test|graph with isolated vnet
+      - ECO-001 PASS continuity depth; ECO-002..009 digital; ECO-010 PARTIAL
+      - Four games + AI workload process proofs
   physical_digital_twin_fidelity:
-    digital_pre_evt_grade: 1
+    digital_pre_evt_grade: 2
     physical_correlation_grade: null
     axis: PRE_EVT_DIGITAL
     evidence_notes:
       - VF0 PARTIAL; VF4/5/6 PHYSICAL_PENDING
-      - Calibration SCHEMA_ONLY — not DIGITALLY_VALIDATED complete
+      - Pre-EVT twin handoff schema/docs added (Wave 5)
       - LAB-FUTURE-007/008/009 blocked on EVT hardware
 requirements:
   -
@@ -272,12 +278,18 @@ requirements:
     owner_repo: gunnchos-device-os
     source_files:
       - gunnchos_device_os/device_lab/scenarios/catalog.py
+      - gunnchos_device_os/device_lab/scenarios/student_day.py
+      - gunnchos_device_os/device_lab/scenarios/handheld_play_dock.py
+      - gunnchos_device_os/device_lab/scenarios/update_rollback.py
     tests:
-
-    evidence_output: catalog maps only GOLDEN-04/06/07/08
-    state: TARGET
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
+    evidence_output: |
+      Wave 5: JOURNEY_SCENARIO_MAP adds GOLDEN-01 (student day), GOLDEN-05
+      (handheld play→dock), GOLDEN-09 (update rollback via UpdateRecoverySuite).
+      G02/G03/G10 remain unwired to Lab this wave.
+    state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: ECO/expanded Golden IDs absent
+    remaining_blocker: G02/G03/G10 Lab wiring still open
   -
     id: DL-PERIPH-001
     description: Display multi-output / dock appear-disappear
@@ -369,24 +381,28 @@ requirements:
     source_files:
       - gunnchos_device_os/device_lab/scenarios/catalog.py
       - gunnchos_device_os/device_lab/scenarios/engine.py
+      - gunnchos_device_os/device_lab/chaos/engine.py
     tests:
-
-    evidence_output: SCENARIO_CATALOG + engine inject paths
-    state: INTEGRATED
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
+    evidence_output: Unified ChaosEngine + SCENARIO_CATALOG inject paths with cleanup/evidence
+    state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: No multi-device chaos soak
+    remaining_blocker: Continuous multi-device chaos soak still PARTIAL (ECO-010)
   -
     id: DL-FAULT-002
     description: Full-ecosystem simultaneous chaos
     owner_repo: gunnchos-device-os
     source_files:
-      - gunnchos_device_os/device_lab/LAB_FUTURE_BACKLOG.json
+      - gunnchos_device_os/device_lab/chaos/engine.py
+      - gunnchos_device_os/device_lab/ecosystem/scenarios.py
     tests:
-
-    evidence_output: LAB-FUTURE-003 DO_NOT_EXECUTE_IN_WP003R; full_ecosystem not executed
-    state: TARGET
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
+    evidence_output: |
+      Wave 5: chaos suite + ECO-010 light simultaneous PARTIAL. Full continuous soak
+      with mixed workloads without silent crash/deadlock not earned.
+    state: IMPLEMENTED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: LAB-FUTURE-003 / ECO-010 absent
+    remaining_blocker: ECO-010 full soak incomplete; master token stays false
   -
     id: DL-EVIDENCE-001
     description: Run manifest reproducibility
@@ -587,39 +603,50 @@ requirements:
     source_files:
       - gunnchos_device_os/device_lab/profiles/full_ecosystem.json
       - gunnchos_device_os/device_lab/ecosystem/topology.py
+      - gunnchos_device_os/device_lab/ecosystem/manager.py
+      - gunnchos_device_os/device_lab/ecosystem/vnet.py
     tests:
-      - tests/device_lab/test_wp011_wave4_dual_ring.py
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
     evidence_output: |
-      Wave 4 scaffold: gunnchctl ecosystem topology lists member profiles;
-      ECO-001 smoke is honest depth (session start + topology assert), not full soak.
-    state: INTEGRATED
+      Wave 5: gunnchctl ecosystem start|status|stop|graph with isolated Lab vnet
+      (deterministic 10.88.0.0/24 + DNS/identity/telemetry endpoints).
+    state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: LAB-FUTURE-003 simultaneous multi-device soak not executed
+    remaining_blocker: Privileged netns optional; logical overlay default
   -
     id: DL-ECOSYSTEM-002
     description: ECO-001..ECO-010 simultaneous workflows
     owner_repo: gunnchos-device-os
     source_files:
-      - gunnchos_device_os/device_lab/ecosystem/eco001_smoke.py
+      - gunnchos_device_os/device_lab/ecosystem/scenarios.py
+      - gunnchos_device_os/device_lab/ecosystem/continuity.py
     tests:
-      - tests/device_lab/test_wp011_wave4_dual_ring.py
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
     evidence_output: |
-      Wave 4: ECO-001 smoke scaffold only (topology + session). ECO-002..010 absent.
-    state: IMPLEMENTED
+      Wave 5: ECO-001 PASS (Student→DS-XL continuity checksum). ECO-002..009 digital
+      runners present. ECO-010 PARTIAL (light simultaneous — not full soak).
+    state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: Continuity/handoff/soak and ECO-002..010 absent
+    remaining_blocker: ECO-010 full continuous soak not earned; master token false
   -
     id: DL-ECOSYSTEM-003
     description: Games + gunnchAI integrated in Lab ecosystem runs
     owner_repo: gunnchos-device-os (+ games + gunnchAI3k + field-kit)
     source_files:
-
+      - gunnchos_device_os/device_lab/ecosystem/games.py
+      - gunnchos_device_os/device_lab/apps/runner.py
+      - games/anime-aggressors-web/
+      - games/beatlink-party-web/
+      - games/earth-species-web/
+      - games/foot-racing-web/
     tests:
-
-    evidence_output: Games/AI repos exist; Lab scenarios do not orchestrate them
-    state: TARGET
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
+    evidence_output: |
+      Four in-tree web games launch via real http.server process proof; optional
+      Godot headless for foot-racing/pedestrian-pursuit sibling; gunnchAI Lab workload process.
+    state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: Cross-repo Lab orchestration missing
+    remaining_blocker: Full WAIKE product orchestration may remain PARTIAL
   -
     id: DL-TWIN-001
     description: VF0 CAD/geometry twin
@@ -638,12 +665,17 @@ requirements:
     owner_repo: gunnchos-device-os
     source_files:
       - gunnchos_device_os/device_lab/calibration.py
+      - gunnchos_device_os/device_lab/twin/PRE_EVT_TWIN_HANDOFF.md
+      - gunnchos_device_os/device_lab/twin/pre_evt_twin_handoff.schema.json
     tests:
       - tests/device_lab/test_wp010_calibration_interfaces.py
-    evidence_output: WP-010 schemas only; LAB-FUTURE-007/008/009 BLOCKED
+      - tests/device_lab/test_wp011_wave5_ecosystem.py
+    evidence_output: |
+      Wave 5: pre-EVT twin handoff schema/docs added. VF4/5/6 remain PHYSICAL_PENDING.
+      WP-010 schemas only for calibration execution.
     state: PHYSICAL_PENDING
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: SCHEMA_ONLY interfaces; needs EVT hardware
+    remaining_blocker: SCHEMA/handoff prepared; needs EVT hardware for calibration/HIL
   -
     id: DL-SECURITY-001
     description: Lab work-path containment
@@ -753,9 +785,9 @@ requirements:
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
     remaining_blocker: No Lab guest-boot CI job
 requirement_state_counts:
-  DIGITALLY_VALIDATED: 19
+  DIGITALLY_VALIDATED: 22
   EXTERNAL_PENDING: 1
   IMPLEMENTED: 5
   INTEGRATED: 10
   PHYSICAL_PENDING: 3
-  TARGET: 11
+  TARGET: 8
