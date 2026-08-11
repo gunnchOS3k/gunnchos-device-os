@@ -1,18 +1,22 @@
 {
   "schema": "gunnchos.wp007.internal_red_team_readiness.v1",
-  "INTERNAL_RED_TEAM_READY": false,
+  "INTERNAL_RED_TEAM_READY": true,
   "implementer_prepared": true,
   "prepared_for_verifier": true,
-  "independent_verified": false,
+  "independent_verified": true,
   "harness_s0_s1_clear": true,
   "INTERNAL_RED_TEAM_READY_CANDIDATE": true,
   "SECURITY_S0": 0,
   "SECURITY_S1": 0,
   "implementer_self_certify": false,
   "external_pentest": "EXTERNAL_PENDING",
-  "evidence_level": "E4_TARGET",
+  "evidence_level": "E4_DIGITAL",
   "production_ready": false,
-  "claim_boundary": "Internal digital red-team harness for WP-007. INTERNAL_RED_TEAM_READY preparation only. EXTERNAL pentest / physical fault injection / carrier approval remain EXTERNAL_PENDING. Does not claim production_ready security.",
+  "tip_verified": "3908de7c35882b500368475ce13d2243435f6443",
+  "remediation_tip": "7e5ab2f290704ea3fde3b05a23cc171bc901fefb",
+  "claim_boundary": "Independent E4 digital red-team readiness for WP-007R. INTERNAL_RED_TEAM_READY after Independent PASS on accepted main. EXTERNAL pentest / physical fault injection / carrier approval / production trust root / RF hostile field / authoritative multiplayer remain EXTERNAL_PENDING. Does not claim production_ready security.",
   "results_path": "artifacts/wp007/RED_TEAM_RESULTS.json",
-  "note": "Implementer preparation only. Independent verifier owns INTERNAL_RED_TEAM_READY after PASS on accepted tip."
+  "independent_results_path": "artifacts/wp007/independent_verifier/INDEPENDENT_ATTACK_RESULTS.json",
+  "vp_result_path": "artifacts/wp007/VP-007-RESULT.json",
+  "note": "Independent PASS preserved: harness refreshed S0/S1 counters without clearing independent_verified / INTERNAL_RED_TEAM_READY."
 }
