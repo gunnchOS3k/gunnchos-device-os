@@ -1,138 +1,79 @@
 {
-  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
   "SILICON_EXACT_EMULATION": false,
-  "alpine_mirror": "https://dl-cdn.alpinelinux.org/alpine/v3.21/releases",
-  "alpine_version": "3.21.3",
-  "arch_matrix": {
-    "aarch64": {
-      "accel": [
-        "hvf"
-      ],
-      "build_script": "os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh",
-      "host_examples": [
-        "macOS Apple Silicon (Mac HVF)"
-      ],
-      "implemented": true
-    },
-    "x86_64": {
-      "accel": [
-        "kvm",
-        "tcg"
-      ],
-      "build_script": null,
-      "host_examples": [
-        "Linux (Student / DS-XL physical profile parity)"
-      ],
-      "implemented": false,
-      "note": "Not yet implemented this wave \u2014 required for x86_64 hardware-profile parity"
-    }
+  "arch": "aarch64",
+  "base_image": {
+    "arch": "arm64",
+    "release": "bookworm",
+    "url": "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-arm64.qcow2",
+    "variant": "genericcloud"
   },
-  "build_capability_at_manifest_time": {
-    "chroot_binfmt": {
-      "binfmt_detail": "binfmt_misc is Linux-only; not applicable on this host OS",
-      "chroot_bin": "/usr/sbin/chroot",
-      "usable": false
-    },
-    "docker": {
-      "bin": null,
-      "detail": "docker not found on PATH",
-      "usable": false
-    },
-    "host_system": "Darwin",
-    "method": "none",
-    "note": "Real apk package install with post-install scripts requires executing real aarch64 Linux binaries; docker (native linux/arm64 on Apple Silicon) or chroot+binfmt (Linux host) are the only honest real methods. Neither present -> method='none' (honest gap, not a fake pass).",
-    "ok": false
+  "claim_boundary": "gunnchOS Device Lab Interactive Development Guest: Debian 12 genericcloud arm64 cloud image, provisioned guest-natively inside QEMU via cloud-init (no Mac foreign-arch chroot/binfmt/Docker). DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. SILICON_EXACT_EMULATION=false. A successful provision run means packages installed and the guest reported readiness over its own serial console \u2014 it does not by itself earn LIVE_GUNNCHOS_VISUAL_PASS, DSXL_DUAL_COMPOSITOR_UX_PASS, or RING_TO_REAL_APP_STATE_MUTATION_PASS; those require a live guest-agent session with real evidence.",
+  "disk": {
+    "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
+    "note": "qcow2 with backing_file=base cloud image; base image cached separately, never committed to git",
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+    "sha256": "ae8278982029c16ebccc1fc55547cec8be205bf36781f1eeb81e199909c4513e",
+    "size_bytes": 2269315072
   },
-  "claim_boundary": "gunnchOS Device Lab Interactive Development Guest: persistent-root-disk Alpine guest scaffolding intended to host a real Wayland compositor (weston) + apps for in-guest LIVE/DSXL/Ring proofs. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. SILICON_EXACT_EMULATION=false. Not physical boot; not production keys; no *_PASS or master-complete token is earned by this scaffolding alone.",
-  "guest_agent_commands_added": [
+  "download": {
+    "cached": true,
+    "downloaded_this_run": false,
+    "expected_sha512": "0ddd6ae10dad18535fc8a8167065e78565a04b721cae3e946a3ca4fda2ce54ac7a7546a09b9c0bca6bd101db3ab950056da19dc452113631dc7bbce7c96a404f",
+    "image_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
+    "image_url": "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-arm64.qcow2",
+    "ok": true,
+    "sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
+    "sha512": "0ddd6ae10dad18535fc8a8167065e78565a04b721cae3e946a3ca4fda2ce54ac7a7546a09b9c0bca6bd101db3ab950056da19dc452113631dc7bbce7c96a404f",
+    "size_bytes": 341901312
+  },
+  "dry_run": false,
+  "guest_agent_commands": [
+    "ping",
+    "boot_status",
+    "process_list",
+    "process_start",
+    "process_stop",
+    "package_ops",
+    "display_info",
+    "input_inject",
+    "input_observe",
+    "logs",
+    "metrics",
+    "shutdown",
+    "reboot",
     "framebuffer_capture",
     "compositor_info",
     "app_launch"
   ],
-  "hybrid_base": true,
-  "note": "Manifest describes intended packages/arch/disk layout. Producing this manifest does not build, boot, or prove anything by itself.",
+  "optional_packages": [
+    "godot3",
+    "grim"
+  ],
   "pass_tokens_earned_by_this_manifest": [],
-  "physical_boot_claimed": false,
-  "production_keys_used": false,
-  "qemu_env_flag": "GUNNCH_LAB_INTERACTIVE_GUEST",
-  "qemu_env_flag_aliases": [
-    "GUNNCHDEVICE_LAB_INTERACTIVE_GUEST"
-  ],
-  "realm": "DEV_LAB",
-  "required_for": [
-    "LIVE_GUNNCHOS_VISUAL_PASS",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS"
-  ],
+  "provision_method": "qemu_debian_genericcloud_cloud_init_guest_native",
+  "provision_ok": true,
   "required_packages": [
-    {
-      "name": "alpine-baselayout",
-      "optional": false,
-      "role": "base filesystem layout"
-    },
-    {
-      "name": "busybox",
-      "optional": false,
-      "role": "base userspace utilities"
-    },
-    {
-      "name": "seatd",
-      "optional": false,
-      "role": "seat management for weston (no logind in Alpine)"
-    },
-    {
-      "name": "weston",
-      "optional": false,
-      "role": "Wayland reference compositor"
-    },
-    {
-      "name": "mesa-dri-gallium",
-      "optional": false,
-      "role": "software / virtio-gpu GL rendering"
-    },
-    {
-      "name": "foot",
-      "optional": false,
-      "role": "Wayland terminal emulator"
-    },
-    {
-      "fallback": "firefox",
-      "name": "chromium",
-      "optional": false,
-      "role": "Wayland-capable browser (Ozone/Wayland)"
-    },
-    {
-      "name": "nano",
-      "optional": false,
-      "role": "terminal text editor"
-    },
-    {
-      "extra": "pipewire-alsa",
-      "fallback": "alsa-utils",
-      "name": "pipewire",
-      "optional": false,
-      "role": "audio server"
-    },
-    {
-      "name": "libinput",
-      "optional": false,
-      "role": "input device handling for weston"
-    },
-    {
-      "name": "godot",
-      "optional": true,
-      "role": "game engine runtime for FOUR_GAME real-runtime work"
-    }
+    "weston",
+    "seatd",
+    "libgl1-mesa-dri",
+    "mesa-utils",
+    "libinput-tools",
+    "evtest",
+    "python3",
+    "python3-evdev",
+    "python3-pip",
+    "wayland-utils",
+    "chromium",
+    "mousepad",
+    "pipewire",
+    "pipewire-pulse",
+    "pipewire-alsa",
+    "wireplumber",
+    "openssh-server",
+    "foot"
   ],
-  "root_disk": {
-    "arch": "aarch64",
-    "format": "qcow2",
-    "note": "Persistent virtio-blk disk (unlike the slim guest's ephemeral initramfs) \u2014 required because a compositor + browser + editor stack does not fit in guest RAM.",
-    "path": "os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
-    "persistent": true
-  },
   "schema": "gunnchos.device_lab.interactive_guest_image.manifest.v1",
-  "version": "0.1.0-lab-interactive-dev"
+  "version": "1.0.0-debian-cloud-init"
 }

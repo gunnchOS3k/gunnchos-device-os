@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
   "wave": "WP-011R",
-  "audited_at_utc": "2026-08-11T17:13:31Z",
-  "base_sha": "5792101",
+  "audited_at_utc": "2026-08-11T19:19:12Z",
+  "base_sha": "71c4b16+",
   "claim_firewall": {
     "SILICON_EXACT_EMULATION": false,
     "VF4": "PHYSICAL_PENDING",
@@ -49,9 +49,9 @@
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "OPEN",
+      "status": "PARTIAL_OPEN",
       "earned": false,
-      "summary": "QEMU guest boots (HVF aarch64) and monitor screendump works, including VNC RFB live path. Framebuffers are blank/near-black with no meaningful input-visible shell+app compositor change. RFB handshake alone rejected. PASS remains false.",
+      "summary": "Interactive Development Guest provisioned guest-natively (Debian 12 cloud-init). Guest agent ping observed in one session; compositor_info still unavailable \u2014 LIVE PASS false.",
       "blocker": "Development guest has no lit shell/compositor+app window surface in screendump; diff_bytes insufficient after honesty gate.",
       "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
       "required_to_earn": [
@@ -138,7 +138,7 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Skeptical corrected register. FOUR_GAME/RING hybrid progress does not earn aggregate PASS. LIVE visual + DSXL compositor UX + ECO-010 full soak remain open. Master complete=false.",
+  "note": "Cycle 3B: Debian cloud-init guest-native provision SUCCEEDED (qcow2 local). LIVE/DSXL/RING/FOUR_GAME/ECO-010 still OPEN. Master false.",
   "independent_audit": {
     "source": "Cycle3A_WP-011R_implementer_session",
     "accepted_tip_audited": "4757c2a",

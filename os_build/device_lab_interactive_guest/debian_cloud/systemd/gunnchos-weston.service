@@ -1,0 +1,20 @@
+[Unit]
+Description=gunnchOS Device Lab Interactive Guest Weston compositor (DRM/virtio-gpu backend)
+After=seatd.service systemd-user-sessions.service local-fs.target
+Wants=seatd.service
+
+[Service]
+Type=simple
+Environment=XDG_RUNTIME_DIR=/run/gunnchos-wayland
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_CONFIG_HOME=/etc/gunnchos-weston
+WorkingDirectory=/var/lib/gunnchos/screenshots
+ExecStartPre=/bin/mkdir -p /run/gunnchos-wayland /var/lib/gunnchos/screenshots
+ExecStartPre=/bin/chmod 700 /run/gunnchos-wayland
+ExecStart=/usr/bin/weston --backend=drm-backend.so --log=/var/log/gunnchos-weston.log
+Restart=on-failure
+RestartSec=2
+User=root
+
+[Install]
+WantedBy=multi-user.target
