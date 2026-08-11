@@ -3,11 +3,11 @@
   "wave": "WP-011R",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_at_utc": "2026-08-11T16:35:00Z",
+  "assessed_at_utc": "2026-08-11T17:13:31Z",
   "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "role": "implementer",
-  "overall": "PARTIAL",
-  "overall_note": "Skeptical self-assessment. Host earned FOUR_GAME + RING tokens; LIVE visual and DSXL compositor UX remain false; ECO-010 PARTIAL; master complete false. Independent verifier required before any DRAFT\u2192ready claim.",
+  "overall": "FAIL",
+  "overall_note": "Skeptical implementer self-assessment. FOUR_GAME aggregate false (Godot Pedestrian Pursuit). RING_TO_REAL_APP_STATE_MUTATION false (Lab hybrid only). LIVE/DSXL/ECO-010 open. Master false. See VP-011R-RESULT.independent.json for separate verifier.",
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "DRAFT_ONLY": true,
@@ -34,7 +34,7 @@
     "score": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
     "gaps": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json"
   },
-  "independent_score_mean_of_12": 5.75,
+  "independent_score_mean_of_12": 5.5,
   "session_actions": [
     "Playwright Chrome-channel fallback + foot-racing Godot write-movie / in-tree web earn path",
     "Four-game production proofs under artifacts/wp011r/games/",
@@ -45,10 +45,11 @@
     "device_lab_score_independent.py recomputed"
   ],
   "remaining_blockers": [
-    "LIVE_GUNNCHOS_VISUAL_PASS: development guest framebuffer blank/near-black \u2014 need lit shell+app compositor with meaningful input-visible change",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS: need real compositor surfaces (Wayland/virtio-gpu plane), not guest_drm enum + Lab windows",
-    "ECO-010: full 1800s multi-guest continuous soak not run/earned (dry-check PARTIAL only)",
-    "Independent verifier must sample FOUR_GAME viewports/saves and RING guest-vs-Lab app boundary",
+    "FOUR_GAME: Pedestrian Pursuit Godot needs input\u2192state + save (web fallback rejected for aggregate)",
+    "LIVE_GUNNCHOS_VISUAL_PASS: lit shell+app compositor with meaningful input-visible change",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS: real compositor surfaces on both outputs + focus/layout",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS: in-guest editor/browser/game apps (not Lab surfaces)",
+    "ECO-010: full 1800s multi-guest continuous soak",
     "Master digital complete remains false"
   ],
   "skepticism": [

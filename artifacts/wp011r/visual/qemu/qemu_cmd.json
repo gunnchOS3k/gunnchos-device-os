@@ -1,0 +1,42 @@
+{
+  "cmd": [
+    "/opt/homebrew/bin/qemu-system-aarch64",
+    "-machine",
+    "virt,accel=hvf",
+    "-cpu",
+    "host",
+    "-smp",
+    "2",
+    "-m",
+    "2048",
+    "-kernel",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_guest/artifacts/vmlinuz-virt",
+    "-initrd",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_guest/artifacts/gunnchos-ref-initramfs.cpio.gz",
+    "-append",
+    "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1 gunnchos.lab_persist=1 gunnchos.guest_agent=1",
+    "-drive",
+    "file=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/visual/qemu/persist.qcow2,if=virtio,format=qcow2",
+    "-serial",
+    "file:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/visual/qemu/qemu_boot.log",
+    "-pidfile",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/visual/qemu/qemu.pid",
+    "-daemonize",
+    "-monitor",
+    "unix:/tmp/gdl-8417-80e63c/mon.sock,server,nowait",
+    "-chardev",
+    "socket,path=/tmp/gdl-8417-80e63c/ga.sock,server=on,wait=off,id=ga0",
+    "-device",
+    "virtio-serial-pci,id=virtio-serial0",
+    "-device",
+    "virtserialport,bus=virtio-serial0.0,chardev=ga0,name=org.gunnchos.guest_agent.0",
+    "-display",
+    "none"
+  ],
+  "accel": {
+    "accel": "hvf",
+    "cpu": "host",
+    "note": "macOS Hypervisor.framework"
+  },
+  "arch": "aarch64"
+}

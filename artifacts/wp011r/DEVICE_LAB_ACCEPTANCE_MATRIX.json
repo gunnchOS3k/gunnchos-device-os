@@ -1,46 +1,55 @@
 {
   "schema": "gunnchos.device_lab.acceptance_matrix.v1",
-  "recorded_at_utc": "2026-08-11T16:35:00Z",
-  "accepted_device_os_main_baseline": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
-  "requirements": [
+  "wave": "WP-011R",
+  "assessed_at_utc": "2026-08-11T17:13:31Z",
+  "rows": [
     {
-      "id": "FOUR_GAME_REAL_RUNTIME",
-      "result": "PASS_HOST",
-      "note": "Playwright Chrome channel + Godot movie/web fallback; aggregate token true on this Mac"
-    },
-    {
-      "id": "LIVE_GUNNCHOS_VISUAL",
+      "requirement": "Four production game runtimes",
+      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
       "result": "FAIL",
-      "note": "QEMU screendump exists but blank/near-black; no shell+app input-visible UX"
+      "note": "Godot Pedestrian Pursuit missing input/save; web fallback insufficient"
     },
     {
-      "id": "DSXL_DUAL_COMPOSITOR_UX",
+      "requirement": "Live gunnchOS shell/compositor visual",
+      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
+      "result": "FAIL",
+      "note": "Blank/near-black fb; RFB\u2260UX"
+    },
+    {
+      "requirement": "DS-XL dual compositor UX",
+      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "result": "FAIL",
+      "note": "DRM enum\u2260compositor surfaces"
+    },
+    {
+      "requirement": "Ring\u2192in-guest app mutation",
+      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+      "result": "FAIL",
+      "note": "Lab surfaces + guest observe only"
+    },
+    {
+      "requirement": "ECO-010 full simultaneous soak \u22651800s",
+      "token": "ECO010_SOAK_PASS",
       "result": "PARTIAL",
-      "note": "GUEST_DUAL_OUTPUT_PASS via DRM; compositor UX PASS false (guest_drm ≠ surface)"
+      "note": "Dry-check only; not shortened to pass"
     },
     {
-      "id": "RING_APP_STATE_MUTATION",
-      "result": "PASS_HOST",
-      "note": "FORCE_REAL_GUEST virtio-serial path=guest + Lab surface mutations"
-    },
-    {
-      "id": "ECO010_FULL_SOAK",
-      "result": "PARTIAL",
-      "note": "dry-check capability PARTIAL; 1800s full soak not earned"
-    },
-    {
-      "id": "DEVICE_LAB_DEVELOPMENT_GUEST",
+      "requirement": "Development guest labeled",
+      "token": "DEVICE_LAB_DEVELOPMENT_GUEST",
       "result": "PASS",
-      "note": "explicitly labeled; not shipping"
+      "note": "Not shipping image"
+    },
+    {
+      "requirement": "Independent score re-derived",
+      "token": "SCORE_INDEPENDENT",
+      "result": "PASS",
+      "note": "mean=5.5; no hardcoded 10s"
+    },
+    {
+      "requirement": "Master digital complete",
+      "token": "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE",
+      "result": "FAIL",
+      "note": "Open digitally executable requirements"
     }
-  ],
-  "tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-    "LIVE_GUNNCHOS_VISUAL_PASS": false,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false,
-    "GUEST_DUAL_OUTPUT_PASS": true
-  },
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  ]
 }

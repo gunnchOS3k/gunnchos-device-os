@@ -1,0 +1,56 @@
+{
+  "backend": "QEMU_HVF",
+  "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+  "qemu_version": "QEMU emulator version 11.0.3",
+  "arch": "aarch64",
+  "accel": {
+    "accel": "hvf",
+    "cpu": "host",
+    "note": "macOS Hypervisor.framework"
+  },
+  "pid": 10305,
+  "boot_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/ring/qemu-ring/qemu_boot.log",
+  "persist_disk": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/ring/qemu-ring/persist.qcow2",
+  "display_transport": {
+    "kind": "none_headless",
+    "note": "Headless CI/default; set GUNNCHDEVICE_LAB_DISPLAY=vnc or FORCE_VNC=1 for live path",
+    "fake_screenshot_only": false,
+    "guest_outputs": []
+  },
+  "guest_agent": {
+    "ready": true,
+    "boot_complete_observed": true,
+    "markers": [
+      "boot_progress",
+      "boot_progress",
+      "boot_progress",
+      "boot_progress",
+      "boot_complete_marker"
+    ],
+    "agent_response": {
+      "ok": true,
+      "ready": true,
+      "response": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "ping",
+        "pong": true,
+        "boot_complete": true,
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial"
+      }
+    },
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "measurement_class": "HOST_OBSERVED",
+    "note": "Boot markers from QEMU serial file; agent prefers virtio-serial (virtio-serial). Mailbox stub is labeled when used."
+  },
+  "monitor_sock": "/tmp/gdl-10270-32c22b/mon.sock",
+  "virtio_serial_sock": "/tmp/gdl-10270-32c22b/ga.sock",
+  "guest_outputs": [],
+  "SILICON_EXACT_EMULATION": false,
+  "claim_boundary": "QEMU virt machine \u2260 transistor-level SoC. SILICON_EXACT_EMULATION=false. VF4/VF5/VF6 PHYSICAL_PENDING. Measurement classes: HOST_OBSERVED for host process liveness; VIRTUAL_CONSTRAINED for guest RAM/disk caps.",
+  "measurement_class_process": "HOST_OBSERVED"
+}

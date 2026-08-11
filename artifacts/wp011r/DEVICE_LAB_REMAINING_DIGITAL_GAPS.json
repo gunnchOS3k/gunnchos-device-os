@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
   "wave": "WP-011R",
-  "audited_at_utc": "2026-08-11T16:30:00Z",
-  "base_sha": "4757c2a",
+  "audited_at_utc": "2026-08-11T17:13:31Z",
+  "base_sha": "5792101",
   "claim_firewall": {
     "SILICON_EXACT_EMULATION": false,
     "VF4": "PHYSICAL_PENDING",
@@ -26,9 +26,9 @@
     {
       "id": "GAP-FOUR-GAME-RUNTIME",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "EARNED_HOST",
-      "earned": true,
-      "summary": "Playwright Chromium (system Chrome channel) earned frame+input+localStorage-save+stop for anime-aggressors, beatlink-party, earth-species; foot-racing earned via Godot write-movie viewport plus in-tree web Playwright path. Independent verifier should sample viewports \u2014 localStorage save is Lab harness save, not necessarily each title's native save format.",
+      "status": "PARTIAL_OPEN",
+      "earned": false,
+      "summary": "3\u00d7 Playwright web titles have viewport/input/Lab-localStorage-save depth; Pedestrian Pursuit / foot-racing Godot lacks input+save. In-tree web fallback is NOT accepted production runtime for Pedestrian Pursuit. Aggregate FOUR_GAME PASS=false.",
       "evidence": "artifacts/wp011r/games/four_games_production.json",
       "code_refs": [
         "gunnchos_device_os/device_lab/ecosystem/games.py",
@@ -75,9 +75,9 @@
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "EARNED_HOST",
-      "earned": true,
-      "summary": "FORCE_REAL_GUEST bound QEMU virtio-serial guest input. Ring stack mutated Lab document/browser/game surfaces with path=guest + input_observe. Independent verifier should confirm whether apps-in-guest (vs Lab surfaces + guest input) is required for Cycle 3A final acceptance.",
+      "status": "PARTIAL_OPEN",
+      "earned": false,
+      "summary": "Ring\u2192guest input_observe + Lab SurfaceRegistry mutation earned hybrid tokens only. In-guest LibreOffice/browser/game app-state mutation NOT proven. RING_TO_REAL_APP_STATE_MUTATION_PASS=false.",
       "required_to_earn": [
         "Full pipeline stages recorded",
         "Document buffer mutation via stack (not direct file write)",
@@ -121,7 +121,7 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Implementer session advanced FOUR_GAME + RING on this Mac host. LIVE visual and DSXL compositor UX remain open. Master complete stays false.",
+  "note": "Skeptical corrected register. FOUR_GAME/RING hybrid progress does not earn aggregate PASS. LIVE visual + DSXL compositor UX + ECO-010 full soak remain open. Master complete=false.",
   "independent_audit": {
     "source": "Cycle3A_WP-011R_implementer_session",
     "accepted_tip_audited": "4757c2a",
@@ -131,7 +131,8 @@
   "score_inflation_risk": [
     "live_visual_interaction grade inflation from RFB banner or blank screendump noise",
     "DSXL UX inflation from guest_drm enum labeled as compositor_surface",
-    "FOUR_GAME localStorage harness save vs native game save formats",
-    "RING apps still Lab surfaces while guest only observes input"
+    "FOUR_GAME localStorage harness save vs native game save; Godot-web-fallback as aggregate PASS",
+    "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
+    "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ]
 }

@@ -44,10 +44,12 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
     """Recompute 12 baseline categories from WP-011R evidence + register-derived signals."""
     pass_tokens = (gaps.get("pass_tokens") or {}) if gaps else {}
     four = bool(pass_tokens.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS") is True)
-    # Prefer freshly earned evidence files when present
+    # Evidence may only confirm PASS when gap register also allows it (AND).
     games_ev = _load_json(ROOT / "artifacts/wp011r/games/four_games_production.json")
     if games_ev:
-        four = bool(games_ev.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"))
+        four = four and bool(games_ev.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"))
+    if pass_tokens.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS") is False:
+        four = False
 
     visual_ev = _load_json(ROOT / "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json")
     live = bool(visual_ev.get("LIVE_GUNNCHOS_VISUAL_PASS")) if visual_ev else False
@@ -58,6 +60,11 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
 
     ring_ev = _load_json(ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json")
     ring_mut = bool(ring_ev.get("RING_TO_REAL_APP_STATE_MUTATION_PASS")) if ring_ev else False
+    if pass_tokens.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False:
+        ring_mut = False
+    # Hybrid Lab surface mutation must never promote to RING_TO_REAL_APP_STATE_MUTATION_PASS
+    if ring_ev and ring_ev.get("RING_HYBRID_LAB_SURFACE_MUTATION_PASS") and not ring_ev.get("RING_TO_REAL_APP_STATE_MUTATION_PASS"):
+        ring_mut = False
 
     eco = _load_json(ROOT / "artifacts/wp011r/ECO010_SOAK.json")
     eco_pass = bool(eco.get("ok") and eco.get("simultaneous_soak_complete")) if eco else False

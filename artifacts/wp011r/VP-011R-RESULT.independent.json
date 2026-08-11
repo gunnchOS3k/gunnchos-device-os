@@ -1,0 +1,38 @@
+{
+  "schema": "gunnchos.wp011r.independent_verifier.v1",
+  "wave": "WP-011R",
+  "role": "independent_verifier",
+  "pr": 103,
+  "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
+  "assessed_tip": "5792101975778fb8db46c10b1f2cd39254921372",
+  "assessed_at_utc": "2026-08-11T17:13:31Z",
+  "overall_result": "FAIL",
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
+  "rejected_as_insufficient": [
+    "python -m http.server alone as game runtime",
+    "RFB 003.008 handshake as gunnchOS UX",
+    "guest DRM enumeration as DS-XL dual compositor UX",
+    "virtio input_observe alone as Ring\u2192app mutation",
+    "Lab SurfaceRegistry mutation as in-guest LibreOffice/browser/game proof",
+    "Godot write-movie without input/save + in-tree web fallback as FOUR_GAME aggregate PASS",
+    "hardcoded or inflated gunnchctl score",
+    "ECO-010 dry-check / shortened soak as PASS"
+  ],
+  "tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+    "ECO010_SOAK_PASS": false,
+    "ECO010_STATUS": "PARTIAL"
+  },
+  "independent_score_mean_of_12": 5.5,
+  "DEVICE_LAB_ACCEPTANCE_MATRIX": "artifacts/wp011r/DEVICE_LAB_ACCEPTANCE_MATRIX.json",
+  "DEVICE_LAB_SCORE_INDEPENDENT": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
+  "DEVICE_LAB_REMAINING_DIGITAL_GAPS": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+  "verdict": "WP-011R NOT ACCEPTED \u2014 digitally executable blockers remain open"
+}
