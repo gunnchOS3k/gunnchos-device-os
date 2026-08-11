@@ -10,16 +10,17 @@
     "VF6": "PHYSICAL_PENDING",
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
     "PRODUCTION_READY": false,
-    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST — not a shipping image"
+    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image"
   },
   "pass_tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
   },
   "gaps": [
     {
@@ -27,7 +28,7 @@
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
       "status": "EARNED_HOST",
       "earned": true,
-      "summary": "Playwright Chromium (system Chrome channel) earned frame+input+localStorage-save+stop for anime-aggressors, beatlink-party, earth-species; foot-racing earned via Godot write-movie viewport plus in-tree web Playwright path. Independent verifier should sample viewports — localStorage save is Lab harness save, not necessarily each title's native save format.",
+      "summary": "Playwright Chromium (system Chrome channel) earned frame+input+localStorage-save+stop for anime-aggressors, beatlink-party, earth-species; foot-racing earned via Godot write-movie viewport plus in-tree web Playwright path. Independent verifier should sample viewports \u2014 localStorage save is Lab harness save, not necessarily each title's native save format.",
       "evidence": "artifacts/wp011r/games/four_games_production.json",
       "code_refs": [
         "gunnchos_device_os/device_lab/ecosystem/games.py",
@@ -58,7 +59,7 @@
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "status": "OPEN",
       "earned": false,
-      "summary": "GUEST_DUAL_OUTPUT_PASS earned via guest_agent DRM dual connectors under FORCE_REAL_GUEST+VNC. DSXL_DUAL_COMPOSITOR_UX_PASS remains false — guest_drm enum alone is not a compositor surface; Lab window placement on DRM outputs is insufficient.",
+      "summary": "GUEST_DUAL_OUTPUT_PASS earned via guest_agent DRM dual connectors under FORCE_REAL_GUEST+VNC. DSXL_DUAL_COMPOSITOR_UX_PASS remains false \u2014 guest_drm enum alone is not a compositor surface; Lab window placement on DRM outputs is insufficient.",
       "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
       "required_to_earn": [
         "Two connected outputs with real compositor surfaces (not guest_drm enum alone)",
@@ -117,7 +118,7 @@
     "script": "scripts/device_lab_score_independent.py",
     "output": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
     "hardcoded_tens_forbidden": true,
-    "note": "Recompute 12 categories from evidence files — not gunnchctl score alone"
+    "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
   "note": "Implementer session advanced FOUR_GAME + RING on this Mac host. LIVE visual and DSXL compositor UX remain open. Master complete stays false.",

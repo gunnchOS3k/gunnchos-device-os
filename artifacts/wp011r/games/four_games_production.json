@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.wp011r.four_game_production_runtime.v1",
-  "ok": true,
+  "ok": false,
   "games": {
     "anime-aggressors": {
       "game_id": "anime-aggressors",
@@ -407,7 +407,7 @@
       }
     }
   },
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "all_viewports_ok": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
@@ -415,5 +415,14 @@
   "http_server_alone_accepted": false,
   "claim": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
   "claim_boundary": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-  "note": "PASS token true only when all four games earned real runtime proofs"
+  "note": "PASS token true only when all four games earned real runtime proofs",
+  "skeptical_correction": {
+    "reason": "foot-racing Godot production path missing input/save; earned only via in-tree web fallback",
+    "web_playwright_depth_ok_for": [
+      "anime-aggressors",
+      "beatlink-party",
+      "earth-species"
+    ],
+    "foot_racing": "GODOT_PARTIAL + INTREE_WEB_FALLBACK \u2014 not enough for aggregate PASS"
+  }
 }

@@ -7,21 +7,22 @@
   "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "role": "implementer",
   "overall": "PARTIAL",
-  "overall_note": "Skeptical self-assessment. Host earned FOUR_GAME + RING tokens; LIVE visual and DSXL compositor UX remain false; ECO-010 PARTIAL; master complete false. Independent verifier required before any DRAFT→ready claim.",
+  "overall_note": "Skeptical self-assessment. Host earned FOUR_GAME + RING tokens; LIVE visual and DSXL compositor UX remain false; ECO-010 PARTIAL; master complete false. Independent verifier required before any DRAFT\u2192ready claim.",
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "DRAFT_ONLY": true,
   "never_merge": true,
   "tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
     "ECO010_SOAK_PASS": false,
-    "ECO010_STATUS": "PARTIAL"
+    "ECO010_STATUS": "PARTIAL",
+    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
   },
   "evidence": {
     "games": "artifacts/wp011r/games/four_games_production.json",
@@ -39,20 +40,20 @@
     "Four-game production proofs under artifacts/wp011r/games/",
     "QEMU HVF guest screendump + VNC attempted; blank fb honesty gate keeps LIVE false",
     "DSXL guest dual DRM earned; compositor UX gate rejects guest_drm-as-surface",
-    "FORCE_REAL_GUEST virtio-serial Ring bind → RING_TO_REAL_APP_STATE_MUTATION_PASS",
+    "FORCE_REAL_GUEST virtio-serial Ring bind \u2192 RING_TO_REAL_APP_STATE_MUTATION_PASS",
     "ECO-010 dry-check PARTIAL (requested 1800s, not shortened to pass)",
     "device_lab_score_independent.py recomputed"
   ],
   "remaining_blockers": [
-    "LIVE_GUNNCHOS_VISUAL_PASS: development guest framebuffer blank/near-black — need lit shell+app compositor with meaningful input-visible change",
+    "LIVE_GUNNCHOS_VISUAL_PASS: development guest framebuffer blank/near-black \u2014 need lit shell+app compositor with meaningful input-visible change",
     "DSXL_DUAL_COMPOSITOR_UX_PASS: need real compositor surfaces (Wayland/virtio-gpu plane), not guest_drm enum + Lab windows",
     "ECO-010: full 1800s multi-guest continuous soak not run/earned (dry-check PARTIAL only)",
     "Independent verifier must sample FOUR_GAME viewports/saves and RING guest-vs-Lab app boundary",
     "Master digital complete remains false"
   ],
   "skepticism": [
-    "FOUR_GAME save path uses Lab localStorage marker — may not equal each title native save format",
-    "RING mutates Lab document/browser/game surfaces while guest proves input_observe — apps-in-guest still unverified",
+    "FOUR_GAME save path uses Lab localStorage marker \u2014 may not equal each title native save format",
+    "RING mutates Lab document/browser/game surfaces while guest proves input_observe \u2014 apps-in-guest still unverified",
     "Prior session nearly inflated LIVE via 48-byte blank-fb noise and DSXL via DRM enum; honesty gates tightened"
   ]
 }

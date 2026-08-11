@@ -542,7 +542,21 @@ def run_all_four_production(*, repo_root: Path, work: Path) -> dict[str, Any]:
         gid: run_production_game(game_id=gid, repo_root=repo_root, work=work / gid)
         for gid in FOUR_GAMES
     }
-    earned = all(bool(g.get("FOUR_GAME_REAL_RUNTIME_EARNED")) for g in games.values())
+    # Skeptical aggregate: Pedestrian Pursuit (foot-racing) must not PASS aggregate solely via
+    # in-tree web fallback when a sibling Godot project exists without input/save earn.
+    earned_flags = []
+    for gid, g in games.items():
+        ok = bool(g.get("FOUR_GAME_REAL_RUNTIME_EARNED"))
+        if gid == "foot-racing" and g.get("runtime_class") == "PLAYWRIGHT_CHROMIUM_INTREE_WEB":
+            godot = g.get("godot_partial") or g.get("runtime_attempt") or {}
+            if godot.get("viewport_ok") and not godot.get("FOUR_GAME_REAL_RUNTIME_EARNED"):
+                g = dict(g)
+                g["FOUR_GAME_REAL_RUNTIME_EARNED"] = False
+                g["aggregate_blocker"] = "godot_sibling_lacks_input_save_web_fallback_insufficient"
+                games[gid] = g
+                ok = False
+        earned_flags.append(ok)
+    earned = all(earned_flags)
     out = {
         "schema": "gunnchos.wp011r.four_game_production_runtime.v1",
         "ok": earned,

@@ -1,7 +1,7 @@
 {
-  "ok": true,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
-  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": false,
+  "ok": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "pipeline_required": [
     "ring_simulator",
     "authenticated_packet",
@@ -447,5 +447,6 @@
   "duration_ms": 17583,
   "SILICON_EXACT_EMULATION": false,
   "claim_boundary": "Ring Lab path mutates observable app surfaces via SpatialInputService. input_observe alone does not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. Hybrid Lab surfaces alone do not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. RING_SPATIAL_ACCURACY=SIMULATED. SILICON_EXACT_EMULATION=false. Physical ring SI PENDING.",
-  "note": "RING_TO_REAL_APP_STATE_MUTATION_PASS earned"
+  "note": "Guest input_observe + Lab surface mutation only \u2014 PASS false until in-guest apps mutate",
+  "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
 }

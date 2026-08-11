@@ -161,13 +161,27 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
             if "guest_os_input" not in mapped:
                 mapped.append("guest_os_input")
         pipeline_ok = all(s in mapped for s in PIPELINE) if guest_ok else False
-        earned = bool(pipeline_ok and all_mutated and gate_ok and guest_ok)
+        # Lab surface snapshots (libreoffice/browser/game dicts from SurfaceRegistry) do not
+        # satisfy Cycle 3A "actual running application" in-guest. Guest input_observe +
+        # QEMU mouse proves guest input path; combine as PARTIAL unless guest app state used.
+        lab_surface_mutation = all(
+            isinstance(mutations[x].get("before"), dict)
+            and str((mutations[x].get("before") or {}).get("app_id", "")).startswith(
+                ("libreoffice", "browser", "game")
+            )
+            for x in targets
+        )
+        hybrid_with_guest_observe = bool(guest_ok and all_mutated and gate_ok and lab_surface_mutation)
+        earned = bool(pipeline_ok and all_mutated and gate_ok and guest_ok and not lab_surface_mutation)
+        if hybrid_with_guest_observe and not earned:
+            # Keep hybrid/guest-observe progress visible without false PASS
+            pass
 
         snapshots = session.rings.surfaces.snapshots() if session.rings.surfaces else {}
         result = {
             "ok": earned,
             PASS_TOKEN: earned,
-            HYBRID_TOKEN: bool(hybrid_earned and not earned),
+            HYBRID_TOKEN: bool((hybrid_earned or hybrid_with_guest_observe) and not earned),
             "pipeline_required": PIPELINE,
             "pipeline_observed": mapped,
             "pipeline_raw": pipeline_raw,
@@ -192,10 +206,15 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
                 "RING_TO_REAL_APP_STATE_MUTATION_PASS earned"
                 if earned
                 else (
-                    "HYBRID Lab surface mutation only — PASS false until guest OS "
-                    "input mutates document+browser+game"
-                    if hybrid_earned
-                    else "PASS false until document+browser+game mutate via full Ring stack"
+                    "Guest input_observe + Lab surface mutation only — PASS false until "
+                    "in-guest editor/browser/game apps mutate"
+                    if hybrid_with_guest_observe
+                    else (
+                        "HYBRID Lab surface mutation only — PASS false until guest OS "
+                        "input mutates document+browser+game"
+                        if hybrid_earned
+                        else "PASS false until document+browser+game mutate via full Ring stack"
+                    )
                 )
             ),
         }
