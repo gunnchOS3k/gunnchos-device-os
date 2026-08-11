@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import time
 import uuid
@@ -30,12 +31,16 @@ _QEMU_SESSIONS: dict[str, Any] = {}
 _APPROVED_WORK_ROOTS: set[Path] = set()
 
 
-def instances_root(repo_root: Path) -> Path:
-    return (Path(repo_root) / "artifacts" / "device_lab" / "instances").resolve()
-
-
 def lab_artifact_root(repo_root: Path) -> Path:
+    """Device Lab artifact root — override via GUNNCHDEVICE_LAB_ARTIFACT_ROOT for tests/CI."""
+    override = os.environ.get("GUNNCHDEVICE_LAB_ARTIFACT_ROOT", "").strip()
+    if override:
+        return Path(override).expanduser().resolve()
     return (Path(repo_root) / "artifacts" / "device_lab").resolve()
+
+
+def instances_root(repo_root: Path) -> Path:
+    return lab_artifact_root(repo_root) / "instances"
 
 
 def _is_under(path: Path, root: Path) -> bool:
@@ -52,6 +57,10 @@ def lab_work_root_policy_ok(root: Path, *, repo_root: Path | None = None) -> boo
     if _is_under(resolved, temp_root):
         return True
     if repo_root is not None and _is_under(resolved, lab_artifact_root(repo_root)):
+        return True
+    # Explicit override root (may live outside repo for sandboxed CI/tests).
+    override = os.environ.get("GUNNCHDEVICE_LAB_ARTIFACT_ROOT", "").strip()
+    if override and _is_under(resolved, Path(override).expanduser().resolve()):
         return True
     return False
 

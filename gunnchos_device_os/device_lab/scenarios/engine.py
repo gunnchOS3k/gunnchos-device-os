@@ -166,9 +166,12 @@ def run_scenario(
 ) -> dict[str, Any]:
     from gunnchos_device_os.device_lab.scenarios import (
         dsxl_dualscreen,
+        handheld_play_dock,
         local_ai_tutor,
         office_dock,
         ring_real_input,
+        student_day,
+        update_rollback,
     )
 
     journey_handlers = {
@@ -176,6 +179,9 @@ def run_scenario(
         "LAB-SCENARIO-DSXL-DUALSCREEN": dsxl_dualscreen.run,
         "LAB-SCENARIO-RING-REAL-INPUT": ring_real_input.run,
         "LAB-SCENARIO-LOCAL-AI-TUTOR": local_ai_tutor.run,
+        "LAB-SCENARIO-STUDENT-DAY": student_day.run,
+        "LAB-SCENARIO-HANDHELD-PLAY-DOCK": handheld_play_dock.run,
+        "LAB-SCENARIO-UPDATE-ROLLBACK": update_rollback.run,
     }
     if scenario in JOURNEY_SCENARIO_MAP:
         meta = JOURNEY_SCENARIO_MAP[scenario]
