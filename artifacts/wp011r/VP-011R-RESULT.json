@@ -1,0 +1,26 @@
+{
+  "schema": "gunnchos.vp011r.result.v1",
+  "role": "IMPLEMENTER_SELF_ASSESSMENT_NOT_INDEPENDENT",
+  "recorded_at_utc": "2026-08-11T16:15:16Z",
+  "tip": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
+  "overall_result": "FAIL",
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+    "ECO010_FULL_SOAK_PASS": false,
+    "DEVICE_LAB_DEVELOPMENT_GUEST": true
+  },
+  "rejected_false_positives": [
+    "http.server as game runtime",
+    "RFB handshake as UI proof",
+    "input_observe as app-state proof",
+    "DRM enumeration as dual-screen UX proof",
+    "hybrid Lab surfaces as Ring guest-app PASS"
+  ],
+  "independent_score_mean": 5.42,
+  "note": "Independent verifier agent must re-derive; this file is implementer honesty snapshot only."
+}
