@@ -260,6 +260,12 @@ def main(argv: list[str] | None = None) -> int:
         visual_dir = _evidence_dir(repo_root, "visual")
         dsxl_dir = _evidence_dir(repo_root, "dsxl")
         ring_dir = _evidence_dir(repo_root, "ring")
+        # Give weston/openvt a few seconds after guest-agent ping before proofs.
+        for _ in range(12):
+            probe = _agent_call(session, "compositor_info", timeout_sec=10.0)
+            if probe.get("available"):
+                break
+            time.sleep(2.0)
         out["live_visual"] = attempt_live_visual_pass(session, visual_dir)
         if ns.dual:
             out["dsxl"] = attempt_dsxl_dual_compositor_pass(session, dsxl_dir)

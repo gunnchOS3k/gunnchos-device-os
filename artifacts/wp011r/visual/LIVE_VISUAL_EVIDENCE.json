@@ -5,17 +5,28 @@
     "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
     "cmd": "ping",
-    "pong": true,
-    "boot_complete": true,
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial"
+    "measurement_class": "GUEST_OBSERVED",
+    "pong": true,
+    "boot_complete": true
   },
   "compositor_info": {
-    "ok": false,
-    "error": "unix_connect_failed",
-    "detail": "empty_or_unmatched_response"
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "compositor_info",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "available": false,
+    "compositor": null,
+    "outputs": 0,
+    "surfaces": 0,
+    "note": "weston process or wayland socket not found in guest right now"
   },
   "blocker": "compositor_not_available"
 }

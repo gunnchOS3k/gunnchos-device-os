@@ -77,8 +77,14 @@ PROVISION_OK_SENTINEL = "GUNNCHOS_INTERACTIVE_GUEST_PROVISION_OK"
 PROVISION_FAIL_SENTINEL = "GUNNCHOS_INTERACTIVE_GUEST_PROVISION_FAILED"
 
 REQUIRED_APT_PACKAGES: tuple[str, ...] = (
+    # Cloud kernel (linux-image-*-cloud-arm64) ships WITHOUT DRM/virtio-gpu and
+    # often WITHOUT uinput — which makes LIVE compositor proofs impossible.
+    # Install the standard arm64 kernel so /dev/dri and /dev/uinput exist after reboot.
+    "linux-image-arm64",
     "weston",
     "seatd",
+    "libseat1",
+    "kbd",  # openvt — required for DRM VT claim when logind session is absent
     "libgl1-mesa-dri",
     "mesa-utils",
     "libinput-tools",
@@ -244,15 +250,40 @@ write_files:
     permissions: '0644'
     content: |
       {lab_doc.strip()}
+  - path: /etc/modules-load.d/gunnchos-lab.conf
+    permissions: '0644'
+    content: |
+      uinput
+      virtio_gpu
+      virtio_input
+  - path: /etc/ssh/sshd_config.d/99-gunnchos-lab.conf
+    permissions: '0644'
+    content: |
+      PermitRootLogin yes
+      PasswordAuthentication yes
+  - path: /usr/local/sbin/gunnchos-post-provision.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      set -eux
+      ls -1 /boot/vmlinuz-* 2>/dev/null | tee /var/log/gunnchos-kernels.txt || true
+      if grep -qv cloud /var/log/gunnchos-kernels.txt 2>/dev/null; then
+        sed -i 's/^GRUB_DEFAULT=.*/GRUB_DEFAULT=0/' /etc/default/grub || true
+        sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="console=ttyAMA0 console=tty0"/' /etc/default/grub || true
+        update-grub || true
+      fi
+      sleep 5
+      dpkg -l linux-image-arm64 weston seatd libseat1 kbd chromium mousepad pipewire wireplumber libinput-tools python3-evdev wayland-utils godot3 grim > /var/log/gunnchos-provision-packages.txt 2>&1 || true
+      (command -v weston-screenshooter >/dev/null 2>&1 && echo weston-screenshooter=present || echo weston-screenshooter=absent) >> /var/log/gunnchos-provision-packages.txt
 runcmd:
   - [ bash, -c, "mkdir -p /etc/gunnchos-weston /var/lib/gunnchos/screenshots /var/log && cp /etc/xdg/weston/weston.ini /etc/gunnchos-weston/weston.ini" ]
+  - [ bash, -c, "modprobe uinput || true; modprobe virtio_gpu || true" ]
   - [ bash, -c, "apt-get install -y --no-install-recommends {optional_installs} > /var/log/gunnchos-optional-install.log 2>&1 || true" ]
   - [ systemctl, daemon-reload ]
   - [ systemctl, enable, --now, seatd.service ]
   - [ systemctl, enable, --now, gunnchos-guest-agent.service ]
-  - [ systemctl, enable, --now, gunnchos-weston.service ]
-  - [ bash, -c, "sleep 8; dpkg -l weston seatd chromium mousepad pipewire wireplumber libinput-tools python3-evdev wayland-utils godot3 grim > /var/log/gunnchos-provision-packages.txt 2>&1 || true" ]
-  - [ bash, -c, "(command -v weston-screenshooter >/dev/null 2>&1 && echo weston-screenshooter=present || echo weston-screenshooter=absent) >> /var/log/gunnchos-provision-packages.txt" ]
+  - [ systemctl, enable, gunnchos-weston.service ]
+  - [ /usr/local/sbin/gunnchos-post-provision.sh ]
   - [ bash, -c, "echo {PROVISION_OK_SENTINEL} $(date -u +%Y-%m-%dT%H:%M:%SZ) | tee /dev/console /dev/ttyS0 2>/dev/null || echo {PROVISION_OK_SENTINEL} $(date -u +%Y-%m-%dT%H:%M:%SZ) > /dev/console" ]
   - [ bash, -c, "touch /etc/cloud/cloud-init.disabled" ]
 power_state:
@@ -529,10 +560,22 @@ class DebianCloudInteractiveGuestProvisioner:
 
     def _prepare_vars_flash(self, edk2_code: Path) -> Path:
         vars_path = self.work / "edk2-aarch64-vars.fd"
-        if not vars_path.exists():
-            size = edk2_code.stat().st_size
-            with vars_path.open("wb") as fh:
-                fh.truncate(size)
+        template_candidates = [
+            Path("/opt/homebrew/share/qemu/edk2-arm-vars.fd"),
+            Path("/opt/homebrew/opt/qemu/share/qemu/edk2-arm-vars.fd"),
+            Path("/usr/share/qemu/edk2-arm-vars.fd"),
+        ]
+        # Always refresh from the nvram template so a prior UEFI-shell session
+        # cannot stick BootOrder on the wrong device.
+        for tmpl in template_candidates:
+            if tmpl.is_file():
+                import shutil
+
+                shutil.copyfile(tmpl, vars_path)
+                return vars_path
+        size = edk2_code.stat().st_size
+        with vars_path.open("wb") as fh:
+            fh.truncate(size)
         return vars_path
 
     def run(

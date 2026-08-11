@@ -1,20 +1,32 @@
 [Unit]
 Description=gunnchOS Device Lab Interactive Guest Weston compositor (DRM/virtio-gpu backend)
-After=seatd.service systemd-user-sessions.service local-fs.target
-Wants=seatd.service
+After=seatd.service systemd-user-sessions.service systemd-logind.service local-fs.target
+Wants=seatd.service systemd-logind.service
+Conflicts=getty@tty1.service
 
 [Service]
 Type=simple
+# Debian cloud images often lack a graphical logind session for uid 0.
+# Prefer libseat→seatd; fall back to openvt on tty1 so drm-backend can claim a VT.
 Environment=XDG_RUNTIME_DIR=/run/gunnchos-wayland
 Environment=WAYLAND_DISPLAY=wayland-0
 Environment=XDG_CONFIG_HOME=/etc/gunnchos-weston
+Environment=LIBSEAT_BACKEND=seatd
+Environment=WLR_LIBINPUT_NO_DEVICES=0
 WorkingDirectory=/var/lib/gunnchos/screenshots
-ExecStartPre=/bin/mkdir -p /run/gunnchos-wayland /var/lib/gunnchos/screenshots
+ExecStartPre=/bin/mkdir -p /run/gunnchos-wayland /var/lib/gunnchos/screenshots /var/log
 ExecStartPre=/bin/chmod 700 /run/gunnchos-wayland
-ExecStart=/usr/bin/weston --backend=drm-backend.so --log=/var/log/gunnchos-weston.log
+# Soft-fail: Debian cloud kernels often omit uinput; full linux-image-arm64 provides it.
+ExecStartPre=-/sbin/modprobe uinput
+ExecStartPre=-/bin/systemctl stop getty@tty1.service
+# openvt allocates a real VT so weston's drm launcher can succeed without weston-launch.
+ExecStart=/bin/bash -lc 'exec openvt -c 1 -f -s -- /usr/bin/weston --backend=drm-backend.so --log=/var/log/gunnchos-weston.log'
 Restart=on-failure
 RestartSec=2
 User=root
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

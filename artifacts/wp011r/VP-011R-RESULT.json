@@ -3,11 +3,11 @@
   "wave": "WP-011R",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_at_utc": "2026-08-11T19:19:12Z",
+  "assessed_at_utc": "2026-08-11T20:55:04Z",
   "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "role": "implementer",
   "overall": "FAIL",
-  "overall_note": "Cycle 3B progress: guest-native Interactive Development Guest provisioned (Debian cloud-init). PASS tokens remain false until compositor/app framebuffer, DSXL UX, Ring in-guest, four-game, ECO-010 earned.",
+  "overall_note": "Cycle 3B: guest-native provision path works; LIVE blocked by Debian cloud kernel missing DRM/uinput. Engineering fix in-flight: linux-image-arm64 + openvt/seatd Weston unit + cloud-init YAML repair. PASS tokens remain false.",
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "DRAFT_ONLY": true,
@@ -44,15 +44,15 @@
     "ECO-010 dry-check PARTIAL (requested 1800s, not shortened to pass)",
     "device_lab_score_independent.py recomputed",
     "Debian genericcloud aarch64 QEMU cloud-init guest-native provision OK",
-    "Guest agent virtio-serial path exercised; compositor_info not yet available"
+    "Guest agent virtio-serial path exercised; compositor_info not yet available",
+    "Diagnosed weston failure: cloud-arm64 kernel has no /dev/dri and no uinput module",
+    "Fixed weston unit (openvt+LIBSEAT_BACKEND=seatd; soft-fail modprobe)",
+    "Added linux-image-arm64 + post-provision script; repaired cloud-init YAML quote breakage",
+    "UEFI bootindex + edk2-arm-vars template to avoid EFI-shell traps"
   ],
   "remaining_blockers": [
-    "FOUR_GAME: Pedestrian Pursuit Godot needs input\u2192state + save (web fallback rejected for aggregate)",
-    "LIVE_GUNNCHOS_VISUAL_PASS: lit shell+app compositor with meaningful input-visible change",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS: real compositor surfaces on both outputs + focus/layout",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS: in-guest editor/browser/game apps (not Lab surfaces)",
-    "ECO-010: full 1800s multi-guest continuous soak",
-    "Master digital complete remains false"
+    "Re-provision with linux-image-arm64 must complete and prove /dev/dri + weston available",
+    "Then earn LIVE (non-blank FB + app), DSXL dual compositor UX, Ring uinput\u2192app, four-game in-guest, ECO-010 1800s"
   ],
   "skepticism": [
     "FOUR_GAME save path uses Lab localStorage marker \u2014 may not equal each title native save format",

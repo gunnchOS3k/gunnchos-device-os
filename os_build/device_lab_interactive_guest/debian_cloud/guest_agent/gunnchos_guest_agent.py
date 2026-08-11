@@ -139,8 +139,17 @@ def cmd_process_start(req: dict[str, Any]) -> dict[str, Any]:
     argv = req.get("argv") or ([name] if name else None)
     if not argv:
         return _fail("process_start", "missing_name_or_argv")
+    env = _env_for_gui()
+    extra = req.get("env")
+    if isinstance(extra, dict):
+        for k, v in extra.items():
+            if v is None:
+                env.pop(str(k), None)
+            else:
+                env[str(k)] = str(v)
+    env.setdefault("LIBSEAT_BACKEND", "seatd")
     try:
-        proc = subprocess.Popen(argv, env=_env_for_gui())
+        proc = subprocess.Popen(argv, env=env)
     except OSError as exc:
         return _fail("process_start", f"spawn_failed:{exc}")
     _procs[str(name or argv[0])] = proc

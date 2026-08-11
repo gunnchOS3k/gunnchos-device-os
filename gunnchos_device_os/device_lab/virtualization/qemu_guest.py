@@ -759,9 +759,23 @@ class QemuGuestSession:
         self.state["sock_dir"] = str(sock_dir)
 
         vars_flash = self.work / "edk2-aarch64-vars.fd"
-        if not vars_flash.exists():
-            with vars_flash.open("wb") as fh:
-                fh.truncate(edk2_code.stat().st_size)
+        # Prefer Homebrew's nvram template (edk2-arm-vars.fd) over a zeroed
+        # flash — blank vars can land in the UEFI shell after PCI topology changes.
+        if not vars_flash.exists() or vars_flash.stat().st_size == 0:
+            template_candidates = [
+                Path("/opt/homebrew/share/qemu/edk2-arm-vars.fd"),
+                Path("/opt/homebrew/opt/qemu/share/qemu/edk2-arm-vars.fd"),
+                Path("/usr/share/qemu/edk2-arm-vars.fd"),
+            ]
+            copied = False
+            for tmpl in template_candidates:
+                if tmpl.is_file():
+                    shutil.copyfile(tmpl, vars_flash)
+                    copied = True
+                    break
+            if not copied:
+                with vars_flash.open("wb") as fh:
+                    fh.truncate(edk2_code.stat().st_size)
 
         dual_guest = bool(
             (self.profile.get("profile_id") == "dsxl_coder")
@@ -793,8 +807,12 @@ class QemuGuestSession:
             f"if=pflash,format=raw,readonly=on,file={edk2_code}",
             "-drive",
             f"if=pflash,format=raw,file={vars_flash}",
+            # Explicit bootindex keeps UEFI on the Linux root disk when PCI
+            # slot order changes (GPU/keyboard inserted ahead of the disk).
             "-drive",
-            f"file={disk},if=virtio,format=qcow2",
+            f"file={disk},if=none,format=qcow2,id=hd0",
+            "-device",
+            "virtio-blk-pci,drive=hd0,bootindex=1",
             "-device",
             gpu_dev,
             "-device",
