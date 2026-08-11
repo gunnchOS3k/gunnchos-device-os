@@ -73,7 +73,7 @@ def run_ring_app_mutation_proof(*, repo_root: Path, profile_id: str = "edge_io_r
             mapped.insert(4 if len(mapped) >= 4 else len(mapped), "confidence_gate")
 
         mutations: dict[str, Any] = {}
-        targets = ("libreoffice", "browser", "game")
+        targets = ("libreoffice", "browser", "games")
         for target in targets:
             before = None
             if session.rings.surfaces is not None:

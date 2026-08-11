@@ -153,7 +153,8 @@ def test_ring_app_mutation_evidence(lab_artifacts: Path, tmp_path: Path, monkeyp
     # Use monkeypatch on Path home? Instead run and check token honesty.
     result = run_ring_app_mutation_proof(repo_root=ROOT)
     assert "RING_TO_REAL_APP_STATE_MUTATION_PASS" in result
-    assert result.get("pipeline_ok") is True
+    assert result.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
+    assert result.get("guest_os_input_required") is True
     # Mutations must be real before/after — not observe-only
     for t in ("libreoffice", "browser", "games"):
         m = result["mutations"][t]

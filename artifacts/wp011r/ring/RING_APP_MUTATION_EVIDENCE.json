@@ -1,13 +1,14 @@
 {
   "ok": false,
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "pipeline_required": [
     "ring_simulator",
     "authenticated_packet",
     "RingService",
     "SpatialInputService",
     "confidence_gate",
-    "guest_or_hybrid_input",
+    "guest_os_input",
     "app_state_mutation"
   ],
   "pipeline_observed": [
@@ -27,7 +28,9 @@
     "input_router_hid_wayland",
     "apps"
   ],
-  "pipeline_ok": true,
+  "pipeline_ok": false,
+  "guest_os_input_required": true,
+  "guest_os_input_present": false,
   "mutations": {
     "libreoffice": {
       "delivered": true,
@@ -47,7 +50,7 @@
         "cursor": 8,
         "focused": true,
         "len": 8,
-        "checksum": 15393253
+        "checksum": 108629678
       },
       "via_stack": true,
       "os_input_path": {
@@ -76,9 +79,8 @@
             "page_state": {
               "counter": 1,
               "last_action": "click",
-              "playwright_counter": 1,
-              "playwright_scroll": 0,
-              "playwright": true
+              "playwright": false,
+              "playwright_error": "No module named 'playwright'"
             }
           },
           "path": "hybrid_process"
@@ -86,7 +88,8 @@
         "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
       },
       "observe_only_rejected": false,
-      "direct_file_write": false
+      "direct_file_write": false,
+      "path_kind": "hybrid_process"
     },
     "browser": {
       "delivered": true,
@@ -101,9 +104,8 @@
         "page_state": {
           "counter": 1,
           "last_action": "click",
-          "playwright_counter": 1,
-          "playwright_scroll": 0,
-          "playwright": true
+          "playwright": false,
+          "playwright_error": "No module named 'playwright'"
         }
       },
       "after": {
@@ -115,9 +117,8 @@
         "page_state": {
           "counter": 2,
           "last_action": "scroll",
-          "playwright_counter": 0,
-          "playwright_scroll": 0,
-          "playwright": true,
+          "playwright": false,
+          "playwright_error": "No module named 'playwright'",
           "pointer": {
             "x": 0.08000000000000002,
             "y": 0.0
@@ -141,9 +142,8 @@
             "page_state": {
               "counter": 2,
               "last_action": "scroll",
-              "playwright_counter": 0,
-              "playwright_scroll": 0,
-              "playwright": true,
+              "playwright": false,
+              "playwright_error": "No module named 'playwright'",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -160,9 +160,8 @@
             "page_state": {
               "counter": 3,
               "last_action": "click",
-              "playwright_counter": 1,
-              "playwright_scroll": 0,
-              "playwright": true,
+              "playwright": false,
+              "playwright_error": "No module named 'playwright'",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -175,7 +174,8 @@
         "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
       },
       "observe_only_rejected": false,
-      "direct_file_write": false
+      "direct_file_write": false,
+      "path_kind": "hybrid_process"
     },
     "games": {
       "delivered": true,
@@ -227,9 +227,8 @@
             "page_state": {
               "counter": 3,
               "last_action": "click",
-              "playwright_counter": 1,
-              "playwright_scroll": 0,
-              "playwright": true,
+              "playwright": false,
+              "playwright_error": "No module named 'playwright'",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -246,9 +245,8 @@
             "page_state": {
               "counter": 4,
               "last_action": "click",
-              "playwright_counter": 1,
-              "playwright_scroll": 0,
-              "playwright": true,
+              "playwright": false,
+              "playwright_error": "No module named 'playwright'",
               "pointer": {
                 "x": 0.08000000000000002,
                 "y": 0.0
@@ -261,7 +259,8 @@
         "blocker": "No guest monitor/agent bound; hybrid Lab surfaces only"
       },
       "observe_only_rejected": false,
-      "direct_file_write": false
+      "direct_file_write": false,
+      "path_kind": "hybrid_process"
     }
   },
   "confidence_gate": {
@@ -292,7 +291,7 @@
       "cursor": 8,
       "focused": false,
       "len": 8,
-      "checksum": 15393253
+      "checksum": 108629678
     },
     "browser": {
       "app_id": "browser",
@@ -303,9 +302,8 @@
       "page_state": {
         "counter": 4,
         "last_action": "click",
-        "playwright_counter": 1,
-        "playwright_scroll": 0,
-        "playwright": true,
+        "playwright": false,
+        "playwright_error": "No module named 'playwright'",
         "pointer": {
           "x": 0.08000000000000002,
           "y": 0.0
@@ -329,16 +327,13 @@
       "last_action": "attack"
     },
     "focus": "games",
-    "ts": 1786456784.35285
+    "ts": 1786457553.104297
   },
   "RING_SPATIAL_ACCURACY": "SIMULATED",
-  "RING_TO_REAL_APPLICATION_INPUT_PASS_note": "Wave4 input_observe token is separate; this token requires actual document/browser/game state mutation via the stack.",
-  "companion_instance": "dev-60d21ffc",
-  "duration_ms": 3881,
+  "RING_TO_REAL_APPLICATION_INPUT_PASS_note": "Wave4 input_observe token is separate; Cycle 3A PASS requires guest OS input plus document/browser/game mutation. Hybrid Lab surfaces alone set RING_HYBRID_LAB_SURFACE_MUTATION_PASS only.",
+  "companion_instance": "dev-969002bd",
+  "duration_ms": 14,
   "SILICON_EXACT_EMULATION": false,
-  "claim_boundary": "Ring Lab path mutates observable app surfaces via SpatialInputService. input_observe alone does not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. RING_SPATIAL_ACCURACY=SIMULATED. SILICON_EXACT_EMULATION=false. Physical ring SI PENDING.",
-  "note": "HYBRID Lab surface mutation only \u2014 PASS false until guest OS input mutates document+browser+game",
-  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
-  "guest_os_input_required": true,
-  "guest_os_input_present": false
+  "claim_boundary": "Ring Lab path mutates observable app surfaces via SpatialInputService. input_observe alone does not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. Hybrid Lab surfaces alone do not earn RING_TO_REAL_APP_STATE_MUTATION_PASS. RING_SPATIAL_ACCURACY=SIMULATED. SILICON_EXACT_EMULATION=false. Physical ring SI PENDING.",
+  "note": "HYBRID Lab surface mutation only \u2014 PASS false until guest OS input mutates document+browser+game"
 }
