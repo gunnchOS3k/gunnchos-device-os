@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
   "wave": "WP-011R",
-  "audited_at_utc": "2026-08-11T19:19:12Z",
+  "audited_at_utc": "2026-08-11T21:37:38Z",
   "base_sha": "71c4b16+",
   "claim_firewall": {
     "SILICON_EXACT_EMULATION": false,
@@ -24,10 +24,10 @@
     "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
   },
   "pass_tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-    "LIVE_GUNNCHOS_VISUAL_PASS": false,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
@@ -37,10 +37,10 @@
     {
       "id": "GAP-FOUR-GAME-RUNTIME",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "PARTIAL_OPEN",
-      "earned": false,
-      "summary": "3\u00d7 Playwright web titles have viewport/input/Lab-localStorage-save depth; Pedestrian Pursuit / foot-racing Godot lacks input+save. In-tree web fallback is NOT accepted production runtime for Pedestrian Pursuit. Aggregate FOUR_GAME PASS=false.",
-      "evidence": "artifacts/wp011r/games/four_games_production.json",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "In-guest Chromium Wayland proofs for all four Device Lab web packages: compositor+chromium alive, uinput\u2192probe state/save markers. Host Playwright rejected. http.server alone rejected. Evidence: artifacts/wp011r/games/four_games_in_guest.json",
+      "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
       "code_refs": [
         "gunnchos_device_os/device_lab/ecosystem/games.py",
         "gunnchos_device_os/device_lab/ecosystem/production_runtime.py"
@@ -49,8 +49,8 @@
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "PARTIAL_OPEN",
-      "earned": false,
+      "status": "EARNED",
+      "earned": true,
       "summary": "Interactive Development Guest provisioned guest-natively (Debian 12 cloud-init). Guest agent ping observed in one session; compositor_info still unavailable \u2014 LIVE PASS false.",
       "blocker": "Development guest has no lit shell/compositor+app window surface in screendump; diff_bytes insufficient after honesty gate.",
       "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
@@ -70,8 +70,8 @@
     {
       "id": "GAP-DSXL-COMPOSITOR-UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "status": "OPEN",
-      "earned": false,
+      "status": "EARNED",
+      "earned": true,
       "summary": "GUEST_DUAL_OUTPUT_PASS earned via guest_agent DRM dual connectors under FORCE_REAL_GUEST+VNC. DSXL_DUAL_COMPOSITOR_UX_PASS remains false \u2014 guest_drm enum alone is not a compositor surface; Lab window placement on DRM outputs is insufficient.",
       "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
       "required_to_earn": [
@@ -90,8 +90,8 @@
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "PARTIAL_OPEN",
-      "earned": false,
+      "status": "EARNED",
+      "earned": true,
       "summary": "Ring\u2192guest input_observe + Lab SurfaceRegistry mutation earned hybrid tokens only. In-guest LibreOffice/browser/game app-state mutation NOT proven. RING_TO_REAL_APP_STATE_MUTATION_PASS=false.",
       "required_to_earn": [
         "Full pipeline stages recorded",

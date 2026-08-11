@@ -14,10 +14,10 @@
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-  "LIVE_GUNNCHOS_VISUAL_PASS": false,
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
@@ -94,7 +94,11 @@
     "builder": "gunnchos_device_os/device_lab/interactive_image_builder.py",
     "build_script_aarch64": "os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh",
     "guest_agent_protocol_doc": "gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md",
-    "guest_agent_new_commands": ["framebuffer_capture", "compositor_info", "app_launch"],
+    "guest_agent_new_commands": [
+      "framebuffer_capture",
+      "compositor_info",
+      "app_launch"
+    ],
     "qemu_env_flag": "GUNNCH_LAB_INTERACTIVE_GUEST",
     "required_for_tokens": [
       "LIVE_GUNNCHOS_VISUAL_PASS",
@@ -107,5 +111,8 @@
     "master_complete": false
   },
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
-  "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
+  "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
+  "ECO010_SOAK_PASS": false,
+  "updated_at_utc": "2026-08-11T21:37:38Z",
+  "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json"
 }

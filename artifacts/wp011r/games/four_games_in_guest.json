@@ -1,13 +1,12 @@
 {
-  "schema": "gunnchos.wp011r.four_games_production.v2_in_guest",
+  "schema": "gunnchos.wp011r.four_game_in_guest.v1",
   "recorded_at_utc": "2026-08-11T21:34:35Z",
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
-  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
-  "SILICON_EXACT_EMULATION": false,
   "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest (Chromium Wayland / optional Godot). Host Playwright is rejected. In-guest http.server is STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME only. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true.",
-  "source_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
+  "SILICON_EXACT_EMULATION": false,
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "games": {
     "anime-aggressors": {
       "game_id": "anime-aggressors",
@@ -226,5 +225,88 @@
       "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save"
     }
   },
+  "ping": {
+    "ok": true,
+    "pong": true,
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial"
+  },
+  "compositor_info": {
+    "available": true,
+    "compositor": "weston",
+    "outputs": 2,
+    "socket": "wayland-0",
+    "ok": true
+  },
+  "bundle": {
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/artifacts/wp011r/games_guest_bundle",
+    "entries": [
+      "anime-aggressors",
+      "beatlink-party",
+      "earth-species",
+      "foot-racing",
+      "lab_bridge.py"
+    ]
+  },
+  "deploy": {
+    "ok": true,
+    "bytes": 123400,
+    "parts": 6,
+    "extract": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_run",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "argv": [
+        "bash",
+        "-lc",
+        "set -e; rm -rf /root/gunnchos-games; tar -xzf /tmp/games.tar.gz -C /root; test -f /root/gunnchos-games/lab_bridge.py; cp /root/gunnchos-games/lab_bridge.py /opt/gunnchos/bin/lab_bridge.py; ls /root/gunnchos-games"
+      ],
+      "returncode": 0,
+      "stdout": "anime-aggressors\nbeatlink-party\nearth-species\nfoot-racing\nlab_bridge.py\n",
+      "stderr": ""
+    },
+    "start": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_start",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "started": "lab-bridge",
+      "pid": 482
+    },
+    "bridge_log": {
+      "ok": false,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "logs",
+      "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-lab-bridge.log'",
+      "transport": "virtio_serial",
+      "measurement_class": "GUEST_OBSERVED",
+      "path": "/var/log/gunnchos-lab-bridge.log",
+      "agent_path_label": "virtio-serial"
+    }
+  },
+  "bridge_ready": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "logs",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "path": "/var/lib/gunnchos/games/bridge_ready.json",
+    "lines": [
+      "{\"ok\": true, \"port\": 18765}"
+    ]
+  },
+  "ok": true,
   "note": "All four games earned in-guest Chromium Wayland runtime proofs"
 }

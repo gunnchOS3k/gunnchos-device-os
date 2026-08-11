@@ -842,6 +842,15 @@ class QemuGuestSession:
                 "-device",
                 "virtio-net-pci,netdev=n0",
             ]
+        # Optional host→guest 9p share for in-guest game assets (FOUR_GAME proofs).
+        games_9p = (os.environ.get("GUNNCH_LAB_GAMES_9P_PATH") or "").strip()
+        if games_9p and Path(games_9p).is_dir():
+            cmd += [
+                "-fsdev",
+                f"local,id=gdlgames,path={games_9p},security_model=none,readonly=on",
+                "-device",
+                "virtio-9p-pci,fsdev=gdlgames,mount_tag=gdlgames",
+            ]
         (self.work / "qemu_cmd.json").write_text(
             json.dumps({"cmd": cmd, "accel": self.accel, "arch": self.arch, "interactive_uefi": True}, indent=2)
             + "\n",

@@ -25,6 +25,7 @@ SUPPORTED_COMMANDS = (
     "boot_status",
     "process_list",
     "process_start",
+    "process_run",
     "process_stop",
     "package_ops",
     "display_info",
@@ -37,6 +38,7 @@ SUPPORTED_COMMANDS = (
     "framebuffer_capture",
     "compositor_info",
     "app_launch",
+    "file_put",
 )
 
 

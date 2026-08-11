@@ -3,17 +3,17 @@
   "wave": "WP-011R",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_at_utc": "2026-08-11T21:13:54Z",
+  "assessed_at_utc": "2026-08-11T21:37:38Z",
   "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "role": "implementer",
   "overall": "PARTIAL",
-  "overall_note": "Cycle 3B: LIVE+DSXL+RING earned on Interactive Guest (non-cloud kernel, weston openvt, QEMU screendump+uinput). FOUR_GAME in-guest / ECO-010 1800s / master still false.",
+  "overall_note": "Cycle 3B: LIVE+DSXL+RING+FOUR_GAME (in-guest Chromium Wayland) earned. ECO-010 1800s soak and master still open. Host Playwright not used for FOUR_GAME.",
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "DRAFT_ONLY": true,
   "never_merge": true,
   "tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
@@ -25,14 +25,15 @@
     "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
   },
   "evidence": {
-    "games": "artifacts/wp011r/games/four_games_production.json",
+    "games": "artifacts/wp011r/games/four_games_in_guest.json",
     "visual": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
     "visual_blocker": "artifacts/wp011r/visual/LIVE_VISUAL_BLOCKER.json",
     "dsxl": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
     "ring": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
     "eco010": "artifacts/wp011r/ECO010_SOAK.json",
     "score": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
-    "gaps": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json"
+    "gaps": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+    "games_production": "artifacts/wp011r/games/four_games_production.json"
   },
   "independent_score_mean_of_12": 5.5,
   "session_actions": [
@@ -48,11 +49,13 @@
     "Diagnosed weston failure: cloud-arm64 kernel has no /dev/dri and no uinput module",
     "Fixed weston unit (openvt+LIBSEAT_BACKEND=seatd; soft-fail modprobe)",
     "Added linux-image-arm64 + post-provision script; repaired cloud-init YAML quote breakage",
-    "UEFI bootindex + edk2-arm-vars template to avoid EFI-shell traps"
+    "UEFI bootindex + edk2-arm-vars template to avoid EFI-shell traps",
+    "Earned FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS via Interactive Guest Chromium Wayland + lab bridge probe"
   ],
   "remaining_blockers": [
-    "Re-provision with linux-image-arm64 must complete and prove /dev/dri + weston available",
-    "Then earn LIVE (non-blank FB + app), DSXL dual compositor UX, Ring uinput\u2192app, four-game in-guest, ECO-010 1800s"
+    "ECO-010 \u22651800s simultaneous soak with \u22655 inject/recover + clean teardown",
+    "Independent verifier re-score after ECO-010",
+    "Master GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE only after all tokens + verifier"
   ],
   "skepticism": [
     "FOUR_GAME save path uses Lab localStorage marker \u2014 may not equal each title native save format",

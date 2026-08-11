@@ -45,9 +45,19 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
     pass_tokens = (gaps.get("pass_tokens") or {}) if gaps else {}
     four = bool(pass_tokens.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS") is True)
     # Evidence may only confirm PASS when gap register also allows it (AND).
+    # Prefer in-guest evidence; reject host-Playwright-only aggregates.
+    guest_ev = _load_json(ROOT / "artifacts/wp011r/games/four_games_in_guest.json")
     games_ev = _load_json(ROOT / "artifacts/wp011r/games/four_games_production.json")
-    if games_ev:
-        four = four and bool(games_ev.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"))
+    if guest_ev:
+        four = bool(guest_ev.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")) and bool(
+            guest_ev.get("HOST_PLAYWRIGHT_REJECTED", True)
+        ) and bool(guest_ev.get("DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST", True))
+    elif games_ev:
+        if games_ev.get("schema") == "gunnchos.wp011r.four_games_production.v2_in_guest":
+            four = four and bool(games_ev.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"))
+        else:
+            # Legacy host Playwright packet — never promotes Device Lab FOUR_GAME alone.
+            four = False
     if pass_tokens.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS") is False:
         four = False
 

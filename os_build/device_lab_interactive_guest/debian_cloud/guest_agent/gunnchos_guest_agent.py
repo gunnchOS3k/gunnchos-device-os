@@ -165,6 +165,73 @@ def cmd_process_start(req: dict[str, Any]) -> dict[str, Any]:
     return _ok("process_start", started=str(name or argv[0]), pid=proc.pid)
 
 
+def cmd_process_run(req: dict[str, Any]) -> dict[str, Any]:
+    """Run argv to completion and return exit code + truncated stdout/stderr."""
+    argv = req.get("argv")
+    if not argv or not isinstance(argv, list):
+        return _fail("process_run", "missing_argv")
+    timeout = float(req.get("timeout_sec") or 60.0)
+    env = _env_for_gui()
+    extra = req.get("env")
+    if isinstance(extra, dict):
+        for k, v in extra.items():
+            if v is None:
+                env.pop(str(k), None)
+            else:
+                env[str(k)] = str(v)
+    try:
+        completed = subprocess.run(
+            [str(x) for x in argv],
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+            env=env,
+        )
+    except subprocess.TimeoutExpired as exc:
+        return _fail(
+            "process_run",
+            "timeout",
+            argv=argv,
+            timeout_sec=timeout,
+            stdout=(exc.stdout or "")[-4000:] if isinstance(exc.stdout, str) else "",
+            stderr=(exc.stderr or "")[-4000:] if isinstance(exc.stderr, str) else "",
+        )
+    except OSError as exc:
+        return _fail("process_run", f"spawn_failed:{exc}", argv=argv)
+    return _ok(
+        "process_run",
+        argv=argv,
+        returncode=completed.returncode,
+        stdout=(completed.stdout or "")[-8000:],
+        stderr=(completed.stderr or "")[-4000:],
+    )
+
+
+def cmd_file_put(req: dict[str, Any]) -> dict[str, Any]:
+    """Write a file from base64 (optional append). Used to stage lab assets."""
+    import base64
+
+    path = str(req.get("path") or "")
+    if not path:
+        return _fail("file_put", "missing_path")
+    b64 = str(req.get("bytes_b64") or "")
+    append = bool(req.get("append"))
+    try:
+        raw = base64.b64decode(b64.encode("ascii"), validate=False)
+    except Exception as exc:  # noqa: BLE001
+        return _fail("file_put", f"b64_decode_failed:{exc}")
+    try:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        mode = "ab" if append else "wb"
+        with p.open(mode) as fh:
+            fh.write(raw)
+        return _ok("file_put", path=path, bytes=len(raw), append=append, size=p.stat().st_size)
+    except OSError as exc:
+        return _fail("file_put", f"write_failed:{exc}", path=path)
+
+
 def cmd_process_stop(req: dict[str, Any]) -> dict[str, Any]:
     name = str(req.get("name") or "")
     proc = _procs.get(name)
@@ -562,6 +629,7 @@ HANDLERS = {
     "boot_status": cmd_boot_status,
     "process_list": cmd_process_list,
     "process_start": cmd_process_start,
+    "process_run": cmd_process_run,
     "process_stop": cmd_process_stop,
     "package_ops": cmd_package_ops,
     "display_info": cmd_display_info,
@@ -574,6 +642,7 @@ HANDLERS = {
     "framebuffer_capture": cmd_framebuffer_capture,
     "compositor_info": cmd_compositor_info,
     "app_launch": cmd_app_launch,
+    "file_put": cmd_file_put,
 }
 
 
