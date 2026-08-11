@@ -137,23 +137,15 @@ def evaluate_evidence_consistency(root: Path | None = None) -> dict[str, Any]:
             # ancestor of the PR base (origin/main) once history is available.
             if not ok_sha and origin_main is not None:
                 ok_sha = _git_merge_base_is_ancestor(str(tip_verified), origin_main)
-            # Documented Independent PASS tip matching readiness file (full SHA)
-            ready_tip = (readiness or {}).get("tip_verified")
-            if (
-                not ok_sha
-                and ready_tip
-                and tip_verified == ready_tip
-                and overall == "PASS"
-                and independent_verified
-            ):
-                # Last resort for shallow clones: object may be missing; only allow
-                # when the Independent PASS tip is explicitly recorded in readiness.
+            # GitHub Actions supplies the PR base SHA even when origin/main is missing.
+            if not ok_sha:
                 import os
-                base_sha = os.environ.get("GITHUB_BASE_SHA") or os.environ.get(
-                    "GITHUB_EVENT_PATH"
-                )
-                if origin_main is None and head is not None:
-                    ok_sha = True  # shallow PR tip advancing non-security work
+
+                base_sha = os.environ.get("GITHUB_BASE_SHA")
+                if base_sha:
+                    ok_sha = tip_verified == base_sha or _git_merge_base_is_ancestor(
+                        str(tip_verified), base_sha
+                    )
             if not ok_sha:
                 violations.append(
                     {
