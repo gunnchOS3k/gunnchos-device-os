@@ -4,7 +4,7 @@
     "kernel_reference": {
       "initramfs_path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
       "initramfs_present": true,
-      "initramfs_sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "initramfs_sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3",
       "kernel_path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
       "kernel_present": true,
       "kernel_sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
@@ -13,7 +13,7 @@
     "rootfs_tarball": {
       "file_count": 21,
       "path": "os_build/realm_images/production_shipping_image_definition/artifacts/rootfs.tar.gz",
-      "sha256": "64a17445067990802eccf7ca7c10d4377ad4d19523a3e2fe5855b6ebcd5757ed",
+      "sha256": "14ddecf328ecdb301730b84b57aac727eaf1a68e22922502ee6b2e4004c1d4d7",
       "size_bytes": 2289
     }
   },
@@ -107,7 +107,7 @@
     },
     "update_channel": "production-stable"
   },
-  "image_hash": "486eb159a299843184fc77e026ea61f3ec6e8163e5e33f6986da6ea22e6f9d2a",
+  "image_hash": "b474ff52aae9f070af344a7a5a5436f1b2dffbb96599f607c3de5e3400e299d1",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -220,7 +220,7 @@
   "reproducibility": {
     "file_count": 21,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "64a17445067990802eccf7ca7c10d4377ad4d19523a3e2fe5855b6ebcd5757ed",
+    "rootfs_sha256": "14ddecf328ecdb301730b84b57aac727eaf1a68e22922502ee6b2e4004c1d4d7",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4392,10 +4392,10 @@
   "signing_realm": "none",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "5cfb0b364e24c763026ebf8ce35f8b3d755f0e61",
+    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
     "working_tree_dirty": true
   },
   "status": "NOT_RELEASED",
-  "timestamp_utc": "2026-08-11T19:30:53Z",
+  "timestamp_utc": "2026-08-11T19:41:59Z",
   "unsigned_requested": false
 }

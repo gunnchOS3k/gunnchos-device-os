@@ -4,7 +4,7 @@
     "kernel_reference": {
       "initramfs_path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
       "initramfs_present": true,
-      "initramfs_sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "initramfs_sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3",
       "kernel_path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
       "kernel_present": true,
       "kernel_sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
@@ -13,7 +13,7 @@
     "rootfs_tarball": {
       "file_count": 15,
       "path": "os_build/realm_images/factory_provisioning_image/artifacts/rootfs.tar.gz",
-      "sha256": "c641f2f0e58da5434b3eca78f7ae01f9068be67946385d93221d991369fd4f19",
+      "sha256": "37b0b3fe4f0d3fb0cb9a4f5006830c476e5e3a798c4315643fbe68692a11ba16",
       "size_bytes": 1963
     }
   },
@@ -113,7 +113,7 @@
     },
     "update_channel": "factory-line"
   },
-  "image_hash": "84b6720d3e37b9319f5fbd8a515adce720950a518663efc1ee98b57912dc2ec5",
+  "image_hash": "e8a4a0e8cd25cdeef61dcd39454a063d963565ea9757e87b60fba525b2cdefd7",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -196,7 +196,7 @@
   "reproducibility": {
     "file_count": 15,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "c641f2f0e58da5434b3eca78f7ae01f9068be67946385d93221d991369fd4f19",
+    "rootfs_sha256": "37b0b3fe4f0d3fb0cb9a4f5006830c476e5e3a798c4315643fbe68692a11ba16",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4248,10 +4248,10 @@
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "5cfb0b364e24c763026ebf8ce35f8b3d755f0e61",
+    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T19:30:54Z",
+  "timestamp_utc": "2026-08-11T19:42:00Z",
   "unsigned_requested": true
 }

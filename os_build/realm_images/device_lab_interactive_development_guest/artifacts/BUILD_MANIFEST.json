@@ -4,7 +4,7 @@
     "kernel_reference": {
       "initramfs_path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
       "initramfs_present": true,
-      "initramfs_sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "initramfs_sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3",
       "kernel_path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
       "kernel_present": true,
       "kernel_sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
@@ -13,7 +13,7 @@
     "rootfs_tarball": {
       "file_count": 38,
       "path": "os_build/realm_images/device_lab_interactive_development_guest/artifacts/rootfs.tar.gz",
-      "sha256": "c0b06d5107836f1fff78ceb94b4c2a95207e2ad144aa95afcb0985f5d35f64c7",
+      "sha256": "3f50ace985b3200a0bd4f42cb404e4a7b041c1483029bbaf2fe955825986e237",
       "size_bytes": 25312
     }
   },
@@ -112,7 +112,7 @@
     },
     "update_channel": "dev-lab"
   },
-  "image_hash": "ad074981928526a07070435f6d3a2d39236a308ce700a2f8a9590fa6b6afe9bc",
+  "image_hash": "2f70ec952e82b03bbe6557da2cce4126888f85bd7ab79b6e5a77e9fd7b257fed",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -310,7 +310,7 @@
   "reproducibility": {
     "file_count": 38,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "c0b06d5107836f1fff78ceb94b4c2a95207e2ad144aa95afcb0985f5d35f64c7",
+    "rootfs_sha256": "3f50ace985b3200a0bd4f42cb404e4a7b041c1483029bbaf2fe955825986e237",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4821,16 +4821,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "27df91a75bd54f30a727ab9fea0d1501744368ed15ef4ffa3249e30bf3ef5daa5c7272a1188941d510c97da9a0222a5e9100d28ab54879b7ab0f036b4d510b0a"
+    "signature_hex": "97eca2da7e85835b7d85c2f18e33040d8f5b8e2d506c405e7bf4ba54219d21cb91abef27bb586dfc4fe6ca6599784c38efb0ae0591021d6582eebe469b917b0f"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "5cfb0b364e24c763026ebf8ce35f8b3d755f0e61",
+    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T19:30:52Z",
+  "timestamp_utc": "2026-08-11T19:41:58Z",
   "unsigned_requested": false
 }

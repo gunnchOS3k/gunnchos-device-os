@@ -4,7 +4,7 @@
     "kernel_reference": {
       "initramfs_path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
       "initramfs_present": true,
-      "initramfs_sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "initramfs_sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3",
       "kernel_path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
       "kernel_present": true,
       "kernel_sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
@@ -13,7 +13,7 @@
     "rootfs_tarball": {
       "file_count": 38,
       "path": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
-      "sha256": "d5892692beb2d5df998c7b36e1fb85a848a52c1d53149e81797a2afb2b24f670",
+      "sha256": "bd71cbed3a1659e9e78a1d9b76a989d7e9c5cee8099fcb1278d7ff56f36e5aa4",
       "size_bytes": 25313
     }
   },
@@ -112,7 +112,7 @@
     },
     "update_channel": "evt"
   },
-  "image_hash": "1574a15393f43f6b9c328b4184d62ef232eda3085a7218d039b074c52272152c",
+  "image_hash": "ebd175ba888c151fecdd5ac72625c4024486cfdfc8badd09e73b3afe49adcd0d",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -310,7 +310,7 @@
   "reproducibility": {
     "file_count": 38,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "d5892692beb2d5df998c7b36e1fb85a848a52c1d53149e81797a2afb2b24f670",
+    "rootfs_sha256": "bd71cbed3a1659e9e78a1d9b76a989d7e9c5cee8099fcb1278d7ff56f36e5aa4",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4822,10 +4822,10 @@
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "5cfb0b364e24c763026ebf8ce35f8b3d755f0e61",
+    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T19:30:54Z",
+  "timestamp_utc": "2026-08-11T19:41:59Z",
   "unsigned_requested": true
 }
