@@ -10,7 +10,18 @@
     "VF6": "PHYSICAL_PENDING",
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
     "PRODUCTION_READY": false,
-    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image"
+    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image",
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": "Interactive guest scaffolding added this wave (os_build/device_lab_interactive_guest/) \u2014 also a development guest, never a shipping image",
+    "SHIPPING_IMAGE": false
+  },
+  "required_guest_for_in_guest_proofs": {
+    "note": "LIVE_GUNNCHOS_VISUAL_PASS / DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS can never be earned on the slim Alpine initramfs-only guest (os_build/device_lab_guest/) because it has no compositor, no persistent rootfs, and no installable apps. The required path forward for all three is the Interactive Development Guest (os_build/device_lab_interactive_guest/, DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true).",
+    "readme": "os_build/device_lab_interactive_guest/README.md",
+    "scaffolding_added_this_wave": true,
+    "scaffolding_earns_no_pass_token": true,
+    "rootfs_build_attempted_on_mac": true,
+    "rootfs_build_result_on_mac": "HONEST_FAIL_NO_DOCKER_OR_CHROOT_BINFMT",
+    "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
   },
   "pass_tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
@@ -49,9 +60,11 @@
         "Input-visible state change between before/after captures",
         "Evidence stored under artifacts/wp011r/visual/"
       ],
+      "required_path": "os_build/device_lab_interactive_guest/ (Interactive Development Guest) \u2014 the slim guest has no compositor and cannot ever produce this evidence",
       "code_refs": [
         "gunnchos_device_os/device_lab/virtualization/live_display.py",
-        "gunnchos_device_os/device_lab/virtualization/live_visual_proof.py"
+        "gunnchos_device_os/device_lab/virtualization/live_visual_proof.py",
+        "gunnchos_device_os/device_lab/interactive_image_builder.py"
       ]
     },
     {
@@ -67,9 +80,11 @@
         "Focus move between outputs",
         "Secondary disconnect + reconnect with layout restore"
       ],
+      "required_path": "os_build/device_lab_interactive_guest/ (Interactive Development Guest) \u2014 a real compositor (weston) with two outputs is required; guest_drm connector enum on the slim guest is insufficient by design",
       "code_refs": [
         "gunnchos_device_os/device_lab/virtualization/dsxl_outputs.py",
-        "gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py"
+        "gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py",
+        "gunnchos_device_os/device_lab/interactive_image_builder.py"
       ]
     },
     {
@@ -86,11 +101,13 @@
         "Guest OS input path (not hybrid alone)",
         "Evidence JSON under artifacts/wp011r/ring/"
       ],
+      "required_path": "os_build/device_lab_interactive_guest/ (Interactive Development Guest) \u2014 real in-guest LibreOffice/browser/game processes (via app_launch) are required; the slim guest cannot install or run them",
       "code_refs": [
         "gunnchos_device_os/device_lab/scenarios/ring_real_input.py",
         "gunnchos_device_os/device_lab/scenarios/ring_app_mutation.py",
         "gunnchos_device_os/device_lab/hw_backends/rings.py",
-        "gunnchos_device_os/device_lab/apps/surfaces.py"
+        "gunnchos_device_os/device_lab/apps/surfaces.py",
+        "gunnchos_device_os/device_lab/interactive_image_builder.py"
       ],
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     },

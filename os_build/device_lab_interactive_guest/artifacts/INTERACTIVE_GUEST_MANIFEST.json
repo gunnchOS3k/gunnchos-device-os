@@ -1,0 +1,138 @@
+{
+  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "alpine_mirror": "https://dl-cdn.alpinelinux.org/alpine/v3.21/releases",
+  "alpine_version": "3.21.3",
+  "arch_matrix": {
+    "aarch64": {
+      "accel": [
+        "hvf"
+      ],
+      "build_script": "os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh",
+      "host_examples": [
+        "macOS Apple Silicon (Mac HVF)"
+      ],
+      "implemented": true
+    },
+    "x86_64": {
+      "accel": [
+        "kvm",
+        "tcg"
+      ],
+      "build_script": null,
+      "host_examples": [
+        "Linux (Student / DS-XL physical profile parity)"
+      ],
+      "implemented": false,
+      "note": "Not yet implemented this wave \u2014 required for x86_64 hardware-profile parity"
+    }
+  },
+  "build_capability_at_manifest_time": {
+    "chroot_binfmt": {
+      "binfmt_detail": "binfmt_misc is Linux-only; not applicable on this host OS",
+      "chroot_bin": "/usr/sbin/chroot",
+      "usable": false
+    },
+    "docker": {
+      "bin": null,
+      "detail": "docker not found on PATH",
+      "usable": false
+    },
+    "host_system": "Darwin",
+    "method": "none",
+    "note": "Real apk package install with post-install scripts requires executing real aarch64 Linux binaries; docker (native linux/arm64 on Apple Silicon) or chroot+binfmt (Linux host) are the only honest real methods. Neither present -> method='none' (honest gap, not a fake pass).",
+    "ok": false
+  },
+  "claim_boundary": "gunnchOS Device Lab Interactive Development Guest: persistent-root-disk Alpine guest scaffolding intended to host a real Wayland compositor (weston) + apps for in-guest LIVE/DSXL/Ring proofs. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. SILICON_EXACT_EMULATION=false. Not physical boot; not production keys; no *_PASS or master-complete token is earned by this scaffolding alone.",
+  "guest_agent_commands_added": [
+    "framebuffer_capture",
+    "compositor_info",
+    "app_launch"
+  ],
+  "hybrid_base": true,
+  "note": "Manifest describes intended packages/arch/disk layout. Producing this manifest does not build, boot, or prove anything by itself.",
+  "pass_tokens_earned_by_this_manifest": [],
+  "physical_boot_claimed": false,
+  "production_keys_used": false,
+  "qemu_env_flag": "GUNNCH_LAB_INTERACTIVE_GUEST",
+  "qemu_env_flag_aliases": [
+    "GUNNCHDEVICE_LAB_INTERACTIVE_GUEST"
+  ],
+  "realm": "DEV_LAB",
+  "required_for": [
+    "LIVE_GUNNCHOS_VISUAL_PASS",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS"
+  ],
+  "required_packages": [
+    {
+      "name": "alpine-baselayout",
+      "optional": false,
+      "role": "base filesystem layout"
+    },
+    {
+      "name": "busybox",
+      "optional": false,
+      "role": "base userspace utilities"
+    },
+    {
+      "name": "seatd",
+      "optional": false,
+      "role": "seat management for weston (no logind in Alpine)"
+    },
+    {
+      "name": "weston",
+      "optional": false,
+      "role": "Wayland reference compositor"
+    },
+    {
+      "name": "mesa-dri-gallium",
+      "optional": false,
+      "role": "software / virtio-gpu GL rendering"
+    },
+    {
+      "name": "foot",
+      "optional": false,
+      "role": "Wayland terminal emulator"
+    },
+    {
+      "fallback": "firefox",
+      "name": "chromium",
+      "optional": false,
+      "role": "Wayland-capable browser (Ozone/Wayland)"
+    },
+    {
+      "name": "nano",
+      "optional": false,
+      "role": "terminal text editor"
+    },
+    {
+      "extra": "pipewire-alsa",
+      "fallback": "alsa-utils",
+      "name": "pipewire",
+      "optional": false,
+      "role": "audio server"
+    },
+    {
+      "name": "libinput",
+      "optional": false,
+      "role": "input device handling for weston"
+    },
+    {
+      "name": "godot",
+      "optional": true,
+      "role": "game engine runtime for FOUR_GAME real-runtime work"
+    }
+  ],
+  "root_disk": {
+    "arch": "aarch64",
+    "format": "qcow2",
+    "note": "Persistent virtio-blk disk (unlike the slim guest's ephemeral initramfs) \u2014 required because a compositor + browser + editor stack does not fit in guest RAM.",
+    "path": "os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+    "persistent": true
+  },
+  "schema": "gunnchos.device_lab.interactive_guest_image.manifest.v1",
+  "version": "0.1.0-lab-interactive-dev"
+}

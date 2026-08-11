@@ -19,6 +19,38 @@ from typing import Any
 from gunnchos_device_os.device_lab.guest_agent.client import GuestAgentClient
 from gunnchos_device_os.device_lab.image_builder import LabGuestImageBuilder
 
+# WP-011R: env flag(s) that select the Interactive Development Guest
+# (persistent qcow2 root disk + virtio-gpu/keyboard/tablet) instead of (in
+# addition to) the slim initramfs-only DEVICE_LAB_DEVELOPMENT_GUEST path.
+# See os_build/device_lab_interactive_guest/README.md.
+INTERACTIVE_GUEST_ENV_VARS = (
+    "GUNNCH_LAB_INTERACTIVE_GUEST",
+    "GUNNCHDEVICE_LAB_INTERACTIVE_GUEST",
+)
+
+
+def interactive_guest_enabled() -> bool:
+    return any(
+        (os.environ.get(name) or "").strip().lower() in {"1", "true", "yes"}
+        for name in INTERACTIVE_GUEST_ENV_VARS
+    )
+
+
+def interactive_guest_disk_path(repo_root: Path, *, arch: str = "aarch64") -> Path:
+    """Path QEMU recognizes as the Interactive Guest's persistent root disk.
+
+    Recognition only — does not create or populate the disk. Use
+    InteractiveGuestImageBuilder.create_disk_placeholder() (or the real
+    rootfs build script) to materialize it first.
+    """
+    return (
+        repo_root
+        / "os_build"
+        / "device_lab_interactive_guest"
+        / "artifacts"
+        / f"interactive-root-{arch}.qcow2"
+    )
+
 
 CLAIM = (
     "QEMU virt machine ≠ transistor-level SoC. SILICON_EXACT_EMULATION=false. "
@@ -196,6 +228,31 @@ class QemuGuestSession:
             # Re-resolve strictly for image arch.
             self.qemu_bin, self.arch = qemu_system_bin(prefer_arch=image_arch, repo_root=self.repo_root)
             self.accel = select_accel(self.arch)
+
+        # WP-011R: Interactive Development Guest recognition. Adds
+        # virtio-gpu + virtio-keyboard/tablet + a persistent root disk on
+        # top of the slim guest's kernel/initramfs boot. Fails early and
+        # honestly if the disk placeholder has not been created yet — never
+        # silently falls back to pretending the flag was not set.
+        interactive_guest = interactive_guest_enabled()
+        interactive_disk: Path | None = None
+        if interactive_guest:
+            interactive_disk = interactive_guest_disk_path(self.repo_root, arch=self.arch)
+            if not interactive_disk.exists():
+                return {
+                    "ok": False,
+                    "error": "interactive_guest_disk_missing",
+                    "path": str(interactive_disk),
+                    "note": (
+                        "GUNNCH_LAB_INTERACTIVE_GUEST=1 set but no root disk placeholder "
+                        "found. Run InteractiveGuestImageBuilder.create_disk_placeholder() "
+                        "or the aarch64 rootfs build script first. See "
+                        "os_build/device_lab_interactive_guest/README.md"
+                    ),
+                    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
+                    "SILICON_EXACT_EMULATION": False,
+                }
+
         disk = self._ensure_persist_disk()
         self.boot_log = self.work / "qemu_boot.log"
         self.pid_file = self.work / "qemu.pid"
@@ -240,10 +297,13 @@ class QemuGuestSession:
             str(initrd),
             "-append",
             (
-                "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1 "
-                "gunnchos.lab_persist=1 gunnchos.guest_agent=1"
-                if self.arch == "aarch64"
-                else "console=ttyS0 rdinit=/init panic=1 gunnchos.lab_persist=1 gunnchos.guest_agent=1"
+                (
+                    "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1 "
+                    "gunnchos.lab_persist=1 gunnchos.guest_agent=1"
+                    if self.arch == "aarch64"
+                    else "console=ttyS0 rdinit=/init panic=1 gunnchos.lab_persist=1 gunnchos.guest_agent=1"
+                )
+                + (" gunnchos.interactive_guest=1" if interactive_guest else "")
             ),
             "-drive",
             f"file={disk},if=virtio,format={'qcow2' if disk.suffix == '.qcow2' else 'raw'}",
@@ -269,14 +329,30 @@ class QemuGuestSession:
         if os.environ.get("GUNNCHDEVICE_LAB_USERNET", "").lower() in {"1", "true", "yes"}:
             cmd += ["-netdev", "user,id=n0,restrict=on", "-device", "virtio-net-device,netdev=n0"]
 
-        # Optional dual virtio-gpu scanouts for DS-XL guest dual attempt
+        # WP-011R Interactive Guest: attach the persistent root disk +
+        # real virtio keyboard/tablet input devices (in addition to the
+        # existing QEMU-monitor sendkey path used by the slim guest).
+        if interactive_guest and interactive_disk is not None:
+            cmd += [
+                "-drive",
+                f"file={interactive_disk},if=virtio,format=qcow2",
+                "-device",
+                "virtio-keyboard-pci",
+                "-device",
+                "virtio-tablet-pci",
+            ]
+
+        # Optional dual virtio-gpu scanouts for DS-XL guest dual attempt,
+        # or a single virtio-gpu scanout for the Interactive Guest compositor.
         guest_outputs: list[dict[str, Any]] = []
-        enable_gpu = dual_guest and os.environ.get("GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU", "1").lower() in {
+        enable_gpu = (dual_guest or interactive_guest) and os.environ.get(
+            "GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU", "1"
+        ).lower() in {
             "1",
             "true",
             "yes",
         }
-        if enable_gpu:
+        if enable_gpu and dual_guest:
             # QEMU ≥11: set outputs[].xres/yres so scanouts start Connected in guest DRM.
             # max_outputs alone leaves Virtual-2 disconnected under headless/single-head.
             # Output names must be ≤12 chars (QEMU virtio-gpu EDID name limit).
@@ -307,6 +383,22 @@ class QemuGuestSession:
                     "class": "host_device_intent",
                     "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
                 },
+            ]
+        elif enable_gpu and interactive_guest:
+            # Single scanout is enough for a non-dual Interactive Guest compositor.
+            cmd += ["-device", "virtio-gpu-pci,id=gpu0"]
+            guest_outputs = [
+                {
+                    "id": "guest-gpu0-out0",
+                    "role": "primary",
+                    "connected": False,
+                    "source": "qemu_virtio_gpu_device_attached",
+                    "class": "host_device_intent",
+                    "note": (
+                        "virtio-gpu attached for Interactive Guest compositor; "
+                        "awaiting real guest compositor_info proof"
+                    ),
+                }
             ]
 
         # Display transport: real VNC (+ websocket when supported) — not fake screenshots
@@ -589,6 +681,17 @@ class QemuGuestSession:
             "monitor_sock": str(self.monitor_sock) if self.monitor_sock else None,
             "virtio_serial_sock": str(self.virtio_serial_sock) if self.virtio_serial_sock else None,
             "guest_outputs": guest_outputs,
+            "interactive_guest": {
+                "enabled": interactive_guest,
+                "disk_path": str(interactive_disk) if interactive_disk is not None else None,
+                "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": interactive_guest,
+                "note": (
+                    "virtio-gpu/keyboard/tablet + persistent disk recognized by QEMU launcher; "
+                    "does not by itself prove a booted compositor — see guest_agent compositor_info"
+                    if interactive_guest
+                    else "Interactive Guest not requested (slim DEVICE_LAB_DEVELOPMENT_GUEST path)"
+                ),
+            },
             "SILICON_EXACT_EMULATION": False,
             "claim_boundary": CLAIM,
             "measurement_class_process": "HOST_OBSERVED",

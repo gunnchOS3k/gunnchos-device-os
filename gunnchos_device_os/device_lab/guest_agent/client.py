@@ -16,6 +16,29 @@ from typing import Any
 
 PROTOCOL = "gunnchos.guest_agent.v1"
 
+# Full command list, including WP-011R Interactive Guest additions
+# (framebuffer_capture, compositor_info, app_launch). See
+# gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md for the honest
+# per-command contract.
+SUPPORTED_COMMANDS = (
+    "ping",
+    "boot_status",
+    "process_list",
+    "process_start",
+    "process_stop",
+    "package_ops",
+    "display_info",
+    "input_inject",
+    "input_observe",
+    "logs",
+    "metrics",
+    "shutdown",
+    "reboot",
+    "framebuffer_capture",
+    "compositor_info",
+    "app_launch",
+)
+
 
 @dataclass
 class GuestAgentClient:
@@ -200,6 +223,46 @@ class GuestAgentClient:
             }
         if cmd in {"shutdown", "reboot"}:
             return {**base, "action": cmd, "accepted": True}
+        if cmd == "framebuffer_capture":
+            # Interactive Guest command. Mailbox stub has no real guest
+            # compositor to capture from — never fabricate a framebuffer.
+            return {
+                **base,
+                "ok": False,
+                "stub": True,
+                "reason": "host_mailbox_stub_no_real_framebuffer",
+                "note": (
+                    "framebuffer_capture requires a live Interactive Guest "
+                    "(DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST) over virtio-serial; "
+                    "mailbox stub cannot produce real pixels."
+                ),
+            }
+        if cmd == "compositor_info":
+            # Interactive Guest command. Honest: no compositor process exists
+            # in the mailbox stub, so report unavailable rather than inventing one.
+            return {
+                **base,
+                "ok": True,
+                "stub": True,
+                "compositor": None,
+                "available": False,
+                "outputs": 0,
+                "surfaces": 0,
+                "note": "No compositor running in host mailbox stub",
+            }
+        if cmd == "app_launch":
+            # Interactive Guest command. Never claim a fabricated PID.
+            return {
+                **base,
+                "ok": False,
+                "stub": True,
+                "started": False,
+                "app": payload.get("app"),
+                "note": (
+                    "app_launch requires an Interactive Guest with a real compositor "
+                    "and installed apps; not available via mailbox stub"
+                ),
+            }
         return {**base, "cmd": cmd, "note": "unknown_cmd_ack"}
 
     def ping(self) -> dict[str, Any]:

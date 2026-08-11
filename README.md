@@ -2,7 +2,7 @@
 
 **gunnchOS** — first-party OS for the gunnchOS3k device family (Student 14.5, Handheld Hybrid, DS-XL Coder) plus **gunnchDevice Lab** digital verification.
 
-> **Current state:** digitally integrated / partially validated. **Not** a finished shipping OS. **Not** production-ready. Device Lab guest = `DEVICE_LAB_DEVELOPMENT_GUEST` (Alpine + gunnchOS-services overlay), not the shipping image.
+> **Current state:** digitally integrated / partially validated. **Not** a finished shipping OS. **Not** production-ready. Device Lab guest = `DEVICE_LAB_DEVELOPMENT_GUEST` (Alpine + gunnchOS-services overlay), not the shipping image. A second `DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST` guest (`os_build/device_lab_interactive_guest/`) is scaffolded as the required path for in-guest LIVE/DS-XL/Ring proofs — also `SHIPPING_IMAGE=false`, not yet built or booted.
 
 Ecosystem portal: [gunnchos-research-portal](https://github.com/gunnchOS3k/gunnchos-research-portal) · Product charter: [field-kit charter](https://github.com/gunnchOS3k/gunnchos-7gc-ai-ran-field-kit/blob/main/program/charter/gunnchOS3k_PRODUCT_CHARTER.md)
 
@@ -37,6 +37,7 @@ Layer 4 (gunnchOS) + Device Lab evidence in the Product Charter. Consumed by por
 - VF4/VF5/VF6, HIL, battery/thermal/RF
 - Shipping OS image, certification, carrier acceptance
 - ECO-010 full soak and four-game *production* Lab runtimes (WP-011R open)
+- A booted Interactive Development Guest with a real compositor/apps (`os_build/device_lab_interactive_guest/` — manifest/script/QEMU-wiring scaffolded; rootfs package install not yet run anywhere; no boot attempted)
 
 ## Try / inspect in 5 minutes
 

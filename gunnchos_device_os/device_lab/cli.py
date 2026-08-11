@@ -197,6 +197,20 @@ def cmd_image(ns: argparse.Namespace) -> int:
         return _out(builder.inspect())
     if ns.image_cmd == "verify":
         return _out(builder.verify())
+    if ns.image_cmd == "interactive-manifest":
+        from gunnchos_device_os.device_lab.interactive_image_builder import InteractiveGuestImageBuilder
+
+        ib = InteractiveGuestImageBuilder(_repo_root())
+        return _out({"ok": True, "manifest_path": str(ib.write_manifest())})
+    if ns.image_cmd == "interactive-disk":
+        from gunnchos_device_os.device_lab.interactive_image_builder import InteractiveGuestImageBuilder
+
+        ib = InteractiveGuestImageBuilder(_repo_root())
+        return _out(ib.create_disk_placeholder(arch=ns.arch, size_gb=ns.disk_size_gb))
+    if ns.image_cmd == "interactive-capability":
+        from gunnchos_device_os.device_lab.interactive_image_builder import detect_build_capability
+
+        return _out(detect_build_capability())
     return _out({"ok": False, "error": f"unknown_image_cmd:{ns.image_cmd}"})
 
 
@@ -384,6 +398,12 @@ def build_parser() -> argparse.ArgumentParser:
     build_i.set_defaults(func=cmd_image)
     si_sub.add_parser("inspect").set_defaults(func=cmd_image)
     si_sub.add_parser("verify").set_defaults(func=cmd_image)
+    si_sub.add_parser("interactive-manifest").set_defaults(func=cmd_image)
+    interactive_disk_p = si_sub.add_parser("interactive-disk")
+    interactive_disk_p.add_argument("--arch", default="aarch64")
+    interactive_disk_p.add_argument("--disk-size-gb", type=int, default=8)
+    interactive_disk_p.set_defaults(func=cmd_image)
+    si_sub.add_parser("interactive-capability").set_defaults(func=cmd_image)
 
     se = sub.add_parser("ecosystem")
     se_sub = se.add_subparsers(dest="ecosystem_cmd", required=True)

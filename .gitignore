@@ -38,6 +38,14 @@ os_build/bootable_reference/artifacts/vmlinuz*
 # Device Lab guest build tree (symlinks / local rebuilds)
 os_build/device_lab_guest/
 
+# Interactive Development Guest caches / large binaries (rebuildable)
+os_build/device_lab_interactive_guest/cache/
+os_build/device_lab_interactive_guest/work/
+os_build/device_lab_interactive_guest/artifacts/*.qcow2
+!os_build/device_lab_interactive_guest/artifacts/.gitkeep
+!os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_GUEST_MANIFEST.json
+!os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json
+
 # Phase XI local service runtime
 user_journeys/services/runtime/
 

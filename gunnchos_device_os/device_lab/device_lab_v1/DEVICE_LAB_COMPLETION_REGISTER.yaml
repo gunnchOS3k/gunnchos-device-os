@@ -12,6 +12,11 @@ wave_eg_note: |
   until full soak (scripts/run_eco010_full_soak.py). Independent score script
   recomputes 12 categories from evidence — no hardcoded 10s.
   Master complete token remains false — ECO-010 full soak / physical VF4/5/6 open.
+  Interactive Development Guest scaffolding added (DL-GUEST-004,
+  DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true, SHIPPING_IMAGE=false) as the
+  required path forward for LIVE_GUNNCHOS_VISUAL_PASS /
+  DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS —
+  scaffolding alone earns no PASS token.
   depends_on: [#102, #101, #100, #98, #97]
 audited_at_utc: |
   2026-08-11T13:45:00Z
@@ -25,6 +30,8 @@ claim_firewall:
   GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE: false
   PRODUCTION_READY: false
   DEVICE_LAB_DEVELOPMENT_GUEST: true
+  DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST: true
+  SHIPPING_IMAGE: false
   FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS: false
   LIVE_GUNNCHOS_VISUAL_PASS: false
   DSXL_DUAL_COMPOSITOR_UX_PASS: false
@@ -487,6 +494,39 @@ requirements:
       missing virtio-ports → labeled host_mailbox_stub_fallback). process_start
       via virtio when label earned; else PARTIAL.
   -
+    id: DL-GUEST-004
+    description: Interactive Development Guest scaffolding (compositor + apps path)
+    owner_repo: gunnchos-device-os
+    source_files:
+      - os_build/device_lab_interactive_guest/README.md
+      - gunnchos_device_os/device_lab/interactive_image_builder.py
+      - os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh
+      - gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md
+      - gunnchos_device_os/device_lab/virtualization/qemu_guest.py
+    tests:
+      - tests/device_lab/test_device_lab_interactive_guest.py
+    evidence_output: |
+      DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true; SHIPPING_IMAGE=false scaffolding
+      added: manifest builder + qcow2 root-disk placeholder + real aarch64 rootfs build
+      script + guest_agent framebuffer_capture/compositor_info/app_launch commands +
+      QEMU virtio-gpu/keyboard/tablet + root-disk recognition under
+      GUNNCH_LAB_INTERACTIVE_GUEST=1. Real network fetch of Alpine minirootfs proven on
+      this Mac; real apk package install honestly NOT attempted (no docker, no Linux
+      chroot+binfmt on this host) — script exits non-zero with
+      INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json recording the honest failure reason.
+      This is the required path forward for LIVE_GUNNCHOS_VISUAL_PASS /
+      DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS — the slim
+      guest can never earn them (no compositor, no persistent rootfs, no installable
+      apps).
+    state: IMPLEMENTED
+    claim_boundary: SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: |
+      No real weston/chromium package install has been run anywhere yet (needs a
+      Docker Desktop host on Apple Silicon, or a Linux CI runner with
+      binfmt_misc+qemu-user-static). Rootfs not yet packed onto the qcow2 disk. No
+      guest has booted from the interactive root disk. LIVE/DSXL/Ring tokens remain
+      false until that full chain is earned.
+  -
     id: DL-AVD-001
     description: AVD-style device manager UX
     owner_repo: gunnchos-device-os
@@ -804,7 +844,7 @@ requirements:
 requirement_state_counts:
   DIGITALLY_VALIDATED: 22
   EXTERNAL_PENDING: 1
-  IMPLEMENTED: 5
+  IMPLEMENTED: 6
   INTEGRATED: 10
   PHYSICAL_PENDING: 3
   TARGET: 8

@@ -12,6 +12,8 @@
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "LIVE_GUNNCHOS_VISUAL_PASS": false,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
@@ -81,10 +83,29 @@
     "WP-011R remediations toward independent 10/10 digital acceptance \u2014 tokens stay false until earned",
     "http.server alone rejected as FOUR_GAME_REAL_RUNTIME proof",
     "Alpine/dev guest labeled DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not shipping image",
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST scaffolding added (os_build/device_lab_interactive_guest/) as the required path forward for LIVE_GUNNCHOS_VISUAL_PASS / DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS in-guest proofs \u2014 the slim initramfs-only guest has no compositor and cannot ever earn them",
+    "Interactive guest scaffolding alone earns nothing \u2014 no PASS token flipped by adding manifest/script/qcow2-placeholder scaffolding",
     "ECO-010 remains PARTIAL until full soak; master complete false",
     "RING_SPATIAL_ACCURACY=SIMULATED; VF4/5/6 PHYSICAL_PENDING",
     "No PRODUCTION_READY / fabrication / RFQ / certification claims"
   ],
+  "wave6_interactive_guest": {
+    "readme": "os_build/device_lab_interactive_guest/README.md",
+    "builder": "gunnchos_device_os/device_lab/interactive_image_builder.py",
+    "build_script_aarch64": "os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh",
+    "guest_agent_protocol_doc": "gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md",
+    "guest_agent_new_commands": ["framebuffer_capture", "compositor_info", "app_launch"],
+    "qemu_env_flag": "GUNNCH_LAB_INTERACTIVE_GUEST",
+    "required_for_tokens": [
+      "LIVE_GUNNCHOS_VISUAL_PASS",
+      "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS"
+    ],
+    "rootfs_build_attempted_on_mac": true,
+    "rootfs_build_result_on_mac": "HONEST_FAIL_NO_DOCKER_OR_CHROOT_BINFMT",
+    "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json",
+    "master_complete": false
+  },
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
 }
