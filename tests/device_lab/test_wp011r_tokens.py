@@ -13,13 +13,14 @@ def test_master_complete_false():
     assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] is False
     assert tokens["LIVE_GUNNCHOS_VISUAL_PASS"] is False
     assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
-    # Ring app-mutation may be earned on hybrid Lab surfaces — require bool honesty
-    assert isinstance(tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"], bool)
-    if tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] is True:
-        evid = ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
-        assert evid.is_file()
+    # Hybrid Lab surfaces alone must not earn the Cycle 3A Ring PASS token
+    assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] is False
+    evid = ROOT / "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
+    if evid.is_file():
         data = json.loads(evid.read_text())
-        assert data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is True
+        assert data.get("RING_TO_REAL_APP_STATE_MUTATION_PASS") is False
+        if data.get("RING_HYBRID_LAB_SURFACE_MUTATION_PASS") is True:
+            assert data.get("guest_os_input_present") is False
 
 
 def test_independent_score_exists():
