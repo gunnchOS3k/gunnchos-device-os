@@ -1,6 +1,10 @@
 schema: gunnchos.device_lab.completion_register.v1
 title: gunnchDevice Lab Full Ecosystem Digital Completion Register
+<<<<<<< HEAD
 status: IMPLEMENTATION_PARTIAL_WAVE_5
+=======
+status: IMPLEMENTATION_PARTIAL_WAVE_4
+>>>>>>> origin/main
 implementation_pass_claimed: false
 wave_eg_note: |
   Wave 5 stacked on #101 tip 187e39e. Ecosystem CLI start|status|stop|test|graph with
@@ -11,7 +15,11 @@ wave_eg_note: |
   Master complete token remains false — ECO-010 full soak / physical VF4/5/6 open.
   depends_on: [#101, #100, #98, #97]
 audited_at_utc: |
+<<<<<<< HEAD
   2026-08-11T12:45:00Z
+=======
+  2026-08-11T04:10:00Z
+>>>>>>> origin/main
 accepted_device_os_main: 26b384bc8e9c0e41285407172ad1dc176bbddbba
 accepted_hardware_main: 45c301a3a335d4bfd54970d80ec7ee717736ad07
 claim_firewall:
@@ -612,22 +620,36 @@ requirements:
       (deterministic 10.88.0.0/24 + DNS/identity/telemetry endpoints).
     state: DIGITALLY_VALIDATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+<<<<<<< HEAD
     remaining_blocker: Privileged netns optional; logical overlay default
+=======
+    remaining_blocker: LAB-FUTURE-003 simultaneous multi-device soak not executed
+>>>>>>> origin/main
   -
     id: DL-ECOSYSTEM-002
     description: ECO-001..ECO-010 simultaneous workflows
     owner_repo: gunnchos-device-os
     source_files:
+<<<<<<< HEAD
       - gunnchos_device_os/device_lab/ecosystem/scenarios.py
       - gunnchos_device_os/device_lab/ecosystem/continuity.py
     tests:
       - tests/device_lab/test_wp011_wave5_ecosystem.py
+=======
+      - gunnchos_device_os/device_lab/ecosystem/eco001_smoke.py
+    tests:
+      - tests/device_lab/test_wp011_wave4_dual_ring.py
+>>>>>>> origin/main
     evidence_output: |
       Wave 5: ECO-001 PASS (Student→DS-XL continuity checksum). ECO-002..009 digital
       runners present. ECO-010 PARTIAL (light simultaneous — not full soak).
     state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
+<<<<<<< HEAD
     remaining_blocker: ECO-010 full continuous soak not earned; master token false
+=======
+    remaining_blocker: Continuity/handoff/soak and ECO-002..010 absent
+>>>>>>> origin/main
   -
     id: DL-ECOSYSTEM-003
     description: Games + gunnchAI integrated in Lab ecosystem runs
@@ -785,9 +807,17 @@ requirements:
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
     remaining_blocker: No Lab guest-boot CI job
 requirement_state_counts:
+<<<<<<< HEAD
   DIGITALLY_VALIDATED: 22
+=======
+  DIGITALLY_VALIDATED: 19
+>>>>>>> origin/main
   EXTERNAL_PENDING: 1
   IMPLEMENTED: 5
   INTEGRATED: 10
   PHYSICAL_PENDING: 3
+<<<<<<< HEAD
   TARGET: 8
+=======
+  TARGET: 11
+>>>>>>> origin/main
