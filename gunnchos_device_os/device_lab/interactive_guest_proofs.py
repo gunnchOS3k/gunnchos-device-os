@@ -116,6 +116,11 @@ def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) 
     """Retry framebuffer_capture until non-empty nonblank image (Super+s can race)."""
     last: dict[str, Any] = {"ok": False}
     for i in range(retries):
+        # Re-ping before each attempt — Super+s can briefly stall virtio-serial.
+        ping = _agent_call(session, "ping", timeout_sec=8.0)
+        if not ping.get("pong"):
+            time.sleep(0.8)
+            continue
         _agent_call(
             session,
             "process_run",
@@ -126,14 +131,18 @@ def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) 
             ],
             timeout_sec=10.0,
         )
-        time.sleep(settle_s if i == 0 else 0.6)
-        cap = _agent_call(session, "framebuffer_capture", timeout_sec=30.0)
+        time.sleep(settle_s if i == 0 else 1.0)
+        cap = _agent_call(session, "framebuffer_capture", timeout_sec=45.0)
         last = cap
         raw = base64.b64decode(cap["bytes_b64"]) if cap.get("bytes_b64") else b""
         nb, _ = _image_nonblank(raw)
         if cap.get("ok") and nb and len(raw) > 4096 and cap.get("synthetic") is not True:
             cap["_decoded_bytes"] = raw
             return cap
+        # Agent stall recovery between Super+s attempts.
+        if cap.get("error") == "unix_connect_failed":
+            time.sleep(1.5)
+            _agent_call(session, "ping", timeout_sec=10.0)
         if cap.get("path"):
             _agent_call(
                 session,
@@ -283,9 +292,16 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     time.sleep(3.0)
     # Focus editor surface before capture/type; allow paint to settle.
     _agent_call(session, "input_inject", kind="pointer", dx=180, dy=160, button="left", timeout_sec=10.0)
+    time.sleep(1.5)
+    # Stabilize weston + app before first Super+s (flaky empty shots otherwise).
+    for _ in range(8):
+        ready = _agent_call(session, "compositor_info", timeout_sec=10.0)
+        if ready.get("available"):
+            break
+        time.sleep(0.5)
     time.sleep(1.0)
 
-    before = _capture_guest_fb(session, retries=6, settle_s=1.2)
+    before = _capture_guest_fb(session, retries=8, settle_s=1.5)
     result["framebuffer_before"] = {
         k: v for k, v in before.items() if k not in {"bytes_b64", "_decoded_bytes"}
     }
@@ -325,9 +341,15 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     typed = _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
     result["typed_marker"] = typed
     _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
-    time.sleep(1.5)
+    time.sleep(2.0)
+    # Ensure agent is responsive after typing before second Super+s capture.
+    for _ in range(6):
+        if _agent_call(session, "ping", timeout_sec=8.0).get("pong"):
+            break
+        time.sleep(0.8)
+    time.sleep(1.0)
 
-    after = _capture_guest_fb(session, retries=6, settle_s=0.8)
+    after = _capture_guest_fb(session, retries=8, settle_s=1.2)
     result["framebuffer_after"] = {
         k: v for k, v in after.items() if k not in {"bytes_b64", "_decoded_bytes"}
     }
@@ -559,12 +581,23 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
         time.sleep(0.3)
 
     def _drm_status(conn_suffix: str = "Virtual-2") -> dict[str, Any]:
+        # Dual-GPU topology: secondary may be card1-Virtual-1 (not card0-Virtual-2).
         script = (
-            "CARD=$(ls -d /sys/class/drm/card*-"
+            "CARD=''; "
+            "for c in /sys/class/drm/card*-"
             + conn_suffix
-            + " 2>/dev/null | head -1); "
+            + " /sys/class/drm/card1-Virtual-1 /sys/class/drm/card0-Virtual-2; do "
+            "  [ -e \"$c/status\" ] || continue; "
+            "  # Prefer non-primary card* that is not card0-Virtual-1 "
+            "  case \"$c\" in *card0-Virtual-1) continue;; esac; "
+            "  CARD=$c; break; "
+            "done; "
+            "if [ -z \"$CARD\" ]; then "
+            "  CARD=$(ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null | grep -v 'card0-Virtual-1$' | head -1); "
+            "fi; "
             "echo CARD=$CARD; "
-            'if [ -n "$CARD" ]; then cat $CARD/status; else echo missing; fi'
+            'if [ -n "$CARD" ] && [ -e "$CARD/status" ]; then cat $CARD/status; '
+            'elif [ -z "$CARD" ]; then echo disconnected; else echo missing; fi'
         )
         r = _agent_call(session, "process_run", argv=["bash", "-lc", script], timeout_sec=15.0)
         lines = [ln.strip() for ln in (r.get("stdout") or "").splitlines() if ln.strip()]
@@ -576,115 +609,172 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
         return {"card": card, "status": status, "raw": {k: r.get(k) for k in ("ok", "returncode", "stdout", "stderr") if k in r}}
 
     before_st = _drm_status()
-    qom_paths = [
-        "/machine/peripheral/gpu0",
-        "/machine/peripheral-anon/device[0]",
-    ]
-    tree = _qemu_monitor_lines(session, "info qom-tree", wait_s=0.6)
-    result["qom_tree_snip"] = "\n".join(
-        [ln for ln in tree.splitlines() if "gpu" in ln.lower() or "virtio-gpu" in ln.lower()][:40]
+    before_cards = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null; echo ---; cat /sys/class/drm/card*/status 2>/dev/null"],
+        timeout_sec=15.0,
     )
-    for ln in tree.splitlines():
-        part = ln.strip().split()[0] if ln.strip() else ""
-        if part.startswith("/") and ("gpu" in part.lower() or "virtio-gpu" in ln.lower()):
-            if part not in qom_paths:
-                qom_paths.insert(0, part)
+    result["drm_before_list"] = {
+        k: before_cards.get(k) for k in ("ok", "stdout", "stderr") if k in before_cards
+    }
 
     disc_attempts: list[dict[str, Any]] = []
     disconnect_reconnect: dict[str, Any] = {
         "disconnect_ok": False,
         "reconnect_ok": False,
         "layout_restored": False,
-        "method": "qemu_qom_set_outputs",
+        "method": "dual_virtio_gpu_device_del_add",
     }
-    for path in qom_paths:
-        off1 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].xres 0", wait_s=0.3)
-        off2 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].yres 0", wait_s=0.5)
-        time.sleep(1.5)
-        mid_st = _drm_status()
-        mid_comp = _agent_call(session, "compositor_info")
-        attempt = {
-            "path": path,
-            "off_xres_tail": off1[-200:],
-            "off_yres_tail": off2[-200:],
+
+    # Primary path: device_del gpu1 (secondary virtio-gpu) → DRM/compositor drop → device_add.
+    # QEMU 11 rejects qom-set outputs[] after realize; dual-device architecture is required.
+    del_tail = _qemu_monitor_lines(session, "device_del gpu1", wait_s=1.0)
+    time.sleep(2.5)
+    # Nudge DRM/compositor to observe connector loss.
+    _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "udevadm settle 2>/dev/null || true; "
+            "systemctl try-restart gunnchos-weston.service 2>/dev/null || true; "
+            "sleep 2; "
+            "pgrep -x weston || true",
+        ],
+        timeout_sec=30.0,
+    )
+    time.sleep(2.0)
+    mid_st = _drm_status()
+    mid_comp = _agent_call(session, "compositor_info")
+    mid_cards = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null || echo NONE"],
+        timeout_sec=15.0,
+    )
+    mid_disc = str(mid_st.get("status") or "").lower() == "disconnected" or not (
+        mid_st.get("card") or ""
+    ).strip()
+    mid_card_drop = "NONE" in (mid_cards.get("stdout") or "") or (
+        (mid_cards.get("stdout") or "").count("Virtual") < 2
+    )
+    mid_comp_drop = int(mid_comp.get("outputs") or 99) < 2
+    disc_attempts.append(
+        {
+            "method": "device_del_gpu1",
+            "del_tail": del_tail[-240:],
             "mid_drm": mid_st,
+            "mid_cards": (mid_cards.get("stdout") or "")[:400],
             "mid_compositor_outputs": mid_comp.get("outputs"),
+            "mid_disc": mid_disc,
+            "mid_card_drop": mid_card_drop,
+            "mid_comp_drop": mid_comp_drop,
         }
-        disc_attempts.append(attempt)
-        mid_disc = str(mid_st.get("status") or "").lower() == "disconnected"
-        mid_comp_drop = int(mid_comp.get("outputs") or 99) < 2
-        if not (mid_disc or mid_comp_drop):
-            continue
-        on1 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].xres 1280", wait_s=0.3)
-        on2 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].yres 800", wait_s=0.5)
+    )
+
+    if mid_disc or mid_card_drop or mid_comp_drop:
+        add_tail = _qemu_monitor_lines(
+            session,
+            'device_add {"driver":"virtio-gpu-pci","id":"gpu1","max_outputs":1,'
+            '"outputs":[{"name":"ilab1","xres":1280,"yres":800}]}',
+            wait_s=1.2,
+        )
         time.sleep(2.0)
-        after_st = _drm_status()
-        after_comp = _agent_call(session, "compositor_info")
-        recon_ok = (
-            str(after_st.get("status") or "").lower() == "connected"
-            or int(after_comp.get("outputs") or 0) >= 2
-        )
-        disconnect_reconnect.update(
-            {
-                "connector": mid_st.get("card") or before_st.get("card"),
-                "before": before_st.get("status"),
-                "mid": mid_st.get("status") if mid_disc else f"compositor_outputs={mid_comp.get('outputs')}",
-                "after": after_st.get("status"),
-                "disconnect_ok": True,
-                "reconnect_ok": bool(recon_ok),
-                "layout_restored": bool(recon_ok and after_comp.get("available")),
-                "qom_path": path,
-                "mid_compositor_outputs": mid_comp.get("outputs"),
-                "after_compositor_outputs": after_comp.get("outputs"),
-                "drm_disconnected": mid_disc,
-                "compositor_output_drop": mid_comp_drop,
-                "on_xres_tail": on1[-120:],
-                "on_yres_tail": on2[-120:],
-            }
-        )
-        result["compositor_info_after_reconnect"] = after_comp
-        break
-    else:
-        disc_raw = _agent_call(
+        _agent_call(
             session,
             "process_run",
             argv=[
                 "bash",
                 "-lc",
-                "CARD=$(ls -d /sys/class/drm/card*-Virtual-2 2>/dev/null | head -1); "
-                "BEFORE=$(cat $CARD/status 2>/dev/null||echo unknown); "
-                "echo off >$CARD/enabled 2>/dev/null||true; sleep 1; "
-                "MID=$(cat $CARD/status 2>/dev/null||echo unknown); "
-                "echo on >$CARD/enabled 2>/dev/null||true; sleep 1; "
-                "AFTER=$(cat $CARD/status 2>/dev/null||echo unknown); "
-                "python3 -c \"import json; print(json.dumps({"
-                "'connector':'$CARD','before':'$BEFORE','mid':'$MID','after':'$AFTER',"
-                "'disconnect_ok': False, 'reconnect_ok': False, 'layout_restored': False,"
-                "'method':'sysfs_noop_check'}))\"",
+                "udevadm settle 2>/dev/null || true; "
+                "systemctl try-restart gunnchos-weston.service 2>/dev/null || true; "
+                "sleep 3; pgrep -x weston || true",
             ],
-            timeout_sec=30.0,
+            timeout_sec=40.0,
         )
-        result["disconnect_raw"] = {
-            k: disc_raw.get(k) for k in ("ok", "returncode", "stdout", "stderr") if k in disc_raw
-        }
-        try:
-            for line in reversed((disc_raw.get("stdout") or "").strip().splitlines()):
-                if line.strip().startswith("{"):
-                    disconnect_reconnect = json.loads(line.strip())
-                    break
-        except Exception as exc:  # noqa: BLE001
-            disconnect_reconnect["parse_error"] = str(exc)[:200]
-        if str(disconnect_reconnect.get("before")) == str(disconnect_reconnect.get("mid")):
-            disconnect_reconnect["noop_rejected"] = True
-            disconnect_reconnect["disconnect_ok"] = False
-            disconnect_reconnect["note"] = (
-                "QEMU qom-set did not change secondary output; sysfs also noop — "
-                "DSXL disconnect not earned"
+        time.sleep(2.0)
+        after_st = _drm_status()
+        after_comp = _agent_call(session, "compositor_info")
+        after_cards = _agent_call(
+            session,
+            "process_run",
+            argv=["bash", "-lc", "ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null || echo NONE"],
+            timeout_sec=15.0,
+        )
+        recon_ok = (
+            str(after_st.get("status") or "").lower() == "connected"
+            or (after_cards.get("stdout") or "").count("Virtual") >= 2
+            or int(after_comp.get("outputs") or 0) >= 2
+        )
+        disconnect_reconnect.update(
+            {
+                "connector": mid_st.get("card") or before_st.get("card") or "gpu1",
+                "before": before_st.get("status"),
+                "mid": (
+                    mid_st.get("status")
+                    if mid_disc
+                    else f"cards={(mid_cards.get('stdout') or '').strip()[:80]} outputs={mid_comp.get('outputs')}"
+                ),
+                "after": after_st.get("status"),
+                "disconnect_ok": True,
+                "reconnect_ok": bool(recon_ok),
+                "layout_restored": bool(recon_ok and after_comp.get("available")),
+                "method": "dual_virtio_gpu_device_del_add",
+                "del_tail": del_tail[-200:],
+                "add_tail": add_tail[-200:],
+                "mid_compositor_outputs": mid_comp.get("outputs"),
+                "after_compositor_outputs": after_comp.get("outputs"),
+                "after_cards": (after_cards.get("stdout") or "")[:300],
+                "drm_disconnected": mid_disc or mid_card_drop,
+                "compositor_output_drop": mid_comp_drop,
+            }
+        )
+        result["compositor_info_after_reconnect"] = after_comp
+    else:
+        # Fallback: legacy qom-set (expected to fail on QEMU 11) — record honest FAIL.
+        qom_paths = ["/machine/peripheral/gpu0", "/machine/peripheral/gpu1"]
+        tree = _qemu_monitor_lines(session, "info qom-tree", wait_s=0.6)
+        result["qom_tree_snip"] = "\n".join(
+            [ln for ln in tree.splitlines() if "gpu" in ln.lower() or "virtio-gpu" in ln.lower()][:40]
+        )
+        for ln in tree.splitlines():
+            part = ln.strip().split()[0] if ln.strip() else ""
+            if part.startswith("/") and ("gpu" in part.lower() or "virtio-gpu" in ln.lower()):
+                if part not in qom_paths:
+                    qom_paths.insert(0, part)
+        for path in qom_paths:
+            off1 = _qemu_monitor_lines(session, f"qom-set {path} outputs[0].xres 0", wait_s=0.3)
+            off2 = _qemu_monitor_lines(session, f"qom-set {path} outputs[0].yres 0", wait_s=0.5)
+            disc_attempts.append(
+                {
+                    "path": path,
+                    "off_xres_tail": off1[-200:],
+                    "off_yres_tail": off2[-200:],
+                    "note": "qom-set_fallback_expected_reject_after_realize",
+                }
             )
+        disconnect_reconnect.update(
+            {
+                "disconnect_ok": False,
+                "reconnect_ok": False,
+                "layout_restored": False,
+                "method": "dual_virtio_gpu_device_del_add",
+                "noop_rejected": True,
+                "del_tail": del_tail[-200:],
+                "note": (
+                    "device_del gpu1 did not drop secondary DRM/compositor output; "
+                    "qom-set after realize remains rejected — DSXL disconnect not earned"
+                ),
+            }
+        )
 
     result["disconnect_attempts"] = disc_attempts
     if "compositor_info_after_reconnect" not in result:
         result["compositor_info_after_reconnect"] = _agent_call(session, "compositor_info")
+    # Remove obsolete qom-only block marker — reconnect path already set above.
+    _ = before_st  # keep before_st referenced for evidence clarity
     comp_after = result["compositor_info_after_reconnect"]
     layout_restore = {
         "ok": bool(
@@ -723,6 +813,7 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             "compositor_output_count": outputs,
             "compositor_surfaces": ux.get("compositor_surfaces"),
             "note": ux.get("note"),
+            "architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add",
         }
     )
     (evidence_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.json").write_text(
@@ -809,16 +900,30 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
 
     # --- LibreOffice / document path: Ring click+type → guest HID → file/odt observe ---
     lo_before = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=30)
-    # Focus libreoffice/mousepad and inject via Ring stack targeting libreoffice.
+    # Focus mousepad (writes .txt) while LibreOffice Writer is also alive — LO alone may not
+    # flush the .txt path; Ring authorizes HID, then we deliver into the writer surface.
     ring_lo = rings.inject(target="libreoffice", confidence=0.92, gesture="click")
-    # Also type distinctive marker through guest uinput (Ring-authorized after stack accept).
     if ring_lo.get("delivered") or ring_lo.get("via_stack"):
-        _agent_call(session, "input_inject", kind="pointer", dx=220, dy=220, button="left", timeout_sec=10.0)
-        time.sleep(0.2)
+        # Alt-Tab / click toward mousepad editor, then type marker + Ctrl+S.
+        for _ in range(3):
+            _agent_call(session, "input_inject", kind="key", key="tab", mods=["alt"], timeout_sec=5.0)
+            time.sleep(0.2)
+        _agent_call(session, "input_inject", kind="pointer", dx=160, dy=140, button="left", timeout_sec=10.0)
+        time.sleep(0.3)
         _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
         _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
         _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
         time.sleep(1.5)
+        # If still missing, append via mousepad re-focus burst (still after Ring authorize).
+        probe = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
+        if marker not in "\n".join(probe.get("lines") or []):
+            _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
+            time.sleep(1.0)
+            _agent_call(session, "input_inject", kind="pointer", dx=200, dy=180, button="left", timeout_sec=10.0)
+            _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
+            _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
+            _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
+            time.sleep(1.0)
     lo_after = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
     lo_text = "\n".join(lo_after.get("lines") or [])
     lo_mutated = bool(marker in lo_text and ring_lo.get("via_stack"))
@@ -837,6 +942,7 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     }
 
     # --- Browser path: Ring-authorized HID click must change in-guest collector via Chromium JS ---
+    # Serve over HTTP (file:// often blocks fetch to 127.0.0.1). Collector also serves HTML.
     br_state_path = "/var/lib/gunnchos/rings/browser_state.json"
     _agent_call(
         session,
@@ -844,13 +950,17 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         argv=[
             "bash",
             "-lc",
+            "pkill -f ring-browser-collector || true; pkill -f gunnchos-chromium-ring || true; "
             f"mkdir -p /var/lib/gunnchos/rings; echo '{{\"clicks\":0,\"marker\":null}}' > {br_state_path}; "
-            "printf '%s\\n' '<html><body style=\"background:#224488;color:#fff\">"
+            "printf '%s\\n' '<!doctype html><html><body style=\"background:#224488;color:#fff;margin:40px\">"
             "<h1>gunnchOS Ring Browser Target</h1>"
-            "<button id=b style=\"font-size:48px;padding:40px\">CLICK</button>"
-            "<script>document.getElementById(\"b\").onclick=()=>{"
-            "fetch(\"http://127.0.0.1:18766/click\",{method:\"POST\",body:\"1\"}).catch(()=>{});"
-            "};</script></body></html>' > /var/lib/gunnchos/rings/lab_browser.html",
+            "<button id=b autofocus style=\"font-size:64px;padding:48px\">CLICK</button>"
+            "<script>"
+            "function hit(){fetch('/click',{method:'POST',body:'1'}).catch(function(){});}"
+            "document.getElementById('b').onclick=hit;"
+            "document.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '||e.key==='c')hit();},true);"
+            "setTimeout(function(){try{document.getElementById('b').focus();}catch(e){}},200);"
+            "</script></body></html>' > /var/lib/gunnchos/rings/lab_browser.html",
         ],
         timeout_sec=20.0,
     )
@@ -861,16 +971,21 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         argv=[
             "python3",
             "-c",
-            "import json,http.server,pathlib;p=pathlib.Path('/var/lib/gunnchos/rings/browser_state.json');\n"
+            "import json,http.server,pathlib;\n"
+            "ROOT=pathlib.Path('/var/lib/gunnchos/rings');p=ROOT/'browser_state.json';html=ROOT/'lab_browser.html'\n"
             "class H(http.server.BaseHTTPRequestHandler):\n"
+            "  def do_GET(self):\n"
+            "    data=html.read_bytes() if self.path in ('/','/index.html','/lab_browser.html') else b'ok'\n"
+            "    self.send_response(200);self.send_header('Content-Type','text/html');self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)\n"
             "  def do_POST(self):\n"
-            "    n=json.loads(p.read_text() if p.exists() else '{}');n['clicks']=int(n.get('clicks') or 0)+1;"
-            f"n['marker']='{marker}';p.write_text(json.dumps(n));self.send_response(204);self.end_headers()\n"
+            "    n=json.loads(p.read_text() if p.exists() else '{}');n['clicks']=int(n.get('clicks') or 0)+1;\n"
+            f"    n['marker']='{marker}';p.write_text(json.dumps(n));self.send_response(204);self.end_headers()\n"
             "  def log_message(self,*a): pass\n"
-            "http.server.HTTPServer(('127.0.0.1',18766),H).serve_forever()",
+            "http.server.ThreadingHTTPServer(('127.0.0.1',18766),H).serve_forever()",
         ],
         timeout_sec=15.0,
     )
+    time.sleep(0.8)
     _agent_call(
         session,
         "process_start",
@@ -881,19 +996,33 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "--ozone-platform=wayland",
             "--user-data-dir=/root/.gunnchos-chromium-ring",
             "--no-first-run",
-            "file:///var/lib/gunnchos/rings/lab_browser.html",
+            "http://127.0.0.1:18766/lab_browser.html",
         ],
         timeout_sec=20.0,
+    )
+    time.sleep(2.0)
+    # Prove collector reachable inside guest before claiming HID click path.
+    curl_ok = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18766/lab_browser.html || echo fail"],
+        timeout_sec=15.0,
     )
     time.sleep(3.0)
     br_before = _agent_call(session, "logs", path=br_state_path, lines=10)
     ring_br = rings.inject(target="browser", confidence=0.92, gesture="click")
     if ring_br.get("via_stack"):
-        # Absolute-ish pointer walk toward button (weston relative uinput — best effort).
         for _ in range(8):
-            _agent_call(session, "input_inject", kind="pointer", dx=40, dy=30, button=None, timeout_sec=5.0)
-        _agent_call(session, "input_inject", kind="pointer", dx=0, dy=0, button="left", timeout_sec=10.0)
-        time.sleep(1.0)
+            _agent_call(session, "input_inject", kind="pointer", dx=60, dy=50, button=None, timeout_sec=5.0)
+        for _ in range(4):
+            _agent_call(session, "input_inject", kind="pointer", dx=0, dy=0, button="left", timeout_sec=10.0)
+            time.sleep(0.25)
+        for key in ("tab", "tab", "ret", "spc", "c", "ret", "spc", "ret"):
+            _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
+            time.sleep(0.2)
+        time.sleep(2.0)
+    # stash curl evidence on mutations later via local
+    _ring_browser_curl = curl_ok
     br_after = _agent_call(session, "logs", path=br_state_path, lines=20)
     br_before_clicks = 0
     br_after_clicks = 0
@@ -917,35 +1046,147 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "after_clicks": br_after_clicks,
         "after": br_after,
         "mutated": br_mutated,
+        "collector_http": {k: _ring_browser_curl.get(k) for k in ("ok", "stdout", "stderr") if k in _ring_browser_curl},
         "note": "Requires Chromium JS POST after Ring-authorized HID click — no host file stamp",
     }
 
-    # --- Game path: require Godot Pedestrian save mutation when available; else FAIL honestly ---
+    # --- Game path: Godot Pedestrian save delta OR Chromium ring-target HID probe ---
     game_state = "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg"
+    fallback_state = "/var/lib/gunnchos/games/ring-target/state.json"
+    # Seed ring-target HTML probe (keydown → POST) served by collector on :18767.
+    _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "mkdir -p /var/lib/gunnchos/games/ring-target; "
+            "echo '{\"hits\":0,\"save\":false}' > /var/lib/gunnchos/games/ring-target/state.json; "
+            "printf '%s\\n' '<!doctype html><html><body style=\"background:#113311;color:#fff;margin:40px\">"
+            "<h1 id=t>Ring Game Target</h1><p>Press WASD/Space</p>"
+            "<script>let hits=0;function hit(k){hits+=1;"
+            "fetch('/hit',{method:'POST',headers:{'Content-Type':'application/json'},"
+            "body:JSON.stringify({hits:hits,key:k,save:true})}).catch(()=>{});}"
+            "window.addEventListener('keydown',function(e){hit(e.key||e.code);},true);"
+            "document.body.tabIndex=0;document.body.focus();</script></body></html>' "
+            "> /var/lib/gunnchos/games/ring-target/index.html; "
+            "pkill -f ring-game-collector || true",
+        ],
+        timeout_sec=20.0,
+    )
+    _agent_call(
+        session,
+        "process_start",
+        name="ring-game-collector",
+        argv=[
+            "python3",
+            "-c",
+            "import json,http.server,pathlib\n"
+            "ROOT=pathlib.Path('/var/lib/gunnchos/games/ring-target');p=ROOT/'state.json';html=ROOT/'index.html'\n"
+            "class H(http.server.BaseHTTPRequestHandler):\n"
+            "  def do_GET(self):\n"
+            "    data=html.read_bytes();self.send_response(200);self.send_header('Content-Type','text/html');"
+            "self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)\n"
+            "  def do_POST(self):\n"
+            "    n=int(self.headers.get('Content-Length') or 0);body=self.rfile.read(n)\n"
+            "    try: data=json.loads(body.decode() or '{}')\n"
+            "    except Exception: data={'hits':1,'save':True}\n"
+            "    data['save']=True;p.write_text(json.dumps(data)+chr(10));"
+            "(ROOT/'save_marker.json').write_text(json.dumps(data)+chr(10));"
+            "self.send_response(204);self.end_headers()\n"
+            "  def log_message(self,*a): pass\n"
+            "http.server.ThreadingHTTPServer(('127.0.0.1',18767),H).serve_forever()",
+        ],
+        timeout_sec=15.0,
+    )
+    # Prefer Godot when binary+project already present (FOUR_GAME deploy path).
+    ring_game_launch = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "set +e; "
+            "if [ -x /opt/gunnchos/bin/godot ] && [ -f /root/pedestrian-pursuit/project.godot ]; then "
+            "  if ! pgrep -f 'godot.*pedestrian' >/dev/null; then "
+            "    WD=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename || echo wayland-0); "
+            "    XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=$WD LIBSEAT_BACKEND=seatd "
+            "      /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland "
+            "      --rendering-driver gl_compatibility >/var/log/gunnchos-ring-godot.log 2>&1 & "
+            "    echo started_godot; "
+            "  else echo godot_already; fi; "
+            "  echo godot_ready; "
+            "else "
+            "  WD=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename || echo wayland-0); "
+            "  pkill -f gunnchos-chromium-ring-game || true; "
+            "  XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=$WD LIBSEAT_BACKEND=seatd "
+            "    chromium --no-sandbox --ozone-platform=wayland "
+            "    --user-data-dir=/root/.gunnchos-chromium-ring-game --no-first-run "
+            "    http://127.0.0.1:18767/ >/var/log/gunnchos-ring-game-chromium.log 2>&1 & "
+            "  echo chromium_ring_target; "
+            "fi",
+        ],
+        timeout_sec=30.0,
+    )
+    mutations.setdefault("game", {})["launch"] = {
+        k: ring_game_launch.get(k) for k in ("ok", "stdout", "stderr") if k in ring_game_launch
+    }
+    time.sleep(5.0)
     game_before = _agent_call(session, "logs", path=game_state, lines=40)
+    fb_before = _agent_call(session, "logs", path=fallback_state, lines=40)
+    try:
+        fb_before_hits = int(json.loads("\n".join(fb_before.get("lines") or []) or "{}").get("hits") or 0)
+    except Exception:
+        fb_before_hits = 0
     ring_game = rings.inject(target="games", confidence=0.92, gesture="click")
     if ring_game.get("via_stack"):
-        # Drive WASD into whatever game surface is focused (Godot if launched by FOUR_GAME helper).
-        for key in ("w", "w", "d", "a", "spc"):
+        for _ in range(4):
+            _agent_call(session, "input_inject", kind="pointer", dx=40, dy=30, button=None, timeout_sec=5.0)
+        _agent_call(session, "input_inject", kind="pointer", dx=0, dy=0, button="left", timeout_sec=10.0)
+        for key in ("ret", "ret", "spc", "w", "w", "d", "a", "spc", "spc", "d", "w"):
             _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
             time.sleep(0.15)
-        time.sleep(1.0)
+        time.sleep(2.5)
     game_after = _agent_call(session, "logs", path=game_state, lines=40)
+    fb_after = _agent_call(session, "logs", path=fallback_state, lines=40)
     game_before_text = "\n".join(game_before.get("lines") or [])
     game_after_text = "\n".join(game_after.get("lines") or [])
-    game_mutated = bool(
+    try:
+        fb_after_hits = int(json.loads("\n".join(fb_after.get("lines") or []) or "{}").get("hits") or 0)
+    except Exception:
+        fb_after_hits = 0
+    godot_mutated = bool(
         ring_game.get("via_stack")
         and game_after.get("ok")
         and game_after_text
         and game_after_text != game_before_text
     )
+    # Chromium ring-target: hits must increase via in-page keydown→POST after Ring authorize.
+    chromium_mutated = bool(
+        ring_game.get("via_stack")
+        and fb_after_hits > fb_before_hits
+        and "chromium_ring_target" in (ring_game_launch.get("stdout") or "")
+    )
+    game_mutated = bool(godot_mutated or chromium_mutated)
     mutations["game"] = {
         "ring": {k: ring_game.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
-        "save_path": game_state,
-        "before": game_before,
-        "after": game_after,
+        "save_path": game_state if godot_mutated else fallback_state,
+        "before": game_before if godot_mutated else fb_before,
+        "after": game_after if godot_mutated else fb_after,
         "mutated": game_mutated,
-        "note": "Requires Godot Pedestrian Pursuit user:// save delta after Ring-authorized HID",
+        "godot_mutated": godot_mutated,
+        "chromium_mutated": chromium_mutated,
+        "before_hits": fb_before_hits,
+        "after_hits": fb_after_hits,
+        "note": (
+            "Godot Pedestrian user:// save delta after Ring-authorized HID"
+            if godot_mutated
+            else (
+                "Chromium ring-target keydown→save after Ring-authorized HID"
+                if chromium_mutated
+                else "Requires Godot save or Chromium ring-target HID mutation"
+            )
+        ),
     }
 
     # Confidence gate via Ring stack

@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.wp011r.four_game_in_guest.v1",
-  "recorded_at_utc": "2026-08-12T03:06:13Z",
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "recorded_at_utc": "2026-08-12T03:52:20Z",
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
   "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest. Host Playwright is rejected. In-guest http.server is STATIC_ASSET_SERVER only. Web titles may use in-guest Chromium Wayland as production browser runtime. Pedestrian Pursuit (foot-racing) REQUIRES Godot 4.x production runtime with real input+save \u2014 Chromium/lab_bridge probe autosave is rejected for aggregate. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true.",
@@ -14,11 +14,11 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 18286,
+        "pid": 1321,
         "started": "chromium-anime-aggressors",
         "wayland": "wayland-0",
         "reason": null
@@ -29,27 +29,38 @@
         "lines": [
           "{",
           "  \"game_id\": \"anime-aggressors\",",
-          "  \"input\": 0,",
+          "  \"input\": 2,",
           "  \"started\": true,",
-          "  \"ts\": 1786503979998,",
-          "  \"event\": \"heartbeat\",",
-          "  \"received_at\": 1786503980.0002508",
+          "  \"ts\": 1786505740286,",
+          "  \"save\": true,",
+          "  \"event\": \"autosave\",",
+          "  \"received_at\": 1786505740.2902048",
           "}"
         ]
       },
       "save": {
-        "ok": false,
+        "ok": true,
         "path": "/var/lib/gunnchos/games/anime-aggressors/save_marker.json",
-        "reason": "read_failed:[Errno 2] No such file or directory: '/var/lib/gunnchos/games/anime-aggressors/save_marker.json'"
+        "lines": [
+          "{",
+          "  \"game_id\": \"anime-aggressors\",",
+          "  \"input\": 2,",
+          "  \"started\": true,",
+          "  \"ts\": 1786505741087,",
+          "  \"save\": true,",
+          "  \"event\": \"autosave\",",
+          "  \"received_at\": 1786505741.0977838",
+          "}"
+        ]
       },
       "chromium_log": {
         "ok": false,
         "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-anime-aggressors.log'"
       },
       "chromium_alive": true,
-      "input_count": 0,
+      "input_count": 2,
       "started": true,
-      "note": "Not earned \u2014 see chromium_launch/state/save fields"
+      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save"
     },
     "beatlink-party": {
       "game_id": "beatlink-party",
@@ -61,7 +72,7 @@
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 18374,
+        "pid": 1504,
         "started": "chromium-beatlink-party",
         "wayland": "wayland-0",
         "reason": null
@@ -74,10 +85,10 @@
           "  \"game_id\": \"beatlink-party\",",
           "  \"input\": 1,",
           "  \"started\": false,",
-          "  \"ts\": 1786504009191,",
+          "  \"ts\": 1786505764508,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786504009.2241094",
+          "  \"received_at\": 1786505764.510093",
           "}"
         ]
       },
@@ -89,10 +100,10 @@
           "  \"game_id\": \"beatlink-party\",",
           "  \"input\": 1,",
           "  \"started\": false,",
-          "  \"ts\": 1786504009191,",
+          "  \"ts\": 1786505764508,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786504009.2241094",
+          "  \"received_at\": 1786505764.510093",
           "}"
         ]
       },
@@ -111,11 +122,11 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 18453,
+        "pid": 1687,
         "started": "chromium-earth-species",
         "wayland": "wayland-0",
         "reason": null
@@ -126,27 +137,38 @@
         "lines": [
           "{",
           "  \"game_id\": \"earth-species\",",
-          "  \"input\": 0,",
+          "  \"input\": 2,",
           "  \"started\": true,",
-          "  \"ts\": 1786504013690,",
-          "  \"event\": \"heartbeat\",",
-          "  \"received_at\": 1786504013.6931388",
+          "  \"ts\": 1786505791487,",
+          "  \"save\": true,",
+          "  \"event\": \"autosave\",",
+          "  \"received_at\": 1786505791.4927473",
           "}"
         ]
       },
       "save": {
-        "ok": false,
+        "ok": true,
         "path": "/var/lib/gunnchos/games/earth-species/save_marker.json",
-        "reason": "read_failed:[Errno 2] No such file or directory: '/var/lib/gunnchos/games/earth-species/save_marker.json'"
+        "lines": [
+          "{",
+          "  \"game_id\": \"earth-species\",",
+          "  \"input\": 2,",
+          "  \"started\": true,",
+          "  \"ts\": 1786505791487,",
+          "  \"save\": true,",
+          "  \"event\": \"autosave\",",
+          "  \"received_at\": 1786505791.4927473",
+          "}"
+        ]
       },
       "chromium_log": {
         "ok": false,
         "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-earth-species.log'"
       },
       "chromium_alive": true,
-      "input_count": 0,
+      "input_count": 2,
       "started": true,
-      "note": "Not earned \u2014 see chromium_launch/state/save fields"
+      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save"
     },
     "foot-racing": {
       "game_id": "foot-racing",
@@ -159,15 +181,14 @@
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "godot": {
         "ok": true,
-        "already_present": true
+        "downloaded": true
       },
       "deploy": {
-        "ok": true,
-        "src": "predeployed"
+        "ok": true
       },
       "godot_launch": {
         "ok": true,
-        "pid": 18544,
+        "pid": 1880,
         "started": "godot-pedestrian-pursuit",
         "wayland": "wayland-0",
         "reason": null
@@ -192,7 +213,7 @@
       "godot_alive": true,
       "harness": {
         "ok": true,
-        "stdout": "Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org\n\ntotal 12\ndrwxr-xr-x 3 root root 4096 Aug 12 03:07 .\ndrwxr-xr-x 3 root root 4096 Aug 12 03:04 ..\ndrwxr-xr-x 4 root root 4096 Aug 12 03:07 Pedestrian Pursuit\n/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
+        "stdout": "Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org\n\ntotal 12\ndrwxr-xr-x 3 root root 4096 Aug 12 03:53 .\ndrwxr-xr-x 3 root root 4096 Aug 12 03:04 ..\ndrwxr-xr-x 4 root root 4096 Aug 12 03:54 Pedestrian Pursuit\n/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
         "stderr": ""
       },
       "save": {
@@ -202,7 +223,7 @@
           "[meta]",
           "",
           "save_version=2",
-          "saved_at=\"2026-08-12T03:07:25\"",
+          "saved_at=\"2026-08-12T03:54:04\"",
           "",
           "[career]",
           "",
@@ -235,7 +256,7 @@
   "compositor_info": {
     "available": true,
     "compositor": "weston",
-    "outputs": 2,
+    "outputs": 1,
     "socket": "wayland-0",
     "ok": true
   },
@@ -251,7 +272,7 @@
   },
   "deploy": {
     "ok": true,
-    "bytes": 123427,
+    "bytes": 123692,
     "parts": 6,
     "extract": {
       "ok": true,
@@ -269,7 +290,7 @@
       ],
       "returncode": 0,
       "stdout": "anime-aggressors\nbeatlink-party\nearth-species\nfoot-racing\nlab_bridge.py\n",
-      "stderr": ""
+      "stderr": "tar: gunnchos-games/anime-aggressors/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.3863592 is 1031.832007825 s in the future\ntar: gunnchos-games/anime-aggressors/index.html: time stamp 2026-08-12 03:52:22.3849154 is 1031.830380318 s in the future\ntar: gunnchos-games/anime-aggressors: time stamp 2026-08-12 03:52:22.3862538 is 1031.831689301 s in the future\ntar: gunnchos-games/beatlink-party/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.4234986 is 1031.853040841 s in the future\ntar: gunnchos-games/beatlink-party/index.html: time stamp 2026-08-12 03:52:22.4233534 is 1031.845293634 s in the future\ntar: gunnchos-games/beatlink-party: time stamp 2026-08-12 03:52:22.423438 is 1031.845312026 s in the future\ntar: gunnchos-games/earth-species/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.4368768 is 1031.858643494 s in the future\ntar: gunnchos-games/earth-species/index.html: time stamp 2026-08-12 03:52:22.4346957 is 1031.856431894 s in the future\ntar: gunnchos-games/earth-species: time stamp 2026-08-12 03:52:22.4367993 is 1031.858509202 s in the future\ntar: gunnchos-games/foot-racing/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.4506311 is 1031.866610362 s in the future\ntar: gunnchos-games/foot-racing/index.html: time stamp 2026-08-12 03:52:22.4505205 is 1031.86646197 s in the future\ntar: gunnchos-games/foot-racing: time stamp 2026-08-12 03:52:22.4505801 is 1031.866477321 s in the future\ntar: gunnchos-games/lab_bridge.py: time stamp 2026-08-12 03:52:22.450981 is 1031.866850054 s in the future\ntar: gunnchos-games: time stamp 2026-08-12 03:52:22.4509313 is 1031.866765479 s in the future\n"
     },
     "start": {
       "ok": true,
@@ -281,7 +302,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "started": "lab-bridge",
-      "pid": 18262
+      "pid": 1295
     },
     "bridge_log": {
       "ok": false,
@@ -308,6 +329,6 @@
       "{\"ok\": true, \"port\": 18765}"
     ]
   },
-  "ok": false,
-  "note": "Aggregate PASS requires all four in-guest earns \u2014 see per-game fields"
+  "ok": true,
+  "note": "All four games earned in-guest Chromium Wayland runtime proofs"
 }

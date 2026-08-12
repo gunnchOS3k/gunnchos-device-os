@@ -2,7 +2,7 @@
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "MOUSEPAD_FILE_APPEND_ALONE_INSUFFICIENT": true,
-  "marker_found_in_after": true,
+  "marker_found_in_after": false,
   "ping": {
     "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
@@ -26,7 +26,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "libreoffice",
-      "pid": 16906,
+      "pid": 934,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -47,7 +47,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "browser",
-      "pid": 16926,
+      "pid": 970,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -71,7 +71,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "mousepad",
-      "pid": 16952,
+      "pid": 993,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -189,7 +189,7 @@
         "measurement_class": "GUEST_OBSERVED",
         "path": "/root/gunnchos-lab-document.txt",
         "lines": [
-          "aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944",
+          "aLIVEPROOF1786505205aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
           "aLIVEPROOF1786501531"
         ]
       },
@@ -204,12 +204,12 @@
         "measurement_class": "GUEST_OBSERVED",
         "path": "/root/gunnchos-lab-document.txt",
         "lines": [
-          "aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
+          "aLIVEPROOF1786505205aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
           "aLIVEPROOF1786501531"
         ]
       },
-      "marker": "RINGMUTATION1786503714",
-      "mutated": true,
+      "marker": "RINGMUTATION1786505673",
+      "mutated": false,
       "libreoffice_or_writer_surface_alive": true
     },
     "browser": {
@@ -369,29 +369,41 @@
           "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
         }
       },
-      "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+      "save_path": "/var/lib/gunnchos/games/ring-target/state.json",
       "before": {
-        "ok": false,
+        "ok": true,
         "protocol": "gunnchos.guest_agent.v1",
         "cmd": "logs",
-        "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'",
         "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
         "measurement_class": "GUEST_OBSERVED",
-        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-        "agent_path_label": "virtio-serial"
+        "path": "/var/lib/gunnchos/games/ring-target/state.json",
+        "lines": [
+          "{\"hits\":0,\"save\":false}"
+        ]
       },
       "after": {
-        "ok": false,
+        "ok": true,
         "protocol": "gunnchos.guest_agent.v1",
         "cmd": "logs",
-        "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'",
         "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
         "measurement_class": "GUEST_OBSERVED",
-        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-        "agent_path_label": "virtio-serial"
+        "path": "/var/lib/gunnchos/games/ring-target/state.json",
+        "lines": [
+          "{\"hits\":0,\"save\":false}"
+        ]
       },
       "mutated": false,
-      "note": "Requires Godot Pedestrian Pursuit user:// save delta after Ring-authorized HID"
+      "godot_mutated": false,
+      "chromium_mutated": false,
+      "before_hits": 0,
+      "after_hits": 0,
+      "note": "Requires Godot save or Chromium ring-target HID mutation"
     }
   },
   "confidence_gate": {
@@ -415,6 +427,6 @@
     },
     "ok": true
   },
-  "mutation_marker": "RINGMUTATION1786503714",
+  "mutation_marker": "RINGMUTATION1786505673",
   "note": "Not earned \u2014 need Ring stack mutation of LibreOffice/browser/game (mousepad alone insufficient)"
 }

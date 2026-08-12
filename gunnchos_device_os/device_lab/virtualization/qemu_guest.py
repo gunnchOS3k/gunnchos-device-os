@@ -362,40 +362,49 @@ class QemuGuestSession:
             "yes",
         }
         if enable_gpu and dual_guest:
-            # QEMU ≥11: set outputs[].xres/yres so scanouts start Connected in guest DRM.
-            # max_outputs alone leaves Virtual-2 disconnected under headless/single-head.
-            # Output names must be ≤12 chars (QEMU virtio-gpu EDID name limit).
-            # WP-011R: dual_guest AND interactive_guest can both be true (DS-XL profile
-            # booting the Interactive Guest) — same two-output device works for either;
-            # the difference is whether a real compositor is running on top (DSXL
-            # compositor UX proof needs the Interactive Guest's weston, not the slim guest).
-            gpu_dev = (
-                '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":2,'
-                '"outputs":['
-                '{"name":"lab0","xres":1280,"yres":800},'
-                '{"name":"lab1","xres":1280,"yres":800}'
-                "]}"
-            )
-            cmd += ["-device", gpu_dev]
-            # Device attached ≠ guest-proven dual. Keep GUEST_DUAL_OUTPUT_PASS false
-            # until guest agent display_info proves two guest outputs.
+            # QEMU ≥11: outputs[] is realize-time only; qom-set after realize rejected.
+            # virtio-gpu-pci also does NOT support hotplug (device_del rejected).
+            # Working architecture:
+            #   * Single gpu0 max_outputs=2 so Weston drm-backend sees 2 wl_outputs
+            #     (separate PCI GPUs only yield 1 weston output — drm-backend binds one card).
+            #   * Secondary disconnect/reconnect = QEMU reboot reconfig (max_outputs 2→1→2).
+            # Optional GUNNCHDEVICE_LAB_DUAL_VIRTIO_GPU_DEVICES=1 keeps dual-PCI experiment.
+            import os as _os
+            dual_pci = _os.environ.get("GUNNCHDEVICE_LAB_DUAL_VIRTIO_GPU_DEVICES", "").lower() in {
+                "1", "true", "yes"
+            }
+            max_out = int(_os.environ.get("GUNNCHDEVICE_LAB_VIRTIO_GPU_MAX_OUTPUTS", "2" if not dual_pci else "1"))
+            if dual_pci:
+                gpu0 = (
+                    '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":1,'
+                    '"outputs":[{"name":"lab0","xres":1280,"yres":800}]}'
+                )
+                gpu1 = (
+                    '{"driver":"virtio-gpu-pci","id":"gpu1","max_outputs":1,'
+                    '"outputs":[{"name":"lab1","xres":1280,"yres":800}]}'
+                )
+                cmd += ["-device", gpu0, "-device", gpu1]
+                note = "dual PCI virtio-gpu (no hotplug); weston may bind only card0"
+            else:
+                outs = ",".join(
+                    f'{{"name":"lab{i}","xres":1280,"yres":800}}' for i in range(max(1, max_out))
+                )
+                gpu_dev = (
+                    f'{{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":{max(1, max_out)},'
+                    f'"outputs":[{outs}]}}'
+                )
+                cmd += ["-device", gpu_dev]
+                note = f"virtio-gpu max_outputs={max_out}; DSXL disconnect via reboot reconfig"
             guest_outputs = [
                 {
-                    "id": "guest-gpu0-out0",
-                    "role": "primary",
+                    "id": f"guest-gpu0-out{i}",
+                    "role": "primary" if i == 0 else "secondary",
                     "connected": False,
                     "source": "qemu_virtio_gpu_device_attached",
                     "class": "host_device_intent",
-                    "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
-                },
-                {
-                    "id": "guest-gpu0-out1",
-                    "role": "secondary",
-                    "connected": False,
-                    "source": "qemu_virtio_gpu_device_attached",
-                    "class": "host_device_intent",
-                    "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
-                },
+                    "note": note,
+                }
+                for i in range(max(2 if dual_pci else max_out, 1))
             ]
         elif enable_gpu and interactive_guest:
             # Single scanout is enough for a non-dual Interactive Guest compositor.
@@ -782,16 +791,30 @@ class QemuGuestSession:
             or self.profile.get("dual_screen")
             or os.environ.get("GUNNCHDEVICE_LAB_DUAL_GPU", "").lower() in {"1", "true", "yes"}
         )
-        if dual_guest:
-            gpu_dev = (
-                '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":2,'
-                '"outputs":['
-                '{"name":"ilab0","xres":1280,"yres":800},'
-                '{"name":"ilab1","xres":1280,"yres":800}'
-                "]}"
+        # Dual outputs: single gpu0 max_outputs=2 (weston-friendly). Hotplug unsupported.
+        # DSXL secondary disconnect = reboot reconfig (GUNNCHDEVICE_LAB_VIRTIO_GPU_MAX_OUTPUTS).
+        import os as _os
+        dual_pci = _os.environ.get("GUNNCHDEVICE_LAB_DUAL_VIRTIO_GPU_DEVICES", "").lower() in {
+            "1", "true", "yes"
+        }
+        if dual_guest and dual_pci:
+            gpu_devices = [
+                '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":1,'
+                '"outputs":[{"name":"ilab0","xres":1280,"yres":800}]}',
+                '{"driver":"virtio-gpu-pci","id":"gpu1","max_outputs":1,'
+                '"outputs":[{"name":"ilab1","xres":1280,"yres":800}]}',
+            ]
+        elif dual_guest:
+            max_out = int(_os.environ.get("GUNNCHDEVICE_LAB_VIRTIO_GPU_MAX_OUTPUTS", "2"))
+            outs = ",".join(
+                f'{{"name":"ilab{i}","xres":1280,"yres":800}}' for i in range(max(1, max_out))
             )
+            gpu_devices = [
+                f'{{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":{max(1, max_out)},'
+                f'"outputs":[{outs}]}}'
+            ]
         else:
-            gpu_dev = "virtio-gpu-pci,id=gpu0"
+            gpu_devices = ["virtio-gpu-pci,id=gpu0"]
 
         cmd = [
             self.qemu_bin,
@@ -813,12 +836,17 @@ class QemuGuestSession:
             f"file={disk},if=none,format=qcow2,id=hd0",
             "-device",
             "virtio-blk-pci,drive=hd0,bootindex=1",
-            "-device",
-            gpu_dev,
+        ]
+        for gd in gpu_devices:
+            cmd += ["-device", gd]
+        cmd += [
             "-device",
             "virtio-keyboard-pci",
             "-device",
             "virtio-tablet-pci",
+        ]
+        # Continue assembling the rest of the UEFI cmd (serial/monitor/agent).
+        cmd += [
             "-serial",
             f"file:{self.boot_log}",
             "-display",

@@ -629,7 +629,7 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
             ["grim", str(grim_path)],
             capture_output=True,
             text=True,
-            timeout=8,
+            timeout=2,
             env=env,
             check=False,
         )
@@ -700,7 +700,7 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
         attempts.append({"via": "weston_screenshooter_super_s_uinput", "error": str(exc)})
         # Fall through to fbdev before failing hard.
 
-    deadline = time.time() + 6.0
+    deadline = time.time() + 4.0
     while time.time() < deadline:
         newly = _collect_pngs(_screenshot_search_roots()) - before
         if newly:

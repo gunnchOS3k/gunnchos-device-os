@@ -125,24 +125,32 @@ PROBE_JS = r'''
       } catch (e2) {}
     }
   }
-  window.addEventListener('keydown', function(e){
+  function bump(kind, detail){
     input += 1;
-    report({key: e.code || e.key || 'key'});
+    report({event: kind, detail: detail || null});
+  }
+  window.addEventListener('keydown', function(e){
+    bump('keydown', e.code || e.key || 'key');
   }, true);
+  window.addEventListener('pointerdown', function(e){
+    bump('pointerdown', String(e.button));
+  }, true);
+  try { window.focus(); document.body && document.body.focus && document.body.focus(); } catch (e) {}
   function markStart(){ started = true; report({event:'start'}); }
   document.addEventListener('DOMContentLoaded', function(){
     var btn = document.getElementById('btn-start');
     if (btn) btn.addEventListener('click', markStart, true);
+    try { window.focus(); } catch (e) {}
     report({event:'load'});
   });
   setTimeout(function(){
     var btn = document.getElementById('btn-start');
     if (btn && !started) { try { btn.click(); } catch(e) {} markStart(); }
     report({event:'heartbeat'});
-  }, 1500);
+  }, 2000);
   setInterval(function(){
     if (input > 0) report({save: true, event: 'autosave'});
-  }, 1000);
+  }, 800);
 })();
 '''
 
@@ -830,8 +838,9 @@ def _run_one_game(session: Any, game_id: str, *, repo_root: Path | None = None) 
     }
     _guest_bash(
         session,
+        f"pkill -f chromium || true; sleep 1; "
         f"rm -rf /var/lib/gunnchos/games/{game_id}; mkdir -p /var/lib/gunnchos/games/{game_id} /root/.gunnchos-chromium-{game_id}",
-        timeout_sec=20,
+        timeout_sec=30,
         name=f"clear-{game_id}",
     )
     url = f"http://127.0.0.1:18765/{game_id}/index.html"
@@ -863,6 +872,7 @@ def _run_one_game(session: Any, game_id: str, *, repo_root: Path | None = None) 
             f"--user-data-dir={udd}",
             "--no-first-run",
             "--disable-features=TranslateUI",
+            "--autoplay-policy=no-user-gesture-required",
             url,
         ],
         env={
@@ -879,17 +889,36 @@ def _run_one_game(session: Any, game_id: str, *, repo_root: Path | None = None) 
         "wayland": wayland,
         "reason": launch.get("reason"),
     }
-    time.sleep(4.0)
-    # Focus the chromium surface then drive title → play → movement.
-    _agent_call(session, "input_inject", kind="pointer", dx=40, dy=40, button="left", timeout_sec=5.0)
-    time.sleep(0.3)
-    for key in ("tab", "tab", "ret", "ret", "space", "ret"):
+    # Heavier titles (anime/earth) need longer paint/focus settle than beatlink.
+    settle = 8.0 if game_id in {"anime-aggressors", "earth-species"} else 5.0
+    time.sleep(settle)
+    # Focus chromium surface aggressively (multiple click targets) then drive input.
+    for dx, dy in ((80, 80), (200, 160), (320, 220), (400, 260)):
+        _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=5.0)
+        time.sleep(0.25)
+    time.sleep(0.5)
+    for key in ("tab", "tab", "ret", "ret", "spc", "ret", "tab", "ret"):
         _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-        time.sleep(0.18)
-    time.sleep(1.2)
-    for key in ("d", "d", "d", "d", "d", "d", "w", "w", "j", "j", "a", "d", "s", "d", "d"):
+        time.sleep(0.2)
+    time.sleep(1.5)
+    for key in ("d", "d", "d", "d", "d", "d", "w", "w", "j", "j", "a", "d", "s", "d", "d", "w", "a", "d", "spc", "j"):
         _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-        time.sleep(0.1)
+        time.sleep(0.12)
+    # Second click+key burst if probe still at 0 (focus races).
+    time.sleep(1.0)
+    st0 = _agent_call(session, "logs", path=f"/var/lib/gunnchos/games/{game_id}/state.json", lines=20)
+    try:
+        ic0 = int(json.loads("\n".join(st0.get("lines") or []) or "{}").get("input") or 0)
+    except Exception:
+        ic0 = 0
+    if ic0 < 1:
+        for _ in range(3):
+            _agent_call(session, "input_inject", kind="pointer", dx=120, dy=120, button="left", timeout_sec=5.0)
+            time.sleep(0.2)
+        for key in ("a", "d", "w", "s", "j", "spc", "ret"):
+            _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
+            time.sleep(0.15)
+        time.sleep(2.0)
     time.sleep(3.0)
     state = _agent_call(session, "logs", path=f"/var/lib/gunnchos/games/{game_id}/state.json", lines=40)
     save = _agent_call(session, "logs", path=f"/var/lib/gunnchos/games/{game_id}/save_marker.json", lines=40)

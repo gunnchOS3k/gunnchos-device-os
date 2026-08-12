@@ -1,5 +1,5 @@
 {
-  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "RFB_HANDSHAKE_ALONE_ACCEPTED": false,
   "HOST_SCREENDUMP_ALONE_INSUFFICIENT": true,
@@ -27,11 +27,11 @@
     "available": true,
     "compositor": "weston",
     "socket": "wayland-0",
-    "outputs": 2,
+    "outputs": 1,
     "surfaces": null,
     "detail": {
       "wayland_info_returncode": 0,
-      "wayland_info_output_globals": 2
+      "wayland_info_output_globals": 1
     },
     "note": "Real registry query via wayland-info against the running weston socket."
   },
@@ -45,7 +45,7 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "app": "mousepad",
-    "pid": 15403,
+    "pid": 660,
     "started": true,
     "alive_after_500ms": true,
     "argv": [
@@ -62,7 +62,7 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_02-58-18.png",
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_03-26-44.png",
     "bytes": 16384,
     "format": "png",
     "synthetic": false,
@@ -113,7 +113,7 @@
       {
         "ok": true,
         "command": "sendkey a",
-        "reply": "s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
+        "reply": "(qemu) s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
         "via": "qemu_monitor"
       }
     ],
@@ -130,13 +130,23 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "kind": "text",
-    "text": "LIVEPROOF1786503499",
+    "text": "LIVEPROOF1786505205",
     "injected_via": "uinput"
   },
   "framebuffer_after": {
-    "ok": false,
-    "error": "unix_connect_failed",
-    "detail": "empty_or_unmatched_response"
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_03-29-32.png",
+    "bytes": 16384,
+    "format": "png",
+    "synthetic": false,
+    "via": "weston_screenshooter_super_s_uinput"
   },
   "host_screendump": {
     "ok": true,
@@ -145,8 +155,8 @@
     "after_exists": true,
     "before_nonblank": true,
     "after_nonblank": true,
-    "before_sha256": "0dae2278a9b1f7354e4f643771def94cd45c86c424ebfa463e65a03f9b477a04",
-    "after_sha256": "5918e16b164dd4d54ce2b265811e28bbfa7fd3a810a890e5e5467e07328b3669",
+    "before_sha256": "974d156f9887161fc00a70c86002f0d7eaaa7aba129edbf1111390fe1b92cc6b",
+    "after_sha256": "c846f827f45f8f0c91da2a0d30701a09b7d582908be69e18dbb7f52ef41bf5c3",
     "changed": true,
     "measurement_class": "HOST_OBSERVED",
     "committed_paths": [
@@ -157,16 +167,16 @@
   },
   "guest_framebuffer": {
     "before_ok": true,
-    "after_ok": false,
+    "after_ok": true,
     "before_nonblank": true,
-    "after_nonblank": false,
-    "before_sha256": "b76d89cf709eae947b5b328e3ef7f6f043aa0f8a5bc4cbd3e66fde4e1d9e8115",
-    "after_sha256": "",
-    "changed": false,
+    "after_nonblank": true,
+    "before_sha256": "1e00ddab503e51b627ff0f769eb072148f64c70d919776180d5028fab290dce3",
+    "after_sha256": "f2f0eea285328870bd6a916cb13b582b7cf447ba26f0910075234ac82b6872f1",
+    "changed": true,
     "before_path": "shell_app_before.png",
-    "after_path": null,
+    "after_path": "shell_app_after.png",
     "via_before": "weston_screenshooter_super_s_uinput",
-    "via_after": null
+    "via_after": "weston_screenshooter_super_s_uinput"
   },
   "document_after": {
     "ok": true,
@@ -179,19 +189,17 @@
     "measurement_class": "GUEST_OBSERVED",
     "path": "/root/gunnchos-lab-document.txt",
     "lines": [
-      "aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944",
+      "aLIVEPROOF1786505205aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
       "aLIVEPROOF1786501531"
     ]
   },
   "input_visible_app_state": {
-    "marker": "LIVEPROOF1786503499",
+    "marker": "LIVEPROOF1786505205",
     "found_in_document": true
   },
-  "non_blank_capture": false,
+  "non_blank_capture": true,
   "diff_bytes": 0,
-  "before_after_changed": false,
-  "missing": [
-    "guest_framebuffer_nonblank_changed"
-  ],
-  "note": "Not earned \u2014 missing: guest_framebuffer_nonblank_changed"
+  "before_after_changed": true,
+  "missing": [],
+  "note": "Guest FB before/after non-blank+changed, mousepad alive, typed marker in document"
 }

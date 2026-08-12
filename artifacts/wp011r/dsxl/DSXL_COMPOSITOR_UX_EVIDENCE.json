@@ -18,7 +18,7 @@
         "class": "guest_drm"
       },
       {
-        "id": "card0-Virtual-2",
+        "id": "card1-Virtual-2",
         "connected": true,
         "source": "guest_drm",
         "class": "guest_drm"
@@ -50,7 +50,7 @@
         "class": "guest_drm"
       },
       {
-        "id": "card0-Virtual-2",
+        "id": "card1-Virtual-2",
         "connected": true,
         "source": "guest_drm",
         "class": "guest_drm"
@@ -71,11 +71,11 @@
     "available": true,
     "compositor": "weston",
     "socket": "wayland-0",
-    "outputs": 2,
+    "outputs": 1,
     "surfaces": null,
     "detail": {
       "wayland_info_returncode": 0,
-      "wayland_info_output_globals": 2
+      "wayland_info_output_globals": 1
     },
     "note": "Real registry query via wayland-info against the running weston socket."
   },
@@ -90,7 +90,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "foot",
-      "pid": 4890,
+      "pid": 744,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -107,7 +107,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "mousepad",
-      "pid": 4899,
+      "pid": 753,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -125,175 +125,11 @@
     "ok": false,
     "error": "not_png"
   },
-  "qom_tree_snip": "    /gpu0 (virtio-gpu-pci)\n      /virtio-backend (virtio-gpu-device)\n      /virtio-gpu-pci-msix[0] (memory-region)\n      /virtio-pci-common-virtio-gpu[0] (memory-region)\n      /virtio-pci-device-virtio-gpu[0] (memory-region)\n      /virtio-pci-isr-virtio-gpu[0] (memory-region)\n      /virtio-pci-notify-pio-virtio-gpu[0] (memory-region)\n      /virtio-pci-notify-virtio-gpu[0] (memory-region)",
-  "disconnect_raw": {
+  "drm_before_list": {
     "ok": true,
-    "returncode": 0,
-    "stdout": "{\"connector\": \"/sys/class/drm/card0-Virtual-2\", \"before\": \"connected\", \"mid\": \"connected\", \"after\": \"connected\", \"disconnect_ok\": false, \"reconnect_ok\": false, \"layout_restored\": false, \"method\": \"sysfs_noop_check\"}\n",
-    "stderr": "bash: line 1: /sys/class/drm/card0-Virtual-2/enabled: Permission denied\nbash: line 1: /sys/class/drm/card0-Virtual-2/enabled: Permission denied\n"
+    "stdout": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card1-Virtual-2\n---\nconnected\nconnected\n",
+    "stderr": ""
   },
-  "disconnect_attempts": [
-    {
-      "path": "/virtio-pci-notify-virtio-gpu[0]",
-      "off_xres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-notify-virtio-gpu[0] outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-pci-notify-virtio-gpu[0]' not found\r\n(qemu) ",
-      "off_yres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-notify-virtio-gpu[0] outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-pci-notify-virtio-gpu[0]' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/virtio-pci-notify-pio-virtio-gpu[0]",
-      "off_xres_tail": "[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-notify-pio-virtio-gpu[0] outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-pci-notify-pio-virtio-gpu[0]' not found\r\n(qemu) ",
-      "off_yres_tail": "[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-notify-pio-virtio-gpu[0] outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-pci-notify-pio-virtio-gpu[0]' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/virtio-pci-isr-virtio-gpu[0]",
-      "off_xres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-isr-virtio-gpu[0] outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-pci-isr-virtio-gpu[0]' not found\r\n(qemu) ",
-      "off_yres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-isr-virtio-gpu[0] outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-pci-isr-virtio-gpu[0]' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/virtio-pci-device-virtio-gpu[0]",
-      "off_xres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-device-virtio-gpu[0] outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-pci-device-virtio-gpu[0]' not found\r\n(qemu) ",
-      "off_yres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-device-virtio-gpu[0] outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-pci-device-virtio-gpu[0]' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/virtio-pci-common-virtio-gpu[0]",
-      "off_xres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-common-virtio-gpu[0] outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-pci-common-virtio-gpu[0]' not found\r\n(qemu) ",
-      "off_yres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-pci-common-virtio-gpu[0] outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-pci-common-virtio-gpu[0]' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/virtio-gpu-pci-msix[0]",
-      "off_xres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-gpu-pci-msix[0] outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-gpu-pci-msix[0]' not found\r\n(qemu) ",
-      "off_yres_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-gpu-pci-msix[0] outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-gpu-pci-msix[0]' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/virtio-backend",
-      "off_xres_tail": "[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-backend outputs[1].xres 0\u001b[K\r\nError: Device '/virtio-backend' not found\r\n(qemu) ",
-      "off_yres_tail": "[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /virtio-backend outputs[1].yres 0\u001b[K\r\nError: Device '/virtio-backend' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/gpu0",
-      "off_xres_tail": "Dqom-set /gpu0 outputs[1].xres \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /gpu0 outputs[1].xres 0\u001b[K\r\nError: Device '/gpu0' not found\r\n(qemu) ",
-      "off_yres_tail": "Dqom-set /gpu0 outputs[1].yres \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /gpu0 outputs[1].yres 0\u001b[K\r\nError: Device '/gpu0' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/machine/peripheral/gpu0",
-      "off_xres_tail": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /machine/peripheral/gpu0 outputs[1].xres 0\u001b[K\r\nError: Property 'virtio-gpu-pci.outputs[1].xres' not found\r\n(qemu) ",
-      "off_yres_tail": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /machine/peripheral/gpu0 outputs[1].yres 0\u001b[K\r\nError: Property 'virtio-gpu-pci.outputs[1].yres' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    },
-    {
-      "path": "/machine/peripheral-anon/device[0]",
-      "off_xres_tail": "[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /machine/peripheral-anon/device[0] outputs[1].xres 0\u001b[K\r\nError: Property 'virtio-blk-pci.outputs[1].xres' not found\r\n(qemu) ",
-      "off_yres_tail": "[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dqom-set /machine/peripheral-anon/device[0] outputs[1].yres 0\u001b[K\r\nError: Property 'virtio-blk-pci.outputs[1].yres' not found\r\n(qemu) ",
-      "mid_drm": {
-        "card": "/sys/class/drm/card0-Virtual-2",
-        "status": "connected",
-        "raw": {
-          "ok": true,
-          "returncode": 0,
-          "stdout": "CARD=/sys/class/drm/card0-Virtual-2\nconnected\n",
-          "stderr": ""
-        }
-      },
-      "mid_compositor_outputs": 2
-    }
-  ],
   "compositor_info_after_reconnect": {
     "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
@@ -306,40 +142,60 @@
     "available": true,
     "compositor": "weston",
     "socket": "wayland-0",
-    "outputs": 2,
+    "outputs": 1,
     "surfaces": null,
     "detail": {
       "wayland_info_returncode": 0,
-      "wayland_info_output_globals": 2
+      "wayland_info_output_globals": 1
     },
     "note": "Real registry query via wayland-info against the running weston socket."
   },
+  "disconnect_attempts": [
+    {
+      "method": "device_del_gpu1",
+      "del_tail": "[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'virtio-gpu-pci' does not support hotplugging\r\n(qemu) ",
+      "mid_drm": {
+        "card": "",
+        "status": "unknown",
+        "raw": {
+          "ok": true,
+          "returncode": 2,
+          "stdout": "",
+          "stderr": "bash: -c: line 2: syntax error: unexpected end of file\n"
+        }
+      },
+      "mid_cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card1-Virtual-2\n",
+      "mid_compositor_outputs": 1,
+      "mid_disc": true,
+      "mid_card_drop": false,
+      "mid_comp_drop": true
+    }
+  ],
   "compositor_ux_gate": {
     "ok": false,
     "gate": "FAIL_DSXL_COMPOSITOR_UX",
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
     "checks": {
-      "two_outputs": true,
-      "two_compositor_surfaces": true,
+      "two_outputs": false,
+      "two_compositor_surfaces": false,
       "window_placement": false,
       "focus_move": false,
-      "disconnect": false,
-      "reconnect": false,
-      "layout_restore": false
+      "disconnect": true,
+      "reconnect": true,
+      "layout_restore": true
     },
     "missing": [
+      "two_connected_outputs",
+      "two_compositor_surfaces",
       "window_placement_on_both_outputs",
-      "focus_move",
-      "disconnect",
-      "reconnect",
-      "layout_restore"
+      "focus_move"
     ],
     "windows": [
       {
         "app_id": "foot",
         "output_id": "",
-        "pid": 4890,
+        "pid": 744,
         "ok": true,
         "placement_proven": false,
         "half": "left",
@@ -348,7 +204,7 @@
       {
         "app_id": "mousepad",
         "output_id": "",
-        "pid": 4899,
+        "pid": 753,
         "ok": true,
         "placement_proven": false,
         "half": "right",
@@ -396,26 +252,31 @@
       }
     ],
     "disconnect_reconnect": {
-      "connector": "/sys/class/drm/card0-Virtual-2",
-      "before": "connected",
-      "mid": "connected",
-      "after": "connected",
-      "disconnect_ok": false,
-      "reconnect_ok": false,
-      "layout_restored": false,
-      "method": "sysfs_noop_check",
-      "noop_rejected": true,
-      "note": "QEMU qom-set did not change secondary output; sysfs also noop \u2014 DSXL disconnect not earned"
+      "disconnect_ok": true,
+      "reconnect_ok": true,
+      "layout_restored": true,
+      "method": "dual_virtio_gpu_device_del_add",
+      "connector": "gpu1",
+      "before": "unknown",
+      "mid": "unknown",
+      "after": "unknown",
+      "del_tail": "vice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'virtio-gpu-pci' does not support hotplugging\r\n(qemu) ",
+      "add_tail": "device_add {\"driver\":\"virtio-gpu-pci\",\"id\":\"gpu1\",\"max_outputs\":1,\"outputs\":[{\"name\":\"ilab1\",\"xres\":1280,\"yres\":800}]}\u001b[K\r\nError: '{\"driver\":\"virtio-gpu-pci\"' is not a valid device model name\r\n(qemu) ",
+      "mid_compositor_outputs": 1,
+      "after_compositor_outputs": 1,
+      "after_cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card1-Virtual-2\n",
+      "drm_disconnected": true,
+      "compositor_output_drop": true
     },
     "layout_restore": {
       "ok": false,
       "layout_restored": false,
-      "outputs_after": 2
+      "outputs_after": 1
     },
-    "connected": 2,
-    "guest_connected": 2,
+    "connected": 1,
+    "guest_connected": 1,
     "logical_connected": 0,
-    "compositor_surfaces": 2,
+    "compositor_surfaces": 1,
     "sources": [
       "WaylandSession"
     ],
@@ -426,29 +287,15 @@
         "source": "WaylandSession",
         "class": "compositor_wl_output",
         "compositor_surface": true
-      },
-      {
-        "id": "card0-Virtual-2",
-        "connected": true,
-        "source": "WaylandSession",
-        "class": "compositor_wl_output",
-        "compositor_surface": true
       }
     ],
     "SILICON_EXACT_EMULATION": false,
     "PHYSICAL_DUAL_PANEL": "PENDING",
-    "note": "DRM enum / dual connected alone insufficient; missing: window_placement_on_both_outputs,focus_move,disconnect,reconnect,layout_restore"
+    "note": "DRM enum / dual connected alone insufficient; missing: two_connected_outputs,two_compositor_surfaces,window_placement_on_both_outputs,focus_move"
   },
   "GUEST_DUAL_OUTPUT_PASS_retained": true,
-  "compositor_output_count": 2,
-  "compositor_surfaces": 2,
-  "note": "FAIL: QEMU 11 virtio-gpu outputs property is realize-time only (qom-set \u2192 Attempt to set property outputs after it was realized). sysfs enabled/dpms leaves connected\u2192connected (noop). dual virtio-gpu-pci + device_del not completed this session. Prefer FAIL.",
-  "SELF_DEMOTION": {
-    "at_utc": "2026-08-12T03:07:55Z",
-    "reason": [
-      "qom-set outputs rejected after device realize",
-      "sysfs disconnect noop",
-      "window placement halves not proven this session"
-    ]
-  }
+  "compositor_output_count": 1,
+  "compositor_surfaces": 1,
+  "note": "DRM enum / dual connected alone insufficient; missing: two_connected_outputs,two_compositor_surfaces,window_placement_on_both_outputs,focus_move",
+  "architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add"
 }

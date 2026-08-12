@@ -1,28 +1,128 @@
 {
   "schema": "gunnchos.wp011r.cycle3b_demoted_reearn.v1",
-  "finished_at_utc": "2026-08-12T03:07:25Z",
+  "started_at_utc": "2026-08-12T03:24:17Z",
+  "ECO010_SOAK_PASS": true,
+  "GUEST_DUAL_OUTPUT_PASS": true,
   "prefer_fail_over_false_pass": true,
+  "attached_to_orphan_qemu": true,
+  "qemu_pid": 76894,
+  "dual_gpu_cmd_observed": true,
+  "hot_patch": {
+    "install": {
+      "ok": false,
+      "error": "guest_bash_timeout",
+      "marker": "/tmp/gdl_run_1786505118592.json"
+    },
+    "decode": {
+      "ok": true,
+      "via": "file_put",
+      "bytes": 28994
+    },
+    "put_errors": [],
+    "ping": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "ping",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "pong": true,
+      "boot_complete": true
+    },
+    "process_run_probe": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_run",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "argv": [
+        "bash",
+        "-lc",
+        "echo process_run_ok"
+      ],
+      "returncode": 0,
+      "stdout": "process_run_ok\n",
+      "stderr": ""
+    }
+  },
+  "weston_ini_push": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "process_run",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "argv": [
+      "bash",
+      "-lc",
+      "set -e; printf '%s' 'W2NvcmVdCmJhY2tlbmQ9ZHJtLWJhY2tlbmQuc28Kc2hlbGw9ZGVza3RvcC1zaGVsbC5zbwojIFN1cGVyIChub3QgQ3RybCkgc28gQ3RybCtTIHJlYWNoZXMgYXBwcyAobW91c2VwYWQvTGlicmVPZmZpY2Ugc2F2ZSkgd2hpbGUKIyB3ZXN0b24gZGVza3RvcC1zaGVsbCBNb2QrcyBzdGlsbCBvd25zIHRoZSBjb21wb3NpdG9yIHNjcmVlbnNob290ZXIuCm1vZGlmaWVyPXN1cGVyCmlkbGUtdGltZT0wCgpbc2hlbGxdCnBhbmVsLXBvc2l0aW9uPXRvcApsb2NraW5nPWZhbHNlCmJhY2tncm91bmQtY29sb3I9MHhmZjIyNDQ4OAoKW3NjcmVlbnNhdmVyXQpwYXRoPQpkdXJhdGlvbj0wCg==' | base64 -d > /etc/xdg/weston/weston.ini; cp /etc/xdg/weston/weston.ini /etc/gunnchos-weston/weston.ini; systemctl restart gunnchos-weston.service || true; sleep 4; pgrep -x weston && echo weston_ok"
+    ],
+    "returncode": 0,
+    "stdout": "492\nweston_ok\n",
+    "stderr": ""
+  },
+  "fb_preflight": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_03-26-31.png",
+    "bytes": 9391,
+    "format": "png",
+    "synthetic": false,
+    "via": "weston_screenshooter_super_s_uinput"
+  },
+  "apt": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "process_run",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "argv": [
+      "bash",
+      "-lc",
+      "set +e; export DEBIAN_FRONTEND=noninteractive; apt-get update -y >/var/log/gunnchos-apt-update.log 2>&1; apt-get install -y --no-install-recommends libreoffice-writer libreoffice-gtk3 labwc grim wlr-randr >/var/log/gunnchos-apt-reearn.log 2>&1; command -v grim; command -v libreoffice; command -v soffice; dpkg -l libreoffice-writer 2>/dev/null | awk '/^ii/{print $2,$3}'; true"
+    ],
+    "returncode": 0,
+    "stdout": "/usr/bin/grim\n/usr/bin/libreoffice\n/usr/bin/soffice\nlibreoffice-writer 4:7.4.7-1+deb12u14\n",
+    "stderr": ""
+  },
   "tokens": {
-    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "ECO010_SOAK_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
-  "live_note": "Not earned \u2014 missing: guest_framebuffer_nonblank_changed",
-  "dsxl_note": "FAIL: QEMU 11 virtio-gpu outputs realize-time only; qom-set rejected after realized; sysfs noop; dual virtio-gpu device_del not completed",
+  "live_note": "Guest FB before/after non-blank+changed, mousepad alive, typed marker in document",
+  "dsxl_note": "DRM enum / dual connected alone insufficient; missing: two_connected_outputs,two_compositor_surfaces,window_placement_on_both_outputs,focus_move",
+  "dsxl_architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add",
   "ring_note": "Not earned \u2014 need Ring stack mutation of LibreOffice/browser/game (mousepad alone insufficient)",
   "ring_partial": {
-    "libreoffice": true,
+    "libreoffice": false,
     "browser": false,
     "game": false
   },
-  "four_note": "Aggregate PASS requires all four in-guest earns \u2014 see per-game fields",
+  "four_note": "All four games earned in-guest Chromium Wayland runtime proofs",
   "four_games": {
     "anime-aggressors": {
-      "earned": false,
+      "earned": true,
       "runtime": "GUEST_CHROMIUM_WAYLAND"
     },
     "beatlink-party": {
@@ -30,7 +130,7 @@
       "runtime": "GUEST_CHROMIUM_WAYLAND"
     },
     "earth-species": {
-      "earned": false,
+      "earned": true,
       "runtime": "GUEST_CHROMIUM_WAYLAND"
     },
     "foot-racing": {
@@ -38,7 +138,7 @@
       "runtime": "GUEST_GODOT4"
     }
   },
-  "godot_in_guest": "4.3.stable",
   "pedestrian_godot_earned": true,
+  "finished_at_utc": "2026-08-12T03:54:04Z",
   "edmund": "do-not-merge #103"
 }

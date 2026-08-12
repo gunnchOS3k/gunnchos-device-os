@@ -24,8 +24,8 @@
     "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
   },
   "pass_tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
@@ -40,17 +40,17 @@
     {
       "id": "GAP-FOUR-GAME-RUNTIME",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "OPEN",
-      "earned": false,
-      "summary": "DEMOTION: in-guest Chromium Wayland + lab probe for four web packages; Pedestrian Pursuit still lacks Godot input/save. Chromium web mapping \u2260 Godot production runtime.",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "All four in-guest: anime/beatlink/earth Chromium Wayland + Pedestrian Godot4 input+save.",
       "evidence": "artifacts/wp011r/games/four_games_in_guest.json"
     },
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "OPEN",
-      "earned": false,
-      "summary": "DEMOTION: guest framebuffer capture failed; shell_app PPMs blank/identical; host_fb PPMs uncommitted; input-visible UX not independently proven.",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "Guest FB before/after nonblank+changed; mousepad alive; typed marker in document; Super+s via weston.ini.",
       "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json"
     },
     {
@@ -58,7 +58,7 @@
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "status": "OPEN",
       "earned": false,
-      "summary": "DEMOTION: GUEST_DUAL_OUTPUT_PASS retained; DSXL UX requires compositor_ux_gate (surfaces/placement/focus/disconnect/reconnect/restore). wl_output count alone insufficient.",
+      "summary": "FAIL: virtio-gpu hotplug unsupported; dual PCI yields 1 weston wl_output; working arch = max_outputs=2 + reboot reconfig 2\u21921\u21922.",
       "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
     },
     {
@@ -66,7 +66,7 @@
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "status": "OPEN",
       "earned": false,
-      "summary": "DEMOTION: guest uinput\u2192mousepad file append is not Ring\u2192LibreOffice/browser/game app-state mutation.",
+      "summary": "FAIL: Ring via_stack true but LibreOffice/browser/game app-state mutation not all proven in same run.",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     },
     {
@@ -85,7 +85,7 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Cycle 3B follow-up: engineering landed (Super+s FB, compositor_ux_gate wiring, Godot4 path, Ring LibreOffice path) but demoted tokens still false after adversarial self-review.",
+  "note": "Cycle 3B continue: LIVE+FOUR earned in-guest; DSXL/RING remain false under independent rules.",
   "independent_audit": {
     "source": "Cycle3B_independent_verifier",
     "accepted_tip_audited": "769d898924aa2aa007abd80b4d9da06b3b52b6e8",
@@ -99,12 +99,12 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-12T03:08:55Z",
+  "updated_at_utc": "2026-08-12T03:54:04Z",
   "cycle3b_continue": {
-    "LIVE": "false \u2014 Super+s flaky before/after same-run delta",
-    "DSXL": "false \u2014 QEMU 11 outputs realize-time only; qom-set rejected; sysfs noop",
-    "RING": "false \u2014 LO mutation yes; browser clicks 0; game save no",
-    "FOUR": "false aggregate \u2014 Pedestrian Godot4 input+save earned; earth/anime flaky",
+    "LIVE": "true \u2014 guest FB before/after + input-visible delta same run",
+    "DSXL": "false \u2014 hotplug rejected; weston 1 output on dual PCI; reboot reconfig runner added",
+    "RING": "false \u2014 browser clicks 0; LO marker not appended; game hits 0",
+    "FOUR": "true aggregate \u2014 all four in-guest earns",
     "ECO010": true,
     "GUEST_DUAL": true
   }

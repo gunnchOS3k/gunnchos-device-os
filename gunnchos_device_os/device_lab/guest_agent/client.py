@@ -94,12 +94,18 @@ class GuestAgentClient:
                                 break
                     except (OSError, TimeoutError):
                         pass
-                    sock.settimeout(min(5.0, max(0.5, deadline - time.time())))
+                    # framebuffer_capture (Super+s / grim) can take >8s; honor timeout_sec.
+                    sock.settimeout(min(30.0, max(0.5, deadline - time.time())))
                     line = (json.dumps(payload, separators=(",", ":")) + "\n").encode("utf-8")
                     sock.sendall(line)
                     buf = b""
                     matched: dict[str, Any] | None = None
-                    read_deadline = time.time() + min(8.0, max(1.0, deadline - time.time()))
+                    read_budget = max(1.0, deadline - time.time())
+                    # Long guest cmds (screenshoot) need the full remaining budget, not a hard 8s cap.
+                    if want_cmd in {"framebuffer_capture", "process_run", "package_ops", "app_launch"}:
+                        read_deadline = time.time() + read_budget
+                    else:
+                        read_deadline = time.time() + min(12.0, read_budget)
                     while time.time() < read_deadline:
                         try:
                             chunk = sock.recv(4096)

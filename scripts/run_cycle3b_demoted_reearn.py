@@ -188,10 +188,42 @@ def main() -> int:
         summary["tokens"] = tokens
         summary["live_note"] = live.get("note") or live.get("blocker")
         summary["dsxl_note"] = dsxl.get("note")
+        summary["dsxl_architecture"] = dsxl.get("architecture") or "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add"
         summary["ring_note"] = ring.get("note") or ring.get("blocker")
+        mut = ring.get("mutations") or {}
+        summary["ring_partial"] = {
+            "libreoffice": bool((mut.get("libreoffice") or {}).get("mutated")),
+            "browser": bool((mut.get("browser") or {}).get("mutated")),
+            "game": bool((mut.get("game") or {}).get("mutated")),
+        }
         summary["four_note"] = four.get("note")
+        fg = four.get("games") or {}
+        summary["four_games"] = {
+            gid: {
+                "earned": bool((fg.get(gid) or {}).get("FOUR_GAME_REAL_RUNTIME_EARNED")),
+                "runtime": (fg.get(gid) or {}).get("runtime_class"),
+            }
+            for gid in ("anime-aggressors", "beatlink-party", "earth-species", "foot-racing")
+        }
+        summary["pedestrian_godot_earned"] = bool(
+            (fg.get("foot-racing") or {}).get("FOUR_GAME_REAL_RUNTIME_EARNED")
+        )
         summary["finished_at_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        summary["edmund"] = "do-not-merge #103 until independent accepts re-earned tokens"
+        # Edmund do-not-merge unless ALL four demoted gates true under independent rules.
+        all_four = all(
+            tokens[t]
+            for t in (
+                "LIVE_GUNNCHOS_VISUAL_PASS",
+                "DSXL_DUAL_COMPOSITOR_UX_PASS",
+                "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+                "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+            )
+        )
+        summary["edmund"] = (
+            "independent-review-ready — still DRAFT; Cursor never merges"
+            if all_four
+            else "do-not-merge #103"
+        )
     finally:
         try:
             session.stop()

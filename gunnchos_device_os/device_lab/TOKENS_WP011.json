@@ -14,8 +14,8 @@
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
@@ -82,10 +82,10 @@
   "notes": [
     "Cycle 3B continue \u2014 prefer FAIL over false PASS",
     "ECO010_SOAK_PASS + GUEST_DUAL_OUTPUT_PASS retained",
-    "LIVE: Super+s flaky (before/after not both nonblank+changed same run)",
-    "DSXL: QEMU 11 outputs realize-time only; cannot runtime disconnect",
-    "RING: LibreOffice mutation earned; browser click collector + game save still false",
-    "FOUR: Pedestrian Godot4 input+save EARNED; aggregate false until earth-species also earns",
+    "LIVE: earned \u2014 guest FB before/after nonblank+changed + input-visible marker",
+    "DSXL: FAIL \u2014 hotplug rejected; dual PCI weston=1 wl_output; reboot reconfig path",
+    "RING: FAIL \u2014 Ring via_stack ok; LO/browser/game app-state mutation not all proven",
+    "FOUR: aggregate EARNED \u2014 all four in-guest (Chromium web + Godot4 Pedestrian)",
     "WP-001 DO_NOT_START; Cursor never merges"
   ],
   "wave6_interactive_guest": {
@@ -112,6 +112,6 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-12T03:07:25Z",
+  "updated_at_utc": "2026-08-12T03:54:04Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json"
 }
