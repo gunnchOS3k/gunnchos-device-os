@@ -58,6 +58,7 @@ class PackageRunner:
             d.mkdir(parents=True, exist_ok=True)
 
         sandbox_profile = manifest.get("sandbox_profile", {})
+        granted_perms = ",".join(manifest.get("permissions") or [])
         env = {
             "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
             "HOME": str(sandbox_dir / "home"),
@@ -65,6 +66,7 @@ class PackageRunner:
             "GUNNCHOS_APP_VERSION": entry["version"],
             "GUNNCHOS_SANDBOX_DATA_DIR": str(data_dir),
             "GUNNCHOS_SANDBOX_NETWORK_POLICY": sandbox_profile.get("network_policy", "deny_all"),
+            "GUNNCHOS_APP_PERMISSIONS": granted_perms,
         }
         (sandbox_dir / "home").mkdir(parents=True, exist_ok=True)
         if self.repo_root is not None:

@@ -1,0 +1,74 @@
+{
+  "schema": "gunnchos.experience_review.v1",
+  "product": "waike_learning",
+  "generated_utc": "2026-08-12T21:05:00Z",
+  "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
+  "AI_HEURISTIC_REVIEW_ONLY": true,
+  "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
+  "HUMAN_E6": "NOT_EARNED",
+  "HUMAN_COMPREHENSION_E6": "NOT_EARNED",
+  "STUDENT_VALIDATED": false,
+  "visual_inspect": {
+    "status": "UNAVAILABLE",
+    "reason": "No live rendered UI inspect performed in PLATFORM-001 dogfood; companion HTML/CSS reviewed structurally only — visual polish PASS forbidden from code inspection."
+  },
+  "roles": {
+    "ER1_senior_product_ux": {
+      "mode": "AI_HEURISTIC",
+      "visual_status": "UNAVAILABLE",
+      "findings": [
+        {
+          "id": "WK-ER1-01",
+          "severity": "S2",
+          "finding": "Progress panel dumps raw JSON — developer dashboard pattern shown to learners."
+        },
+        {
+          "id": "WK-ER1-02",
+          "severity": "S2",
+          "finding": "No lesson content body / worked example surface in companion shell — only pack IDs."
+        },
+        {
+          "id": "WK-ER1-03",
+          "severity": "S3",
+          "finding": "Role + a11y controls present but completion/reward feedback is minimal."
+        },
+        {
+          "id": "WK-ER1-04",
+          "severity": "S3",
+          "finding": "Visual hierarchy is flat four-equal-panels; next action not dominant."
+        }
+      ]
+    },
+    "ER2_student_engagement": {
+      "mode": "AI_HEURISTIC",
+      "applicable": true,
+      "findings": [
+        {
+          "id": "WK-ER2-01",
+          "severity": "S2",
+          "finding": "Motivated student may not understand why a pack matters or see a visible lab result quickly."
+        },
+        {
+          "id": "WK-ER2-02",
+          "severity": "S2",
+          "finding": "Portfolio export exists, but in-shell progress presentation is dry/repetitive JSON."
+        },
+        {
+          "id": "WK-ER2-03",
+          "severity": "S3",
+          "finding": "Tutor note is a static sentence — does not feel like coaching."
+        }
+      ],
+      "explicit_non_claims": [
+        "HUMAN_COMPREHENSION_E6 != PASS",
+        "STUDENT_VALIDATED != true"
+      ]
+    },
+    "ER3_game_critic": {
+      "mode": "AI_HEURISTIC",
+      "applicable": false,
+      "note": "Not a game product — ER-3 N/A for this surface."
+    }
+  },
+  "summary": "WAIKE Learning SDK app persists progress/portfolio and binds gunnchAI tutor digitally. HTML lesson browser is sparse/JSON-progress oriented — reads like a developer panel more than a learning product. Full curriculum quality not claimed."
+}

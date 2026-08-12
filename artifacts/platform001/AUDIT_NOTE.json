@@ -1,0 +1,22 @@
+{
+  "schema": "gunnchos.platform001.audit.v1",
+  "base_main_sha": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "pr_104": {
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/104",
+    "merge_commit": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "state": "MERGED"
+  },
+  "do_not_merge_pr_103": true,
+  "pre_audit": {
+    "creator_studio": "Thin sdk/apps wrapper over Cont-VII first_party_apps; tempfile workspace; no sandbox persistence; HTML shell mock run/build.",
+    "waike_learning": "Thin wrapper; progress store defaulted in-memory; no gunnchAI cross-service in app path.",
+    "gunnchai_tutor": "Safety-gate-only entry; mock flags; no first_party app module; no UI tree; not owner-depth tutoring app."
+  },
+  "post_audit": {
+    "creator_studio": "Sandbox workspace persist, real run/build artifact, git status, permissions, logs, gunnchAI assist, SDK lifecycle dogfood.",
+    "waike_learning": "Sandbox progress/portfolio persist, roles, gunnchAI lesson tutor bind, SDK lifecycle dogfood.",
+    "gunnchai_tutor": "first_party_apps.gunnchai_tutor + UI shell + local template replies + memory + WAIKE binding + SDK lifecycle dogfood."
+  },
+  "examples_never_product_evidence": true,
+  "tokens_file": "artifacts/platform001/PLATFORM001_RESULT.json"
+}

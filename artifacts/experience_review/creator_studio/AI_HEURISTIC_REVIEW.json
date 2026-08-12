@@ -1,0 +1,64 @@
+{
+  "schema": "gunnchos.experience_review.v1",
+  "product": "creator_studio",
+  "generated_utc": "2026-08-12T21:05:00Z",
+  "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
+  "AI_HEURISTIC_REVIEW_ONLY": true,
+  "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
+  "HUMAN_E6": "NOT_EARNED",
+  "HUMAN_COMPREHENSION_E6": "NOT_EARNED",
+  "STUDENT_VALIDATED": false,
+  "visual_inspect": {
+    "status": "UNAVAILABLE",
+    "reason": "No live rendered UI inspect performed in PLATFORM-001 dogfood; companion HTML/CSS reviewed structurally only — visual polish PASS forbidden from code inspection."
+  },
+  "roles": {
+    "ER1_senior_product_ux": {
+      "mode": "AI_HEURISTIC",
+      "visual_status": "UNAVAILABLE",
+      "findings": [
+        {
+          "id": "CS-ER1-01",
+          "severity": "S2",
+          "finding": "Companion shell run/build buttons simulate terminal output rather than reflecting sandbox runtime artifacts — trust gap for creators."
+        },
+        {
+          "id": "CS-ER1-02",
+          "severity": "S3",
+          "finding": "Header subtitle enumerates every feature (debug dump style); primary action hierarchy is weak."
+        },
+        {
+          "id": "CS-ER1-03",
+          "severity": "S3",
+          "finding": "DS-XL layout toggle exists as a class flip only; dual-screen composition not visually validated."
+        },
+        {
+          "id": "CS-ER1-04",
+          "severity": "S2",
+          "finding": "Empty/error/loading states absent in companion shell."
+        }
+      ]
+    },
+    "ER2_student_engagement": {
+      "mode": "AI_HEURISTIC",
+      "applicable": true,
+      "findings": [
+        {
+          "id": "CS-ER2-01",
+          "severity": "S3",
+          "finding": "First 30s: file list + editor present, but payoff of real package artifact is invisible in the HTML shell."
+        }
+      ],
+      "explicit_non_claims": [
+        "HUMAN_COMPREHENSION_E6 != PASS",
+        "STUDENT_VALIDATED != true"
+      ]
+    },
+    "ER3_game_critic": {
+      "mode": "AI_HEURISTIC",
+      "applicable": false,
+      "note": "Not a game product — ER-3 N/A for this surface."
+    }
+  },
+  "summary": "Creator Studio Python/SDK runtime dogfoods real edit/run/build/git/AI-assist with persistence. Companion HTML remains a prototype three-pane shell with mock terminal text — intentional design not demonstrated in a rendered inspect."
+}
