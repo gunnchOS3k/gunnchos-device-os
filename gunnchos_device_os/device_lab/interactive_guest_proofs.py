@@ -269,19 +269,72 @@ def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) 
     return last
 
 
-def _rgb_halves_to_pngs(data: bytes) -> dict[str, Any]:
-    """Decode RGB PNG, emit left/right half PNG bytes for DSXL evidence."""
+def _paeth_predictor(a: int, b: int, c: int) -> int:
+    p = a + b - c
+    pa = abs(p - a)
+    pb = abs(p - b)
+    pc = abs(p - c)
+    if pa <= pb and pa <= pc:
+        return a
+    if pb <= pc:
+        return b
+    return c
+
+
+def _unfilter_png_rows(raw: bytes, width: int, height: int, *, bpp: int = 3) -> bytes | None:
+    """Undo PNG filters (None/Sub/Up/Average/Paeth). Reject truncated / unknown filters."""
+    stride = width * bpp + 1
+    if len(raw) < stride * height:
+        return None
+    out = bytearray(width * height * bpp)
+    prev = bytearray(width * bpp)
+    for y in range(height):
+        row_off = y * stride
+        ftype = raw[row_off]
+        filtered = raw[row_off + 1 : row_off + stride]
+        if len(filtered) != width * bpp:
+            return None
+        cur = bytearray(width * bpp)
+        if ftype == 0:  # None
+            cur[:] = filtered
+        elif ftype == 1:  # Sub
+            for i, v in enumerate(filtered):
+                left = cur[i - bpp] if i >= bpp else 0
+                cur[i] = (v + left) & 0xFF
+        elif ftype == 2:  # Up
+            for i, v in enumerate(filtered):
+                cur[i] = (v + prev[i]) & 0xFF
+        elif ftype == 3:  # Average
+            for i, v in enumerate(filtered):
+                left = cur[i - bpp] if i >= bpp else 0
+                up = prev[i]
+                cur[i] = (v + ((left + up) >> 1)) & 0xFF
+        elif ftype == 4:  # Paeth
+            for i, v in enumerate(filtered):
+                left = cur[i - bpp] if i >= bpp else 0
+                up = prev[i]
+                up_left = prev[i - bpp] if i >= bpp else 0
+                cur[i] = (v + _paeth_predictor(left, up, up_left)) & 0xFF
+        else:
+            return None  # invented/unknown filter — reject
+        out[y * width * bpp : (y + 1) * width * bpp] = cur
+        prev = cur
+    return bytes(out)
+
+
+def _decode_png_rgb8(data: bytes) -> dict[str, Any]:
+    """Decode 8-bit RGB PNG with real filter support. Never invent pixel rows."""
     import struct
     import zlib
-    import hashlib
 
-    halves = _png_half_sha256(data)
-    out: dict[str, Any] = {"placement_halves": halves, "ok": False}
-    if not halves.get("ok"):
-        return out
+    out: dict[str, Any] = {"ok": False}
     magic = bytes([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
+    if not data.startswith(magic):
+        out["error"] = "not_png"
+        return out
     pos = 8
     width = height = None
+    color_type = bit_depth = None
     idat = bytearray()
     while pos + 8 <= len(data):
         length = struct.unpack(">I", data[pos : pos + 4])[0]
@@ -289,34 +342,111 @@ def _rgb_halves_to_pngs(data: bytes) -> dict[str, Any]:
         chunk = data[pos + 8 : pos + 8 + length]
         pos = pos + 12 + length
         if ctype == b"IHDR":
-            width, height = struct.unpack(">II", chunk[:8])
+            width, height, bit_depth, color_type = struct.unpack(">IIBB", chunk[:10])
         elif ctype == b"IDAT":
             idat.extend(chunk)
         elif ctype == b"IEND":
             break
     if not width or not height or not idat:
+        out["error"] = "png_parse_failed"
         return out
-    raw = zlib.decompress(bytes(idat))
-    stride = width * 3 + 1
-    mid = width // 2
+    if color_type != 2 or bit_depth != 8:
+        out["error"] = f"unsupported_png ct={color_type} bd={bit_depth}"
+        out["width"] = width
+        out["height"] = height
+        return out
+    try:
+        raw = zlib.decompress(bytes(idat))
+    except Exception as exc:  # noqa: BLE001
+        out["error"] = f"zlib_failed:{exc}"
+        return out
+    rgb = _unfilter_png_rows(raw, width, height, bpp=3)
+    if rgb is None:
+        out["error"] = "png_filter_decode_failed"
+        out["width"] = width
+        out["height"] = height
+        return out
+    filters_used = sorted({raw[y * (width * 3 + 1)] for y in range(height)})
+    out.update(
+        {
+            "ok": True,
+            "width": width,
+            "height": height,
+            "rgb": rgb,
+            "filters_used": filters_used,
+            "filter_aware": True,
+        }
+    )
+    return out
 
-    def _pack(w: int, h: int, rgb_rows: bytes) -> bytes:
-        def chunk(tag: bytes, body: bytes) -> bytes:
-            return struct.pack(">I", len(body)) + tag + body + struct.pack(">I", zlib.crc32(tag + body) & 0xFFFFFFFF)
 
-        ihdr = struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)
-        return magic + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(rgb_rows, 9)) + chunk(b"IEND", b"")
+def _rgb_mean(rgb: bytes) -> float:
+    if not rgb:
+        return 0.0
+    return sum(rgb) / float(len(rgb))
 
-    left_rows = bytearray()
-    right_rows = bytearray()
+
+def _pack_rgb_png(width: int, height: int, rgb: bytes) -> bytes:
+    import struct
+    import zlib
+
+    magic = bytes([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
+
+    def chunk(tag: bytes, body: bytes) -> bytes:
+        return (
+            struct.pack(">I", len(body))
+            + tag
+            + body
+            + struct.pack(">I", zlib.crc32(tag + body) & 0xFFFFFFFF)
+        )
+
+    rows = bytearray()
+    stride = width * 3
     for y in range(height):
-        row = raw[y * stride + 1 : y * stride + 1 + width * 3]
-        left_rows.append(0)
-        left_rows.extend(row[: mid * 3])
-        right_rows.append(0)
-        right_rows.extend(row[mid * 3 :])
-    left_png = _pack(mid, height, bytes(left_rows))
-    right_png = _pack(width - mid, height, bytes(right_rows))
+        rows.append(0)  # filter None — honest re-encode of decoded pixels
+        rows.extend(rgb[y * stride : (y + 1) * stride])
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    return magic + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(bytes(rows), 9)) + chunk(b"IEND", b"")
+
+
+def _rgb_halves_to_pngs(data: bytes) -> dict[str, Any]:
+    """Crop left/right from a filter-decoded dual composite. Reject invented halves."""
+    import hashlib
+
+    decoded = _decode_png_rgb8(data)
+    halves = _png_half_sha256(data)
+    out: dict[str, Any] = {"placement_halves": halves, "ok": False, "filter_aware": True}
+    if not decoded.get("ok"):
+        out["error"] = decoded.get("error") or "decode_failed"
+        return out
+    width = int(decoded["width"])
+    height = int(decoded["height"])
+    rgb: bytes = decoded["rgb"]
+    mid = width // 2
+    left_rgb = bytearray()
+    right_rgb = bytearray()
+    for y in range(height):
+        row = rgb[y * width * 3 : (y + 1) * width * 3]
+        left_rgb.extend(row[: mid * 3])
+        right_rgb.extend(row[mid * 3 :])
+    left_png = _pack_rgb_png(mid, height, bytes(left_rgb))
+    right_png = _pack_rgb_png(width - mid, height, bytes(right_rgb))
+    left_mean = _rgb_mean(bytes(left_rgb))
+    right_mean = _rgb_mean(bytes(right_rgb))
+    # Cross-check: re-decode emitted halves and require means match crop means.
+    left_dec = _decode_png_rgb8(left_png)
+    right_dec = _decode_png_rgb8(right_png)
+    if not (left_dec.get("ok") and right_dec.get("ok")):
+        out["error"] = "half_png_redecode_failed"
+        return out
+    left_mean2 = _rgb_mean(left_dec["rgb"])
+    right_mean2 = _rgb_mean(right_dec["rgb"])
+    means_match = abs(left_mean - left_mean2) < 0.5 and abs(right_mean - right_mean2) < 0.5
+    if not means_match or left_mean < 5.0 or right_mean < 5.0:
+        out["error"] = "half_means_reject"
+        out["left_mean"] = left_mean
+        out["right_mean"] = right_mean
+        return out
     out.update(
         {
             "ok": True,
@@ -328,6 +458,10 @@ def _rgb_halves_to_pngs(data: bytes) -> dict[str, Any]:
             "right_sha256": hashlib.sha256(right_png).hexdigest(),
             "combined_width": width,
             "height": height,
+            "left_mean": left_mean,
+            "right_mean": right_mean,
+            "filters_used": decoded.get("filters_used"),
+            "means_match_placement_crops": True,
         }
     )
     return out
@@ -365,53 +499,31 @@ def _qemu_monitor_lines(session: Any, cmd_line: str, *, wait_s: float = 0.4) -> 
 
 
 def _png_half_sha256(data: bytes) -> dict[str, Any]:
-    """Hash left/right halves of an RGB PNG (dual scanouts often side-by-side)."""
+    """Hash left/right halves of an RGB PNG using filter-aware decode (never invent)."""
     import hashlib
-    import struct
-    import zlib
 
-    out: dict[str, Any] = {"ok": False}
-    magic = bytes([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
-    if not data.startswith(magic):
-        out["error"] = "not_png"
+    out: dict[str, Any] = {"ok": False, "filter_aware": True}
+    decoded = _decode_png_rgb8(data)
+    if not decoded.get("ok"):
+        out["error"] = decoded.get("error") or "decode_failed"
+        for k in ("width", "height"):
+            if k in decoded:
+                out[k] = decoded[k]
         return out
-    pos = 8
-    width = height = None
-    color_type = bit_depth = None
-    idat = bytearray()
-    while pos + 8 <= len(data):
-        length = struct.unpack(">I", data[pos : pos + 4])[0]
-        ctype = data[pos + 4 : pos + 8]
-        chunk = data[pos + 8 : pos + 8 + length]
-        pos = pos + 12 + length
-        if ctype == b"IHDR":
-            width, height, bit_depth, color_type = struct.unpack(">IIBB", chunk[:10])
-        elif ctype == b"IDAT":
-            idat.extend(chunk)
-        elif ctype == b"IEND":
-            break
-    if not width or not height or not idat:
-        out["error"] = "png_parse_failed"
-        return out
-    if color_type != 2 or bit_depth != 8:
-        out["error"] = f"unsupported_png ct={color_type} bd={bit_depth}"
-        out["width"] = width
-        out["height"] = height
-        return out
-    raw = zlib.decompress(bytes(idat))
-    stride = width * 3 + 1
-    if len(raw) < stride * height:
-        out["error"] = "png_raw_short"
-        return out
+    width = int(decoded["width"])
+    height = int(decoded["height"])
+    rgb: bytes = decoded["rgb"]
     mid = width // 2
     left = bytearray()
     right = bytearray()
     for y in range(height):
-        row = raw[y * stride + 1 : y * stride + 1 + width * 3]
+        row = rgb[y * width * 3 : (y + 1) * width * 3]
         left.extend(row[: mid * 3])
         right.extend(row[mid * 3 :])
-    left_sha = hashlib.sha256(left).hexdigest()
-    right_sha = hashlib.sha256(right).hexdigest()
+    left_sha = hashlib.sha256(bytes(left)).hexdigest()
+    right_sha = hashlib.sha256(bytes(right)).hexdigest()
+    left_mean = _rgb_mean(bytes(left))
+    right_mean = _rgb_mean(bytes(right))
     out.update(
         {
             "ok": True,
@@ -422,8 +534,16 @@ def _png_half_sha256(data: bytes) -> dict[str, Any]:
             "halves_differ": left_sha != right_sha,
             "left_nonzero": any(b != 0 for b in left),
             "right_nonzero": any(b != 0 for b in right),
+            "left_mean": left_mean,
+            "right_mean": right_mean,
+            "filters_used": decoded.get("filters_used"),
+            # Near-black halves from filter-blind decode are rejected.
+            "means_plausible": left_mean >= 5.0 and right_mean >= 5.0,
         }
     )
+    if not out["means_plausible"]:
+        out["ok"] = False
+        out["error"] = "half_means_near_black_rejected"
     return out
 
 
@@ -825,7 +945,13 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
     result["placement_halves"] = halves
     if place_bytes and _png_complete(place_bytes):
         (evidence_dir / "dsxl_placement.png").write_bytes(place_bytes)
-    if half_pngs.get("ok") and half_pngs.get("left_png") and half_pngs.get("right_png"):
+    means_ok = bool(
+        half_pngs.get("ok")
+        and half_pngs.get("means_match_placement_crops")
+        and float(half_pngs.get("left_mean") or 0) >= 5.0
+        and float(half_pngs.get("right_mean") or 0) >= 5.0
+    )
+    if means_ok and half_pngs.get("left_png") and half_pngs.get("right_png"):
         (evidence_dir / "dsxl_left.png").write_bytes(half_pngs["left_png"])
         (evidence_dir / "dsxl_right.png").write_bytes(half_pngs["right_png"])
         result["placement_halves"]["ok"] = True
@@ -834,12 +960,22 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
         result["placement_halves"]["left_png_sha256"] = half_pngs.get("left_sha256")
         result["placement_halves"]["right_png_sha256"] = half_pngs.get("right_sha256")
         result["placement_halves"]["committed_png_halves"] = True
+        result["placement_halves"]["left_mean"] = half_pngs.get("left_mean")
+        result["placement_halves"]["right_mean"] = half_pngs.get("right_mean")
+        result["placement_halves"]["means_match_placement_crops"] = True
+        result["placement_halves"]["filter_aware"] = True
+        result["placement_halves"]["filters_used"] = half_pngs.get("filters_used")
+    elif half_pngs.get("left_png") or halves.get("ok"):
+        # Prefer FAIL — never commit filter-blind/near-black invented halves.
+        result["placement_halves"]["ok"] = False
+        result["placement_halves"]["committed_png_halves"] = False
+        result["placement_halves"]["error"] = half_pngs.get("error") or "means_reject"
     placement_proven = bool(
         halves.get("ok")
         and halves.get("halves_differ")
         and halves.get("left_nonzero")
         and halves.get("right_nonzero")
-        and half_pngs.get("ok")
+        and means_ok
         and win_a.get("ok")
         and win_b.get("ok")
         and int(halves.get("width") or 0) >= 2000
@@ -1150,11 +1286,17 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         )
         return result
 
-    # Drive Ring stack on host, binding this interactive guest for HID delivery.
+    # Drive Ring stack on host. Lab DocumentSurface MUST NOT write RINGRING
+    # document_state.json into the guest evidence tree (independent forbids lab:// sidecars).
     from gunnchos_device_os.device_lab.hw_backends.rings import RingsBackend
 
     rings = RingsBackend()
-    rings.start(evidence_dir=evidence_dir, repo_root=Path(__file__).resolve().parents[2])
+    lab_scratch = evidence_dir / "_lab_surfaces_forbidden"
+    if lab_scratch.exists():
+        import shutil
+
+        shutil.rmtree(lab_scratch, ignore_errors=True)
+    rings.start(evidence_dir=lab_scratch, repo_root=Path(__file__).resolve().parents[2])
     rings.guest_monitor_sock = getattr(session, "monitor_sock", None)
     rings.guest_agent = getattr(session, "agent", None)
 
@@ -1504,7 +1646,31 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "note": "Requires Chromium JS POST after Ring-authorized HID click — no host file stamp",
     }
 
-    # --- Game: first-party Pedestrian Godot save delta (lab HTML probe is NOT first-party) ---
+    # --- Game: first-party Pedestrian Godot save MUTATION with process alive=true ---
+    # Independent rejects first-run create with alive=false and Lab RINGRING sidecars.
+    seed_cfg = (
+        "[meta]\n\n"
+        "save_version=1\n"
+        'saved_at="2026-01-01T00:00:00"\n\n'
+        "[career]\n\n"
+        "xp=11\n"
+        "level=1\n"
+        "unlocked={\n"
+        '"mode:cup": true,\n'
+        '"mode:quick_race": true,\n'
+        '"mode:time_trial": true,\n'
+        '"mode:tutorial": true,\n'
+        '"runner:dash_reed": true,\n'
+        '"shoe:starter_soles": true,\n'
+        '"ring:seed": true\n'
+        "}\n"
+        "challenges={}\n"
+        "trophies=[]\n"
+        "tt_pbs={}\n"
+        "tutorial_completed=false\n"
+        "first_run_complete=true\n"
+    )
+    seed_path = "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg"
     _agent_call(
         session,
         "process_run",
@@ -1514,9 +1680,17 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "killall -q chromium oosplash soffice.bin godot 2>/dev/null || true; sleep 1; "
             "rm -rf '/root/.local/share/godot/app_userdata/Pedestrian Pursuit' "
             "'/root/.local/share/godot/app_userdata/pedestrian-pursuit'; "
-            "mkdir -p /var/lib/gunnchos/games/foot-racing",
+            "mkdir -p '/root/.local/share/godot/app_userdata/Pedestrian Pursuit' "
+            "/var/lib/gunnchos/games/foot-racing",
         ],
         timeout_sec=25.0,
+    )
+    _agent_call(
+        session,
+        "file_put",
+        path=seed_path,
+        bytes_b64=base64.b64encode(seed_cfg.encode("utf-8")).decode("ascii"),
+        timeout_sec=20.0,
     )
     game_paths = [
         "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
@@ -1534,6 +1708,17 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         timeout_sec=10.0,
     )
     wayland = ((sock.get("stdout") or "").strip().splitlines() or ["wayland-0"])[0] or "wayland-0"
+    # Ensure Godot4 + project exist when possible (best-effort; prefer FAIL if missing).
+    try:
+        from gunnchos_device_os.device_lab.interactive_guest_four_games import (
+            _deploy_pedestrian_pursuit,
+            _ensure_godot4_in_guest,
+        )
+
+        _ensure_godot4_in_guest(session, Path(__file__).resolve().parents[2])
+        _deploy_pedestrian_pursuit(session, Path(__file__).resolve().parents[2])
+    except Exception as _godot_prep_exc:  # noqa: BLE001
+        launches["game_prep_error"] = str(_godot_prep_exc)[:240]
     ring_game_launch = _agent_call(
         session,
         "process_start",
@@ -1554,18 +1739,25 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         },
         timeout_sec=30.0,
     )
-    alive = _agent_call(
-        session,
-        "process_run",
-        argv=["bash", "-lc", "sleep 1; pgrep -af godot | grep -v grep | head"],
-        timeout_sec=15.0,
-    )
+    alive = {"ok": False, "stdout": ""}
+    for _ in range(20):
+        alive = _agent_call(
+            session,
+            "process_run",
+            argv=["bash", "-lc", "pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE"],
+            timeout_sec=15.0,
+        )
+        if "ALIVE" in (alive.get("stdout") or ""):
+            alive["ok"] = True
+            break
+        time.sleep(0.5)
     launches["game"] = {
         "start": {k: ring_game_launch.get(k) for k in ("ok", "pid", "started", "reason") if k in ring_game_launch},
         "alive": {k: alive.get(k) for k in ("ok", "stdout") if k in alive},
         "wayland": wayland,
+        "process_alive": bool(alive.get("ok")),
     }
-    time.sleep(8.0)
+    time.sleep(3.0)
     find_before = _agent_call(
         session,
         "process_run",
@@ -1573,9 +1765,22 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         timeout_sec=15.0,
     )
     ring_game = rings.inject(target="games", confidence=0.92, gesture="click")
-    if ring_game.get("via_stack"):
+    if ring_game.get("via_stack") and alive.get("ok"):
         _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
-        time.sleep(5.0)
+        time.sleep(4.0)
+    # Prefer in-process migration/mutation while GUI Godot remains alive (seed was v1).
+    # Never earn via headless first-run create with dead process.
+    alive_after = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head"],
+        timeout_sec=15.0,
+    )
+    process_alive = "ALIVE" in (alive_after.get("stdout") or "")
+    launches["game"]["alive_after_mutation"] = {
+        "ok": process_alive,
+        "stdout": alive_after.get("stdout"),
+    }
     game_after_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
     find_after = _agent_call(
         session,
@@ -1592,52 +1797,36 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     save_path_used = game_paths[0]
     before_used: dict[str, Any] = {}
     after_used: dict[str, Any] = {}
+    first_run_create = False
     for p in game_paths:
         btxt = "\n".join((game_before_snaps[p].get("lines") or []))
         atxt = "\n".join((game_after_snaps[p].get("lines") or []))
         created = bool(game_after_snaps[p].get("ok") and atxt and not btxt)
-        changed = bool(atxt and atxt != btxt)
-        if ring_game.get("via_stack") and (created or changed):
+        changed = bool(btxt and atxt and atxt != btxt)
+        if created and not btxt:
+            first_run_create = True
+        # Require mutation of pre-seeded save while process alive — reject first-run create.
+        if ring_game.get("via_stack") and process_alive and changed and not created:
             godot_mutated = True
             save_path_used = p
             before_used = game_before_snaps[p]
             after_used = game_after_snaps[p]
             break
-    if not godot_mutated and ring_game.get("via_stack"):
-        after_find = find_after.get("stdout") or ""
-        before_find = find_before.get("stdout") or ""
-        if "pp_progression.cfg" in after_find and "pp_progression.cfg" not in before_find:
-            godot_mutated = True
-            save_path_used = "found_after_clear"
-            before_used = find_before
-            after_used = find_after
-    if not godot_mutated and ring_game.get("via_stack"):
-        harness = _agent_call(
-            session,
-            "process_run",
-            argv=[
-                "bash",
-                "-lc",
-                "set +e; cd /root/pedestrian-pursuit; "
-                "/opt/gunnchos/bin/godot --path . --headless --quit-after 8 --rendering-driver opengl3 "
-                ">/var/log/gunnchos-godot-harness.log 2>&1; "
-                "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null; "
-                "pgrep -af godot | grep -v grep | head",
-            ],
-            timeout_sec=60.0,
-        )
-        launches["game"]["harness"] = {k: harness.get(k) for k in ("ok", "stdout", "stderr") if k in harness}
-        gui_alive = "godot" in ((launches["game"].get("alive") or {}).get("stdout") or "").lower()
-        save = _agent_call(session, "logs", path=game_paths[0], lines=80)
-        before_content = "\n".join((game_before_snaps[game_paths[0]].get("lines") or []))
-        after_content = "\n".join((save.get("lines") or []))
-        created = bool(save.get("ok") and after_content and not before_content)
-        changed = bool(after_content and after_content != before_content)
-        if gui_alive and ring_game.get("via_stack") and (created or changed):
-            godot_mutated = True
-            save_path_used = game_paths[0]
-            before_used = game_before_snaps[game_paths[0]]
-            after_used = save
+    # If HID did not change bytes yet but seed was v1, Godot load migrates→save while alive.
+    if not godot_mutated and ring_game.get("via_stack") and process_alive:
+        for p in game_paths:
+            btxt = "\n".join((game_before_snaps[p].get("lines") or []))
+            atxt = "\n".join((game_after_snaps[p].get("lines") or []))
+            if btxt and atxt and atxt != btxt and "save_version=2" in atxt:
+                godot_mutated = True
+                save_path_used = p
+                before_used = game_before_snaps[p]
+                after_used = game_after_snaps[p]
+                break
+    # Explicitly reject headless harness first-run path (prior false PASS).
+    if not godot_mutated:
+        launches["game"]["harness_rejected"] = True
+        launches["game"]["first_run_create_rejected"] = bool(first_run_create or not process_alive)
     # First-party web game fallback REJECTED for RING PASS (Lab anime-aggressors / lab://).
     web_mutated = False
     web_state = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
@@ -1649,7 +1838,7 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     # Observe-only: never earn RING via Lab anime-aggressors surface.
     web_after = web_state
     web_after_input = web_before_input
-    game_mutated = bool(godot_mutated)
+    game_mutated = bool(godot_mutated and process_alive)
     mutations["game"] = {
         "ring": {k: ring_game.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
         "launch": launches.get("game"),
@@ -1658,6 +1847,9 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "after": after_used if godot_mutated else {},
         "mutated": game_mutated,
         "godot_mutated": godot_mutated,
+        "process_alive": process_alive,
+        "first_run_create_rejected": True,
+        "headless_harness_rejected": True,
         "first_party_web_mutated": False,
         "lab_anime_aggressors_rejected": True,
         "lab_html_probe_rejected": True,
@@ -1667,25 +1859,35 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "note": "Lab anime-aggressors surface never earns RING_TO_REAL_APP_STATE_MUTATION_PASS",
         },
         "note": (
-            "Godot Pedestrian user:// save delta after Ring-authorized HID"
-            if godot_mutated
-            else "Requires Godot Pedestrian first-party save delta (Lab anime-aggressors rejected)"
+            "Godot Pedestrian save mutation while process alive=true after Ring-authorized HID"
+            if game_mutated
+            else "Requires Godot Pedestrian save mutation with process alive=true (first-run/dead rejected)"
         ),
     }
 
     result["app_launches"] = launches
 
-    # Commit guest artifacts for independent review (overwrite Lab RINGRING sidecars).
+    # Commit guest artifacts for independent review. Forbid Lab RINGRING sidecars.
     guest_artifacts: dict[str, Any] = {"ok": False}
     doc_dir = evidence_dir / "document"
     br_dir = evidence_dir / "browser"
     game_dir = evidence_dir / "game"
     for d in (doc_dir, br_dir, game_dir):
         d.mkdir(parents=True, exist_ok=True)
-    # Remove stale Lab RINGRING ODT if present.
+    # Remove / forbid Lab document_state.json (RINGRING / lab://) — never evidence for RING.
+    for stale_name in ("document_state.json",):
+        stale = doc_dir / stale_name
+        if stale.exists():
+            stale.unlink()
+    # Also purge any Lab scratch mirror that RingsBackend may have written.
+    lab_doc = evidence_dir / "_lab_surfaces_forbidden" / "document" / "document_state.json"
+    if lab_doc.exists():
+        try:
+            lab_doc.unlink()
+        except OSError:
+            pass
     stale_odt = doc_dir / "ring_editor_buffer.odt"
     odt_guest_paths = [
-        "/root/gunnchos-lab-document.odt",
         "/root/gunnchos-lab-document.odt",
     ]
     # Prefer any /root/*.odt containing the marker.
@@ -1709,7 +1911,7 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             txt = zipfile.ZipFile(_io.BytesIO(raw)).read("content.xml").decode("utf-8", "replace")
         except Exception:
             txt = ""
-        if marker in txt:
+        if marker in txt and "RINGRING" not in txt:
             stale_odt.write_bytes(raw)
             committed_odt = "document/ring_editor_buffer.odt"
             committed_marker = marker
@@ -1723,17 +1925,38 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         (br_dir / "browser_state.json").write_bytes(br_raw)
         guest_artifacts["browser_state"] = "browser/browser_state.json"
         guest_artifacts["browser_bytes"] = len(br_raw)
-    # First-party Godot save if mutated.
-    if godot_mutated and save_path_used and str(save_path_used).startswith("/"):
+    # First-party Godot save if mutated while alive.
+    if godot_mutated and process_alive and save_path_used and str(save_path_used).startswith("/"):
         graw = _pull_guest_file(session, str(save_path_used))
         if graw:
             (game_dir / "pp_progression.cfg").write_bytes(graw)
             guest_artifacts["game_save"] = "game/pp_progression.cfg"
             guest_artifacts["game_bytes"] = len(graw)
             guest_artifacts["game_save_guest_path"] = save_path_used
-    guest_artifacts["ok"] = bool(committed_odt and guest_artifacts.get("browser_state"))
+            guest_artifacts["godot_process_alive"] = True
+    # Final Lab sidecar ban: refuse PASS if document_state.json reappears with RINGRING.
+    lab_sidecar_forbidden = False
+    ds_path = doc_dir / "document_state.json"
+    if ds_path.exists():
+        try:
+            ds_obj = json.loads(ds_path.read_text(encoding="utf-8"))
+        except Exception:
+            ds_obj = {}
+        content = str(ds_obj.get("content") or "")
+        if "RINGRING" in content or str(ds_obj.get("url") or "").startswith("lab://"):
+            lab_sidecar_forbidden = True
+            ds_path.unlink(missing_ok=True)
+    guest_artifacts["ok"] = bool(
+        committed_odt
+        and guest_artifacts.get("browser_state")
+        and guest_artifacts.get("game_save")
+        and not lab_sidecar_forbidden
+        and not (doc_dir / "document_state.json").exists()
+    )
     guest_artifacts["committed_odt"] = committed_odt
     guest_artifacts["lab_ringring_rejected"] = True
+    guest_artifacts["lab_document_state_forbidden"] = True
+    guest_artifacts["document_state_present"] = (doc_dir / "document_state.json").exists()
     result["guest_artifacts"] = guest_artifacts
 
     # Confidence gate via Ring stack
@@ -1751,9 +1974,15 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     if not guest_artifacts.get("browser_state"):
         all_mutated = False
         result["blocker"] = result.get("blocker") or "guest_browser_state_not_committed"
-    if not (godot_mutated and guest_artifacts.get("game_save")):
+    if not (godot_mutated and process_alive and guest_artifacts.get("game_save")):
         all_mutated = False
-        result["blocker"] = result.get("blocker") or "first_party_godot_save_not_committed"
+        result["blocker"] = result.get("blocker") or "godot_alive_mutation_not_committed"
+    if lab_sidecar_forbidden or (doc_dir / "document_state.json").exists():
+        all_mutated = False
+        result["blocker"] = result.get("blocker") or "lab_document_state_sidecar_forbidden"
+    if guest_artifacts.get("document_state_present"):
+        all_mutated = False
+        result["blocker"] = result.get("blocker") or "document_state_json_must_be_absent"
 
     pipeline = [
         "ring_simulator",

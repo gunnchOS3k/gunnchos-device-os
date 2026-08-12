@@ -317,41 +317,131 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
                     "via": "guest_screenshot_dir",
                 }
                 break
-    half_pngs = _rgb_halves_to_pngs(place_bytes)
-    halves = half_pngs.get("placement_halves") or _png_half_sha256(place_bytes)
+    # Prefer per-output grim captures when compositor exposes named outputs.
+    per_out = _guest_bash(
+        session,
+        "set +e; RUN=/var/lib/gunnchos/screenshots/dsxl_this_run; mkdir -p \"$RUN\"; "
+        "OUTS=$(wlr-randr 2>/dev/null | awk '/^[^ ]/{print $1}'); "
+        "i=0; for o in $OUTS; do "
+        "  grim -o \"$o\" \"$RUN/grim_out_$i.png\" 2>>/tmp/grim_out.err; i=$((i+1)); "
+        "done; "
+        "ls -1 \"$RUN\"/grim_out_*.png 2>/dev/null; "
+        "python3 - <<'PY'\n"
+        "from pathlib import Path\n"
+        "import struct\n"
+        "root=Path('/var/lib/gunnchos/screenshots/dsxl_this_run')\n"
+        "for p in sorted(root.glob('grim_out_*.png')):\n"
+        "  b=p.read_bytes()\n"
+        "  if len(b)<24: continue\n"
+        "  w,h=struct.unpack('>II', b[16:24])\n"
+        "  print(p.name, len(b), w, h, 'iend='+str(b'\\x00\\x00\\x00\\x00IEND' in b))\n"
+        "PY",
+        timeout_sec=40,
+        name="grim-per-output",
+    )
+    ev["grim_per_output"] = {k: per_out.get(k) for k in ("ok", "stdout", "stderr") if k in per_out}
+    left_png = right_png = b""
+    fb_method = "none"
+    left_pull = _pull_guest_file(session, "/var/lib/gunnchos/screenshots/dsxl_this_run/grim_out_0.png")
+    right_pull = _pull_guest_file(session, "/var/lib/gunnchos/screenshots/dsxl_this_run/grim_out_1.png")
+    if _png_complete(left_pull) and _png_complete(right_pull):
+        left_png, right_png = left_pull, right_pull
+        fb_method = "grim_per_output"
+        # Build/refresh placement composite from true dual halves when needed.
+        if not _png_complete(place_bytes) or int(_png_half_sha256(place_bytes).get("width") or 0) < 2000:
+            # Keep whatever composite we have; halves stand alone as per-output FBs.
+            pass
+
+    half_pngs = _rgb_halves_to_pngs(place_bytes) if _png_complete(place_bytes) else {"ok": False}
+    halves = half_pngs.get("placement_halves") or _png_half_sha256(place_bytes if place_bytes else b"")
     ev["placement_framebuffer"] = {
         k: v for k, v in place_cap.items() if k not in {"bytes_b64", "_decoded_bytes"}
     }
+    # If per-output grim missing, crop from filter-aware dual composite only.
+    if not (left_png and right_png) and half_pngs.get("ok"):
+        left_png = half_pngs["left_png"]
+        right_png = half_pngs["right_png"]
+        fb_method = "filter_aware_composite_crop"
+        halves = half_pngs.get("placement_halves") or halves
+    # Validate committed halves statistically match placement crops when composite exists.
+    means_match = False
+    if left_png and right_png:
+        from gunnchos_device_os.device_lab.interactive_guest_proofs import (  # noqa: WPS433
+            _decode_png_rgb8,
+            _rgb_mean,
+        )
+
+        ld = _decode_png_rgb8(left_png)
+        rd = _decode_png_rgb8(right_png)
+        crop = _png_half_sha256(place_bytes) if _png_complete(place_bytes) else {"ok": False}
+        if crop.get("ok") and ld.get("ok") and rd.get("ok"):
+            lm, rm = _rgb_mean(ld["rgb"]), _rgb_mean(rd["rgb"])
+            means_match = (
+                abs(lm - float(crop.get("left_mean") or -1)) < 8.0
+                and abs(rm - float(crop.get("right_mean") or -1)) < 8.0
+                and lm >= 5.0
+                and rm >= 5.0
+            )
+            halves = dict(crop)
+            halves["left_mean_committed"] = lm
+            halves["right_mean_committed"] = rm
+            halves["means_match_placement_crops"] = means_match
+            halves["filter_aware"] = True
+        elif ld.get("ok") and rd.get("ok"):
+            lm, rm = _rgb_mean(ld["rgb"]), _rgb_mean(rd["rgb"])
+            means_match = lm >= 5.0 and rm >= 5.0 and ld["rgb"] != rd["rgb"]
+            halves = {
+                "ok": means_match,
+                "left_mean": lm,
+                "right_mean": rm,
+                "halves_differ": True,
+                "left_nonzero": True,
+                "right_nonzero": True,
+                "width": int(ld.get("width") or 0) + int(rd.get("width") or 0),
+                "height": int(ld.get("height") or 0),
+                "means_match_placement_crops": means_match,
+                "filter_aware": True,
+                "per_output": fb_method == "grim_per_output",
+            }
     ev["placement_halves"] = halves
     if place_bytes and _png_complete(place_bytes):
         (evidence_dir / "dsxl_placement.png").write_bytes(place_bytes)
-    if half_pngs.get("ok") and half_pngs.get("left_png") and half_pngs.get("right_png"):
-        (evidence_dir / "dsxl_left.png").write_bytes(half_pngs["left_png"])
-        (evidence_dir / "dsxl_right.png").write_bytes(half_pngs["right_png"])
+    if left_png and right_png and means_match:
+        (evidence_dir / "dsxl_left.png").write_bytes(left_png)
+        (evidence_dir / "dsxl_right.png").write_bytes(right_png)
         halves["ok"] = True
         halves["left_png"] = "dsxl_left.png"
         halves["right_png"] = "dsxl_right.png"
-        halves["left_png_sha256"] = half_pngs.get("left_sha256")
-        halves["right_png_sha256"] = half_pngs.get("right_sha256")
         halves["committed_png_halves"] = True
+        halves["fb_method"] = fb_method
         ev["placement_halves"] = halves
+    elif left_png or right_png:
+        # Prefer FAIL: do not commit invented/near-black halves.
+        halves["ok"] = False
+        halves["committed_png_halves"] = False
+        halves["error"] = halves.get("error") or "means_mismatch_or_near_black"
+        ev["placement_halves"] = halves
+    left_path = evidence_dir / "dsxl_left.png"
+    right_path = evidence_dir / "dsxl_right.png"
     halves_ok = bool(
         halves.get("ok")
         and halves.get("halves_differ")
         and halves.get("left_nonzero")
         and halves.get("right_nonzero")
-        and half_pngs.get("ok")
-        and int(halves.get("width") or 0) >= 2000
         and halves.get("committed_png_halves")
+        and halves.get("means_match_placement_crops")
+        and int(halves.get("width") or 0) >= 2000
+        and left_path.is_file()
+        and right_path.is_file()
+        and _png_complete(left_path.read_bytes())
+        and _png_complete(right_path.read_bytes())
     )
-    # Prefer real placement halves PNGs; wide this-run shot is supporting only.
-    fb_both = bool(halves_ok or (wide_ok and halves_ok))
-    if not halves_ok:
-        fb_both = False
+    fb_both = bool(halves_ok)
     ev["fb_both"] = fb_both
-    ev["fb_method"] = "combined_halves_png" if halves_ok else ("wide_this_run_only_insufficient" if wide_ok else "none")
+    ev["fb_method"] = fb_method if halves_ok else ("wide_this_run_only_insufficient" if wide_ok else "none")
     ev["this_run_shot_hashes"] = hashes
     ev["grim_both_stale_rejected"] = True
+    ev["invented_halves_rejected"] = True
 
     # Agent often stalls after large dual PNG pull — recover before focus clicks.
     for _ in range(20):
@@ -730,6 +820,58 @@ def main() -> int:
         "GUEST_DUAL_OUTPUT_PASS": True,
         "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
     }
+    # Prefer FAIL: DSXL disk halves must statistically match placement crops.
+    from gunnchos_device_os.device_lab.interactive_guest_proofs import (  # noqa: WPS433
+        _decode_png_rgb8,
+        _png_half_sha256,
+        _rgb_mean,
+    )
+
+    left_p = dsxl_dir / "dsxl_left.png"
+    right_p = dsxl_dir / "dsxl_right.png"
+    place_p = dsxl_dir / "dsxl_placement.png"
+    dsxl_disk_ok = False
+    if left_p.is_file() and right_p.is_file() and place_p.is_file():
+        crop = _png_half_sha256(place_p.read_bytes())
+        ld = _decode_png_rgb8(left_p.read_bytes())
+        rd = _decode_png_rgb8(right_p.read_bytes())
+        if crop.get("ok") and ld.get("ok") and rd.get("ok"):
+            lm, rm = _rgb_mean(ld["rgb"]), _rgb_mean(rd["rgb"])
+            dsxl_disk_ok = (
+                abs(lm - float(crop.get("left_mean") or -1)) < 8.0
+                and abs(rm - float(crop.get("right_mean") or -1)) < 8.0
+                and lm >= 5.0
+                and rm >= 5.0
+                and _png_complete(left_p.read_bytes())
+                and _png_complete(right_p.read_bytes())
+            )
+            summary["dsxl_disk_means"] = {
+                "left": lm,
+                "right": rm,
+                "crop_left": crop.get("left_mean"),
+                "crop_right": crop.get("right_mean"),
+                "ok": dsxl_disk_ok,
+            }
+    if tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] and not dsxl_disk_ok:
+        tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] = False
+        summary["dsxl_note"] = (
+            str(dsxl.get("note") or "") + " | disk mean-match gate failed"
+        ).strip(" |")
+    # Prefer FAIL: RING must not leave Lab document_state.json / must have alive Godot save.
+    doc_state = ring_dir / "document" / "document_state.json"
+    if doc_state.exists():
+        try:
+            ds_obj = json.loads(doc_state.read_text(encoding="utf-8"))
+        except Exception:
+            ds_obj = {}
+        if "RINGRING" in str(ds_obj.get("content") or "") or str(ds_obj.get("url") or "").startswith("lab://"):
+            tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] = False
+            summary["ring_note"] = "lab document_state sidecar forbidden"
+            doc_state.unlink(missing_ok=True)
+    game_alive = bool(((ring.get("mutations") or {}).get("game") or {}).get("process_alive"))
+    if tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] and not game_alive:
+        tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] = False
+        summary["ring_note"] = "godot process_alive required"
     summary["tokens"] = tokens
     summary["live_note"] = "retained from coherent before/after guest FB run"
     summary["dsxl_note"] = dsxl.get("note")

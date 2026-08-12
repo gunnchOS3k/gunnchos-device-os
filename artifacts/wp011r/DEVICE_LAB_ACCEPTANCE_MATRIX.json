@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.wp011r.acceptance_matrix.v1",
-  "updated_at_utc": "2026-08-12T16:20:00Z",
+  "updated_at_utc": "2026-08-12T16:47:18Z",
   "assessed_tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
   "rows": [
     {
@@ -16,7 +16,7 @@
     {
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "pass": false,
-      "note": "left/right near-black ≠ placement halves; filter-blind invented halves"
+      "note": "left/right near-black \u2260 placement halves; filter-blind invented halves"
     },
     {
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
@@ -41,5 +41,18 @@
   "prefer_fail_over_false_pass": true,
   "cursor_never_merges": true,
   "WP-001": "DO_NOT_START",
-  "note": "Independent FAIL demotion of DSXL+RING on tip 7fe1022; LIVE/FOUR/ECO010 retained; shipping false; Cursor never merges"
+  "note": "Implementer re-earn; independent acceptance pending for DSXL+RING",
+  "implementer_tokens": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "ECO010_SOAK_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "five_gate_digital_and": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "SHIPPING_IMAGE": false,
+    "SILICON_EXACT_EMULATION": false
+  },
+  "independent_accepted": false
 }

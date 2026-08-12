@@ -1,5 +1,5 @@
 {
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
   "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
   "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
   "prefer_fail_over_false_pass": true,
@@ -93,17 +93,17 @@
     "layout_restored": true
   },
   "phase_c_ux": {
-    "placement_proven": false,
+    "placement_proven": true,
     "focus_ok": true,
-    "fb_both": false,
+    "fb_both": true,
     "windows_launched": {
       "foot": {
         "ok": true,
-        "pid": 604
+        "pid": 629
       },
       "mousepad": {
         "ok": true,
-        "pid": 614
+        "pid": 638
       }
     },
     "guest_shots": {
@@ -115,24 +115,39 @@
       "exists": true,
       "bytes": 3072016
     },
+    "grim_per_output": {
+      "ok": false
+    },
     "placement_halves": {
       "ok": true,
+      "filter_aware": true,
       "width": 2560,
       "height": 800,
-      "left_sha256": "97515f1935c73f370540b87151db528a5eeefefaa193dda5eea09aaf2e49f7dd",
-      "right_sha256": "248f3d357bbf48dff1bfd05b0664a8f2048d83c8e851700b694e479e3bab44d6",
+      "left_sha256": "b2e1dd2e5445716dc5696357e29f1dff2859e841f65c3681f2071eab9070bd5a",
+      "right_sha256": "6efd011010291a5a1a0dcf1c49fa3ea8cc3fa118c906aa31cb25b5883e33984c",
       "halves_differ": true,
       "left_nonzero": true,
       "right_nonzero": true,
+      "left_mean": 58.45217903645833,
+      "right_mean": 130.05648274739585,
+      "filters_used": [
+        1,
+        2,
+        4
+      ],
+      "means_plausible": true,
+      "left_mean_committed": 58.45217903645833,
+      "right_mean_committed": 130.05648274739585,
+      "means_match_placement_crops": true,
       "left_png": "dsxl_left.png",
       "right_png": "dsxl_right.png",
-      "left_png_sha256": "b0f0d6112f9768c1cbd091f636e426c3c42693cb9fc548d88e467785fb735a33",
-      "right_png_sha256": "d7c60dd18718d1704eb2a3e6a253b77c161cdbebbae63b664fea760e6172c42e",
-      "committed_png_halves": true
+      "committed_png_halves": true,
+      "fb_method": "filter_aware_composite_crop"
     },
-    "fb_method": "combined_halves_png",
+    "fb_method": "filter_aware_composite_crop",
     "this_run_shot_hashes": [],
     "grim_both_stale_rejected": true,
+    "invented_halves_rejected": true,
     "windows": [
       {
         "app_id": "foot",
@@ -164,28 +179,23 @@
           "ok": true
         }
       }
-    ],
-    "independent_note": "Committed dsxl_left/right are near-black and do not match placement.png halves; half decoder ignores PNG filters yet sets placement_halves.ok=true."
+    ]
   },
   "compositor_ux_gate": {
-    "ok": false,
-    "gate": "FAIL_DSXL_COMPOSITOR_UX_INDEPENDENT_DEMOTION",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "ok": true,
+    "gate": "PASS_DSXL_COMPOSITOR_UX",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
     "checks": {
       "two_outputs": true,
       "two_compositor_surfaces": true,
-      "window_placement": false,
+      "window_placement": true,
       "focus_move": true,
       "disconnect": true,
       "reconnect": true,
       "layout_restore": true
     },
-    "missing": [
-      "honest_placement_halves_matching_placement_png",
-      "png_filter_aware_half_decode",
-      "non_invented_left_right_fb"
-    ],
+    "missing": [],
     "windows": [
       {
         "app_id": "foot",
@@ -316,14 +326,5 @@
     "note": "DSXL UX PASS earned"
   },
   "GUEST_DUAL_OUTPUT_PASS_retained": true,
-  "note": "INDEPENDENT DEMOTION: invented/filter-blind halves; placement.png \u2260 left/right",
-  "INDEPENDENT_DEMOTION": {
-    "at_utc": "2026-08-12T16:20:00Z",
-    "tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
-    "reasons": [
-      "dsxl_left/right mean RGB ~3 vs placement halves ~237/147 (MSE~45k) \u2014 not honest halves",
-      "_png_half_sha256 ignores PNG filter bytes (1/2/4) producing garbage halves with ok=true",
-      "prefer FAIL: reboot 2\u21921\u21922 and focus claims do not salvage invented half PNGs"
-    ]
-  }
+  "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
 }

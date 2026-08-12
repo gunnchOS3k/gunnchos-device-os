@@ -1,67 +1,39 @@
 {
-  "schema": "gunnchos.wp011r.implementer_self_assessment.v1",
+  "schema": "gunnchos.wp011r.implementer_result.v1",
   "wave": "WP-011R",
+  "role": "implementer",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_at_utc": "2026-08-11T22:36:48Z",
-  "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
-  "role": "implementer",
-  "overall": "FAIL",
-  "overall_note": "INDEPENDENT DEMOTION overlay: LIVE/DSXL/RING/FOUR_GAME/master demoted; ECO-010 duration PASS retained. Cursor never merges.",
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
-  "SILICON_EXACT_EMULATION": false,
-  "DRAFT_ONLY": true,
-  "never_merge": true,
+  "recorded_at_utc": "2026-08-12T16:47:18Z",
+  "overall_result": "CANDIDATE_PASS_PENDING_INDEPENDENT",
+  "prefer_fail_over_false_pass": true,
   "tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-    "LIVE_GUNNCHOS_VISUAL_PASS": false,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-    "GUEST_DUAL_OUTPUT_PASS": true,
-    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "ECO010_SOAK_PASS": true,
-    "ECO010_STATUS": "PASS",
-    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "five_gate_digital_and": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "SHIPPING_IMAGE": false,
+    "SILICON_EXACT_EMULATION": false
   },
-  "evidence": {
-    "games": "artifacts/wp011r/games/four_games_in_guest.json",
-    "visual": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
-    "visual_blocker": "artifacts/wp011r/visual/LIVE_VISUAL_BLOCKER.json",
-    "dsxl": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
-    "ring": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
-    "eco010": "artifacts/wp011r/ECO010_SOAK.json",
-    "score": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
-    "gaps": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
-    "games_production": "artifacts/wp011r/games/four_games_production.json"
+  "dsxl_fix": {
+    "filter_aware_decoder": true,
+    "left_mean": 58.45217903645833,
+    "right_mean": 130.05648274739585,
+    "means_match_placement_crops": true,
+    "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+    "reconnect": "2\u21921\u21922"
   },
-  "independent_score_mean_of_12": 6.17,
-  "session_actions": [
-    "Playwright Chrome-channel fallback + foot-racing Godot write-movie / in-tree web earn path",
-    "Four-game production proofs under artifacts/wp011r/games/",
-    "QEMU HVF guest screendump + VNC attempted; blank fb honesty gate keeps LIVE false",
-    "DSXL guest dual DRM earned; compositor UX gate rejects guest_drm-as-surface",
-    "FORCE_REAL_GUEST virtio-serial Ring bind \u2192 RING_TO_REAL_APP_STATE_MUTATION_PASS",
-    "ECO-010 dry-check PARTIAL (requested 1800s, not shortened to pass)",
-    "device_lab_score_independent.py recomputed",
-    "Debian genericcloud aarch64 QEMU cloud-init guest-native provision OK",
-    "Guest agent virtio-serial path exercised; compositor_info not yet available",
-    "Diagnosed weston failure: cloud-arm64 kernel has no /dev/dri and no uinput module",
-    "Fixed weston unit (openvt+LIBSEAT_BACKEND=seatd; soft-fail modprobe)",
-    "Added linux-image-arm64 + post-provision script; repaired cloud-init YAML quote breakage",
-    "UEFI bootindex + edk2-arm-vars template to avoid EFI-shell traps",
-    "Earned FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS via Interactive Guest Chromium Wayland + lab bridge probe",
-    "ECO-010 full 1800s soak PASS (inject/recover 10/10, members_alive=6)"
-  ],
-  "remaining_blockers": [
-    "Physical VF4/5/6 still PHYSICAL_PENDING",
-    "Edmund merge decisions \u2014 Cursor never merges",
-    "WP-001 still DO_NOT_START; profile README freeze"
-  ],
-  "skepticism": [
-    "FOUR_GAME save path uses Lab localStorage marker \u2014 may not equal each title native save format",
-    "RING mutates Lab document/browser/game surfaces while guest proves input_observe \u2014 apps-in-guest still unverified",
-    "Prior session nearly inflated LIVE via 48-byte blank-fb noise and DSXL via DRM enum; honesty gates tightened"
-  ],
-  "independent_demotion_at_utc": "2026-08-11T22:43:39Z"
+  "ring_fix": {
+    "odt_marker": "RINGMUTATION1786552403",
+    "document_state_absent": true,
+    "lab_ringring_forbidden": true,
+    "browser_clicks": 70,
+    "godot_process_alive": true,
+    "godot_save_mutation": "save_version 1\u21922 with ring:seed retained"
+  },
+  "edmund": "do-not-merge #103 until independent re-checks DSXL+RING; Cursor never merges; WP-001 DO_NOT_START"
 }
