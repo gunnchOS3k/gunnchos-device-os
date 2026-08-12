@@ -1,0 +1,76 @@
+schema: gunnchos.image_realm.v1
+realm_id: RECOVERY_IMAGE
+status: ACTIVE_DEV
+description: >-
+  Minimal recovery-partition image: boot-failure fallback, factory reset,
+  update rollback, diagnostic bundle export, secure wipe. Intentionally
+  tiny attack surface.
+
+packages:
+  included:
+    - gunnchos.recovery.minimal_init
+    - gunnchos.recovery.ab_rollback_agent
+    - gunnchos.recovery.factory_reset
+    - gunnchos.recovery.diagnostic_bundle_export
+    - gunnchos.recovery.secure_wipe
+    - gunnchos.recovery.user_data_migration
+  excluded:
+    - gunnchos.core.ai_interface
+    - gunnchos.core.ring
+    - gunnchos.core.dock
+    - gunnchos.dev.ssh_shell
+    - gunnchos.dev.python_toolchain
+    - gunnchos.factory.esim_provisioning
+
+debug_access:
+  enabled: false
+  methods: [serial_console_readonly]
+  requires_unlock: true
+
+developer_mode:
+  enabled: false
+  unlock_policy: fused_unlock_flag
+  persists_across_updates: false
+
+logging:
+  level: WARN
+  remote_upload: false
+  retention_days: 7
+  redaction_required: true
+
+telemetry:
+  enabled: false
+  scope: none
+  opt_out_supported: true
+
+update_channel: recovery
+
+trust_roots:
+  key_source: dev
+  signing_keys: [release_engineering_ed25519_dev]
+  production_private_keys_present: false
+  anti_rollback_enforced: true
+
+secrets_policy:
+  allowed_secret_classes: [dev_test_only]
+  forbidden: [production_signing_key, production_device_identity, real_esim_credential]
+
+recovery_behavior:
+  auto_recovery_on_boot_failure: true
+  recovery_partition_required: true
+  factory_reset_available: true
+
+factory_only_services: []
+
+production_restrictions:
+  shell_access: disabled
+  adb_equivalent: disabled
+  root_access: unlock_gated
+  allow_unsigned_updates: false
+  debug_access_allowed: false
+
+claim_boundary: >-
+  RECOVERY_IMAGE is the last-resort boot target. Anti-rollback enforced,
+  no dev shell by default, no production keys. Validated only through
+  virtual/simulated boot-failure and rollback tests in this repo, not on
+  physical hardware.

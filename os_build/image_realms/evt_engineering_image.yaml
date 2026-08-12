@@ -1,0 +1,85 @@
+schema: gunnchos.image_realm.v1
+realm_id: EVT_ENGINEERING_IMAGE
+status: ACTIVE_DEV
+description: >-
+  Engineering Validation Test (EVT) build: closer to shippable than the lab
+  guest, still fully debuggable, used for bring-up and hardware validation.
+
+packages:
+  included:
+    - gunnchos.core.hal
+    - gunnchos.core.input
+    - gunnchos.core.ring
+    - gunnchos.core.display
+    - gunnchos.core.dock
+    - gunnchos.core.continuity
+    - gunnchos.core.identity
+    - gunnchos.core.permissions
+    - gunnchos.core.sandbox
+    - gunnchos.core.connectivity
+    - gunnchos.core.ai_interface
+    - gunnchos.core.profile_manager
+    - gunnchos.core.a11y
+    - gunnchos.core.diagnostics
+    - gunnchos.core.updater
+    - gunnchos.core.recovery
+    - gunnchos.dev.ssh_shell
+    - gunnchos.dev.gunnchctl
+    - gunnchos.evt.hardware_validation_suite
+    - gunnchos.evt.telemetry_debug_agent
+  excluded:
+    - gunnchos.dev.python_toolchain
+    - gunnchos.factory.calibration_import
+    - gunnchos.factory.esim_provisioning
+
+debug_access:
+  enabled: true
+  methods: [ssh, serial_console, gunnchctl_debug_bridge]
+  requires_unlock: true
+
+developer_mode:
+  enabled: true
+  unlock_policy: fused_unlock_flag
+  persists_across_updates: false
+
+logging:
+  level: INFO
+  remote_upload: true
+  retention_days: 30
+  redaction_required: true
+
+telemetry:
+  enabled: true
+  scope: engineering_only
+  opt_out_supported: false
+
+update_channel: evt
+
+trust_roots:
+  key_source: dev
+  signing_keys: [release_engineering_ed25519_dev]
+  production_private_keys_present: false
+  anti_rollback_enforced: true
+
+secrets_policy:
+  allowed_secret_classes: [dev_test_only, evt_bench_credentials]
+  forbidden: [production_signing_key, production_device_identity, real_esim_credential]
+
+recovery_behavior:
+  auto_recovery_on_boot_failure: true
+  recovery_partition_required: true
+  factory_reset_available: true
+
+factory_only_services: []
+
+production_restrictions:
+  shell_access: unlock_gated
+  adb_equivalent: unlock_gated
+  root_access: unlock_gated
+  allow_unsigned_updates: false
+  debug_access_allowed: true
+
+claim_boundary: >-
+  EVT realm for hardware bring-up / validation. Signed with DEV keys only,
+  anti-rollback counter enforced, no production keys or real eSIM/factory
+  credentials present.

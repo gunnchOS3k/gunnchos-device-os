@@ -21,9 +21,31 @@ GGUF_URL="${GUNNCHAI_GGUF_URL:-https://huggingface.co/bartowski/SmolLM2-135M-Ins
 
 export PATH="$BIN:$PATH"
 
+curl_retry() {
+  # GitHub release CDN occasionally returns 503; fail closed after retries.
+  local out="$1"
+  shift
+  local attempt=1
+  local max=6
+  local delay=3
+  while true; do
+    if curl -fsSL --retry 3 --retry-all-errors --retry-delay 2 -o "$out" "$@"; then
+      return 0
+    fi
+    if (( attempt >= max )); then
+      echo "curl_retry exhausted after ${max} attempts: $*" >&2
+      return 1
+    fi
+    echo "curl_retry attempt ${attempt}/${max} failed; sleeping ${delay}s..." >&2
+    sleep "$delay"
+    attempt=$((attempt + 1))
+    delay=$((delay * 2))
+  done
+}
+
 if ! command -v godot >/dev/null 2>&1 && [[ ! -x "$BIN/godot" ]]; then
   echo "Downloading Godot ${GODOT_VER}..."
-  curl -fsSL -o "$CACHE/$GODOT_ZIP" "$GODOT_URL"
+  curl_retry "$CACHE/$GODOT_ZIP" "$GODOT_URL"
   unzip -o "$CACHE/$GODOT_ZIP" -d "$CACHE/godot_extract" >/dev/null
   GODOT_BIN="$(find "$CACHE/godot_extract" -type f -name 'Godot*' ! -name '*.txt' | head -n1)"
   install -m 755 "$GODOT_BIN" "$BIN/godot"
@@ -31,7 +53,7 @@ fi
 
 if ! command -v llama-server >/dev/null 2>&1 && [[ ! -x "$BIN/llama-server" ]]; then
   echo "Downloading llama.cpp ${LLAMA_TAG}..."
-  curl -fsSL -o "$CACHE/$LLAMA_TGZ" "$LLAMA_URL"
+  curl_retry "$CACHE/$LLAMA_TGZ" "$LLAMA_URL"
   mkdir -p "$CACHE/llama_extract"
   tar -xzf "$CACHE/$LLAMA_TGZ" -C "$CACHE/llama_extract"
   LLAMA_BIN="$(find "$CACHE/llama_extract" -type f -name 'llama-server' | head -n1)"
@@ -51,7 +73,7 @@ fi
 if [[ -x "$BIN/llama-server" ]]; then
   if ! LD_LIBRARY_PATH="$BIN${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" "$BIN/llama-server" --version >/dev/null 2>&1; then
     echo "Cached llama-server missing libs; re-fetching ${LLAMA_TAG}..."
-    curl -fsSL -o "$CACHE/$LLAMA_TGZ" "$LLAMA_URL"
+    curl_retry "$CACHE/$LLAMA_TGZ" "$LLAMA_URL"
     rm -rf "$CACHE/llama_extract"
     mkdir -p "$CACHE/llama_extract"
     tar -xzf "$CACHE/$LLAMA_TGZ" -C "$CACHE/llama_extract"
@@ -64,7 +86,7 @@ fi
 
 if [[ ! -f "$MODELS/$GGUF_NAME" ]]; then
   echo "Downloading $GGUF_NAME..."
-  curl -fsSL -L -o "$MODELS/$GGUF_NAME" "$GGUF_URL"
+  curl_retry "$MODELS/$GGUF_NAME" -L "$GGUF_URL"
 fi
 
 # Prefer cache bins on PATH for subsequent steps (GitHub Actions)

@@ -1,32 +1,20 @@
 {
-  "accepted_prs": [
-    12
-  ],
-  "accepted_sha": "a2c6da5b4d4635af1281dbb12b8564ba70f994c6",
-  "artifact_path": "project.godot",
-  "artifact_tree_sha256": "f5ec140b5bf5286d669cf7979f0a3c2e1c84440086005a00c0596d2547711b36",
-  "build_command": "godot --headless --export-release \"Web\" dist/index.html (when export template present); digital RC validated via Godot project + Android path",
-  "claim_boundary": "Accepted-SHA package manifest with workspace artifact import. Does not vendor full game repos into device-os.",
-  "device_roles": [
-    "student",
-    "handheld",
-    "ds_xl"
-  ],
-  "engine_runtime": "Godot 4 project (Pedestrian Pursuit) + web controller-first slice",
-  "id": "foot-racing-web",
-  "import_mode": "workspace_project_reference",
-  "imported_path": "games/foot-racing-web",
-  "local_playable_fallback": "games/foot-racing-web",
-  "note": "Pedestrian is Godot-native; gunnchOS ships controller-first web slice plus workspace project reference \u2014 not a static HTML stub.",
+  "accepted_prs": [12, 14],
+  "accepted_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+  "artifact_path": "build/gunnchos/pedestrian_pursuit.pck",
+  "build_command": "godot4.5 --headless --path <accepted-worktree> --export-pack gunnchos-macos build/gunnchos/pedestrian_pursuit.pck",
+  "claim_boundary": "Accepted-SHA Godot export-pack consumed by gunnchSDK FIRST_PARTY_GAME_SDK_ADOPTION_PASS. Not a production store build; not Android APK certification.",
+  "device_roles": ["student", "handheld", "ds_xl"],
+  "engine_runtime": "Godot 4.5 export-pack (.pck) + host Godot runtime via gunnchSDK",
+  "id": "pedestrian-pursuit",
+  "import_mode": "accepted_sha_godot_export_pack",
   "offline": true,
-  "permissions": [
-    "files_read",
-    "network"
-  ],
+  "permissions": ["files_read", "files_write", "display"],
   "schema": "gunnchos.first_party_game_package.v1",
   "source_github": "gunnchOS3k/pedestrian-pursuit",
   "source_repo": "pedestrian-pursuit",
   "stub_content": false,
   "workspace_artifact": "pedestrian-pursuit",
-  "workspace_file_count": 1
+  "gunnchsdk_runtime": "godot",
+  "gunnchsdk_app_id": "gunnchos.pedestrian_pursuit"
 }

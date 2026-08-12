@@ -1,0 +1,19 @@
+{
+  "schema": "gunnchos.sdk.app_manifest.v1",
+  "app_id": "gunnchos.gunnchai_client_stub",
+  "name": "gunnchAI Client (stub)",
+  "version": "0.1.0",
+  "api_version": "1.1.0",
+  "min_os_version": "0.2.0",
+  "max_os_version": null,
+  "arch_targets": ["aarch64", "x86_64", "wasm32"],
+  "entrypoint": "main.py",
+  "permissions": ["network", "ai_interface"],
+  "capabilities_required": ["network.http", "ai_interface.query"],
+  "dependencies": [],
+  "sandbox_profile": {
+    "network_policy": "deny_all",
+    "filesystem_scope": "/data/apps/gunnchos.gunnchai_client_stub",
+    "allow_ipc": false
+  }
+}

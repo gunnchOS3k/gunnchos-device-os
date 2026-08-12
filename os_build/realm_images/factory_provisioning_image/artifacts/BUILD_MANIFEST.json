@@ -1,0 +1,4262 @@
+{
+  "PRODUCTION_RELEASE_CLAIMED": false,
+  "artifacts": {
+    "kernel_reference": {
+      "initramfs_path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
+      "initramfs_present": true,
+      "initramfs_sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3",
+      "kernel_path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
+      "kernel_present": true,
+      "kernel_sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
+      "source": "os_build/bootable_reference (shared reference, not realm-specific)"
+    },
+    "rootfs_tarball": {
+      "file_count": 15,
+      "path": "os_build/realm_images/factory_provisioning_image/artifacts/rootfs.tar.gz",
+      "sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+      "size_bytes": 1952
+    }
+  },
+  "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+  "config": {
+    "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here.",
+    "debug_access": {
+      "enabled": true,
+      "methods": [
+        "line_station_console"
+      ],
+      "requires_unlock": false
+    },
+    "description": "Line-station image used only during factory provisioning: identity issuance, calibration import, eSIM stub provisioning, flashing hand-off. Never shipped to end users.",
+    "developer_mode": {
+      "enabled": false,
+      "persists_across_updates": false,
+      "unlock_policy": "not_applicable"
+    },
+    "factory_only_services": [
+      "serial_issuer",
+      "mac_allocator",
+      "identity_request_response",
+      "key_injection_interface",
+      "esim_provisioning_stub",
+      "calibration_import",
+      "flashing_orchestrator",
+      "device_record_export",
+      "repair_traceability"
+    ],
+    "logging": {
+      "level": "INFO",
+      "redaction_required": true,
+      "remote_upload": true,
+      "retention_days": 90
+    },
+    "packages": {
+      "excluded": [
+        "gunnchos.dev.ssh_shell",
+        "gunnchos.dev.python_toolchain",
+        "gunnchos.core.ai_interface",
+        "gunnchos.core.ring",
+        "gunnchos.core.dock"
+      ],
+      "included": [
+        "gunnchos.core.hal",
+        "gunnchos.core.diagnostics",
+        "gunnchos.factory.serial_issuer",
+        "gunnchos.factory.mac_allocator",
+        "gunnchos.factory.identity_request_response",
+        "gunnchos.factory.key_injection_interface",
+        "gunnchos.factory.esim_provisioning",
+        "gunnchos.factory.calibration_import",
+        "gunnchos.factory.flashing_orchestrator",
+        "gunnchos.factory.device_record_export",
+        "gunnchos.factory.repair_traceability"
+      ]
+    },
+    "production_restrictions": {
+      "adb_equivalent": "disabled",
+      "allow_unsigned_updates": false,
+      "debug_access_allowed": false,
+      "root_access": "line_station_only",
+      "shell_access": "line_station_only"
+    },
+    "realm_id": "FACTORY_PROVISIONING_IMAGE",
+    "recovery_behavior": {
+      "auto_recovery_on_boot_failure": true,
+      "factory_reset_available": true,
+      "recovery_partition_required": false
+    },
+    "schema": "gunnchos.image_realm.v1",
+    "secrets_policy": {
+      "allowed_secret_classes": [
+        "dev_test_only",
+        "factory_dummy_identity"
+      ],
+      "forbidden": [
+        "production_signing_key",
+        "real_esim_credential",
+        "real_customer_data"
+      ]
+    },
+    "status": "ACTIVE_DEV",
+    "telemetry": {
+      "enabled": true,
+      "opt_out_supported": false,
+      "scope": "factory_line_only"
+    },
+    "trust_roots": {
+      "anti_rollback_enforced": false,
+      "key_source": "dev",
+      "production_private_keys_present": false,
+      "signing_keys": [
+        "release_engineering_ed25519_dev"
+      ]
+    },
+    "update_channel": "factory-line"
+  },
+  "image_hash": "ff13a42c90955f05923f9d93eb861e66e223f97de028e67cd4961204eb954654",
+  "package_manifest": [
+    {
+      "path": "etc/gunnchos/realm.json",
+      "sha256": "c67da0f42983f9f2045aeaec1879b8b6728e5dafadbdc488828969ff375babfe",
+      "size_bytes": 2926
+    },
+    {
+      "path": "etc/os-release",
+      "sha256": "f453b544cee527acae38d73c99c838cfcf3eb56c2788de1d5920ff410972221e",
+      "size_bytes": 120
+    },
+    {
+      "path": "opt/gunnchos/bin/NO_DEV_TOOLCHAIN.txt",
+      "sha256": "feada1d8fbaa0f36007f07daf2c8c9fb9c9fbbc45594f372750ed993a5360fa6",
+      "size_bytes": 82
+    },
+    {
+      "path": "opt/gunnchos/factory/FACTORY_ONLY_SERVICES.json",
+      "sha256": "db56f3b357a95ece8aae1747fcfdf798683cf5cc1be94ac5c55812e5caaf5c18",
+      "size_bytes": 231
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.core.diagnostics.service",
+      "sha256": "d32c3194d5d161dca80252a0242f883f47f58973ce9719bcc5f8374d6b2269cd",
+      "size_bytes": 222
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.core.hal.service",
+      "sha256": "350c8c4f48b4135d1f46e71b039041841dab469814dab0431555700b46b3a1c4",
+      "size_bytes": 206
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.calibration_import.service",
+      "sha256": "913df398c372ed70f71a00863f5bcf21caca8a5eb25555b7529886d0b431d47e",
+      "size_bytes": 242
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.device_record_export.service",
+      "sha256": "394e74cf88a9c0922f61c58f85f77b4cc98c73eeda18a71cc36cce742535338d",
+      "size_bytes": 246
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.esim_provisioning.service",
+      "sha256": "10da72bdfb6a2cf5c9e27ee4e8030e1612a0a49681364779de27ef47becf70d6",
+      "size_bytes": 240
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.flashing_orchestrator.service",
+      "sha256": "9759a44ea2bfea4dedb5b110420590ef5ee45fcfc0a7cf7dddcd0cd50d62de64",
+      "size_bytes": 248
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.identity_request_response.service",
+      "sha256": "d58445da09e137c2ceac54d17ceb73e79667cde009ff5d23895432211c64ad6f",
+      "size_bytes": 256
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.key_injection_interface.service",
+      "sha256": "db5fc2298646ee7679037f1472e77fc4c728b386564294b39eb9f092961d8fc5",
+      "size_bytes": 252
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.mac_allocator.service",
+      "sha256": "0a4dc57708f798d4e62360f9c386aab0bccc60eeab093a9592e8ceaf1fcff77c",
+      "size_bytes": 232
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.repair_traceability.service",
+      "sha256": "2906170eb3e78d80a26978a83807ed1fc21b71963f2ef2fb1e91243748f2321e",
+      "size_bytes": 244
+    },
+    {
+      "path": "opt/gunnchos/services/gunnchos.factory.serial_issuer.service",
+      "sha256": "56f811ad02639ad537fc7aacf65765eb8fc4a84834f2e458aa14a28d0fda48ae",
+      "size_bytes": 232
+    }
+  ],
+  "production_keys_used": false,
+  "realm_id": "FACTORY_PROVISIONING_IMAGE",
+  "reproducibility": {
+    "file_count": 15,
+    "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
+    "rootfs_sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+    "verifiable_by": "rebuild_and_compare_rootfs_sha256"
+  },
+  "sbom": {
+    "bomFormat": "CycloneDX",
+    "components": [
+      {
+        "name": "Farama-Notifications",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/farama-notifications@0.0.6",
+        "type": "library",
+        "version": "0.0.6"
+      },
+      {
+        "name": "GitPython",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/gitpython@3.1.50",
+        "type": "library",
+        "version": "3.1.50"
+      },
+      {
+        "name": "Jinja2",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/jinja2@3.1.6",
+        "type": "library",
+        "version": "3.1.6"
+      },
+      {
+        "name": "MarkupSafe",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/markupsafe@3.0.3",
+        "type": "library",
+        "version": "3.0.3"
+      },
+      {
+        "name": "PyOpenGL",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyopengl@3.1.10",
+        "type": "library",
+        "version": "3.1.10"
+      },
+      {
+        "name": "PyPDF2",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pypdf2@3.0.1",
+        "type": "library",
+        "version": "3.0.1"
+      },
+      {
+        "name": "PyYAML",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyyaml@6.0.3",
+        "type": "library",
+        "version": "6.0.3"
+      },
+      {
+        "name": "Pygments",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pygments@2.19.2",
+        "type": "library",
+        "version": "2.19.2"
+      },
+      {
+        "name": "Radicale",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/radicale@3.7.8",
+        "type": "library",
+        "version": "3.7.8"
+      },
+      {
+        "name": "Shimmy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/shimmy@2.0.1",
+        "type": "library",
+        "version": "2.0.1"
+      },
+      {
+        "name": "absl-py",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/absl-py@2.3.1",
+        "type": "library",
+        "version": "2.3.1"
+      },
+      {
+        "name": "aiosmtpd",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/aiosmtpd@1.4.6",
+        "type": "library",
+        "version": "1.4.6"
+      },
+      {
+        "name": "altair",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/altair@6.1.0",
+        "type": "library",
+        "version": "6.1.0"
+      },
+      {
+        "name": "annotated-types",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/annotated-types@0.7.0",
+        "type": "library",
+        "version": "0.7.0"
+      },
+      {
+        "name": "anyio",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/anyio@4.11.0",
+        "type": "library",
+        "version": "4.11.0"
+      },
+      {
+        "name": "appnope",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/appnope@0.1.4",
+        "type": "library",
+        "version": "0.1.4"
+      },
+      {
+        "name": "ast_serialize",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ast_serialize@0.6.0",
+        "type": "library",
+        "version": "0.6.0"
+      },
+      {
+        "name": "asttokens",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/asttokens@3.0.1",
+        "type": "library",
+        "version": "3.0.1"
+      },
+      {
+        "name": "atpublic",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/atpublic@7.0.0",
+        "type": "library",
+        "version": "7.0.0"
+      },
+      {
+        "name": "attrs",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/attrs@26.1.0",
+        "type": "library",
+        "version": "26.1.0"
+      },
+      {
+        "name": "bcrypt",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/bcrypt@4.3.0",
+        "type": "library",
+        "version": "4.3.0"
+      },
+      {
+        "name": "blake3",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/blake3@1.0.8",
+        "type": "library",
+        "version": "1.0.8"
+      },
+      {
+        "name": "blinker",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/blinker@1.9.0",
+        "type": "library",
+        "version": "1.9.0"
+      },
+      {
+        "name": "cachetools",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/cachetools@6.2.0",
+        "type": "library",
+        "version": "6.2.0"
+      },
+      {
+        "name": "certifi",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/certifi@2022.12.7",
+        "type": "library",
+        "version": "2022.12.7"
+      },
+      {
+        "name": "cffi",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/cffi@2.1.1",
+        "type": "library",
+        "version": "2.1.1"
+      },
+      {
+        "name": "charset-normalizer",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/charset-normalizer@3.1.0",
+        "type": "library",
+        "version": "3.1.0"
+      },
+      {
+        "name": "chess",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/chess@1.11.2",
+        "type": "library",
+        "version": "1.11.2"
+      },
+      {
+        "name": "click",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/click@8.1.3",
+        "type": "library",
+        "version": "8.1.3"
+      },
+      {
+        "name": "cloudpickle",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/cloudpickle@3.1.2",
+        "type": "library",
+        "version": "3.1.2"
+      },
+      {
+        "name": "comm",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/comm@0.2.3",
+        "type": "library",
+        "version": "0.2.3"
+      },
+      {
+        "name": "contourpy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/contourpy@1.3.3",
+        "type": "library",
+        "version": "1.3.3"
+      },
+      {
+        "name": "coverage",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/coverage@7.15.2",
+        "type": "library",
+        "version": "7.15.2"
+      },
+      {
+        "name": "cryptography",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/cryptography@50.0.0",
+        "type": "library",
+        "version": "50.0.0"
+      },
+      {
+        "name": "cycler",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/cycler@0.12.1",
+        "type": "library",
+        "version": "0.12.1"
+      },
+      {
+        "name": "debugpy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/debugpy@1.8.17",
+        "type": "library",
+        "version": "1.8.17"
+      },
+      {
+        "name": "decorator",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/decorator@5.2.1",
+        "type": "library",
+        "version": "5.2.1"
+      },
+      {
+        "name": "defusedxml",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/defusedxml@0.7.1",
+        "type": "library",
+        "version": "0.7.1"
+      },
+      {
+        "name": "emergent-intent",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/emergent-intent@0.1.0",
+        "type": "library",
+        "version": "0.1.0"
+      },
+      {
+        "name": "etils",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/etils@1.13.0",
+        "type": "library",
+        "version": "1.13.0"
+      },
+      {
+        "name": "executing",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/executing@2.2.1",
+        "type": "library",
+        "version": "2.2.1"
+      },
+      {
+        "name": "filelock",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/filelock@3.32.0",
+        "type": "library",
+        "version": "3.32.0"
+      },
+      {
+        "name": "fonttools",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/fonttools@4.60.1",
+        "type": "library",
+        "version": "4.60.1"
+      },
+      {
+        "name": "fsspec",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/fsspec@2025.10.0",
+        "type": "library",
+        "version": "2025.10.0"
+      },
+      {
+        "name": "gTTS",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/gtts@2.3.1",
+        "type": "library",
+        "version": "2.3.1"
+      },
+      {
+        "name": "gitdb",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/gitdb@4.0.12",
+        "type": "library",
+        "version": "4.0.12"
+      },
+      {
+        "name": "glfw",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/glfw@2.10.0",
+        "type": "library",
+        "version": "2.10.0"
+      },
+      {
+        "name": "google-auth",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/google-auth@2.41.1",
+        "type": "library",
+        "version": "2.41.1"
+      },
+      {
+        "name": "google-genai",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/google-genai@1.41.0",
+        "type": "library",
+        "version": "1.41.0"
+      },
+      {
+        "name": "greenlet",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/greenlet@3.5.4",
+        "type": "library",
+        "version": "3.5.4"
+      },
+      {
+        "name": "gymnasium",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/gymnasium@1.3.0",
+        "type": "library",
+        "version": "1.3.0"
+      },
+      {
+        "name": "h11",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/h11@0.16.0",
+        "type": "library",
+        "version": "0.16.0"
+      },
+      {
+        "name": "httpcore",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/httpcore@1.0.9",
+        "type": "library",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httptools",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/httptools@0.8.0",
+        "type": "library",
+        "version": "0.8.0"
+      },
+      {
+        "name": "httpx",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/httpx@0.28.1",
+        "type": "library",
+        "version": "0.28.1"
+      },
+      {
+        "name": "hypothesis",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/hypothesis@6.163.0",
+        "type": "library",
+        "version": "6.163.0"
+      },
+      {
+        "name": "idna",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/idna@3.4",
+        "type": "library",
+        "version": "3.4"
+      },
+      {
+        "name": "importlib_resources",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/importlib_resources@6.5.2",
+        "type": "library",
+        "version": "6.5.2"
+      },
+      {
+        "name": "iniconfig",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/iniconfig@2.3.0",
+        "type": "library",
+        "version": "2.3.0"
+      },
+      {
+        "name": "ipykernel",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ipykernel@7.1.0",
+        "type": "library",
+        "version": "7.1.0"
+      },
+      {
+        "name": "ipython",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ipython@9.7.0",
+        "type": "library",
+        "version": "9.7.0"
+      },
+      {
+        "name": "ipython_pygments_lexers",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ipython_pygments_lexers@1.1.1",
+        "type": "library",
+        "version": "1.1.1"
+      },
+      {
+        "name": "itsdangerous",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/itsdangerous@2.2.0",
+        "type": "library",
+        "version": "2.2.0"
+      },
+      {
+        "name": "jedi",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/jedi@0.19.2",
+        "type": "library",
+        "version": "0.19.2"
+      },
+      {
+        "name": "joblib",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/joblib@1.5.3",
+        "type": "library",
+        "version": "1.5.3"
+      },
+      {
+        "name": "json5",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/json5@0.15.0",
+        "type": "library",
+        "version": "0.15.0"
+      },
+      {
+        "name": "jsonschema",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/jsonschema@4.26.0",
+        "type": "library",
+        "version": "4.26.0"
+      },
+      {
+        "name": "jsonschema-specifications",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/jsonschema-specifications@2025.9.1",
+        "type": "library",
+        "version": "2025.9.1"
+      },
+      {
+        "name": "jupyter_client",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/jupyter_client@8.6.3",
+        "type": "library",
+        "version": "8.6.3"
+      },
+      {
+        "name": "jupyter_core",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/jupyter_core@5.9.1",
+        "type": "library",
+        "version": "5.9.1"
+      },
+      {
+        "name": "kiwisolver",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/kiwisolver@1.4.9",
+        "type": "library",
+        "version": "1.4.9"
+      },
+      {
+        "name": "libpass",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/libpass@1.9.3",
+        "type": "library",
+        "version": "1.9.3"
+      },
+      {
+        "name": "librt",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/librt@0.13.0",
+        "type": "library",
+        "version": "0.13.0"
+      },
+      {
+        "name": "loguru",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/loguru@0.7.3",
+        "type": "library",
+        "version": "0.7.3"
+      },
+      {
+        "name": "markdown-it-py",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/markdown-it-py@4.2.0",
+        "type": "library",
+        "version": "4.2.0"
+      },
+      {
+        "name": "matplotlib",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/matplotlib@3.10.7",
+        "type": "library",
+        "version": "3.10.7"
+      },
+      {
+        "name": "matplotlib-inline",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/matplotlib-inline@0.2.1",
+        "type": "library",
+        "version": "0.2.1"
+      },
+      {
+        "name": "mdurl",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/mdurl@0.1.2",
+        "type": "library",
+        "version": "0.1.2"
+      },
+      {
+        "name": "ml_collections",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ml_collections@1.1.0",
+        "type": "library",
+        "version": "1.1.0"
+      },
+      {
+        "name": "mpmath",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/mpmath@1.3.0",
+        "type": "library",
+        "version": "1.3.0"
+      },
+      {
+        "name": "mujoco",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/mujoco@3.3.7",
+        "type": "library",
+        "version": "3.3.7"
+      },
+      {
+        "name": "mypy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/mypy@2.3.0",
+        "type": "library",
+        "version": "2.3.0"
+      },
+      {
+        "name": "mypy_extensions",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/mypy_extensions@1.1.0",
+        "type": "library",
+        "version": "1.1.0"
+      },
+      {
+        "name": "narwhals",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/narwhals@2.21.2",
+        "type": "library",
+        "version": "2.21.2"
+      },
+      {
+        "name": "nest-asyncio",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/nest-asyncio@1.6.0",
+        "type": "library",
+        "version": "1.6.0"
+      },
+      {
+        "name": "networkx",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/networkx@3.6.1",
+        "type": "library",
+        "version": "3.6.1"
+      },
+      {
+        "name": "numpy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/numpy@2.3.5",
+        "type": "library",
+        "version": "2.3.5"
+      },
+      {
+        "name": "open-spiel",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/open-spiel@2.0.1",
+        "type": "library",
+        "version": "2.0.1"
+      },
+      {
+        "name": "packaging",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/packaging@25.0",
+        "type": "library",
+        "version": "25.0"
+      },
+      {
+        "name": "pandas",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pandas@3.0.1",
+        "type": "library",
+        "version": "3.0.1"
+      },
+      {
+        "name": "parso",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/parso@0.8.5",
+        "type": "library",
+        "version": "0.8.5"
+      },
+      {
+        "name": "passlib",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/passlib@1.7.4",
+        "type": "library",
+        "version": "1.7.4"
+      },
+      {
+        "name": "pathspec",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pathspec@1.1.1",
+        "type": "library",
+        "version": "1.1.1"
+      },
+      {
+        "name": "pettingzoo",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pettingzoo@1.26.1",
+        "type": "library",
+        "version": "1.26.1"
+      },
+      {
+        "name": "pexpect",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pexpect@4.9.0",
+        "type": "library",
+        "version": "4.9.0"
+      },
+      {
+        "name": "pika",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pika@1.4.4",
+        "type": "library",
+        "version": "1.4.4"
+      },
+      {
+        "name": "pillow",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pillow@12.0.0",
+        "type": "library",
+        "version": "12.0.0"
+      },
+      {
+        "name": "pip",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pip@25.2",
+        "type": "library",
+        "version": "25.2"
+      },
+      {
+        "name": "platformdirs",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/platformdirs@4.5.0",
+        "type": "library",
+        "version": "4.5.0"
+      },
+      {
+        "name": "playwright",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/playwright@1.62.0",
+        "type": "library",
+        "version": "1.62.0"
+      },
+      {
+        "name": "pluggy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pluggy@1.6.0",
+        "type": "library",
+        "version": "1.6.0"
+      },
+      {
+        "name": "prompt_toolkit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/prompt_toolkit@3.0.52",
+        "type": "library",
+        "version": "3.0.52"
+      },
+      {
+        "name": "protobuf",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/protobuf@7.35.0",
+        "type": "library",
+        "version": "7.35.0"
+      },
+      {
+        "name": "psutil",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/psutil@7.1.3",
+        "type": "library",
+        "version": "7.1.3"
+      },
+      {
+        "name": "ptyprocess",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ptyprocess@0.7.0",
+        "type": "library",
+        "version": "0.7.0"
+      },
+      {
+        "name": "pure_eval",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pure_eval@0.2.3",
+        "type": "library",
+        "version": "0.2.3"
+      },
+      {
+        "name": "pyarrow",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyarrow@24.0.0",
+        "type": "library",
+        "version": "24.0.0"
+      },
+      {
+        "name": "pyasn1",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyasn1@0.6.1",
+        "type": "library",
+        "version": "0.6.1"
+      },
+      {
+        "name": "pyasn1_modules",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyasn1_modules@0.4.2",
+        "type": "library",
+        "version": "0.4.2"
+      },
+      {
+        "name": "pycparser",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pycparser@3.0",
+        "type": "library",
+        "version": "3.0"
+      },
+      {
+        "name": "pydantic",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pydantic@2.11.10",
+        "type": "library",
+        "version": "2.11.10"
+      },
+      {
+        "name": "pydantic_core",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pydantic_core@2.33.2",
+        "type": "library",
+        "version": "2.33.2"
+      },
+      {
+        "name": "pydeck",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pydeck@0.9.2",
+        "type": "library",
+        "version": "0.9.2"
+      },
+      {
+        "name": "pydub",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pydub@0.25.1",
+        "type": "library",
+        "version": "0.25.1"
+      },
+      {
+        "name": "pyee",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyee@13.0.1",
+        "type": "library",
+        "version": "13.0.1"
+      },
+      {
+        "name": "pygame",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pygame@2.2.0",
+        "type": "library",
+        "version": "2.2.0"
+      },
+      {
+        "name": "pygame-ce",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pygame-ce@2.5.7",
+        "type": "library",
+        "version": "2.5.7"
+      },
+      {
+        "name": "pyobjc",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-core",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-core@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AVFoundation",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-avfoundation@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AVKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-avkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AVRouting",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-avrouting@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Accessibility",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-accessibility@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Accounts",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-accounts@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AdServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-adservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AdSupport",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-adsupport@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AddressBook",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-addressbook@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AppTrackingTransparency",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-apptrackingtransparency@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AppleScriptKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-applescriptkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AppleScriptObjC",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-applescriptobjc@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ApplicationServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-applicationservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AudioVideoBridging",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-audiovideobridging@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AuthenticationServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-authenticationservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-AutomaticAssessmentConfiguration",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-automaticassessmentconfiguration@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Automator",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-automator@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-BackgroundAssets",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-backgroundassets@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-BusinessChat",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-businesschat@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CFNetwork",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-cfnetwork@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CalendarStore",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-calendarstore@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CallKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-callkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ClassKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-classkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CloudKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-cloudkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Cocoa",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-cocoa@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Collaboration",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-collaboration@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ColorSync",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-colorsync@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Contacts",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-contacts@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ContactsUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-contactsui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreAudio",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coreaudio@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreAudioKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coreaudiokit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreBluetooth",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-corebluetooth@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreData",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coredata@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreHaptics",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-corehaptics@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreLocation",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-corelocation@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreMIDI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coremidi@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreML",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coreml@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreMedia",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coremedia@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreMediaIO",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coremediaio@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreMotion",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coremotion@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coreservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreSpotlight",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-corespotlight@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreText",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-coretext@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CoreWLAN",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-corewlan@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-CryptoTokenKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-cryptotokenkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DVDPlayback",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-dvdplayback@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DataDetection",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-datadetection@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DeviceCheck",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-devicecheck@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DictionaryServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-dictionaryservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DiscRecording",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-discrecording@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DiscRecordingUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-discrecordingui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-DiskArbitration",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-diskarbitration@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-EventKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-eventkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ExceptionHandling",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-exceptionhandling@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ExecutionPolicy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-executionpolicy@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ExtensionKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-extensionkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ExternalAccessory",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-externalaccessory@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-FSEvents",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-fsevents@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-FileProvider",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-fileprovider@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-FileProviderUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-fileproviderui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-FinderSync",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-findersync@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-GameCenter",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-gamecenter@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-GameController",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-gamecontroller@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-GameKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-gamekit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-GameplayKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-gameplaykit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-HealthKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-healthkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-IMServicePlugIn",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-imserviceplugin@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-IOSurface",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-iosurface@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ImageCaptureCore",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-imagecapturecore@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-InputMethodKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-inputmethodkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-InstallerPlugins",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-installerplugins@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-InstantMessage",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-instantmessage@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Intents",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-intents@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-IntentsUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-intentsui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-KernelManagement",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-kernelmanagement@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-LatentSemanticMapping",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-latentsemanticmapping@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-LaunchServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-launchservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-LinkPresentation",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-linkpresentation@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-LocalAuthentication",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-localauthentication@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-LocalAuthenticationEmbeddedUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-localauthenticationembeddedui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MLCompute",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-mlcompute@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MailKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-mailkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MapKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-mapkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MediaAccessibility",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-mediaaccessibility@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MediaLibrary",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-medialibrary@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MediaPlayer",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-mediaplayer@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MediaToolbox",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-mediatoolbox@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Metal",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-metal@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MetalFX",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-metalfx@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MetalKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-metalkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MetalPerformanceShaders",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-metalperformanceshaders@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MetalPerformanceShadersGraph",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-metalperformanceshadersgraph@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MetricKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-metrickit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ModelIO",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-modelio@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-MultipeerConnectivity",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-multipeerconnectivity@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-NaturalLanguage",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-naturallanguage@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-NetFS",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-netfs@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Network",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-network@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-NetworkExtension",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-networkextension@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-NotificationCenter",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-notificationcenter@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-OSAKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-osakit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-OSLog",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-oslog@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-OpenDirectory",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-opendirectory@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-PassKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-passkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-PencilKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-pencilkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Photos",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-photos@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-PhotosUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-photosui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-PreferencePanes",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-preferencepanes@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-PushKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-pushkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Quartz",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-quartz@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-QuickLookThumbnailing",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-quicklookthumbnailing@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ReplayKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-replaykit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SafariServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-safariservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SafetyKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-safetykit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SceneKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-scenekit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ScreenCaptureKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-screencapturekit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ScreenSaver",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-screensaver@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ScreenTime",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-screentime@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ScriptingBridge",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-scriptingbridge@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SearchKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-searchkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Security",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-security@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SecurityFoundation",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-securityfoundation@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SecurityInterface",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-securityinterface@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ServiceManagement",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-servicemanagement@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SharedWithYou",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-sharedwithyou@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SharedWithYouCore",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-sharedwithyoucore@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ShazamKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-shazamkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Social",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-social@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SoundAnalysis",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-soundanalysis@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Speech",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-speech@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SpriteKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-spritekit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-StoreKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-storekit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SyncServices",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-syncservices@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SystemConfiguration",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-systemconfiguration@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-SystemExtensions",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-systemextensions@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-ThreadNetwork",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-threadnetwork@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-UniformTypeIdentifiers",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-uniformtypeidentifiers@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-UserNotifications",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-usernotifications@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-UserNotificationsUI",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-usernotificationsui@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-VideoSubscriberAccount",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-videosubscriberaccount@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-VideoToolbox",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-videotoolbox@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Virtualization",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-virtualization@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-Vision",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-vision@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-WebKit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-webkit@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-iTunesLibrary",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-ituneslibrary@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyobjc-framework-libdispatch",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyobjc-framework-libdispatch@9.0.1",
+        "type": "library",
+        "version": "9.0.1"
+      },
+      {
+        "name": "pyparsing",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyparsing@3.2.5",
+        "type": "library",
+        "version": "3.2.5"
+      },
+      {
+        "name": "pytest",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pytest@9.0.3",
+        "type": "library",
+        "version": "9.0.3"
+      },
+      {
+        "name": "pytest-cov",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pytest-cov@7.1.0",
+        "type": "library",
+        "version": "7.1.0"
+      },
+      {
+        "name": "python-dateutil",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/python-dateutil@2.9.0.post0",
+        "type": "library",
+        "version": "2.9.0.post0"
+      },
+      {
+        "name": "python-dotenv",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/python-dotenv@1.2.2",
+        "type": "library",
+        "version": "1.2.2"
+      },
+      {
+        "name": "python-multipart",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/python-multipart@0.0.29",
+        "type": "library",
+        "version": "0.0.29"
+      },
+      {
+        "name": "pyttsx3",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyttsx3@2.90",
+        "type": "library",
+        "version": "2.90"
+      },
+      {
+        "name": "pytz",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pytz@2026.3.post1",
+        "type": "library",
+        "version": "2026.3.post1"
+      },
+      {
+        "name": "pyzmq",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/pyzmq@27.1.0",
+        "type": "library",
+        "version": "27.1.0"
+      },
+      {
+        "name": "referencing",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/referencing@0.37.0",
+        "type": "library",
+        "version": "0.37.0"
+      },
+      {
+        "name": "requests",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/requests@2.28.2",
+        "type": "library",
+        "version": "2.28.2"
+      },
+      {
+        "name": "rich",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/rich@15.0.0",
+        "type": "library",
+        "version": "15.0.0"
+      },
+      {
+        "name": "rlcard",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/rlcard@1.2.0",
+        "type": "library",
+        "version": "1.2.0"
+      },
+      {
+        "name": "rpds-py",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/rpds-py@2026.5.1",
+        "type": "library",
+        "version": "2026.5.1"
+      },
+      {
+        "name": "rsa",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/rsa@4.9.1",
+        "type": "library",
+        "version": "4.9.1"
+      },
+      {
+        "name": "ruff",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/ruff@0.16.0",
+        "type": "library",
+        "version": "0.16.0"
+      },
+      {
+        "name": "scikit-learn",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/scikit-learn@1.8.0",
+        "type": "library",
+        "version": "1.8.0"
+      },
+      {
+        "name": "scipy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/scipy@1.16.3",
+        "type": "library",
+        "version": "1.16.3"
+      },
+      {
+        "name": "setuptools",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/setuptools@83.0.0",
+        "type": "library",
+        "version": "83.0.0"
+      },
+      {
+        "name": "six",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/six@1.17.0",
+        "type": "library",
+        "version": "1.17.0"
+      },
+      {
+        "name": "smmap",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/smmap@5.0.3",
+        "type": "library",
+        "version": "5.0.3"
+      },
+      {
+        "name": "sniffio",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/sniffio@1.3.1",
+        "type": "library",
+        "version": "1.3.1"
+      },
+      {
+        "name": "sortedcontainers",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/sortedcontainers@2.4.0",
+        "type": "library",
+        "version": "2.4.0"
+      },
+      {
+        "name": "spectrumx",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/spectrumx@0.1.17",
+        "type": "library",
+        "version": "0.1.17"
+      },
+      {
+        "name": "stack-data",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/stack-data@0.6.3",
+        "type": "library",
+        "version": "0.6.3"
+      },
+      {
+        "name": "starlette",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/starlette@1.2.0",
+        "type": "library",
+        "version": "1.2.0"
+      },
+      {
+        "name": "streamlit",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/streamlit@1.58.0",
+        "type": "library",
+        "version": "1.58.0"
+      },
+      {
+        "name": "sympy",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/sympy@1.14.0",
+        "type": "library",
+        "version": "1.14.0"
+      },
+      {
+        "name": "tenacity",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/tenacity@9.1.2",
+        "type": "library",
+        "version": "9.1.2"
+      },
+      {
+        "name": "termcolor",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/termcolor@3.3.0",
+        "type": "library",
+        "version": "3.3.0"
+      },
+      {
+        "name": "threadpoolctl",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/threadpoolctl@3.6.0",
+        "type": "library",
+        "version": "3.6.0"
+      },
+      {
+        "name": "toml",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/toml@0.10.2",
+        "type": "library",
+        "version": "0.10.2"
+      },
+      {
+        "name": "torch",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/torch@2.13.0",
+        "type": "library",
+        "version": "2.13.0"
+      },
+      {
+        "name": "tornado",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/tornado@6.5.2",
+        "type": "library",
+        "version": "6.5.2"
+      },
+      {
+        "name": "tqdm",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/tqdm@4.70.0",
+        "type": "library",
+        "version": "4.70.0"
+      },
+      {
+        "name": "traitlets",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/traitlets@5.14.3",
+        "type": "library",
+        "version": "5.14.3"
+      },
+      {
+        "name": "typing-inspection",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/typing-inspection@0.4.2",
+        "type": "library",
+        "version": "0.4.2"
+      },
+      {
+        "name": "typing_extensions",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/typing_extensions@4.15.0",
+        "type": "library",
+        "version": "4.15.0"
+      },
+      {
+        "name": "urllib3",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/urllib3@1.26.14",
+        "type": "library",
+        "version": "1.26.14"
+      },
+      {
+        "name": "uvicorn",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/uvicorn@0.48.0",
+        "type": "library",
+        "version": "0.48.0"
+      },
+      {
+        "name": "vobject",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/vobject@0.9.9",
+        "type": "library",
+        "version": "0.9.9"
+      },
+      {
+        "name": "wcwidth",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/wcwidth@0.2.14",
+        "type": "library",
+        "version": "0.2.14"
+      },
+      {
+        "name": "websockets",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/websockets@15.0.1",
+        "type": "library",
+        "version": "15.0.1"
+      },
+      {
+        "name": "wheel",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/wheel@0.38.4",
+        "type": "library",
+        "version": "0.38.4"
+      },
+      {
+        "name": "wsgidav",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/wsgidav@4.3.5",
+        "type": "library",
+        "version": "4.3.5"
+      },
+      {
+        "name": "zipp",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "installed_python_env"
+          }
+        ],
+        "purl": "pkg:pypi/zipp@3.23.0",
+        "type": "library",
+        "version": "3.23.0"
+      },
+      {
+        "name": "etc/gunnchos/realm.json",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "c67da0f42983f9f2045aeaec1879b8b6728e5dafadbdc488828969ff375babfe"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "2926"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/etc/gunnchos/realm.json@c67da0f42983",
+        "type": "file",
+        "version": "c67da0f42983"
+      },
+      {
+        "name": "etc/os-release",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "f453b544cee527acae38d73c99c838cfcf3eb56c2788de1d5920ff410972221e"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "120"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/etc/os-release@f453b544cee5",
+        "type": "file",
+        "version": "f453b544cee5"
+      },
+      {
+        "name": "opt/gunnchos/bin/NO_DEV_TOOLCHAIN.txt",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "feada1d8fbaa0f36007f07daf2c8c9fb9c9fbbc45594f372750ed993a5360fa6"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "82"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/bin/NO_DEV_TOOLCHAIN.txt@feada1d8fbaa",
+        "type": "file",
+        "version": "feada1d8fbaa"
+      },
+      {
+        "name": "opt/gunnchos/factory/FACTORY_ONLY_SERVICES.json",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "db56f3b357a95ece8aae1747fcfdf798683cf5cc1be94ac5c55812e5caaf5c18"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "231"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/factory/FACTORY_ONLY_SERVICES.json@db56f3b357a9",
+        "type": "file",
+        "version": "db56f3b357a9"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.core.diagnostics.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "d32c3194d5d161dca80252a0242f883f47f58973ce9719bcc5f8374d6b2269cd"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "222"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.core.diagnostics.service@d32c3194d5d1",
+        "type": "file",
+        "version": "d32c3194d5d1"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.core.hal.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "350c8c4f48b4135d1f46e71b039041841dab469814dab0431555700b46b3a1c4"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "206"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.core.hal.service@350c8c4f48b4",
+        "type": "file",
+        "version": "350c8c4f48b4"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.calibration_import.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "913df398c372ed70f71a00863f5bcf21caca8a5eb25555b7529886d0b431d47e"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "242"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.calibration_import.service@913df398c372",
+        "type": "file",
+        "version": "913df398c372"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.device_record_export.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "394e74cf88a9c0922f61c58f85f77b4cc98c73eeda18a71cc36cce742535338d"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "246"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.device_record_export.service@394e74cf88a9",
+        "type": "file",
+        "version": "394e74cf88a9"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.esim_provisioning.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "10da72bdfb6a2cf5c9e27ee4e8030e1612a0a49681364779de27ef47becf70d6"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "240"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.esim_provisioning.service@10da72bdfb6a",
+        "type": "file",
+        "version": "10da72bdfb6a"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.flashing_orchestrator.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "9759a44ea2bfea4dedb5b110420590ef5ee45fcfc0a7cf7dddcd0cd50d62de64"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "248"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.flashing_orchestrator.service@9759a44ea2bf",
+        "type": "file",
+        "version": "9759a44ea2bf"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.identity_request_response.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "d58445da09e137c2ceac54d17ceb73e79667cde009ff5d23895432211c64ad6f"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "256"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.identity_request_response.service@d58445da09e1",
+        "type": "file",
+        "version": "d58445da09e1"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.key_injection_interface.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "db5fc2298646ee7679037f1472e77fc4c728b386564294b39eb9f092961d8fc5"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "252"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.key_injection_interface.service@db5fc2298646",
+        "type": "file",
+        "version": "db5fc2298646"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.mac_allocator.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "0a4dc57708f798d4e62360f9c386aab0bccc60eeab093a9592e8ceaf1fcff77c"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "232"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.mac_allocator.service@0a4dc57708f7",
+        "type": "file",
+        "version": "0a4dc57708f7"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.repair_traceability.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "2906170eb3e78d80a26978a83807ed1fc21b71963f2ef2fb1e91243748f2321e"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "244"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.repair_traceability.service@2906170eb3e7",
+        "type": "file",
+        "version": "2906170eb3e7"
+      },
+      {
+        "name": "opt/gunnchos/services/gunnchos.factory.serial_issuer.service",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "56f811ad02639ad537fc7aacf65765eb8fc4a84834f2e458aa14a28d0fda48ae"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "232"
+          }
+        ],
+        "purl": "pkg:generic/factory_provisioning_image/opt/gunnchos/services/gunnchos.factory.serial_issuer.service@56f811ad0263",
+        "type": "file",
+        "version": "56f811ad0263"
+      }
+    ],
+    "metadata": {
+      "component": {
+        "name": "gunnchos-factory_provisioning_image-image",
+        "type": "firmware"
+      },
+      "properties": [
+        {
+          "name": "gunnchos:realm",
+          "value": "FACTORY_PROVISIONING_IMAGE"
+        },
+        {
+          "name": "gunnchos:sbom_kind",
+          "value": "real_from_installed_packages_and_rootfs_files"
+        }
+      ]
+    },
+    "specVersion": "1.5",
+    "version": 1
+  },
+  "schema": "gunnchos.os_image_build.manifest.v1",
+  "signature": {
+    "algorithm": "Ed25519",
+    "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
+    "public_key_fingerprint": "d0ccabcf3b44f16e",
+    "signature_hex": "74a09c045f85962ab924792c5975db6ea707c3db3b60777915ee99e22f87aeac547c64cbc0ee2952a057a11ecfefbe8c7e391d77bcdde422b3d1bc3fc4e8f50d"
+  },
+  "signed": true,
+  "signing_realm": "dev",
+  "source_shas": {
+    "branch": "operating-cycle-3b/wp-013-release-engineering",
+    "repo_head_sha": "45a2aa712c99a88752d3f58658f9c742f09801ce",
+    "working_tree_dirty": true
+  },
+  "status": "ACTIVE_DEV",
+  "timestamp_utc": "2026-08-12T19:42:57Z",
+  "unsigned_requested": false
+}
