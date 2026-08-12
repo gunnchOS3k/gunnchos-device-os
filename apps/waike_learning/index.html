@@ -10,11 +10,16 @@
   <header>
     <h1>WAIKE Learning</h1>
     <p>Wireless + AI Kinesthetic Education — offline packs, labs, progress</p>
+    <p id="shell-status" data-state="ready">Loading…</p>
   </header>
   <main class="grid">
     <section>
       <h2>Course / lesson browser</h2>
       <ul id="lessons"></ul>
+    </section>
+    <section>
+      <h2>Lesson body</h2>
+      <div id="lesson-content"></div>
     </section>
     <section>
       <h2>Labs & offline packs</h2>
@@ -23,7 +28,7 @@
     </section>
     <section>
       <h2>Progress & portfolio</h2>
-      <pre id="progress"></pre>
+      <div id="progress"></div>
       <button id="export-portfolio">Export portfolio JSON</button>
     </section>
     <section>

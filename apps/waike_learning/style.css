@@ -9,3 +9,10 @@ section { background:var(--panel); padding:1rem; border:1px solid #334155; }
 button, select { background:#0ea5e9; color:#082f49; border:0; padding:.55rem .9rem; font-weight:600; cursor:pointer; }
 ul { padding-left:1.1rem; }
 pre { white-space:pre-wrap; font-size:.85rem; }
+#shell-status { font-size:.9rem; color:#7dd3fc; }
+#shell-status[data-state="error"] { color:#fda4af; }
+#shell-status[data-state="loading"] { color:#fde68a; }
+.progress-card { background:#0b1220; border:1px solid #334155; padding:.75rem; margin:.5rem 0; }
+.progress-card h3 { margin:.1rem 0 .35rem; font-size:1rem; }
+.empty, .hint { color:#94a3b8; font-size:.9rem; }
+#lesson-content h4 { margin:.75rem 0 .25rem; }

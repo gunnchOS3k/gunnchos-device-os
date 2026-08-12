@@ -1,13 +1,14 @@
 {
   "schema": "gunnchos.experience_review.v1",
   "product": "creator_studio",
-  "generated_utc": "2026-08-12T21:05:00Z",
+  "generated_utc": "2026-08-12T21:20:00Z",
   "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
   "AI_HEURISTIC_REVIEW_ONLY": true,
   "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
   "HUMAN_E6": "NOT_EARNED",
   "HUMAN_COMPREHENSION_E6": "NOT_EARNED",
   "STUDENT_VALIDATED": false,
+  "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
   "visual_inspect": {
     "status": "UNAVAILABLE",
     "reason": "No live rendered UI inspect performed in PLATFORM-001 dogfood; companion HTML/CSS reviewed structurally only — visual polish PASS forbidden from code inspection."
@@ -20,22 +21,32 @@
         {
           "id": "CS-ER1-01",
           "severity": "S2",
-          "finding": "Companion shell run/build buttons simulate terminal output rather than reflecting sandbox runtime artifacts — trust gap for creators."
+          "status": "REMEDIATED_DIGITAL_HONESTY",
+          "finding": "Companion shell no longer simulates successful run/build stdout; preview-only error path + empty/loading/error states added."
+        },
+        {
+          "id": "CS-ER1-01b",
+          "severity": "S2",
+          "status": "OPEN",
+          "finding": "Shell still not wired to gunnchSDK sandbox runtime I/O — blocks FIRST_PARTY_APP_D5_D6_PASS."
         },
         {
           "id": "CS-ER1-02",
           "severity": "S3",
-          "finding": "Header subtitle enumerates every feature (debug dump style); primary action hierarchy is weak."
+          "status": "OPEN",
+          "finding": "Header still prototype; primary action hierarchy remains weak."
         },
         {
           "id": "CS-ER1-03",
           "severity": "S3",
+          "status": "OPEN",
           "finding": "DS-XL layout toggle exists as a class flip only; dual-screen composition not visually validated."
         },
         {
           "id": "CS-ER1-04",
           "severity": "S2",
-          "finding": "Empty/error/loading states absent in companion shell."
+          "status": "REMEDIATED_DIGITAL",
+          "finding": "Empty/loading/error states now present in companion shell status + terminal."
         }
       ]
     },
@@ -46,7 +57,8 @@
         {
           "id": "CS-ER2-01",
           "severity": "S3",
-          "finding": "First 30s: file list + editor present, but payoff of real package artifact is invisible in the HTML shell."
+          "status": "OPEN",
+          "finding": "Real package artifact payoff remains invisible in HTML shell (SDK-only)."
         }
       ],
       "explicit_non_claims": [
@@ -60,5 +72,5 @@
       "note": "Not a game product — ER-3 N/A for this surface."
     }
   },
-  "summary": "Creator Studio Python/SDK runtime dogfoods real edit/run/build/git/AI-assist with persistence. Companion HTML remains a prototype three-pane shell with mock terminal text — intentional design not demonstrated in a rendered inspect."
+  "summary": "Creator Studio Python/SDK runtime dogfoods real edit/run/build/git/AI-assist with persistence. Companion HTML remediated to stop fake terminal success and add empty/loading/error states, but remains unwired preview — FIRST_PARTY D5/D6 PASS demoted with S2 OPEN."
 }

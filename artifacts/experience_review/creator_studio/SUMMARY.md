@@ -1,7 +1,8 @@
-# Experience review — creator_studio
+# Creator Studio — experience review summary
 
-- Council: ACTIVE (AI_HEURISTIC only)
+- VISUAL_MODEL_REVIEW: UNAVAILABLE
 - HUMAN_E6: NOT_EARNED
-- Visual inspect: UNAVAILABLE
+- S2: mock terminal remediated to honest preview-only; empty/loading/error added; shell↔SDK wiring remains OPEN
+- FIRST_PARTY_APP_D5_D6_PASS: demoted (PARTIAL/false) until wiring + visual inspect close
 
-Creator Studio Python/SDK runtime dogfoods real edit/run/build/git/AI-assist with persistence. Companion HTML remains a prototype three-pane shell with mock terminal text — intentional design not demonstrated in a rendered inspect.
+Python/SDK runtime dogfoods real edit/run/build with persistence. Companion HTML is explicitly preview-only — not product-complete.

@@ -8,4 +8,9 @@ textarea { width:100%; min-height:320px; background:#0b1020; color:var(--fg); bo
 button, select { background:var(--accent); color:#064e3b; border:0; padding:0.45rem 0.7rem; font-weight:700; cursor:pointer; margin-right:0.35rem; }
 pre { white-space:pre-wrap; font-size:0.8rem; max-height:220px; overflow:auto; }
 .row { margin-top:0.5rem; }
+#shell-status { font-size:0.85rem; color:#a7f3d0; }
+#shell-status[data-state="error"] { color:#fca5a5; }
+#shell-status[data-state="loading"] { color:#fde68a; }
+#shell-status[data-state="empty"] { color:#93c5fd; }
+#term[data-state="empty"]::before { content:"(empty) "; color:#93c5fd; }
 @media (max-width:900px){ .layout { grid-template-columns:1fr; } }

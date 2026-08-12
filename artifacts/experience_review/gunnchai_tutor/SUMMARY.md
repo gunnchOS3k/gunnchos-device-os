@@ -1,7 +1,9 @@
-# Experience review — gunnchai_tutor
+# gunnchAI Tutor — experience review summary
 
-- Council: ACTIVE (AI_HEURISTIC only)
+- VISUAL_MODEL_REVIEW: UNAVAILABLE
 - HUMAN_E6: NOT_EARNED
-- Visual inspect: UNAVAILABLE
+- S2: empty/loading/error + turn cards remidiated; browser Ask continuity remains OPEN (DISCONNECTED_PREVIEW)
+- Model quality: NOT CLAIMED
+- FIRST_PARTY_APP_D5_D6_PASS: demoted (PARTIAL/false) until continuity + visual inspect close
 
-gunnchAI Tutor gained a first UI shell and real local-template replies with safety gates + WAIKE binding in the SDK runtime. Companion shell still clearly labeled as preview; not a polished tutoring product. Model quality / HUMAN_E6 not claimed.
+SDK runtime has real local-template replies with safety + WAIKE binding. Companion shell is explicitly disconnected preview — not a polished tutoring product.

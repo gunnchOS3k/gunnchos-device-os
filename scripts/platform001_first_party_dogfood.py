@@ -191,8 +191,9 @@ def _dogfood_one(
             json.dumps(original_manifest, indent=2) + "\n", encoding="utf-8"
         )
 
-    # Honest D5/D6 evaluation for this app.
-    d5 = all(
+    # Platform lifecycle + cross-service evidence (SDK path). Separate from
+    # FIRST_PARTY_APP_D5_D6_PASS product-complete tokens.
+    platform_lifecycle_d5 = all(
         [
             steps.get("package_v1", {}).get("ok"),
             steps.get("install_v1", {}).get("ok"),
@@ -206,57 +207,65 @@ def _dogfood_one(
             bool(steps.get("run_1", {}).get("owner_functions")),
         ]
     )
-    # D6 requires observed cross-service keys on the run artifact.
-    d6 = d5 and bool(steps.get("run_1", {}).get("cross_service_keys"))
+    cross_service_d6 = platform_lifecycle_d5 and bool(
+        steps.get("run_1", {}).get("cross_service_keys")
+    )
 
     residual_gaps = list(gaps)
-    if not d5:
+    if not platform_lifecycle_d5:
         residual_gaps.append("d5_lifecycle_or_owner_function_incomplete")
-    if not d6:
+    if not cross_service_d6:
         residual_gaps.append("d6_cross_service_not_observed")
 
-    # Experience / curriculum honesty gaps (do not invent PASS).
-    residual_gaps.extend(
-        [
-            "html_companion_shell_still_prototype_ux",
-            "visual_experience_review_unavailable_without_rendered_inspect",
-        ]
-    )
+    # Experience S2 must not be silently ignored. Companion remediations may
+    # close lying-terminal / empty-state / lesson-body gaps, but shell↔SDK
+    # wiring + visual inspect remain OPEN and block product D5/D6 PASS tokens.
+    s2_open = [
+        "s2_open_companion_shell_not_wired_to_sdk_runtime",
+        "s2_open_visual_model_review_unavailable",
+    ]
+    if name == "gunnchai_tutor":
+        s2_open.append("s2_open_browser_ask_disconnected_from_runtime")
+    residual_gaps.extend(s2_open)
+    residual_gaps.append("html_companion_shell_still_prototype_ux")
     if name == "waike_learning":
         residual_gaps.append("full_waike_curriculum_not_claimed")
     if name == "gunnchai_tutor":
         residual_gaps.append("frontier_model_quality_not_claimed")
 
-    token_pass = d5 and d6 and not any(
-        g.startswith("d5_") or g.startswith("d6_") or g == "examples_stub_used_as_evidence" for g in residual_gaps
-    )
-    # Soft UX gaps do not block digital D5/D6 token if lifecycle+cross-service earned.
-    blocking = [
-        g
-        for g in residual_gaps
-        if g
-        not in (
-            "html_companion_shell_still_prototype_ux",
-            "visual_experience_review_unavailable_without_rendered_inspect",
-            "full_waike_curriculum_not_claimed",
-            "frontier_model_quality_not_claimed",
-        )
-    ]
-    token_pass = d5 and d6 and not blocking
+    non_blocking = {
+        "html_companion_shell_still_prototype_ux",
+        "full_waike_curriculum_not_claimed",
+        "frontier_model_quality_not_claimed",
+    }
+    blocking = [g for g in residual_gaps if g not in non_blocking]
+    # Product tokens require no OPEN S2 / lifecycle failures.
+    token_pass = platform_lifecycle_d5 and cross_service_d6 and not blocking
+    # Demote D5/D6 product claims when S2 OPEN remain (keep lifecycle evidence).
+    d5 = platform_lifecycle_d5 and not any(g.startswith("s2_open_") for g in residual_gaps)
+    d6 = cross_service_d6 and d5
+    token_status = "PASS" if token_pass else ("PARTIAL" if platform_lifecycle_d5 else "FAIL")
 
     return {
         "app": name,
         "app_id": app_id,
         "token": meta["token"],
         "token_pass": token_pass,
+        "token_status": token_status,
         "D5": d5,
         "D6": d6,
+        "platform_lifecycle_d5": platform_lifecycle_d5,
+        "cross_service_d6": cross_service_d6,
+        "S2_OPEN": s2_open,
+        "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
         "steps": steps,
         "gaps": residual_gaps,
         "examples_used_as_evidence": False,
         "claim_boundary": (
-            "Digital gunnchSDK dogfood of first-party app depth. "
-            "Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device."
+            "gunnchSDK lifecycle/cross-service evidence may be earned while "
+            "FIRST_PARTY_APP_D5_D6_PASS stays false/PARTIAL until companion "
+            "shell↔SDK wiring + visual inspect S2 are closed. Not HUMAN_E6, "
+            "not full curriculum, not frontier AI quality, not physical device."
         ),
     }
 
@@ -309,32 +318,43 @@ def main() -> int:
         shutil.rmtree(work, ignore_errors=True)
 
     tokens = {results[n]["token"]: bool(results[n]["token_pass"]) for n in APPS}
-    # Strengthen D6 with explicit cross-service workflow evidence.
+    token_status = {results[n]["token"]: results[n]["token_status"] for n in APPS}
+    # Attach cross-service workflow evidence; do not auto-promote product tokens.
     if cross.get("ok"):
         for name in APPS:
-            if results[name]["D5"] and results[name]["D6"]:
-                results[name]["cross_service_workflow"] = cross
-            elif results[name]["D5"] and cross.get("ok"):
-                results[name]["D6"] = True
-                results[name]["cross_service_workflow"] = cross
-                # Recompute token if only missing cross-service.
-                blocking = [
-                    g
-                    for g in results[name]["gaps"]
-                    if g
-                    not in (
-                        "html_companion_shell_still_prototype_ux",
-                        "visual_experience_review_unavailable_without_rendered_inspect",
-                        "full_waike_curriculum_not_claimed",
-                        "frontier_model_quality_not_claimed",
-                        "d6_cross_service_not_observed",
-                    )
-                ]
+            results[name]["cross_service_workflow"] = cross
+            if results[name].get("platform_lifecycle_d5") and not results[name].get(
+                "cross_service_d6"
+            ):
+                results[name]["cross_service_d6"] = True
                 results[name]["gaps"] = [
                     g for g in results[name]["gaps"] if g != "d6_cross_service_not_observed"
                 ]
-                results[name]["token_pass"] = results[name]["D5"] and results[name]["D6"] and not blocking
-                tokens[results[name]["token"]] = results[name]["token_pass"]
+            # Recompute product D5/D6 + token after cross-service attach.
+            s2_open = [g for g in results[name]["gaps"] if g.startswith("s2_open_")]
+            results[name]["S2_OPEN"] = s2_open
+            results[name]["D5"] = bool(results[name]["platform_lifecycle_d5"]) and not s2_open
+            results[name]["D6"] = bool(results[name]["cross_service_d6"]) and bool(
+                results[name]["D5"]
+            )
+            non_blocking = {
+                "html_companion_shell_still_prototype_ux",
+                "full_waike_curriculum_not_claimed",
+                "frontier_model_quality_not_claimed",
+            }
+            blocking = [g for g in results[name]["gaps"] if g not in non_blocking]
+            results[name]["token_pass"] = (
+                bool(results[name]["platform_lifecycle_d5"])
+                and bool(results[name]["cross_service_d6"])
+                and not blocking
+            )
+            results[name]["token_status"] = (
+                "PASS"
+                if results[name]["token_pass"]
+                else ("PARTIAL" if results[name]["platform_lifecycle_d5"] else "FAIL")
+            )
+            tokens[results[name]["token"]] = results[name]["token_pass"]
+            token_status[results[name]["token"]] = results[name]["token_status"]
 
     gap_register = []
     for name, r in results.items():
@@ -344,13 +364,14 @@ def main() -> int:
                     "app": name,
                     "gap_id": f"PLATFORM001-{name}-{g}",
                     "gap": g,
-                    "severity": g
-                    not in (
-                        "html_companion_shell_still_prototype_ux",
-                        "visual_experience_review_unavailable_without_rendered_inspect",
-                        "full_waike_curriculum_not_claimed",
-                        "frontier_model_quality_not_claimed",
-                    ),
+                    "severity": g.startswith("s2_open_")
+                    or g.startswith("d5_")
+                    or g.startswith("d6_")
+                    or g == "examples_stub_used_as_evidence",
+                    "blocks_first_party_d5_d6_token": g.startswith("s2_open_")
+                    or g.startswith("d5_")
+                    or g.startswith("d6_")
+                    or g == "examples_stub_used_as_evidence",
                 }
             )
 
@@ -359,15 +380,19 @@ def main() -> int:
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "base_main_sha_expected": "3858e760295ad35828ff141919681f2bb8685cf0",
         "PRODUCTION_RELEASE_CLAIMED": False,
+        "HUMAN_E6": "NOT_EARNED",
+        "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
         "examples_are_not_product_evidence": True,
         "tokens": tokens,
+        "token_status": token_status,
         "apps": results,
         "cross_service_workflow": cross,
         "gap_register": gap_register,
         "claim_boundary": (
-            "PLATFORM-001 digital first-party app depth on gunnchSDK. "
-            "HUMAN_E6 not earned. Visual experience may be UNAVAILABLE. "
-            "Full WAIKE curriculum and AI model quality are out of scope."
+            "PLATFORM-001: gunnchSDK first-party lifecycle/cross-service dogfood "
+            "may be earned; FIRST_PARTY_APP_D5_D6_PASS remains false/PARTIAL while "
+            "companion shell↔SDK wiring and VISUAL_MODEL_REVIEW S2 stay OPEN. "
+            "HUMAN_E6 not earned. Full WAIKE curriculum and AI model quality out of scope."
         ),
     }
     (out_dir / "PLATFORM001_RESULT.json").write_text(
@@ -378,7 +403,18 @@ def main() -> int:
         + "\n",
         encoding="utf-8",
     )
-    print(json.dumps({"ok": all(tokens.values()), "tokens": tokens, "out": str(out_dir)}, indent=2))
+    print(
+        json.dumps(
+            {
+                "ok": all(tokens.values()),
+                "tokens": tokens,
+                "token_status": token_status,
+                "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+                "out": str(out_dir),
+            },
+            indent=2,
+        )
+    )
     return 0 if all(tokens.values()) else 1
 
 

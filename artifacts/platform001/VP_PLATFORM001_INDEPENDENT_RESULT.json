@@ -1,0 +1,112 @@
+{
+  "schema": "gunnchos.vp.platform001.independent.v1",
+  "verification_packet": "VP_PLATFORM001",
+  "role": "INDEPENDENT_VERIFIER",
+  "executed_at_utc": "2026-08-12T21:15:46Z",
+  "pr": {
+    "number": 106,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/106",
+    "is_draft": true,
+    "head_ref": "operating-cycle-3b/platform-001-first-party-app-depth",
+    "base_ref": "main",
+    "base_includes_pr_104": true,
+    "base_sha": "3858e760295ad35828ff141919681f2bb8685cf0"
+  },
+  "tip_claimed": "91e1ed0c22808787c9b28d4d9aac34baffe7f206",
+  "tip_verified_pre_remediation": "91e1ed0c22808787c9b28d4d9aac34baffe7f206",
+  "tip_verified": "91e1ed0c22808787c9b28d4d9aac34baffe7f206",
+  "tip_claimed_was_live": true,
+  "do_not_merge_pr_103": true,
+  "did_not_merge_pr_106": true,
+  "implementer_not_this_verifier": true,
+  "challenge": {
+    "ci_green_on_tip": "PENDING_POST_PUSH",
+    "lifecycle_reproduced_sdk_apps": true,
+    "examples_rejected_as_evidence": true,
+    "paths": "package\u2192install\u2192run\u2192persist\u2192crash\u2192update\u2192uninstall",
+    "PRODUCTION_RELEASE_CLAIMED": false,
+    "HUMAN_E6": "NOT_EARNED",
+    "VISUAL_MODEL_REVIEW": "UNAVAILABLE"
+  },
+  "overclaim_finding": {
+    "on_tip_91e1ed0": true,
+    "summary": "FIRST_PARTY_APP_D5_D6_PASS tokens were true while thin HTML shells (mock terminal / disconnected Ask / prototype UX) and experience S2 findings were treated as non-blocking \u2014 overclaim relative to product-complete D5/D6.",
+    "remediation": "Demoted all three tokens to false with token_status=PARTIAL; marked S2_OPEN explicitly; remidiated digitally executable companion honesty (no fake terminal success; WAIKE lesson body + progress cards; gunnchAI empty/loading/error + DISCONNECTED_PREVIEW); kept curriculum/model/HUMAN_E6 false."
+  },
+  "tokens": {
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": false,
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": false,
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": false
+  },
+  "token_status": {
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL",
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL",
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL"
+  },
+  "apps": {
+    "creator_studio": {
+      "D5": false,
+      "D6": false,
+      "token_pass": false,
+      "token_status": "PARTIAL",
+      "platform_lifecycle_d5": true,
+      "cross_service_d6": true,
+      "S2_OPEN": [
+        "s2_open_companion_shell_not_wired_to_sdk_runtime",
+        "s2_open_visual_model_review_unavailable"
+      ],
+      "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+      "examples_used_as_evidence": false
+    },
+    "gunnchai_tutor": {
+      "D5": false,
+      "D6": false,
+      "token_pass": false,
+      "token_status": "PARTIAL",
+      "platform_lifecycle_d5": true,
+      "cross_service_d6": true,
+      "S2_OPEN": [
+        "s2_open_companion_shell_not_wired_to_sdk_runtime",
+        "s2_open_visual_model_review_unavailable",
+        "s2_open_browser_ask_disconnected_from_runtime"
+      ],
+      "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+      "examples_used_as_evidence": false
+    },
+    "waike_learning": {
+      "D5": false,
+      "D6": false,
+      "token_pass": false,
+      "token_status": "PARTIAL",
+      "platform_lifecycle_d5": true,
+      "cross_service_d6": true,
+      "S2_OPEN": [
+        "s2_open_companion_shell_not_wired_to_sdk_runtime",
+        "s2_open_visual_model_review_unavailable"
+      ],
+      "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+      "examples_used_as_evidence": false
+    }
+  },
+  "honest_claims_after_remediation": true,
+  "overall_result": "PARTIAL",
+  "independent_pass": false,
+  "DEVICE_OS_106_READY_FOR_EDMUND_MERGE": false,
+  "ready_reason": "Tokens demoted PARTIAL/false with explicit S2_OPEN (shell\u2194SDK wiring + VISUAL_MODEL_REVIEW UNAVAILABLE + gunnchAI disconnected Ask). Lifecycle dogfood earned but FIRST_PARTY_APP_D5_D6_PASS not merge-ready PASS. CI re-check required on remediation tip.",
+  "top_gaps": [
+    "Companion shells not wired to gunnchSDK sandbox runtime I/O (blocks all three D5/D6 PASS tokens)",
+    "VISUAL_MODEL_REVIEW=UNAVAILABLE \u2014 no rendered inspect (blocks tokens)",
+    "gunnchAI browser Ask remains DISCONNECTED_PREVIEW (blocks GUNNCHAI token)",
+    "Full WAIKE curriculum + frontier model quality + HUMAN_E6 remain out of scope / false"
+  ],
+  "evidence": [
+    "artifacts/platform001/PLATFORM001_RESULT.json",
+    "artifacts/platform001/GAP_REGISTER.json",
+    "artifacts/platform001/AUDIT_NOTE.json",
+    "artifacts/experience_review/creator_studio/",
+    "artifacts/experience_review/waike_learning/",
+    "artifacts/experience_review/gunnchai_tutor/",
+    "scripts/platform001_first_party_dogfood.py",
+    "tests/platform001/test_first_party_app_depth.py"
+  ]
+}

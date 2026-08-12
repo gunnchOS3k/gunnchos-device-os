@@ -10,6 +10,8 @@
   <header>
     <h1>gunnchAI Tutor</h1>
     <p>Local-first tutoring · AI suggests · human verifies · WAIKE lesson binding</p>
+    <p id="shell-status" data-state="empty">Checking shell status…</p>
+    <p id="continuity" class="hint"></p>
   </header>
   <main class="grid">
     <section>
@@ -28,10 +30,10 @@
       </label>
     </section>
     <section>
-      <h2>Ask</h2>
+      <h2>Ask (disconnected preview)</h2>
       <textarea id="prompt" rows="5">Explain OFDM at a high level</textarea>
       <button id="ask">Ask tutor</button>
-      <p class="hint">Companion shell — real replies come from the gunnchSDK Python app runtime.</p>
+      <p class="hint">Browser Ask is a disconnected preview. Durable tutoring + memory require gunnchSDK Python runtime.</p>
     </section>
     <section>
       <h2>Reply</h2>
@@ -39,8 +41,8 @@
       <p id="safety">Safety: local gates on</p>
     </section>
     <section>
-      <h2>Memory (local)</h2>
-      <pre id="memory">[]</pre>
+      <h2>Memory (local preview turns)</h2>
+      <div id="memory"></div>
     </section>
   </main>
   <script src="app.js"></script>

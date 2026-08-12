@@ -2,7 +2,7 @@
   --bg: #0f1419;
   --panel: #1a222c;
   --text: #e7eef7;
-  --muted: #9aatb8;
+  --muted: #9aafb8;
   --accent: #3d9cf0;
   --warn: #e0a35a;
 }
@@ -55,3 +55,15 @@ pre {
   min-height: 4rem;
 }
 #safety { color: var(--warn); }
+#shell-status[data-state="error"] { color: #f5a8a8; }
+#shell-status[data-state="loading"] { color: #e6d38a; }
+#shell-status[data-state="empty"] { color: #8eb6e8; }
+.turn-card {
+  background: #0d1218;
+  border: 1px solid #2a3644;
+  border-radius: 6px;
+  padding: 0.55rem 0.65rem;
+  margin: 0.45rem 0;
+}
+.turn-card .meta { color: var(--muted); font-size: 0.8rem; }
+.empty { color: var(--muted); }
