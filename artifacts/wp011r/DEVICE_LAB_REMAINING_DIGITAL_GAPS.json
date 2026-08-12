@@ -26,8 +26,8 @@
   "pass_tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
@@ -48,9 +48,9 @@
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "CLOSED_PENDING_INDEPENDENT",
-      "earned": false,
-      "summary": "INDEPENDENT DEMOTION: truncated guest PNG FB (16384B no IEND); identical shell PPMs; host screendump alone insufficient.",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "Independent PASS: IEND-complete before/after PNGs differ; LIVEPROOF OCR-visible; document marker; not host-FB-only.",
       "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
       "pass": true,
       "digital_earned": true
@@ -58,22 +58,22 @@
     {
       "id": "GAP-DSXL-COMPOSITOR-UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "status": "CLOSED_PENDING_INDEPENDENT",
+      "status": "OPEN_DEMOTION",
       "earned": false,
-      "summary": "INDEPENDENT DEMOTION: placement_halves not_png; invented placement; stale multi-hash FB; dual PNGs uncommitted.",
+      "summary": "INDEPENDENT DEMOTION: left/right PNGs near-black \u2260 placement halves; filter-blind decoder invented halves despite placement_halves.ok.",
       "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
-      "pass": true,
-      "digital_earned": true
+      "pass": false,
+      "digital_earned": false
     },
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "CLOSED_PENDING_INDEPENDENT",
+      "status": "OPEN_DEMOTION",
       "earned": false,
-      "summary": "INDEPENDENT DEMOTION: Lab Ring surface sidecars; guest ODT marker not committed; prefer FAIL.",
+      "summary": "INDEPENDENT DEMOTION: Lab RINGRING document_state sidecar remains; Godot save is first-run create (alive=false); prefer FAIL.",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
-      "pass": true,
-      "digital_earned": true
+      "pass": false,
+      "digital_earned": false
     },
     {
       "id": "GAP-ECO010-SOAK",
@@ -91,13 +91,14 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Digital five-gate candidate earned with committed guest artifacts; independent must accept; Cursor never merges; shipping false.",
+  "note": "Independent demoted DSXL+RING on tip 7fe1022; LIVE/FOUR/ECO010 retained; five_gate false; shipping false; Cursor never merges.",
   "independent_audit": {
     "source": "independent_verifier_adversarial",
-    "accepted_tip_audited": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
-    "verdict": "FAIL_DEMOTION_LIVE_DSXL_RING",
+    "accepted_tip_audited": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
+    "verdict": "FAIL_DEMOTION_DSXL_RING",
     "five_gate_digital_and": false,
     "shipping_master": false,
+    "LIVE_PASS": true,
     "note": "Prefer FAIL over false PASS. Cursor never merges. WP-001 DO_NOT_START."
   },
   "score_inflation_risk": [
@@ -107,24 +108,24 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-12T16:08:31Z",
+  "updated_at_utc": "2026-08-12T16:20:00Z",
   "cycle3b_continue": {
     "LIVE": false,
-    "DSXL": false,
-    "RING": false,
+    "DSXL": true,
+    "RING": true,
     "FOUR": true,
     "ECO010": true,
     "GUEST_DUAL": true
   },
   "closed_this_cycle": [
-    "LIVE typed_marker/document + IEND PNGs same-run",
-    "DSXL placement_halves committed + focus + reboot 2\u21921\u21922",
-    "RING guest ODT marker + browser + Godot save committed"
+    "LIVE typed_marker/document + IEND PNGs same-run (independent PASS)"
   ],
   "remaining": [
-    "Independent VP-011R accept on DRAFT #103",
+    "DSXL honest placement halves (PNG filter-aware) matching placement.png",
+    "RING remove Lab RINGRING sidecars; prove Godot save delta from Ring HID (not first-run create)",
+    "Independent five-gate AND still false",
     "Shipping/silicon master PHYSICAL_PENDING"
   ],
-  "five_gate_digital_and": true,
+  "five_gate_digital_and": false,
   "shipping_master": false
 }

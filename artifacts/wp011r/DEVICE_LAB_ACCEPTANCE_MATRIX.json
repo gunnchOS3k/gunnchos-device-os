@@ -1,6 +1,7 @@
 {
   "schema": "gunnchos.wp011r.acceptance_matrix.v1",
-  "updated_at_utc": "2026-08-12T16:07:47Z",
+  "updated_at_utc": "2026-08-12T16:20:00Z",
+  "assessed_tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
   "rows": [
     {
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
@@ -9,18 +10,18 @@
     },
     {
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "pass": false,
-      "note": "Complete IEND PNGs committed; typed_marker/document still missing"
+      "pass": true,
+      "note": "IEND PNGs differ; LIVEPROOF OCR-visible; guest FB not host-only"
     },
     {
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "pass": false,
-      "note": "dual compositor true; placement half PNGs missing"
+      "note": "left/right near-black ≠ placement halves; filter-blind invented halves"
     },
     {
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "pass": false,
-      "note": "guest ODT marker / Godot save not committed"
+      "note": "Lab RINGRING sidecar + Godot first-run save; prefer FAIL despite ODT marker"
     },
     {
       "token": "ECO010_SOAK_PASS",
@@ -33,8 +34,12 @@
       "note": "guest_drm dual retained"
     }
   ],
-  "five_gate_digital_and": true,
+  "five_gate_digital_and": false,
+  "INDEPENDENT_PASS": false,
+  "shipping_master": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "prefer_fail_over_false_pass": true,
   "cursor_never_merges": true,
-  "note": "Digital five-gate candidate earned with committed artifacts; independent must accept; shipping false; Cursor never merges"
+  "WP-001": "DO_NOT_START",
+  "note": "Independent FAIL demotion of DSXL+RING on tip 7fe1022; LIVE/FOUR/ECO010 retained; shipping false; Cursor never merges"
 }

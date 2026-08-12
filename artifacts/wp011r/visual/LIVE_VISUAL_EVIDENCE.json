@@ -205,5 +205,17 @@
   "diff_bytes": 2617,
   "before_after_changed": true,
   "missing": [],
-  "note": "Guest FB before/after non-blank+changed, mousepad alive, typed marker in document"
+  "note": "Independent PASS: guest FB IEND+delta + OCR-visible LIVEPROOF + document marker",
+  "INDEPENDENT_ACCEPT": {
+    "at_utc": "2026-08-12T16:20:00Z",
+    "tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
+    "verdict": "PASS",
+    "checks": {
+      "iend_complete_before_after": true,
+      "pngs_differ": true,
+      "liveproof_ocr_visible": true,
+      "document_marker": true,
+      "not_host_fb_only": true
+    }
+  }
 }

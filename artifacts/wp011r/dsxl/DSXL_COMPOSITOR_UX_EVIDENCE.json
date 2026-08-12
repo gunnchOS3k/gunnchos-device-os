@@ -1,5 +1,5 @@
 {
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
   "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
   "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
   "prefer_fail_over_false_pass": true,
@@ -93,9 +93,9 @@
     "layout_restored": true
   },
   "phase_c_ux": {
-    "placement_proven": true,
+    "placement_proven": false,
     "focus_ok": true,
-    "fb_both": true,
+    "fb_both": false,
     "windows_launched": {
       "foot": {
         "ok": true,
@@ -164,23 +164,28 @@
           "ok": true
         }
       }
-    ]
+    ],
+    "independent_note": "Committed dsxl_left/right are near-black and do not match placement.png halves; half decoder ignores PNG filters yet sets placement_halves.ok=true."
   },
   "compositor_ux_gate": {
-    "ok": true,
-    "gate": "PASS_DSXL_COMPOSITOR_UX",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "ok": false,
+    "gate": "FAIL_DSXL_COMPOSITOR_UX_INDEPENDENT_DEMOTION",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
     "checks": {
       "two_outputs": true,
       "two_compositor_surfaces": true,
-      "window_placement": true,
+      "window_placement": false,
       "focus_move": true,
       "disconnect": true,
       "reconnect": true,
       "layout_restore": true
     },
-    "missing": [],
+    "missing": [
+      "honest_placement_halves_matching_placement_png",
+      "png_filter_aware_half_decode",
+      "non_invented_left_right_fb"
+    ],
     "windows": [
       {
         "app_id": "foot",
@@ -311,5 +316,14 @@
     "note": "DSXL UX PASS earned"
   },
   "GUEST_DUAL_OUTPUT_PASS_retained": true,
-  "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
+  "note": "INDEPENDENT DEMOTION: invented/filter-blind halves; placement.png \u2260 left/right",
+  "INDEPENDENT_DEMOTION": {
+    "at_utc": "2026-08-12T16:20:00Z",
+    "tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
+    "reasons": [
+      "dsxl_left/right mean RGB ~3 vs placement halves ~237/147 (MSE~45k) \u2014 not honest halves",
+      "_png_half_sha256 ignores PNG filter bytes (1/2/4) producing garbage halves with ok=true",
+      "prefer FAIL: reboot 2\u21921\u21922 and focus claims do not salvage invented half PNGs"
+    ]
+  }
 }
