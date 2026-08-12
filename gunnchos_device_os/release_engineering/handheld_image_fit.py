@@ -140,27 +140,64 @@ def _measure_realm(repo_root: Path, realm_dir: str) -> dict[str, Any]:
 
 
 def _measure_boot_reference(repo_root: Path) -> dict[str, Any]:
+    """Measure shared boot reference for slot composition.
+
+    Kernel/initramfs binaries are gitignored and may be rebuilt non-deterministically
+    during CI (cpio timestamps). Prefer committed MANIFEST.json artifact metadata for
+    reproducible IMAGE_FIT_MANIFEST evidence; fall back to on-disk files when needed.
+    """
     art = repo_root / "os_build" / "bootable_reference" / "artifacts"
     kernel = art / "vmlinuz-virt"
     initramfs = art / "gunnchos-ref-initramfs.cpio.gz"
+    manifest_path = art / "MANIFEST.json"
+    committed: dict[str, Any] = {}
+    if manifest_path.is_file():
+        try:
+            committed = (
+                json.loads(manifest_path.read_text(encoding="utf-8")).get("artifacts") or {}
+            )
+        except Exception:
+            committed = {}
     out: dict[str, Any] = {
         "kind": "shared_bootable_reference",
-        "note": "Shared DEV/QEMU reference — not realm-specific compiled binaries.",
+        "note": (
+            "Shared DEV/QEMU reference — not realm-specific compiled binaries. "
+            "Sizes/hashes prefer committed bootable_reference MANIFEST.json because "
+            "vmlinuz*/*.cpio* are gitignored and CI rebuilds can drift by tens of bytes."
+        ),
+        "size_source": "committed_manifest" if committed else "on_disk_or_missing",
     }
     total = 0
     for key, path in (("kernel", kernel), ("initramfs", initramfs)):
-        if path.is_file():
+        meta = committed.get(key) or {}
+        rel = str(path.relative_to(repo_root))
+        if isinstance(meta, dict) and meta.get("size_bytes") is not None:
+            nbytes = int(meta["size_bytes"])
+            total += nbytes
+            entry: dict[str, Any] = {
+                "path": meta.get("path") or rel,
+                "sha256": meta.get("sha256"),
+                "bytes": nbytes,
+                "gib": _gib(nbytes),
+                "present": path.is_file(),
+                "size_source": "committed_manifest",
+            }
+            if path.is_file():
+                entry["on_disk_bytes"] = path.stat().st_size
+            out[key] = entry
+        elif path.is_file():
             nbytes = path.stat().st_size
             total += nbytes
             out[key] = {
-                "path": str(path.relative_to(repo_root)),
+                "path": rel,
                 "sha256": _sha256_file(path),
                 "bytes": nbytes,
                 "gib": _gib(nbytes),
                 "present": True,
+                "size_source": "on_disk",
             }
         else:
-            out[key] = {"path": str(path.relative_to(repo_root)), "present": False}
+            out[key] = {"path": rel, "present": False, "size_source": "missing"}
     out["combined_bytes"] = total
     out["combined_gib"] = _gib(total)
     return out

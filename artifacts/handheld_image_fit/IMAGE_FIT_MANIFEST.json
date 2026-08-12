@@ -4,8 +4,7 @@
   "architecture_outcome": "A",
   "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
   "claim_boundary": "Digital measurement of WP-013 realm rootfs.tar.gz artifacts plus shared bootable_reference kernel/initramfs. Not a physical eMMC flash image, not silicon-exact, not signed production shipping. When payload_class is production_intent_digital, rootfs embeds Alpine minirootfs + gunnchOS userspace for MLP-class digital slot-fit \u2014 still SHIPPING_IMAGE=false and PRODUCTION_RELEASE_CLAIMED=false always.",
-  "device_os_tip": "995c434afcfa55c32b9de12a64df7b2513b2db55",
-  "evidence_note": "Production-intent digital rootfs rebuilt from Alpine minirootfs + gunnchOS userspace on DRAFT #107. A/B slots measured from unsigned PRODUCTION_SHIPPING_IMAGE_DEFINITION; recovery from RECOVERY_IMAGE. SHIPPING_IMAGE=false; PRODUCTION_RELEASE_CLAIMED=false.",
+  "device_os_tip": "3219299708a9e2abe1f401f432cb993638a19b14",
   "fit_assessment": {
     "any_PRODUCTION_RELEASE_CLAIMED_true": false,
     "any_SHIPPING_IMAGE_true": false,
@@ -20,9 +19,9 @@
     "shared_boot_reference_present": true,
     "stub_like_rootfs_payloads": false
   },
-  "generated_at_utc": "2026-08-12T22:20:23Z",
+  "generated_at_utc": "2026-08-12T22:42:08Z",
   "larger_emmc_sku_invented": false,
-  "measured_against_main_tip": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "measured_against_main_tip": null,
   "npi": {
     "architecture_change_proposal": {
       "architecture_change_required": false,
@@ -180,24 +179,29 @@
   },
   "schema": "gunnchos.device_os.handheld_image_fit_manifest.v1",
   "shared_bootable_reference": {
-    "combined_bytes": 14140184,
+    "combined_bytes": 14140185,
     "combined_gib": 0.013169073,
     "initramfs": {
-      "bytes": 4514072,
-      "gib": 0.004204057,
+      "bytes": 4514073,
+      "gib": 0.004204058,
+      "on_disk_bytes": 4514072,
       "path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
       "present": true,
-      "sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3"
+      "sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "size_source": "committed_manifest"
     },
     "kernel": {
       "bytes": 9626112,
       "gib": 0.008965015,
+      "on_disk_bytes": 9626112,
       "path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
       "present": true,
-      "sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac"
+      "sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
+      "size_source": "committed_manifest"
     },
     "kind": "shared_bootable_reference",
-    "note": "Shared DEV/QEMU reference \u2014 not realm-specific compiled binaries."
+    "note": "Shared DEV/QEMU reference \u2014 not realm-specific compiled binaries. Sizes/hashes prefer committed bootable_reference MANIFEST.json because vmlinuz*/*.cpio* are gitignored and CI rebuilds can drift by tens of bytes.",
+    "size_source": "committed_manifest"
   },
   "sizes_summary_gib": {
     "evt_rootfs_compressed": 0.005879017,
@@ -205,14 +209,14 @@
     "factory_rootfs_compressed": 0.004028673,
     "production_def_rootfs_compressed": 0.005843321,
     "production_def_rootfs_uncompressed": 0.011548556,
-    "recovery_composed": 0.020781854,
-    "recovery_margin": 1.979218146,
+    "recovery_composed": 0.020781855,
+    "recovery_margin": 1.979218145,
     "recovery_rootfs_compressed": 0.003587433,
     "shared_boot_combined": 0.013169073,
-    "slot_a_composed": 0.024717629,
-    "slot_a_margin": 4.975282371,
-    "slot_b_composed": 0.024717629,
-    "slot_b_margin": 4.975282371
+    "slot_a_composed": 0.02471763,
+    "slot_a_margin": 4.97528237,
+    "slot_b_composed": 0.02471763,
+    "slot_b_margin": 4.97528237
   },
   "sku_profile": "handheld_hybrid",
   "slot_budgets_gib": {
@@ -224,17 +228,17 @@
     "evt_engineering_report_only": {
       "budget_bytes": 5368709120,
       "budget_gib": 5.0,
-      "composed_bytes": 26704506,
-      "composed_gib": 0.024870509,
+      "composed_bytes": 26704507,
+      "composed_gib": 0.02487051,
       "composition": {
         "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
         "rootfs_uncompressed_file_bytes": 12564322,
-        "shared_kernel_initramfs_bytes": 14140184
+        "shared_kernel_initramfs_bytes": 14140185
       },
       "fits_budget": true,
       "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
-      "margin_bytes": 5342004614,
-      "margin_gib": 4.975129491,
+      "margin_bytes": 5342004613,
+      "margin_gib": 4.97512949,
       "payload_class": "production_intent_digital",
       "production_intent_digital": true,
       "realm_id": "EVT_ENGINEERING_IMAGE",
@@ -243,17 +247,17 @@
     "factory_provisioning_report_only": {
       "budget_bytes": 5368709120,
       "budget_gib": 5.0,
-      "composed_bytes": 24315594,
-      "composed_gib": 0.022645662,
+      "composed_bytes": 24315595,
+      "composed_gib": 0.022645663,
       "composition": {
         "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
         "rootfs_uncompressed_file_bytes": 10175410,
-        "shared_kernel_initramfs_bytes": 14140184
+        "shared_kernel_initramfs_bytes": 14140185
       },
       "fits_budget": true,
       "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
-      "margin_bytes": 5344393526,
-      "margin_gib": 4.977354338,
+      "margin_bytes": 5344393525,
+      "margin_gib": 4.977354337,
       "payload_class": "production_intent_digital",
       "production_intent_digital": true,
       "realm_id": "FACTORY_PROVISIONING_IMAGE",
@@ -262,17 +266,17 @@
     "recovery": {
       "budget_bytes": 2147483648,
       "budget_gib": 2.0,
-      "composed_bytes": 22314346,
-      "composed_gib": 0.020781854,
+      "composed_bytes": 22314347,
+      "composed_gib": 0.020781855,
       "composition": {
         "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
         "rootfs_uncompressed_file_bytes": 8174162,
-        "shared_kernel_initramfs_bytes": 14140184
+        "shared_kernel_initramfs_bytes": 14140185
       },
       "fits_budget": true,
       "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
-      "margin_bytes": 2125169302,
-      "margin_gib": 1.979218146,
+      "margin_bytes": 2125169301,
+      "margin_gib": 1.979218145,
       "payload_class": "production_intent_digital",
       "production_intent_digital": true,
       "realm_id": "RECOVERY_IMAGE",
@@ -281,17 +285,17 @@
     "slot_a": {
       "budget_bytes": 5368709120,
       "budget_gib": 5.0,
-      "composed_bytes": 26540352,
-      "composed_gib": 0.024717629,
+      "composed_bytes": 26540353,
+      "composed_gib": 0.02471763,
       "composition": {
         "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
         "rootfs_uncompressed_file_bytes": 12400168,
-        "shared_kernel_initramfs_bytes": 14140184
+        "shared_kernel_initramfs_bytes": 14140185
       },
       "fits_budget": true,
       "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
-      "margin_bytes": 5342168768,
-      "margin_gib": 4.975282371,
+      "margin_bytes": 5342168767,
+      "margin_gib": 4.97528237,
       "payload_class": "production_intent_digital",
       "production_intent_digital": true,
       "realm_id": "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
@@ -300,17 +304,17 @@
     "slot_b": {
       "budget_bytes": 5368709120,
       "budget_gib": 5.0,
-      "composed_bytes": 26540352,
-      "composed_gib": 0.024717629,
+      "composed_bytes": 26540353,
+      "composed_gib": 0.02471763,
       "composition": {
         "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
         "rootfs_uncompressed_file_bytes": 12400168,
-        "shared_kernel_initramfs_bytes": 14140184
+        "shared_kernel_initramfs_bytes": 14140185
       },
       "fits_budget": true,
       "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
-      "margin_bytes": 5342168768,
-      "margin_gib": 4.975282371,
+      "margin_bytes": 5342168767,
+      "margin_gib": 4.97528237,
       "note": "Proxy uses PRODUCTION_SHIPPING_IMAGE_DEFINITION composed size for both A and B (identical-slot A/B update payload assumption).",
       "payload_class": "production_intent_digital",
       "production_intent_digital": true,

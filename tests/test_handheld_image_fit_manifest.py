@@ -4,6 +4,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from gunnchos_device_os.release_engineering.handheld_image_fit import (
     build_handheld_image_fit_manifest,
     write_handheld_image_fit_manifest,
@@ -31,10 +33,26 @@ def test_emit_manifest_matches_tracked_artifact():
     assert tracked["fit_assessment"]["production_image_fit_verdict"] == live["fit_assessment"][
         "production_image_fit_verdict"
     ]
-    assert tracked["sizes_summary_gib"]["slot_a_composed"] == live["sizes_summary_gib"]["slot_a_composed"]
-    assert tracked["sizes_summary_gib"]["recovery_composed"] == live["sizes_summary_gib"][
-        "recovery_composed"
-    ]
+    # Rootfs tarballs are tracked — exact match required.
+    for realm in (
+        "production_shipping_image_definition",
+        "recovery_image",
+    ):
+        t = tracked["realms"][realm]["rootfs_tarball"]
+        l = live["realms"][realm]["rootfs_tarball"]
+        assert t["sha256"] == l["sha256"]
+        assert t["compressed_bytes"] == l["compressed_bytes"]
+        assert t["uncompressed_file_bytes"] == l["uncompressed_file_bytes"]
+    # Shared boot binaries are gitignored; composition uses committed MANIFEST.json sizes.
+    assert tracked["sizes_summary_gib"]["slot_a_composed"] == pytest.approx(
+        live["sizes_summary_gib"]["slot_a_composed"], abs=1e-9
+    )
+    assert tracked["sizes_summary_gib"]["recovery_composed"] == pytest.approx(
+        live["sizes_summary_gib"]["recovery_composed"], abs=1e-9
+    )
+    assert tracked["shared_bootable_reference"]["combined_bytes"] == live[
+        "shared_bootable_reference"
+    ]["combined_bytes"]
 
 
 def test_slot_numeric_margins_positive_production_intent():
