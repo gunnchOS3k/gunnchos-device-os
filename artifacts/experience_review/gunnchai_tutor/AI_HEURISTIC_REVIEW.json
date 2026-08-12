@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.experience_review.v1",
   "product": "gunnchai_tutor",
-  "generated_utc": "2026-08-12T21:20:00Z",
+  "generated_utc": "2026-08-12T21:50:00Z",
   "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
   "AI_HEURISTIC_REVIEW_ONLY": true,
   "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
@@ -21,26 +21,26 @@
         {
           "id": "AI-ER1-01",
           "severity": "S2",
-          "status": "OPEN",
-          "finding": "Browser Ask remains a disconnected preview (explicit CONTINUITY: DISCONNECTED_PREVIEW). Blocks FIRST_PARTY_APP_D5_D6_PASS."
+          "status": "CLOSED_DIGITAL",
+          "finding": "Browser Ask posts to /api/gunnchai/ask → run_gunnchai_tutor; CONTINUITY: SDK_SANDBOX_MEMORY. DISCONNECTED_PREVIEW success path removed; fail-closed RUNTIME_UNAVAILABLE."
         },
         {
           "id": "AI-ER1-02",
           "severity": "S3",
           "status": "REMEDIATED_DIGITAL",
-          "finding": "Memory panel now uses turn cards instead of raw JSON array dump."
+          "finding": "Memory panel uses turn cards loaded from sandbox tutor_memory.json."
         },
         {
           "id": "AI-ER1-03",
           "severity": "S3",
           "status": "REMEDIATED_DIGITAL",
-          "finding": "Blocked prompts now include recovery guidance text."
+          "finding": "Blocked prompts include recovery guidance text from SDK safety gate."
         },
         {
           "id": "AI-ER1-04",
           "severity": "S2",
           "status": "REMEDIATED_DIGITAL",
-          "finding": "Empty/loading/error states added for Ask/reply status."
+          "finding": "Empty/loading/error states present for Ask/reply status."
         }
       ]
     },
@@ -52,7 +52,7 @@
           "id": "AI-ER2-01",
           "severity": "S2",
           "status": "OPEN",
-          "finding": "Preview replies remain local templates — model quality / coaching depth not claimed."
+          "finding": "SDK replies remain local templates — model quality / coaching depth not claimed."
         },
         {
           "id": "AI-ER2-02",
@@ -73,5 +73,5 @@
       "note": "Not a game product — ER-3 N/A for this surface."
     }
   },
-  "summary": "gunnchAI Tutor SDK runtime has local-template replies, safety gates, memory, WAIKE binding. Companion shell now labels DISCONNECTED_PREVIEW and has empty/loading/error + turn cards, but continuity S2 remains OPEN — FIRST_PARTY D5/D6 PASS demoted. Model quality / HUMAN_E6 not claimed."
+  "summary": "gunnchAI Tutor Ask wired to first_party SDK sandbox memory for platform integration depth. Local-template replies only — frontier model quality + HUMAN_E6 + VISUAL still not claimed/earned."
 }

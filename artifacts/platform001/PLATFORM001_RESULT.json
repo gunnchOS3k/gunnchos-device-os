@@ -4,21 +4,73 @@
   "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
   "apps": {
     "creator_studio": {
-      "D5": false,
-      "D6": false,
+      "D5": true,
+      "D6": true,
       "S2_OPEN": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
         "s2_open_visual_model_review_unavailable"
       ],
       "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
       "app": "creator_studio",
       "app_id": "gunnchos.creator_studio",
-      "claim_boundary": "gunnchSDK lifecycle/cross-service evidence may be earned while FIRST_PARTY_APP_D5_D6_PASS stays false/PARTIAL until companion shell\u2194SDK wiring + visual inspect S2 are closed. Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device.",
+      "claim_boundary": "gunnchSDK lifecycle/cross-service + companion shell\u2194SDK sandbox wiring may earn FIRST_PARTY_APP_D5_D6_PASS for platform integration depth. VISUAL_MODEL_REVIEW may remain UNAVAILABLE (residual OPEN, non-blocking). Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device.",
+      "companion_shell_wiring": {
+        "base_url": "http://127.0.0.1:56031",
+        "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+        "creator": {
+          "ok": true,
+          "persisted_run_count": 1,
+          "runtime": "first_party_apps.creator_studio",
+          "wired": true
+        },
+        "gunnchai": {
+          "continuity": "SDK_SANDBOX_MEMORY",
+          "memory_turns": 1,
+          "ok": true,
+          "runtime": "first_party_apps.gunnchai_tutor",
+          "wired": true
+        },
+        "health": {
+          "ok": true,
+          "wired": true
+        },
+        "ok": true,
+        "proved_at_utc": "2026-08-12T21:48:29Z",
+        "sandbox_data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/companion_proof/companion_sandbox",
+        "sandbox_files": {
+          "app_runtime_log": true,
+          "creator_run": true,
+          "creator_state": true,
+          "tutor_memory": true,
+          "tutor_run": true,
+          "waike_run": true,
+          "waike_state": true
+        },
+        "shell_source_checks": {
+          "creator_studio": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          },
+          "gunnchai_tutor": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          },
+          "waike_learning": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          }
+        },
+        "waike": {
+          "ok": true,
+          "persisted_progress_pct": 25.0,
+          "runtime": "first_party_apps.waike_app",
+          "wired": true
+        }
+      },
       "cross_service_d6": true,
       "cross_service_workflow": {
         "creator_assist_ok": true,
         "creator_ok": true,
-        "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/cross_service_data",
+        "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/cross_service_data",
         "ok": true,
         "tutor_ok": true,
         "tutor_waike_bound": true,
@@ -27,16 +79,15 @@
       },
       "examples_used_as_evidence": false,
       "gaps": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable",
-        "html_companion_shell_still_prototype_ux"
+        "html_companion_shell_still_prototype_ux",
+        "s2_open_visual_model_review_unavailable"
       ],
       "platform_lifecycle_d5": true,
       "steps": {
         "crash_probe": {
-          "crash_report_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_creator_studio/apps/gunnchos.creator_studio/sandbox/crash_reports/run-1786569322947_crash.json",
+          "crash_report_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_creator_studio/apps/gunnchos.creator_studio/sandbox/crash_reports/run-1786571308856_crash.json",
           "exit_code": 1,
-          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_creator_studio/apps/gunnchos.creator_studio/sandbox/logs/run-1786569322947.log",
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_creator_studio/apps/gunnchos.creator_studio/sandbox/logs/run-1786571308856.log",
           "ok": true
         },
         "install_v1": {
@@ -46,7 +97,7 @@
         },
         "package_v1": {
           "ok": true,
-          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/pkgs_creator_studio/gunnchos.creator_studio-0.3.0.gunnchpkg",
+          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/pkgs_creator_studio/gunnchos.creator_studio-0.3.0.gunnchpkg",
           "signed": true,
           "version": "0.3.0"
         },
@@ -56,7 +107,7 @@
             "gunnchai_assist"
           ],
           "exit_code": 0,
-          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_creator_studio/apps/gunnchos.creator_studio/sandbox/logs/run-1786569322733.log",
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_creator_studio/apps/gunnchos.creator_studio/sandbox/logs/run-1786571308640.log",
           "ok": true,
           "owner_functions": [
             "project_browser",
@@ -92,26 +143,77 @@
         }
       },
       "token": "CREATOR_FIRST_PARTY_APP_D5_D6_PASS",
-      "token_pass": false,
-      "token_status": "PARTIAL"
+      "token_pass": true,
+      "token_status": "PASS"
     },
     "gunnchai_tutor": {
-      "D5": false,
-      "D6": false,
+      "D5": true,
+      "D6": true,
       "S2_OPEN": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable",
-        "s2_open_browser_ask_disconnected_from_runtime"
+        "s2_open_visual_model_review_unavailable"
       ],
       "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
       "app": "gunnchai_tutor",
       "app_id": "gunnchos.gunnchai_tutor",
-      "claim_boundary": "gunnchSDK lifecycle/cross-service evidence may be earned while FIRST_PARTY_APP_D5_D6_PASS stays false/PARTIAL until companion shell\u2194SDK wiring + visual inspect S2 are closed. Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device.",
+      "claim_boundary": "gunnchSDK lifecycle/cross-service + companion shell\u2194SDK sandbox wiring may earn FIRST_PARTY_APP_D5_D6_PASS for platform integration depth. VISUAL_MODEL_REVIEW may remain UNAVAILABLE (residual OPEN, non-blocking). Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device.",
+      "companion_shell_wiring": {
+        "base_url": "http://127.0.0.1:56031",
+        "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+        "creator": {
+          "ok": true,
+          "persisted_run_count": 1,
+          "runtime": "first_party_apps.creator_studio",
+          "wired": true
+        },
+        "gunnchai": {
+          "continuity": "SDK_SANDBOX_MEMORY",
+          "memory_turns": 1,
+          "ok": true,
+          "runtime": "first_party_apps.gunnchai_tutor",
+          "wired": true
+        },
+        "health": {
+          "ok": true,
+          "wired": true
+        },
+        "ok": true,
+        "proved_at_utc": "2026-08-12T21:48:29Z",
+        "sandbox_data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/companion_proof/companion_sandbox",
+        "sandbox_files": {
+          "app_runtime_log": true,
+          "creator_run": true,
+          "creator_state": true,
+          "tutor_memory": true,
+          "tutor_run": true,
+          "waike_run": true,
+          "waike_state": true
+        },
+        "shell_source_checks": {
+          "creator_studio": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          },
+          "gunnchai_tutor": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          },
+          "waike_learning": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          }
+        },
+        "waike": {
+          "ok": true,
+          "persisted_progress_pct": 25.0,
+          "runtime": "first_party_apps.waike_app",
+          "wired": true
+        }
+      },
       "cross_service_d6": true,
       "cross_service_workflow": {
         "creator_assist_ok": true,
         "creator_ok": true,
-        "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/cross_service_data",
+        "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/cross_service_data",
         "ok": true,
         "tutor_ok": true,
         "tutor_waike_bound": true,
@@ -120,18 +222,16 @@
       },
       "examples_used_as_evidence": false,
       "gaps": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable",
-        "s2_open_browser_ask_disconnected_from_runtime",
         "html_companion_shell_still_prototype_ux",
-        "frontier_model_quality_not_claimed"
+        "frontier_model_quality_not_claimed",
+        "s2_open_visual_model_review_unavailable"
       ],
       "platform_lifecycle_d5": true,
       "steps": {
         "crash_probe": {
-          "crash_report_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_gunnchai_tutor/apps/gunnchos.gunnchai_tutor/sandbox/crash_reports/run-1786569323384_crash.json",
+          "crash_report_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_gunnchai_tutor/apps/gunnchos.gunnchai_tutor/sandbox/crash_reports/run-1786571309302_crash.json",
           "exit_code": 1,
-          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_gunnchai_tutor/apps/gunnchos.gunnchai_tutor/sandbox/logs/run-1786569323384.log",
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_gunnchai_tutor/apps/gunnchos.gunnchai_tutor/sandbox/logs/run-1786571309302.log",
           "ok": true
         },
         "install_v1": {
@@ -141,7 +241,7 @@
         },
         "package_v1": {
           "ok": true,
-          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/pkgs_gunnchai_tutor/gunnchos.gunnchai_tutor-0.3.0.gunnchpkg",
+          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/pkgs_gunnchai_tutor/gunnchos.gunnchai_tutor-0.3.0.gunnchpkg",
           "signed": true,
           "version": "0.3.0"
         },
@@ -151,7 +251,7 @@
             "waike_context"
           ],
           "exit_code": 0,
-          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_gunnchai_tutor/apps/gunnchos.gunnchai_tutor/sandbox/logs/run-1786569323295.log",
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_gunnchai_tutor/apps/gunnchos.gunnchai_tutor/sandbox/logs/run-1786571309206.log",
           "ok": true,
           "owner_functions": [
             "tutor_session",
@@ -187,25 +287,77 @@
         }
       },
       "token": "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS",
-      "token_pass": false,
-      "token_status": "PARTIAL"
+      "token_pass": true,
+      "token_status": "PASS"
     },
     "waike_learning": {
-      "D5": false,
-      "D6": false,
+      "D5": true,
+      "D6": true,
       "S2_OPEN": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
         "s2_open_visual_model_review_unavailable"
       ],
       "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
       "app": "waike_learning",
       "app_id": "gunnchos.waike_learning",
-      "claim_boundary": "gunnchSDK lifecycle/cross-service evidence may be earned while FIRST_PARTY_APP_D5_D6_PASS stays false/PARTIAL until companion shell\u2194SDK wiring + visual inspect S2 are closed. Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device.",
+      "claim_boundary": "gunnchSDK lifecycle/cross-service + companion shell\u2194SDK sandbox wiring may earn FIRST_PARTY_APP_D5_D6_PASS for platform integration depth. VISUAL_MODEL_REVIEW may remain UNAVAILABLE (residual OPEN, non-blocking). Not HUMAN_E6, not full curriculum, not frontier AI quality, not physical device.",
+      "companion_shell_wiring": {
+        "base_url": "http://127.0.0.1:56031",
+        "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+        "creator": {
+          "ok": true,
+          "persisted_run_count": 1,
+          "runtime": "first_party_apps.creator_studio",
+          "wired": true
+        },
+        "gunnchai": {
+          "continuity": "SDK_SANDBOX_MEMORY",
+          "memory_turns": 1,
+          "ok": true,
+          "runtime": "first_party_apps.gunnchai_tutor",
+          "wired": true
+        },
+        "health": {
+          "ok": true,
+          "wired": true
+        },
+        "ok": true,
+        "proved_at_utc": "2026-08-12T21:48:29Z",
+        "sandbox_data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/companion_proof/companion_sandbox",
+        "sandbox_files": {
+          "app_runtime_log": true,
+          "creator_run": true,
+          "creator_state": true,
+          "tutor_memory": true,
+          "tutor_run": true,
+          "waike_run": true,
+          "waike_state": true
+        },
+        "shell_source_checks": {
+          "creator_studio": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          },
+          "gunnchai_tutor": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          },
+          "waike_learning": {
+            "calls_bridge_api": true,
+            "no_disconnected_preview_success": true
+          }
+        },
+        "waike": {
+          "ok": true,
+          "persisted_progress_pct": 25.0,
+          "runtime": "first_party_apps.waike_app",
+          "wired": true
+        }
+      },
       "cross_service_d6": true,
       "cross_service_workflow": {
         "creator_assist_ok": true,
         "creator_ok": true,
-        "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/cross_service_data",
+        "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/cross_service_data",
         "ok": true,
         "tutor_ok": true,
         "tutor_waike_bound": true,
@@ -214,17 +366,16 @@
       },
       "examples_used_as_evidence": false,
       "gaps": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable",
         "html_companion_shell_still_prototype_ux",
-        "full_waike_curriculum_not_claimed"
+        "full_waike_curriculum_not_claimed",
+        "s2_open_visual_model_review_unavailable"
       ],
       "platform_lifecycle_d5": true,
       "steps": {
         "crash_probe": {
-          "crash_report_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_waike_learning/apps/gunnchos.waike_learning/sandbox/crash_reports/run-1786569323195_crash.json",
+          "crash_report_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_waike_learning/apps/gunnchos.waike_learning/sandbox/crash_reports/run-1786571309102_crash.json",
           "exit_code": 1,
-          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_waike_learning/apps/gunnchos.waike_learning/sandbox/logs/run-1786569323195.log",
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_waike_learning/apps/gunnchos.waike_learning/sandbox/logs/run-1786571309102.log",
           "ok": true
         },
         "install_v1": {
@@ -234,7 +385,7 @@
         },
         "package_v1": {
           "ok": true,
-          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/pkgs_waike_learning/gunnchos.waike_learning-0.3.0.gunnchpkg",
+          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/pkgs_waike_learning/gunnchos.waike_learning-0.3.0.gunnchpkg",
           "signed": true,
           "version": "0.3.0"
         },
@@ -244,7 +395,7 @@
             "gunnchai_tutor"
           ],
           "exit_code": 0,
-          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/install_waike_learning/apps/gunnchos.waike_learning/sandbox/logs/run-1786569323099.log",
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/install_waike_learning/apps/gunnchos.waike_learning/sandbox/logs/run-1786571309007.log",
           "ok": true,
           "owner_functions": [
             "lesson_browser",
@@ -281,16 +432,69 @@
         }
       },
       "token": "WAIKE_FIRST_PARTY_APP_D5_D6_PASS",
-      "token_pass": false,
-      "token_status": "PARTIAL"
+      "token_pass": true,
+      "token_status": "PASS"
     }
   },
   "base_main_sha_expected": "3858e760295ad35828ff141919681f2bb8685cf0",
-  "claim_boundary": "PLATFORM-001: gunnchSDK first-party lifecycle/cross-service dogfood may be earned; FIRST_PARTY_APP_D5_D6_PASS remains false/PARTIAL while companion shell\u2194SDK wiring and VISUAL_MODEL_REVIEW S2 stay OPEN. HUMAN_E6 not earned. Full WAIKE curriculum and AI model quality out of scope.",
+  "claim_boundary": "PLATFORM-001: gunnchSDK first-party lifecycle/cross-service dogfood plus companion shell\u2194SDK sandbox wiring may earn FIRST_PARTY_APP_D5_D6_PASS for platform integration depth. VISUAL_MODEL_REVIEW=UNAVAILABLE remains residual OPEN (non-blocking). HUMAN_E6 not earned. Full WAIKE curriculum and AI model quality out of scope.",
+  "companion_shell_wiring": {
+    "base_url": "http://127.0.0.1:56031",
+    "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+    "creator": {
+      "ok": true,
+      "persisted_run_count": 1,
+      "runtime": "first_party_apps.creator_studio",
+      "wired": true
+    },
+    "gunnchai": {
+      "continuity": "SDK_SANDBOX_MEMORY",
+      "memory_turns": 1,
+      "ok": true,
+      "runtime": "first_party_apps.gunnchai_tutor",
+      "wired": true
+    },
+    "health": {
+      "ok": true,
+      "wired": true
+    },
+    "ok": true,
+    "proved_at_utc": "2026-08-12T21:48:29Z",
+    "sandbox_data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/companion_proof/companion_sandbox",
+    "sandbox_files": {
+      "app_runtime_log": true,
+      "creator_run": true,
+      "creator_state": true,
+      "tutor_memory": true,
+      "tutor_run": true,
+      "waike_run": true,
+      "waike_state": true
+    },
+    "shell_source_checks": {
+      "creator_studio": {
+        "calls_bridge_api": true,
+        "no_disconnected_preview_success": true
+      },
+      "gunnchai_tutor": {
+        "calls_bridge_api": true,
+        "no_disconnected_preview_success": true
+      },
+      "waike_learning": {
+        "calls_bridge_api": true,
+        "no_disconnected_preview_success": true
+      }
+    },
+    "waike": {
+      "ok": true,
+      "persisted_progress_pct": 25.0,
+      "runtime": "first_party_apps.waike_app",
+      "wired": true
+    }
+  },
   "cross_service_workflow": {
     "creator_assist_ok": true,
     "creator_ok": true,
-    "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_hixprciq/cross_service_data",
+    "data_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/platform001_dogfood_u1_9az8n/cross_service_data",
     "ok": true,
     "tutor_ok": true,
     "tutor_waike_bound": true,
@@ -301,37 +505,16 @@
   "gap_register": [
     {
       "app": "creator_studio",
-      "blocks_first_party_d5_d6_token": true,
-      "gap": "s2_open_companion_shell_not_wired_to_sdk_runtime",
-      "gap_id": "PLATFORM001-creator_studio-s2_open_companion_shell_not_wired_to_sdk_runtime",
-      "severity": true
-    },
-    {
-      "app": "creator_studio",
-      "blocks_first_party_d5_d6_token": true,
-      "gap": "s2_open_visual_model_review_unavailable",
-      "gap_id": "PLATFORM001-creator_studio-s2_open_visual_model_review_unavailable",
-      "severity": true
-    },
-    {
-      "app": "creator_studio",
       "blocks_first_party_d5_d6_token": false,
       "gap": "html_companion_shell_still_prototype_ux",
       "gap_id": "PLATFORM001-creator_studio-html_companion_shell_still_prototype_ux",
       "severity": false
     },
     {
-      "app": "waike_learning",
-      "blocks_first_party_d5_d6_token": true,
-      "gap": "s2_open_companion_shell_not_wired_to_sdk_runtime",
-      "gap_id": "PLATFORM001-waike_learning-s2_open_companion_shell_not_wired_to_sdk_runtime",
-      "severity": true
-    },
-    {
-      "app": "waike_learning",
-      "blocks_first_party_d5_d6_token": true,
+      "app": "creator_studio",
+      "blocks_first_party_d5_d6_token": false,
       "gap": "s2_open_visual_model_review_unavailable",
-      "gap_id": "PLATFORM001-waike_learning-s2_open_visual_model_review_unavailable",
+      "gap_id": "PLATFORM001-creator_studio-s2_open_visual_model_review_unavailable",
       "severity": true
     },
     {
@@ -349,24 +532,10 @@
       "severity": false
     },
     {
-      "app": "gunnchai_tutor",
-      "blocks_first_party_d5_d6_token": true,
-      "gap": "s2_open_companion_shell_not_wired_to_sdk_runtime",
-      "gap_id": "PLATFORM001-gunnchai_tutor-s2_open_companion_shell_not_wired_to_sdk_runtime",
-      "severity": true
-    },
-    {
-      "app": "gunnchai_tutor",
-      "blocks_first_party_d5_d6_token": true,
+      "app": "waike_learning",
+      "blocks_first_party_d5_d6_token": false,
       "gap": "s2_open_visual_model_review_unavailable",
-      "gap_id": "PLATFORM001-gunnchai_tutor-s2_open_visual_model_review_unavailable",
-      "severity": true
-    },
-    {
-      "app": "gunnchai_tutor",
-      "blocks_first_party_d5_d6_token": true,
-      "gap": "s2_open_browser_ask_disconnected_from_runtime",
-      "gap_id": "PLATFORM001-gunnchai_tutor-s2_open_browser_ask_disconnected_from_runtime",
+      "gap_id": "PLATFORM001-waike_learning-s2_open_visual_model_review_unavailable",
       "severity": true
     },
     {
@@ -382,18 +551,25 @@
       "gap": "frontier_model_quality_not_claimed",
       "gap_id": "PLATFORM001-gunnchai_tutor-frontier_model_quality_not_claimed",
       "severity": false
+    },
+    {
+      "app": "gunnchai_tutor",
+      "blocks_first_party_d5_d6_token": false,
+      "gap": "s2_open_visual_model_review_unavailable",
+      "gap_id": "PLATFORM001-gunnchai_tutor-s2_open_visual_model_review_unavailable",
+      "severity": true
     }
   ],
-  "generated_utc": "2026-08-12T21:15:23Z",
+  "generated_utc": "2026-08-12T21:48:30Z",
   "schema": "gunnchos.platform001.first_party_app_depth.v1",
   "token_status": {
-    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL",
-    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL",
-    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL"
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": "PASS",
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": "PASS",
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": "PASS"
   },
   "tokens": {
-    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": false,
-    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": false,
-    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": false
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": true
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.experience_review.v1",
   "product": "creator_studio",
-  "generated_utc": "2026-08-12T21:20:00Z",
+  "generated_utc": "2026-08-12T21:50:00Z",
   "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
   "AI_HEURISTIC_REVIEW_ONLY": true,
   "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
@@ -21,20 +21,20 @@
         {
           "id": "CS-ER1-01",
           "severity": "S2",
-          "status": "REMEDIATED_DIGITAL_HONESTY",
-          "finding": "Companion shell no longer simulates successful run/build stdout; preview-only error path + empty/loading/error states added."
+          "status": "CLOSED_DIGITAL",
+          "finding": "Companion shell invokes /api/creator/run → run_creator_studio sandbox I/O; fail-closed RUNTIME_UNAVAILABLE when bridge down."
         },
         {
           "id": "CS-ER1-01b",
           "severity": "S2",
-          "status": "OPEN",
-          "finding": "Shell still not wired to gunnchSDK sandbox runtime I/O — blocks FIRST_PARTY_APP_D5_D6_PASS."
+          "status": "CLOSED_DIGITAL",
+          "finding": "Shell wired to gunnchSDK sandbox runtime I/O via companion_bridge (proved in dogfood)."
         },
         {
           "id": "CS-ER1-02",
           "severity": "S3",
           "status": "OPEN",
-          "finding": "Header still prototype; primary action hierarchy remains weak."
+          "finding": "Header/polish still prototype; primary action hierarchy remains weak."
         },
         {
           "id": "CS-ER1-03",
@@ -46,7 +46,7 @@
           "id": "CS-ER1-04",
           "severity": "S2",
           "status": "REMEDIATED_DIGITAL",
-          "finding": "Empty/loading/error states now present in companion shell status + terminal."
+          "finding": "Empty/loading/error states present in companion shell status + terminal."
         }
       ]
     },
@@ -58,7 +58,7 @@
           "id": "CS-ER2-01",
           "severity": "S3",
           "status": "OPEN",
-          "finding": "Real package artifact payoff remains invisible in HTML shell (SDK-only)."
+          "finding": "Package artifact payoff is now echoed from SDK run stdout in terminal, but visual polish still unverified."
         }
       ],
       "explicit_non_claims": [
@@ -72,5 +72,5 @@
       "note": "Not a game product — ER-3 N/A for this surface."
     }
   },
-  "summary": "Creator Studio Python/SDK runtime dogfoods real edit/run/build/git/AI-assist with persistence. Companion HTML remediated to stop fake terminal success and add empty/loading/error states, but remains unwired preview — FIRST_PARTY D5/D6 PASS demoted with S2 OPEN."
+  "summary": "Creator Studio SDK runtime + companion bridge wiring earned for platform integration depth. VISUAL still UNAVAILABLE; HUMAN_E6 not earned. Prototype polish S3 remains OPEN."
 }

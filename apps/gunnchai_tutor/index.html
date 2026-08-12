@@ -30,10 +30,10 @@
       </label>
     </section>
     <section>
-      <h2>Ask (disconnected preview)</h2>
+      <h2>Ask (SDK runtime)</h2>
       <textarea id="prompt" rows="5">Explain OFDM at a high level</textarea>
       <button id="ask">Ask tutor</button>
-      <p class="hint">Browser Ask is a disconnected preview. Durable tutoring + memory require gunnchSDK Python runtime.</p>
+      <p class="hint">Ask posts to /api/gunnchai/ask → first_party_apps.gunnchai_tutor sandbox memory. Fail-closed if bridge is down (no fake preview replies).</p>
     </section>
     <section>
       <h2>Reply</h2>

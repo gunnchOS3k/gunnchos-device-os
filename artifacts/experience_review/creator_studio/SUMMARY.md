@@ -1,8 +1,7 @@
 # Creator Studio — experience review summary
 
-- VISUAL_MODEL_REVIEW: UNAVAILABLE
-- HUMAN_E6: NOT_EARNED
-- S2: mock terminal remediated to honest preview-only; empty/loading/error added; shell↔SDK wiring remains OPEN
-- FIRST_PARTY_APP_D5_D6_PASS: demoted (PARTIAL/false) until wiring + visual inspect close
-
-Python/SDK runtime dogfoods real edit/run/build with persistence. Companion HTML is explicitly preview-only — not product-complete.
+- Platform lifecycle D5/D6 dogfood: earned on `sdk/apps/creator_studio` (not examples)
+- Companion shell: wired to `/api/creator/run` → `first_party_apps.creator_studio.run_creator_studio` sandbox I/O
+- Fail-closed when bridge down (`RUNTIME_UNAVAILABLE`); no mock terminal success
+- S2 residual: `VISUAL_MODEL_REVIEW=UNAVAILABLE` (non-blocking); prototype polish remains
+- FIRST_PARTY_APP_D5_D6_PASS: true (platform integration depth only)

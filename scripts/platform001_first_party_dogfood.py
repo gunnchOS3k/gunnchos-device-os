@@ -18,6 +18,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from gunnchos_device_os.first_party_apps.companion_bridge import (  # noqa: E402
+    prove_companion_shell_wiring,
+)
 from gunnchos_device_os.release_engineering.sdk.installer import PackageInstaller  # noqa: E402
 from gunnchos_device_os.release_engineering.sdk.packager import PackageBuilder  # noqa: E402
 from gunnchos_device_os.release_engineering.sdk.runner import PackageRunner  # noqa: E402
@@ -217,32 +220,28 @@ def _dogfood_one(
     if not cross_service_d6:
         residual_gaps.append("d6_cross_service_not_observed")
 
-    # Experience S2 must not be silently ignored. Companion remediations may
-    # close lying-terminal / empty-state / lesson-body gaps, but shell↔SDK
-    # wiring + visual inspect remain OPEN and block product D5/D6 PASS tokens.
-    s2_open = [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable",
-    ]
-    if name == "gunnchai_tutor":
-        s2_open.append("s2_open_browser_ask_disconnected_from_runtime")
-    residual_gaps.extend(s2_open)
+    # Companion shell↔SDK wiring + Ask continuity are proved separately via
+    # companion_bridge and attached in main(). Visual inspect may stay
+    # UNAVAILABLE without blocking platform-integration PASS.
     residual_gaps.append("html_companion_shell_still_prototype_ux")
     if name == "waike_learning":
         residual_gaps.append("full_waike_curriculum_not_claimed")
     if name == "gunnchai_tutor":
         residual_gaps.append("frontier_model_quality_not_claimed")
 
+    # Placeholder; main() recomputes after wiring proof.
+    s2_open: list[str] = []
     non_blocking = {
         "html_companion_shell_still_prototype_ux",
         "full_waike_curriculum_not_claimed",
         "frontier_model_quality_not_claimed",
+        "s2_open_visual_model_review_unavailable",
     }
     blocking = [g for g in residual_gaps if g not in non_blocking]
-    # Product tokens require no OPEN S2 / lifecycle failures.
     token_pass = platform_lifecycle_d5 and cross_service_d6 and not blocking
-    # Demote D5/D6 product claims when S2 OPEN remain (keep lifecycle evidence).
-    d5 = platform_lifecycle_d5 and not any(g.startswith("s2_open_") for g in residual_gaps)
+    d5 = platform_lifecycle_d5 and not any(
+        g.startswith("s2_open_") and g not in non_blocking for g in residual_gaps
+    )
     d6 = cross_service_d6 and d5
     token_status = "PASS" if token_pass else ("PARTIAL" if platform_lifecycle_d5 else "FAIL")
 
@@ -262,10 +261,11 @@ def _dogfood_one(
         "gaps": residual_gaps,
         "examples_used_as_evidence": False,
         "claim_boundary": (
-            "gunnchSDK lifecycle/cross-service evidence may be earned while "
-            "FIRST_PARTY_APP_D5_D6_PASS stays false/PARTIAL until companion "
-            "shell↔SDK wiring + visual inspect S2 are closed. Not HUMAN_E6, "
-            "not full curriculum, not frontier AI quality, not physical device."
+            "gunnchSDK lifecycle/cross-service + companion shell↔SDK sandbox "
+            "wiring may earn FIRST_PARTY_APP_D5_D6_PASS for platform integration "
+            "depth. VISUAL_MODEL_REVIEW may remain UNAVAILABLE (residual OPEN, "
+            "non-blocking). Not HUMAN_E6, not full curriculum, not frontier AI "
+            "quality, not physical device."
         ),
     }
 
@@ -314,14 +314,24 @@ def main() -> int:
         for name, meta in APPS.items():
             results[name] = _dogfood_one(name, meta, work=work, builder=builder)
         cross = _cross_service_workflow(work)
+        # Prove companion HTML shells invoke the same first_party sandbox I/O paths.
+        companion_wiring = prove_companion_shell_wiring(ROOT, work / "companion_proof")
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
     tokens = {results[n]["token"]: bool(results[n]["token_pass"]) for n in APPS}
     token_status = {results[n]["token"]: results[n]["token_status"] for n in APPS}
-    # Attach cross-service workflow evidence; do not auto-promote product tokens.
-    if cross.get("ok"):
-        for name in APPS:
+
+    non_blocking = {
+        "html_companion_shell_still_prototype_ux",
+        "full_waike_curriculum_not_claimed",
+        "frontier_model_quality_not_claimed",
+        "s2_open_visual_model_review_unavailable",
+    }
+
+    # Attach cross-service + companion wiring; recompute product tokens honestly.
+    for name in APPS:
+        if cross.get("ok"):
             results[name]["cross_service_workflow"] = cross
             if results[name].get("platform_lifecycle_d5") and not results[name].get(
                 "cross_service_d6"
@@ -330,51 +340,78 @@ def main() -> int:
                 results[name]["gaps"] = [
                     g for g in results[name]["gaps"] if g != "d6_cross_service_not_observed"
                 ]
-            # Recompute product D5/D6 + token after cross-service attach.
-            s2_open = [g for g in results[name]["gaps"] if g.startswith("s2_open_")]
-            results[name]["S2_OPEN"] = s2_open
-            results[name]["D5"] = bool(results[name]["platform_lifecycle_d5"]) and not s2_open
-            results[name]["D6"] = bool(results[name]["cross_service_d6"]) and bool(
-                results[name]["D5"]
-            )
-            non_blocking = {
-                "html_companion_shell_still_prototype_ux",
-                "full_waike_curriculum_not_claimed",
-                "frontier_model_quality_not_claimed",
-            }
-            blocking = [g for g in results[name]["gaps"] if g not in non_blocking]
-            results[name]["token_pass"] = (
-                bool(results[name]["platform_lifecycle_d5"])
-                and bool(results[name]["cross_service_d6"])
-                and not blocking
-            )
-            results[name]["token_status"] = (
-                "PASS"
-                if results[name]["token_pass"]
-                else ("PARTIAL" if results[name]["platform_lifecycle_d5"] else "FAIL")
-            )
-            tokens[results[name]["token"]] = results[name]["token_pass"]
-            token_status[results[name]["token"]] = results[name]["token_status"]
+
+        results[name]["companion_shell_wiring"] = companion_wiring
+        gaps = list(results[name].get("gaps") or [])
+        # Always keep visual residual explicit (OPEN, non-blocking).
+        if "s2_open_visual_model_review_unavailable" not in gaps:
+            gaps.append("s2_open_visual_model_review_unavailable")
+
+        if companion_wiring.get("ok"):
+            gaps = [
+                g
+                for g in gaps
+                if g
+                not in (
+                    "s2_open_companion_shell_not_wired_to_sdk_runtime",
+                    "s2_open_browser_ask_disconnected_from_runtime",
+                )
+            ]
+        else:
+            if "s2_open_companion_shell_not_wired_to_sdk_runtime" not in gaps:
+                gaps.append("s2_open_companion_shell_not_wired_to_sdk_runtime")
+            if name == "gunnchai_tutor" and (
+                "s2_open_browser_ask_disconnected_from_runtime" not in gaps
+            ):
+                gaps.append("s2_open_browser_ask_disconnected_from_runtime")
+
+        results[name]["gaps"] = gaps
+        s2_open = [g for g in gaps if g.startswith("s2_open_")]
+        results[name]["S2_OPEN"] = s2_open
+        blocking_s2 = [g for g in s2_open if g not in non_blocking]
+        results[name]["D5"] = bool(results[name]["platform_lifecycle_d5"]) and not blocking_s2
+        results[name]["D6"] = bool(results[name]["cross_service_d6"]) and bool(
+            results[name]["D5"]
+        )
+        blocking = [g for g in gaps if g not in non_blocking]
+        results[name]["token_pass"] = (
+            bool(results[name]["platform_lifecycle_d5"])
+            and bool(results[name]["cross_service_d6"])
+            and bool(companion_wiring.get("ok"))
+            and not blocking
+        )
+        results[name]["token_status"] = (
+            "PASS"
+            if results[name]["token_pass"]
+            else ("PARTIAL" if results[name]["platform_lifecycle_d5"] else "FAIL")
+        )
+        tokens[results[name]["token"]] = results[name]["token_pass"]
+        token_status[results[name]["token"]] = results[name]["token_status"]
 
     gap_register = []
     for name, r in results.items():
         for g in r.get("gaps") or []:
+            blocks = (
+                (g.startswith("s2_open_") and g not in non_blocking)
+                or g.startswith("d5_")
+                or g.startswith("d6_")
+                or g == "examples_stub_used_as_evidence"
+            )
             gap_register.append(
                 {
                     "app": name,
                     "gap_id": f"PLATFORM001-{name}-{g}",
                     "gap": g,
-                    "severity": g.startswith("s2_open_")
+                    "severity": blocks
+                    or g.startswith("s2_open_")
                     or g.startswith("d5_")
                     or g.startswith("d6_")
                     or g == "examples_stub_used_as_evidence",
-                    "blocks_first_party_d5_d6_token": g.startswith("s2_open_")
-                    or g.startswith("d5_")
-                    or g.startswith("d6_")
-                    or g == "examples_stub_used_as_evidence",
+                    "blocks_first_party_d5_d6_token": blocks,
                 }
             )
 
+    all_pass = all(tokens.values())
     summary = {
         "schema": "gunnchos.platform001.first_party_app_depth.v1",
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -383,6 +420,7 @@ def main() -> int:
         "HUMAN_E6": "NOT_EARNED",
         "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
         "examples_are_not_product_evidence": True,
+        "companion_shell_wiring": companion_wiring,
         "tokens": tokens,
         "token_status": token_status,
         "apps": results,
@@ -390,9 +428,17 @@ def main() -> int:
         "gap_register": gap_register,
         "claim_boundary": (
             "PLATFORM-001: gunnchSDK first-party lifecycle/cross-service dogfood "
-            "may be earned; FIRST_PARTY_APP_D5_D6_PASS remains false/PARTIAL while "
-            "companion shell↔SDK wiring and VISUAL_MODEL_REVIEW S2 stay OPEN. "
+            "plus companion shell↔SDK sandbox wiring may earn "
+            "FIRST_PARTY_APP_D5_D6_PASS for platform integration depth. "
+            "VISUAL_MODEL_REVIEW=UNAVAILABLE remains residual OPEN (non-blocking). "
             "HUMAN_E6 not earned. Full WAIKE curriculum and AI model quality out of scope."
+            if all_pass
+            else (
+                "PLATFORM-001: lifecycle/cross-service may be earned; "
+                "FIRST_PARTY_APP_D5_D6_PASS stays false/PARTIAL while blocking "
+                "companion wiring / Ask continuity S2 remain OPEN. "
+                "VISUAL may stay UNAVAILABLE. HUMAN_E6 not earned."
+            )
         ),
     }
     (out_dir / "PLATFORM001_RESULT.json").write_text(

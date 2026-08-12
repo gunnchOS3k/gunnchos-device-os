@@ -92,6 +92,20 @@ def test_platform001_full_lifecycle(tmp_path, app_name):
     assert un["ok"] is True
 
 
+def test_companion_bridge_wires_sandbox_io(tmp_path):
+    from gunnchos_device_os.first_party_apps.companion_bridge import (
+        prove_companion_shell_wiring,
+    )
+
+    evidence = prove_companion_shell_wiring(ROOT, tmp_path)
+    assert evidence["ok"] is True
+    assert evidence["gunnchai"]["continuity"] == "SDK_SANDBOX_MEMORY"
+    assert evidence["sandbox_files"]["tutor_memory"] is True
+    assert (ROOT / "apps/gunnchai_tutor/app.js").read_text(encoding="utf-8").count(
+        "/api/gunnchai/ask"
+    )
+
+
 def test_dogfood_script_writes_tokens(tmp_path, monkeypatch):
     # Run dogfood against real repo; artifacts land under artifacts/platform001.
     from scripts.platform001_first_party_dogfood import main as dogfood_main
@@ -104,6 +118,12 @@ def test_dogfood_script_writes_tokens(tmp_path, monkeypatch):
     assert "CREATOR_FIRST_PARTY_APP_D5_D6_PASS" in payload["tokens"]
     assert "WAIKE_FIRST_PARTY_APP_D5_D6_PASS" in payload["tokens"]
     assert "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS" in payload["tokens"]
+    assert payload.get("companion_shell_wiring", {}).get("ok") is True
+    assert payload["VISUAL_MODEL_REVIEW"] == "UNAVAILABLE"
     # Prefer PASS but do not hard-require if residual blocking gaps exist.
     assert isinstance(payload["tokens"]["CREATOR_FIRST_PARTY_APP_D5_D6_PASS"], bool)
     assert rc in (0, 1)
+    # Ask continuity gap must be closed when wiring proof passes.
+    gunnchai_gaps = payload["apps"]["gunnchai_tutor"]["gaps"]
+    assert "s2_open_browser_ask_disconnected_from_runtime" not in gunnchai_gaps
+    assert "s2_open_companion_shell_not_wired_to_sdk_runtime" not in gunnchai_gaps

@@ -13,13 +13,14 @@
     "gunnchai_tutor": "Safety-gate-only entry; mock flags; no first_party app module; no UI tree; not owner-depth tutoring app."
   },
   "post_audit": {
-    "creator_studio": "Sandbox workspace persist, real run/build artifact, git status, permissions, logs, gunnchAI assist, SDK lifecycle dogfood. Companion shell honesty remidiated (no fake terminal success) but still unwired — FIRST_PARTY D5/D6 PASS demoted.",
-    "waike_learning": "Sandbox progress/portfolio persist, roles, gunnchAI lesson tutor bind, SDK lifecycle dogfood. Lesson body + progress cards remidiated; wiring OPEN — token demoted.",
-    "gunnchai_tutor": "first_party_apps.gunnchai_tutor + UI shell + local template replies + memory + WAIKE binding + SDK lifecycle dogfood. Browser Ask DISCONNECTED_PREVIEW OPEN — token demoted."
+    "creator_studio": "Sandbox workspace persist + SDK lifecycle dogfood + companion shell wired via companion_bridge /api/creator/run → run_creator_studio.",
+    "waike_learning": "Sandbox progress/portfolio + companion shell wired via /api/waike/start → run_waike_app. Curriculum completeness still not claimed.",
+    "gunnchai_tutor": "first_party tutor + Ask wired via /api/gunnchai/ask → run_gunnchai_tutor with SDK_SANDBOX_MEMORY continuity; fail-closed RUNTIME_UNAVAILABLE (no DISCONNECTED_PREVIEW success)."
   },
   "independent_verifier_claim_honesty": {
     "overclaim_found_on_tip_91e1ed0": true,
-    "remediation": "Demote CREATOR/WAIKE/GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS to false/PARTIAL with explicit S2_OPEN; keep curriculum/model/HUMAN_E6 false; VISUAL_MODEL_REVIEW=UNAVAILABLE",
+    "prior_demotion": "Verifier demoted FIRST_PARTY_* tokens to false/PARTIAL for unwired shells + disconnected Ask.",
+    "remediation_round": "Wire companion shells to first_party sandbox I/O; remove DISCONNECTED_PREVIEW success path; re-earn tokens only with wiring proof + lifecycle; VISUAL stays UNAVAILABLE (non-blocking residual).",
     "examples_never_product_evidence": true
   },
   "examples_never_product_evidence": true,

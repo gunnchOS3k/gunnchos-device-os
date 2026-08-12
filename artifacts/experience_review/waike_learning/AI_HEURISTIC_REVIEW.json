@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.experience_review.v1",
   "product": "waike_learning",
-  "generated_utc": "2026-08-12T21:20:00Z",
+  "generated_utc": "2026-08-12T21:50:00Z",
   "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
   "AI_HEURISTIC_REVIEW_ONLY": true,
   "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
@@ -22,7 +22,7 @@
           "id": "WK-ER1-01",
           "severity": "S2",
           "status": "REMEDIATED_DIGITAL",
-          "finding": "Progress panel now uses learner-facing cards instead of raw JSON dump."
+          "finding": "Progress panel uses learner-facing cards instead of raw JSON dump."
         },
         {
           "id": "WK-ER1-02",
@@ -45,8 +45,8 @@
         {
           "id": "WK-ER1-05",
           "severity": "S2",
-          "status": "OPEN",
-          "finding": "Companion shell still not wired to gunnchSDK durable progress — blocks FIRST_PARTY_APP_D5_D6_PASS."
+          "status": "CLOSED_DIGITAL",
+          "finding": "Companion shell wired to gunnchSDK durable progress via /api/waike/start → run_waike_app."
         }
       ]
     },
@@ -64,7 +64,7 @@
           "id": "WK-ER2-02",
           "severity": "S2",
           "status": "REMEDIATED_DIGITAL",
-          "finding": "In-shell progress is now card-based rather than dry JSON."
+          "finding": "In-shell progress is card-based and reflects sandbox pct when bridge is up."
         },
         {
           "id": "WK-ER2-03",
@@ -85,5 +85,5 @@
       "note": "Not a game product — ER-3 N/A for this surface."
     }
   },
-  "summary": "WAIKE Learning SDK app persists progress/portfolio and binds gunnchAI tutor digitally. Companion shell gained lesson body + readable progress cards; shell↔SDK wiring and visual inspect remain OPEN — token demoted PARTIAL/false. Full curriculum quality not claimed."
+  "summary": "WAIKE Learning SDK app + companion bridge wiring earned for platform integration depth. Full curriculum + VISUAL inspect remain OPEN/out of scope. HUMAN_E6 not earned."
 }
