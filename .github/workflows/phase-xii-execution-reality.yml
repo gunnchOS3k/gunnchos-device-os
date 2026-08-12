@@ -62,8 +62,15 @@ jobs:
 
       - name: Enable corepack / pnpm
         run: |
+          set -euo pipefail
           corepack enable || true
-          npm install -g pnpm@9 || true
+          if command -v pnpm >/dev/null 2>&1; then
+            pnpm -v
+          else
+            # Avoid npm EEXIST when the Node toolcache already ships pnpm.
+            npm install -g pnpm@9 --force
+            pnpm -v
+          fi
           node -v
           npm -v
           pnpm -v || true
