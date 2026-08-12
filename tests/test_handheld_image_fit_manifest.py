@@ -23,24 +23,42 @@ def test_emit_manifest_matches_tracked_artifact():
         doc.pop("device_os_tip", None)
     assert live["PRODUCTION_RELEASE_CLAIMED"] is False
     assert tracked["PRODUCTION_RELEASE_CLAIMED"] is False
+    assert live["SHIPPING_IMAGE"] is False
+    assert tracked["SHIPPING_IMAGE"] is False
     assert live["larger_emmc_sku_invented"] is False
-    assert tracked["npi"]["recommended_status"] == "OPEN"
-    assert tracked["npi"]["closure_gate_met"] is False
-    assert tracked["fit_assessment"]["production_image_fit_verdict"] == "FAIL_STUB_REALM_NOT_MLP"
+    assert tracked["npi"]["recommended_status"] == live["npi"]["recommended_status"]
+    assert tracked["npi"]["closure_gate_met"] == live["npi"]["closure_gate_met"]
+    assert tracked["fit_assessment"]["production_image_fit_verdict"] == live["fit_assessment"][
+        "production_image_fit_verdict"
+    ]
     assert tracked["sizes_summary_gib"]["slot_a_composed"] == live["sizes_summary_gib"]["slot_a_composed"]
-    assert tracked["sizes_summary_gib"]["recovery_composed"] == live["sizes_summary_gib"]["recovery_composed"]
+    assert tracked["sizes_summary_gib"]["recovery_composed"] == live["sizes_summary_gib"][
+        "recovery_composed"
+    ]
 
 
-def test_slot_numeric_margins_positive_but_stubs():
+def test_slot_numeric_margins_positive_production_intent():
     m = build_handheld_image_fit_manifest(REPO_ROOT)
     for slot in ("slot_a", "slot_b", "recovery"):
         fit = m["slot_fit"][slot]
         assert fit["fits_budget"] is True
         assert fit["margin_gib"] > 0
-    assert m["fit_assessment"]["stub_like_rootfs_payloads"] is True
+        assert fit["production_intent_digital"] is True
+    assert m["fit_assessment"]["stub_like_rootfs_payloads"] is False
+    assert m["fit_assessment"]["production_intent_digital_present"] is True
     assert m["fit_assessment"]["production_mlp_disk_image_present"] is False
+    assert m["fit_assessment"]["production_image_fit_verdict"] == (
+        "PASS_PRODUCTION_INTENT_DIGITAL_FIT"
+    )
+    assert m["npi"]["closure_gate_met"] is True
+    assert m["npi"]["recommended_status"] == "CLOSE"
     assert m["realms"]["production_shipping_image_definition"]["status"] == "NOT_RELEASED"
     assert m["realms"]["production_shipping_image_definition"]["PRODUCTION_RELEASE_CLAIMED"] is False
+    assert m["realms"]["production_shipping_image_definition"]["SHIPPING_IMAGE"] is False
+    # A/B measured from production definition, not stub EVT.
+    assert m["slot_fit"]["slot_a"]["realm_id"] == "PRODUCTION_SHIPPING_IMAGE_DEFINITION"
+    prod = m["realms"]["production_shipping_image_definition"]["rootfs_tarball"]
+    assert prod["compressed_bytes"] >= 2 * 1024 * 1024
 
 
 def test_writer_roundtrip(tmp_path):
@@ -48,6 +66,7 @@ def test_writer_roundtrip(tmp_path):
     written = write_handheld_image_fit_manifest(REPO_ROOT, out_path=out)
     assert out.is_file()
     assert written["PRODUCTION_RELEASE_CLAIMED"] is False
+    assert written["SHIPPING_IMAGE"] is False
     reloaded = json.loads(out.read_text(encoding="utf-8"))
     assert reloaded["schema"] == "gunnchos.device_os.handheld_image_fit_manifest.v1"
     assert reloaded["npi"]["defect_id"] == "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001"

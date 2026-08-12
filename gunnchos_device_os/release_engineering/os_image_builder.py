@@ -2,30 +2,31 @@
 
 Honest scope: this builder does NOT compile a fresh kernel per realm (heavy,
 out of scope for a digital/CI environment). It builds a real, deterministic
-rootfs tarball populated with real files (the actual `scripts/gunnchctl`
-entrypoint, real release-engineering source for dev-capable realms, and a
-realm-specific service/package manifest), then attaches the shared
-reference kernel/initramfs from ``os_build/bootable_reference`` when those
-artifacts happen to be present locally (they are gitignored and are not
-guaranteed to exist in a fresh checkout).
+rootfs tarball from Alpine minirootfs + gunnchOS userspace overlay (service
+units, Python tree, first-party apps/games when in-profile), then attaches
+the shared reference kernel/initramfs from ``os_build/bootable_reference``
+when those artifacts happen to be present locally (they are gitignored and
+are not guaranteed to exist in a fresh checkout).
 
 Every build produces: rootfs/kernel/image hashes, a package manifest, a
 CycloneDX-style SBOM derived from actually-installed Python packages plus
 the actual rootfs files, source SHAs (git HEAD), the realm config, a
 timestamp, reproducibility metadata, and a signing block. Production always
 builds unsigned / NOT_RELEASED — see ``image_realms`` validation.
+
+Payload class is ``production_intent_digital`` when Alpine minirootfs is
+embedded. This is MLP-class digital packaging for slot-fit measurement —
+never SHIPPING_IMAGE, never physical flash, never production keys.
 """
 from __future__ import annotations
 
 import gzip
 import hashlib
 import json
-import os
 import shutil
 import subprocess
 import tarfile
 import time
-from importlib import metadata as importlib_metadata
 from pathlib import Path
 from typing import Any
 
@@ -37,8 +38,35 @@ BUILDER_CLAIM_BOUNDARY = (
     "initramfs are reused from the shared bootable_reference artifacts when "
     "present locally and are never realm-specific compiled binaries. "
     "PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and "
-    "stamped NOT_RELEASED regardless of the --unsigned flag."
+    "stamped NOT_RELEASED regardless of the --unsigned flag. "
+    "production_intent_digital payloads embed Alpine minirootfs + gunnchOS "
+    "userspace for NPI slot-fit measurement; SHIPPING_IMAGE=false always."
 )
+
+COPY_IGNORE = shutil.ignore_patterns(
+    "__pycache__",
+    "*.pyc",
+    "*.pyo",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".git",
+    ".DS_Store",
+    "node_modules",
+    "dist",
+    "*.gguf",
+    "*.img",
+    "*.iso",
+)
+
+# Realm → userspace profile for production-intent packaging.
+# recovery stays lean (Alpine + recovery overlay); A/B/EVT/lab get full digital userspace.
+FULL_USERSPACE_REALMS = {
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST",
+    "EVT_ENGINEERING_IMAGE",
+    "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
+}
+FACTORY_USERSPACE_REALMS = {"FACTORY_PROVISIONING_IMAGE"}
+RECOVERY_USERSPACE_REALMS = {"RECOVERY_IMAGE"}
 
 
 def _repo_root() -> Path:
@@ -91,7 +119,95 @@ class RealmImageBuilder:
     # ------------------------------------------------------------------
     # Staging
     # ------------------------------------------------------------------
-    def _stage_rootfs(self, realm: dict[str, Any], stage: Path) -> list[Path]:
+    def _alpine_minirootfs_path(self) -> Path:
+        return (
+            self.repo_root
+            / "os_build"
+            / "bootable_reference"
+            / "cache"
+            / "alpine-minirootfs-aarch64.tar.gz"
+        )
+
+    def _ensure_alpine_minirootfs(self, *, fetch: bool = True) -> Path:
+        """Return Alpine minirootfs cache path, fetching via bootable_reference if needed."""
+        alpine = self._alpine_minirootfs_path()
+        if alpine.is_file() and alpine.stat().st_size > 0:
+            return alpine
+        if not fetch:
+            raise FileNotFoundError(
+                f"alpine_minirootfs_missing:{alpine} (required for production_intent_digital)"
+            )
+        from gunnchos_device_os.bootable_image.builder import (
+            BootableImagePaths,
+            BootableReferenceBuilder,
+        )
+
+        BootableReferenceBuilder(
+            BootableImagePaths(track=self.repo_root / "os_build" / "bootable_reference")
+        ).ensure_cache(fetch=True)
+        if not alpine.is_file() or alpine.stat().st_size <= 0:
+            raise FileNotFoundError(f"alpine_minirootfs_fetch_failed:{alpine}")
+        return alpine
+
+    def _extract_alpine_base(self, stage: Path, alpine: Path) -> dict[str, Any]:
+        with tarfile.open(alpine, "r:gz") as tar:
+            tar.extractall(stage)
+        return {
+            "source": str(alpine.relative_to(self.repo_root)),
+            "sha256": _sha256_file(alpine),
+            "compressed_bytes": alpine.stat().st_size,
+        }
+
+    def _copy_tree(self, src: Path, dst: Path) -> None:
+        if not src.exists():
+            return
+        if dst.exists():
+            shutil.rmtree(dst)
+        shutil.copytree(src, dst, ignore=COPY_IGNORE)
+
+    def _stage_userspace_trees(self, realm_id: str, stage: Path) -> list[str]:
+        """Copy real gunnchOS userspace trees for production-intent profiles."""
+        included: list[str] = []
+        opt = stage / "opt" / "gunnchos"
+        opt.mkdir(parents=True, exist_ok=True)
+
+        if realm_id in RECOVERY_USERSPACE_REALMS:
+            # Lean recovery: Alpine base + recovery overlay only (no full Python tree).
+            return included
+
+        # Factory + full A/B/EVT/lab: real device-os package tree.
+        src_pkg = self.repo_root / "gunnchos_device_os"
+        if src_pkg.is_dir():
+            self._copy_tree(src_pkg, opt / "lib" / "gunnchos_device_os")
+            included.append("opt/gunnchos/lib/gunnchos_device_os")
+
+        if realm_id in FACTORY_USERSPACE_REALMS:
+            return included
+
+        if realm_id in FULL_USERSPACE_REALMS:
+            for label, src in (
+                ("sdk_apps", self.repo_root / "sdk" / "apps"),
+                ("packages", self.repo_root / "packages"),
+                ("games", self.repo_root / "games"),
+            ):
+                if src.is_dir():
+                    self._copy_tree(src, opt / "userspace" / label)
+                    included.append(f"opt/gunnchos/userspace/{label}")
+            installable = (
+                self.repo_root
+                / "os_build"
+                / "installable_image"
+                / "artifact"
+                / "gunnchos-installable-image-prototype.tar.gz"
+            )
+            if installable.is_file():
+                dest = opt / "userspace" / "installable_image_prototype.tar.gz"
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(installable, dest)
+                included.append("opt/gunnchos/userspace/installable_image_prototype.tar.gz")
+        return included
+
+    def _stage_rootfs(self, realm: dict[str, Any], stage: Path) -> tuple[list[Path], dict[str, Any]]:
         if stage.exists():
             shutil.rmtree(stage)
         stage.mkdir(parents=True, exist_ok=True)
@@ -99,6 +215,16 @@ class RealmImageBuilder:
         realm_id = realm["realm_id"]
         included = list(realm.get("packages", {}).get("included") or [])
         excluded = set(realm.get("packages", {}).get("excluded") or [])
+
+        alpine_meta = self._extract_alpine_base(stage, self._ensure_alpine_minirootfs(fetch=True))
+        userspace_trees = self._stage_userspace_trees(realm_id, stage)
+
+        if realm_id in RECOVERY_USERSPACE_REALMS:
+            profile = "production_intent_recovery"
+        elif realm_id in FACTORY_USERSPACE_REALMS:
+            profile = "production_intent_factory"
+        else:
+            profile = "production_intent_ab_userspace"
 
         etc = stage / "etc"
         etc.mkdir(parents=True, exist_ok=True)
@@ -110,6 +236,9 @@ class RealmImageBuilder:
                     f'UPDATE_CHANNEL="{realm.get("update_channel")}"',
                     f'STATUS="{realm.get("status")}"',
                     "VERSION_ID=0.3.0-dev",
+                    "PAYLOAD_CLASS=production_intent_digital",
+                    "SHIPPING_IMAGE=false",
+                    "PRODUCTION_RELEASE_CLAIMED=false",
                     "",
                 ]
             ),
@@ -119,6 +248,22 @@ class RealmImageBuilder:
         gunnchos_etc.mkdir(parents=True, exist_ok=True)
         (gunnchos_etc / "realm.json").write_text(
             json.dumps(realm, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        payload_meta = {
+            "payload_class": "production_intent_digital",
+            "payload_profile": profile,
+            "SHIPPING_IMAGE": False,
+            "PRODUCTION_RELEASE_CLAIMED": False,
+            "physical_flash_claimed": False,
+            "alpine_minirootfs": alpine_meta,
+            "userspace_trees": userspace_trees,
+            "note": (
+                "MLP-class digital rootfs for QEMU/NPI slot-fit. Unsigned. "
+                "Not a shipping image; not silicon-exact; not physical flash."
+            ),
+        }
+        (gunnchos_etc / "payload.json").write_text(
+            json.dumps(payload_meta, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
 
         services = stage / "opt" / "gunnchos" / "services"
@@ -150,11 +295,7 @@ class RealmImageBuilder:
             src_pkg = self.repo_root / "gunnchos_device_os" / "release_engineering"
             dst_pkg = stage / "opt" / "gunnchos" / "release_engineering"
             if src_pkg.exists():
-                shutil.copytree(
-                    src_pkg,
-                    dst_pkg,
-                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
-                )
+                self._copy_tree(src_pkg, dst_pkg)
         else:
             # Non-dev realms carry a manifest reference instead of the full
             # dev toolchain (matches packages.excluded policy).
@@ -180,7 +321,7 @@ class RealmImageBuilder:
             )
 
         files = sorted(p for p in stage.rglob("*") if p.is_file())
-        return files
+        return files, payload_meta
 
     def _make_deterministic_tar(self, stage: Path, dest: Path, files: list[Path]) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -219,43 +360,12 @@ class RealmImageBuilder:
         return rows
 
     def _sbom(self, realm_id: str, package_manifest: list[dict[str, Any]]) -> dict[str, Any]:
-        components: list[dict[str, Any]] = []
-        try:
-            dists = sorted(
-                importlib_metadata.distributions(), key=lambda d: (d.metadata.get("Name") or "")
-            )
-        except Exception:
-            dists = []
-        seen: set[str] = set()
-        for dist in dists:
-            name = dist.metadata.get("Name") or dist.metadata.get("Summary")
-            if not name or name in seen:
-                continue
-            seen.add(name)
-            version = dist.version or "0.0.0"
-            components.append(
-                {
-                    "type": "library",
-                    "name": name,
-                    "version": version,
-                    "purl": f"pkg:pypi/{name.lower()}@{version}",
-                    "properties": [{"name": "gunnchos:sbom_source", "value": "installed_python_env"}],
-                }
-            )
-        for row in package_manifest:
-            components.append(
-                {
-                    "type": "file",
-                    "name": row["path"],
-                    "version": row["sha256"][:12],
-                    "purl": f"pkg:generic/{realm_id.lower()}/{row['path']}@{row['sha256'][:12]}",
-                    "properties": [
-                        {"name": "gunnchos:sbom_source", "value": "rootfs_file"},
-                        {"name": "gunnchos:sha256", "value": row["sha256"]},
-                        {"name": "gunnchos:size_bytes", "value": str(row["size_bytes"])},
-                    ],
-                }
-            )
+        # Compact image SBOM: rootfs file inventory lives in package_manifest.
+        # Avoid duplicating every path here (keeps BUILD_MANIFEST reviewable).
+        total_bytes = sum(int(row.get("size_bytes") or 0) for row in package_manifest)
+        inventory_digest = _sha256_bytes(
+            json.dumps(package_manifest, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        )
         return {
             "bomFormat": "CycloneDX",
             "specVersion": "1.5",
@@ -264,10 +374,25 @@ class RealmImageBuilder:
                 "component": {"name": f"gunnchos-{realm_id.lower()}-image", "type": "firmware"},
                 "properties": [
                     {"name": "gunnchos:realm", "value": realm_id},
-                    {"name": "gunnchos:sbom_kind", "value": "real_from_installed_packages_and_rootfs_files"},
+                    {"name": "gunnchos:sbom_kind", "value": "rootfs_package_manifest_digest"},
+                    {"name": "gunnchos:package_manifest_sha256", "value": inventory_digest},
+                    {"name": "gunnchos:rootfs_file_count", "value": str(len(package_manifest))},
+                    {"name": "gunnchos:rootfs_total_bytes", "value": str(total_bytes)},
                 ],
             },
-            "components": components,
+            "components": [
+                {
+                    "type": "filesystem",
+                    "name": f"{realm_id.lower()}-rootfs",
+                    "version": inventory_digest[:12],
+                    "purl": f"pkg:generic/{realm_id.lower()}/rootfs@{inventory_digest[:12]}",
+                    "properties": [
+                        {"name": "gunnchos:sbom_source", "value": "rootfs_package_manifest"},
+                        {"name": "gunnchos:file_count", "value": str(len(package_manifest))},
+                        {"name": "gunnchos:total_bytes", "value": str(total_bytes)},
+                    ],
+                }
+            ],
         }
 
     def _kernel_reference(self) -> dict[str, Any]:
@@ -306,7 +431,7 @@ class RealmImageBuilder:
         artifacts = out_dir / "artifacts"
         artifacts.mkdir(parents=True, exist_ok=True)
 
-        files = self._stage_rootfs(realm, stage)
+        files, payload_meta = self._stage_rootfs(realm, stage)
         rootfs_tar = artifacts / "rootfs.tar.gz"
         self._make_deterministic_tar(stage, rootfs_tar, files)
         rootfs_sha256 = _sha256_file(rootfs_tar)
@@ -321,6 +446,9 @@ class RealmImageBuilder:
             "status": realm.get("status"),
             "timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "config": realm,
+            "payload": payload_meta,
+            "payload_class": payload_meta.get("payload_class"),
+            "SHIPPING_IMAGE": False,
             "artifacts": {
                 "rootfs_tarball": {
                     "path": str(rootfs_tar.relative_to(self.repo_root)),
@@ -373,6 +501,8 @@ class RealmImageBuilder:
             "rootfs_sha256": rootfs_sha256,
             "image_hash": manifest["image_hash"],
             "signed": manifest["signed"],
+            "payload_class": manifest.get("payload_class"),
+            "SHIPPING_IMAGE": False,
             "PRODUCTION_RELEASE_CLAIMED": False,
         }
 

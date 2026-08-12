@@ -15,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 GIB = 1024**3
+# Below this compressed size, rootfs is treated as package-stub (not production-intent).
+STUB_COMPRESSED_CEILING_BYTES = 2 * 1024 * 1024
 
 # Outcome A onboard slot budgets (GiB) — hardware NPI contract.
 SLOT_BUDGETS_GIB = {
@@ -35,9 +37,10 @@ SCHEMA = "gunnchos.device_os.handheld_image_fit_manifest.v1"
 CLAIM_BOUNDARY = (
     "Digital measurement of WP-013 realm rootfs.tar.gz artifacts plus shared "
     "bootable_reference kernel/initramfs. Not a physical eMMC flash image, not "
-    "silicon-exact, not signed production shipping. Realm rootfs payloads are "
-    "release-engineering package stubs (service units + optional Python tree), "
-    "not a full MLP userspace. PRODUCTION_RELEASE_CLAIMED=false always."
+    "silicon-exact, not signed production shipping. When payload_class is "
+    "production_intent_digital, rootfs embeds Alpine minirootfs + gunnchOS "
+    "userspace for MLP-class digital slot-fit — still SHIPPING_IMAGE=false and "
+    "PRODUCTION_RELEASE_CLAIMED=false always."
 )
 
 
@@ -94,12 +97,27 @@ def _measure_realm(repo_root: Path, realm_dir: str) -> dict[str, Any]:
     build_manifest: dict[str, Any] = {}
     if manifest_path.is_file():
         build_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    payload = build_manifest.get("payload") or {}
+    payload_class = (
+        build_manifest.get("payload_class")
+        or payload.get("payload_class")
+        or "unknown"
+    )
+    stub_like = compressed < STUB_COMPRESSED_CEILING_BYTES
+    production_intent = (
+        payload_class == "production_intent_digital" and not stub_like
+    )
     return {
         "ok": True,
         "realm_dir": realm_dir,
         "realm_id": build_manifest.get("realm_id") or realm_dir.upper(),
         "status": build_manifest.get("status"),
         "signing_realm": build_manifest.get("signing_realm"),
+        "payload_class": payload_class,
+        "payload_profile": payload.get("payload_profile"),
+        "SHIPPING_IMAGE": bool(build_manifest.get("SHIPPING_IMAGE", False)),
+        "production_intent_digital": production_intent,
+        "stub_like": stub_like,
         "PRODUCTION_RELEASE_CLAIMED": bool(
             build_manifest.get("PRODUCTION_RELEASE_CLAIMED", False)
         ),
@@ -116,6 +134,8 @@ def _measure_realm(repo_root: Path, realm_dir: str) -> dict[str, Any]:
             str(manifest_path.relative_to(repo_root)) if manifest_path.is_file() else None
         ),
         "image_hash": build_manifest.get("image_hash"),
+        "alpine_minirootfs": (payload.get("alpine_minirootfs") or None),
+        "userspace_trees": payload.get("userspace_trees") or [],
     }
 
 
@@ -158,11 +178,24 @@ def _compose_slot_proxy(
     composed = rootfs_unc + boot_bytes
     budget_bytes = int(budget_gib * GIB)
     margin = budget_bytes - composed
+    intent = bool(realm.get("production_intent_digital"))
+    honesty = (
+        "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) "
+        "+ shared reference boot vs Outcome A budget. Not physical flash; "
+        "SHIPPING_IMAGE=false."
+        if intent
+        else (
+            "Numeric fit of CURRENT digital realm stub + shared reference boot only. "
+            "Not proof of full MLP/production A/B disk-image fit."
+        )
+    )
     return {
         "slot": slot,
         "budget_gib": budget_gib,
         "budget_bytes": budget_bytes,
         "realm_id": realm.get("realm_id"),
+        "payload_class": realm.get("payload_class"),
+        "production_intent_digital": intent,
         "composition": {
             "rootfs_uncompressed_file_bytes": rootfs_unc,
             "shared_kernel_initramfs_bytes": boot_bytes,
@@ -173,10 +206,7 @@ def _compose_slot_proxy(
         "margin_bytes": margin,
         "margin_gib": _gib(margin),
         "fits_budget": margin > 0,
-        "honesty": (
-            "Numeric fit of CURRENT digital realm stub + shared reference boot only. "
-            "Not proof of full MLP/production A/B disk-image fit."
-        ),
+        "honesty": honesty,
     }
 
 
@@ -192,44 +222,95 @@ def build_handheld_image_fit_manifest(repo_root: Path | None = None) -> dict[str
     recovery = realms["recovery_image"]
     production = realms["production_shipping_image_definition"]
 
-    slot_a = _compose_slot_proxy(evt, boot, slot="slot_a", budget_gib=SLOT_BUDGETS_GIB["slot_a"])
-    # A/B identical size assumption for current digital EVT candidate.
-    slot_b = _compose_slot_proxy(evt, boot, slot="slot_b", budget_gib=SLOT_BUDGETS_GIB["slot_b"])
-    slot_b["note"] = "Proxy uses EVT composed size for both A and B (identical-slot assumption)."
+    # A/B slots measure unsigned production-intent definition (identical-slot assumption).
+    slot_a = _compose_slot_proxy(
+        production, boot, slot="slot_a", budget_gib=SLOT_BUDGETS_GIB["slot_a"]
+    )
+    slot_b = _compose_slot_proxy(
+        production, boot, slot="slot_b", budget_gib=SLOT_BUDGETS_GIB["slot_b"]
+    )
+    slot_b["note"] = (
+        "Proxy uses PRODUCTION_SHIPPING_IMAGE_DEFINITION composed size for both "
+        "A and B (identical-slot A/B update payload assumption)."
+    )
     slot_recovery = _compose_slot_proxy(
         recovery, boot, slot="recovery", budget_gib=SLOT_BUDGETS_GIB["recovery"]
     )
 
-    # Factory + production-definition are reported; production is NOT_RELEASED unsigned.
+    # EVT/factory reported for comparison.
+    evt_proxy = _compose_slot_proxy(
+        evt, boot, slot="evt_engineering_report_only", budget_gib=SLOT_BUDGETS_GIB["slot_a"]
+    )
     factory_proxy = _compose_slot_proxy(
         factory, boot, slot="factory_provisioning_report_only", budget_gib=SLOT_BUDGETS_GIB["slot_a"]
     )
-    production_proxy = _compose_slot_proxy(
-        production,
-        boot,
-        slot="production_shipping_definition_unsigned",
-        budget_gib=SLOT_BUDGETS_GIB["slot_a"],
-    )
 
     all_realms_ok = all(r.get("ok") for r in realms.values())
-    boot_ok = bool((boot.get("kernel") or {}).get("present") and (boot.get("initramfs") or {}).get("present"))
-    numeric_fit = all(
-        s["fits_budget"] for s in (slot_a, slot_b, slot_recovery)
-    ) and all_realms_ok and boot_ok
-    any_production_claimed = any(r.get("PRODUCTION_RELEASE_CLAIMED") for r in realms.values())
-
-    # Honest NPI gate: stub realm tarballs are necessary evidence but not closure.
-    stub_like = all(
-        int((r.get("rootfs_tarball") or {}).get("compressed_bytes") or 0) < 2 * 1024 * 1024
-        for r in realms.values()
-        if r.get("ok")
+    boot_ok = bool(
+        (boot.get("kernel") or {}).get("present") and (boot.get("initramfs") or {}).get("present")
     )
-    npi_closure_met = False
-    npi_reason = (
-        "Measured EVT/factory/recovery/production-definition rootfs tarballs exist with "
-        "sha256/bytes and positive numeric margin vs Outcome A 5.0/5.0/2.0 GiB budgets, "
-        "but payloads remain package-stub digital artifacts (<2 MiB compressed each), not "
-        "full MLP/production A/B disk images. Keep NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 OPEN."
+    numeric_fit = all(s["fits_budget"] for s in (slot_a, slot_b, slot_recovery)) and all_realms_ok and boot_ok
+    any_production_claimed = any(r.get("PRODUCTION_RELEASE_CLAIMED") for r in realms.values())
+    any_shipping_claimed = any(r.get("SHIPPING_IMAGE") for r in realms.values())
+    stub_like = any(bool(r.get("stub_like")) for r in realms.values() if r.get("ok"))
+    production_intent_ok = all(
+        bool(r.get("production_intent_digital")) for r in (production, recovery) if r.get("ok")
+    ) and all_realms_ok
+
+    if (
+        production_intent_ok
+        and numeric_fit
+        and not stub_like
+        and not any_production_claimed
+        and not any_shipping_claimed
+    ):
+        npi_closure_met = True
+        npi_status = "CLOSE"
+        verdict = "PASS_PRODUCTION_INTENT_DIGITAL_FIT"
+        npi_reason = (
+            "Production-intent digital A/B (production_shipping_image_definition) and "
+            "recovery rootfs tarballs embed Alpine minirootfs + gunnchOS userspace, "
+            "exceed stub ceiling, and compose with shared boot reference under Outcome A "
+            "5.0/5.0/2.0 GiB budgets with positive margin. Propose NPI "
+            "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 CLOSE for digital slot-fit only. "
+            "SHIPPING_IMAGE=false; PRODUCTION_RELEASE_CLAIMED=false; no physical flash."
+        )
+    elif stub_like or not production_intent_ok:
+        npi_closure_met = False
+        npi_status = "OPEN"
+        verdict = "FAIL_STUB_REALM_NOT_MLP"
+        npi_reason = (
+            "Measured realm rootfs tarballs exist but remain package-stub or lack "
+            "production_intent_digital Alpine+userspace payloads. Keep "
+            "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 OPEN."
+        )
+    else:
+        npi_closure_met = False
+        npi_status = "OPEN"
+        verdict = "FAIL_PRODUCTION_INTENT_OVER_BUDGET"
+        npi_reason = (
+            "Production-intent digital payloads exist but composed sizes exceed Outcome A "
+            "slot budgets (or boot/realm artifacts missing). Keep NPI OPEN and reopen "
+            "architecture without inventing larger eMMC SKUs — retain Outcome A + microSD "
+            "or reduce onboard payload."
+        )
+
+    arch_next = (
+        [
+            "Hardware may CLOSE NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 on digital evidence "
+            "when consuming this IMAGE_FIT_MANIFEST (margin_gib > 0, production_intent)",
+            "Do not claim SHIPPING_IMAGE, physical flash, or PRODUCTION_RELEASE",
+            "Retain Outcome A (32GB system + microSD for MLP user content); no invented eMMC SKU",
+            "Optional: refresh EVT/factory comparison sizes on subsequent remeasures",
+        ]
+        if npi_closure_met
+        else [
+            "Grow realm builder toward production-intent rootfs (Alpine + real userspace) and remeasure",
+            "Publish refreshed IMAGE_FIT_MANIFEST.json with margin_gib > 0 for slot_a/slot_b/recovery",
+            "Hardware remodel may CLOSE only when production-intent measured images exist",
+            "If measured production-intent images exceed onboard usable after reserves, reopen "
+            "architecture (still without inventing eMMC SKUs)",
+        ]
     )
 
     return {
@@ -242,6 +323,7 @@ def build_handheld_image_fit_manifest(repo_root: Path | None = None) -> dict[str
         "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
         "larger_emmc_sku_invented": False,
         "PRODUCTION_RELEASE_CLAIMED": False,
+        "SHIPPING_IMAGE": False,
         "claim_boundary": CLAIM_BOUNDARY,
         "slot_budgets_gib": dict(SLOT_BUDGETS_GIB),
         "shared_bootable_reference": boot,
@@ -250,37 +332,40 @@ def build_handheld_image_fit_manifest(repo_root: Path | None = None) -> dict[str
             "slot_a": slot_a,
             "slot_b": slot_b,
             "recovery": slot_recovery,
+            "evt_engineering_report_only": evt_proxy,
             "factory_provisioning_report_only": factory_proxy,
-            "production_shipping_definition_unsigned": production_proxy,
         },
         "fit_assessment": {
             "realm_rootfs_artifacts_present": all_realms_ok,
             "shared_boot_reference_present": boot_ok,
             "current_digital_realm_numeric_fit": numeric_fit,
             "production_mlp_disk_image_present": False,
+            "production_intent_digital_present": production_intent_ok,
             "production_shipping_status": production.get("status"),
             "production_shipping_unsigned": production.get("signing_realm") in (None, "none")
             or production.get("status") == "NOT_RELEASED",
             "stub_like_rootfs_payloads": stub_like,
             "any_PRODUCTION_RELEASE_CLAIMED_true": any_production_claimed,
-            "production_image_fit_verdict": "FAIL_STUB_REALM_NOT_MLP",
+            "any_SHIPPING_IMAGE_true": any_shipping_claimed,
+            "production_image_fit_verdict": verdict,
             "production_image_fit_reason": npi_reason,
         },
         "npi": {
             "defect_id": "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001",
-            "recommended_status": "OPEN",
+            "recommended_status": npi_status,
             "closure_gate_met": npi_closure_met,
             "closure_gate_reason": npi_reason,
+            "closure_scope": (
+                "digital_production_intent_slot_fit_only" if npi_closure_met else None
+            ),
             "architecture_change_proposal": {
                 "retain_outcome_a": True,
                 "invent_larger_emmc_sku": False,
                 "microsd_required_for_mlp_user_content": True,
-                "next_steps": [
-                    "Grow realm builder toward production-intent rootfs (real userspace payload, not service-unit stubs alone) and remeasure",
-                    "Publish refreshed IMAGE_FIT_MANIFEST.json with margin_gib > 0 for slot_a/slot_b/recovery",
-                    "Hardware remodel may CLOSE only when production-intent measured images exist — contracts/stubs insufficient",
-                    "If measured production-intent images exceed onboard usable after reserves, reopen architecture (still without inventing eMMC SKUs)",
-                ],
+                "architecture_change_required": bool(
+                    verdict == "FAIL_PRODUCTION_INTENT_OVER_BUDGET"
+                ),
+                "next_steps": arch_next,
             },
         },
         "sizes_summary_gib": {
@@ -290,6 +375,9 @@ def build_handheld_image_fit_manifest(repo_root: Path | None = None) -> dict[str
             "recovery_rootfs_compressed": (recovery.get("rootfs_tarball") or {}).get("compressed_gib"),
             "production_def_rootfs_compressed": (production.get("rootfs_tarball") or {}).get(
                 "compressed_gib"
+            ),
+            "production_def_rootfs_uncompressed": (production.get("rootfs_tarball") or {}).get(
+                "uncompressed_file_gib"
             ),
             "slot_a_composed": slot_a["composed_gib"],
             "slot_b_composed": slot_b["composed_gib"],
