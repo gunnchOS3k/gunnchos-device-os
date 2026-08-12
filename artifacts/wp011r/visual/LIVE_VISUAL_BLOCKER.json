@@ -1,0 +1,67 @@
+{
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "qemu_ok": true,
+  "diff_bytes": 0,
+  "non_black_samples": {
+    "before": 446,
+    "after": 446
+  },
+  "display_transport": {
+    "kind": "vnc",
+    "listen": "127.0.0.1:5907",
+    "vnc_port": 5907,
+    "websocket_port": 5707,
+    "novnc_path": "/lab/novnc/",
+    "fake_screenshot_only": false,
+    "guest_outputs": [],
+    "note": "VNC+WebSocket localhost-only for Lab UI live pixels",
+    "live": {
+      "ok": true,
+      "result": "PASS",
+      "LIVE_VISUAL_PASS": true,
+      "probe": {
+        "ok": true,
+        "live": true,
+        "banner": "RFB 003.008",
+        "host": "127.0.0.1",
+        "port": 5907,
+        "protocol": "rfb",
+        "fake_screenshot_only": false,
+        "measurement_class": "HOST_OBSERVED",
+        "claim_boundary": "Live Lab display is QEMU VNC/WebSocket pixels for a virt machine \u2014 not physical panel measurement. SILICON_EXACT_EMULATION=false. fake_screenshot_only must remain false when this path is claimed."
+      },
+      "websocket_live": true,
+      "fake_screenshot_only": false,
+      "SILICON_EXACT_EMULATION": false,
+      "claim_boundary": "Live Lab display is QEMU VNC/WebSocket pixels for a virt machine \u2014 not physical panel measurement. SILICON_EXACT_EMULATION=false. fake_screenshot_only must remain false when this path is claimed."
+    },
+    "ui": {
+      "ok": true,
+      "kind": "vnc_websocket",
+      "vnc": {
+        "host": "127.0.0.1",
+        "port": 5907,
+        "ok": true,
+        "live": true,
+        "banner": "RFB 003.008",
+        "protocol": "rfb",
+        "fake_screenshot_only": false,
+        "measurement_class": "HOST_OBSERVED",
+        "claim_boundary": "Live Lab display is QEMU VNC/WebSocket pixels for a virt machine \u2014 not physical panel measurement. SILICON_EXACT_EMULATION=false. fake_screenshot_only must remain false when this path is claimed."
+      },
+      "websocket": {
+        "host": "127.0.0.1",
+        "port": 5707,
+        "live": true,
+        "url": "ws://127.0.0.1:5707/"
+      },
+      "novnc_path": "/lab/novnc/",
+      "ui_ready": true,
+      "fake_screenshot_only": false,
+      "SILICON_EXACT_EMULATION": false,
+      "claim_boundary": "Live Lab display is QEMU VNC/WebSocket pixels for a virt machine \u2014 not physical panel measurement. SILICON_EXACT_EMULATION=false. fake_screenshot_only must remain false when this path is claimed."
+    }
+  },
+  "guest_outputs": [],
+  "blocker": "QEMU screendump captured but framebuffer is blank/near-black or diff too small (diff_bytes=0, lit_before=446, lit_after=446). No shell/compositor+app window proof. RFB handshake alone does not earn PASS."
+}

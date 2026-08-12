@@ -1,5 +1,6 @@
 {
   "schema": "gunnchos.device_lab.wp011_tokens.v1",
+  "wave": "WP-011R.2",
   "GUNNCHDEVICE_LAB_PROFILE_SYNC_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_IMAGE_PREPARED": true,
   "GUNNCHDEVICE_LAB_GUEST_AGENT_PREPARED": true,
@@ -10,14 +11,36 @@
   "GUNNCHDEVICE_LAB_PRE_EVT_TWIN_INFRA_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
+  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "depends_on": ["#101", "#100", "#98", "#97"],
+  "depends_on": [
+    "#102",
+    "#101",
+    "#100",
+    "#98",
+    "#97"
+  ],
   "hardware_truth_pin": "b4eee53c9483849904af056c4dd020da7a8e3417",
+  "wave011r": {
+    "gap_register": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+    "production_runtime": "gunnchos_device_os/device_lab/ecosystem/production_runtime.py",
+    "http_server_alone": "PROCESS_PROOF_ONLY / NOT_PRODUCTION_RUNTIME",
+    "eco010_soak_runner": "scripts/run_eco010_full_soak.py",
+    "independent_score": "scripts/device_lab_score_independent.py",
+    "master_complete": false,
+    "four_game_demoted_probe_facade": true
+  },
   "wave5": {
     "ecosystem_cli": "start|status|stop|test|graph|topology",
     "eco001_depth": "continuity_export_import_checksum",
@@ -25,7 +48,11 @@
     "eco010": "PARTIAL_light_simultaneous",
     "four_games_process_proof": true,
     "chaos_engine": true,
-    "golden_expanded": ["GOLDEN-01", "GOLDEN-05", "GOLDEN-09"],
+    "golden_expanded": [
+      "GOLDEN-01",
+      "GOLDEN-05",
+      "GOLDEN-09"
+    ],
     "score_from_register": true,
     "pre_evt_twin_handoff_docs": true,
     "master_complete": false
@@ -36,7 +63,8 @@
     "ring_spatial_accuracy": "SIMULATED",
     "drm_modules_staged_from_alpine_initramfs_virt": true,
     "qemu_outputs_xres_yres_enables_second_scanout": true,
-    "force_real_guest_mac": "GUNNCHDEVICE_LAB_FORCE_REAL_GUEST=1"
+    "force_real_guest_mac": "GUNNCHDEVICE_LAB_FORCE_REAL_GUEST=1",
+    "note": "GUEST_DUAL_OUTPUT_PASS / RING input_observe retained; insufficient alone for WP-011R UX/mutation tokens"
   },
   "wave3": {
     "virtio_serial_primary": true,
@@ -53,10 +81,43 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Wave 5 — ecosystem start/test, ECO-001..010 (010 PARTIAL), games, chaos, score, twin handoff",
-    "Master ecosystem digital complete remains false (ECO-010 full soak not earned)",
-    "GUEST_DUAL_OUTPUT_PASS / RING_TO_REAL_APPLICATION_INPUT_PASS retained from Wave 4",
-    "RING_SPATIAL_ACCURACY=SIMULATED; VF4/5/6 PHYSICAL_PENDING",
-    "No PRODUCTION_READY / physical measurement claims"
-  ]
+    "IMPLEMENTER re-earn after independent DSXL/RING demotion on 779c2ae",
+    "DSXL: filter-aware PNG decode; left/right means match placement crops (58.45/130.06); 2\u21921\u21922 reboot reconfig retained",
+    "RING: no Lab document_state/RINGRING; ODT RINGMUTATION; browser clicks; Godot save_version 1\u21922 mutation with process alive=true",
+    "COMPLETE/shipping/silicon remain false; Cursor never merges; WP-001 DO_NOT_START; Edmund do-not-merge until independent re-checks DSXL+RING"
+  ],
+  "wave6_interactive_guest": {
+    "readme": "os_build/device_lab_interactive_guest/README.md",
+    "builder": "gunnchos_device_os/device_lab/interactive_image_builder.py",
+    "build_script_aarch64": "os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh",
+    "guest_agent_protocol_doc": "gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md",
+    "guest_agent_new_commands": [
+      "framebuffer_capture",
+      "compositor_info",
+      "app_launch"
+    ],
+    "qemu_env_flag": "GUNNCH_LAB_INTERACTIVE_GUEST",
+    "required_for_tokens": [
+      "LIVE_GUNNCHOS_VISUAL_PASS",
+      "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS"
+    ],
+    "rootfs_build_attempted_on_mac": true,
+    "rootfs_build_result_on_mac": "HONEST_FAIL_NO_DOCKER_OR_CHROOT_BINFMT",
+    "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json",
+    "master_complete": false
+  },
+  "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+  "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
+  "ECO010_SOAK_PASS": true,
+  "updated_at_utc": "2026-08-12T22:08:21Z",
+  "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
+  "five_gate_digital_and": false,
+  "wp011r2": {
+    "packet": "WP-011R.2",
+    "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "historical_103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5",
+    "successor_of": 103,
+    "note": "Successor from accepted main after #104; do not merge historical #103 tip. FOUR_GAME demoted (probe/lab_bridge). LIVE/DSXL/RING/ECO010 retained with evidence consistency."
+  }
 }

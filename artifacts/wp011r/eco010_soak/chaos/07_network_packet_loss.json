@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "fault": "network.packet_loss",
+  "initial_state": {
+    "state": "online"
+  },
+  "injected_condition": "network.packet_loss",
+  "expected_result": "fault_observed_and_cleanup_possible",
+  "actual_result": {
+    "ok": true,
+    "scenario": "packet_loss",
+    "state": "lossy",
+    "loss_pct": 30.0,
+    "latency_ms": 40,
+    "mode": "logical",
+    "e4_reference_proof": false,
+    "note": "apply() scenarios are logical policy overlays, not E4 packet proof."
+  },
+  "cleanup_queued": true,
+  "duration_ms": 0,
+  "claim_boundary": "Device Lab chaos injection with cleanup + evidence. SILICON_EXACT_EMULATION=false. Not physical silicon fault injection.",
+  "SILICON_EXACT_EMULATION": false
+}

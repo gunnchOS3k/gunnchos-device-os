@@ -1,0 +1,16 @@
+[Unit]
+Description=gunnchOS Device Lab guest agent (gunnchos.guest_agent.v1 over virtio-serial)
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/gunnchos/bin/gunnchos_guest_agent.py
+Restart=always
+RestartSec=1
+User=root
+StandardOutput=append:/var/log/gunnchos-guest-agent.stdout.log
+StandardError=append:/var/log/gunnchos-guest-agent.stdout.log
+
+[Install]
+WantedBy=multi-user.target

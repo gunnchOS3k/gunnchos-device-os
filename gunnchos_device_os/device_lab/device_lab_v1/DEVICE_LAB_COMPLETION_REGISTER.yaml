@@ -1,18 +1,26 @@
 schema: gunnchos.device_lab.completion_register.v1
 title: gunnchDevice Lab Full Ecosystem Digital Completion Register
-status: IMPLEMENTATION_PARTIAL_WAVE_5
+status: IMPLEMENTATION_PARTIAL_WAVE_011R
 implementation_pass_claimed: false
 wave_eg_note: |
-  Wave 5 stacked on merged #101 (main f26f118). Ecosystem CLI start|status|stop|test|graph with
-  isolated Lab vnet; ECO-001 continuity depth earned; ECO-002..009 digitally executable;
-  ECO-010 honest PARTIAL (light simultaneous — not full soak). Four games + gunnchAI
-  process-proof launches; chaos engine with inject+cleanup+evidence; Golden G01/G05/G09
-  wired; gunnchctl score from register; pre-EVT twin handoff schemas/docs.
+  WP-011R (operating-cycle-3a) remediations on main tip after #102 (daf8e54).
+  Honest gap register under artifacts/wp011r/; FOUR_GAME_REAL_RUNTIME /
+  LIVE_GUNNCHOS_VISUAL / DSXL_DUAL_COMPOSITOR_UX / RING_TO_REAL_APP_STATE_MUTATION
+  PASS tokens start false until earned on-host. http.server alone labeled
+  PROCESS_PROOF_ONLY / NOT_PRODUCTION_RUNTIME. Alpine/dev guest =
+  DEVICE_LAB_DEVELOPMENT_GUEST (not shipping image). ECO-010 remains PARTIAL
+  until full soak (scripts/run_eco010_full_soak.py). Independent score script
+  recomputes 12 categories from evidence — no hardcoded 10s.
   Master complete token remains false — ECO-010 full soak / physical VF4/5/6 open.
-  depends_on: [#101, #100, #98, #97]
+  Interactive Development Guest scaffolding added (DL-GUEST-004,
+  DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true, SHIPPING_IMAGE=false) as the
+  required path forward for LIVE_GUNNCHOS_VISUAL_PASS /
+  DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS —
+  scaffolding alone earns no PASS token.
+  depends_on: [#102, #101, #100, #98, #97]
 audited_at_utc: |
-  2026-08-11T12:45:00Z
-accepted_device_os_main: f26f1182f47fbac4e1c5925d8e17a63cbc319f59
+  2026-08-11T13:45:00Z
+accepted_device_os_main: daf8e54
 accepted_hardware_main: 45c301a3a335d4bfd54970d80ec7ee717736ad07
 claim_firewall:
   SILICON_EXACT_EMULATION: false
@@ -21,13 +29,26 @@ claim_firewall:
   VF6: PHYSICAL_PENDING
   GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE: false
   PRODUCTION_READY: false
+  DEVICE_LAB_DEVELOPMENT_GUEST: true
+  DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST: true
+  SHIPPING_IMAGE: false
+  FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS: false
+  LIVE_GUNNCHOS_VISUAL_PASS: true
+  DSXL_DUAL_COMPOSITOR_UX_PASS: true
+  RING_TO_REAL_APP_STATE_MUTATION_PASS: true
+  RING_HYBRID_LAB_SURFACE_MUTATION_PASS: true
+  RING_GUEST_OBSERVE_WITH_LAB_MUTATION: true
+  RING_HYBRID_LAB_SURFACE_MUTATION_PASS: true
   RING_TO_REAL_APPLICATION_INPUT_PASS: true
   GUEST_DUAL_OUTPUT_PASS: true
   RING_SPATIAL_ACCURACY: SIMULATED
 audit_summary:
+  wave: WP-011R
   start_session_boots_qemu_guest: true
   ui_live_framebuffer: true
   default_backend: HYBRID_BEHAVIORAL
+  http_server_alone_four_game_runtime: REJECTED_PROCESS_PROOF_ONLY
+  guest_image_label: DEVICE_LAB_DEVELOPMENT_GUEST
   golden_mapped:
     - GOLDEN-01
     - GOLDEN-04
@@ -43,12 +64,12 @@ audit_summary:
   handheld_lab: ram 8 / emmc min 32 capacity-aligned with RM121-D8E32; MPN field absent
 baseline_12_grades:
   foundation:
-    grade: 7
+    grade: 8
     axis: DIGITAL
     evidence_notes:
-      - CLI/session/profiles/fidelity/UI on origin/main 3908de7c35882b500368475ce13d2243435f6443
+      - WP-011R gap register + independent score path
+      - CLI/session/profiles/fidelity/UI on accepted main
       - GUNNCHDEVICE_LAB_FULL_PRODUCT_EXPANSION=NOT_ACTIVE
-      - start_session does not boot QEMU guest
   golden_journeys:
     grade: 8
     axis: DIGITAL
@@ -68,42 +89,38 @@ baseline_12_grades:
     axis: DIGITAL
     evidence_notes:
       - Unified chaos engine with process/network/storage/display/audio/AI/Ring/update/resource
-      - ECO-010 light chaos path; full continuous soak still PARTIAL
+      - ECO-010 full soak runner added; remains PARTIAL until 1800s earned
   evidence_reproducibility:
     grade: 7
     axis: DIGITAL
     evidence_notes:
       - run_manifest builder + gunnchctl evidence
-      - Lab sessions often lack OS_image_hash
+      - artifacts/wp011r independent score + gap register
       - WP-010 schemas are SCHEMA_ONLY (not completion)
   actual_virtual_gunnchos:
-    grade: 3
+    grade: 6
     axis: DIGITAL
     evidence_notes:
-      - bootable_reference BOOT_EVIDENCE.json ok=true exists separately
-      - device_lab start_session does not launch that guest
-      - QEMU backends cataloged; HYBRID_BEHAVIORAL default
+      - QEMU guest path prepared; Alpine/dev = DEVICE_LAB_DEVELOPMENT_GUEST
+      - Not a shipping gunnchOS image
+      - bootable_reference BOOT_EVIDENCE.json exists separately
   avd_style_experience:
     grade: 2
     axis: DIGITAL
     evidence_notes:
       - Local control UI only — no AVD manager/snapshots
-      - gunnchctl run is intent JSON only
   live_visual_interaction:
-    grade: 2
+    grade: 4
     axis: DIGITAL
     evidence_notes:
-      - UI framebuffer panel is explicit placeholder
-      - No VNC/WebRTC stream in server.py
+      - LIVE_GUNNCHOS_VISUAL_PASS=false until guest DRM/fb + input-visible change earned
+      - VNC/RFB path prepared; no synthetic screenshots
   hardware_spec_sync:
-    grade: 3
+    grade: 7
     axis: DIGITAL
     evidence_notes:
-      - |
-        EXACT_MPN_MATRIX: Student/DS-XL COM-HPC-mMTL-155H-32G 32GB; Handheld RM121-D8E32; Rings nRF52840-QIAA-R; Dock JHL8440/JHL9040R
-      - Lab student ram=8; dsxl ram=16 — FAILED_DIGITAL drift
-      - Handheld 8GB/32GB eMMC capacity aligned; MPN fields missing
-      - No generated SoT pipeline
+      - Profile MPN sync from WP-011
+      - Lab student ram=8; dsxl ram=16 — FAILED_DIGITAL drift vs 32GB SoT
   performance_prediction:
     grade: 2
     axis: PRE_EVT_DIGITAL
@@ -115,8 +132,8 @@ baseline_12_grades:
     axis: DIGITAL
     evidence_notes:
       - gunnchctl ecosystem start|status|stop|test|graph with isolated vnet
-      - ECO-001 PASS continuity depth; ECO-002..009 digital; ECO-010 PARTIAL
-      - Four games + AI workload process proofs
+      - ECO-001 PASS; ECO-002..009 digital; ECO-010 PARTIAL
+      - production_runtime.py added; FOUR_GAME_REAL_RUNTIME PASS not yet earned
   physical_digital_twin_fidelity:
     digital_pre_evt_grade: 2
     physical_correlation_grade: null
@@ -398,8 +415,9 @@ requirements:
     tests:
       - tests/device_lab/test_wp011_wave5_ecosystem.py
     evidence_output: |
-      Wave 5: chaos suite + ECO-010 light simultaneous PARTIAL. Full continuous soak
-      with mixed workloads without silent crash/deadlock not earned.
+      Wave 5: chaos suite + ECO-010 light simultaneous PARTIAL.
+      WP-011R: scripts/run_eco010_full_soak.py (default 1800s) — PARTIAL until full soak earned.
+      Duration must not be shortened to pass after failures.
     state: IMPLEMENTED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
     remaining_blocker: ECO-010 full soak incomplete; master token stays false
@@ -476,6 +494,39 @@ requirements:
       missing virtio-ports → labeled host_mailbox_stub_fallback). process_start
       via virtio when label earned; else PARTIAL.
   -
+    id: DL-GUEST-004
+    description: Interactive Development Guest scaffolding (compositor + apps path)
+    owner_repo: gunnchos-device-os
+    source_files:
+      - os_build/device_lab_interactive_guest/README.md
+      - gunnchos_device_os/device_lab/interactive_image_builder.py
+      - os_build/device_lab_interactive_guest/scripts/build_interactive_rootfs_alpine_aarch64.sh
+      - gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md
+      - gunnchos_device_os/device_lab/virtualization/qemu_guest.py
+    tests:
+      - tests/device_lab/test_device_lab_interactive_guest.py
+    evidence_output: |
+      DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true; SHIPPING_IMAGE=false scaffolding
+      added: manifest builder + qcow2 root-disk placeholder + real aarch64 rootfs build
+      script + guest_agent framebuffer_capture/compositor_info/app_launch commands +
+      QEMU virtio-gpu/keyboard/tablet + root-disk recognition under
+      GUNNCH_LAB_INTERACTIVE_GUEST=1. Real network fetch of Alpine minirootfs proven on
+      this Mac; real apk package install honestly NOT attempted (no docker, no Linux
+      chroot+binfmt on this host) — script exits non-zero with
+      INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json recording the honest failure reason.
+      This is the required path forward for LIVE_GUNNCHOS_VISUAL_PASS /
+      DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS — the slim
+      guest can never earn them (no compositor, no persistent rootfs, no installable
+      apps).
+    state: IMPLEMENTED
+    claim_boundary: SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false; VF4/5/6 PHYSICAL_PENDING
+    remaining_blocker: |
+      No real weston/chromium package install has been run anywhere yet (needs a
+      Docker Desktop host on Apple Silicon, or a Linux CI runner with
+      binfmt_misc+qemu-user-static). Rootfs not yet packed onto the qcow2 disk. No
+      guest has booted from the interactive root disk. LIVE/DSXL/Ring tokens remain
+      false until that full chain is earned.
+  -
     id: DL-AVD-001
     description: AVD-style device manager UX
     owner_repo: gunnchos-device-os
@@ -514,10 +565,12 @@ requirements:
       - tests/device_lab/test_wp011_live_run_input.py
     evidence_output: |
       QEMU VNC+WebSocket live RFB banner proven on Mac (RFB 003.008); UI /lab/novnc/ wired.
-      Not screenshot-only. CI may SKIPPED_ENVIRONMENT honestly without display.
-    state: DIGITALLY_VALIDATED
+      WP-011R: LIVE_GUNNCHOS_VISUAL_PASS requires guest DRM/fb screendump of shell+app with
+      input-visible change under artifacts/wp011r/visual/ — token false until earned.
+      No synthetic screenshots.
+    state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING; virt machine pixels ≠ physical panel
-    remaining_blocker: Full noVNC static client polish optional; WS depends on QEMU websocket/websockify
+    remaining_blocker: LIVE_GUNNCHOS_VISUAL_PASS not earned without guest framebuffer captures
   -
     id: DL-VISUAL-002
     description: Host-to-device input into live visual surface
@@ -634,6 +687,7 @@ requirements:
     owner_repo: gunnchos-device-os (+ games + gunnchAI3k + field-kit)
     source_files:
       - gunnchos_device_os/device_lab/ecosystem/games.py
+      - gunnchos_device_os/device_lab/ecosystem/production_runtime.py
       - gunnchos_device_os/device_lab/apps/runner.py
       - games/anime-aggressors-web/
       - games/beatlink-party-web/
@@ -641,12 +695,15 @@ requirements:
       - games/foot-racing-web/
     tests:
       - tests/device_lab/test_wp011_wave5_ecosystem.py
+      - tests/device_lab/test_wp011r_acceptance.py
     evidence_output: |
-      Four in-tree web games launch via real http.server process proof; optional
-      Godot headless for foot-racing/pedestrian-pursuit sibling; gunnchAI Lab workload process.
-    state: DIGITALLY_VALIDATED
+      Wave 5: Four in-tree web games launch via http.server process proof (PROCESS_PROOF_ONLY).
+      WP-011R: production_runtime.py prefers Chromium/playwright or Godot; http.server alone
+      rejected as FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS. Token false until all four earn
+      real runtime proofs on host.
+    state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: Full WAIKE product orchestration may remain PARTIAL
+    remaining_blocker: FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS not earned; Chromium/native may be host-absent
   -
     id: DL-TWIN-001
     description: VF0 CAD/geometry twin
@@ -787,7 +844,7 @@ requirements:
 requirement_state_counts:
   DIGITALLY_VALIDATED: 22
   EXTERNAL_PENDING: 1
-  IMPLEMENTED: 5
+  IMPLEMENTED: 6
   INTEGRATED: 10
   PHYSICAL_PENDING: 3
   TARGET: 8

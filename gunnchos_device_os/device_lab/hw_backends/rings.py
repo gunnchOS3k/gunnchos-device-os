@@ -246,14 +246,17 @@ class RingsBackend:
                 and not stub
                 and (out.get("guest_observe") or {}).get("observed")
             ):
+                out["path"] = "guest"
                 out["RING_TO_REAL_APPLICATION_INPUT_PASS"] = True
                 out["earned_via"] = "ring→SpatialInput→OS_input→guest_agent_virtio_serial"
             else:
+                out["path"] = "guest_attempted"
                 out["blocker"] = (
                     "Guest virtio-serial input_observe not proven (stub or missing); "
                     "spatial remains SIMULATED"
                 )
         else:
+            out["path"] = "hybrid_process" if out.get("hybrid_process") else "unbound"
             out["blocker"] = "No guest monitor/agent bound; hybrid Lab surfaces only"
         return out
 
