@@ -4,7 +4,7 @@
   "architecture_outcome": "A",
   "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
   "claim_boundary": "Digital measurement of WP-013 realm rootfs.tar.gz artifacts plus shared bootable_reference kernel/initramfs. Not a physical eMMC flash image, not silicon-exact, not signed production shipping. When payload_class is production_intent_digital, rootfs embeds Alpine minirootfs + gunnchOS userspace for MLP-class digital slot-fit \u2014 still SHIPPING_IMAGE=false and PRODUCTION_RELEASE_CLAIMED=false always.",
-  "device_os_tip": "3219299708a9e2abe1f401f432cb993638a19b14",
+  "device_os_tip": "812b1bfbd59d7b4044badb7ebab9d93206c189a6",
   "fit_assessment": {
     "any_PRODUCTION_RELEASE_CLAIMED_true": false,
     "any_SHIPPING_IMAGE_true": false,
@@ -19,7 +19,7 @@
     "shared_boot_reference_present": true,
     "stub_like_rootfs_payloads": false
   },
-  "generated_at_utc": "2026-08-12T22:42:08Z",
+  "generated_at_utc": "2026-08-12T23:20:49Z",
   "larger_emmc_sku_invented": false,
   "measured_against_main_tip": null,
   "npi": {
@@ -188,7 +188,7 @@
       "path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
       "present": true,
       "sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
-      "size_source": "committed_manifest"
+      "size_source": "shared_boot_pin"
     },
     "kernel": {
       "bytes": 9626112,
@@ -197,11 +197,11 @@
       "path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
       "present": true,
       "sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
-      "size_source": "committed_manifest"
+      "size_source": "shared_boot_pin"
     },
     "kind": "shared_bootable_reference",
-    "note": "Shared DEV/QEMU reference \u2014 not realm-specific compiled binaries. Sizes/hashes prefer committed bootable_reference MANIFEST.json because vmlinuz*/*.cpio* are gitignored and CI rebuilds can drift by tens of bytes.",
-    "size_source": "committed_manifest"
+    "note": "Shared DEV/QEMU reference \u2014 not realm-specific compiled binaries. Sizes/hashes prefer artifacts/handheld_image_fit/SHARED_BOOT_PIN.json because bootable MANIFEST.json is mutated by BootableReferenceBuilder during CI.",
+    "size_source": "shared_boot_pin"
   },
   "sizes_summary_gib": {
     "evt_rootfs_compressed": 0.005879017,

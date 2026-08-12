@@ -149,23 +149,33 @@ def _measure_boot_reference(repo_root: Path) -> dict[str, Any]:
     art = repo_root / "os_build" / "bootable_reference" / "artifacts"
     kernel = art / "vmlinuz-virt"
     initramfs = art / "gunnchos-ref-initramfs.cpio.gz"
-    manifest_path = art / "MANIFEST.json"
+    pin_path = repo_root / "artifacts" / "handheld_image_fit" / "SHARED_BOOT_PIN.json"
+    boot_manifest_path = art / "MANIFEST.json"
     committed: dict[str, Any] = {}
-    if manifest_path.is_file():
+    size_source = "on_disk_or_missing"
+    for candidate, label in (
+        (pin_path, "shared_boot_pin"),
+        (boot_manifest_path, "committed_manifest"),
+    ):
+        if not candidate.is_file():
+            continue
         try:
-            committed = (
-                json.loads(manifest_path.read_text(encoding="utf-8")).get("artifacts") or {}
-            )
+            raw = json.loads(candidate.read_text(encoding="utf-8"))
+            arts = raw.get("artifacts") or {}
+            if arts:
+                committed = arts
+                size_source = label
+                break
         except Exception:
-            committed = {}
+            continue
     out: dict[str, Any] = {
         "kind": "shared_bootable_reference",
         "note": (
             "Shared DEV/QEMU reference — not realm-specific compiled binaries. "
-            "Sizes/hashes prefer committed bootable_reference MANIFEST.json because "
-            "vmlinuz*/*.cpio* are gitignored and CI rebuilds can drift by tens of bytes."
+            "Sizes/hashes prefer artifacts/handheld_image_fit/SHARED_BOOT_PIN.json "
+            "because bootable MANIFEST.json is mutated by BootableReferenceBuilder during CI."
         ),
-        "size_source": "committed_manifest" if committed else "on_disk_or_missing",
+        "size_source": size_source,
     }
     total = 0
     for key, path in (("kernel", kernel), ("initramfs", initramfs)):
@@ -180,7 +190,7 @@ def _measure_boot_reference(repo_root: Path) -> dict[str, Any]:
                 "bytes": nbytes,
                 "gib": _gib(nbytes),
                 "present": path.is_file(),
-                "size_source": "committed_manifest",
+                "size_source": size_source,
             }
             if path.is_file():
                 entry["on_disk_bytes"] = path.stat().st_size

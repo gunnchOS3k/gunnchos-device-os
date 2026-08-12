@@ -4,8 +4,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from gunnchos_device_os.release_engineering.handheld_image_fit import (
     build_handheld_image_fit_manifest,
     write_handheld_image_fit_manifest,
@@ -13,13 +11,15 @@ from gunnchos_device_os.release_engineering.handheld_image_fit import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = REPO_ROOT / "artifacts" / "handheld_image_fit" / "IMAGE_FIT_MANIFEST.json"
+BOOT_PIN = REPO_ROOT / "artifacts" / "handheld_image_fit" / "SHARED_BOOT_PIN.json"
 
 
 def test_emit_manifest_matches_tracked_artifact():
     live = build_handheld_image_fit_manifest(REPO_ROOT)
     assert MANIFEST.is_file(), "IMAGE_FIT_MANIFEST.json must be tracked evidence"
+    assert BOOT_PIN.is_file(), "SHARED_BOOT_PIN.json must pin boot sizes for CI"
     tracked = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    # Drop volatile timestamp / tip for structural compare of sizes + honesty.
+    pin = json.loads(BOOT_PIN.read_text(encoding="utf-8"))
     for doc in (live, tracked):
         doc.pop("generated_at_utc", None)
         doc.pop("device_os_tip", None)
@@ -33,26 +33,21 @@ def test_emit_manifest_matches_tracked_artifact():
     assert tracked["fit_assessment"]["production_image_fit_verdict"] == live["fit_assessment"][
         "production_image_fit_verdict"
     ]
-    # Rootfs tarballs are tracked — exact match required.
-    for realm in (
-        "production_shipping_image_definition",
-        "recovery_image",
-    ):
+    for realm in ("production_shipping_image_definition", "recovery_image"):
         t = tracked["realms"][realm]["rootfs_tarball"]
         l = live["realms"][realm]["rootfs_tarball"]
         assert t["sha256"] == l["sha256"]
         assert t["compressed_bytes"] == l["compressed_bytes"]
         assert t["uncompressed_file_bytes"] == l["uncompressed_file_bytes"]
-    # Shared boot binaries are gitignored; composition uses committed MANIFEST.json sizes.
-    assert tracked["sizes_summary_gib"]["slot_a_composed"] == pytest.approx(
-        live["sizes_summary_gib"]["slot_a_composed"], abs=1e-9
-    )
-    assert tracked["sizes_summary_gib"]["recovery_composed"] == pytest.approx(
-        live["sizes_summary_gib"]["recovery_composed"], abs=1e-9
-    )
-    assert tracked["shared_bootable_reference"]["combined_bytes"] == live[
-        "shared_bootable_reference"
-    ]["combined_bytes"]
+    assert live["shared_bootable_reference"]["size_source"] == "shared_boot_pin"
+    assert live["shared_bootable_reference"]["combined_bytes"] == pin["combined_bytes"]
+    assert tracked["shared_bootable_reference"]["combined_bytes"] == pin["combined_bytes"]
+    assert tracked["sizes_summary_gib"]["slot_a_composed"] == live["sizes_summary_gib"][
+        "slot_a_composed"
+    ]
+    assert tracked["sizes_summary_gib"]["recovery_composed"] == live["sizes_summary_gib"][
+        "recovery_composed"
+    ]
 
 
 def test_slot_numeric_margins_positive_production_intent():
@@ -73,7 +68,6 @@ def test_slot_numeric_margins_positive_production_intent():
     assert m["realms"]["production_shipping_image_definition"]["status"] == "NOT_RELEASED"
     assert m["realms"]["production_shipping_image_definition"]["PRODUCTION_RELEASE_CLAIMED"] is False
     assert m["realms"]["production_shipping_image_definition"]["SHIPPING_IMAGE"] is False
-    # A/B measured from production definition, not stub EVT.
     assert m["slot_fit"]["slot_a"]["realm_id"] == "PRODUCTION_SHIPPING_IMAGE_DEFINITION"
     prod = m["realms"]["production_shipping_image_definition"]["rootfs_tarball"]
     assert prod["compressed_bytes"] >= 2 * 1024 * 1024
