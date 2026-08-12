@@ -10,6 +10,7 @@ suite result — to `artifacts/wp013/WP-013-RESULT.json`. Tokens are only set
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -233,67 +234,18 @@ def check_recovery_serviceability() -> dict:
 
 
 def check_realm_runtime() -> dict:
-    """Behaviorally verify EVT/FACTORY/RECOVERY realm artifacts in Device Lab terms.
+    """Behaviorally verify EVT/FACTORY/RECOVERY realm artifacts under QEMU.
 
-    Prefer real QEMU/guest boot when available. Otherwise fail closed on
-    EVT/FACTORY/RECOVERY_IMAGE_RUNTIME_PASS rather than claiming PASS from
-    rootfs-tarball presence alone.
+    Rootfs-tarball presence alone never earns RUNTIME_PASS. Tokens flip true
+    only when ``realm_runtime.verify_all_realm_runtimes`` boots each artifact
+    and serial evidence shows realm identity + executed probe markers.
     """
-    builder = RealmImageBuilder(ROOT)
-    out: dict = {"schema": "gunnchos.wp013.realm_runtime.v1", "realms": {}}
-    qemu = None
-    try:
-        from gunnchos_device_os.device_lab.virtualization.qemu_guest import QemuGuest
-        qemu = QemuGuest
-    except Exception as exc:  # noqa: BLE001
-        out["qemu_import_error"] = str(exc)
+    from gunnchos_device_os.release_engineering.realm_runtime import (
+        verify_all_realm_runtimes,
+    )
 
-    for alias, token in (
-        ("evt", "EVT_IMAGE_RUNTIME_PASS"),
-        ("factory", "FACTORY_IMAGE_RUNTIME_PASS"),
-        ("recovery", "RECOVERY_IMAGE_RUNTIME_PASS"),
-    ):
-        inspect = builder.inspect(alias)
-        manifest = inspect.get("manifest") or {}
-        rootfs = ((manifest.get("artifacts") or {}).get("rootfs_tarball") or {})
-        policy = {
-            "realm_id": manifest.get("realm_id"),
-            "signing_realm": manifest.get("signing_realm") or manifest.get("trust_roots"),
-            "rootfs_present": bool(rootfs.get("path") or rootfs.get("sha256")),
-            "file_count": rootfs.get("file_count"),
-            "PRODUCTION_RELEASE_CLAIMED": bool(manifest.get("PRODUCTION_RELEASE_CLAIMED", False)),
-        }
-        boot = {"attempted": False, "ok": False, "mode": "not_attempted"}
-        # Device Lab interactive guest path already covers DEV lab realm.
-        # For EVT/FACTORY/RECOVERY we require either a successful QEMU probe
-        # against the built rootfs, or an explicit FAIL (no false PASS).
-        if qemu is not None and policy["rootfs_present"]:
-            boot["attempted"] = True
-            boot["mode"] = "qemu_probe_unavailable_or_unsupported"
-            # Honest FAIL until a realm-specific QEMU boot harness exists for
-            # these non-lab rootfs tarballs (lab guest image is separate).
-            boot["ok"] = False
-            boot["reason"] = "realm_rootfs_qemu_boot_harness_not_yet_wired"
-        else:
-            boot["reason"] = "qemu_unavailable_or_rootfs_missing"
-        out["realms"][alias] = {
-            "policy": policy,
-            "boot": boot,
-            token: False,
-        }
-    out["IMAGE_REALM_POLICY_SEPARATION_PASS"] = all(
-        (out["realms"][a]["policy"].get("realm_id") not in (None, ""))
-        and out["realms"][a]["policy"].get("PRODUCTION_RELEASE_CLAIMED") is False
-        for a in ("evt", "factory", "recovery")
-    )
-    out["EVT_IMAGE_RUNTIME_PASS"] = False
-    out["FACTORY_IMAGE_RUNTIME_PASS"] = False
-    out["RECOVERY_IMAGE_RUNTIME_PASS"] = False
-    out["claim_boundary"] = (
-        "Rootfs-tarball + policy separation alone does not earn RUNTIME_PASS. "
-        "RUNTIME tokens stay false until Device Lab boots each realm artifact."
-    )
-    return out
+    timeout = float(os.environ.get("WP013_REALM_RUNTIME_TIMEOUT_SEC", "90"))
+    return verify_all_realm_runtimes(ROOT, timeout_sec=timeout)
 
 def main() -> int:
     result: dict = {

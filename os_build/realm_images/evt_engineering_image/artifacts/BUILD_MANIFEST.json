@@ -11,10 +11,10 @@
       "source": "os_build/bootable_reference (shared reference, not realm-specific)"
     },
     "rootfs_tarball": {
-      "file_count": 38,
+      "file_count": 39,
       "path": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
-      "sha256": "4dd47c0c37ddc8e6aa1efee874bc4b2848f077f3f45e333993953d666d0fe911",
-      "size_bytes": 25565
+      "sha256": "45a35febe66d66811f650cea9eaa3770377b5b60a75f07d4ac4c89f860926034",
+      "size_bytes": 29727
     }
   },
   "claim_boundary": "EVT realm for hardware bring-up / validation. Signed with DEV keys only, anti-rollback counter enforced, no production keys or real eSIM/factory credentials present. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
@@ -112,7 +112,7 @@
     },
     "update_channel": "evt"
   },
-  "image_hash": "ae5f86d95e1c337f730d91629cfaaf96b337d2e4c0006db52742a73bf2d43e4c",
+  "image_hash": "5c0797b41f428ba9f8559f71229f25886a37fe120c334eb6684f2d3360b045d7",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -168,6 +168,11 @@
       "path": "opt/gunnchos/release_engineering/os_image_builder.py",
       "sha256": "f6f78cc753baa59397118bf194da9dd495886d4090090cc8b884d2eaf6c2271c",
       "size_bytes": 18202
+    },
+    {
+      "path": "opt/gunnchos/release_engineering/realm_runtime.py",
+      "sha256": "dec1547ca9985c8fc62bc9d4b22d041dc15f0031ecb2ed8c4189f1861faebdcb",
+      "size_bytes": 16132
     },
     {
       "path": "opt/gunnchos/release_engineering/sdk/__init__.py",
@@ -308,9 +313,9 @@
   "production_keys_used": false,
   "realm_id": "EVT_ENGINEERING_IMAGE",
   "reproducibility": {
-    "file_count": 38,
+    "file_count": 39,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "4dd47c0c37ddc8e6aa1efee874bc4b2848f077f3f45e333993953d666d0fe911",
+    "rootfs_sha256": "45a35febe66d66811f650cea9eaa3770377b5b60a75f07d4ac4c89f860926034",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4257,6 +4262,26 @@
         "version": "f6f78cc753ba"
       },
       {
+        "name": "opt/gunnchos/release_engineering/realm_runtime.py",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "dec1547ca9985c8fc62bc9d4b22d041dc15f0031ecb2ed8c4189f1861faebdcb"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "16132"
+          }
+        ],
+        "purl": "pkg:generic/evt_engineering_image/opt/gunnchos/release_engineering/realm_runtime.py@dec1547ca998",
+        "type": "file",
+        "version": "dec1547ca998"
+      },
+      {
         "name": "opt/gunnchos/release_engineering/sdk/__init__.py",
         "properties": [
           {
@@ -4821,16 +4846,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "60aefec75dceac2230ca74aba8710bbecac33531b42cee1ff02cc122bdfc4259fb92c9e0ef7c94f9d90b4b62044825b846420ec2c06114fbf208f73ecbc35b0d"
+    "signature_hex": "14516db6ffe0750ee1d9413e05a1cadac82b00b7b0aae59f7ec1725ae4de6e51ebecbc3f3f215061b85c12e16cc1347d1e7d6acc7b5fc25b874130b3592ab204"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "f3e4efbe03558300e56151349472a603b38ba391",
+    "repo_head_sha": "3a1ac12203eea38d9b5afb6beb7816c58f439da6",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-12T18:20:34Z",
+  "timestamp_utc": "2026-08-12T18:35:10Z",
   "unsigned_requested": false
 }
