@@ -1,0 +1,25 @@
+{
+  "schema": "gunnchos.wp011r.implementer_followup.v1",
+  "role": "implementer_followup_after_independent_fail",
+  "pr": 103,
+  "assessed_at_utc": "2026-08-12T01:49:54Z",
+  "overall_result": "FAIL",
+  "tokens": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "ECO010_SOAK_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "engineering_progress": [
+    "weston.ini modifier=super; guest FB via Super+s screenshooter (non-empty after)",
+    "reject empty screenshots in guest agent",
+    "compositor_ux_gate wired; self-demoted false PASS (noop disconnect)",
+    "Ring path requires LibreOffice/browser/game (mousepad alone insufficient)",
+    "Pedestrian Godot4 aarch64 deploy path added (download SSL still open on host)"
+  ],
+  "merge_recommendation": "do not merge #103 yet",
+  "WP-001": "DO_NOT_START"
+}

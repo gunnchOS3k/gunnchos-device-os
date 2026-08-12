@@ -1,10 +1,10 @@
 {
   "schema": "gunnchos.wp011r.four_game_in_guest.v1",
-  "recorded_at_utc": "2026-08-11T21:34:35Z",
+  "recorded_at_utc": "2026-08-12T01:46:11Z",
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
-  "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest (Chromium Wayland / optional Godot). Host Playwright is rejected. In-guest http.server is STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME only. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true.",
+  "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest. Host Playwright is rejected. In-guest http.server is STATIC_ASSET_SERVER only. Web titles may use in-guest Chromium Wayland as production browser runtime. Pedestrian Pursuit (foot-racing) REQUIRES Godot 4.x production runtime with real input+save \u2014 Chromium/lab_bridge probe autosave is rejected for aggregate. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true.",
   "SILICON_EXACT_EMULATION": false,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "games": {
@@ -18,7 +18,7 @@
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 507,
+        "pid": 1190,
         "started": "chromium-anime-aggressors",
         "wayland": "wayland-0",
         "reason": null
@@ -31,10 +31,10 @@
           "  \"game_id\": \"anime-aggressors\",",
           "  \"input\": 2,",
           "  \"started\": true,",
-          "  \"ts\": 1786484093589,",
+          "  \"ts\": 1786499189744,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484093.5940316",
+          "  \"received_at\": 1786499189.7502248",
           "}"
         ]
       },
@@ -46,10 +46,10 @@
           "  \"game_id\": \"anime-aggressors\",",
           "  \"input\": 2,",
           "  \"started\": true,",
-          "  \"ts\": 1786484093589,",
+          "  \"ts\": 1786499189744,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484093.5940316",
+          "  \"received_at\": 1786499189.7502248",
           "}"
         ]
       },
@@ -72,7 +72,7 @@
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 689,
+        "pid": 1367,
         "started": "chromium-beatlink-party",
         "wayland": "wayland-0",
         "reason": null
@@ -85,10 +85,10 @@
           "  \"game_id\": \"beatlink-party\",",
           "  \"input\": 1,",
           "  \"started\": false,",
-          "  \"ts\": 1786484110116,",
+          "  \"ts\": 1786499206532,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484110.1334755",
+          "  \"received_at\": 1786499206.538141",
           "}"
         ]
       },
@@ -100,10 +100,10 @@
           "  \"game_id\": \"beatlink-party\",",
           "  \"input\": 1,",
           "  \"started\": false,",
-          "  \"ts\": 1786484111115,",
+          "  \"ts\": 1786499206532,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484111.124156",
+          "  \"received_at\": 1786499206.538141",
           "}"
         ]
       },
@@ -126,7 +126,7 @@
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 878,
+        "pid": 1561,
         "started": "chromium-earth-species",
         "wayland": "wayland-0",
         "reason": null
@@ -139,10 +139,10 @@
           "  \"game_id\": \"earth-species\",",
           "  \"input\": 2,",
           "  \"started\": true,",
-          "  \"ts\": 1786484127083,",
+          "  \"ts\": 1786499223575,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484127.085773",
+          "  \"received_at\": 1786499223.579563",
           "}"
         ]
       },
@@ -154,10 +154,10 @@
           "  \"game_id\": \"earth-species\",",
           "  \"input\": 2,",
           "  \"started\": true,",
-          "  \"ts\": 1786484127083,",
+          "  \"ts\": 1786499223575,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484127.085773",
+          "  \"received_at\": 1786499223.579563",
           "}"
         ]
       },
@@ -172,60 +172,18 @@
     },
     "foot-racing": {
       "game_id": "foot-racing",
-      "runtime_class": "GUEST_CHROMIUM_WAYLAND",
+      "title": "Pedestrian Pursuit",
+      "runtime_class": "GUEST_GODOT4",
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
-      "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
+      "CHROMIUM_WEB_REJECTED_FOR_PEDESTRIAN": true,
       "ok": false,
       "FOUR_GAME_REAL_RUNTIME_EARNED": false,
-      "chromium_launch": {
-        "ok": true,
-        "pid": 1086,
-        "started": "chromium-foot-racing",
-        "wayland": "wayland-0",
-        "reason": null
-      },
-      "state": {
-        "ok": true,
-        "path": "/var/lib/gunnchos/games/foot-racing/state.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"foot-racing\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786484144436,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484144.4396167",
-          "}"
-        ]
-      },
-      "save": {
-        "ok": true,
-        "path": "/var/lib/gunnchos/games/foot-racing/save_marker.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"foot-racing\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786484144436,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786484144.4396167",
-          "}"
-        ]
-      },
-      "chromium_log": {
+      "godot": {
         "ok": false,
-        "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-foot-racing.log'"
+        "error": "godot4_download_failed:<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:992)>"
       },
-      "chromium_alive": true,
-      "input_count": 2,
-      "started": true,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save",
-      "INDEPENDENT_VERIFIER_DEMOTION": {
-        "reason": "GUEST_CHROMIUM_WAYLAND loaded in-tree foot-racing-web / lab probe \u2014 not Godot Pedestrian Pursuit production runtime with input/save"
-      }
+      "blocker": "godot4_download_failed:<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:992)>"
     }
   },
   "ping": {
@@ -253,7 +211,7 @@
   },
   "deploy": {
     "ok": true,
-    "bytes": 123400,
+    "bytes": 123446,
     "parts": 6,
     "extract": {
       "ok": true,
@@ -283,7 +241,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "started": "lab-bridge",
-      "pid": 482
+      "pid": 1166
     },
     "bridge_log": {
       "ok": false,
@@ -311,17 +269,5 @@
     ]
   },
   "ok": false,
-  "note": "INDEPENDENT DEMOTION: FOUR_GAME aggregate FAIL \u2014 Pedestrian Pursuit Godot input/save still open",
-  "INDEPENDENT_VERIFIER_DEMOTION": {
-    "at_utc": "2026-08-11T22:43:39Z",
-    "reason": [
-      "Pedestrian Pursuit (foot-racing) proven only as in-guest Chromium + lab_bridge probe autosave markers",
-      "sibling Godot write-movie still lacks input/save (godot_no_save_hook)",
-      "probe JS synthesizes save markers \u2014 not native game save",
-      "WP-014 / package note: guest Chromium web mapping; not Godot-in-guest",
-      "rejection criterion: Chromium in-tree web fallback as Pedestrian/Godot production when Godot input/save required"
-    ],
-    "prior_implementer_claim": true,
-    "GUEST_CHROMIUM_WEB_PARTIAL_FOR_THREE_WEB_TITLES": true
-  }
+  "note": "Aggregate PASS requires all four in-guest earns \u2014 see per-game fields"
 }

@@ -102,9 +102,12 @@ REQUIRED_APT_PACKAGES: tuple[str, ...] = (
     "openssh-server",
     "foot",
     "grim",
+    "libreoffice-writer",
+    "libreoffice-gtk3",
 )
-# Best-effort only — the mission explicitly allows godot as "optional / document if unavailable".
-OPTIONAL_APT_PACKAGES: tuple[str, ...] = ("godot3",)
+# Best-effort only — Pedestrian Pursuit needs Godot 4.x (bundled separately);
+# Debian godot3 remains optional legacy, never enough for FOUR_GAME alone.
+OPTIONAL_APT_PACKAGES: tuple[str, ...] = ("godot3", "labwc", "wlr-randr")
 
 CLAIM_BOUNDARY = (
     "gunnchOS Device Lab Interactive Development Guest: Debian 12 genericcloud "

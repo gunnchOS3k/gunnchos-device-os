@@ -1,92 +1,408 @@
 {
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
-  "app_launch": {
+  "MOUSEPAD_FILE_APPEND_ALONE_INSUFFICIENT": true,
+  "marker_found_in_after": false,
+  "ping": {
     "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "app_launch",
+    "cmd": "ping",
     "transport": "virtio_serial",
     "agent_path_label": "virtio-serial",
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "app": "mousepad",
-    "pid": 463,
-    "started": true,
-    "alive_after_500ms": true,
-    "argv": [
-      "mousepad",
-      "/root/gunnchos-lab-document.txt"
-    ]
+    "pong": true,
+    "boot_complete": true
   },
-  "document_before": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "logs",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/root/gunnchos-lab-document.txt",
-    "lines": [
-      "agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
-    ]
+  "app_launches": {
+    "libreoffice": {
+      "ok": false,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "reason": "binary_not_installed:libreoffice",
+      "transport": "virtio_serial",
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "libreoffice",
+      "agent_path_label": "virtio-serial"
+    },
+    "browser": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "browser",
+      "pid": 868,
+      "started": true,
+      "alive_after_500ms": true,
+      "argv": [
+        "chromium",
+        "--no-sandbox",
+        "--disable-gpu-sandbox",
+        "--ozone-platform=wayland",
+        "--enable-features=UseOzonePlatform",
+        "--user-data-dir=/root/.gunnchos-chromium",
+        "--no-first-run",
+        "about:blank"
+      ]
+    },
+    "mousepad": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "mousepad",
+      "pid": 915,
+      "started": true,
+      "alive_after_500ms": true,
+      "argv": [
+        "mousepad",
+        "/root/gunnchos-lab-document.txt"
+      ]
+    },
+    "game_runtime": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_run",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "argv": [
+        "bash",
+        "-lc",
+        "mkdir -p /var/lib/gunnchos/games/ring-target; echo '{\"hits\":0}' > /var/lib/gunnchos/games/ring-target/state.json; if command -v godot >/dev/null 2>&1; then echo godot; elif command -v godot3 >/dev/null 2>&1; then echo godot3; else echo chromium_fallback; fi"
+      ],
+      "returncode": 0,
+      "stdout": "godot3\n",
+      "stderr": ""
+    }
   },
-  "ring_input_inject": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "input_inject",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "kind": "text",
-    "text": "RINGMUTATION1786482831",
-    "injected_via": "uinput"
+  "blocker": "libreoffice_binary_required_for_document_leg",
+  "pipeline_required": [
+    "ring_simulator",
+    "authenticated_packet",
+    "RingService",
+    "SpatialInputService",
+    "confidence_gate",
+    "guest_os_input",
+    "app_state_mutation"
+  ],
+  "pipeline_ok": false,
+  "mutations": {
+    "libreoffice": {
+      "ring": {
+        "delivered": true,
+        "via_stack": true,
+        "app_state_changed": true,
+        "os_input_path": {
+          "attempted": true,
+          "RING_SPATIAL_ACCURACY": "SIMULATED",
+          "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+          "guest_injection": {
+            "ok": true,
+            "path": "qemu_monitor_mouse",
+            "x": 40,
+            "y": 40,
+            "button": "left",
+            "attempts": [
+              {
+                "ok": true,
+                "command": "mouse_move 40 40",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+                "via": "qemu_monitor"
+              },
+              {
+                "ok": true,
+                "command": "mouse_button 1",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+                "via": "qemu_monitor"
+              }
+            ],
+            "SILICON_EXACT_EMULATION": false,
+            "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+          },
+          "guest_observe": {
+            "ok": true,
+            "protocol": "gunnchos.guest_agent.v1",
+            "cmd": "input_observe",
+            "transport": "virtio_serial",
+            "agent_path_label": "virtio-serial",
+            "SILICON_EXACT_EMULATION": false,
+            "production_keys": false,
+            "measurement_class": "GUEST_OBSERVED",
+            "devices": [
+              {
+                "path": "/dev/input/event4",
+                "name": "gunnchos-uinput-mouse"
+              },
+              {
+                "path": "/dev/input/event3",
+                "name": "gunnchos-uinput-kbd"
+              },
+              {
+                "path": "/dev/input/event2",
+                "name": "QEMU Virtio Tablet"
+              },
+              {
+                "path": "/dev/input/event1",
+                "name": "QEMU Virtio Keyboard"
+              },
+              {
+                "path": "/dev/input/event0",
+                "name": "Power Button"
+              }
+            ],
+            "count": 5
+          },
+          "path": "guest_attempted",
+          "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
+        }
+      },
+      "before": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/root/gunnchos-lab-document.txt",
+        "lines": [
+          "aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
+        ]
+      },
+      "after": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/root/gunnchos-lab-document.txt",
+        "lines": [
+          "aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
+        ]
+      },
+      "marker": "RINGMUTATION1786499155",
+      "mutated": false,
+      "libreoffice_or_writer_surface_alive": true
+    },
+    "browser": {
+      "ring": {
+        "delivered": true,
+        "via_stack": true,
+        "app_state_changed": true,
+        "os_input_path": {
+          "attempted": true,
+          "RING_SPATIAL_ACCURACY": "SIMULATED",
+          "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+          "guest_injection": {
+            "ok": true,
+            "path": "qemu_monitor_mouse",
+            "x": 40,
+            "y": 40,
+            "button": "left",
+            "attempts": [
+              {
+                "ok": true,
+                "command": "mouse_move 40 40",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+                "via": "qemu_monitor"
+              },
+              {
+                "ok": true,
+                "command": "mouse_button 1",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+                "via": "qemu_monitor"
+              }
+            ],
+            "SILICON_EXACT_EMULATION": false,
+            "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+          },
+          "guest_observe": {
+            "ok": true,
+            "protocol": "gunnchos.guest_agent.v1",
+            "cmd": "input_observe",
+            "transport": "virtio_serial",
+            "agent_path_label": "virtio-serial",
+            "SILICON_EXACT_EMULATION": false,
+            "production_keys": false,
+            "measurement_class": "GUEST_OBSERVED",
+            "devices": [
+              {
+                "path": "/dev/input/event4",
+                "name": "gunnchos-uinput-mouse"
+              },
+              {
+                "path": "/dev/input/event3",
+                "name": "gunnchos-uinput-kbd"
+              },
+              {
+                "path": "/dev/input/event2",
+                "name": "QEMU Virtio Tablet"
+              },
+              {
+                "path": "/dev/input/event1",
+                "name": "QEMU Virtio Keyboard"
+              },
+              {
+                "path": "/dev/input/event0",
+                "name": "Power Button"
+              }
+            ],
+            "count": 5
+          },
+          "path": "guest_attempted",
+          "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
+        }
+      },
+      "before_clicks": 0,
+      "after_clicks": 0,
+      "after": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/var/lib/gunnchos/rings/browser_state.json",
+        "lines": [
+          "{\"clicks\":0,\"marker\":null}"
+        ]
+      },
+      "mutated": false,
+      "note": "Requires Chromium JS POST after Ring-authorized HID click \u2014 no host file stamp"
+    },
+    "game": {
+      "ring": {
+        "delivered": true,
+        "via_stack": true,
+        "app_state_changed": true,
+        "os_input_path": {
+          "attempted": true,
+          "RING_SPATIAL_ACCURACY": "SIMULATED",
+          "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+          "guest_injection": {
+            "ok": true,
+            "path": "qemu_monitor_mouse",
+            "x": 40,
+            "y": 40,
+            "button": "left",
+            "attempts": [
+              {
+                "ok": true,
+                "command": "mouse_move 40 40",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
+                "via": "qemu_monitor"
+              },
+              {
+                "ok": true,
+                "command": "mouse_button 1",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+                "via": "qemu_monitor"
+              }
+            ],
+            "SILICON_EXACT_EMULATION": false,
+            "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+          },
+          "guest_observe": {
+            "ok": true,
+            "protocol": "gunnchos.guest_agent.v1",
+            "cmd": "input_observe",
+            "transport": "virtio_serial",
+            "agent_path_label": "virtio-serial",
+            "SILICON_EXACT_EMULATION": false,
+            "production_keys": false,
+            "measurement_class": "GUEST_OBSERVED",
+            "devices": [
+              {
+                "path": "/dev/input/event4",
+                "name": "gunnchos-uinput-mouse"
+              },
+              {
+                "path": "/dev/input/event3",
+                "name": "gunnchos-uinput-kbd"
+              },
+              {
+                "path": "/dev/input/event2",
+                "name": "QEMU Virtio Tablet"
+              },
+              {
+                "path": "/dev/input/event1",
+                "name": "QEMU Virtio Keyboard"
+              },
+              {
+                "path": "/dev/input/event0",
+                "name": "Power Button"
+              }
+            ],
+            "count": 5
+          },
+          "path": "guest_attempted",
+          "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
+        }
+      },
+      "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+      "before": {
+        "ok": false,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'",
+        "transport": "virtio_serial",
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "agent_path_label": "virtio-serial"
+      },
+      "after": {
+        "ok": false,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'",
+        "transport": "virtio_serial",
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "agent_path_label": "virtio-serial"
+      },
+      "mutated": false,
+      "note": "Requires Godot Pedestrian Pursuit user:// save delta after Ring-authorized HID"
+    }
   },
-  "save_keystroke": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "input_inject",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "kind": "key",
-    "key": "s",
-    "mods": [
-      "ctrl"
-    ],
-    "injected_via": "uinput"
+  "confidence_gate": {
+    "low": {
+      "ok": true,
+      "delivered": false,
+      "reject": {
+        "reason": "low_confidence",
+        "confidence": 0.2
+      },
+      "via_stack": true
+    },
+    "wrong": {
+      "ok": true,
+      "delivered": false,
+      "reject": {
+        "reason": "wrong_target",
+        "requested": "browser"
+      },
+      "via_stack": true
+    },
+    "ok": true
   },
-  "document_after": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "logs",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/root/gunnchos-lab-document.txt",
-    "lines": [
-      "agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786482831"
-    ]
-  },
-  "mutation_marker": "RINGMUTATION1786482831",
-  "marker_found_in_after": true,
-  "note": "Real guest uinput text injection landed in the real in-guest mousepad document via HID->libinput->weston->app, verified by reading the saved file",
-  "RING_GUEST_UINPUT_MOUSEPAD_MUTATION": true,
-  "INDEPENDENT_VERIFIER_DEMOTION": {
-    "at_utc": "2026-08-11T22:43:39Z",
-    "reason": [
-      "uinput text inject into mousepad is not Ring gesture stack \u2192 LibreOffice/browser/game mutation",
-      "required document/browser/game app-state via Ring pipeline not proven",
-      "Lab hybrid surfaces remain non-promotable to RING_TO_REAL_APP_STATE_MUTATION_PASS"
-    ],
-    "prior_implementer_claim": true
-  }
+  "mutation_marker": "RINGMUTATION1786499155",
+  "note": "Not earned \u2014 need Ring stack mutation of LibreOffice/browser/game (mousepad alone insufficient)"
 }

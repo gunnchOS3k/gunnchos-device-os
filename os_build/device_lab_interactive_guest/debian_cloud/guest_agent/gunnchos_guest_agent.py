@@ -49,12 +49,21 @@ APP_COMMANDS: dict[str, list[str]] = {
     ],
     "browser": None,  # resolved to chromium below
     "mousepad": ["mousepad", "/root/gunnchos-lab-document.txt"],
-    "editor": None,  # resolved to mousepad below
-    "godot": ["godot3", "--path", "/root/gunnchos-lab-godot"],
+    "editor": None,  # resolved to mousepad / libreoffice below
+    "libreoffice": [
+        "libreoffice",
+        "--writer",
+        "--nologo",
+        "--norestore",
+        "/root/gunnchos-lab-document.odt",
+    ],
+    "godot": ["godot", "--path", "/root/gunnchos-lab-godot"],
+    "godot3": ["godot3", "--path", "/root/gunnchos-lab-godot"],
     "foot": ["foot"],
 }
 APP_COMMANDS["browser"] = APP_COMMANDS["chromium"]
-APP_COMMANDS["editor"] = APP_COMMANDS["mousepad"]
+# Prefer real LibreOffice Writer when installed; mousepad remains fallback editor.
+APP_COMMANDS["editor"] = APP_COMMANDS["libreoffice"]
 
 _uinput_kbd = None
 _uinput_mouse = None
@@ -524,11 +533,96 @@ def cmd_reboot(_req: dict[str, Any]) -> dict[str, Any]:
     return resp
 
 
+def _screenshot_search_roots() -> list[Path]:
+    roots = [
+        SCREENSHOT_DIR,
+        Path("/root"),
+        Path("/tmp"),
+        Path("/var/tmp"),
+        Path.cwd(),
+    ]
+    home = Path.home()
+    if home not in roots:
+        roots.append(home)
+    return roots
+
+
+def _collect_pngs(roots: list[Path]) -> set[Path]:
+    found: set[Path] = set()
+    for root in roots:
+        try:
+            if not root.is_dir():
+                continue
+            for p in root.glob("*.png"):
+                found.add(p)
+            for p in root.glob("wayland-screenshot*.png"):
+                found.add(p)
+            for p in root.glob("weston*.png"):
+                found.add(p)
+        except OSError:
+            continue
+    return found
+
+
+def _png_ok_response(path: Path, *, via: str) -> dict[str, Any]:
+    import base64
+
+    raw = path.read_bytes()
+    if len(raw) < 256:
+        return _fail(
+            "framebuffer_capture",
+            "empty_or_tiny_screenshot",
+            path=str(path),
+            bytes=len(raw),
+            via=via,
+            note="Screenshot file existed but was empty/tiny — not a valid guest framebuffer",
+        )
+    return _ok(
+        "framebuffer_capture",
+        path=str(path),
+        bytes=len(raw),
+        format="png",
+        bytes_b64=base64.b64encode(raw).decode("ascii"),
+        synthetic=False,
+        via=via,
+    )
+
+
+def _fbdev_ppm_capture() -> Path | None:
+    """Last-resort guest-side capture from /dev/fb0 when Wayland screenshot fails.
+
+    virtio-gpu often has no fbdev node; this only succeeds when a real fb device exists.
+    """
+    fb = Path("/dev/fb0")
+    vs = Path("/sys/class/graphics/fb0/virtual_size")
+    if not fb.exists() or not vs.exists():
+        return None
+    try:
+        w_s, h_s = vs.read_text(encoding="utf-8").strip().split(",")
+        width, height = int(w_s), int(h_s)
+        expected = width * height * 4
+        raw = fb.read_bytes()[:expected]
+        if len(raw) < expected or expected <= 0:
+            return None
+        # Convert XRGB8888 -> PPM P6 (drop alpha / padding byte).
+        out = SCREENSHOT_DIR / f"fb0_{int(time.time() * 1000)}.ppm"
+        pixels = bytearray()
+        for i in range(0, expected, 4):
+            pixels.extend(raw[i : i + 3])
+        out.write_bytes(f"P6\n{width} {height}\n255\n".encode("ascii") + bytes(pixels))
+        return out if out.stat().st_size > 64 else None
+    except OSError:
+        return None
+
+
 def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
     import base64
 
     SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
-    # Prefer grim against the live Wayland socket (honest guest-side capture).
+    attempts: list[dict[str, Any]] = []
+    env = _env_for_gui()
+
+    # 1) grim — works on wlroots compositors (labwc); weston typically lacks wlr-screencopy.
     grim_path = SCREENSHOT_DIR / f"grim_{int(time.time() * 1000)}.png"
     try:
         grim = subprocess.run(
@@ -536,69 +630,126 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
             capture_output=True,
             text=True,
             timeout=8,
-            env=_env_for_gui(),
+            env=env,
             check=False,
         )
+        attempts.append(
+            {
+                "via": "grim_wayland",
+                "rc": grim.returncode,
+                "stderr": (grim.stderr or "")[:400],
+            }
+        )
         if grim.returncode == 0 and grim_path.is_file() and grim_path.stat().st_size > 0:
-            raw = grim_path.read_bytes()
-            return _ok(
-                "framebuffer_capture",
-                path=str(grim_path),
-                bytes=len(raw),
-                format="png",
-                bytes_b64=base64.b64encode(raw).decode("ascii"),
-                synthetic=False,
-                via="grim_wayland",
-            )
-    except (OSError, subprocess.TimeoutExpired):
-        pass
+            return _png_ok_response(grim_path, via="grim_wayland")
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        attempts.append({"via": "grim_wayland", "error": str(exc)})
 
-    before = set(SCREENSHOT_DIR.glob("*.png"))
+    # 2) weston-screenshooter client binary when present.
+    try:
+        which = subprocess.run(
+            ["which", "weston-screenshooter"],
+            capture_output=True,
+            text=True,
+            timeout=3,
+            check=False,
+        )
+        if which.returncode == 0:
+            before = _collect_pngs(_screenshot_search_roots())
+            shot = subprocess.run(
+                ["weston-screenshooter"],
+                capture_output=True,
+                text=True,
+                timeout=8,
+                env=env,
+                cwd=str(SCREENSHOT_DIR),
+                check=False,
+            )
+            attempts.append(
+                {
+                    "via": "weston_screenshooter_cli",
+                    "rc": shot.returncode,
+                    "stderr": (shot.stderr or "")[:400],
+                }
+            )
+            deadline = time.time() + 3.0
+            while time.time() < deadline:
+                newly = _collect_pngs(_screenshot_search_roots()) - before
+                if newly:
+                    return _png_ok_response(sorted(newly)[0], via="weston_screenshooter_cli")
+                time.sleep(0.15)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        attempts.append({"via": "weston_screenshooter_cli", "error": str(exc)})
+
+    # 3) Weston desktop-shell Mod+s (modifier=super in weston.ini) via uinput.
+    # Ctrl+S is reserved for app save (mousepad/LibreOffice) and must not be used here.
+    before = _collect_pngs(_screenshot_search_roots())
     try:
         kbd, _mouse = _get_uinput_devices()
         from evdev import ecodes as e
 
-        kbd.write(e.EV_KEY, e.KEY_LEFTCTRL, 1)
+        kbd.write(e.EV_KEY, e.KEY_LEFTMETA, 1)
         kbd.write(e.EV_KEY, e.KEY_S, 1)
         kbd.syn()
         time.sleep(0.05)
         kbd.write(e.EV_KEY, e.KEY_S, 0)
-        kbd.write(e.EV_KEY, e.KEY_LEFTCTRL, 0)
+        kbd.write(e.EV_KEY, e.KEY_LEFTMETA, 0)
         kbd.syn()
+        attempts.append({"via": "weston_screenshooter_super_s_uinput", "injected": True})
     except RuntimeError as exc:
-        return _fail("framebuffer_capture", f"uinput_unavailable:{exc}")
+        attempts.append({"via": "weston_screenshooter_super_s_uinput", "error": str(exc)})
+        # Fall through to fbdev before failing hard.
 
-    deadline = time.time() + 5.0
-    new_file: Path | None = None
+    deadline = time.time() + 6.0
     while time.time() < deadline:
-        after = set(SCREENSHOT_DIR.glob("*.png"))
-        newly = after - before
+        newly = _collect_pngs(_screenshot_search_roots()) - before
         if newly:
-            new_file = sorted(newly)[0]
-            break
+            cand = sorted(newly)[0]
+            try:
+                if cand.stat().st_size < 256:
+                    attempts.append(
+                        {
+                            "via": "weston_screenshooter_super_s_uinput",
+                            "rejected_empty": str(cand),
+                            "size": cand.stat().st_size,
+                        }
+                    )
+                    # Remove empty/partial shot and keep waiting.
+                    try:
+                        cand.unlink()
+                    except OSError:
+                        pass
+                    before = _collect_pngs(_screenshot_search_roots())
+                    continue
+            except OSError:
+                pass
+            return _png_ok_response(cand, via="weston_screenshooter_super_s_uinput")
         time.sleep(0.2)
-    if new_file is None:
-        return _fail(
-            "framebuffer_capture",
-            "no_screenshot_produced",
-            note=(
-                "grim failed/absent and Ctrl+S weston-screenshooter produced no PNG under "
-                f"{SCREENSHOT_DIR} within 5s."
-            ),
-        )
-    try:
-        raw = new_file.read_bytes()
-    except OSError as exc:
-        return _fail("framebuffer_capture", f"read_failed:{exc}")
 
-    return _ok(
+    # 4) fbdev PPM when /dev/fb0 exists (often absent on pure DRM virtio-gpu).
+    ppm = _fbdev_ppm_capture()
+    if ppm is not None:
+        raw = ppm.read_bytes()
+        return _ok(
+            "framebuffer_capture",
+            path=str(ppm),
+            bytes=len(raw),
+            format="ppm",
+            bytes_b64=base64.b64encode(raw).decode("ascii"),
+            synthetic=False,
+            via="fbdev_ppm",
+            attempts=attempts,
+        )
+
+    return _fail(
         "framebuffer_capture",
-        path=str(new_file),
-        bytes=len(raw),
-        format="png",
-        bytes_b64=base64.b64encode(raw).decode("ascii"),
-        synthetic=False,
-        via="weston_screenshooter_ctrl_s_uinput",
+        "no_screenshot_produced",
+        note=(
+            "grim (wlroots), weston-screenshooter CLI, Super+s weston screenshooter, "
+            f"and /dev/fb0 all failed. Searched {_screenshot_search_roots()}. "
+            "Weston does not implement wlr-screencopy; labwc+grim is the grim path."
+        ),
+        attempts=attempts,
     )
 
 

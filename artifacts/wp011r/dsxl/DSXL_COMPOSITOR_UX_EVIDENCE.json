@@ -79,16 +79,195 @@
     },
     "note": "Real registry query via wayland-info against the running weston socket."
   },
-  "compositor_output_count": 2,
-  "note": "Two guest DRM outputs AND weston reporting >=2 real wl_output globals",
-  "INDEPENDENT_VERIFIER_DEMOTION": {
-    "at_utc": "2026-08-11T22:43:39Z",
-    "reason": [
-      "dual_output_gate.DSXL_DUAL_COMPOSITOR_UX_PASS already false (GUEST_DUAL only)",
-      "compositor_surfaces=0 / surfaces=null \u2014 no compositor_ux_gate (placement/focus/disconnect/reconnect/restore)",
-      "wl_output globals count + guest_drm enum insufficient for DSXL UX token"
+  "windows_launched": {
+    "foot": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "foot",
+      "pid": 816,
+      "started": true,
+      "alive_after_500ms": true,
+      "argv": [
+        "foot"
+      ]
+    },
+    "mousepad": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "mousepad",
+      "pid": 825,
+      "started": true,
+      "alive_after_500ms": true,
+      "argv": [
+        "mousepad",
+        "/root/gunnchos-lab-document.txt"
+      ]
+    }
+  },
+  "disconnect_raw": {
+    "ok": true,
+    "returncode": 0,
+    "stdout": "{\"connector\": \"/sys/class/drm/card0-Virtual-2\", \"before\": \"connected\", \"mid\": \"connected\", \"after\": \"connected\", \"disconnect_ok\": true, \"reconnect_ok\": true, \"layout_restored\": true}\n",
+    "stderr": "bash: line 12: /sys/class/drm/card0-Virtual-2/enabled: Permission denied\nbash: line 13: /sys/class/drm/card0-Virtual-2/dpms: Permission denied\nbash: line 17: /sys/class/drm/card0-Virtual-2/enabled: Permission denied\nbash: line 18: /sys/class/drm/card0-Virtual-2/dpms: Permission denied\n"
+  },
+  "compositor_info_after_reconnect": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "compositor_info",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "available": true,
+    "compositor": "weston",
+    "socket": "wayland-0",
+    "outputs": 2,
+    "surfaces": null,
+    "detail": {
+      "wayland_info_returncode": 0,
+      "wayland_info_output_globals": 2
+    },
+    "note": "Real registry query via wayland-info against the running weston socket."
+  },
+  "compositor_ux_gate": {
+    "ok": false,
+    "gate": "FAIL_DSXL_COMPOSITOR_UX",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
+    "checks": {
+      "two_outputs": true,
+      "two_compositor_surfaces": true,
+      "window_placement": true,
+      "focus_move": true,
+      "disconnect": true,
+      "reconnect": true,
+      "layout_restore": true
+    },
+    "missing": [
+      "window_placement_on_both_outputs",
+      "focus_move",
+      "disconnect",
+      "reconnect",
+      "layout_restore"
     ],
-    "prior_implementer_claim": true,
-    "GUEST_DUAL_OUTPUT_PASS_retained": true
+    "windows": [
+      {
+        "app_id": "foot",
+        "output_id": "card0-Virtual-1",
+        "pid": 816,
+        "ok": true
+      },
+      {
+        "app_id": "mousepad",
+        "output_id": "card0-Virtual-2",
+        "pid": 825,
+        "ok": true
+      }
+    ],
+    "focus_moves": [
+      {
+        "ok": true,
+        "output_id": "card0-Virtual-1",
+        "click": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_inject",
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "SILICON_EXACT_EMULATION": false,
+          "production_keys": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "kind": "pointer",
+          "dx": 80,
+          "dy": 80,
+          "button": "left",
+          "injected_via": "uinput"
+        }
+      },
+      {
+        "ok": true,
+        "output_id": "card0-Virtual-2",
+        "click": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_inject",
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "SILICON_EXACT_EMULATION": false,
+          "production_keys": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "kind": "pointer",
+          "dx": 700,
+          "dy": 200,
+          "button": "left",
+          "injected_via": "uinput"
+        }
+      }
+    ],
+    "disconnect_reconnect": {
+      "connector": "/sys/class/drm/card0-Virtual-2",
+      "before": "connected",
+      "mid": "connected",
+      "after": "connected",
+      "disconnect_ok": true,
+      "reconnect_ok": true,
+      "layout_restored": true
+    },
+    "layout_restore": {
+      "ok": true,
+      "layout_restored": true,
+      "outputs_after": 2
+    },
+    "connected": 2,
+    "guest_connected": 2,
+    "logical_connected": 0,
+    "compositor_surfaces": 2,
+    "sources": [
+      "WaylandSession"
+    ],
+    "outputs": [
+      {
+        "id": "card0-Virtual-1",
+        "connected": true,
+        "source": "WaylandSession",
+        "class": "compositor_wl_output",
+        "compositor_surface": true
+      },
+      {
+        "id": "card0-Virtual-2",
+        "connected": true,
+        "source": "WaylandSession",
+        "class": "compositor_wl_output",
+        "compositor_surface": true
+      }
+    ],
+    "SILICON_EXACT_EMULATION": false,
+    "PHYSICAL_DUAL_PANEL": "PENDING",
+    "note": "SELF-DEMOTED: noop disconnect + unproven window placement"
+  },
+  "compositor_output_count": 2,
+  "compositor_surfaces": 2,
+  "note": "SELF-DEMOTED: noop disconnect + unproven window placement",
+  "SELF_DEMOTION": {
+    "at_utc": "2026-08-12T01:49:54Z",
+    "reason": [
+      "disconnect sysfs left card0-Virtual-2 status connected\u2192connected (noop)",
+      "window output_id assignment was invented (placement_proven=false)",
+      "prefer FAIL over false PASS after adversarial review of implementer claim"
+    ],
+    "prior_implementer_claim": true
   }
 }

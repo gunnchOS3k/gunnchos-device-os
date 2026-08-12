@@ -836,9 +836,18 @@ class QemuGuestSession:
             "-daemonize",
         ]
         if os.environ.get("GUNNCHDEVICE_LAB_INTERACTIVE_NET", "1").lower() in {"1", "true", "yes"}:
+            # Default restrict=on (lab isolation). Set GUNNCHDEVICE_LAB_NET_RESTRICT=0
+            # when guest apt/package fetch is required for honest re-earn proofs.
+            restrict = os.environ.get("GUNNCHDEVICE_LAB_NET_RESTRICT", "1").lower() not in {
+                "0",
+                "false",
+                "no",
+                "off",
+            }
+            netdev = "user,id=n0,restrict=on" if restrict else "user,id=n0"
             cmd += [
                 "-netdev",
-                "user,id=n0,restrict=on",
+                netdev,
                 "-device",
                 "virtio-net-pci,netdev=n0",
             ]
