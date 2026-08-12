@@ -55,7 +55,7 @@ APP_COMMANDS: dict[str, list[str]] = {
         "--writer",
         "--nologo",
         "--norestore",
-        "/root/gunnchos-lab-document.odt",
+        "/root/gunnchos-lab-document.txt",
     ],
     "godot": ["godot", "--path", "/root/gunnchos-lab-godot"],
     "godot3": ["godot3", "--path", "/root/gunnchos-lab-godot"],

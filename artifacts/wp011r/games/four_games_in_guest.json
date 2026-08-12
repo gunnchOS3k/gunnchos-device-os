@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.wp011r.four_game_in_guest.v1",
-  "recorded_at_utc": "2026-08-12T01:46:11Z",
+  "recorded_at_utc": "2026-08-12T03:06:13Z",
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
@@ -14,11 +14,11 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": true,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "ok": false,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
       "chromium_launch": {
         "ok": true,
-        "pid": 1190,
+        "pid": 18286,
         "started": "chromium-anime-aggressors",
         "wayland": "wayland-0",
         "reason": null
@@ -29,38 +29,27 @@
         "lines": [
           "{",
           "  \"game_id\": \"anime-aggressors\",",
-          "  \"input\": 2,",
+          "  \"input\": 0,",
           "  \"started\": true,",
-          "  \"ts\": 1786499189744,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786499189.7502248",
+          "  \"ts\": 1786503979998,",
+          "  \"event\": \"heartbeat\",",
+          "  \"received_at\": 1786503980.0002508",
           "}"
         ]
       },
       "save": {
-        "ok": true,
+        "ok": false,
         "path": "/var/lib/gunnchos/games/anime-aggressors/save_marker.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"anime-aggressors\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786499189744,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786499189.7502248",
-          "}"
-        ]
+        "reason": "read_failed:[Errno 2] No such file or directory: '/var/lib/gunnchos/games/anime-aggressors/save_marker.json'"
       },
       "chromium_log": {
         "ok": false,
         "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-anime-aggressors.log'"
       },
       "chromium_alive": true,
-      "input_count": 2,
+      "input_count": 0,
       "started": true,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save"
+      "note": "Not earned \u2014 see chromium_launch/state/save fields"
     },
     "beatlink-party": {
       "game_id": "beatlink-party",
@@ -72,7 +61,7 @@
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "chromium_launch": {
         "ok": true,
-        "pid": 1367,
+        "pid": 18374,
         "started": "chromium-beatlink-party",
         "wayland": "wayland-0",
         "reason": null
@@ -85,10 +74,10 @@
           "  \"game_id\": \"beatlink-party\",",
           "  \"input\": 1,",
           "  \"started\": false,",
-          "  \"ts\": 1786499206532,",
+          "  \"ts\": 1786504009191,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786499206.538141",
+          "  \"received_at\": 1786504009.2241094",
           "}"
         ]
       },
@@ -100,10 +89,10 @@
           "  \"game_id\": \"beatlink-party\",",
           "  \"input\": 1,",
           "  \"started\": false,",
-          "  \"ts\": 1786499206532,",
+          "  \"ts\": 1786504009191,",
           "  \"save\": true,",
           "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786499206.538141",
+          "  \"received_at\": 1786504009.2241094",
           "}"
         ]
       },
@@ -122,11 +111,11 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": true,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "ok": false,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
       "chromium_launch": {
         "ok": true,
-        "pid": 1561,
+        "pid": 18453,
         "started": "chromium-earth-species",
         "wayland": "wayland-0",
         "reason": null
@@ -137,38 +126,27 @@
         "lines": [
           "{",
           "  \"game_id\": \"earth-species\",",
-          "  \"input\": 2,",
+          "  \"input\": 0,",
           "  \"started\": true,",
-          "  \"ts\": 1786499223575,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786499223.579563",
+          "  \"ts\": 1786504013690,",
+          "  \"event\": \"heartbeat\",",
+          "  \"received_at\": 1786504013.6931388",
           "}"
         ]
       },
       "save": {
-        "ok": true,
+        "ok": false,
         "path": "/var/lib/gunnchos/games/earth-species/save_marker.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"earth-species\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786499223575,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786499223.579563",
-          "}"
-        ]
+        "reason": "read_failed:[Errno 2] No such file or directory: '/var/lib/gunnchos/games/earth-species/save_marker.json'"
       },
       "chromium_log": {
         "ok": false,
         "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-earth-species.log'"
       },
       "chromium_alive": true,
-      "input_count": 2,
+      "input_count": 0,
       "started": true,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save"
+      "note": "Not earned \u2014 see chromium_launch/state/save fields"
     },
     "foot-racing": {
       "game_id": "foot-racing",
@@ -177,13 +155,75 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "CHROMIUM_WEB_REJECTED_FOR_PEDESTRIAN": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "godot": {
-        "ok": false,
-        "error": "godot4_download_failed:<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:992)>"
+        "ok": true,
+        "already_present": true
       },
-      "blocker": "godot4_download_failed:<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:992)>"
+      "deploy": {
+        "ok": true,
+        "src": "predeployed"
+      },
+      "godot_launch": {
+        "ok": true,
+        "pid": 18544,
+        "started": "godot-pedestrian-pursuit",
+        "wayland": "wayland-0",
+        "reason": null
+      },
+      "save_attempts": [
+        {
+          "ok": false,
+          "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+          "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'"
+        },
+        {
+          "ok": false,
+          "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/accessibility.cfg",
+          "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/accessibility.cfg'"
+        },
+        {
+          "ok": false,
+          "path": "/root/.local/share/godot/app_userdata/pedestrian-pursuit/pp_progression.cfg",
+          "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/pedestrian-pursuit/pp_progression.cfg'"
+        }
+      ],
+      "godot_alive": true,
+      "harness": {
+        "ok": true,
+        "stdout": "Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org\n\ntotal 12\ndrwxr-xr-x 3 root root 4096 Aug 12 03:07 .\ndrwxr-xr-x 3 root root 4096 Aug 12 03:04 ..\ndrwxr-xr-x 4 root root 4096 Aug 12 03:07 Pedestrian Pursuit\n/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
+        "stderr": ""
+      },
+      "save": {
+        "ok": true,
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "lines": [
+          "[meta]",
+          "",
+          "save_version=2",
+          "saved_at=\"2026-08-12T03:07:25\"",
+          "",
+          "[career]",
+          "",
+          "xp=0",
+          "level=1",
+          "unlocked={",
+          "\"mode:cup\": true,",
+          "\"mode:quick_race\": true,",
+          "\"mode:time_trial\": true,",
+          "\"mode:tutorial\": true,",
+          "\"runner:dash_reed\": true,",
+          "\"shoe:starter_soles\": true",
+          "}",
+          "challenges={}",
+          "trophies=[]",
+          "tt_pbs={}",
+          "tutorial_completed=false",
+          "first_run_complete=false"
+        ]
+      },
+      "note": "Godot 4 Pedestrian Pursuit alive with user:// save after input"
     }
   },
   "ping": {
@@ -211,7 +251,7 @@
   },
   "deploy": {
     "ok": true,
-    "bytes": 123446,
+    "bytes": 123427,
     "parts": 6,
     "extract": {
       "ok": true,
@@ -241,7 +281,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "started": "lab-bridge",
-      "pid": 1166
+      "pid": 18262
     },
     "bridge_log": {
       "ok": false,

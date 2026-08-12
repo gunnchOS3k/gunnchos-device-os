@@ -227,6 +227,7 @@ def _guest_bash(session: Any, script: str, *, timeout_sec: float = 90.0, name: s
 def _hot_patch_guest_agent(session: Any, repo_root: Path) -> dict[str, Any]:
     """Push process_run/file_put capable agent without full reprovision.
 
+    Prefer file_put chunks (avoids guest_bash_timeout on large base64 printf loops).
     Restarting the agent drops the virtio-serial session briefly — caller must
     re-ping after this returns.
     """
@@ -241,21 +242,51 @@ def _hot_patch_guest_agent(session: Any, repo_root: Path) -> dict[str, Any]:
         / "gunnchos_guest_agent.py"
     )
     raw = agent_src.read_bytes()
-    b64 = base64.b64encode(raw).decode("ascii")
-    # Clear then append in chunks via existing process_start + poll.
-    _guest_bash(session, "rm -f /tmp/ga_new.b64 /tmp/ga_new.py; : > /tmp/ga_new.b64", timeout_sec=20)
-    chunk = 8000
-    for i in range(0, len(b64), chunk):
-        part = b64[i : i + chunk]
-        _guest_bash(
+    _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "rm -f /tmp/ga_new.py; mkdir -p /opt/gunnchos/bin"],
+        timeout_sec=20.0,
+    )
+    chunk = 24_000
+    put_errors: list[dict[str, Any]] = []
+    for i in range(0, len(raw), chunk):
+        piece = raw[i : i + chunk]
+        put = _agent_call(
             session,
-            f"printf '%s' '{part}' >> /tmp/ga_new.b64",
-            timeout_sec=20,
-            name=f"ga-chunk-{i}",
+            "file_put",
+            path="/tmp/ga_new.py",
+            bytes_b64=base64.b64encode(piece).decode("ascii"),
+            append=(i > 0),
+            timeout_sec=30.0,
         )
+        if not put.get("ok"):
+            put_errors.append({"offset": i, "put": put})
+            break
+    if put_errors:
+        # Fallback to legacy bash base64 path.
+        b64 = base64.b64encode(raw).decode("ascii")
+        _guest_bash(session, "rm -f /tmp/ga_new.b64 /tmp/ga_new.py; : > /tmp/ga_new.b64", timeout_sec=20)
+        for i in range(0, len(b64), 8000):
+            part = b64[i : i + 8000]
+            _guest_bash(
+                session,
+                f"printf '%s' '{part}' >> /tmp/ga_new.b64",
+                timeout_sec=20,
+                name=f"ga-chunk-{i}",
+            )
+        decode = _guest_bash(
+            session,
+            "set -e; base64 -d /tmp/ga_new.b64 > /tmp/ga_new.py; wc -c /tmp/ga_new.py",
+            timeout_sec=60,
+            name="ga-decode",
+        )
+    else:
+        decode = {"ok": True, "via": "file_put", "bytes": len(raw)}
+
     install = _guest_bash(
         session,
-        "set -e; base64 -d /tmp/ga_new.b64 > /tmp/ga_new.py; "
+        "set -e; test -s /tmp/ga_new.py; "
         "cp /tmp/ga_new.py /opt/gunnchos/bin/gunnchos_guest_agent.py; "
         "cp /tmp/ga_new.py /usr/local/sbin/gunnchos_guest_agent.py 2>/dev/null || true; "
         "systemctl restart gunnchos-guest-agent.service || "
@@ -265,15 +296,22 @@ def _hot_patch_guest_agent(session: Any, repo_root: Path) -> dict[str, Any]:
         timeout_sec=60,
         name="ga-install",
     )
-    # Wait for agent to come back
     for _ in range(30):
         ping = _agent_call(session, "ping")
         if ping.get("pong"):
-            # Probe process_run
-            pr = _agent_call(session, "process_run", argv=["bash", "-lc", "echo process_run_ok"], timeout_sec=10.0)
-            return {"install": install, "ping": ping, "process_run_probe": pr}
+            pr = _agent_call(
+                session, "process_run", argv=["bash", "-lc", "echo process_run_ok"], timeout_sec=10.0
+            )
+            return {
+                "install": install,
+                "decode": decode,
+                "put_errors": put_errors,
+                "ping": ping,
+                "process_run_probe": pr,
+            }
         time.sleep(1.0)
-    return {"install": install, "error": "agent_did_not_return"}
+    return {"install": install, "decode": decode, "put_errors": put_errors, "error": "agent_did_not_return"}
+
 
 
 def _deploy_bundle_via_9p(session: Any) -> dict[str, Any]:
@@ -439,10 +477,11 @@ def _kill_matching_pythonish(session: Any, needle: str) -> dict[str, Any]:
 def _ensure_godot4_in_guest(session: Any, repo_root: Path) -> dict[str, Any]:
     """Ensure a Godot 4.x aarch64 Linux binary exists in the guest.
 
-    Debian godot3 is Godot 3.x and cannot run Pedestrian Pursuit (Godot 4.5).
-    Downloads official arm64 zip once on the host, then file_puts into guest.
+    Debian godot3 is Godot 3.x and cannot run Pedestrian Pursuit (Godot 4.x).
+    Prefer host curl (SecureTransport) + local cache; never claim PASS on urllib SSL fail alone.
     """
-    import urllib.request
+    import shutil
+    import subprocess as _sp
     import zipfile
 
     cache = repo_root / "artifacts" / "wp011r" / "cache"
@@ -453,8 +492,31 @@ def _ensure_godot4_in_guest(session: Any, repo_root: Path) -> dict[str, Any]:
         "https://github.com/godotengine/godot/releases/download/4.3-stable/"
         "Godot_v4.3-stable_linux.arm64.zip"
     )
+    # Alternate caches (field-kit / sibling) when device-os cache empty.
+    alt_bins = [
+        Path("/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-7gc-ai-ran-field-kit/.wave5_lab_artifacts/godot_cache/Godot_v4.3-stable_linux.arm64"),
+        repo_root.parent / "gunnchos-7gc-ai-ran-field-kit" / ".wave5_lab_artifacts" / "godot_cache" / "Godot_v4.3-stable_linux.arm64",
+    ]
     out: dict[str, Any] = {"url": url, "cache_bin": str(godot_bin)}
-    # Probe guest first
+    # Prefer guest curl from host :8765 (usernet 10.0.2.2) over 99MB virtio-serial put.
+    http_try = _guest_bash(
+        session,
+        "set +e; mkdir -p /opt/gunnchos/bin; "
+        "if [ -x /opt/gunnchos/bin/godot ]; then /opt/gunnchos/bin/godot --version; exit 0; fi; "
+        "curl -fsSL --connect-timeout 3 --retry 2 -o /opt/gunnchos/bin/godot "
+        "http://10.0.2.2:8765/Godot_v4.3-stable_linux.arm64 && "
+        "chmod +x /opt/gunnchos/bin/godot && ln -sf /opt/gunnchos/bin/godot /usr/local/bin/godot && "
+        "/opt/gunnchos/bin/godot --version",
+        timeout_sec=600,
+        name="godot-http-host",
+    )
+    out["http_host"] = {k: http_try.get(k) for k in ("ok", "stdout", "stderr", "returncode") if k in http_try}
+    if http_try.get("ok") and "4." in (http_try.get("stdout") or ""):
+        out["ok"] = True
+        out["downloaded"] = True
+        out["via"] = "guest_curl_10.0.2.2:8765"
+        return out
+
     probe = _guest_bash(
         session,
         "command -v godot || test -x /opt/gunnchos/bin/godot && echo /opt/gunnchos/bin/godot; "
@@ -470,24 +532,41 @@ def _ensure_godot4_in_guest(session: Any, repo_root: Path) -> dict[str, Any]:
         return out
 
     if not godot_bin.is_file():
+        for alt in alt_bins:
+            if alt.is_file() and alt.stat().st_size > 1_000_000:
+                shutil.copy2(alt, godot_bin)
+                out["copied_from"] = str(alt)
+                break
+
+    if not godot_bin.is_file():
         try:
             if not zip_path.is_file():
-                # Prefer curl (macOS system certs) over urllib SSL stack.
-                import subprocess as _sp
-
+                for altz in [p.with_suffix(p.suffix + ".zip") if False else p for p in []]:
+                    pass
+                alt_zips = [
+                    Path("/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-7gc-ai-ran-field-kit/.wave5_lab_artifacts/godot_cache/Godot_v4.3-stable_linux.arm64.zip"),
+                ]
+                for az in alt_zips:
+                    if az.is_file():
+                        shutil.copy2(az, zip_path)
+                        out["zip_copied_from"] = str(az)
+                        break
+            if not zip_path.is_file():
                 curl = _sp.run(
-                    ["curl", "-L", "--fail", "-o", str(zip_path), url],
+                    ["curl", "-L", "--fail", "--retry", "3", "-o", str(zip_path), url],
                     capture_output=True,
                     text=True,
                     timeout=300,
                     check=False,
                 )
+                out["curl"] = {"rc": curl.returncode, "stderr": (curl.stderr or "")[-400:]}
                 if curl.returncode != 0 or not zip_path.is_file():
-                    # Fallback urllib with default context
+                    # Last resort urllib (may fail SSL on some hosts)
+                    import urllib.request
+
                     urllib.request.urlretrieve(url, zip_path)
             with zipfile.ZipFile(zip_path, "r") as zf:
                 names = zf.namelist()
-                # Usually a single binary at archive root.
                 member = names[0]
                 zf.extract(member, cache)
                 extracted = cache / member
@@ -500,30 +579,67 @@ def _ensure_godot4_in_guest(session: Any, repo_root: Path) -> dict[str, Any]:
             out["error"] = f"godot4_download_failed:{exc}"
             return out
 
-    # Push via file_put in chunks if needed
-    raw = godot_bin.read_bytes()
+    if not godot_bin.is_file():
+        out["ok"] = False
+        out["error"] = "godot4_cache_missing_after_download"
+        return out
+
+    # Prefer file_put of binary (chunked) over base64 printf.
     import base64
 
-    b64 = base64.b64encode(raw).decode("ascii")
-    _guest_bash(session, "rm -f /tmp/godot.b64 /opt/gunnchos/bin/godot; mkdir -p /opt/gunnchos/bin", timeout_sec=20)
-    chunk = 12000
-    for i in range(0, len(b64), chunk):
-        part = b64[i : i + chunk]
-        _guest_bash(session, f"printf '%s' '{part}' >> /tmp/godot.b64", timeout_sec=30, name=f"godot-chunk-{i}")
+    raw = godot_bin.read_bytes()
+    _guest_bash(
+        session,
+        "rm -f /tmp/godot.bin /opt/gunnchos/bin/godot; mkdir -p /opt/gunnchos/bin",
+        timeout_sec=20,
+    )
+    chunk = 24_000
+    for i in range(0, len(raw), chunk):
+        piece = raw[i : i + chunk]
+        put = _agent_call(
+            session,
+            "file_put",
+            path="/tmp/godot.bin",
+            bytes_b64=base64.b64encode(piece).decode("ascii"),
+            append=(i > 0),
+            timeout_sec=45.0,
+        )
+        if not put.get("ok"):
+            out["ok"] = False
+            out["error"] = f"godot_file_put_failed_at_{i}"
+            out["put"] = put
+            return out
     install = _guest_bash(
         session,
-        "set -e; base64 -d /tmp/godot.b64 > /opt/gunnchos/bin/godot; chmod +x /opt/gunnchos/bin/godot; "
+        "set -e; mv /tmp/godot.bin /opt/gunnchos/bin/godot; chmod +x /opt/gunnchos/bin/godot; "
+        "ln -sf /opt/gunnchos/bin/godot /usr/local/bin/godot; "
         "/opt/gunnchos/bin/godot --version",
         timeout_sec=60,
         name="godot-install",
     )
     out["install"] = install
     out["ok"] = bool(install.get("ok") and "4." in (install.get("stdout") or ""))
+    if not out["ok"]:
+        out["error"] = out.get("error") or "godot_install_version_probe_failed"
     return out
+
 
 
 def _deploy_pedestrian_pursuit(session: Any, repo_root: Path) -> dict[str, Any]:
     """Tar Pedestrian Pursuit project and push into guest /root/pedestrian-pursuit."""
+    # Fast path: host HTTP :8765/pedestrian-pursuit.tar.gz via usernet 10.0.2.2
+    http = _guest_bash(
+        session,
+        "set +e; if [ -f /root/pedestrian-pursuit/project.godot ]; then echo already; exit 0; fi; "
+        "curl -fsSL --connect-timeout 3 --retry 2 -o /tmp/pp.tar.gz "
+        "http://10.0.2.2:8765/pedestrian-pursuit.tar.gz || exit 11; "
+        "rm -rf /root/pedestrian-pursuit; tar -xzf /tmp/pp.tar.gz -C /root; "
+        "test -f /root/pedestrian-pursuit/project.godot && echo http_ok",
+        timeout_sec=180,
+        name="pp-http",
+    )
+    if http.get("ok") and ("http_ok" in (http.get("stdout") or "") or "already" in (http.get("stdout") or "")):
+        return {"ok": True, "via": "guest_curl_10.0.2.2:8765", "extract": http}
     import tarfile
     import tempfile
     import base64

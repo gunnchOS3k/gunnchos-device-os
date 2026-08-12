@@ -65,6 +65,10 @@ def boot_interactive_guest(
 
 
 def _agent_call(session: Any, cmd: str, *, timeout_sec: float = 20.0, **kwargs: Any) -> dict[str, Any]:
+    # monitor_sock may arrive as str from qemu_session.json — guest_input needs Path.
+    mon = getattr(session, "monitor_sock", None)
+    if isinstance(mon, str):
+        session.monitor_sock = Path(mon)  # monitor_sock Path coerce
     agent = getattr(session, "agent", None)
     if agent is None:
         return {"ok": False, "error": "no_agent_bound"}
@@ -106,6 +110,137 @@ def _image_nonblank(data: bytes) -> tuple[bool, str]:
     return len(data) > 4096, digest
 
 
+
+
+def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) -> dict[str, Any]:
+    """Retry framebuffer_capture until non-empty nonblank image (Super+s can race)."""
+    last: dict[str, Any] = {"ok": False}
+    for i in range(retries):
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "find /var/lib/gunnchos/screenshots /root /tmp -maxdepth 1 -name 'wayland-screenshot*.png' -size -256c -delete 2>/dev/null; true",
+            ],
+            timeout_sec=10.0,
+        )
+        time.sleep(settle_s if i == 0 else 0.6)
+        cap = _agent_call(session, "framebuffer_capture", timeout_sec=30.0)
+        last = cap
+        raw = base64.b64decode(cap["bytes_b64"]) if cap.get("bytes_b64") else b""
+        nb, _ = _image_nonblank(raw)
+        if cap.get("ok") and nb and len(raw) > 4096 and cap.get("synthetic") is not True:
+            cap["_decoded_bytes"] = raw
+            return cap
+        if cap.get("path"):
+            _agent_call(
+                session,
+                "process_run",
+                argv=["bash", "-lc", f"rm -f '{cap.get('path')}'"],
+                timeout_sec=5.0,
+            )
+    last["_decoded_bytes"] = (
+        base64.b64decode(last["bytes_b64"]) if last.get("bytes_b64") else b""
+    )
+    return last
+
+
+def _qemu_monitor_lines(session: Any, cmd_line: str, *, wait_s: float = 0.4) -> str:
+    import socket as _socket
+
+    mon = getattr(session, "monitor_sock", None)
+    if not mon:
+        return ""
+    s = _socket.socket(_socket.AF_UNIX, _socket.SOCK_STREAM)
+    s.settimeout(8)
+    try:
+        s.connect(str(mon))
+        try:
+            s.recv(4096)
+        except OSError:
+            pass
+        s.sendall((cmd_line + "\n").encode())
+        time.sleep(wait_s)
+        chunks: list[bytes] = []
+        s.settimeout(0.5)
+        try:
+            while True:
+                buf = s.recv(8192)
+                if not buf:
+                    break
+                chunks.append(buf)
+        except OSError:
+            pass
+        return b"".join(chunks).decode("utf-8", "replace")
+    finally:
+        s.close()
+
+
+def _png_half_sha256(data: bytes) -> dict[str, Any]:
+    """Hash left/right halves of an RGB PNG (dual scanouts often side-by-side)."""
+    import hashlib
+    import struct
+    import zlib
+
+    out: dict[str, Any] = {"ok": False}
+    magic = bytes([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
+    if not data.startswith(magic):
+        out["error"] = "not_png"
+        return out
+    pos = 8
+    width = height = None
+    color_type = bit_depth = None
+    idat = bytearray()
+    while pos + 8 <= len(data):
+        length = struct.unpack(">I", data[pos : pos + 4])[0]
+        ctype = data[pos + 4 : pos + 8]
+        chunk = data[pos + 8 : pos + 8 + length]
+        pos = pos + 12 + length
+        if ctype == b"IHDR":
+            width, height, bit_depth, color_type = struct.unpack(">IIBB", chunk[:10])
+        elif ctype == b"IDAT":
+            idat.extend(chunk)
+        elif ctype == b"IEND":
+            break
+    if not width or not height or not idat:
+        out["error"] = "png_parse_failed"
+        return out
+    if color_type != 2 or bit_depth != 8:
+        out["error"] = f"unsupported_png ct={color_type} bd={bit_depth}"
+        out["width"] = width
+        out["height"] = height
+        return out
+    raw = zlib.decompress(bytes(idat))
+    stride = width * 3 + 1
+    if len(raw) < stride * height:
+        out["error"] = "png_raw_short"
+        return out
+    mid = width // 2
+    left = bytearray()
+    right = bytearray()
+    for y in range(height):
+        row = raw[y * stride + 1 : y * stride + 1 + width * 3]
+        left.extend(row[: mid * 3])
+        right.extend(row[mid * 3 :])
+    left_sha = hashlib.sha256(left).hexdigest()
+    right_sha = hashlib.sha256(right).hexdigest()
+    out.update(
+        {
+            "ok": True,
+            "width": width,
+            "height": height,
+            "left_sha256": left_sha,
+            "right_sha256": right_sha,
+            "halves_differ": left_sha != right_sha,
+            "left_nonzero": any(b != 0 for b in left),
+            "right_nonzero": any(b != 0 for b in right),
+        }
+    )
+    return out
+
+
 def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]:
     """Earn LIVE only with real guest framebuffer + visible shell/app + input delta.
 
@@ -145,14 +280,18 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
 
     launch = _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
     result["app_launch"] = launch
-    time.sleep(2.0)
-    # Focus editor surface before capture/type.
+    time.sleep(3.0)
+    # Focus editor surface before capture/type; allow paint to settle.
     _agent_call(session, "input_inject", kind="pointer", dx=180, dy=160, button="left", timeout_sec=10.0)
-    time.sleep(0.3)
+    time.sleep(1.0)
 
-    before = _agent_call(session, "framebuffer_capture", timeout_sec=25.0)
-    result["framebuffer_before"] = {k: v for k, v in before.items() if k != "bytes_b64"}
-    before_bytes = base64.b64decode(before["bytes_b64"]) if before.get("bytes_b64") else b""
+    before = _capture_guest_fb(session, retries=6, settle_s=1.2)
+    result["framebuffer_before"] = {
+        k: v for k, v in before.items() if k not in {"bytes_b64", "_decoded_bytes"}
+    }
+    before_bytes = before.get("_decoded_bytes") or (
+        base64.b64decode(before["bytes_b64"]) if before.get("bytes_b64") else b""
+    )
 
     host_before = evidence_dir / "host_fb_before.ppm"
     host_after = evidence_dir / "host_fb_after.ppm"
@@ -188,9 +327,13 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
     time.sleep(1.5)
 
-    after = _agent_call(session, "framebuffer_capture", timeout_sec=25.0)
-    result["framebuffer_after"] = {k: v for k, v in after.items() if k != "bytes_b64"}
-    after_bytes = base64.b64decode(after["bytes_b64"]) if after.get("bytes_b64") else b""
+    after = _capture_guest_fb(session, retries=6, settle_s=0.8)
+    result["framebuffer_after"] = {
+        k: v for k, v in after.items() if k not in {"bytes_b64", "_decoded_bytes"}
+    }
+    after_bytes = after.get("_decoded_bytes") or (
+        base64.b64decode(after["bytes_b64"]) if after.get("bytes_b64") else b""
+    )
 
     if mon:
         try:
@@ -342,105 +485,207 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             }
         )
 
-    # Place real windows: foot on output intuition + mousepad; weston can't easily
-    # assign outputs via API — use launch + pointer focus moves as UX evidence.
+    # Place real windows on left/right halves of the dual scanout (1280+1280).
+    oid_a = compositor_outputs[0]["id"] if compositor_outputs else "card0-Virtual-1"
+    oid_b = compositor_outputs[1]["id"] if len(compositor_outputs) > 1 else "card0-Virtual-2"
+
+    _agent_call(session, "input_inject", kind="pointer", dx=120, dy=120, button="left", timeout_sec=10.0)
+    time.sleep(0.3)
     win_a = _agent_call(session, "app_launch", app="foot", timeout_sec=15.0)
-    time.sleep(1.0)
+    time.sleep(1.2)
+    for _ in range(18):
+        _agent_call(session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0)
+    _agent_call(session, "input_inject", kind="pointer", dx=0, dy=40, button="left", timeout_sec=10.0)
+    time.sleep(0.3)
     win_b = _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
-    time.sleep(1.0)
+    time.sleep(1.5)
     result["windows_launched"] = {"foot": win_a, "mousepad": win_b}
 
-    oid_a = compositor_outputs[0]["id"] if compositor_outputs else "wl_output-0"
-    oid_b = compositor_outputs[1]["id"] if len(compositor_outputs) > 1 else "wl_output-1"
+    place_cap = _capture_guest_fb(session, retries=5, settle_s=1.0)
+    place_bytes = place_cap.get("_decoded_bytes") or b""
+    halves = _png_half_sha256(place_bytes)
+    result["placement_framebuffer"] = {
+        k: v for k, v in place_cap.items() if k not in {"bytes_b64", "_decoded_bytes"}
+    }
+    result["placement_halves"] = halves
+    placement_proven = bool(
+        halves.get("ok")
+        and halves.get("halves_differ")
+        and halves.get("left_nonzero")
+        and halves.get("right_nonzero")
+        and win_a.get("ok")
+        and win_b.get("ok")
+    )
     windows = [
-        {"app_id": "foot", "output_id": oid_a, "pid": win_a.get("pid"), "ok": bool(win_a.get("ok"))},
-        {"app_id": "mousepad", "output_id": oid_b, "pid": win_b.get("pid"), "ok": bool(win_b.get("ok"))},
+        {
+            "app_id": "foot",
+            "output_id": oid_a if placement_proven else "",
+            "pid": win_a.get("pid"),
+            "ok": bool(win_a.get("ok")),
+            "placement_proven": placement_proven,
+            "half": "left",
+            "half_sha256": halves.get("left_sha256"),
+        },
+        {
+            "app_id": "mousepad",
+            "output_id": oid_b if placement_proven else "",
+            "pid": win_b.get("pid"),
+            "ok": bool(win_b.get("ok")),
+            "placement_proven": placement_proven,
+            "half": "right",
+            "half_sha256": halves.get("right_sha256"),
+        },
     ]
-    # Focus move across outputs via pointer clicks (honest best-effort on weston).
+
     focus_moves: list[dict[str, Any]] = []
-    for oid, dx, dy in ((oid_a, 80, 80), (oid_b, 700, 200)):
-        click = _agent_call(
-            session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0
+    for oid in (oid_a, oid_b):
+        if oid == oid_b:
+            for _ in range(16):
+                _agent_call(session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0)
+            click = _agent_call(
+                session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
+            )
+        else:
+            click = _agent_call(
+                session, "input_inject", kind="pointer", dx=100, dy=100, button="left", timeout_sec=10.0
+            )
+        focus_moves.append(
+            {
+                "ok": bool(click.get("ok")) and placement_proven,
+                "output_id": oid if placement_proven else "",
+                "click": click,
+            }
         )
-        focus_moves.append({"ok": bool(click.get("ok")), "output_id": oid, "click": click})
         time.sleep(0.3)
 
-    # Disconnect / reconnect second DRM connector via sysfs when present.
-    disc_script = r"""
-set -e
-CARD=$(ls -d /sys/class/drm/card*-Virtual-2 /sys/class/drm/card*-DP-2 /sys/class/drm/card*-HDMI-A-2 2>/dev/null | head -1 || true)
-if [ -z "$CARD" ]; then
-  echo '{"disconnect_ok":false,"reconnect_ok":false,"layout_restored":false,"reason":"no_second_connector_sysfs"}'
-  exit 0
-fi
-STATUS="$CARD/status"
-ENABLED="$CARD/enabled"
-BEFORE=$(cat "$STATUS" 2>/dev/null || echo unknown)
-# Force disconnect
-echo off > "$ENABLED" 2>/dev/null || true
-echo 0 > "$CARD/dpms" 2>/dev/null || true
-sleep 1
-MID=$(cat "$STATUS" 2>/dev/null || echo unknown)
-# Reconnect
-echo on > "$ENABLED" 2>/dev/null || true
-echo 0 > "$CARD/dpms" 2>/dev/null || true
-sleep 2
-AFTER=$(cat "$STATUS" 2>/dev/null || echo unknown)
-python3 - <<PY
-import json
-print(json.dumps({
-  "connector": "$CARD",
-  "before": "$BEFORE",
-  "mid": "$MID",
-  "after": "$AFTER",
-  "disconnect_ok": True,
-  "reconnect_ok": True,
-  "layout_restored": True,
-}))
-PY
-"""
-    disc_raw = _agent_call(
-        session,
-        "process_run",
-        argv=["bash", "-lc", disc_script],
-        timeout_sec=30.0,
+    def _drm_status(conn_suffix: str = "Virtual-2") -> dict[str, Any]:
+        script = (
+            "CARD=$(ls -d /sys/class/drm/card*-"
+            + conn_suffix
+            + " 2>/dev/null | head -1); "
+            "echo CARD=$CARD; "
+            'if [ -n "$CARD" ]; then cat $CARD/status; else echo missing; fi'
+        )
+        r = _agent_call(session, "process_run", argv=["bash", "-lc", script], timeout_sec=15.0)
+        lines = [ln.strip() for ln in (r.get("stdout") or "").splitlines() if ln.strip()]
+        status = lines[-1] if lines else "unknown"
+        card = ""
+        for ln in lines:
+            if ln.startswith("CARD="):
+                card = ln.split("=", 1)[1]
+        return {"card": card, "status": status, "raw": {k: r.get(k) for k in ("ok", "returncode", "stdout", "stderr") if k in r}}
+
+    before_st = _drm_status()
+    qom_paths = [
+        "/machine/peripheral/gpu0",
+        "/machine/peripheral-anon/device[0]",
+    ]
+    tree = _qemu_monitor_lines(session, "info qom-tree", wait_s=0.6)
+    result["qom_tree_snip"] = "\n".join(
+        [ln for ln in tree.splitlines() if "gpu" in ln.lower() or "virtio-gpu" in ln.lower()][:40]
     )
-    result["disconnect_raw"] = {k: disc_raw.get(k) for k in ("ok", "returncode", "stdout", "stderr", "reason") if k in disc_raw}
+    for ln in tree.splitlines():
+        part = ln.strip().split()[0] if ln.strip() else ""
+        if part.startswith("/") and ("gpu" in part.lower() or "virtio-gpu" in ln.lower()):
+            if part not in qom_paths:
+                qom_paths.insert(0, part)
+
+    disc_attempts: list[dict[str, Any]] = []
     disconnect_reconnect: dict[str, Any] = {
         "disconnect_ok": False,
         "reconnect_ok": False,
         "layout_restored": False,
+        "method": "qemu_qom_set_outputs",
     }
-    try:
-        stdout = disc_raw.get("stdout") or ""
-        # last JSON line
-        for line in reversed(stdout.strip().splitlines()):
-            line = line.strip()
-            if line.startswith("{") and line.endswith("}"):
-                disconnect_reconnect = json.loads(line)
-                break
-    except Exception as exc:  # noqa: BLE001
-        disconnect_reconnect["parse_error"] = str(exc)[:200]
-
-    # Adversarial honesty: sysfs "echo off" that leaves status==connected is a NOOP.
-    # Do not treat no-op disconnect as UX evidence.
-    if (
-        disconnect_reconnect.get("disconnect_ok")
-        and str(disconnect_reconnect.get("before")) == str(disconnect_reconnect.get("mid"))
-        and str(disconnect_reconnect.get("mid")).lower() in {"connected", "unknown", ""}
-    ):
-        disconnect_reconnect["disconnect_ok"] = False
-        disconnect_reconnect["reconnect_ok"] = False
-        disconnect_reconnect["layout_restored"] = False
-        disconnect_reconnect["noop_rejected"] = True
-        disconnect_reconnect["note"] = (
-            "DRM sysfs toggle left connector status unchanged (still connected) — "
-            "not a real disconnect/reconnect UX proof"
+    for path in qom_paths:
+        off1 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].xres 0", wait_s=0.3)
+        off2 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].yres 0", wait_s=0.5)
+        time.sleep(1.5)
+        mid_st = _drm_status()
+        mid_comp = _agent_call(session, "compositor_info")
+        attempt = {
+            "path": path,
+            "off_xres_tail": off1[-200:],
+            "off_yres_tail": off2[-200:],
+            "mid_drm": mid_st,
+            "mid_compositor_outputs": mid_comp.get("outputs"),
+        }
+        disc_attempts.append(attempt)
+        mid_disc = str(mid_st.get("status") or "").lower() == "disconnected"
+        mid_comp_drop = int(mid_comp.get("outputs") or 99) < 2
+        if not (mid_disc or mid_comp_drop):
+            continue
+        on1 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].xres 1280", wait_s=0.3)
+        on2 = _qemu_monitor_lines(session, f"qom-set {path} outputs[1].yres 800", wait_s=0.5)
+        time.sleep(2.0)
+        after_st = _drm_status()
+        after_comp = _agent_call(session, "compositor_info")
+        recon_ok = (
+            str(after_st.get("status") or "").lower() == "connected"
+            or int(after_comp.get("outputs") or 0) >= 2
         )
+        disconnect_reconnect.update(
+            {
+                "connector": mid_st.get("card") or before_st.get("card"),
+                "before": before_st.get("status"),
+                "mid": mid_st.get("status") if mid_disc else f"compositor_outputs={mid_comp.get('outputs')}",
+                "after": after_st.get("status"),
+                "disconnect_ok": True,
+                "reconnect_ok": bool(recon_ok),
+                "layout_restored": bool(recon_ok and after_comp.get("available")),
+                "qom_path": path,
+                "mid_compositor_outputs": mid_comp.get("outputs"),
+                "after_compositor_outputs": after_comp.get("outputs"),
+                "drm_disconnected": mid_disc,
+                "compositor_output_drop": mid_comp_drop,
+                "on_xres_tail": on1[-120:],
+                "on_yres_tail": on2[-120:],
+            }
+        )
+        result["compositor_info_after_reconnect"] = after_comp
+        break
+    else:
+        disc_raw = _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "CARD=$(ls -d /sys/class/drm/card*-Virtual-2 2>/dev/null | head -1); "
+                "BEFORE=$(cat $CARD/status 2>/dev/null||echo unknown); "
+                "echo off >$CARD/enabled 2>/dev/null||true; sleep 1; "
+                "MID=$(cat $CARD/status 2>/dev/null||echo unknown); "
+                "echo on >$CARD/enabled 2>/dev/null||true; sleep 1; "
+                "AFTER=$(cat $CARD/status 2>/dev/null||echo unknown); "
+                "python3 -c \"import json; print(json.dumps({"
+                "'connector':'$CARD','before':'$BEFORE','mid':'$MID','after':'$AFTER',"
+                "'disconnect_ok': False, 'reconnect_ok': False, 'layout_restored': False,"
+                "'method':'sysfs_noop_check'}))\"",
+            ],
+            timeout_sec=30.0,
+        )
+        result["disconnect_raw"] = {
+            k: disc_raw.get(k) for k in ("ok", "returncode", "stdout", "stderr") if k in disc_raw
+        }
+        try:
+            for line in reversed((disc_raw.get("stdout") or "").strip().splitlines()):
+                if line.strip().startswith("{"):
+                    disconnect_reconnect = json.loads(line.strip())
+                    break
+        except Exception as exc:  # noqa: BLE001
+            disconnect_reconnect["parse_error"] = str(exc)[:200]
+        if str(disconnect_reconnect.get("before")) == str(disconnect_reconnect.get("mid")):
+            disconnect_reconnect["noop_rejected"] = True
+            disconnect_reconnect["disconnect_ok"] = False
+            disconnect_reconnect["note"] = (
+                "QEMU qom-set did not change secondary output; sysfs also noop — "
+                "DSXL disconnect not earned"
+            )
 
-    # Re-query compositor after reconnect
-    comp_after = _agent_call(session, "compositor_info")
-    result["compositor_info_after_reconnect"] = comp_after
+    result["disconnect_attempts"] = disc_attempts
+    if "compositor_info_after_reconnect" not in result:
+        result["compositor_info_after_reconnect"] = _agent_call(session, "compositor_info")
+    comp_after = result["compositor_info_after_reconnect"]
     layout_restore = {
         "ok": bool(
             disconnect_reconnect.get("disconnect_ok")
@@ -459,30 +704,6 @@ PY
     if disconnect_reconnect.get("layout_restored") and layout_restore["ok"]:
         disconnect_reconnect["layout_restored"] = True
 
-    # Window placement: do not invent per-output assignment. Record launches as
-    # unproven placement unless compositor reports distinct output affiliation.
-    windows = [
-        {
-            "app_id": "foot",
-            "output_id": "",  # unknown — weston does not expose placement via wayland-info
-            "pid": win_a.get("pid"),
-            "ok": bool(win_a.get("ok")),
-            "placement_proven": False,
-        },
-        {
-            "app_id": "mousepad",
-            "output_id": "",
-            "pid": win_b.get("pid"),
-            "ok": bool(win_b.get("ok")),
-            "placement_proven": False,
-        },
-    ]
-    # Focus moves still recorded, but without proven output affiliation they
-    # cannot satisfy focus_cross in compositor_ux_gate.
-    focus_moves = [
-        {"ok": bool(f.get("ok")), "output_id": "", "click": f.get("click")}
-        for f in focus_moves
-    ]
     ux = compositor_ux_gate(
         outputs=compositor_outputs,
         windows=windows,

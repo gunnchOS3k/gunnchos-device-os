@@ -45,7 +45,7 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "app": "mousepad",
-    "pid": 783,
+    "pid": 15403,
     "started": true,
     "alive_after_500ms": true,
     "argv": [
@@ -62,8 +62,8 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_01-45-33.png",
-    "bytes": 0,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_02-58-18.png",
+    "bytes": 16384,
     "format": "png",
     "synthetic": false,
     "via": "weston_screenshooter_super_s_uinput"
@@ -113,7 +113,7 @@
       {
         "ok": true,
         "command": "sendkey a",
-        "reply": "(qemu) s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
+        "reply": "s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
         "via": "qemu_monitor"
       }
     ],
@@ -130,23 +130,13 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "kind": "text",
-    "text": "LIVEPROOF1786499133",
+    "text": "LIVEPROOF1786503499",
     "injected_via": "uinput"
   },
   "framebuffer_after": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "framebuffer_capture",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_01-45-39.png",
-    "bytes": 16384,
-    "format": "png",
-    "synthetic": false,
-    "via": "weston_screenshooter_super_s_uinput"
+    "ok": false,
+    "error": "unix_connect_failed",
+    "detail": "empty_or_unmatched_response"
   },
   "host_screendump": {
     "ok": true,
@@ -155,8 +145,8 @@
     "after_exists": true,
     "before_nonblank": true,
     "after_nonblank": true,
-    "before_sha256": "699f96e1bd9915c3ac9506ffc2c9f1d887d8e5a9a99516040a8d4ead357824d0",
-    "after_sha256": "bd5afdc936b8d2ed88c836505fec832045240a3af299a9615097df3e85ee05da",
+    "before_sha256": "0dae2278a9b1f7354e4f643771def94cd45c86c424ebfa463e65a03f9b477a04",
+    "after_sha256": "5918e16b164dd4d54ce2b265811e28bbfa7fd3a810a890e5e5467e07328b3669",
     "changed": true,
     "measurement_class": "HOST_OBSERVED",
     "committed_paths": [
@@ -167,16 +157,16 @@
   },
   "guest_framebuffer": {
     "before_ok": true,
-    "after_ok": true,
-    "before_nonblank": false,
-    "after_nonblank": true,
-    "before_sha256": "",
-    "after_sha256": "c3a459331e815e097619ec8fceee0f3a4e9d700d2b6f268957fffd256b64865f",
+    "after_ok": false,
+    "before_nonblank": true,
+    "after_nonblank": false,
+    "before_sha256": "b76d89cf709eae947b5b328e3ef7f6f043aa0f8a5bc4cbd3e66fde4e1d9e8115",
+    "after_sha256": "",
     "changed": false,
-    "before_path": null,
-    "after_path": "shell_app_after.png",
+    "before_path": "shell_app_before.png",
+    "after_path": null,
     "via_before": "weston_screenshooter_super_s_uinput",
-    "via_after": "weston_screenshooter_super_s_uinput"
+    "via_after": null
   },
   "document_after": {
     "ok": true,
@@ -189,11 +179,12 @@
     "measurement_class": "GUEST_OBSERVED",
     "path": "/root/gunnchos-lab-document.txt",
     "lines": [
-      "aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
+      "aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944",
+      "aLIVEPROOF1786501531"
     ]
   },
   "input_visible_app_state": {
-    "marker": "LIVEPROOF1786499133",
+    "marker": "LIVEPROOF1786503499",
     "found_in_document": true
   },
   "non_blank_capture": false,

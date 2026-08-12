@@ -80,13 +80,12 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Cycle 3B follow-up after INDEPENDENT_FAIL \u2014 engineering continues; prefer FAIL",
-    "ECO010_SOAK_PASS retained (1800s)",
-    "GUEST_DUAL_OUTPUT_PASS retained",
-    "DSXL briefly claimed then SELF-DEMOTED (noop disconnect / unproven placement)",
-    "LIVE: Super+s guest FB path works but empty before-frame + need committed nonblank delta",
-    "RING: libreoffice not installed in guest this run",
-    "FOUR_GAME: Pedestrian Godot4 download SSL failed; Chromium web still insufficient for Pedestrian",
+    "Cycle 3B continue \u2014 prefer FAIL over false PASS",
+    "ECO010_SOAK_PASS + GUEST_DUAL_OUTPUT_PASS retained",
+    "LIVE: Super+s flaky (before/after not both nonblank+changed same run)",
+    "DSXL: QEMU 11 outputs realize-time only; cannot runtime disconnect",
+    "RING: LibreOffice mutation earned; browser click collector + game save still false",
+    "FOUR: Pedestrian Godot4 input+save EARNED; aggregate false until earth-species also earns",
     "WP-001 DO_NOT_START; Cursor never merges"
   ],
   "wave6_interactive_guest": {
@@ -113,6 +112,6 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-12T01:49:54Z",
+  "updated_at_utc": "2026-08-12T03:07:25Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json"
 }

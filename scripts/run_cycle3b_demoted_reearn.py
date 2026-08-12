@@ -35,13 +35,20 @@ def _apt_install(session, packages: list[str]) -> dict:
     pkgs = " ".join(packages)
     return _guest_bash(
         session,
-        f"export DEBIAN_FRONTEND=noninteractive; "
-        f"apt-get update -qq >/var/log/gunnchos-apt-update.log 2>&1 || true; "
+        "set +e; export DEBIAN_FRONTEND=noninteractive; "
+        "echo '===df==='; df -h / /var 2>/dev/null | head; "
+        "echo '===hosts==='; getent hosts deb.debian.org | head; "
+        "apt-get update -y >/var/log/gunnchos-apt-update.log 2>&1; echo update_rc=$?; "
+        f"for attempt in 1 2 3; do "
         f"apt-get install -y --no-install-recommends {pkgs} "
-        f">/var/log/gunnchos-apt-reearn.log 2>&1 || true; "
+        f">/var/log/gunnchos-apt-reearn.log 2>&1 && break; "
+        f"echo apt_attempt_${{attempt}}_failed; sleep 5; "
+        f"done; "
         f"dpkg -l {pkgs} 2>/dev/null | awk '/^ii/{{print $2,$3}}' | head -40; "
-        f"command -v grim; command -v libreoffice; command -v labwc; true",
-        timeout_sec=900,
+        "command -v grim; command -v libreoffice; command -v soffice; command -v labwc; "
+        "echo '===apt_reearn_tail==='; tail -40 /var/log/gunnchos-apt-reearn.log 2>/dev/null; "
+        "true",
+        timeout_sec=1200,
         name="apt-reearn",
     )
 
@@ -110,6 +117,27 @@ def main() -> int:
                 time.sleep(1.0)
         # Probe guest FB once before proofs (honest preflight).
         summary["fb_preflight"] = _agent_call(session, "framebuffer_capture", timeout_sec=30.0)
+
+
+        # Seed Godot linux.arm64 cache from field-kit when present (avoid urllib SSL fail).
+        try:
+            import shutil as _shutil
+
+            cache = ROOT / "artifacts/wp011r/cache"
+            cache.mkdir(parents=True, exist_ok=True)
+            alt = Path(
+                "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
+                "gunnchos-7gc-ai-ran-field-kit/.wave5_lab_artifacts/godot_cache/"
+                "Godot_v4.3-stable_linux.arm64"
+            )
+            dest = cache / "Godot_v4.3-stable_linux.arm64"
+            if alt.is_file() and (not dest.is_file() or dest.stat().st_size < 1_000_000):
+                _shutil.copy2(alt, dest)
+                summary["godot_cache_seed"] = str(alt)
+            elif dest.is_file():
+                summary["godot_cache_seed"] = "already_present"
+        except Exception as exc:  # noqa: BLE001
+            summary["godot_cache_seed"] = f"error:{exc}"
 
         summary["apt"] = _apt_install(
             session,
