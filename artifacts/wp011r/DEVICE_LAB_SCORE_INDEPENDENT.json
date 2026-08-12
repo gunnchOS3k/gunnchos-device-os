@@ -88,13 +88,13 @@
       "hardcoded": false
     },
     "full_ecosystem_simulation": {
-      "grade": 6,
+      "grade": 8,
       "axis": "DIGITAL",
       "evidence": [
         "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=True",
         "ECO-010=PASS",
-        "DSXL_DUAL_COMPOSITOR_UX_PASS=False (demoted)",
-        "RING_TO_REAL_APP_STATE_MUTATION_PASS=False (demoted)"
+        "DSXL_DUAL_COMPOSITOR_UX_PASS=True (filter-aware halves MSE=0)",
+        "RING_TO_REAL_APP_STATE_MUTATION_PASS=True (ODT+browser+Godot alive mutation)"
       ],
       "hardcoded": false
     },
@@ -109,12 +109,12 @@
       "hardcoded": false
     }
   },
-  "grade_mean_of_12": 5.92,
+  "grade_mean_of_12": 6.08,
   "tokens_observed": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "ECO010_SOAK_PASS": true,
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
@@ -130,11 +130,15 @@
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "note": "Independent recomputation after FAIL demotion of DSXL+RING on tip 7fe1022. LIVE retained. Master COMPLETE false. SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING.",
-  "updated_at_utc": "2026-08-12T16:47:18Z",
-  "implementer_reearn_pending_independent": true,
+  "note": "Independent PASS on tip 9d8ce2d: DSXL filter-aware halves + RING alive mutation cleared. five_gate_digital_and=true. COMPLETE/shipping remain false (packet does not allow digital COMPLETE solely from DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST + SILICON_EXACT=false). Cursor never merges.",
+  "updated_at_utc": "2026-08-12T16:55:11Z",
+  "implementer_reearn_pending_independent": false,
   "notes": [
-    "Prior independent FAIL on tip 7fe1022/779c2ae (invented halves + Lab RINGRING/Godot first-run).",
-    "Implementer claims DSXL+RING re-earned with filter-aware halves + alive Godot mutation; independent must re-verify before five-gate AND."
-  ]
+    "Prior FAIL on 7fe1022/779c2ae cleared by 9d8ce2d re-earn.",
+    "Residual Lab observe-only game_state.json/lab_browser.html tracked but non-earning.",
+    "COMPLETE false; SILICON_EXACT false; VF4/5/6 PHYSICAL_PENDING."
+  ],
+  "assessed_tip": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
+  "INDEPENDENT_PASS": true,
+  "five_gate_digital_and": true
 }

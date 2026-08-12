@@ -4,33 +4,46 @@
   "role": "independent_verifier",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
-  "assessed_at_utc": "2026-08-12T16:20:00Z",
-  "overall_result": "FAIL",
-  "INDEPENDENT_PASS": false,
-  "independent_accepted": false,
+  "assessed_tip": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
+  "assessed_at_utc": "2026-08-12T16:55:11Z",
+  "overall_result": "INDEPENDENT_PASS",
+  "INDEPENDENT_PASS": true,
+  "independent_accepted": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
   "shipping_master": false,
-  "five_gate_digital_and": false,
+  "five_gate_digital_and": true,
   "prefer_fail": true,
   "cursor_never_merges": true,
   "WP-001": "DO_NOT_START",
-  "rejected_as_insufficient": [
-    "DSXL committed dsxl_left/right near-black (mean~3) do not equal placement.png halves (mean~237/147); MSE~45k — invented/filter-blind halves",
-    "DSXL _png_half_sha256/_rgb_halves_to_pngs ignore PNG filter bytes (types 1/2/4) yet set placement_halves.ok=true",
-    "RING document_state.json still Lab RINGRING sidecar; game_state.json still Lab anime-aggressors",
-    "RING Godot pp_progression.cfg is first-run create (before missing → default career; alive=false) — not proven Ring HID mutation",
-    "inflated five-gate AND / DIGITAL_COMPLETE from trusting implementer PASS booleans on tip 7fe1022"
+  "complete_policy": {
+    "rule": "Keep GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE=false and SHIPPING_IMAGE=false even when five_gate_digital_and=true, unless the wave packet explicitly allows digital COMPLETE with DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true AND SILICON_EXACT_EMULATION=false.",
+    "packet_allows_digital_complete_on_interactive_guest": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "applied": "five gates PASS \u2192 INDEPENDENT_PASS + five_gate_digital_and=true; COMPLETE/shipping remain false"
+  },
+  "challenged_and_cleared": [
+    "DSXL filter-aware decode: placement filters [1,2,4]; left/right MSE=0 vs placement crops; means 58.452/130.056; not near-black; PNGs committed",
+    "DSXL dual wl_output + focus + 2\u21921\u21922 reboot reconfig + layout_restore evidenced in DSXL_COMPOSITOR_UX_EVIDENCE.json",
+    "RING document_state absent; no RINGRING/lab:// in ring+dsxl blobs",
+    "RING ODT contains RINGMUTATION1786552403",
+    "RING browser clicks 65\u219270 (delta 5); committed browser_state clicks=70",
+    "RING Godot save_version 1\u21922 with process alive=true / alive_after_mutation; first_run_create_rejected",
+    "Same-run full stack: CYCLE3B_DSXL_RING_FIX.log DSXL then RING in window 16:27\u201316:45Z"
   ],
+  "residual_non_blocking": [
+    "Tracked Lab observe-only leftovers remain: ring/game/game_state.json (anime-aggressors) and ring/browser/lab_browser.html \u2014 evidence rejects them as earning paths; contain neither RINGRING nor lab://; not used for RING PASS"
+  ],
+  "rejected_as_insufficient": [],
   "tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
     "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
@@ -42,22 +55,22 @@
     {
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
       "verdict": "PASS",
-      "note": "Pedestrian Godot4 + Chromium Wayland web titles retained honestly"
+      "note": "Retained; Pedestrian Godot4 + Chromium Wayland"
     },
     {
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
       "verdict": "PASS",
-      "note": "IEND-complete guest PNGs differ; OCR LIVEPROOF1786547491 visible in after; document marker; not host-FB-only"
+      "note": "Retained; IEND guest PNGs differ; LIVEPROOF path unchanged"
     },
     {
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "verdict": "FAIL_DEMOTION",
-      "note": "placement.png real but left/right halves invented via filter-blind decoder; not honest dual-surface placement proof"
+      "verdict": "PASS",
+      "note": "Filter-aware halves MSE=0; dual wl_output; 2\u21921\u21922; focus; layout restore"
     },
     {
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "verdict": "FAIL_DEMOTION",
-      "note": "ODT RINGMUTATION + browser delta present; Lab RINGRING sidecar + unproven Godot first-run save → prefer FAIL"
+      "verdict": "PASS",
+      "note": "ODT RINGMUTATION + browser delta + Godot save_version 1\u21922 alive=true; no document_state/RINGRING/lab://"
     },
     {
       "token": "ECO010_SOAK_PASS",
@@ -75,19 +88,39 @@
     "shell_app_after_png_bytes": 30041,
     "shell_app_png_has_iend": true,
     "shell_app_png_differ": true,
-    "liveproof_ocr_visible_in_after": true,
-    "liveproof_marker": "LIVEPROOF1786547491",
     "dsxl_dual_pngs_committed": true,
-    "dsxl_placement_halves_match_left_right": false,
-    "dsxl_left_mean_rgb": 3.03,
-    "dsxl_placement_left_half_mean_rgb": 237.36,
+    "dsxl_placement_filters": [
+      1,
+      2,
+      4
+    ],
+    "dsxl_placement_halves_match_left_right": true,
+    "dsxl_left_mse_vs_placement_crop": 0.0,
+    "dsxl_right_mse_vs_placement_crop": 0.0,
+    "dsxl_left_mean_rgb": 58.45217903706035,
+    "dsxl_right_mean_rgb": 130.05648274655783,
+    "dsxl_placement_left_half_mean_rgb": 58.45217903706035,
+    "dsxl_placement_right_half_mean_rgb": 130.05648274655783,
+    "dsxl_2_1_2_layout_restore": true,
     "ring_odt_has_RINGMUTATION": true,
-    "ring_document_state_still_RINGRING": true,
-    "ring_godot_alive_ok": false,
-    "ring_godot_before_missing_after_default_career": true
+    "ring_odt_marker": "RINGMUTATION1786552403",
+    "ring_document_state_present": false,
+    "ring_ringring_in_ring_dsxl_blobs": false,
+    "ring_lab_scheme_in_ring_dsxl_blobs": false,
+    "ring_browser_clicks_before": 65,
+    "ring_browser_clicks_after": 70,
+    "ring_browser_click_delta": 5,
+    "ring_godot_alive_ok": true,
+    "ring_godot_save_version_before": 1,
+    "ring_godot_save_version_after": 2,
+    "ring_godot_first_run_create_rejected": true,
+    "same_run_dsxl_then_ring": true,
+    "same_run_window_utc": "2026-08-12T16:27:28Z..2026-08-12T16:45:05Z",
+    "residual_lab_game_state_tracked": true,
+    "residual_lab_browser_html_tracked": true
   },
-  "merge_recommendation": "do-not-merge #103; WP-001 DO_NOT_START",
-  "edmund_merge_order": "do-not-merge",
-  "verdict": "FAIL_DEMOTION_DSXL_RING",
-  "note": "Prefer FAIL over false PASS. LIVE earned; DSXL/RING demoted; FIVE_GATE false; shipping/COMPLETE false. Cursor never merges."
+  "merge_recommendation": "Edmund may merge #103 after INDEPENDENT_PASS; Cursor never merges; WP-001 DO_NOT_START; COMPLETE/shipping false",
+  "edmund_merge_order": "merge-ready-for-Edmund-only (Cursor never merges); keep COMPLETE/shipping false; WP-001 DO_NOT_START",
+  "verdict": "INDEPENDENT_PASS",
+  "note": "Skeptical re-check of tip 9d8ce2d cleared prior DSXL invented-halves and RING Lab RINGRING/first-run demotions. Five-gate AND true. COMPLETE/shipping remain false per packet policy (interactive guest + SILICON_EXACT=false does not auto-complete). Cursor never merges."
 }

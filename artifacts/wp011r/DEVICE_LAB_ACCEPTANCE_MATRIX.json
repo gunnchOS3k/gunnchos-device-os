@@ -1,27 +1,27 @@
 {
   "schema": "gunnchos.wp011r.acceptance_matrix.v1",
-  "updated_at_utc": "2026-08-12T16:47:18Z",
-  "assessed_tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
+  "updated_at_utc": "2026-08-12T16:55:11Z",
+  "assessed_tip": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
   "rows": [
     {
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
       "pass": true,
-      "note": "Pedestrian Godot4 + Chromium Wayland retained"
+      "note": "Retained Pedestrian Godot4 + Chromium Wayland"
     },
     {
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
       "pass": true,
-      "note": "IEND PNGs differ; LIVEPROOF OCR-visible; guest FB not host-only"
+      "note": "Retained IEND PNGs + LIVEPROOF path"
     },
     {
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "pass": false,
-      "note": "left/right near-black \u2260 placement halves; filter-blind invented halves"
+      "pass": true,
+      "note": "Filter-aware halves MSE=0; dual wl_output; 2\u21921\u21922; focus; layout restore"
     },
     {
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "pass": false,
-      "note": "Lab RINGRING sidecar + Godot first-run save; prefer FAIL despite ODT marker"
+      "pass": true,
+      "note": "ODT RINGMUTATION; browser \u0394; Godot save_version 1\u21922 alive; no document_state/RINGRING/lab://"
     },
     {
       "token": "ECO010_SOAK_PASS",
@@ -34,25 +34,20 @@
       "note": "guest_drm dual retained"
     }
   ],
-  "five_gate_digital_and": false,
-  "INDEPENDENT_PASS": false,
+  "five_gate_digital_and": true,
+  "INDEPENDENT_PASS": true,
   "shipping_master": false,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "prefer_fail_over_false_pass": true,
   "cursor_never_merges": true,
   "WP-001": "DO_NOT_START",
-  "note": "Implementer re-earn; independent acceptance pending for DSXL+RING",
-  "implementer_tokens": {
-    "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-    "ECO010_SOAK_PASS": true,
-    "GUEST_DUAL_OUTPUT_PASS": true,
-    "five_gate_digital_and": true,
-    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
-    "SHIPPING_IMAGE": false,
-    "SILICON_EXACT_EMULATION": false
+  "complete_policy": {
+    "rule": "Keep GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE=false and SHIPPING_IMAGE=false even when five_gate_digital_and=true, unless the wave packet explicitly allows digital COMPLETE with DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true AND SILICON_EXACT_EMULATION=false.",
+    "packet_allows_digital_complete_on_interactive_guest": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "applied": "five gates PASS \u2192 INDEPENDENT_PASS + five_gate_digital_and=true; COMPLETE/shipping remain false"
   },
-  "independent_accepted": false
+  "note": "Independent PASS on tip 9d8ce2d after DSXL/RING re-earn challenge; COMPLETE/shipping false",
+  "independent_accepted": true
 }
