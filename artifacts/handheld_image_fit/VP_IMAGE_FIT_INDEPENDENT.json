@@ -1,125 +1,143 @@
 {
-  "schema": "gunnchos.device_os.handheld_image_fit.independent_verifier.v1",
-  "item": "HANDHELD_IMAGE_FIT",
-  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
-  "did_not_implement": true,
-  "did_not_merge": true,
-  "pr": {
-    "number": 107,
-    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/107",
-    "draft": true,
-    "branch": "operating-cycle-3b/handheld-image-fit-manifest",
-    "title": "feat(image-fit): Handheld IMAGE_FIT_MANIFEST with measured realm sizes"
-  },
-  "claimed_tip": "f5da4ed64eeeccbf205980a92901b07f2c43ae22",
-  "claimed_tip_live_confirmed": true,
-  "verified_tip": "f5da4ed64eeeccbf205980a92901b07f2c43ae22",
-  "generated_at_utc": "2026-08-12T22:27:46Z",
+  "DEVICE_OS_107_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "READY_reason": "Substantive digital production-intent fit PASS retained; tip CI fully green on 08ec83a (39/39 required checks SUCCESS including gate1+test) after SHARED_BOOT_PIN CI remediation. Draft PR \u2014 do not auto-merge.",
   "VP_IMAGE_FIT_INDEPENDENT": "PASS",
-  "READY_FOR_EDMUND_MERGE": false,
-  "READY_reason": "Substantive digital production-intent fit PASS, but tip CI still has in_progress gate1 + test at verification time — READY withheld until fully green.",
   "challenges": {
+    "ci_on_tip": {
+      "all_required_complete": true,
+      "failed": [],
+      "in_progress": [],
+      "observed_at_utc": "2026-08-12T23:31:41Z",
+      "passing_majority": true,
+      "recently_completed_success": [
+        "gate1",
+        "test",
+        "reality",
+        "digital-lock",
+        "compatibility-corpus",
+        "prove-stage2",
+        "prove-phase-xiv",
+        "prove-phase-xv"
+      ],
+      "success_count": 39,
+      "tip": "08ec83a33adc5e8347f0076ae379736111930df5",
+      "verdict": "PASS"
+    },
+    "npi_close_digital_only": {
+      "closure_scope": "digital_production_intent_slot_fit_only",
+      "defect": "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001",
+      "earned_status": "CLOSE",
+      "force_open": false,
+      "force_open_triggers_evaluated": {
+        "budgets_gamed": false,
+        "stub_like_or_renamed_stub": false
+      },
+      "honesty": "CLOSE earned for digital production-intent A/B slot-fit (+ Alpine-minimal recovery) under Outcome A only. Not shipping, not physical flash, not signed production release.",
+      "verdict": "PASS"
+    },
+    "release_claim_honesty": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "SHIPPING_IMAGE": false,
+      "production_keys_used": false,
+      "production_private_keys_present": false,
+      "production_shipping_status": "NOT_RELEASED",
+      "production_signed": false,
+      "production_signing_realm": "none",
+      "recovery_production_keys_used": false,
+      "recovery_signing_realm": "dev",
+      "verdict": "PASS"
+    },
     "rootfs_authenticity_ab_and_recovery": {
-      "verdict": "PASS_WITH_RECOVERY_NOTE",
       "force_open": false,
       "production_shipping_image_definition": {
-        "path": "os_build/realm_images/production_shipping_image_definition/artifacts/rootfs.tar.gz",
-        "compressed_bytes": 6274218,
-        "uncompressed_file_bytes": 12400168,
-        "file_count": 533,
-        "sha256": "633dde1fa148908b001d0b714a279e9217e5db2a414fc4d1a0cf1160e573b2f4",
         "alpine_release": "3.21.3",
-        "has_busybox": true,
-        "has_apk_db": true,
+        "assessment": "Real Alpine minirootfs + gunnchOS userspace (hundreds of files, multi-MiB). Not a renamed stub.",
+        "compressed_bytes": 6274218,
+        "file_count": 533,
         "gunnchos_file_count": 443,
+        "has_apk_db": true,
+        "has_busybox": true,
+        "path": "os_build/realm_images/production_shipping_image_definition/artifacts/rootfs.tar.gz",
+        "sha256": "633dde1fa148908b001d0b714a279e9217e5db2a414fc4d1a0cf1160e573b2f4",
+        "stub_like": false,
+        "uncompressed_file_bytes": 12400168,
         "userspace_trees_present": [
           "opt/gunnchos/lib/gunnchos_device_os",
           "opt/gunnchos/userspace/sdk_apps",
           "opt/gunnchos/userspace/packages",
           "opt/gunnchos/userspace/games",
           "opt/gunnchos/userspace/installable_image_prototype.tar.gz"
-        ],
-        "stub_like": false,
-        "assessment": "Real Alpine minirootfs + gunnchOS userspace (hundreds of files, multi-MiB). Not a renamed stub."
+        ]
       },
       "recovery_image": {
-        "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
-        "compressed_bytes": 3851977,
-        "uncompressed_file_bytes": 8174162,
-        "file_count": 98,
-        "sha256": "871b573e9f2a62a52b76f3eaf878995af65ed4bcfb731ca62697277930e31de2",
-        "alpine_release": "3.21.3",
         "alpine_base_files": 88,
-        "recovery_overlay_files_only": 10,
+        "alpine_release": "3.21.3",
+        "assessment": "Real Alpine 3.21.3 rootfs + minimal recovery agents/policy (not hundreds of gunnchOS userspace files). Acceptable as production_intent_recovery digital payload; NOT an empty/renamed stub. Manifest wording that recovery embeds full userspace is slightly overstated \u2014 recovery is Alpine-minimal by design.",
+        "compressed_bytes": 3851977,
         "compressed_delta_vs_alpine_bytes": 1612,
-        "userspace_trees": [],
+        "file_count": 98,
+        "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
+        "recovery_overlay_files_only": 10,
+        "sha256": "871b573e9f2a62a52b76f3eaf878995af65ed4bcfb731ca62697277930e31de2",
         "stub_like_under_project_ceiling_2MiB": false,
-        "assessment": "Real Alpine 3.21.3 rootfs + minimal recovery agents/policy (not hundreds of gunnchOS userspace files). Acceptable as production_intent_recovery digital payload; NOT an empty/renamed stub. Manifest wording that recovery embeds full userspace is slightly overstated — recovery is Alpine-minimal by design."
+        "uncompressed_file_bytes": 8174162,
+        "userspace_trees": []
       },
+      "renamed_stub_detected": false,
       "stub_ceiling_bytes": 2097152,
-      "renamed_stub_detected": false
+      "verdict": "PASS_WITH_RECOVERY_NOTE"
     },
     "size_reproduction_vs_outcome_a_budgets": {
-      "verdict": "PASS",
-      "budgets_gib": { "slot_a": 5.0, "slot_b": 5.0, "recovery": 2.0 },
-      "shared_boot_combined_bytes": 14140184,
-      "shared_boot_sha256": {
-        "kernel": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
-        "initramfs": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3"
+      "budgets_gamed": false,
+      "budgets_gib": {
+        "recovery": 2.0,
+        "slot_a": 5.0,
+        "slot_b": 5.0
       },
       "independent_compose": {
         "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "recovery_composed_bytes": 22314346,
+        "recovery_composed_gib": 0.020781854,
+        "recovery_margin_gib": 1.979218146,
         "slot_a_composed_bytes": 26540352,
         "slot_a_composed_gib": 0.024717629,
         "slot_a_margin_gib": 4.975282371,
         "slot_b_composed_bytes": 26540352,
         "slot_b_composed_gib": 0.024717629,
-        "slot_b_margin_gib": 4.975282371,
-        "recovery_composed_bytes": 22314346,
-        "recovery_composed_gib": 0.020781854,
-        "recovery_margin_gib": 1.979218146
+        "slot_b_margin_gib": 4.975282371
       },
-      "matches_IMAGE_FIT_MANIFEST_sizes_summary": true,
-      "budgets_gamed": false,
       "larger_emmc_sku_invented": false,
-      "outcome_a_retained": true
-    },
-    "release_claim_honesty": {
-      "verdict": "PASS",
-      "SHIPPING_IMAGE": false,
-      "PRODUCTION_RELEASE_CLAIMED": false,
-      "production_shipping_status": "NOT_RELEASED",
-      "production_signing_realm": "none",
-      "production_signed": false,
-      "production_keys_used": false,
-      "production_private_keys_present": false,
-      "recovery_signing_realm": "dev",
-      "recovery_production_keys_used": false
-    },
-    "npi_close_digital_only": {
-      "verdict": "PASS",
-      "defect": "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001",
-      "earned_status": "CLOSE",
-      "closure_scope": "digital_production_intent_slot_fit_only",
-      "force_open": false,
-      "force_open_triggers_evaluated": {
-        "stub_like_or_renamed_stub": false,
-        "budgets_gamed": false
+      "matches_IMAGE_FIT_MANIFEST_sizes_summary": true,
+      "outcome_a_retained": true,
+      "shared_boot_combined_bytes": 14140184,
+      "shared_boot_sha256": {
+        "initramfs": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3",
+        "kernel": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac"
       },
-      "honesty": "CLOSE earned for digital production-intent A/B slot-fit (+ Alpine-minimal recovery) under Outcome A only. Not shipping, not physical flash, not signed production release."
-    },
-    "ci_on_tip": {
-      "verdict": "PENDING",
-      "tip": "f5da4ed64eeeccbf205980a92901b07f2c43ae22",
-      "observed_at_utc": "2026-08-12T22:27:46Z",
-      "passing_majority": true,
-      "in_progress": ["gate1", "test"],
-      "recently_completed_success": ["reality", "digital-lock", "compatibility-corpus", "prove-stage2", "prove-phase-xv"]
+      "verdict": "PASS"
     }
   },
+  "ci_green_at_utc": "2026-08-12T23:31:41Z",
+  "claim_boundary": "Digital-only independent verification of IMAGE_FIT_MANIFEST + realm rootfs.tar.gz authenticity/sizes. No physical eMMC flash, no production signing, no SHIPPING_IMAGE.",
+  "claimed_tip": "08ec83a33adc5e8347f0076ae379736111930df5",
+  "claimed_tip_live_confirmed": true,
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "generated_at_utc": "2026-08-12T23:31:41Z",
+  "item": "HANDHELD_IMAGE_FIT",
   "local_validators": {
     "tests/test_handheld_image_fit_manifest.py": "3 passed"
   },
-  "claim_boundary": "Digital-only independent verification of IMAGE_FIT_MANIFEST + realm rootfs.tar.gz authenticity/sizes. No physical eMMC flash, no production signing, no SHIPPING_IMAGE.",
-  "verdict_summary": "DRAFT #107 tip f5da4ed PASS for digital production-intent image-fit. A/B rootfs is real Alpine 3.21.3 + gunnchOS userspace (533 files). Recovery is real Alpine + 10 overlay files (not stub). Composed margins ~4.975/4.975/1.979 GiB vs 5.0/5.0/2.0. SHIPPING_IMAGE=false; PRODUCTION_RELEASE_CLAIMED=false; unsigned/NOT_RELEASED. NPI CLOSE earned digitally. READY=false until tip CI fully green."
+  "pr": {
+    "branch": "operating-cycle-3b/handheld-image-fit-manifest",
+    "draft": true,
+    "number": 107,
+    "title": "feat(image-fit): Handheld IMAGE_FIT_MANIFEST with measured realm sizes",
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/107"
+  },
+  "schema": "gunnchos.device_os.handheld_image_fit.independent_verifier.v1",
+  "verdict_summary": "DRAFT #107 tip 08ec83a PASS for digital production-intent image-fit; CI fully green (gate1+test included). DEVICE_OS_107_READY_FOR_EDMUND_MERGE=true. Not merged.",
+  "verified_tip": "08ec83a33adc5e8347f0076ae379736111930df5",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT"
 }
