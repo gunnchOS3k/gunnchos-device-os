@@ -6,19 +6,19 @@
   "assessed_at_utc": "2026-08-11T22:36:48Z",
   "base_tip_before_session": "4757c2a3ee13967711c043cb4bb2511d3690b40c",
   "role": "implementer",
-  "overall": "PASS",
-  "overall_note": "Cycle 3B: LIVE+DSXL+RING+FOUR_GAME+ECO-010 earned; independent scorer confirms master digital complete. SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING. Cursor never merges.",
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
+  "overall": "FAIL",
+  "overall_note": "INDEPENDENT DEMOTION overlay: LIVE/DSXL/RING/FOUR_GAME/master demoted; ECO-010 duration PASS retained. Cursor never merges.",
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "DRAFT_ONLY": true,
   "never_merge": true,
   "tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-    "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
-    "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
     "ECO010_SOAK_PASS": true,
     "ECO010_STATUS": "PASS",
@@ -62,5 +62,6 @@
     "FOUR_GAME save path uses Lab localStorage marker \u2014 may not equal each title native save format",
     "RING mutates Lab document/browser/game surfaces while guest proves input_observe \u2014 apps-in-guest still unverified",
     "Prior session nearly inflated LIVE via 48-byte blank-fb noise and DSXL via DRM enum; honesty gates tightened"
-  ]
+  ],
+  "independent_demotion_at_utc": "2026-08-11T22:43:39Z"
 }

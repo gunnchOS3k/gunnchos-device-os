@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.wp011r.four_games_production.v2_in_guest",
   "recorded_at_utc": "2026-08-11T21:34:35Z",
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
@@ -177,8 +177,8 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": true,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "ok": false,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
       "chromium_launch": {
         "ok": true,
         "pid": 1086,
@@ -223,8 +223,24 @@
       "chromium_alive": true,
       "input_count": 2,
       "started": true,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save"
+      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save",
+      "INDEPENDENT_VERIFIER_DEMOTION": {
+        "reason": "GUEST_CHROMIUM_WAYLAND loaded in-tree foot-racing-web / lab probe \u2014 not Godot Pedestrian Pursuit production runtime with input/save"
+      }
     }
   },
-  "note": "All four games earned in-guest Chromium Wayland runtime proofs"
+  "note": "INDEPENDENT DEMOTION: FOUR_GAME aggregate FAIL \u2014 Pedestrian Pursuit Godot input/save still open",
+  "ok": false,
+  "INDEPENDENT_VERIFIER_DEMOTION": {
+    "at_utc": "2026-08-11T22:43:39Z",
+    "reason": [
+      "Pedestrian Pursuit (foot-racing) proven only as in-guest Chromium + lab_bridge probe autosave markers",
+      "sibling Godot write-movie still lacks input/save (godot_no_save_hook)",
+      "probe JS synthesizes save markers \u2014 not native game save",
+      "WP-014 / package note: guest Chromium web mapping; not Godot-in-guest",
+      "rejection criterion: Chromium in-tree web fallback as Pedestrian/Godot production when Godot input/save required"
+    ],
+    "prior_implementer_claim": true,
+    "GUEST_CHROMIUM_WEB_PARTIAL_FOR_THREE_WEB_TITLES": true
+  }
 }

@@ -7,18 +7,18 @@
   "GUNNCHDEVICE_LAB_LIVE_VISUAL_PREPARED": true,
   "GUNNCHDEVICE_LAB_REAL_RUN_PREPARED": true,
   "GUNNCHDEVICE_LAB_CONVENTIONAL_INPUT_PREPARED": true,
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "GUNNCHDEVICE_LAB_PRE_EVT_TWIN_INFRA_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "BEHAVIORAL_DEVICE_PROFILE": true,
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-  "LIVE_GUNNCHOS_VISUAL_PASS": true,
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
-  "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
   "VF4": "PHYSICAL_PENDING",
@@ -80,14 +80,10 @@
     "qemu_websocket": true
   },
   "notes": [
-    "WP-011R remediations toward independent 10/10 digital acceptance \u2014 tokens stay false until earned",
-    "http.server alone rejected as FOUR_GAME_REAL_RUNTIME proof",
-    "Alpine/dev guest labeled DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not shipping image",
-    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST scaffolding added (os_build/device_lab_interactive_guest/) as the required path forward for LIVE_GUNNCHOS_VISUAL_PASS / DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS in-guest proofs \u2014 the slim initramfs-only guest has no compositor and cannot ever earn them",
-    "Interactive guest scaffolding alone earns nothing \u2014 no PASS token flipped by adding manifest/script/qcow2-placeholder scaffolding",
-    "ECO-010 remains PARTIAL until full soak; master complete false",
-    "RING_SPATIAL_ACCURACY=SIMULATED; VF4/5/6 PHYSICAL_PENDING",
-    "No PRODUCTION_READY / fabrication / RFQ / certification claims"
+    "INDEPENDENT VERIFIER DEMOTION Cycle 3B \u2014 PASS tokens false until honestly re-earned",
+    "ECO010_SOAK_PASS retained (1800s not shortened)",
+    "GUEST_DUAL_OUTPUT_PASS retained; DSXL UX open",
+    "WP-001 DO_NOT_START; Cursor never merges"
   ],
   "wave6_interactive_guest": {
     "readme": "os_build/device_lab_interactive_guest/README.md",
@@ -113,6 +109,6 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-11T22:36:48Z",
+  "updated_at_utc": "2026-08-11T22:43:39Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json"
 }

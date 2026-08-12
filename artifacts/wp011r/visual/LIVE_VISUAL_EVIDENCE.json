@@ -1,5 +1,5 @@
 {
-  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "ping": {
     "ok": true,
@@ -139,5 +139,15 @@
   "non_blank_capture": true,
   "diff_bytes": 0,
   "before_after_changed": true,
-  "note": "Real weston + alive app + non-blank FB (guest and/or QEMU screendump) with input-visible delta"
+  "note": "Real weston + alive app + non-blank FB (guest and/or QEMU screendump) with input-visible delta",
+  "INDEPENDENT_VERIFIER_DEMOTION": {
+    "at_utc": "2026-08-11T22:43:39Z",
+    "reason": [
+      "guest framebuffer_capture failed before/after (no_screenshot_produced)",
+      "shell_app_before/after ppm nearly blank and identical",
+      "host_fb_*.ppm cited but not committed in PR tip",
+      "diff_bytes=0 in evidence; earn gate accepted host SHA delta without proving typed text visible"
+    ],
+    "prior_implementer_claim": true
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "display_info": {
     "ok": true,
@@ -80,5 +80,15 @@
     "note": "Real registry query via wayland-info against the running weston socket."
   },
   "compositor_output_count": 2,
-  "note": "Two guest DRM outputs AND weston reporting >=2 real wl_output globals"
+  "note": "Two guest DRM outputs AND weston reporting >=2 real wl_output globals",
+  "INDEPENDENT_VERIFIER_DEMOTION": {
+    "at_utc": "2026-08-11T22:43:39Z",
+    "reason": [
+      "dual_output_gate.DSXL_DUAL_COMPOSITOR_UX_PASS already false (GUEST_DUAL only)",
+      "compositor_surfaces=0 / surfaces=null \u2014 no compositor_ux_gate (placement/focus/disconnect/reconnect/restore)",
+      "wl_output globals count + guest_drm enum insufficient for DSXL UX token"
+    ],
+    "prior_implementer_claim": true,
+    "GUEST_DUAL_OUTPUT_PASS_retained": true
+  }
 }

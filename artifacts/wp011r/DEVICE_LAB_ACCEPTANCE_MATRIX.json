@@ -1,37 +1,38 @@
 {
   "schema": "gunnchos.device_lab.acceptance_matrix.v1",
   "wave": "WP-011R",
-  "assessed_at_utc": "2026-08-11T17:13:31Z",
+  "assessed_at_utc": "2026-08-11T22:43:39Z",
+  "assessed_tip": "769d898924aa2aa007abd80b4d9da06b3b52b6e8",
   "rows": [
     {
       "requirement": "Four production game runtimes",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
       "result": "FAIL",
-      "note": "Godot Pedestrian Pursuit missing input/save; web fallback insufficient"
+      "note": "Pedestrian Chromium web/lab probe; Godot input/save open"
     },
     {
       "requirement": "Live gunnchOS shell/compositor visual",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
       "result": "FAIL",
-      "note": "Blank/near-black fb; RFB\u2260UX"
+      "note": "Guest FB fail; host_fb uncommitted; shell_app blank"
     },
     {
       "requirement": "DS-XL dual compositor UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "result": "FAIL",
-      "note": "DRM enum\u2260compositor surfaces"
+      "note": "DRM/wl_output ≠ compositor_ux_gate"
     },
     {
-      "requirement": "Ring\u2192in-guest app mutation",
+      "requirement": "Ring→in-guest app mutation",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "result": "FAIL",
-      "note": "Lab surfaces + guest observe only"
+      "note": "uinput mousepad only"
     },
     {
-      "requirement": "ECO-010 full simultaneous soak \u22651800s",
+      "requirement": "ECO-010 full simultaneous soak ≥1800s",
       "token": "ECO010_SOAK_PASS",
-      "result": "PARTIAL",
-      "note": "Dry-check only; not shortened to pass"
+      "result": "PASS",
+      "note": "1800.05s; not dry/shortened; Lab sessions qemu=null caveat"
     },
     {
       "requirement": "Development guest labeled",
@@ -43,7 +44,7 @@
       "requirement": "Independent score re-derived",
       "token": "SCORE_INDEPENDENT",
       "result": "PASS",
-      "note": "mean=5.5; no hardcoded 10s"
+      "note": "mean=5.67; no hardcoded 10s"
     },
     {
       "requirement": "Master digital complete",

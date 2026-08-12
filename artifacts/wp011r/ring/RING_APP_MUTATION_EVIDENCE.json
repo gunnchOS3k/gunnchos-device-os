@@ -1,5 +1,5 @@
 {
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "app_launch": {
     "ok": true,
@@ -78,5 +78,15 @@
   },
   "mutation_marker": "RINGMUTATION1786482831",
   "marker_found_in_after": true,
-  "note": "Real guest uinput text injection landed in the real in-guest mousepad document via HID->libinput->weston->app, verified by reading the saved file"
+  "note": "Real guest uinput text injection landed in the real in-guest mousepad document via HID->libinput->weston->app, verified by reading the saved file",
+  "RING_GUEST_UINPUT_MOUSEPAD_MUTATION": true,
+  "INDEPENDENT_VERIFIER_DEMOTION": {
+    "at_utc": "2026-08-11T22:43:39Z",
+    "reason": [
+      "uinput text inject into mousepad is not Ring gesture stack \u2192 LibreOffice/browser/game mutation",
+      "required document/browser/game app-state via Ring pipeline not proven",
+      "Lab hybrid surfaces remain non-promotable to RING_TO_REAL_APP_STATE_MUTATION_PASS"
+    ],
+    "prior_implementer_claim": true
+  }
 }

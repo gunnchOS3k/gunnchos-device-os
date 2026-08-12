@@ -1,14 +1,14 @@
 {
   "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
   "wave": "WP-011R",
-  "audited_at_utc": "2026-08-11T22:36:48Z",
+  "audited_at_utc": "2026-08-11T22:43:39Z",
   "base_sha": "71c4b16+",
   "claim_firewall": {
     "SILICON_EXACT_EMULATION": false,
     "VF4": "PHYSICAL_PENDING",
     "VF5": "PHYSICAL_PENDING",
     "VF6": "PHYSICAL_PENDING",
-    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
     "PRODUCTION_READY": false,
     "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image",
     "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": "Interactive guest scaffolding added this wave (os_build/device_lab_interactive_guest/) \u2014 also a development guest, never a shipping image",
@@ -24,113 +24,58 @@
     "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
   },
   "pass_tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-    "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
-    "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
     "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
+    "RING_GUEST_UINPUT_MOUSEPAD_MUTATION": true,
     "ECO010_SOAK_PASS": true,
-    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
   "gaps": [
     {
       "id": "GAP-FOUR-GAME-RUNTIME",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "In-guest Chromium Wayland proofs for all four Device Lab web packages: compositor+chromium alive, uinput\u2192probe state/save markers. Host Playwright rejected. http.server alone rejected. Evidence: artifacts/wp011r/games/four_games_in_guest.json",
-      "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-      "code_refs": [
-        "gunnchos_device_os/device_lab/ecosystem/games.py",
-        "gunnchos_device_os/device_lab/ecosystem/production_runtime.py"
-      ]
+      "status": "OPEN",
+      "earned": false,
+      "summary": "DEMOTION: in-guest Chromium Wayland + lab probe for four web packages; Pedestrian Pursuit still lacks Godot input/save. Chromium web mapping \u2260 Godot production runtime.",
+      "evidence": "artifacts/wp011r/games/four_games_in_guest.json"
     },
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "Interactive Development Guest provisioned guest-natively (Debian 12 cloud-init). Guest agent ping observed in one session; compositor_info still unavailable \u2014 LIVE PASS false.",
-      "blocker": "Development guest has no lit shell/compositor+app window surface in screendump; diff_bytes insufficient after honesty gate.",
-      "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
-      "required_to_earn": [
-        "Guest DRM or framebuffer capture of compositor/shell surface",
-        "App window visible in capture",
-        "Input-visible state change between before/after captures",
-        "Evidence stored under artifacts/wp011r/visual/"
-      ],
-      "required_path": "os_build/device_lab_interactive_guest/ (Interactive Development Guest) \u2014 the slim guest has no compositor and cannot ever produce this evidence",
-      "code_refs": [
-        "gunnchos_device_os/device_lab/virtualization/live_display.py",
-        "gunnchos_device_os/device_lab/virtualization/live_visual_proof.py",
-        "gunnchos_device_os/device_lab/interactive_image_builder.py"
-      ]
+      "status": "OPEN",
+      "earned": false,
+      "summary": "DEMOTION: guest framebuffer capture failed; shell_app PPMs blank/identical; host_fb PPMs uncommitted; input-visible UX not independently proven.",
+      "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json"
     },
     {
       "id": "GAP-DSXL-COMPOSITOR-UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "GUEST_DUAL_OUTPUT_PASS earned via guest_agent DRM dual connectors under FORCE_REAL_GUEST+VNC. DSXL_DUAL_COMPOSITOR_UX_PASS remains false \u2014 guest_drm enum alone is not a compositor surface; Lab window placement on DRM outputs is insufficient.",
-      "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
-      "required_to_earn": [
-        "Two connected outputs with real compositor surfaces (not guest_drm enum alone)",
-        "Window placement on each output",
-        "Focus move between outputs",
-        "Secondary disconnect + reconnect with layout restore"
-      ],
-      "required_path": "os_build/device_lab_interactive_guest/ (Interactive Development Guest) \u2014 a real compositor (weston) with two outputs is required; guest_drm connector enum on the slim guest is insufficient by design",
-      "code_refs": [
-        "gunnchos_device_os/device_lab/virtualization/dsxl_outputs.py",
-        "gunnchos_device_os/device_lab/scenarios/dsxl_dualscreen.py",
-        "gunnchos_device_os/device_lab/interactive_image_builder.py"
-      ]
+      "status": "OPEN",
+      "earned": false,
+      "summary": "DEMOTION: GUEST_DUAL_OUTPUT_PASS retained; DSXL UX requires compositor_ux_gate (surfaces/placement/focus/disconnect/reconnect/restore). wl_output count alone insufficient.",
+      "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
     },
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "Ring\u2192guest input_observe + Lab SurfaceRegistry mutation earned hybrid tokens only. In-guest LibreOffice/browser/game app-state mutation NOT proven. RING_TO_REAL_APP_STATE_MUTATION_PASS=false.",
-      "required_to_earn": [
-        "Full pipeline stages recorded",
-        "Document buffer mutation via stack (not direct file write)",
-        "Browser page-state mutation via stack",
-        "One game state mutation via stack",
-        "Guest OS input path (not hybrid alone)",
-        "Evidence JSON under artifacts/wp011r/ring/"
-      ],
-      "required_path": "os_build/device_lab_interactive_guest/ (Interactive Development Guest) \u2014 real in-guest LibreOffice/browser/game processes (via app_launch) are required; the slim guest cannot install or run them",
-      "code_refs": [
-        "gunnchos_device_os/device_lab/scenarios/ring_real_input.py",
-        "gunnchos_device_os/device_lab/scenarios/ring_app_mutation.py",
-        "gunnchos_device_os/device_lab/hw_backends/rings.py",
-        "gunnchos_device_os/device_lab/apps/surfaces.py",
-        "gunnchos_device_os/device_lab/interactive_image_builder.py"
-      ],
+      "status": "OPEN",
+      "earned": false,
+      "summary": "DEMOTION: guest uinput\u2192mousepad file append is not Ring\u2192LibreOffice/browser/game app-state mutation.",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     },
     {
       "id": "GAP-ECO010-SOAK",
       "token": "ECO-010",
-      "status": "PARTIAL",
-      "earned": false,
-      "summary": "ECO-010 dry-check capability run completed PARTIAL. Default requested duration remains 1800s; dry_check bounds wall time and does not claim PASS. Full multi-guest 1800s continuous soak not earned on this host session.",
-      "evidence": "artifacts/wp011r/ECO010_SOAK.json",
-      "required_to_earn": [
-        "scripts/run_eco010_full_soak.py default 1800s",
-        "Health polling + resource telemetry",
-        ">=5 inject/recover cycles",
-        "Clean shutdown",
-        "If host cannot run full multi-guest soak: fail honestly PARTIAL"
-      ],
-      "code_refs": [
-        "scripts/run_eco010_full_soak.py",
-        "gunnchos_device_os/device_lab/ecosystem/scenarios.py"
-      ]
+      "status": "EARNED",
+      "earned": true,
+      "summary": "ECO-010 1800.05s soak not shortened / not dry-check; inject/recover 10/10. Caveat: cleanup qemu=null and rss_mb flat 17.27 (Lab session members). Does not unlock master alone.",
+      "evidence": "artifacts/wp011r/ECO010_SOAK.json"
     }
   ],
   "independent_score": {
@@ -140,12 +85,12 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Cycle 3B: Debian cloud-init guest-native provision SUCCEEDED (qcow2 local). LIVE/DSXL/RING/FOUR_GAME/ECO-010 still OPEN. Master false.",
+  "note": "Cycle 3B independent verifier DEMOTION on tip 769d898. ECO-010 duration PASS retained; LIVE/DSXL/RING/FOUR_GAME/master demoted. WP-001 DO_NOT_START.",
   "independent_audit": {
-    "source": "Cycle3A_WP-011R_implementer_session",
-    "accepted_tip_audited": "4757c2a",
-    "verdict": "PARTIAL_PROGRESS_DOES_NOT_SATISFY_FULL_DIGITAL_CONTRACT",
-    "note": "Skeptical self-assessment: overall FAIL/PARTIAL until independent verifier. Blank framebuffer and DRM-enum-as-compositor traps closed in honesty gates."
+    "source": "Cycle3B_independent_verifier",
+    "accepted_tip_audited": "769d898924aa2aa007abd80b4d9da06b3b52b6e8",
+    "verdict": "FAIL_WITH_DEMOTIONS",
+    "note": "Prefer demotion over inflation. Implementer PASS tokens overclaimed."
   },
   "score_inflation_risk": [
     "live_visual_interaction grade inflation from RFB banner or blank screendump noise",
