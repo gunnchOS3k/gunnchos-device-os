@@ -1,0 +1,245 @@
+{
+  "PRODUCTION_RELEASE_CLAIMED": false,
+  "architecture_outcome": "A",
+  "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
+  "claim_boundary": "Digital measurement of WP-013 realm rootfs.tar.gz artifacts plus shared bootable_reference kernel/initramfs. Not a physical eMMC flash image, not silicon-exact, not signed production shipping. Realm rootfs payloads are release-engineering package stubs (service units + optional Python tree), not a full MLP userspace. PRODUCTION_RELEASE_CLAIMED=false always.",
+  "device_os_tip": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "fit_assessment": {
+    "any_PRODUCTION_RELEASE_CLAIMED_true": false,
+    "current_digital_realm_numeric_fit": true,
+    "production_image_fit_reason": "Measured EVT/factory/recovery/production-definition rootfs tarballs exist with sha256/bytes and positive numeric margin vs Outcome A 5.0/5.0/2.0 GiB budgets, but payloads remain package-stub digital artifacts (<2 MiB compressed each), not full MLP/production A/B disk images. Keep NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 OPEN.",
+    "production_image_fit_verdict": "FAIL_STUB_REALM_NOT_MLP",
+    "production_mlp_disk_image_present": false,
+    "production_shipping_status": "NOT_RELEASED",
+    "production_shipping_unsigned": true,
+    "realm_rootfs_artifacts_present": true,
+    "shared_boot_reference_present": true,
+    "stub_like_rootfs_payloads": true
+  },
+  "generated_at_utc": "2026-08-12T22:08:55Z",
+  "larger_emmc_sku_invented": false,
+  "npi": {
+    "architecture_change_proposal": {
+      "invent_larger_emmc_sku": false,
+      "microsd_required_for_mlp_user_content": true,
+      "next_steps": [
+        "Grow realm builder toward production-intent rootfs (real userspace payload, not service-unit stubs alone) and remeasure",
+        "Publish refreshed IMAGE_FIT_MANIFEST.json with margin_gib > 0 for slot_a/slot_b/recovery",
+        "Hardware remodel may CLOSE only when production-intent measured images exist \u2014 contracts/stubs insufficient",
+        "If measured production-intent images exceed onboard usable after reserves, reopen architecture (still without inventing eMMC SKUs)"
+      ],
+      "retain_outcome_a": true
+    },
+    "closure_gate_met": false,
+    "closure_gate_reason": "Measured EVT/factory/recovery/production-definition rootfs tarballs exist with sha256/bytes and positive numeric margin vs Outcome A 5.0/5.0/2.0 GiB budgets, but payloads remain package-stub digital artifacts (<2 MiB compressed each), not full MLP/production A/B disk images. Keep NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 OPEN.",
+    "defect_id": "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001",
+    "recommended_status": "OPEN"
+  },
+  "realms": {
+    "evt_engineering_image": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_manifest_path": "os_build/realm_images/evt_engineering_image/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "59bdace7aca5b765b9cce35e77a05984a4ed61904dabb94a24bd6171ef99173b",
+      "ok": true,
+      "realm_dir": "evt_engineering_image",
+      "realm_id": "EVT_ENGINEERING_IMAGE",
+      "rootfs_tarball": {
+        "compressed_bytes": 36481,
+        "compressed_gib": 3.3976e-05,
+        "file_count": 41,
+        "path": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
+        "sha256": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
+        "uncompressed_file_bytes": 149320,
+        "uncompressed_file_gib": 0.000139065
+      },
+      "signing_realm": "dev",
+      "status": "ACTIVE_DEV"
+    },
+    "factory_provisioning_image": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_manifest_path": "os_build/realm_images/factory_provisioning_image/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "ff13a42c90955f05923f9d93eb861e66e223f97de028e67cd4961204eb954654",
+      "ok": true,
+      "realm_dir": "factory_provisioning_image",
+      "realm_id": "FACTORY_PROVISIONING_IMAGE",
+      "rootfs_tarball": {
+        "compressed_bytes": 1952,
+        "compressed_gib": 1.818e-06,
+        "file_count": 15,
+        "path": "os_build/realm_images/factory_provisioning_image/artifacts/rootfs.tar.gz",
+        "sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+        "uncompressed_file_bytes": 5979,
+        "uncompressed_file_gib": 5.568e-06
+      },
+      "signing_realm": "dev",
+      "status": "ACTIVE_DEV"
+    },
+    "production_shipping_image_definition": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_manifest_path": "os_build/realm_images/production_shipping_image_definition/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "d0be40fc570557d576ec40bf34133d3889ca3cb4561b1f7070107ee7e0c8ced1",
+      "ok": true,
+      "realm_dir": "production_shipping_image_definition",
+      "realm_id": "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
+      "rootfs_tarball": {
+        "compressed_bytes": 2278,
+        "compressed_gib": 2.122e-06,
+        "file_count": 21,
+        "path": "os_build/realm_images/production_shipping_image_definition/artifacts/rootfs.tar.gz",
+        "sha256": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
+        "uncompressed_file_bytes": 7512,
+        "uncompressed_file_gib": 6.996e-06
+      },
+      "signing_realm": "none",
+      "status": "NOT_RELEASED"
+    },
+    "recovery_image": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_manifest_path": "os_build/realm_images/recovery_image/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "e00d395a711fe92e0854d93e60861d0eb879bc85fc7f0d8a0fe502ab19ed42e2",
+      "ok": true,
+      "realm_dir": "recovery_image",
+      "realm_id": "RECOVERY_IMAGE",
+      "rootfs_tarball": {
+        "compressed_bytes": 1636,
+        "compressed_gib": 1.524e-06,
+        "file_count": 10,
+        "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
+        "sha256": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa",
+        "uncompressed_file_bytes": 4043,
+        "uncompressed_file_gib": 3.765e-06
+      },
+      "signing_realm": "dev",
+      "status": "ACTIVE_DEV"
+    }
+  },
+  "schema": "gunnchos.device_os.handheld_image_fit_manifest.v1",
+  "shared_bootable_reference": {
+    "combined_bytes": 14140184,
+    "combined_gib": 0.013169073,
+    "initramfs": {
+      "bytes": 4514072,
+      "gib": 0.004204057,
+      "path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
+      "present": true,
+      "sha256": "bac2fecb2954252c7130a778d0f00b4b40cf0498e5ba5e63d4bfc1e50599aaf3"
+    },
+    "kernel": {
+      "bytes": 9626112,
+      "gib": 0.008965015,
+      "path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
+      "present": true,
+      "sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac"
+    },
+    "kind": "shared_bootable_reference",
+    "note": "Shared DEV/QEMU reference \u2014 not realm-specific compiled binaries."
+  },
+  "sizes_summary_gib": {
+    "evt_rootfs_compressed": 3.3976e-05,
+    "evt_rootfs_uncompressed": 0.000139065,
+    "factory_rootfs_compressed": 1.818e-06,
+    "production_def_rootfs_compressed": 2.122e-06,
+    "recovery_composed": 0.013172838,
+    "recovery_margin": 1.986827162,
+    "recovery_rootfs_compressed": 1.524e-06,
+    "shared_boot_combined": 0.013169073,
+    "slot_a_composed": 0.013308138,
+    "slot_a_margin": 4.986691862,
+    "slot_b_composed": 0.013308138,
+    "slot_b_margin": 4.986691862
+  },
+  "sku_profile": "handheld_hybrid",
+  "slot_budgets_gib": {
+    "recovery": 2.0,
+    "slot_a": 5.0,
+    "slot_b": 5.0
+  },
+  "slot_fit": {
+    "factory_provisioning_report_only": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 14146163,
+      "composed_gib": 0.013174641,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 5979,
+        "shared_kernel_initramfs_bytes": 14140184
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of CURRENT digital realm stub + shared reference boot only. Not proof of full MLP/production A/B disk-image fit.",
+      "margin_bytes": 5354562957,
+      "margin_gib": 4.986825359,
+      "realm_id": "FACTORY_PROVISIONING_IMAGE",
+      "slot": "factory_provisioning_report_only"
+    },
+    "production_shipping_definition_unsigned": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 14147696,
+      "composed_gib": 0.013176069,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 7512,
+        "shared_kernel_initramfs_bytes": 14140184
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of CURRENT digital realm stub + shared reference boot only. Not proof of full MLP/production A/B disk-image fit.",
+      "margin_bytes": 5354561424,
+      "margin_gib": 4.986823931,
+      "realm_id": "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
+      "slot": "production_shipping_definition_unsigned"
+    },
+    "recovery": {
+      "budget_bytes": 2147483648,
+      "budget_gib": 2.0,
+      "composed_bytes": 14144227,
+      "composed_gib": 0.013172838,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 4043,
+        "shared_kernel_initramfs_bytes": 14140184
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of CURRENT digital realm stub + shared reference boot only. Not proof of full MLP/production A/B disk-image fit.",
+      "margin_bytes": 2133339421,
+      "margin_gib": 1.986827162,
+      "realm_id": "RECOVERY_IMAGE",
+      "slot": "recovery"
+    },
+    "slot_a": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 14289504,
+      "composed_gib": 0.013308138,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 149320,
+        "shared_kernel_initramfs_bytes": 14140184
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of CURRENT digital realm stub + shared reference boot only. Not proof of full MLP/production A/B disk-image fit.",
+      "margin_bytes": 5354419616,
+      "margin_gib": 4.986691862,
+      "realm_id": "EVT_ENGINEERING_IMAGE",
+      "slot": "slot_a"
+    },
+    "slot_b": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 14289504,
+      "composed_gib": 0.013308138,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 149320,
+        "shared_kernel_initramfs_bytes": 14140184
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of CURRENT digital realm stub + shared reference boot only. Not proof of full MLP/production A/B disk-image fit.",
+      "margin_bytes": 5354419616,
+      "margin_gib": 4.986691862,
+      "note": "Proxy uses EVT composed size for both A and B (identical-slot assumption).",
+      "realm_id": "EVT_ENGINEERING_IMAGE",
+      "slot": "slot_b"
+    }
+  }
+}
