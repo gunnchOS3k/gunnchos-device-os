@@ -2,7 +2,7 @@
   "schema": "gunnchos.vp.platform001.independent.v1",
   "verification_packet": "VP_PLATFORM001",
   "role": "INDEPENDENT_VERIFIER",
-  "executed_at_utc": "2026-08-12T21:33:27Z",
+  "executed_at_utc": "2026-08-12T22:04:27Z",
   "pr": {
     "number": 106,
     "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/106",
@@ -12,110 +12,186 @@
     "base_includes_pr_104": true,
     "base_sha": "3858e760295ad35828ff141919681f2bb8685cf0"
   },
-  "tip_claimed": "91e1ed0c22808787c9b28d4d9aac34baffe7f206",
-  "tip_verified_pre_remediation": "91e1ed0c22808787c9b28d4d9aac34baffe7f206",
-  "tip_verified": "c4b3a31e12faf942c3ac08a89820af4b73dbf5dc",
+  "tip_claimed": "dd69153a108c2ec591df45a71fd13cafff915b0b",
+  "tip_verified": "dd69153a108c2ec591df45a71fd13cafff915b0b",
   "tip_claimed_was_live": true,
+  "prior_independent_verdict": {
+    "tip": "c4b3a31e12faf942c3ac08a89820af4b73dbf5dc",
+    "independent_pass": false,
+    "DEVICE_OS_106_READY_FOR_EDMUND_MERGE": false,
+    "tokens_demoted": true,
+    "reason": "Thin shells / DISCONNECTED_PREVIEW Ask overclaimed FIRST_PARTY D5/D6 PASS"
+  },
+  "implementer_remediation_packet": "artifacts/platform001/VP_PLATFORM001_IMPLEMENTER_REMEDIATION.json",
   "do_not_merge_pr_103": true,
   "did_not_merge_pr_106": true,
   "implementer_not_this_verifier": true,
   "challenge": {
     "ci_green_on_tip": true,
+    "companion_bridge_wiring_reproduced": true,
     "lifecycle_reproduced_sdk_apps": true,
+    "gunnchai_ask_not_disconnected_preview": true,
+    "gunnchai_ask_continuity": "SDK_SANDBOX_MEMORY",
     "examples_rejected_as_evidence": true,
-    "paths": "package\u2192install\u2192run\u2192persist\u2192crash\u2192update\u2192uninstall",
+    "paths": "package→install→run→persist→crash→update→uninstall",
     "PRODUCTION_RELEASE_CLAIMED": false,
     "HUMAN_E6": "NOT_EARNED",
+    "full_waike_curriculum": false,
+    "frontier_model_quality": false,
     "VISUAL_MODEL_REVIEW": "UNAVAILABLE"
   },
-  "overclaim_finding": {
-    "on_tip_91e1ed0": true,
-    "summary": "FIRST_PARTY_APP_D5_D6_PASS tokens were true while thin HTML shells (mock terminal / disconnected Ask / prototype UX) and experience S2 findings were treated as non-blocking \u2014 overclaim relative to product-complete D5/D6.",
-    "remediation": "Demoted all three tokens to false with token_status=PARTIAL; marked S2_OPEN explicitly; remidiated digitally executable companion honesty (no fake terminal success; WAIKE lesson body + progress cards; gunnchAI empty/loading/error + DISCONNECTED_PREVIEW); kept curriculum/model/HUMAN_E6 false."
+  "ci": {
+    "tip": "dd69153a108c2ec591df45a71fd13cafff915b0b",
+    "status": "GREEN",
+    "all_checks_pass": true,
+    "confirmed_utc": "2026-08-12T22:04:27Z",
+    "workflows_sampled": [
+      "CI",
+      "Gate 1 post-merge integrity",
+      "Continuation IX digital release lock",
+      "phase-xii-execution-reality",
+      "phase-xiv-frontier-os",
+      "phase-xv-final-os",
+      "stage2-frontier-os",
+      "Golden Journeys (WP-003)",
+      "wp-007-security-red-team"
+    ]
+  },
+  "reproduction": {
+    "prove_companion_shell_wiring": {
+      "ok": true,
+      "continuity": "SDK_SANDBOX_MEMORY",
+      "creator_runtime": "first_party_apps.creator_studio",
+      "waike_runtime": "first_party_apps.waike_app",
+      "gunnchai_runtime": "first_party_apps.gunnchai_tutor",
+      "sandbox_files": {
+        "app_runtime_log": true,
+        "creator_run": true,
+        "creator_state": true,
+        "tutor_memory": true,
+        "tutor_run": true,
+        "waike_run": true,
+        "waike_state": true
+      },
+      "shell_source_checks": {
+        "creator_studio": {
+          "calls_bridge_api": true,
+          "no_disconnected_preview_success": true
+        },
+        "gunnchai_tutor": {
+          "calls_bridge_api": true,
+          "no_disconnected_preview_success": true
+        },
+        "waike_learning": {
+          "calls_bridge_api": true,
+          "no_disconnected_preview_success": true
+        }
+      },
+      "proved_at_utc": "2026-08-12T22:03:45Z",
+      "local_evidence": "/tmp/vp106_prove_companion_shell_wiring.json"
+    },
+    "pytest_platform001_without_dogfood_rewrite": {
+      "passed": 9,
+      "deselected": 1,
+      "note": "test_dogfood_script_writes_tokens deselected to avoid rewriting implementer dogfood artifacts during independent verify; dogfood was still executed once and then implementer artifacts restored via git checkout"
+    },
+    "dogfood_script_re_run_ok": true,
+    "inspected_implementer_dogfood": "artifacts/platform001/PLATFORM001_RESULT.json"
   },
   "tokens": {
-    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": false,
-    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": false,
-    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": false
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": true
   },
   "token_status": {
-    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL",
-    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL",
-    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": "PARTIAL"
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": "PASS",
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": "PASS",
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": "PASS"
   },
+  "token_claim_boundary": "FIRST_PARTY_*_D5_D6_PASS means platform integration depth only (sdk/apps lifecycle + companion shell↔first_party run_* sandbox I/O + gunnchAI Ask SDK_SANDBOX_MEMORY). Not HUMAN_E6, not full WAIKE curriculum, not frontier model quality, not VISUAL_MODEL_REVIEW, not production release.",
   "apps": {
     "creator_studio": {
-      "D5": false,
-      "D6": false,
-      "token_pass": false,
-      "token_status": "PARTIAL",
+      "D5": true,
+      "D6": true,
+      "token_pass": true,
+      "token_status": "PASS",
       "platform_lifecycle_d5": true,
       "cross_service_d6": true,
+      "companion_shell_wired": true,
+      "runtime": "first_party_apps.creator_studio",
       "S2_OPEN": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable"
-      ],
-      "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
-      "examples_used_as_evidence": false
-    },
-    "gunnchai_tutor": {
-      "D5": false,
-      "D6": false,
-      "token_pass": false,
-      "token_status": "PARTIAL",
-      "platform_lifecycle_d5": true,
-      "cross_service_d6": true,
-      "S2_OPEN": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
         "s2_open_visual_model_review_unavailable",
-        "s2_open_browser_ask_disconnected_from_runtime"
+        "html_companion_shell_still_prototype_ux"
       ],
       "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
       "examples_used_as_evidence": false
     },
     "waike_learning": {
-      "D5": false,
-      "D6": false,
-      "token_pass": false,
-      "token_status": "PARTIAL",
+      "D5": true,
+      "D6": true,
+      "token_pass": true,
+      "token_status": "PASS",
       "platform_lifecycle_d5": true,
       "cross_service_d6": true,
+      "companion_shell_wired": true,
+      "runtime": "first_party_apps.waike_app",
       "S2_OPEN": [
-        "s2_open_companion_shell_not_wired_to_sdk_runtime",
-        "s2_open_visual_model_review_unavailable"
+        "s2_open_visual_model_review_unavailable",
+        "html_companion_shell_still_prototype_ux",
+        "full_waike_curriculum_not_claimed"
+      ],
+      "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+      "examples_used_as_evidence": false
+    },
+    "gunnchai_tutor": {
+      "D5": true,
+      "D6": true,
+      "token_pass": true,
+      "token_status": "PASS",
+      "platform_lifecycle_d5": true,
+      "cross_service_d6": true,
+      "companion_shell_wired": true,
+      "ask_continuity": "SDK_SANDBOX_MEMORY",
+      "ask_disconnected_preview_success": false,
+      "ask_fail_closed_when_bridge_down": true,
+      "runtime": "first_party_apps.gunnchai_tutor",
+      "S2_OPEN": [
+        "s2_open_visual_model_review_unavailable",
+        "html_companion_shell_still_prototype_ux",
+        "frontier_model_quality_not_claimed"
       ],
       "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
       "examples_used_as_evidence": false
     }
   },
-  "honest_claims_after_remediation": true,
-  "overall_result": "PARTIAL",
-  "independent_pass": false,
-  "DEVICE_OS_106_READY_FOR_EDMUND_MERGE": false,
-  "ready_reason": "CI green on tip c4b3a31 after claim-honesty remediation, but CREATOR/WAIKE/GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS remain false/PARTIAL with explicit S2_OPEN (shell\u2194SDK wiring, VISUAL_MODEL_REVIEW UNAVAILABLE, gunnchAI disconnected Ask). Not merge-ready PASS.",
-  "top_gaps": [
-    "Companion shells not wired to gunnchSDK sandbox runtime I/O (blocks all three D5/D6 PASS tokens)",
-    "VISUAL_MODEL_REVIEW=UNAVAILABLE \u2014 no rendered inspect (blocks tokens)",
-    "gunnchAI browser Ask remains DISCONNECTED_PREVIEW (blocks GUNNCHAI token)",
-    "Full WAIKE curriculum + frontier model quality + HUMAN_E6 remain out of scope / false"
+  "S2_closed_digitally": [
+    "s2_open_companion_shell_not_wired_to_sdk_runtime",
+    "s2_open_browser_ask_disconnected_from_runtime"
   ],
+  "remaining_OPEN": [
+    "VISUAL_MODEL_REVIEW=UNAVAILABLE (allowed residual; non-blocking for FIRST_PARTY D5/D6 integration-depth tokens)",
+    "html_companion_shell_still_prototype_ux (non-blocking)",
+    "full_waike_curriculum_not_claimed (false / out of scope)",
+    "frontier_model_quality_not_claimed (false / out of scope)",
+    "HUMAN_E6 NOT_EARNED",
+    "PRODUCTION_RELEASE_CLAIMED=false"
+  ],
+  "honest_claims_after_remediation": true,
+  "overall_result": "PASS",
+  "independent_pass": true,
+  "DEVICE_OS_106_READY_FOR_EDMUND_MERGE": true,
+  "ready_reason": "CI green on live tip dd69153; companion shells hit real first_party run_* sandbox I/O; gunnchAI Ask uses SDK_SANDBOX_MEMORY and fail-closes (no DISCONNECTED_PREVIEW success); lifecycle dogfood + prove_companion_shell_wiring reproduced; FIRST_PARTY_*_D5_D6_PASS allowed for platform integration depth only; curriculum/model/HUMAN_E6 remain false; VISUAL UNAVAILABLE residual OPEN non-blocking.",
   "evidence": [
     "artifacts/platform001/PLATFORM001_RESULT.json",
+    "artifacts/platform001/REMEDIATION_SHELL_SDK_WIRING.json",
     "artifacts/platform001/GAP_REGISTER.json",
-    "artifacts/platform001/AUDIT_NOTE.json",
-    "artifacts/experience_review/creator_studio/",
-    "artifacts/experience_review/waike_learning/",
-    "artifacts/experience_review/gunnchai_tutor/",
+    "artifacts/platform001/VP_PLATFORM001_IMPLEMENTER_REMEDIATION.json",
+    "gunnchos_device_os/first_party_apps/companion_bridge.py",
+    "apps/creator_studio/app.js",
+    "apps/waike_learning/app.js",
+    "apps/gunnchai_tutor/app.js",
     "scripts/platform001_first_party_dogfood.py",
     "tests/platform001/test_first_party_app_depth.py"
   ],
-  "remediation_tip": "9b3a96f05f3f9f87eb26b0d71c2014df98ea9204",
-  "note": "tip_verified tracks branch HEAD at last VP edit; content remediation is remediation_tip 9b3a96f.",
-  "tip_ci_green": "c4b3a31e12faf942c3ac08a89820af4b73dbf5dc",
-  "ci": {
-    "tip": "c4b3a31e12faf942c3ac08a89820af4b73dbf5dc",
-    "status": "GREEN",
-    "all_checks_pass": true,
-    "confirmed_utc": "2026-08-12T21:33:27Z"
-  }
+  "note": "Fresh independent re-verify after implementer shell↔SDK wiring remediation. Did not implement remediation. Did not merge #106. Did not touch #103."
 }
