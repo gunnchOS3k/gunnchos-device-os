@@ -1,0 +1,50 @@
+{
+  "FIRST_PARTY_GAME_SDK_ADOPTION_allowed_as_platform_proof": true,
+  "FIRST_PARTY_SDK_ADOPTION_allowed_as_platform_proof": true,
+  "PRODUCTION_RELEASE_CLAIMED_implementer": false,
+  "forbidden_claims_absent_from_exit_tokens": true,
+  "forbidden_claims_not_asserted_true": true,
+  "forbidden_present": [],
+  "forbidden_true_hits": [],
+  "must_remain_false": {
+    "CREATOR_STUDIO_PRODUCT_COMPLETE": false,
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+    "PRODUCTION_RELEASE_CLAIMED": false,
+    "WAIKE_APP_PRODUCT_COMPLETE": false
+  },
+  "ok": true,
+  "sdk_apps_classification": {
+    "creator_studio": {
+      "classification": "thin_client_D4_D5_foundation",
+      "main_lines": 29,
+      "notes": "First-party SDK package caller proving build/package/install/run \u2014 not CREATOR/WAIKE/GUNNCHAI product-complete.",
+      "path": "sdk/apps/creator_studio",
+      "product_complete": false
+    },
+    "gunnchai_tutor": {
+      "classification": "thin_client_D4_D5_foundation",
+      "main_lines": 41,
+      "notes": "First-party SDK package caller proving build/package/install/run \u2014 not CREATOR/WAIKE/GUNNCHAI product-complete.",
+      "path": "sdk/apps/gunnchai_tutor",
+      "product_complete": false
+    },
+    "pedestrian_pursuit": {
+      "classification": "godot_adoption_harness_only",
+      "notes": "Harness + packaging path for FIRST_PARTY_GAME_SDK_ADOPTION platform proof.",
+      "path": "sdk/apps/pedestrian_pursuit",
+      "product_complete": false
+    },
+    "waike_learning": {
+      "classification": "thin_client_D4_D5_foundation",
+      "main_lines": 27,
+      "notes": "First-party SDK package caller proving build/package/install/run \u2014 not CREATOR/WAIKE/GUNNCHAI product-complete.",
+      "path": "sdk/apps/waike_learning",
+      "product_complete": false
+    }
+  },
+  "sdk_examples_are_tutorials_only": [
+    "creator_stub",
+    "gunnchai_client_stub",
+    "waike_stub"
+  ]
+}
