@@ -1,5 +1,5 @@
 {
-  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "RFB_HANDSHAKE_ALONE_ACCEPTED": false,
   "HOST_SCREENDUMP_ALONE_INSUFFICIENT": true,
@@ -201,5 +201,15 @@
   "diff_bytes": 0,
   "before_after_changed": true,
   "missing": [],
-  "note": "Guest FB before/after non-blank+changed, mousepad alive, typed marker in document"
+  "note": "INDEPENDENT DEMOTION: truncated guest PNG FB; identical shell PPMs; host screendump alone insufficient",
+  "INDEPENDENT_DEMOTION": {
+    "at_utc": "2026-08-12T13:18:06Z",
+    "tip": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
+    "reasons": [
+      "committed shell_app_before/after.png are truncated 16384-byte PNGs (IHDR+IDAT, no IEND; PIL truncated)",
+      "_image_nonblank only checks len>4096 for PNG \u2014 accepts incomplete captures",
+      "shell_app_before.ppm identical to shell_app_after.ppm (diff_bytes=0)",
+      "host_fb PPM changed but HOST_SCREENDUMP_ALONE_INSUFFICIENT per claim boundary"
+    ]
+  }
 }

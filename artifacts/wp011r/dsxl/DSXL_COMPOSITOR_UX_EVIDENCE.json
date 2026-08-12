@@ -1,5 +1,5 @@
 {
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
   "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
   "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
   "prefer_fail_over_false_pass": true,
@@ -93,9 +93,9 @@
     "layout_restored": true
   },
   "phase_c_ux": {
-    "placement_proven": true,
-    "focus_ok": true,
-    "fb_both": true,
+    "placement_proven": false,
+    "focus_ok": false,
+    "fb_both": false,
     "windows_launched": {
       "foot": {
         "ok": true,
@@ -149,23 +149,28 @@
           "ok": true
         }
       }
-    ]
+    ],
+    "independent_note": "fb_method=two_guest_png_hashes counted ANY two historical screenshot hashes across hours of prior runs; placement_halves={ok:false,error:not_png}; no dual PNGs committed; window output_ids assigned without half proof"
   },
   "compositor_ux_gate": {
-    "ok": true,
-    "gate": "PASS_DSXL_COMPOSITOR_UX",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "ok": false,
+    "gate": "FAIL_DSXL_COMPOSITOR_UX_INDEPENDENT_DEMOTION",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
     "checks": {
       "two_outputs": true,
       "two_compositor_surfaces": true,
-      "window_placement": true,
-      "focus_move": true,
+      "window_placement": false,
+      "focus_move": false,
       "disconnect": true,
       "reconnect": true,
       "layout_restore": true
     },
-    "missing": [],
+    "missing": [
+      "window_placement_on_both_outputs_proven",
+      "fb_evidence_both_outputs_this_run",
+      "dual_pngs_committed"
+    ],
     "windows": [
       {
         "app_id": "foot",
@@ -291,8 +296,19 @@
     ],
     "SILICON_EXACT_EMULATION": false,
     "PHYSICAL_DUAL_PANEL": "PENDING",
-    "note": "DSXL UX PASS earned"
+    "note": "Independent demotion: invented placement + stale multi-hash FB"
   },
   "GUEST_DUAL_OUTPUT_PASS_retained": true,
-  "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
+  "note": "INDEPENDENT DEMOTION: invented placement + stale hash FB; dual PNGs missing",
+  "INDEPENDENT_DEMOTION": {
+    "at_utc": "2026-08-12T13:18:06Z",
+    "tip": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
+    "reasons": [
+      "placement_halves failed (not_png) \u2014 no left/right FB proof",
+      "placement_proven invented: foot/mousepad labeled left/right without half hashes",
+      "fb_both via grim_both on stale screenshot directory (many prior-run hashes)",
+      "no dual PNGs committed under artifacts/wp011r/dsxl/",
+      "prefer FAIL: reboot-reconfig disconnect does not salvage invented placement"
+    ]
+  }
 }

@@ -1,38 +1,38 @@
 {
   "schema": "gunnchos.device_lab.acceptance_matrix.v1",
   "wave": "WP-011R",
-  "assessed_at_utc": "2026-08-11T22:43:39Z",
-  "assessed_tip": "769d898924aa2aa007abd80b4d9da06b3b52b6e8",
+  "assessed_at_utc": "2026-08-12T13:18:06Z",
+  "assessed_tip": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
   "rows": [
     {
       "requirement": "Four production game runtimes",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "result": "FAIL",
-      "note": "Pedestrian Chromium web/lab probe; Godot input/save open"
+      "result": "PASS",
+      "note": "In-guest Chromium Wayland web titles + Pedestrian Godot4 save retained"
     },
     {
       "requirement": "Live gunnchOS shell/compositor visual",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
       "result": "FAIL",
-      "note": "Guest FB fail; host_fb uncommitted; shell_app blank"
+      "note": "Truncated 16KiB guest PNGs; identical shell PPMs; host FB alone insufficient"
     },
     {
       "requirement": "DS-XL dual compositor UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "result": "FAIL",
-      "note": "DRM/wl_output ≠ compositor_ux_gate"
+      "note": "Invented placement; placement_halves not_png; stale hash FB; dual PNGs missing"
     },
     {
-      "requirement": "Ring→in-guest app mutation",
+      "requirement": "Ring\u2192in-guest app mutation",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "result": "FAIL",
-      "note": "uinput mousepad only"
+      "note": "Lab Ring surface sidecars; guest ODT marker uncommitted"
     },
     {
-      "requirement": "ECO-010 full simultaneous soak ≥1800s",
+      "requirement": "ECO-010 full simultaneous soak \u22651800s",
       "token": "ECO010_SOAK_PASS",
       "result": "PASS",
-      "note": "1800.05s; not dry/shortened; Lab sessions qemu=null caveat"
+      "note": "1800.05s; dry_check=false; not shortened"
     },
     {
       "requirement": "Development guest labeled",
@@ -44,13 +44,13 @@
       "requirement": "Independent score re-derived",
       "token": "SCORE_INDEPENDENT",
       "result": "PASS",
-      "note": "mean=5.67; no hardcoded 10s"
+      "note": "Recomputed after demotion; no hardcoded 10s"
     },
     {
       "requirement": "Master digital complete",
       "token": "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE",
       "result": "FAIL",
-      "note": "Open digitally executable requirements"
+      "note": "Five-gate AND false; shipping/silicon master false; PHYSICAL_PENDING"
     }
   ]
 }

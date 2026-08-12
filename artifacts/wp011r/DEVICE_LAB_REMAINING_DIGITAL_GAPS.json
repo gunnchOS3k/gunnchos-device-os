@@ -25,9 +25,9 @@
   },
   "pass_tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-    "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
@@ -48,25 +48,25 @@
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "Guest FB before/after nonblank+changed; mousepad alive; typed marker in document; Super+s via weston.ini.",
+      "status": "OPEN_DEMOTION",
+      "earned": false,
+      "summary": "INDEPENDENT DEMOTION: truncated guest PNG FB (16384B no IEND); identical shell PPMs; host screendump alone insufficient.",
       "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json"
     },
     {
       "id": "GAP-DSXL-COMPOSITOR-UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "Earned: gpu0 max_outputs=2 (2 Weston wl_outputs) + QEMU reboot reconfig 2→1→2 disconnect/reconnect; windows on both; focus move; two guest PNG hashes. DRM enum alone insufficient. QEMU 11 virtio-gpu has no hotplug.",
+      "status": "OPEN_DEMOTION",
+      "earned": false,
+      "summary": "INDEPENDENT DEMOTION: placement_halves not_png; invented placement; stale multi-hash FB; dual PNGs uncommitted.",
       "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
     },
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "Earned same-run: Ring via_stack → guest uinput/HID mutated LibreOffice Writer ODT marker, Chromium collector clicks, and Godot Pedestrian this-run save (pre-launch missing → saved_at this run). mousepad-alone rejected. Spatial remains SIMULATED.",
+      "status": "OPEN_DEMOTION",
+      "earned": false,
+      "summary": "INDEPENDENT DEMOTION: Lab Ring surface sidecars; guest ODT marker not committed; prefer FAIL.",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     },
     {
@@ -85,12 +85,14 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Cycle 3B WP-011R: LIVE+DSXL+RING+FOUR+ECO010 earned under independent evidence rules. Shipping/silicon master remains false (dev guest, VF4/5/6 PHYSICAL_PENDING). Cursor never merges.",
+  "note": "Independent verifier demotion at d4ba2a1: LIVE+DSXL+RING false; FOUR+ECO010 retained; shipping master false.",
   "independent_audit": {
-    "source": "Cycle3B_WP011R_continue",
-    "accepted_tip_audited": "091c2e0+",
-    "verdict": "FIVE_GATE_DIGITAL_AND_TRUE_SHIPPING_MASTER_FALSE",
-    "note": "Prefer FAIL over false PASS. RING revoked once for stale Godot save; re-earned with pre-launch empty userdata."
+    "source": "independent_verifier_adversarial",
+    "accepted_tip_audited": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
+    "verdict": "FAIL_DEMOTION_LIVE_DSXL_RING",
+    "five_gate_digital_and": false,
+    "shipping_master": false,
+    "note": "Prefer FAIL over false PASS. Cursor never merges. WP-001 DO_NOT_START."
   },
   "score_inflation_risk": [
     "live_visual_interaction grade inflation from RFB banner or blank screendump noise",
@@ -99,12 +101,12 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-12T13:06:08Z",
+  "updated_at_utc": "2026-08-12T13:18:06Z",
   "cycle3b_continue": {
-    "LIVE": "true — guest FB before/after + input-visible delta same run",
-    "DSXL": "true — max_outputs=2 compositor UX + reboot reconfig 2→1→2",
-    "RING": "true — same-run LO ODT marker + browser clicks + Godot this-run save",
-    "FOUR": "true aggregate — all four in-guest earns",
+    "LIVE": false,
+    "DSXL": false,
+    "RING": false,
+    "FOUR": true,
     "ECO010": true,
     "GUEST_DUAL": true
   }

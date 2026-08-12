@@ -1,13 +1,13 @@
 {
   "schema": "gunnchos.wp011r.cycle3b_dsxl_ring.v1",
   "started_at_utc": "2026-08-12T13:02:25Z",
-  "LIVE_GUNNCHOS_VISUAL_PASS_retained": true,
+  "LIVE_GUNNCHOS_VISUAL_PASS_retained": false,
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS_retained": true,
   "ECO010_SOAK_PASS": true,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "prefer_fail_over_false_pass": true,
   "dsxl": {
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
     "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
     "prefer_fail_over_false_pass": true,
@@ -160,9 +160,9 @@
       ]
     },
     "compositor_ux_gate": {
-      "ok": true,
+      "ok": false,
       "gate": "PASS_DSXL_COMPOSITOR_UX",
-      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
       "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
       "checks": {
         "two_outputs": true,
@@ -308,9 +308,9 @@
     "ok": true
   },
   "tokens": {
-    "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "ECO010_SOAK_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
@@ -326,7 +326,7 @@
     "game": true
   },
   "finished_at_utc": "2026-08-12T13:06:08Z",
-  "edmund": "independent-review-ready \u2014 still DRAFT; Cursor never merges",
+  "edmund": "do-not-merge \u2014 independent demoted LIVE/DSXL/RING; Cursor never merges",
   "four_games": {
     "anime-aggressors": {
       "earned": true,
@@ -346,5 +346,13 @@
     }
   },
   "pedestrian_godot_earned": true,
-  "four_note": "All four games earned in-guest Chromium Wayland runtime proofs"
+  "four_note": "All four games earned in-guest Chromium Wayland runtime proofs",
+  "independent_demotion": {
+    "at_utc": "2026-08-12T13:18:06Z",
+    "LIVE": false,
+    "DSXL": false,
+    "RING": false,
+    "FOUR": true,
+    "ECO010": true
+  }
 }

@@ -15,9 +15,9 @@
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-  "LIVE_GUNNCHOS_VISUAL_PASS": true,
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "LIVE_GUNNCHOS_VISUAL_PASS": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
@@ -80,13 +80,12 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Cycle 3B WP-011R — prefer FAIL over false PASS",
-    "ECO010_SOAK_PASS + GUEST_DUAL_OUTPUT_PASS retained",
-    "LIVE: earned — guest FB before/after nonblank+changed + input-visible marker",
-    "DSXL: earned — gpu0 max_outputs=2 Weston 2 wl_output + reboot reconfig 2→1→2; two guest PNG hashes; DRM enum alone insufficient",
-    "RING: earned — same-run Ring via_stack HID mutated LibreOffice ODT marker + browser clicks + Godot Pedestrian this-run save (pre-launch empty → saved_at this run)",
-    "FOUR: aggregate EARNED — all four in-guest (Chromium web + Godot4 Pedestrian)",
-    "Independent five-gate AND is true; shipping/silicon GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE stays false (dev guest, VF4/5/6 PHYSICAL_PENDING)",
+    "Cycle 3B WP-011R \u2014 independent verifier demotion at tip d4ba2a1; prefer FAIL over false PASS",
+    "ECO010_SOAK_PASS + GUEST_DUAL_OUTPUT_PASS + FOUR_GAME retained",
+    "LIVE DEMOTION: truncated 16KiB guest PNGs (no IEND); identical shell PPMs; host FB alone insufficient",
+    "DSXL DEMOTION: placement_halves not_png; invented left/right; stale screenshot-hash FB; dual PNGs uncommitted",
+    "RING DEMOTION: committed sidecars are Lab Ring surfaces; guest ODT marker not committed",
+    "Independent five-gate AND false; shipping/silicon master remains false",
     "WP-001 DO_NOT_START; Cursor never merges"
   ],
   "wave6_interactive_guest": {
@@ -113,6 +112,6 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-12T13:06:08Z",
+  "updated_at_utc": "2026-08-12T13:18:06Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json"
 }
