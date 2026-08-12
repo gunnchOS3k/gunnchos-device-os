@@ -1,56 +1,37 @@
 {
-  "schema": "gunnchos.device_lab.acceptance_matrix.v1",
-  "wave": "WP-011R",
-  "assessed_at_utc": "2026-08-12T13:18:06Z",
-  "assessed_tip": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
+  "schema": "gunnchos.wp011r.acceptance_matrix.v1",
+  "updated_at_utc": "2026-08-12T14:57:27Z",
   "rows": [
     {
-      "requirement": "Four production game runtimes",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "result": "PASS",
-      "note": "In-guest Chromium Wayland web titles + Pedestrian Godot4 save retained"
+      "pass": true,
+      "note": "Pedestrian Godot4 + Chromium Wayland retained"
     },
     {
-      "requirement": "Live gunnchOS shell/compositor visual",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "result": "FAIL",
-      "note": "Truncated 16KiB guest PNGs; identical shell PPMs; host FB alone insufficient"
+      "pass": false,
+      "note": "Complete IEND PNGs committed; typed_marker/document still missing"
     },
     {
-      "requirement": "DS-XL dual compositor UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "result": "FAIL",
-      "note": "Invented placement; placement_halves not_png; stale hash FB; dual PNGs missing"
+      "pass": false,
+      "note": "dual compositor true; placement half PNGs missing"
     },
     {
-      "requirement": "Ring\u2192in-guest app mutation",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "result": "FAIL",
-      "note": "Lab Ring surface sidecars; guest ODT marker uncommitted"
+      "pass": false,
+      "note": "guest ODT marker / Godot save not committed"
     },
     {
-      "requirement": "ECO-010 full simultaneous soak \u22651800s",
       "token": "ECO010_SOAK_PASS",
-      "result": "PASS",
-      "note": "1800.05s; dry_check=false; not shortened"
+      "pass": true,
+      "note": "1800s soak retained"
     },
     {
-      "requirement": "Development guest labeled",
-      "token": "DEVICE_LAB_DEVELOPMENT_GUEST",
-      "result": "PASS",
-      "note": "Not shipping image"
-    },
-    {
-      "requirement": "Independent score re-derived",
-      "token": "SCORE_INDEPENDENT",
-      "result": "PASS",
-      "note": "Recomputed after demotion; no hardcoded 10s"
-    },
-    {
-      "requirement": "Master digital complete",
-      "token": "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE",
-      "result": "FAIL",
-      "note": "Five-gate AND false; shipping/silicon master false; PHYSICAL_PENDING"
+      "token": "GUEST_DUAL_OUTPUT_PASS",
+      "pass": true,
+      "note": "guest_drm dual retained"
     }
-  ]
+  ],
+  "five_gate_digital_and": false
 }

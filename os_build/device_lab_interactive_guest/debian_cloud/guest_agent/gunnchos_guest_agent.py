@@ -243,6 +243,42 @@ def cmd_file_put(req: dict[str, Any]) -> dict[str, Any]:
         return _fail("file_put", f"write_failed:{exc}", path=path)
 
 
+def cmd_file_get(req: dict[str, Any]) -> dict[str, Any]:
+    """Read a guest file chunk as base64 (offset/length). Avoids virtio-serial PNG truncation."""
+    import base64
+    import hashlib
+
+    path = str(req.get("path") or "")
+    if not path:
+        return _fail("file_get", "missing_path")
+    try:
+        offset = max(0, int(req.get("offset") or 0))
+        length = int(req.get("length") or 24_000)
+    except (TypeError, ValueError):
+        return _fail("file_get", "bad_offset_or_length")
+    length = max(1, min(length, 48_000))
+    p = Path(path)
+    if not p.is_file():
+        return _fail("file_get", "not_found", path=path)
+    try:
+        size = p.stat().st_size
+        with p.open("rb") as fh:
+            fh.seek(offset)
+            raw = fh.read(length)
+    except OSError as exc:
+        return _fail("file_get", f"read_failed:{exc}", path=path)
+    return _ok(
+        "file_get",
+        path=path,
+        offset=offset,
+        bytes=len(raw),
+        size=size,
+        eof=offset + len(raw) >= size,
+        sha256_chunk=hashlib.sha256(raw).hexdigest(),
+        bytes_b64=base64.b64encode(raw).decode("ascii"),
+    )
+
+
 def cmd_process_stop(req: dict[str, Any]) -> dict[str, Any]:
     name = str(req.get("name") or "")
     proc = _procs.get(name)
@@ -615,10 +651,71 @@ def _collect_pngs(roots: list[Path]) -> set[Path]:
     return found
 
 
+def _png_has_iend(data: bytes) -> bool:
+    """Complete PNG must include IEND. Weston often flushes 16KiB mid-write."""
+    if len(data) < 24 or not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return False
+    # Standard trailer: 00 00 00 00 49 45 4E 44 + 4-byte CRC
+    return b"\x00\x00\x00\x00IEND" in data
+
+
+def _wait_png_complete(path: Path, *, timeout_s: float = 10.0) -> tuple[bool, bytes]:
+    """Wait until size stabilizes and IEND is present (fixes 16384B truncation race)."""
+    deadline = time.time() + timeout_s
+    last_size = -1
+    stable = 0
+    raw = b""
+    while time.time() < deadline:
+        try:
+            size = path.stat().st_size
+        except OSError:
+            time.sleep(0.1)
+            continue
+        if size < 256:
+            last_size = size
+            stable = 0
+            time.sleep(0.15)
+            continue
+        if size == last_size:
+            stable += 1
+        else:
+            stable = 0
+            last_size = size
+        if stable >= 3:
+            try:
+                raw = path.read_bytes()
+            except OSError:
+                time.sleep(0.1)
+                continue
+            if _png_has_iend(raw) and len(raw) > 4096:
+                return True, raw
+            # Stable but incomplete — keep waiting (writer may still append).
+            stable = 0
+        time.sleep(0.12)
+    try:
+        raw = path.read_bytes()
+    except OSError:
+        raw = b""
+    return _png_has_iend(raw) and len(raw) > 4096, raw
+
+
 def _png_ok_response(path: Path, *, via: str) -> dict[str, Any]:
     import base64
 
-    raw = path.read_bytes()
+    ok_complete, raw = _wait_png_complete(path)
+    if not ok_complete:
+        return _fail(
+            "framebuffer_capture",
+            "truncated_or_incomplete_png",
+            path=str(path),
+            bytes=len(raw),
+            via=via,
+            note=(
+                "Screenshot lacked IEND or was still growing (classic 16KiB mid-write race). "
+                "Incomplete PNGs are never accepted."
+            ),
+            has_iend=_png_has_iend(raw),
+        )
     if len(raw) < 256:
         return _fail(
             "framebuffer_capture",
@@ -628,15 +725,30 @@ def _png_ok_response(path: Path, *, via: str) -> dict[str, Any]:
             via=via,
             note="Screenshot file existed but was empty/tiny — not a valid guest framebuffer",
         )
-    return _ok(
+    # Prefer path+sha for large shots; still include bytes_b64 when small enough
+    # for virtio-serial (≈48KiB raw ≈64KiB b64 keeps line writes reliable).
+    import hashlib
+
+    digest = hashlib.sha256(raw).hexdigest()
+    resp = _ok(
         "framebuffer_capture",
         path=str(path),
         bytes=len(raw),
         format="png",
-        bytes_b64=base64.b64encode(raw).decode("ascii"),
+        sha256=digest,
         synthetic=False,
         via=via,
+        png_complete=True,
+        has_iend=True,
     )
+    if len(raw) <= 48_000:
+        resp["bytes_b64"] = base64.b64encode(raw).decode("ascii")
+    else:
+        resp["bytes_b64_omitted"] = True
+        resp["note"] = (
+            "PNG complete on guest disk; bytes_b64 omitted (>48KiB) — host must file_get by path"
+        )
+    return resp
 
 
 def _fbdev_ppm_capture() -> Path | None:
@@ -723,11 +835,13 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
                     "stderr": (shot.stderr or "")[:400],
                 }
             )
-            deadline = time.time() + 3.0
+            deadline = time.time() + 6.0
             while time.time() < deadline:
                 newly = _collect_pngs(_screenshot_search_roots()) - before
                 if newly:
-                    return _png_ok_response(sorted(newly)[0], via="weston_screenshooter_cli")
+                    resp = _png_ok_response(sorted(newly)[0], via="weston_screenshooter_cli")
+                    if resp.get("ok"):
+                        return resp
                 time.sleep(0.15)
     except (OSError, subprocess.TimeoutExpired) as exc:
         attempts.append({"via": "weston_screenshooter_cli", "error": str(exc)})
@@ -751,7 +865,7 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
         attempts.append({"via": "weston_screenshooter_super_s_uinput", "error": str(exc)})
         # Fall through to fbdev before failing hard.
 
-    deadline = time.time() + 4.0
+    deadline = time.time() + 8.0
     while time.time() < deadline:
         newly = _collect_pngs(_screenshot_search_roots()) - before
         if newly:
@@ -774,7 +888,24 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
                     continue
             except OSError:
                 pass
-            return _png_ok_response(cand, via="weston_screenshooter_super_s_uinput")
+            # Wait for IEND — do not accept mid-write 16KiB flushes.
+            resp = _png_ok_response(cand, via="weston_screenshooter_super_s_uinput")
+            if resp.get("ok"):
+                return resp
+            attempts.append(
+                {
+                    "via": "weston_screenshooter_super_s_uinput",
+                    "incomplete": str(cand),
+                    "bytes": resp.get("bytes"),
+                    "error": resp.get("error") or resp.get("reason"),
+                }
+            )
+            try:
+                cand.unlink()
+            except OSError:
+                pass
+            before = _collect_pngs(_screenshot_search_roots())
+            continue
         time.sleep(0.2)
 
     # 4) fbdev PPM when /dev/fb0 exists (often absent on pure DRM virtio-gpu).
@@ -848,7 +979,19 @@ HANDLERS = {
     "compositor_info": cmd_compositor_info,
     "app_launch": cmd_app_launch,
     "file_put": cmd_file_put,
+    "file_get": cmd_file_get,
 }
+
+
+def _write_all(fh: Any, data: bytes) -> None:
+    """Write full response; virtio-serial may partial-write large JSON lines."""
+    view = memoryview(data)
+    while len(view):
+        n = fh.write(view)
+        if not n:
+            time.sleep(0.01)
+            continue
+        view = view[n:]
 
 
 def serve_forever() -> None:
@@ -884,7 +1027,7 @@ def serve_forever() -> None:
                         except Exception as exc:  # noqa: BLE001 - never let one bad request kill the loop
                             resp = _fail(str(cmd), f"handler_exception:{exc}")
                         line = (json.dumps(resp, separators=(",", ":")) + "\n").encode("utf-8")
-                        fh.write(line)
+                        _write_all(fh, line)
         except OSError as exc:
             _log(f"port error, reopening: {exc}")
             time.sleep(1.0)

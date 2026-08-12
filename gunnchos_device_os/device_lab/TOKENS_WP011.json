@@ -80,13 +80,10 @@
     "qemu_websocket": true
   },
   "notes": [
-    "Cycle 3B WP-011R \u2014 independent verifier demotion at tip d4ba2a1; prefer FAIL over false PASS",
-    "ECO010_SOAK_PASS + GUEST_DUAL_OUTPUT_PASS + FOUR_GAME retained",
-    "LIVE DEMOTION: truncated 16KiB guest PNGs (no IEND); identical shell PPMs; host FB alone insufficient",
-    "DSXL DEMOTION: placement_halves not_png; invented left/right; stale screenshot-hash FB; dual PNGs uncommitted",
-    "RING DEMOTION: committed sidecars are Lab Ring surfaces; guest ODT marker not committed",
-    "Independent five-gate AND false; shipping/silicon master remains false",
-    "WP-001 DO_NOT_START; Cursor never merges"
+    "LIVE: capture path fixed (IEND+stable wait+file_get); complete before/after PNGs committed but typed_marker/document read still fails \u2014 token false",
+    "DSXL: dual wl_output earned; placement_halves PNGs not committed this-run \u2014 token false",
+    "RING: agent stall / Lab sidecars rejected; guest ODT marker not committed \u2014 token false",
+    "FOUR_GAME + ECO010 + GUEST_DUAL_OUTPUT retained"
   ],
   "wave6_interactive_guest": {
     "readme": "os_build/device_lab_interactive_guest/README.md",
@@ -113,5 +110,6 @@
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
   "updated_at_utc": "2026-08-12T13:18:06Z",
-  "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json"
+  "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
+  "five_gate_digital_and": false
 }

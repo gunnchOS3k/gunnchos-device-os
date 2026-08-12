@@ -91,6 +91,14 @@ def _require_real_virtio_serial(resp: dict[str, Any]) -> bool:
     return resp.get("ok") is not False or "reason" in resp  # allow honest ok:false diagnostics through
 
 
+def _png_complete(data: bytes) -> bool:
+    return (
+        len(data) > 4096
+        and data.startswith(b"\x89PNG\r\n\x1a\n")
+        and b"\x00\x00\x00\x00IEND" in data
+    )
+
+
 def _image_nonblank(data: bytes) -> tuple[bool, str]:
     import hashlib
 
@@ -98,22 +106,78 @@ def _image_nonblank(data: bytes) -> tuple[bool, str]:
         return False, ""
     digest = hashlib.sha256(data).hexdigest()
     if data.startswith(b"\x89PNG"):
-        # PNG: reject tiny / nearly-empty payloads; require meaningful size.
-        return len(data) > 4096, digest
+        # Require complete PNG (IEND). len>4096 alone accepted truncated 16KiB shots.
+        if not _png_complete(data):
+            return False, digest
+        return True, digest
     if data.startswith(b"P6"):
         try:
             _, body = data.split(b"\n255\n", 1)
         except ValueError:
             return False, digest
         ratio = (sum(1 for b in body if b != 0) / len(body)) if body else 0.0
+        # Reject identical blank/near-blank PPMs.
         return ratio > 0.01, digest
     return len(data) > 4096, digest
 
 
+def _pull_guest_file(session: Any, path: str, *, chunk: int = 24_000) -> bytes:
+    """Pull full guest file via chunked file_get (survives large PNGs / ODT)."""
+    out = bytearray()
+    offset = 0
+    for _ in range(512):
+        resp = _agent_call(
+            session,
+            "file_get",
+            path=path,
+            offset=offset,
+            length=chunk,
+            timeout_sec=30.0,
+        )
+        if not resp.get("ok") or not resp.get("bytes_b64"):
+            # Older guest agent without file_get — fall back to process_run base64 slice.
+            if resp.get("error") in {"unknown_cmd", "unix_connect_failed"} or "unknown" in str(
+                resp.get("error") or ""
+            ):
+                break
+            if resp.get("error") == "not_found":
+                return bytes(out)
+            break
+        piece = base64.b64decode(resp["bytes_b64"])
+        if not piece:
+            break
+        out.extend(piece)
+        offset += len(piece)
+        if resp.get("eof") or len(piece) < chunk:
+            return bytes(out)
+    if out:
+        return bytes(out)
+    # Fallback: single-shot base64 via python in guest (small files).
+    probe = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "python3",
+            "-c",
+            (
+                "import base64,pathlib,sys;\n"
+                f"p=pathlib.Path({path!r});\n"
+                "sys.stdout.write(base64.b64encode(p.read_bytes()).decode() if p.is_file() else '')\n"
+            ),
+        ],
+        timeout_sec=60.0,
+    )
+    b64 = (probe.get("stdout") or "").strip()
+    if not b64:
+        return b""
+    try:
+        return base64.b64decode(b64)
+    except Exception:
+        return b""
 
 
 def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) -> dict[str, Any]:
-    """Retry framebuffer_capture until non-empty nonblank image (Super+s can race)."""
+    """Retry framebuffer_capture until complete nonblank PNG (IEND required)."""
     last: dict[str, Any] = {"ok": False}
     for i in range(retries):
         # Re-ping before each attempt — Super+s can briefly stall virtio-serial.
@@ -132,12 +196,22 @@ def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) 
             timeout_sec=10.0,
         )
         time.sleep(settle_s if i == 0 else 1.0)
-        cap = _agent_call(session, "framebuffer_capture", timeout_sec=45.0)
+        cap = _agent_call(session, "framebuffer_capture", timeout_sec=60.0)
         last = cap
         raw = base64.b64decode(cap["bytes_b64"]) if cap.get("bytes_b64") else b""
+        # Prefer path pull when agent omitted/truncated bytes_b64 or PNG incomplete.
+        guest_path = str(cap.get("path") or "")
+        if guest_path and (cap.get("bytes_b64_omitted") or not _png_complete(raw)):
+            pulled = _pull_guest_file(session, guest_path)
+            if _png_complete(pulled):
+                raw = pulled
+                cap["bytes"] = len(raw)
+                cap["pulled_via"] = "file_get"
+                cap["png_complete"] = True
         nb, _ = _image_nonblank(raw)
-        if cap.get("ok") and nb and len(raw) > 4096 and cap.get("synthetic") is not True:
+        if cap.get("ok") and nb and _png_complete(raw) and cap.get("synthetic") is not True:
             cap["_decoded_bytes"] = raw
+            cap["png_complete"] = True
             return cap
         # Agent stall recovery between Super+s attempts.
         if cap.get("error") == "unix_connect_failed":
@@ -153,7 +227,75 @@ def _capture_guest_fb(session: Any, *, retries: int = 5, settle_s: float = 1.0) 
     last["_decoded_bytes"] = (
         base64.b64decode(last["bytes_b64"]) if last.get("bytes_b64") else b""
     )
+    if last.get("path") and not _png_complete(last.get("_decoded_bytes") or b""):
+        pulled = _pull_guest_file(session, str(last["path"]))
+        if pulled:
+            last["_decoded_bytes"] = pulled
     return last
+
+
+def _rgb_halves_to_pngs(data: bytes) -> dict[str, Any]:
+    """Decode RGB PNG, emit left/right half PNG bytes for DSXL evidence."""
+    import struct
+    import zlib
+    import hashlib
+
+    halves = _png_half_sha256(data)
+    out: dict[str, Any] = {"placement_halves": halves, "ok": False}
+    if not halves.get("ok"):
+        return out
+    magic = bytes([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
+    pos = 8
+    width = height = None
+    idat = bytearray()
+    while pos + 8 <= len(data):
+        length = struct.unpack(">I", data[pos : pos + 4])[0]
+        ctype = data[pos + 4 : pos + 8]
+        chunk = data[pos + 8 : pos + 8 + length]
+        pos = pos + 12 + length
+        if ctype == b"IHDR":
+            width, height = struct.unpack(">II", chunk[:8])
+        elif ctype == b"IDAT":
+            idat.extend(chunk)
+        elif ctype == b"IEND":
+            break
+    if not width or not height or not idat:
+        return out
+    raw = zlib.decompress(bytes(idat))
+    stride = width * 3 + 1
+    mid = width // 2
+
+    def _pack(w: int, h: int, rgb_rows: bytes) -> bytes:
+        def chunk(tag: bytes, body: bytes) -> bytes:
+            return struct.pack(">I", len(body)) + tag + body + struct.pack(">I", zlib.crc32(tag + body) & 0xFFFFFFFF)
+
+        ihdr = struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)
+        return magic + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(rgb_rows, 9)) + chunk(b"IEND", b"")
+
+    left_rows = bytearray()
+    right_rows = bytearray()
+    for y in range(height):
+        row = raw[y * stride + 1 : y * stride + 1 + width * 3]
+        left_rows.append(0)
+        left_rows.extend(row[: mid * 3])
+        right_rows.append(0)
+        right_rows.extend(row[mid * 3 :])
+    left_png = _pack(mid, height, bytes(left_rows))
+    right_png = _pack(width - mid, height, bytes(right_rows))
+    out.update(
+        {
+            "ok": True,
+            "left_png": left_png,
+            "right_png": right_png,
+            "left_bytes": len(left_png),
+            "right_bytes": len(right_png),
+            "left_sha256": hashlib.sha256(left_png).hexdigest(),
+            "right_sha256": hashlib.sha256(right_png).hexdigest(),
+            "combined_width": width,
+            "height": height,
+        }
+    )
+    return out
 
 
 def _qemu_monitor_lines(session: Any, cmd_line: str, *, wait_s: float = 0.4) -> str:
@@ -338,9 +480,21 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
         monitor_sock=getattr(session, "monitor_sock", None), key="a", agent=session.agent
     )
     result["input_injection"] = inj
+    # Re-focus mousepad editor surface before typing marker.
+    for dx, dy in ((200, 180), (220, 200), (180, 160)):
+        _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0)
+        time.sleep(0.25)
     typed = _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
     result["typed_marker"] = typed
+    # Also type via QEMU sendkey as belt-and-suspenders for compositor focus races.
+    for ch in marker:
+        if ch.isupper():
+            _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.04)
+        elif ch.isdigit() or ch.islower():
+            _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.04)
+    time.sleep(0.5)
     _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
+    _qemu_monitor_lines(session, "sendkey ctrl-s")
     time.sleep(2.0)
     # Ensure agent is responsive after typing before second Super+s capture.
     for _ in range(6):
@@ -370,6 +524,16 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     guest_after_path = evidence_dir / (
         "shell_app_after.png" if after_bytes.startswith(b"\x89PNG") else "shell_app_after.ppm"
     )
+    # Drop stale identical PPMs from prior demoted runs so review does not cite them.
+    for stale in (
+        evidence_dir / "shell_app_before.ppm",
+        evidence_dir / "shell_app_after.ppm",
+    ):
+        try:
+            if stale.exists():
+                stale.unlink()
+        except OSError:
+            pass
     if before_bytes:
         guest_before_path.write_bytes(before_bytes)
     if after_bytes:
@@ -399,6 +563,7 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
 
     guest_nb_b, guest_sha_b = _image_nonblank(before_bytes)
     guest_nb_a, guest_sha_a = _image_nonblank(after_bytes)
+    png_ok = _png_complete(before_bytes) and _png_complete(after_bytes)
     guest_fb_ok = bool(
         before.get("ok")
         and after.get("ok")
@@ -406,15 +571,21 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
         and after.get("synthetic") is not True
         and guest_nb_b
         and guest_nb_a
+        and png_ok
         and guest_sha_b
         and guest_sha_a
         and guest_sha_b != guest_sha_a
+        and before_bytes != after_bytes
     )
     result["guest_framebuffer"] = {
         "before_ok": bool(before.get("ok")),
         "after_ok": bool(after.get("ok")),
         "before_nonblank": guest_nb_b,
         "after_nonblank": guest_nb_a,
+        "before_png_complete": _png_complete(before_bytes),
+        "after_png_complete": _png_complete(after_bytes),
+        "before_bytes": len(before_bytes),
+        "after_bytes": len(after_bytes),
         "before_sha256": guest_sha_b,
         "after_sha256": guest_sha_a,
         "changed": bool(guest_sha_b and guest_sha_a and guest_sha_b != guest_sha_a),
@@ -422,16 +593,35 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
         "after_path": str(guest_after_path.name) if after_bytes else None,
         "via_before": before.get("via"),
         "via_after": after.get("via"),
+        "pulled_via_before": before.get("pulled_via"),
+        "pulled_via_after": after.get("pulled_via"),
     }
 
     # Observable app-state delta: typed marker must land in the mousepad file.
-    doc = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
+    # Super+s / large FB pulls can stall virtio-serial — re-ping then retry reads.
+    doc = {"ok": False}
+    doc_text = ""
+    for attempt in range(8):
+        if not _agent_call(session, "ping", timeout_sec=8.0).get("pong"):
+            time.sleep(1.0)
+            continue
+        doc = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
+        doc_text = "\n".join(doc.get("lines") or [])
+        if doc.get("ok") and doc_text:
+            break
+        # Fallback: file_get full document when logs stalls.
+        raw = _pull_guest_file(session, "/root/gunnchos-lab-document.txt")
+        if raw:
+            doc_text = raw.decode("utf-8", "replace")
+            doc = {"ok": True, "via": "file_get", "bytes": len(raw), "lines": doc_text.splitlines()[-40:]}
+            break
+        time.sleep(1.0)
     result["document_after"] = doc
-    doc_text = "\n".join(doc.get("lines") or [])
     input_visible_in_app = bool(marker in doc_text)
     result["input_visible_app_state"] = {
         "marker": marker,
         "found_in_document": input_visible_in_app,
+        "document_read_ok": bool(doc.get("ok")),
     }
 
     earned = bool(
@@ -443,7 +633,10 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
     )
     missing: list[str] = []
     if not guest_fb_ok:
-        missing.append("guest_framebuffer_nonblank_changed")
+        if not png_ok:
+            missing.append("guest_png_incomplete_no_iend")
+        else:
+            missing.append("guest_framebuffer_nonblank_changed")
     if not input_visible_in_app:
         missing.append("typed_marker_in_app_document")
     if not (launch.get("ok") and launch.get("alive_after_500ms")):
@@ -525,18 +718,32 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
 
     place_cap = _capture_guest_fb(session, retries=5, settle_s=1.0)
     place_bytes = place_cap.get("_decoded_bytes") or b""
-    halves = _png_half_sha256(place_bytes)
+    half_pngs = _rgb_halves_to_pngs(place_bytes)
+    halves = half_pngs.get("placement_halves") or _png_half_sha256(place_bytes)
     result["placement_framebuffer"] = {
         k: v for k, v in place_cap.items() if k not in {"bytes_b64", "_decoded_bytes"}
     }
     result["placement_halves"] = halves
+    if place_bytes and _png_complete(place_bytes):
+        (evidence_dir / "dsxl_placement.png").write_bytes(place_bytes)
+    if half_pngs.get("ok") and half_pngs.get("left_png") and half_pngs.get("right_png"):
+        (evidence_dir / "dsxl_left.png").write_bytes(half_pngs["left_png"])
+        (evidence_dir / "dsxl_right.png").write_bytes(half_pngs["right_png"])
+        result["placement_halves"]["ok"] = True
+        result["placement_halves"]["left_png"] = "dsxl_left.png"
+        result["placement_halves"]["right_png"] = "dsxl_right.png"
+        result["placement_halves"]["left_png_sha256"] = half_pngs.get("left_sha256")
+        result["placement_halves"]["right_png_sha256"] = half_pngs.get("right_sha256")
+        result["placement_halves"]["committed_png_halves"] = True
     placement_proven = bool(
         halves.get("ok")
         and halves.get("halves_differ")
         and halves.get("left_nonzero")
         and halves.get("right_nonzero")
+        and half_pngs.get("ok")
         and win_a.get("ok")
         and win_b.get("ok")
+        and int(halves.get("width") or 0) >= 2000
     )
     windows = [
         {
@@ -1332,7 +1539,7 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             save_path_used = game_paths[0]
             before_used = game_before_snaps[game_paths[0]]
             after_used = save
-    # First-party web game fallback (anime-aggressors probe already on guest from FOUR).
+    # First-party web game fallback REJECTED for RING PASS (Lab anime-aggressors / lab://).
     web_mutated = False
     web_state = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
     web_before_input = 0
@@ -1340,63 +1547,95 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         web_before_input = int(json.loads("\n".join(web_state.get("lines") or []) or "{}").get("input") or 0)
     except Exception:
         web_before_input = 0
-    if not godot_mutated:
-        _agent_call(
-            session,
-            "process_run",
-            argv=[
-                "bash",
-                "-lc",
-                "set +e; "
-                "if [ -f /var/lib/gunnchos/games/anime-aggressors/index.html ]; then "
-                "  WD=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename || echo wayland-0); "
-                "  pkill -f chromium || true; sleep 1; "
-                "  XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=$WD LIBSEAT_BACKEND=seatd "
-                "    chromium --no-sandbox --ozone-platform=wayland "
-                "    --user-data-dir=/root/.gunnchos-chromium-ring-game --no-first-run "
-                "    http://127.0.0.1:18765/anime-aggressors/index.html >/var/log/gunnchos-ring-anime.log 2>&1 & "
-                "  echo started_anime; "
-                "else echo no_anime_bundle; fi",
-            ],
-            timeout_sec=25.0,
-        )
-        time.sleep(6.0)
-        if ring_game.get("via_stack"):
-            _hid_burst(("d", "d", "w", "j", "spc", "ret"), clicks=4)
-            time.sleep(3.0)
-        web_after = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
-        try:
-            web_after_input = int(json.loads("\n".join(web_after.get("lines") or []) or "{}").get("input") or 0)
-        except Exception:
-            web_after_input = 0
-        web_mutated = bool(ring_game.get("via_stack") and web_after_input > web_before_input)
-        if web_mutated:
-            save_path_used = "/var/lib/gunnchos/games/anime-aggressors/state.json"
-            before_used = web_state
-            after_used = web_after
-    game_mutated = bool(godot_mutated or web_mutated)
+    # Observe-only: never earn RING via Lab anime-aggressors surface.
+    web_after = web_state
+    web_after_input = web_before_input
+    game_mutated = bool(godot_mutated)
     mutations["game"] = {
         "ring": {k: ring_game.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
         "launch": launches.get("game"),
-        "save_path": save_path_used,
-        "before": before_used,
-        "after": after_used,
+        "save_path": save_path_used if godot_mutated else "",
+        "before": before_used if godot_mutated else {},
+        "after": after_used if godot_mutated else {},
         "mutated": game_mutated,
         "godot_mutated": godot_mutated,
-        "first_party_web_mutated": web_mutated,
+        "first_party_web_mutated": False,
+        "lab_anime_aggressors_rejected": True,
         "lab_html_probe_rejected": True,
+        "web_observe_only": {
+            "before_input": web_before_input,
+            "after_input": web_after_input,
+            "note": "Lab anime-aggressors surface never earns RING_TO_REAL_APP_STATE_MUTATION_PASS",
+        },
         "note": (
             "Godot Pedestrian user:// save delta after Ring-authorized HID"
             if godot_mutated
-            else (
-                "First-party anime-aggressors probe input delta after Ring-authorized HID"
-                if web_mutated
-                else "Requires Godot Pedestrian save delta or first-party web game input delta"
-            )
+            else "Requires Godot Pedestrian first-party save delta (Lab anime-aggressors rejected)"
         ),
     }
 
     result["app_launches"] = launches
+
+    # Commit guest artifacts for independent review (overwrite Lab RINGRING sidecars).
+    guest_artifacts: dict[str, Any] = {"ok": False}
+    doc_dir = evidence_dir / "document"
+    br_dir = evidence_dir / "browser"
+    game_dir = evidence_dir / "game"
+    for d in (doc_dir, br_dir, game_dir):
+        d.mkdir(parents=True, exist_ok=True)
+    # Remove stale Lab RINGRING ODT if present.
+    stale_odt = doc_dir / "ring_editor_buffer.odt"
+    odt_guest_paths = [
+        "/root/gunnchos-lab-document.odt",
+        "/root/gunnchos-lab-document.odt",
+    ]
+    # Prefer any /root/*.odt containing the marker.
+    odt_list = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "ls -1 /root/*.odt 2>/dev/null"],
+        timeout_sec=10.0,
+    )
+    odt_candidates = [ln.strip() for ln in (odt_list.get("stdout") or "").splitlines() if ln.strip().endswith(".odt")]
+    committed_odt = None
+    committed_marker = None
+    for cand in odt_candidates or odt_guest_paths:
+        raw = _pull_guest_file(session, cand)
+        if not raw:
+            continue
+        try:
+            import zipfile
+            import io as _io
+
+            txt = zipfile.ZipFile(_io.BytesIO(raw)).read("content.xml").decode("utf-8", "replace")
+        except Exception:
+            txt = ""
+        if marker in txt:
+            stale_odt.write_bytes(raw)
+            committed_odt = "document/ring_editor_buffer.odt"
+            committed_marker = marker
+            guest_artifacts["odt_path_guest"] = cand
+            guest_artifacts["odt_bytes"] = len(raw)
+            guest_artifacts["odt_marker"] = marker
+            break
+    # Browser state from guest (not Lab Playwright sidecar).
+    br_raw = _pull_guest_file(session, br_state_path)
+    if br_raw:
+        (br_dir / "browser_state.json").write_bytes(br_raw)
+        guest_artifacts["browser_state"] = "browser/browser_state.json"
+        guest_artifacts["browser_bytes"] = len(br_raw)
+    # First-party Godot save if mutated.
+    if godot_mutated and save_path_used and str(save_path_used).startswith("/"):
+        graw = _pull_guest_file(session, str(save_path_used))
+        if graw:
+            (game_dir / "pp_progression.cfg").write_bytes(graw)
+            guest_artifacts["game_save"] = "game/pp_progression.cfg"
+            guest_artifacts["game_bytes"] = len(graw)
+            guest_artifacts["game_save_guest_path"] = save_path_used
+    guest_artifacts["ok"] = bool(committed_odt and guest_artifacts.get("browser_state"))
+    guest_artifacts["committed_odt"] = committed_odt
+    guest_artifacts["lab_ringring_rejected"] = True
+    result["guest_artifacts"] = guest_artifacts
 
     # Confidence gate via Ring stack
     low = rings.inject(confidence=0.2, target="browser")
@@ -1407,6 +1646,15 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     if not (launches.get("libreoffice") or {}).get("ok"):
         all_mutated = False
         result["blocker"] = result.get("blocker") or "libreoffice_binary_required_for_document_leg"
+    if not committed_odt or committed_marker != marker:
+        all_mutated = False
+        result["blocker"] = result.get("blocker") or "guest_odt_with_marker_not_committed"
+    if not guest_artifacts.get("browser_state"):
+        all_mutated = False
+        result["blocker"] = result.get("blocker") or "guest_browser_state_not_committed"
+    if not (godot_mutated and guest_artifacts.get("game_save")):
+        all_mutated = False
+        result["blocker"] = result.get("blocker") or "first_party_godot_save_not_committed"
 
     pipeline = [
         "ring_simulator",
@@ -1435,9 +1683,9 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "mutation_marker": marker,
             "marker_found_in_after": bool(mutations["libreoffice"].get("mutated")),
             "note": (
-                "Ring→SpatialInput→guest HID mutated LibreOffice+browser+game"
+                "Ring→SpatialInput→guest HID mutated LibreOffice+browser+Godot; guest artifacts committed"
                 if earned
-                else "Not earned — need Ring stack mutation of LibreOffice/browser/game (mousepad alone insufficient)"
+                else "Not earned — need Ring stack mutation of LibreOffice/browser/Godot with committed guest artifacts (Lab sidecars rejected)"
             ),
         }
     )

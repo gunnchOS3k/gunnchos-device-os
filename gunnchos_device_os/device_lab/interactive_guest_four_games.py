@@ -295,15 +295,27 @@ def _hot_patch_guest_agent(session: Any, repo_root: Path) -> dict[str, Any]:
     install = _guest_bash(
         session,
         "set -e; test -s /tmp/ga_new.py; "
+        "python3 -m py_compile /tmp/ga_new.py; "
         "cp /tmp/ga_new.py /opt/gunnchos/bin/gunnchos_guest_agent.py; "
         "cp /tmp/ga_new.py /usr/local/sbin/gunnchos_guest_agent.py 2>/dev/null || true; "
-        "systemctl restart gunnchos-guest-agent.service || "
-        "(pkill -f gunnchos_guest_agent.py || true; "
-        " nohup python3 /opt/gunnchos/bin/gunnchos_guest_agent.py "
-        " >/var/log/gunnchos-guest-agent.log 2>&1 &); sleep 2; echo restarted",
+        # Schedule restart AFTER this process_run returns — do not pkill the agent
+        # that is currently executing this script (that orphans virtio-serial).
+        "rm -f /tmp/ga_restarted; "
+        "( sleep 1; "
+        "  systemctl stop gunnchos-guest-agent.service 2>/dev/null || true; "
+        "  pkill -f '/opt/gunnchos/bin/gunnchos_guest_agent.py' || true; "
+        "  pkill -f '/usr/local/sbin/gunnchos_guest_agent.py' || true; "
+        "  sleep 1; "
+        "  nohup python3 /opt/gunnchos/bin/gunnchos_guest_agent.py "
+        "    >/var/log/gunnchos-guest-agent.log 2>&1 & "
+        "  sleep 1; pgrep -af gunnchos_guest_agent | head > /tmp/ga_restarted; "
+        "  tail -30 /var/log/gunnchos-guest-agent.log >> /tmp/ga_restarted; "
+        ") >/tmp/ga_restart_launcher.log 2>&1 & "
+        "echo scheduled_restart",
         timeout_sec=60,
         name="ga-install",
     )
+    time.sleep(4.0)
     for _ in range(30):
         ping = _agent_call(session, "ping")
         if ping.get("pong"):

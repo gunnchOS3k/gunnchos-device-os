@@ -27,13 +27,13 @@
     "available": true,
     "compositor": "weston",
     "socket": "wayland-0",
-    "outputs": 1,
+    "outputs": 2,
     "surfaces": null,
     "detail": {
       "wayland_info_returncode": 0,
-      "wayland_info_output_globals": 1
+      "wayland_info_output_globals": 2
     },
-    "note": "Real registry query via wayland-info against the running weston socket."
+    "note": "Real registry query via wayland-info against the running compositor socket."
   },
   "app_launch": {
     "ok": true,
@@ -45,7 +45,7 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "app": "mousepad",
-    "pid": 660,
+    "pid": 601,
     "started": true,
     "alive_after_500ms": true,
     "argv": [
@@ -62,11 +62,14 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_03-26-44.png",
-    "bytes": 16384,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_14-49-35.png",
+    "bytes": 34947,
     "format": "png",
+    "sha256": "a24e5cf9507679f1c068a4e1c670f803ad2ea8953810bc3e5963a8cc2a1ed2b5",
     "synthetic": false,
-    "via": "weston_screenshooter_super_s_uinput"
+    "via": "weston_screenshooter_super_s_uinput",
+    "png_complete": true,
+    "has_iend": true
   },
   "input_injection": {
     "ok": true,
@@ -76,37 +79,9 @@
       "monitor_accepted": true,
       "key": "a",
       "agent": {
-        "ok": true,
-        "protocol": "gunnchos.guest_agent.v1",
-        "cmd": "input_observe",
-        "transport": "virtio_serial",
-        "agent_path_label": "virtio-serial",
-        "SILICON_EXACT_EMULATION": false,
-        "production_keys": false,
-        "measurement_class": "GUEST_OBSERVED",
-        "devices": [
-          {
-            "path": "/dev/input/event4",
-            "name": "gunnchos-uinput-mouse"
-          },
-          {
-            "path": "/dev/input/event3",
-            "name": "gunnchos-uinput-kbd"
-          },
-          {
-            "path": "/dev/input/event2",
-            "name": "QEMU Virtio Tablet"
-          },
-          {
-            "path": "/dev/input/event1",
-            "name": "QEMU Virtio Keyboard"
-          },
-          {
-            "path": "/dev/input/event0",
-            "name": "Power Button"
-          }
-        ],
-        "count": 5
+        "ok": false,
+        "error": "unix_connect_failed",
+        "detail": "empty_or_unmatched_response"
       }
     },
     "attempts": [
@@ -129,8 +104,10 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "kind": "text",
-    "text": "LIVEPROOF1786505205",
+    "kind": "pointer",
+    "dx": 200,
+    "dy": 180,
+    "button": "left",
     "injected_via": "uinput"
   },
   "framebuffer_after": {
@@ -142,11 +119,14 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_03-29-32.png",
-    "bytes": 16384,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_14-52-50.png",
+    "bytes": 40635,
     "format": "png",
+    "sha256": "cbb020ee3c2d56284000225efacf0e72630c53fb020ecd58017016cd9ccfcf91",
     "synthetic": false,
-    "via": "weston_screenshooter_super_s_uinput"
+    "via": "weston_screenshooter_super_s_uinput",
+    "png_complete": true,
+    "has_iend": true
   },
   "host_screendump": {
     "ok": true,
@@ -155,8 +135,8 @@
     "after_exists": true,
     "before_nonblank": true,
     "after_nonblank": true,
-    "before_sha256": "974d156f9887161fc00a70c86002f0d7eaaa7aba129edbf1111390fe1b92cc6b",
-    "after_sha256": "c846f827f45f8f0c91da2a0d30701a09b7d582908be69e18dbb7f52ef41bf5c3",
+    "before_sha256": "d89702e4633c01cdbeb3be82645e3201b0d01751d9a23c2920e399c7116a56e8",
+    "after_sha256": "ec719d4979e647491c6d95eb82fe4b309aa18fad522e5fb67036621c95c793b3",
     "changed": true,
     "measurement_class": "HOST_OBSERVED",
     "committed_paths": [
@@ -170,46 +150,34 @@
     "after_ok": true,
     "before_nonblank": true,
     "after_nonblank": true,
-    "before_sha256": "1e00ddab503e51b627ff0f769eb072148f64c70d919776180d5028fab290dce3",
-    "after_sha256": "f2f0eea285328870bd6a916cb13b582b7cf447ba26f0910075234ac82b6872f1",
+    "before_png_complete": true,
+    "after_png_complete": true,
+    "before_bytes": 34947,
+    "after_bytes": 40635,
+    "before_sha256": "a24e5cf9507679f1c068a4e1c670f803ad2ea8953810bc3e5963a8cc2a1ed2b5",
+    "after_sha256": "cbb020ee3c2d56284000225efacf0e72630c53fb020ecd58017016cd9ccfcf91",
     "changed": true,
     "before_path": "shell_app_before.png",
     "after_path": "shell_app_after.png",
     "via_before": "weston_screenshooter_super_s_uinput",
-    "via_after": "weston_screenshooter_super_s_uinput"
+    "via_after": "weston_screenshooter_super_s_uinput",
+    "pulled_via_before": null,
+    "pulled_via_after": null
   },
   "document_after": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "logs",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/root/gunnchos-lab-document.txt",
-    "lines": [
-      "aLIVEPROOF1786505205aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
-      "aLIVEPROOF1786501531"
-    ]
+    "ok": false,
+    "error": "unix_connect_failed",
+    "detail": "empty_or_unmatched_response"
   },
   "input_visible_app_state": {
-    "marker": "LIVEPROOF1786505205",
-    "found_in_document": true
+    "marker": "LIVEPROOF1786546176",
+    "found_in_document": false
   },
   "non_blank_capture": true,
-  "diff_bytes": 0,
+  "diff_bytes": 5688,
   "before_after_changed": true,
-  "missing": [],
-  "note": "INDEPENDENT DEMOTION: truncated guest PNG FB; identical shell PPMs; host screendump alone insufficient",
-  "INDEPENDENT_DEMOTION": {
-    "at_utc": "2026-08-12T13:18:06Z",
-    "tip": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
-    "reasons": [
-      "committed shell_app_before/after.png are truncated 16384-byte PNGs (IHDR+IDAT, no IEND; PIL truncated)",
-      "_image_nonblank only checks len>4096 for PNG \u2014 accepts incomplete captures",
-      "shell_app_before.ppm identical to shell_app_after.ppm (diff_bytes=0)",
-      "host_fb PPM changed but HOST_SCREENDUMP_ALONE_INSUFFICIENT per claim boundary"
-    ]
-  }
+  "missing": [
+    "typed_marker_in_app_document"
+  ],
+  "note": "Not earned \u2014 missing: typed_marker_in_app_document"
 }

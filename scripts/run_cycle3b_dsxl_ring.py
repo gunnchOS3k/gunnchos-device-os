@@ -26,8 +26,10 @@ from gunnchos_device_os.device_lab.interactive_guest_proofs import (  # noqa: E4
     _agent_call,
     _capture_guest_fb,
     _evidence_dir,
+    _png_complete,
     _png_half_sha256,
     _qemu_monitor_lines,
+    _rgb_halves_to_pngs,
     attempt_ring_app_mutation_pass,
     boot_interactive_guest,
 )
@@ -213,21 +215,30 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
             break
         time.sleep(0.8)
 
-    # Guest-side weston-screenshooter (avoids framebuffer_capture virtio-serial stall).
+    # Guest-side weston-screenshooter in a FRESH this-run directory (no stale multi-run hashes).
     shot = _guest_bash(
         session,
-        "set +e; mkdir -p /var/lib/gunnchos/screenshots/dsxl; "
-        "cd /var/lib/gunnchos/screenshots; "
-        "find . -name 'wayland-screenshot*.png' -o -name 'weston*.png' | wc -l; "
-        "weston-screenshooter >/tmp/wss.err 2>&1; sleep 2; "
+        "set +e; RUN=/var/lib/gunnchos/screenshots/dsxl_this_run; rm -rf \"$RUN\"; mkdir -p \"$RUN\"; "
+        "cd \"$RUN\"; "
+        "weston-screenshooter >/tmp/wss.err 2>&1; sleep 3; "
+        "grim \"$RUN/grim_both.png\" 2>/tmp/grim.err; sleep 1; "
         "python3 - <<'PY'\n"
-        "import hashlib, pathlib, struct\n"
-        "root=pathlib.Path('/var/lib/gunnchos/screenshots')\n"
-        "for p in sorted(root.rglob('*.png')):\n"
+        "import hashlib, pathlib, struct, time\n"
+        "root=pathlib.Path('/var/lib/gunnchos/screenshots/dsxl_this_run')\n"
+        "deadline=time.time()+8\n"
+        "while time.time()<deadline:\n"
+        "  ready=True\n"
+        "  for p in sorted(root.glob('*.png')):\n"
+        "    b=p.read_bytes()\n"
+        "    if len(b)<4096 or b'\\x00\\x00\\x00\\x00IEND' not in b:\n"
+        "      ready=False; break\n"
+        "  if ready and any(root.glob('*.png')): break\n"
+        "  time.sleep(0.2)\n"
+        "for p in sorted(root.glob('*.png')):\n"
         "    b=p.read_bytes()\n"
         "    if len(b)<24: continue\n"
         "    w,h=struct.unpack('>II', b[16:24])\n"
-        "    print(p.name, len(b), w, h, hashlib.sha256(b).hexdigest())\n"
+        "    print(p.name, len(b), w, h, hashlib.sha256(b).hexdigest(), 'iend='+str(b'\\x00\\x00\\x00\\x00IEND' in b))\n"
         "PY",
         timeout_sec=40,
         name="weston-screenshooter-dsxl",
@@ -235,18 +246,22 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
     ev["guest_shots"] = {k: shot.get(k) for k in ("ok", "stdout", "stderr") if k in shot}
     hashes: list[str] = []
     wide_ok = False
+    this_run_complete = 0
     for ln in (shot.get("stdout") or "").splitlines():
         parts = ln.split()
-        if len(parts) >= 5 and parts[-1] not in {"missing"}:
+        if len(parts) >= 5 and parts[-1].startswith("iend="):
             try:
                 size, width = int(parts[1]), int(parts[2])
             except ValueError:
                 continue
-            if size > 4096:
-                hashes.append(parts[-1])
-            if width >= 2000 and size > 4096:
+            iend = parts[-1] == "iend=True"
+            if size > 4096 and iend:
+                hashes.append(parts[4])
+                this_run_complete += 1
+            if width >= 2000 and size > 4096 and iend:
                 wide_ok = True
-    grim_both = len(set(hashes)) >= 2
+    # Do NOT treat multi-hash from historical dirs as fb_both — only this_run dir.
+    grim_both = this_run_complete >= 1 and wide_ok
 
     # Host QEMU screendump of the dual scanout (supporting; guest shots preferred).
     host_ppm = evidence_dir / "dsxl_host_scanout.ppm"
@@ -261,27 +276,41 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
 
     place_cap = _capture_guest_fb(session, retries=6, settle_s=1.2)
     place_bytes = place_cap.get("_decoded_bytes") or b""
-    halves = _png_half_sha256(place_bytes)
+    half_pngs = _rgb_halves_to_pngs(place_bytes)
+    halves = half_pngs.get("placement_halves") or _png_half_sha256(place_bytes)
     ev["placement_framebuffer"] = {
         k: v for k, v in place_cap.items() if k not in {"bytes_b64", "_decoded_bytes"}
     }
     ev["placement_halves"] = halves
-    if place_bytes:
+    if place_bytes and _png_complete(place_bytes):
         (evidence_dir / "dsxl_placement.png").write_bytes(place_bytes)
+    if half_pngs.get("ok") and half_pngs.get("left_png") and half_pngs.get("right_png"):
+        (evidence_dir / "dsxl_left.png").write_bytes(half_pngs["left_png"])
+        (evidence_dir / "dsxl_right.png").write_bytes(half_pngs["right_png"])
+        halves["ok"] = True
+        halves["left_png"] = "dsxl_left.png"
+        halves["right_png"] = "dsxl_right.png"
+        halves["left_png_sha256"] = half_pngs.get("left_sha256")
+        halves["right_png_sha256"] = half_pngs.get("right_sha256")
+        halves["committed_png_halves"] = True
+        ev["placement_halves"] = halves
     halves_ok = bool(
         halves.get("ok")
         and halves.get("halves_differ")
         and halves.get("left_nonzero")
         and halves.get("right_nonzero")
+        and half_pngs.get("ok")
         and int(halves.get("width") or 0) >= 2000
+        and halves.get("committed_png_halves")
     )
-    fb_both = bool(grim_both or halves_ok or wide_ok)
+    # Prefer real placement halves PNGs; wide this-run shot is supporting only.
+    fb_both = bool(halves_ok or (wide_ok and halves_ok))
+    if not halves_ok:
+        fb_both = False
     ev["fb_both"] = fb_both
-    ev["fb_method"] = (
-        "two_guest_png_hashes"
-        if grim_both
-        else ("combined_halves" if halves_ok else ("wide_guest_png" if wide_ok else "none"))
-    )
+    ev["fb_method"] = "combined_halves_png" if halves_ok else ("wide_this_run_only_insufficient" if wide_ok else "none")
+    ev["this_run_shot_hashes"] = hashes
+    ev["grim_both_stale_rejected"] = True
 
     click_a = _agent_call(
         session, "input_inject", kind="pointer", dx=-400, dy=80, button="left", timeout_sec=10.0
@@ -290,7 +319,7 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
     click_b = _agent_call(
         session, "input_inject", kind="pointer", dx=400, dy=40, button="left", timeout_sec=10.0
     )
-    placement_proven = bool(win_a.get("ok") and win_b.get("ok") and fb_both)
+    placement_proven = bool(win_a.get("ok") and win_b.get("ok") and fb_both and halves_ok)
     ev["placement_proven"] = placement_proven
     ev["windows"] = [
         {
@@ -298,12 +327,14 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
             "output_id": oid_a if placement_proven else "",
             "ok": bool(win_a.get("ok")),
             "half": "left",
+            "half_png": "dsxl_left.png" if halves_ok else "",
         },
         {
             "app_id": "mousepad",
             "output_id": oid_b if placement_proven else "",
             "ok": bool(win_b.get("ok")),
             "half": "right",
+            "half_png": "dsxl_right.png" if halves_ok else "",
         },
     ]
     focus_ok = bool(click_a.get("ok") and click_b.get("ok") and placement_proven)
@@ -334,8 +365,13 @@ def attempt_dsxl_reboot_reconfig(work: Path, evidence_dir: Path) -> dict:
         (evidence_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.json").write_text(json.dumps(result, indent=2) + "\n")
         return result
     try:
-        _hot_patch_guest_agent(session, ROOT)
-        time.sleep(2)
+        # Skip destructive agent restart when file_get already works.
+        fg = _agent_call(
+            session, "file_get", path="/etc/hostname", offset=0, length=64, timeout_sec=10.0
+        )
+        if not (fg.get("ok") and fg.get("bytes_b64")):
+            _hot_patch_guest_agent(session, ROOT)
+            time.sleep(2)
         _wait_compositor(session)
         enable = _enable_dual_compositor(session)
         result["enable_dual"] = {k: v for k, v in enable.items() if k != "comp"}
@@ -412,8 +448,12 @@ def attempt_dsxl_reboot_reconfig(work: Path, evidence_dir: Path) -> dict:
         (evidence_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.json").write_text(json.dumps(result, indent=2) + "\n")
         return result
     try:
-        _hot_patch_guest_agent(session, ROOT)
-        time.sleep(1)
+        fg = _agent_call(
+            session, "file_get", path="/etc/hostname", offset=0, length=64, timeout_sec=10.0
+        )
+        if not (fg.get("ok") and fg.get("bytes_b64")):
+            _hot_patch_guest_agent(session, ROOT)
+            time.sleep(1)
         _wait_compositor(session)
         enable_c = _enable_dual_compositor(session)
         result["enable_dual_restore"] = {k: v for k, v in enable_c.items() if k != "comp"}
@@ -502,7 +542,7 @@ def main() -> int:
     summary = {
         "schema": "gunnchos.wp011r.cycle3b_dsxl_ring.v1",
         "started_at_utc": started,
-        "LIVE_GUNNCHOS_VISUAL_PASS_retained": True,
+        "LIVE_GUNNCHOS_VISUAL_PASS_retained": False,
         "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS_retained": True,
         "ECO010_SOAK_PASS": True,
         "GUEST_DUAL_OUTPUT_PASS": True,
@@ -527,19 +567,12 @@ def main() -> int:
         session = dsxl.pop("_session", None)
         logp("DSXL", dsxl.get("DSXL_DUAL_COMPOSITOR_UX_PASS"), dsxl.get("note"))
         evid = dsxl_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.json"
-        backup = dsxl_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.earned.json"
+        # Prefer FAIL: never retain a prior "earned" DSXL claim across runs.
         if dsxl.get("DSXL_DUAL_COMPOSITOR_UX_PASS") and evid.is_file():
+            backup = dsxl_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.earned.json"
             backup.write_text(evid.read_text(encoding="utf-8"), encoding="utf-8")
-        elif backup.is_file():
-            retained = json.loads(backup.read_text(encoding="utf-8"))
-            if retained.get("DSXL_DUAL_COMPOSITOR_UX_PASS"):
-                evid.write_text(backup.read_text(encoding="utf-8"), encoding="utf-8")
-                dsxl["DSXL_DUAL_COMPOSITOR_UX_PASS"] = True
-                dsxl["note"] = (
-                    f"{dsxl.get('note') or 'this-run DSXL failed'} | "
-                    "retained prior earned DSXL evidence (not this-run)"
-                )
-                logp("DSXL retained prior earned evidence")
+        elif not dsxl.get("DSXL_DUAL_COMPOSITOR_UX_PASS"):
+            logp("DSXL this-run FAIL retained (no stale PASS restore)")
     summary["dsxl"] = {k: v for k, v in dsxl.items() if k != "_session"}
 
     ring: dict = {"RING_TO_REAL_APP_STATE_MUTATION_PASS": False, "note": "no_session"}
@@ -551,24 +584,27 @@ def main() -> int:
             session = boot.pop("_session", None)
             summary["ring_boot"] = {k: boot.get(k) for k in ("ok", "error") if k in boot}
             if session:
-                _hot_patch_guest_agent(session, ROOT)
+                fg = _agent_call(
+                    session, "file_get", path="/etc/hostname", offset=0, length=64, timeout_sec=10.0
+                )
+                if not (fg.get("ok") and fg.get("bytes_b64")):
+                    _hot_patch_guest_agent(session, ROOT)
                 _wait_compositor(session)
                 _guest_bash(
                     session,
-                    "export DEBIAN_FRONTEND=noninteractive; "
-                    "apt-get install -y --no-install-recommends libreoffice-writer libreoffice-gtk3 "
-                    ">/var/log/gunnchos-apt-ring.log 2>&1; command -v libreoffice; true",
-                    timeout_sec=900,
-                    name="apt-ring",
+                    "command -v libreoffice; command -v soffice; true",
+                    timeout_sec=30,
+                    name="lo-probe-ring",
                 )
                 _wait_compositor(session)
         if session is not None:
             _guest_bash(
                 session,
-                "export DEBIAN_FRONTEND=noninteractive; "
-                "apt-get install -y --no-install-recommends libreoffice-writer libreoffice-gtk3 "
-                ">/var/log/gunnchos-apt-ring.log 2>&1; command -v libreoffice; true",
-                timeout_sec=900,
+                "command -v libreoffice || "
+                "(export DEBIAN_FRONTEND=noninteractive; "
+                " apt-get install -y --no-install-recommends libreoffice-writer libreoffice-gtk3 "
+                " >/var/log/gunnchos-apt-ring.log 2>&1); command -v libreoffice; true",
+                timeout_sec=600,
                 name="apt-ring-dsxl-session",
             )
             logp("=== RING ===")

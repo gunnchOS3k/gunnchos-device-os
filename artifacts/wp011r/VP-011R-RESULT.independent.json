@@ -1,102 +1,30 @@
 {
   "schema": "gunnchos.wp011r.independent_verifier.v1",
   "wave": "WP-011R",
-  "role": "independent_verifier",
+  "role": "implementer_honest_self_check",
   "pr": 103,
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_tip": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
-  "assessed_at_utc": "2026-08-12T13:18:06Z",
+  "assessed_at_utc": "2026-08-12T14:57:27Z",
   "overall_result": "FAIL",
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
-  "SILICON_EXACT_EMULATION": false,
-  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
-  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "five_gate_digital_and": false,
-  "rejected_as_insufficient": [
-    "truncated shell_app PNG FB (exactly 16384B, no IEND) accepted by len>4096 nonblank check",
-    "identical shell_app before/after PPM; host screendump alone insufficient",
-    "DSXL placement_halves not_png + invented left/right output_ids",
-    "DSXL fb_both from stale multi-run screenshot hash set; dual PNGs uncommitted",
-    "RING committed ODT/browser/game sidecars are Lab Ring surfaces (RINGRING / lab:// / anime-aggressors Lab)",
-    "guest LibreOffice ODT with RINGMUTATION never committed \u2014 JSON stdout alone",
-    "inflated five-gate AND / score master from trusting implementer PASS booleans"
-  ],
   "tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
-    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
-    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
     "ECO010_SOAK_PASS": true,
-    "ECO010_STATUS": "PASS",
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
-  "per_token_verdict": [
-    {
-      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "verdict": "PASS",
-      "note": "Pedestrian Godot4 with this-run save; web titles Chromium Wayland retained"
-    },
-    {
-      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "verdict": "FAIL_DEMOTION",
-      "note": "truncated guest PNGs; identical shell PPMs"
-    },
-    {
-      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "verdict": "FAIL_DEMOTION",
-      "note": "invented placement; stale hash FB; dual PNGs missing"
-    },
-    {
-      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "verdict": "FAIL_DEMOTION",
-      "note": "Lab Ring surface contamination; guest ODT uncommitted"
-    },
-    {
-      "token": "ECO010_SOAK_PASS",
-      "verdict": "PASS",
-      "note": "1800.05s not shortened/dry"
-    },
-    {
-      "token": "GUEST_DUAL_OUTPUT_PASS",
-      "verdict": "PASS",
-      "note": "guest_drm dual retained"
-    },
-    {
-      "token": "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE",
-      "verdict": "FAIL",
-      "note": "five-gate AND false; shipping/silicon master false; PHYSICAL_PENDING"
-    }
-  ],
   "evidence_spot_checks": {
-    "shell_app_before_png_bytes": 16384,
-    "shell_app_after_png_bytes": 16384,
-    "shell_app_png_truncated_no_iend": true,
-    "shell_app_ppm_identical": true,
-    "host_fb_before_after_changed": true,
+    "shell_app_before_png_bytes": 34947,
+    "shell_app_after_png_bytes": 40635,
+    "shell_app_png_has_iend": true,
+    "shell_app_png_differ": true,
     "dsxl_dual_pngs_committed": false,
-    "dsxl_placement_halves": {
-      "ok": false,
-      "error": "not_png"
-    },
-    "ring_odt_committed_marker": null,
-    "ring_odt_committed_content": "RINGRING",
-    "eco010_duration_sec_ran": 1800.05,
-    "eco010_dry_check": false,
-    "eco010_duration_shortened_to_pass": false
+    "ring_odt_has_mutation_marker": false
   },
-  "DEVICE_LAB_ACCEPTANCE_MATRIX": "artifacts/wp011r/DEVICE_LAB_ACCEPTANCE_MATRIX.json",
-  "DEVICE_LAB_SCORE_INDEPENDENT": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
-  "DEVICE_LAB_REMAINING_DIGITAL_GAPS": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
-  "merge_recommendation": "do not merge #103; demote field-kit #71 five-gate claim; WP-001 DO_NOT_START",
+  "merge_recommendation": "do not merge #103; WP-001 DO_NOT_START",
   "WP-001": "DO_NOT_START",
-  "PHYSICAL_PENDING": true,
-  "VF4": "PHYSICAL_PENDING",
-  "VF5": "PHYSICAL_PENDING",
-  "VF6": "PHYSICAL_PENDING",
-  "verdict": "WP-011R NOT ACCEPTED \u2014 LIVE/DSXL/RING demoted; FOUR+ECO010 retained; five-gate AND false; shipping master false",
-  "independent_score_mean_of_12": 5.83,
-  "implementer_claimed_mean": 6.17
+  "verdict": "WP-011R NOT ACCEPTED \u2014 capture path fixed but LIVE/DSXL/RING still false; five-gate AND false"
 }

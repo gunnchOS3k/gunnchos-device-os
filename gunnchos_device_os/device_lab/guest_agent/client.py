@@ -39,6 +39,7 @@ SUPPORTED_COMMANDS = (
     "compositor_info",
     "app_launch",
     "file_put",
+    "file_get",
 )
 
 
@@ -76,11 +77,29 @@ class GuestAgentClient:
         """QEMU virtio-serial chardev is a host unix socket (server=on).
 
         Guest agent may emit unsolicited heartbeats; drain until matching cmd/pong.
+        Connect retries use a short budget so a dead agent cannot burn a 20min apt timeout.
         """
         deadline = time.time() + self.timeout_sec
         last_err = None
         want_cmd = payload.get("cmd")
+        # Ping/boot may wait minutes for agent; long process_run must not spin connect for 20min.
+        if want_cmd == "ping":
+            connect_deadline = deadline
+        else:
+            connect_deadline = time.time() + min(25.0, max(5.0, self.timeout_sec))
         while time.time() < deadline:
+            if (
+                want_cmd != "ping"
+                and time.time() > connect_deadline
+                and last_err
+                and ("Connection refused" in last_err or "connect" in last_err.lower())
+            ):
+                return {
+                    "ok": False,
+                    "error": "unix_connect_failed",
+                    "detail": last_err,
+                    "note": "guest_agent_not_listening",
+                }
             try:
                 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
                     sock.settimeout(min(5.0, self.timeout_sec))
@@ -94,25 +113,46 @@ class GuestAgentClient:
                                 break
                     except (OSError, TimeoutError):
                         pass
-                    # framebuffer_capture (Super+s / grim) can take >8s; honor timeout_sec.
+                    # framebuffer_capture / file_get / process_run can take >8s; honor timeout_sec.
                     sock.settimeout(min(30.0, max(0.5, deadline - time.time())))
                     line = (json.dumps(payload, separators=(",", ":")) + "\n").encode("utf-8")
                     sock.sendall(line)
                     buf = b""
                     matched: dict[str, Any] | None = None
                     read_budget = max(1.0, deadline - time.time())
-                    # Long guest cmds (screenshoot) need the full remaining budget, not a hard 8s cap.
-                    if want_cmd in {"framebuffer_capture", "process_run", "package_ops", "app_launch"}:
+                    # Long guest cmds need the full remaining budget, not a hard 8s cap.
+                    if want_cmd in {
+                        "framebuffer_capture",
+                        "process_run",
+                        "package_ops",
+                        "app_launch",
+                        "file_get",
+                        "file_put",
+                    }:
                         read_deadline = time.time() + read_budget
                     else:
                         read_deadline = time.time() + min(12.0, read_budget)
+                    idle_timeouts = 0
                     while time.time() < read_deadline:
                         try:
-                            chunk = sock.recv(4096)
+                            # Keep socket timeout short so we can poll deadline, but do NOT
+                            # abort a partial JSON line on the first idle recv.
+                            sock.settimeout(1.0)
+                            chunk = sock.recv(65536)
                         except (OSError, TimeoutError):
+                            # If we already have an incomplete line, keep waiting for more.
+                            if buf and b"\n" not in buf:
+                                idle_timeouts += 1
+                                if idle_timeouts < 45:
+                                    continue
                             break
+                        idle_timeouts = 0
                         if not chunk:
-                            break
+                            # Peer closed — only stop if we have nothing useful pending.
+                            if not buf:
+                                break
+                            time.sleep(0.05)
+                            continue
                         buf += chunk
                         while b"\n" in buf:
                             raw, buf = buf.split(b"\n", 1)
