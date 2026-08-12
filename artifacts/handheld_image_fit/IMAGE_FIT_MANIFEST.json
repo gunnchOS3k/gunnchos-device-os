@@ -3,7 +3,8 @@
   "architecture_outcome": "A",
   "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
   "claim_boundary": "Digital measurement of WP-013 realm rootfs.tar.gz artifacts plus shared bootable_reference kernel/initramfs. Not a physical eMMC flash image, not silicon-exact, not signed production shipping. Realm rootfs payloads are release-engineering package stubs (service units + optional Python tree), not a full MLP userspace. PRODUCTION_RELEASE_CLAIMED=false always.",
-  "device_os_tip": "baa128905ad805e9576041558ca4333d2264b617",
+  "device_os_tip": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "evidence_note": "Sizes/sha256 measured from realm artifacts present on accepted main 3858e76 (#104). This evidence branch only adds the IMAGE_FIT_MANIFEST emitter + tracked JSON.",
   "fit_assessment": {
     "any_PRODUCTION_RELEASE_CLAIMED_true": false,
     "current_digital_realm_numeric_fit": true,
@@ -16,8 +17,9 @@
     "shared_boot_reference_present": true,
     "stub_like_rootfs_payloads": true
   },
-  "generated_at_utc": "2026-08-12T22:10:22Z",
+  "generated_at_utc": "2026-08-12T22:11:17Z",
   "larger_emmc_sku_invented": false,
+  "measured_against_main_tip": "3858e760295ad35828ff141919681f2bb8685cf0",
   "npi": {
     "architecture_change_proposal": {
       "invent_larger_emmc_sku": false,

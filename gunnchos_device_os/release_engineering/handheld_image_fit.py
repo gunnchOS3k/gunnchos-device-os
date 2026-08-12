@@ -236,6 +236,7 @@ def build_handheld_image_fit_manifest(repo_root: Path | None = None) -> dict[str
         "schema": SCHEMA,
         "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "device_os_tip": _git_head(repo_root),
+        "measured_against_main_tip": None,  # filled by emit script / CI when known
         "sku_profile": "handheld_hybrid",
         "architecture_outcome": "A",
         "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
