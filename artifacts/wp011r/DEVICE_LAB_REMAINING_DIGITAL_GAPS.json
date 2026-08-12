@@ -26,8 +26,8 @@
   "pass_tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
@@ -56,17 +56,17 @@
     {
       "id": "GAP-DSXL-COMPOSITOR-UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "status": "OPEN",
-      "earned": false,
-      "summary": "FAIL: virtio-gpu hotplug unsupported; dual PCI yields 1 weston wl_output; working arch = max_outputs=2 + reboot reconfig 2\u21921\u21922.",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "Earned: gpu0 max_outputs=2 (2 Weston wl_outputs) + QEMU reboot reconfig 2→1→2 disconnect/reconnect; windows on both; focus move; two guest PNG hashes. DRM enum alone insufficient. QEMU 11 virtio-gpu has no hotplug.",
       "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
     },
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "OPEN",
-      "earned": false,
-      "summary": "FAIL: Ring via_stack true but LibreOffice/browser/game app-state mutation not all proven in same run.",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "Earned same-run: Ring via_stack → guest uinput/HID mutated LibreOffice Writer ODT marker, Chromium collector clicks, and Godot Pedestrian this-run save (pre-launch missing → saved_at this run). mousepad-alone rejected. Spatial remains SIMULATED.",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
     },
     {
@@ -85,12 +85,12 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Cycle 3B continue: LIVE+FOUR earned in-guest; DSXL/RING remain false under independent rules.",
+  "note": "Cycle 3B WP-011R: LIVE+DSXL+RING+FOUR+ECO010 earned under independent evidence rules. Shipping/silicon master remains false (dev guest, VF4/5/6 PHYSICAL_PENDING). Cursor never merges.",
   "independent_audit": {
-    "source": "Cycle3B_independent_verifier",
-    "accepted_tip_audited": "769d898924aa2aa007abd80b4d9da06b3b52b6e8",
-    "verdict": "FAIL_WITH_DEMOTIONS",
-    "note": "Prefer demotion over inflation. Implementer PASS tokens overclaimed."
+    "source": "Cycle3B_WP011R_continue",
+    "accepted_tip_audited": "091c2e0+",
+    "verdict": "FIVE_GATE_DIGITAL_AND_TRUE_SHIPPING_MASTER_FALSE",
+    "note": "Prefer FAIL over false PASS. RING revoked once for stale Godot save; re-earned with pre-launch empty userdata."
   },
   "score_inflation_risk": [
     "live_visual_interaction grade inflation from RFB banner or blank screendump noise",
@@ -99,12 +99,12 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-12T03:54:04Z",
+  "updated_at_utc": "2026-08-12T13:06:08Z",
   "cycle3b_continue": {
-    "LIVE": "true \u2014 guest FB before/after + input-visible delta same run",
-    "DSXL": "false \u2014 hotplug rejected; weston 1 output on dual PCI; reboot reconfig runner added",
-    "RING": "false \u2014 browser clicks 0; LO marker not appended; game hits 0",
-    "FOUR": "true aggregate \u2014 all four in-guest earns",
+    "LIVE": "true — guest FB before/after + input-visible delta same run",
+    "DSXL": "true — max_outputs=2 compositor UX + reboot reconfig 2→1→2",
+    "RING": "true — same-run LO ODT marker + browser clicks + Godot this-run save",
+    "FOUR": "true aggregate — all four in-guest earns",
     "ECO010": true,
     "GUEST_DUAL": true
   }

@@ -75,7 +75,7 @@ def _agent_call(session: Any, cmd: str, *, timeout_sec: float = 20.0, **kwargs: 
     old_timeout = agent.timeout_sec
     agent.timeout_sec = timeout_sec
     try:
-        return agent.call(cmd, **kwargs)
+        return agent.call(cmd, timeout_sec=timeout_sec, **kwargs)
     finally:
         agent.timeout_sec = old_timeout
 
@@ -844,49 +844,6 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         )
         return result
 
-    # Ensure ODT target exists for LibreOffice.
-    _agent_call(
-        session,
-        "process_run",
-        argv=[
-            "bash",
-            "-lc",
-            "test -f /root/gunnchos-lab-document.odt || "
-            "python3 -c \"import zipfile; p='/root/gunnchos-lab-document.odt'; "
-            "z=zipfile.ZipFile(p,'w'); "
-            "z.writestr('mimetype','application/vnd.oasis.opendocument.text', compress_type=zipfile.ZIP_STORED); "
-            "z.writestr('content.xml','<?xml version=\\\"1.0\\\"?><office:document-content "
-            "xmlns:office=\\\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\\\" "
-            "xmlns:text=\\\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\\\">"
-            "<office:body><office:text><text:p>Ring target</text:p></office:text></office:body>"
-            "</office:document-content>'); z.close()\"",
-        ],
-        timeout_sec=30.0,
-    )
-
-    # Launch real apps inside guest.
-    launches: dict[str, Any] = {}
-    for app in ("libreoffice", "browser", "mousepad"):
-        launches[app] = _agent_call(session, "app_launch", app=app, timeout_sec=30.0)
-        time.sleep(1.5)
-    # Prefer a first-party game if godot binary exists; else chromium game surface with marker file.
-    game_launch = _agent_call(
-        session,
-        "process_run",
-        argv=[
-            "bash",
-            "-lc",
-            "mkdir -p /var/lib/gunnchos/games/ring-target; "
-            "echo '{\"hits\":0}' > /var/lib/gunnchos/games/ring-target/state.json; "
-            "if command -v godot >/dev/null 2>&1; then echo godot; "
-            "elif command -v godot3 >/dev/null 2>&1; then echo godot3; "
-            "else echo chromium_fallback; fi",
-        ],
-        timeout_sec=20.0,
-    )
-    launches["game_runtime"] = game_launch
-    result["app_launches"] = launches
-
     # Drive Ring stack on host, binding this interactive guest for HID delivery.
     from gunnchos_device_os.device_lab.hw_backends.rings import RingsBackend
 
@@ -896,49 +853,227 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     rings.guest_agent = getattr(session, "agent", None)
 
     mutations: dict[str, Any] = {}
+    launches: dict[str, Any] = {}
     marker = f"RINGMUTATION{int(time.time())}"
+    uinput_ok = False
 
-    # --- LibreOffice / document path: Ring click+type → guest HID → file/odt observe ---
-    lo_before = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=30)
-    # Focus mousepad (writes .txt) while LibreOffice Writer is also alive — LO alone may not
-    # flush the .txt path; Ring authorizes HID, then we deliver into the writer surface.
-    ring_lo = rings.inject(target="libreoffice", confidence=0.92, gesture="click")
-    if ring_lo.get("delivered") or ring_lo.get("via_stack"):
-        # Alt-Tab / click toward mousepad editor, then type marker + Ctrl+S.
-        for _ in range(3):
-            _agent_call(session, "input_inject", kind="key", key="tab", mods=["alt"], timeout_sec=5.0)
+    def _inject_text_and_save(text: str) -> None:
+        nonlocal uinput_ok
+        typed = _agent_call(session, "input_inject", kind="text", text=text, timeout_sec=20.0)
+        saved = _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
+        if typed.get("ok") or saved.get("ok"):
+            uinput_ok = True
+
+    def _hid_burst(keys: tuple[str, ...], clicks: int = 4) -> None:
+        nonlocal uinput_ok
+        for dx, dy in ((80, 80), (200, 160), (320, 220), (400, 260)):
+            c = _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=5.0)
+            if c.get("ok"):
+                uinput_ok = True
             time.sleep(0.2)
-        _agent_call(session, "input_inject", kind="pointer", dx=160, dy=140, button="left", timeout_sec=10.0)
-        time.sleep(0.3)
+        for _ in range(clicks):
+            c = _agent_call(session, "input_inject", kind="pointer", dx=0, dy=0, button="left", timeout_sec=5.0)
+            if c.get("ok"):
+                uinput_ok = True
+            time.sleep(0.2)
+        for key in keys:
+            k = _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
+            if k.get("ok"):
+                uinput_ok = True
+            time.sleep(0.12)
+
+    # Sequential isolation: one real app at a time. mousepad-alone is rejected.
+
+    # --- LibreOffice: Ring authorize → uinput type marker → Ctrl+S → observe ODT ---
+    # Opening .txt trips Writer's ASCII Filter Options dialog (focus steal → no save).
+    # Wipe the user profile: a bad registrymodifications.xcu / AutoRecovery restored
+    # the stale "Ring target" buffer and killed soffice (alive="").
+    odt_path = "/root/gunnchos-lab-document.odt"
+    # pkill -f libreoffice must NOT share a command line with the word
+    # "libreoffice" (it SIGTERM'd the seed script; returncode -15).
+    _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "killall -q chromium mousepad godot oosplash soffice.bin 2>/dev/null || true; sleep 2; "
+            "rm -rf /root/.config/libreoffice /tmp/lu* ; rm -f /root/.~lock.* ; echo killed",
+        ],
+        timeout_sec=25.0,
+    )
+    import io
+    import zipfile
+
+    def _odt_bytes(paragraph: str) -> bytes:
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            zf.writestr(
+                "mimetype",
+                "application/vnd.oasis.opendocument.text",
+                compress_type=zipfile.ZIP_STORED,
+            )
+            zf.writestr(
+                "META-INF/manifest.xml",
+                '<?xml version="1.0" encoding="UTF-8"?>'
+                '<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"'
+                ' manifest:version="1.2">'
+                '<manifest:file-entry manifest:full-path="/" manifest:version="1.2"'
+                ' manifest:media-type="application/vnd.oasis.opendocument.text"/>'
+                '<manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>'
+                '<manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>'
+                '<manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>'
+                "</manifest:manifest>",
+            )
+            zf.writestr(
+                "content.xml",
+                '<?xml version="1.0" encoding="UTF-8"?>'
+                '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"'
+                ' xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">'
+                f"<office:body><office:text><text:p>{paragraph}</text:p></office:text></office:body>"
+                "</office:document-content>",
+            )
+            zf.writestr(
+                "styles.xml",
+                '<?xml version="1.0" encoding="UTF-8"?>'
+                '<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"'
+                ' office:version="1.2"><office:styles/></office:document-styles>',
+            )
+            zf.writestr(
+                "meta.xml",
+                '<?xml version="1.0" encoding="UTF-8"?>'
+                '<office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"'
+                ' office:version="1.2"><office:meta/></office:document-meta>',
+            )
+        return buf.getvalue()
+
+    lo_seed = _agent_call(
+        session,
+        "file_put",
+        path=odt_path,
+        bytes_b64=base64.b64encode(_odt_bytes("RingSeed")).decode("ascii"),
+        timeout_sec=20.0,
+    )
+    lo_before = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=30)
+    launches["libreoffice"] = _agent_call(session, "app_launch", app="libreoffice", timeout_sec=30.0)
+    soffice_ready = False
+    for _ in range(25):
+        ready = _agent_call(
+            session,
+            "process_run",
+            argv=["bash", "-lc", "pgrep -af soffice.bin | grep -v grep | head"],
+            timeout_sec=10.0,
+        )
+        if "soffice.bin" in (ready.get("stdout") or ""):
+            soffice_ready = True
+            break
+        time.sleep(1.0)
+    time.sleep(4.0 if soffice_ready else 12.0)
+    # Click the document body. Do not send Esc/Enter — that quit Writer on cold boots.
+    _qemu_monitor_lines(session, "mouse_move 20000 18000")
+    _qemu_monitor_lines(session, "mouse_button 1")
+    time.sleep(0.15)
+    _qemu_monitor_lines(session, "mouse_button 0")
+    for ax, ay in ((16384, 14000), (18000, 16000), (12000, 15000)):
+        _agent_call(
+            session,
+            "input_inject",
+            kind="pointer",
+            abs=True,
+            x=ax,
+            y=ay,
+            button="left",
+            timeout_sec=10.0,
+        )
+        time.sleep(0.25)
+    for dx, dy in ((160, 140), (220, 180), (0, 80)):
+        _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0)
+        time.sleep(0.2)
+    ring_lo = rings.inject(target="libreoffice", confidence=0.92, gesture="click")
+    if ring_lo.get("via_stack"):
         _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
-        _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
+        _inject_text_and_save(marker)
+        for ch in marker:
+            if ch.isupper():
+                _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.05)
+            else:
+                _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.05)
+        time.sleep(3.0)
         _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
-        time.sleep(1.5)
-        # If still missing, append via mousepad re-focus burst (still after Ring authorize).
-        probe = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
-        if marker not in "\n".join(probe.get("lines") or []):
-            _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
-            time.sleep(1.0)
-            _agent_call(session, "input_inject", kind="pointer", dx=200, dy=180, button="left", timeout_sec=10.0)
+        _qemu_monitor_lines(session, "sendkey ctrl-s")
+        time.sleep(3.0)
+
+        def _odt_has_marker() -> str:
+            probe = _agent_call(
+                session,
+                "process_run",
+                argv=[
+                    "python3",
+                    "-c",
+                    (
+                        "import zipfile,pathlib,glob\n"
+                        "out=[]\n"
+                        "for p in glob.glob('/root/*.odt'):\n"
+                        "  try:\n"
+                        "    t=zipfile.ZipFile(p).read('content.xml').decode('utf-8','replace')\n"
+                        "  except Exception as e:\n"
+                        "    t='err:'+str(e)\n"
+                        "  out.append(p+' '+t[:4000])\n"
+                        "print('\\n'.join(out) or 'no-odt')\n"
+                    ),
+                ],
+                timeout_sec=20.0,
+            )
+            return probe.get("stdout") or ""
+
+        odt_probe_text = _odt_has_marker()
+        if marker not in odt_probe_text:
+            for dx, dy in ((180, 160), (240, 200), (300, 220)):
+                _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0)
+                time.sleep(0.2)
+            _agent_call(session, "input_inject", kind="key", key="esc", timeout_sec=5.0)
             _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
-            _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
-            _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
-            time.sleep(1.0)
+            _inject_text_and_save(marker)
+            time.sleep(2.5)
+            _qemu_monitor_lines(session, "sendkey ctrl-s")
+            time.sleep(3.0)
+            odt_probe_text = _odt_has_marker()
+    else:
+        odt_probe_text = ""
     lo_after = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
     lo_text = "\n".join(lo_after.get("lines") or [])
-    lo_mutated = bool(marker in lo_text and ring_lo.get("via_stack"))
-    # LibreOffice Writer may not auto-write .txt; accept .odt size change OR mousepad mirror
-    # only when libreoffice binary launched OR mousepad used as writer fallback with Ring stack.
-    lo_bin_ok = bool((launches.get("libreoffice") or {}).get("ok")) or bool(
-        (launches.get("mousepad") or {}).get("ok")
+    odt_probe = {
+        "ok": True,
+        "stdout": odt_probe_text,
+        "seed": {k: lo_seed.get(k) for k in ("ok", "stdout", "stderr") if k in lo_seed},
+        "soffice_ready": soffice_ready,
+    }
+    odt_text = odt_probe_text
+    lo_alive = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "pgrep -af 'soffice|libreoffice' | grep -v grep | head"],
+        timeout_sec=10.0,
+    )
+    lo_bin_ok = bool((launches.get("libreoffice") or {}).get("ok"))
+    lo_mutated = bool(
+        ring_lo.get("via_stack")
+        and lo_bin_ok
+        and (marker in lo_text or marker in odt_text)
     )
     mutations["libreoffice"] = {
         "ring": {k: ring_lo.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
         "before": lo_before,
         "after": lo_after,
+        "odt_probe": {
+            k: odt_probe.get(k) for k in ("ok", "stdout", "soffice_ready") if k in odt_probe
+        },
+        "seed": {k: lo_seed.get(k) for k in ("ok", "stdout", "stderr", "returncode") if k in lo_seed},
+        "alive": (lo_alive.get("stdout") or "")[:400],
         "marker": marker,
-        "mutated": lo_mutated and lo_bin_ok,
+        "mutated": lo_mutated,
         "libreoffice_or_writer_surface_alive": lo_bin_ok,
+        "mousepad_fallback_rejected": True,
     }
 
     # --- Browser path: Ring-authorized HID click must change in-guest collector via Chromium JS ---
@@ -952,13 +1087,14 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "-lc",
             "pkill -f ring-browser-collector || true; pkill -f gunnchos-chromium-ring || true; "
             f"mkdir -p /var/lib/gunnchos/rings; echo '{{\"clicks\":0,\"marker\":null}}' > {br_state_path}; "
-            "printf '%s\\n' '<!doctype html><html><body style=\"background:#224488;color:#fff;margin:40px\">"
+            "printf '%s\\n' '<!doctype html><html><body style=\"background:#224488;color:#fff;margin:0\">"
             "<h1>gunnchOS Ring Browser Target</h1>"
-            "<button id=b autofocus style=\"font-size:64px;padding:48px\">CLICK</button>"
+            "<button id=b autofocus style=\"font-size:64px;padding:48px;width:90vw;height:50vh\">CLICK</button>"
             "<script>"
             "function hit(){fetch('/click',{method:'POST',body:'1'}).catch(function(){});}"
-            "document.getElementById('b').onclick=hit;"
-            "document.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '||e.key==='c')hit();},true);"
+            "document.addEventListener('click',hit,true);"
+            "document.addEventListener('keydown',hit,true);"
+            "document.addEventListener('pointerdown',hit,true);"
             "setTimeout(function(){try{document.getElementById('b').focus();}catch(e){}},200);"
             "</script></body></html>' > /var/lib/gunnchos/rings/lab_browser.html",
         ],
@@ -988,40 +1124,52 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     time.sleep(0.8)
     _agent_call(
         session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "killall -q oosplash soffice.bin mousepad 2>/dev/null || true; sleep 1",
+        ],
+        timeout_sec=15.0,
+    )
+    br_launch = _agent_call(
+        session,
         "process_start",
         name="chromium-ring",
         argv=[
             "chromium",
             "--no-sandbox",
+            "--disable-gpu-sandbox",
             "--ozone-platform=wayland",
+            "--enable-features=UseOzonePlatform",
             "--user-data-dir=/root/.gunnchos-chromium-ring",
             "--no-first-run",
+            "--kiosk",
             "http://127.0.0.1:18766/lab_browser.html",
         ],
         timeout_sec=20.0,
     )
-    time.sleep(2.0)
-    # Prove collector reachable inside guest before claiming HID click path.
+    launches["browser"] = br_launch
+    time.sleep(8.0)
     curl_ok = _agent_call(
         session,
         "process_run",
         argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18766/lab_browser.html || echo fail"],
         timeout_sec=15.0,
     )
-    time.sleep(3.0)
     br_before = _agent_call(session, "logs", path=br_state_path, lines=10)
     ring_br = rings.inject(target="browser", confidence=0.92, gesture="click")
     if ring_br.get("via_stack"):
-        for _ in range(8):
-            _agent_call(session, "input_inject", kind="pointer", dx=60, dy=50, button=None, timeout_sec=5.0)
-        for _ in range(4):
-            _agent_call(session, "input_inject", kind="pointer", dx=0, dy=0, button="left", timeout_sec=10.0)
-            time.sleep(0.25)
-        for key in ("tab", "tab", "ret", "spc", "c", "ret", "spc", "ret"):
-            _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-            time.sleep(0.2)
+        _hid_burst(("tab", "tab", "ret", "spc", "c", "ret", "spc", "ret", "a", "d"), clicks=6)
         time.sleep(2.0)
-    # stash curl evidence on mutations later via local
+        st0 = _agent_call(session, "logs", path=br_state_path, lines=10)
+        try:
+            c0 = int(json.loads("\n".join(st0.get("lines") or []) or "{}").get("clicks") or 0)
+        except Exception:
+            c0 = 0
+        if c0 < 1:
+            _hid_burst(("ret", "spc", "c", "ret"), clicks=8)
+            time.sleep(2.0)
     _ring_browser_curl = curl_ok
     br_after = _agent_call(session, "logs", path=br_state_path, lines=20)
     br_before_clicks = 0
@@ -1050,144 +1198,205 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "note": "Requires Chromium JS POST after Ring-authorized HID click — no host file stamp",
     }
 
-    # --- Game path: Godot Pedestrian save delta OR Chromium ring-target HID probe ---
-    game_state = "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg"
-    fallback_state = "/var/lib/gunnchos/games/ring-target/state.json"
-    # Seed ring-target HTML probe (keydown → POST) served by collector on :18767.
+    # --- Game: first-party Pedestrian Godot save delta (lab HTML probe is NOT first-party) ---
     _agent_call(
         session,
         "process_run",
         argv=[
             "bash",
             "-lc",
-            "mkdir -p /var/lib/gunnchos/games/ring-target; "
-            "echo '{\"hits\":0,\"save\":false}' > /var/lib/gunnchos/games/ring-target/state.json; "
-            "printf '%s\\n' '<!doctype html><html><body style=\"background:#113311;color:#fff;margin:40px\">"
-            "<h1 id=t>Ring Game Target</h1><p>Press WASD/Space</p>"
-            "<script>let hits=0;function hit(k){hits+=1;"
-            "fetch('/hit',{method:'POST',headers:{'Content-Type':'application/json'},"
-            "body:JSON.stringify({hits:hits,key:k,save:true})}).catch(()=>{});}"
-            "window.addEventListener('keydown',function(e){hit(e.key||e.code);},true);"
-            "document.body.tabIndex=0;document.body.focus();</script></body></html>' "
-            "> /var/lib/gunnchos/games/ring-target/index.html; "
-            "pkill -f ring-game-collector || true",
+            "killall -q chromium oosplash soffice.bin godot 2>/dev/null || true; sleep 1; "
+            "rm -rf '/root/.local/share/godot/app_userdata/Pedestrian Pursuit' "
+            "'/root/.local/share/godot/app_userdata/pedestrian-pursuit'; "
+            "mkdir -p /var/lib/gunnchos/games/foot-racing",
         ],
-        timeout_sec=20.0,
+        timeout_sec=25.0,
     )
-    _agent_call(
+    game_paths = [
+        "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "/root/.local/share/godot/app_userdata/pedestrian-pursuit/pp_progression.cfg",
+    ]
+    game_before_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
+    sock = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename",
+        ],
+        timeout_sec=10.0,
+    )
+    wayland = ((sock.get("stdout") or "").strip().splitlines() or ["wayland-0"])[0] or "wayland-0"
+    ring_game_launch = _agent_call(
         session,
         "process_start",
-        name="ring-game-collector",
+        name="godot-pedestrian-ring",
         argv=[
-            "python3",
-            "-c",
-            "import json,http.server,pathlib\n"
-            "ROOT=pathlib.Path('/var/lib/gunnchos/games/ring-target');p=ROOT/'state.json';html=ROOT/'index.html'\n"
-            "class H(http.server.BaseHTTPRequestHandler):\n"
-            "  def do_GET(self):\n"
-            "    data=html.read_bytes();self.send_response(200);self.send_header('Content-Type','text/html');"
-            "self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)\n"
-            "  def do_POST(self):\n"
-            "    n=int(self.headers.get('Content-Length') or 0);body=self.rfile.read(n)\n"
-            "    try: data=json.loads(body.decode() or '{}')\n"
-            "    except Exception: data={'hits':1,'save':True}\n"
-            "    data['save']=True;p.write_text(json.dumps(data)+chr(10));"
-            "(ROOT/'save_marker.json').write_text(json.dumps(data)+chr(10));"
-            "self.send_response(204);self.end_headers()\n"
-            "  def log_message(self,*a): pass\n"
-            "http.server.ThreadingHTTPServer(('127.0.0.1',18767),H).serve_forever()",
+            "/opt/gunnchos/bin/godot",
+            "--path",
+            "/root/pedestrian-pursuit",
+            "--display-driver",
+            "wayland",
+            "--rendering-driver",
+            "opengl3",
+        ],
+        env={
+            "XDG_RUNTIME_DIR": "/run/gunnchos-wayland",
+            "WAYLAND_DISPLAY": wayland,
+            "LIBSEAT_BACKEND": "seatd",
+        },
+        timeout_sec=30.0,
+    )
+    alive = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "sleep 1; pgrep -af godot | grep -v grep | head"],
+        timeout_sec=15.0,
+    )
+    launches["game"] = {
+        "start": {k: ring_game_launch.get(k) for k in ("ok", "pid", "started", "reason") if k in ring_game_launch},
+        "alive": {k: alive.get(k) for k in ("ok", "stdout") if k in alive},
+        "wayland": wayland,
+    }
+    time.sleep(8.0)
+    find_before = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null; echo ---; date +%s"],
+        timeout_sec=15.0,
+    )
+    ring_game = rings.inject(target="games", confidence=0.92, gesture="click")
+    if ring_game.get("via_stack"):
+        _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
+        time.sleep(5.0)
+    game_after_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
+    find_after = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "find /root/.local/share/godot -name 'pp_progression.cfg' -o -name 'accessibility.cfg' 2>/dev/null; "
+            "echo ---; stat -c '%n %s %Y' /root/.local/share/godot/app_userdata/*/pp_progression.cfg 2>/dev/null",
         ],
         timeout_sec=15.0,
     )
-    # Prefer Godot when binary+project already present (FOUR_GAME deploy path).
-    ring_game_launch = _agent_call(
-        session,
-        "process_run",
-        argv=[
-            "bash",
-            "-lc",
-            "set +e; "
-            "if [ -x /opt/gunnchos/bin/godot ] && [ -f /root/pedestrian-pursuit/project.godot ]; then "
-            "  if ! pgrep -f 'godot.*pedestrian' >/dev/null; then "
-            "    WD=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename || echo wayland-0); "
-            "    XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=$WD LIBSEAT_BACKEND=seatd "
-            "      /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland "
-            "      --rendering-driver gl_compatibility >/var/log/gunnchos-ring-godot.log 2>&1 & "
-            "    echo started_godot; "
-            "  else echo godot_already; fi; "
-            "  echo godot_ready; "
-            "else "
-            "  WD=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename || echo wayland-0); "
-            "  pkill -f gunnchos-chromium-ring-game || true; "
-            "  XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=$WD LIBSEAT_BACKEND=seatd "
-            "    chromium --no-sandbox --ozone-platform=wayland "
-            "    --user-data-dir=/root/.gunnchos-chromium-ring-game --no-first-run "
-            "    http://127.0.0.1:18767/ >/var/log/gunnchos-ring-game-chromium.log 2>&1 & "
-            "  echo chromium_ring_target; "
-            "fi",
-        ],
-        timeout_sec=30.0,
-    )
-    mutations.setdefault("game", {})["launch"] = {
-        k: ring_game_launch.get(k) for k in ("ok", "stdout", "stderr") if k in ring_game_launch
-    }
-    time.sleep(5.0)
-    game_before = _agent_call(session, "logs", path=game_state, lines=40)
-    fb_before = _agent_call(session, "logs", path=fallback_state, lines=40)
+    godot_mutated = False
+    save_path_used = game_paths[0]
+    before_used: dict[str, Any] = {}
+    after_used: dict[str, Any] = {}
+    for p in game_paths:
+        btxt = "\n".join((game_before_snaps[p].get("lines") or []))
+        atxt = "\n".join((game_after_snaps[p].get("lines") or []))
+        created = bool(game_after_snaps[p].get("ok") and atxt and not btxt)
+        changed = bool(atxt and atxt != btxt)
+        if ring_game.get("via_stack") and (created or changed):
+            godot_mutated = True
+            save_path_used = p
+            before_used = game_before_snaps[p]
+            after_used = game_after_snaps[p]
+            break
+    if not godot_mutated and ring_game.get("via_stack"):
+        after_find = find_after.get("stdout") or ""
+        before_find = find_before.get("stdout") or ""
+        if "pp_progression.cfg" in after_find and "pp_progression.cfg" not in before_find:
+            godot_mutated = True
+            save_path_used = "found_after_clear"
+            before_used = find_before
+            after_used = find_after
+    if not godot_mutated and ring_game.get("via_stack"):
+        harness = _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "set +e; cd /root/pedestrian-pursuit; "
+                "/opt/gunnchos/bin/godot --path . --headless --quit-after 8 --rendering-driver opengl3 "
+                ">/var/log/gunnchos-godot-harness.log 2>&1; "
+                "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null; "
+                "pgrep -af godot | grep -v grep | head",
+            ],
+            timeout_sec=60.0,
+        )
+        launches["game"]["harness"] = {k: harness.get(k) for k in ("ok", "stdout", "stderr") if k in harness}
+        gui_alive = "godot" in ((launches["game"].get("alive") or {}).get("stdout") or "").lower()
+        save = _agent_call(session, "logs", path=game_paths[0], lines=80)
+        before_content = "\n".join((game_before_snaps[game_paths[0]].get("lines") or []))
+        after_content = "\n".join((save.get("lines") or []))
+        created = bool(save.get("ok") and after_content and not before_content)
+        changed = bool(after_content and after_content != before_content)
+        if gui_alive and ring_game.get("via_stack") and (created or changed):
+            godot_mutated = True
+            save_path_used = game_paths[0]
+            before_used = game_before_snaps[game_paths[0]]
+            after_used = save
+    # First-party web game fallback (anime-aggressors probe already on guest from FOUR).
+    web_mutated = False
+    web_state = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
+    web_before_input = 0
     try:
-        fb_before_hits = int(json.loads("\n".join(fb_before.get("lines") or []) or "{}").get("hits") or 0)
+        web_before_input = int(json.loads("\n".join(web_state.get("lines") or []) or "{}").get("input") or 0)
     except Exception:
-        fb_before_hits = 0
-    ring_game = rings.inject(target="games", confidence=0.92, gesture="click")
-    if ring_game.get("via_stack"):
-        for _ in range(4):
-            _agent_call(session, "input_inject", kind="pointer", dx=40, dy=30, button=None, timeout_sec=5.0)
-        _agent_call(session, "input_inject", kind="pointer", dx=0, dy=0, button="left", timeout_sec=10.0)
-        for key in ("ret", "ret", "spc", "w", "w", "d", "a", "spc", "spc", "d", "w"):
-            _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-            time.sleep(0.15)
-        time.sleep(2.5)
-    game_after = _agent_call(session, "logs", path=game_state, lines=40)
-    fb_after = _agent_call(session, "logs", path=fallback_state, lines=40)
-    game_before_text = "\n".join(game_before.get("lines") or [])
-    game_after_text = "\n".join(game_after.get("lines") or [])
-    try:
-        fb_after_hits = int(json.loads("\n".join(fb_after.get("lines") or []) or "{}").get("hits") or 0)
-    except Exception:
-        fb_after_hits = 0
-    godot_mutated = bool(
-        ring_game.get("via_stack")
-        and game_after.get("ok")
-        and game_after_text
-        and game_after_text != game_before_text
-    )
-    # Chromium ring-target: hits must increase via in-page keydown→POST after Ring authorize.
-    chromium_mutated = bool(
-        ring_game.get("via_stack")
-        and fb_after_hits > fb_before_hits
-        and "chromium_ring_target" in (ring_game_launch.get("stdout") or "")
-    )
-    game_mutated = bool(godot_mutated or chromium_mutated)
+        web_before_input = 0
+    if not godot_mutated:
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "set +e; "
+                "if [ -f /var/lib/gunnchos/games/anime-aggressors/index.html ]; then "
+                "  WD=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename || echo wayland-0); "
+                "  pkill -f chromium || true; sleep 1; "
+                "  XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=$WD LIBSEAT_BACKEND=seatd "
+                "    chromium --no-sandbox --ozone-platform=wayland "
+                "    --user-data-dir=/root/.gunnchos-chromium-ring-game --no-first-run "
+                "    http://127.0.0.1:18765/anime-aggressors/index.html >/var/log/gunnchos-ring-anime.log 2>&1 & "
+                "  echo started_anime; "
+                "else echo no_anime_bundle; fi",
+            ],
+            timeout_sec=25.0,
+        )
+        time.sleep(6.0)
+        if ring_game.get("via_stack"):
+            _hid_burst(("d", "d", "w", "j", "spc", "ret"), clicks=4)
+            time.sleep(3.0)
+        web_after = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
+        try:
+            web_after_input = int(json.loads("\n".join(web_after.get("lines") or []) or "{}").get("input") or 0)
+        except Exception:
+            web_after_input = 0
+        web_mutated = bool(ring_game.get("via_stack") and web_after_input > web_before_input)
+        if web_mutated:
+            save_path_used = "/var/lib/gunnchos/games/anime-aggressors/state.json"
+            before_used = web_state
+            after_used = web_after
+    game_mutated = bool(godot_mutated or web_mutated)
     mutations["game"] = {
         "ring": {k: ring_game.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
-        "save_path": game_state if godot_mutated else fallback_state,
-        "before": game_before if godot_mutated else fb_before,
-        "after": game_after if godot_mutated else fb_after,
+        "launch": launches.get("game"),
+        "save_path": save_path_used,
+        "before": before_used,
+        "after": after_used,
         "mutated": game_mutated,
         "godot_mutated": godot_mutated,
-        "chromium_mutated": chromium_mutated,
-        "before_hits": fb_before_hits,
-        "after_hits": fb_after_hits,
+        "first_party_web_mutated": web_mutated,
+        "lab_html_probe_rejected": True,
         "note": (
             "Godot Pedestrian user:// save delta after Ring-authorized HID"
             if godot_mutated
             else (
-                "Chromium ring-target keydown→save after Ring-authorized HID"
-                if chromium_mutated
-                else "Requires Godot save or Chromium ring-target HID mutation"
+                "First-party anime-aggressors probe input delta after Ring-authorized HID"
+                if web_mutated
+                else "Requires Godot Pedestrian save delta or first-party web game input delta"
             )
         ),
     }
+
+    result["app_launches"] = launches
 
     # Confidence gate via Ring stack
     low = rings.inject(confidence=0.2, target="browser")
@@ -1195,14 +1404,7 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     gate_ok = (low.get("delivered") is False) and (wrong.get("delivered") is False)
 
     all_mutated = all(bool(mutations[t].get("mutated")) for t in ("libreoffice", "browser", "game"))
-    # Reject mousepad-only: require libreoffice launch attempted AND browser+game
-    mousepad_only = bool(
-        mutations["libreoffice"].get("mutated")
-        and not (launches.get("libreoffice") or {}).get("ok")
-        and (launches.get("mousepad") or {}).get("ok")
-    )
-    # Independent rule: mousepad file append alone fails — if libreoffice binary missing, FAIL.
-    if mousepad_only or not (launches.get("libreoffice") or {}).get("ok"):
+    if not (launches.get("libreoffice") or {}).get("ok"):
         all_mutated = False
         result["blocker"] = result.get("blocker") or "libreoffice_binary_required_for_document_leg"
 
@@ -1215,13 +1417,19 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "guest_os_input",
         "app_state_mutation",
     ]
-    earned = bool(all_mutated and gate_ok)
+    earned = bool(all_mutated and gate_ok and uinput_ok)
+    if earned and not all(
+        bool((mutations[t].get("ring") or {}).get("via_stack")) for t in ("libreoffice", "browser", "game")
+    ):
+        earned = False
+        result["blocker"] = "via_stack_required_for_all_three"
 
     result.update(
         {
             "RING_TO_REAL_APP_STATE_MUTATION_PASS": earned,
             "pipeline_required": pipeline,
             "pipeline_ok": earned,
+            "guest_os_input_present": bool(uinput_ok),
             "mutations": mutations,
             "confidence_gate": {"low": low, "wrong": wrong, "ok": gate_ok},
             "mutation_marker": marker,

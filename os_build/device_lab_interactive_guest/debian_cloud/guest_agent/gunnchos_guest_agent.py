@@ -55,7 +55,8 @@ APP_COMMANDS: dict[str, list[str]] = {
         "--writer",
         "--nologo",
         "--norestore",
-        "/root/gunnchos-lab-document.txt",
+        "--nolockcheck",
+        "/root/gunnchos-lab-document.odt",
     ],
     "godot": ["godot", "--path", "/root/gunnchos-lab-godot"],
     "godot3": ["godot3", "--path", "/root/gunnchos-lab-godot"],
@@ -67,6 +68,7 @@ APP_COMMANDS["editor"] = APP_COMMANDS["libreoffice"]
 
 _uinput_kbd = None
 _uinput_mouse = None
+_uinput_tablet = None
 _procs: dict[str, subprocess.Popen[bytes]] = {}
 _started_at = time.time()
 
@@ -318,21 +320,24 @@ def _wayland_socket_present() -> str | None:
 
 
 def cmd_compositor_info(_req: dict[str, Any]) -> dict[str, Any]:
-    weston_running = False
+    compositor_name = None
     try:
-        out = subprocess.run(["pgrep", "-x", "weston"], capture_output=True, text=True, timeout=5, check=False)
-        weston_running = out.returncode == 0 and bool(out.stdout.strip())
+        for name in ("weston", "labwc"):
+            out = subprocess.run(["pgrep", "-x", name], capture_output=True, text=True, timeout=5, check=False)
+            if out.returncode == 0 and bool(out.stdout.strip()):
+                compositor_name = name
+                break
     except (OSError, subprocess.TimeoutExpired):
         pass
     sock = _wayland_socket_present()
-    if not weston_running or not sock:
+    if not compositor_name or not sock:
         return _ok(
             "compositor_info",
             available=False,
             compositor=None,
             outputs=0,
             surfaces=0,
-            note="weston process or wayland socket not found in guest right now",
+            note="weston/labwc process or wayland socket not found in guest right now",
         )
     outputs = 0
     surfaces = None
@@ -352,12 +357,12 @@ def cmd_compositor_info(_req: dict[str, Any]) -> dict[str, Any]:
     return _ok(
         "compositor_info",
         available=True,
-        compositor="weston",
+        compositor=compositor_name,
         socket=sock,
         outputs=outputs,
         surfaces=surfaces,
         detail=detail,
-        note="Real registry query via wayland-info against the running weston socket.",
+        note="Real registry query via wayland-info against the running compositor socket.",
     )
 
 
@@ -379,6 +384,27 @@ def _get_uinput_devices():
     _uinput_mouse = UInput(mouse_caps, name="gunnchos-uinput-mouse")
     time.sleep(0.3)  # let udev/libinput register the new device
     return _uinput_kbd, _uinput_mouse
+
+
+def _get_uinput_tablet():
+    global _uinput_tablet
+    if _uinput_tablet is not None:
+        return _uinput_tablet
+    try:
+        from evdev import AbsInfo, UInput
+        from evdev import ecodes as e
+    except ImportError as exc:
+        raise RuntimeError(f"python3-evdev not available: {exc}") from exc
+    cap = {
+        e.EV_KEY: [e.BTN_LEFT, e.BTN_RIGHT, e.BTN_TOUCH],
+        e.EV_ABS: [
+            (e.ABS_X, AbsInfo(value=0, min=0, max=32767, fuzz=0, flat=0, resolution=0)),
+            (e.ABS_Y, AbsInfo(value=0, min=0, max=32767, fuzz=0, flat=0, resolution=0)),
+        ],
+    }
+    _uinput_tablet = UInput(cap, name="gunnchos-uinput-tablet")
+    time.sleep(0.3)
+    return _uinput_tablet
 
 
 _KEYNAME_MAP = {
@@ -460,6 +486,31 @@ def cmd_input_inject(req: dict[str, Any]) -> dict[str, Any]:
             dx = int(req.get("dx") or 0)
             dy = int(req.get("dy") or 0)
             button = req.get("button")
+            abs_click = bool(req.get("abs"))
+            if abs_click:
+                tablet = _get_uinput_tablet()
+                ax = int(req.get("x") or 16384)
+                ay = int(req.get("y") or 16384)
+                tablet.write(e.EV_ABS, e.ABS_X, ax)
+                tablet.write(e.EV_ABS, e.ABS_Y, ay)
+                tablet.syn()
+                if button == "left":
+                    tablet.write(e.EV_KEY, e.BTN_TOUCH, 1)
+                    tablet.write(e.EV_KEY, e.BTN_LEFT, 1)
+                    tablet.syn()
+                    time.sleep(0.03)
+                    tablet.write(e.EV_KEY, e.BTN_LEFT, 0)
+                    tablet.write(e.EV_KEY, e.BTN_TOUCH, 0)
+                    tablet.syn()
+                return _ok(
+                    "input_inject",
+                    kind="pointer",
+                    abs=True,
+                    x=ax,
+                    y=ay,
+                    button=button,
+                    injected_via="uinput_tablet",
+                )
             if dx or dy:
                 mouse.write(e.EV_REL, e.REL_X, dx)
                 mouse.write(e.EV_REL, e.REL_Y, dy)
@@ -765,8 +816,11 @@ def cmd_app_launch(req: dict[str, Any]) -> dict[str, Any]:
             return _fail("app_launch", f"binary_not_installed:{binary}", app=app)
     except (OSError, subprocess.TimeoutExpired) as exc:
         return _fail("app_launch", f"which_failed:{exc}", app=app)
+    env = _env_for_gui()
+    if app == "libreoffice":
+        env["SAL_NO_UPDATECHECK"] = "1"
     try:
-        proc = subprocess.Popen(argv, env=_env_for_gui())
+        proc = subprocess.Popen(argv, env=env)
     except OSError as exc:
         return _fail("app_launch", f"spawn_failed:{exc}", app=app)
     time.sleep(0.5)

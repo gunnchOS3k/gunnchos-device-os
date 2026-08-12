@@ -58,8 +58,13 @@ def test_master_and_silicon_tokens_remain_false():
         )
     else:
         assert tokens["DSXL_DUAL_COMPOSITOR_UX_PASS"] is False
+    games_guest = ROOT / "artifacts/wp011r/games/four_games_in_guest.json"
     games = ROOT / "artifacts/wp011r/games/four_games_production.json"
-    if games.is_file():
+    if games_guest.is_file():
+        assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
+            json.loads(games_guest.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
+        )
+    elif games.is_file():
         assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
             json.loads(games.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
         )
@@ -254,7 +259,18 @@ def test_independent_score_no_hardcoded_tens():
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["hardcoded_tens_forbidden"] is True
     assert data["any_grade_is_10"] is False
-    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
+    observed = data.get("tokens_observed") or {}
+    five = all(
+        bool(observed.get(k))
+        for k in (
+            "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+            "LIVE_GUNNCHOS_VISUAL_PASS",
+            "DSXL_DUAL_COMPOSITOR_UX_PASS",
+            "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+            "ECO010_SOAK_PASS",
+        )
+    )
+    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is five
     for name, g in data["baseline_12_grades"].items():
         assert int(g["grade"]) < 10, name
         assert g.get("hardcoded") is False

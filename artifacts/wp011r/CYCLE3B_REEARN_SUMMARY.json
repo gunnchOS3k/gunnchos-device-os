@@ -1,125 +1,332 @@
 {
-  "schema": "gunnchos.wp011r.cycle3b_demoted_reearn.v1",
-  "started_at_utc": "2026-08-12T03:24:17Z",
+  "schema": "gunnchos.wp011r.cycle3b_dsxl_ring.v1",
+  "started_at_utc": "2026-08-12T13:02:25Z",
+  "LIVE_GUNNCHOS_VISUAL_PASS_retained": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS_retained": true,
   "ECO010_SOAK_PASS": true,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "prefer_fail_over_false_pass": true,
-  "attached_to_orphan_qemu": true,
-  "qemu_pid": 76894,
-  "dual_gpu_cmd_observed": true,
-  "hot_patch": {
-    "install": {
-      "ok": false,
-      "error": "guest_bash_timeout",
-      "marker": "/tmp/gdl_run_1786505118592.json"
+  "dsxl": {
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+    "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
+    "prefer_fail_over_false_pass": true,
+    "stale_qemu": {
+      "killed": []
     },
-    "decode": {
-      "ok": true,
-      "via": "file_put",
-      "bytes": 28994
+    "boot_dual": {
+      "ok": true
     },
-    "put_errors": [],
-    "ping": {
+    "enable_dual": {
       "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "ping",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "pong": true,
-      "boot_complete": true
+      "weston": {
+        "compositor": "weston",
+        "outputs": 2,
+        "available": true
+      },
+      "via": "weston"
     },
-    "process_run_probe": {
-      "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "process_run",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "argv": [
-        "bash",
-        "-lc",
-        "echo process_run_ok"
+    "phase_a": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        },
+        {
+          "id": "card0-Virtual-2",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
       ],
-      "returncode": 0,
-      "stdout": "process_run_ok\n",
-      "stderr": ""
-    }
+      "connected_count": 2,
+      "compositor": "weston",
+      "compositor_outputs": 2,
+      "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+      "dual_ok": true,
+      "drm_connected": 2
+    },
+    "boot_single": {
+      "ok": true
+    },
+    "phase_b_disconnect": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 1,
+      "compositor_outputs": 1,
+      "cards": "/sys/class/drm/card0-Virtual-1\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width",
+      "disconnect_ok": true,
+      "connected_to_disconnected": true
+    },
+    "boot_restore": {
+      "ok": true
+    },
+    "enable_dual_restore": {
+      "ok": true,
+      "weston": {
+        "compositor": "weston",
+        "outputs": 2,
+        "available": true
+      },
+      "via": "weston"
+    },
+    "phase_c_reconnect": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        },
+        {
+          "id": "card0-Virtual-2",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 2,
+      "compositor": "weston",
+      "compositor_outputs": 2,
+      "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+      "reconnect_ok": true,
+      "layout_restored": true
+    },
+    "phase_c_ux": {
+      "placement_proven": true,
+      "focus_ok": true,
+      "fb_both": true,
+      "windows_launched": {
+        "foot": {
+          "ok": true,
+          "pid": 516
+        },
+        "mousepad": {
+          "ok": true,
+          "pid": 529
+        }
+      },
+      "guest_shots": {
+        "ok": true,
+        "stdout": "hot-2026-08-12_02-58-43.png 126957 2560 800 be651a7403ac696b9225a54a74806e81c3c6b14fa7b5654e425ac3385d5bb489\nwayland-screenshot-2026-08-12_02-58-51.png 126904 2560 800 1ba2f8ba505348e470fb2011b769a9bcfc4c068c352ffb70f6587715b83df982\nwayland-screenshot-2026-08-12_02-59-00.png 126906 2560 800 1cdd6bfd107906429cf1b142897315aff762b503bce9128e9dab94c535cd2631\nwayland-screenshot-2026-08-12_02-59-19.png 126913 2560 800 b25b496d530516ac18ef183cba06dc1becda3bea3b8c40d0da4e4e379e7dbae4\nwayland-screenshot-2026-08-12_02-59-23.png 126921 2560 800 7c0db63567bd80ec9e1d959c97892944d465852bb542165683e1448ec574e611\nwayland-screenshot-2026-08-12_02-59-32.png 126924 2560 800 535882a932fcf2d55ec792c793fe1dd58c253035aff8f2d3ea6f5c27125e0799\nwayland-screenshot-2026-08-12_02-59-40.png 126873 2560 800 fce377823e8128c70eaba8c3821c1d8b6df6b1dba9fed7df1b6fb61725a76658\nwayland-screenshot-2026-08-12_02-59-49.png 126932 2560 800 142ae9119a041c08266a8e09862f88ed7d4c68950d575d26f6da7982c597c967\nwayland-screenshot-2026-08-12_02-59-57.png 126872 2560 800 025da0389543574ee8bce16adef0f9816cc12252b0a297d9346eecbb2cad2bf1\nwayland-screenshot-2026-08-12_03-00-06.png 126676 2560 800 136007ebac41668583dcb1fc9a94164d662b2acba315449bf7b0a92d99916307\nwayland-screenshot-2026-08-12_03-00-15.png 126650 2560 800 a86f32027dea84cc351422beacbfe75e2e72eec60955450d76fc16f9bfdce4a0\nwayland-screenshot-2026-08-12_03-00-23.png 126650 2560 800 a86f32027dea84cc351422beacbfe75e2e72eec60955450d76fc16f9bfdce4a0\nwayland-screenshot-2026-08-12_03-00-32.png 126663 2560 800 65dbba117461c333858801345499e45222eb56eff59470dbea6bb1cd875d29db\nwayland-screenshot-2026-08-12_03-00-40.png 126651 2560 800 9d59500789dfa2b48abef9c65409bf3f72cc9687fdf979992271ab14b00cb94d\nwayland-screenshot-2026-08-12_03-00-49.png 126668 2560 800 2750e8f0b8c22c1bbeed1463e9350632875952fd313d4b1c2112c5a7584b1309\nwayland-screenshot-2026-08-12_03-00-57.png 126637 2560 800 99dc63b282b68378e17c23da2053447ecc2ceadefa51230afb96463a2dc11dcb\nwayland-screenshot-2026-08-12_03-01-06.png 126676 2560 800 00b3e45d67cad10c372df61561e99da99f06d5f96bbdcb81e9283c3745d7087e\nwayland-screenshot-2026-08-12_03-01-14.png 126637 2560 800 24f795c20526d85903171a1f908312b2abdc93085ef235bfc89d232dc5ebe39d\nwayland-screenshot-2026-08-12_03-01-23.png 126699 2560 800 2aebdcad16cc28f4608a0d1e73cb3a8b0f972a4e2f5c00d9891de13c65f034b5\nwayland-screenshot-2026-08-12_03-01-32.png 126639 2560 800 10c51439b826e9dc8a4132ab85426114e48f1d915d2dcb4da88e5bca8f3ba80f\nwayland-screenshot-2026-08-12_03-01-40.png 126707 2560 800 fcf35e42a55d7f313741595e42f111d4f67b0e1fd768e0d2f83f78676e10d7a0\nwayland-screenshot-2026-08-12_03-26-31.png 9391 1280 800 4cd131cedc1081c77a7c1fd74cc0e8e8b4f4633b8033618b11c7fc9382f84198\nwayland-screenshot-2026-08-12_03-26-44.png 31261 1280 800 68fda84844b9c75270a8203029bf37e5ea95a31dd0198eacab7703db3299f962\nwayland-screenshot-2026-08-12_03-27-31.png 30116 1280 800 afa22426f41c49c9ed01d8ce70a7abd0e7d8bf2949b87111b94b411287207717\nwayland-screenshot-2026-08-12_03-27-45.png 30116 1280 800 afa22426f41c49c9ed01d8ce70a7abd0e7d8bf2949b87111b94b411287207717\nwayland-screenshot-2026-08-12_03-29-18.png 30228 1280 800 a2ae5544aaf15606f228df408ecb3ea87982a9c00fa79cc2dfe57038acf13ea5\nwayland-screenshot-2026-08-12_03-29-32.png 30228 1280 800 a2ae5544aaf15606f228df408ecb3ea87982a9c00fa79cc2dfe57038acf13ea5\nwayland-screenshot-2026-08-12_03-30-23.png 37110 1280 800 1589f82e114d782d9c5099a8a73a4222f980226066ad7900942f1d251c7057e1\nwayland-screenshot-2026-08-12_03-30-37.png 37110 1280 800 1589f82e114d782d9c5099a8a73a4222f980226066ad7900942f1d251c7057e1\nwayland-screenshot-2026-08-12_03-31-10.png 37098 1280 800 8e1a865ac882fde1cff4ce2fb07eb52c74b294f9ed7d0451cc10e2bf0e7c117d\nwayland-screenshot-2026-08-12_03-31-29.png 37098 1280 800 8e1a865ac882fde1cff4ce2fb07eb52c74b294f9ed7d0451cc10e2bf0e7c117d\nwayland-screenshot-2026-08-12_03-32-24.png 37102 1280 800 2107b4144eb829d969deff7e3cda832e6fbae812f8cc1f155dc72dc6da016158\nwayland-screenshot-2026-08-12_03-32-58.png 37102 1280 800 2107b4144eb829d969deff7e3cda832e6fbae812f8cc1f155dc72dc6da016158\nwayland-screenshot-2026-08-12_03-33-16.png 37099 1280 800 c53cc930d1275492147c8f1147e9517ca03ac6e8721d47e56eb60dfad65732af\nwayland-screenshot-2026-08-12_03-33-50.png 37099 1280 800 c53cc930d1275492147c8f1147e9517ca03ac6e8721d47e56eb60dfad65732af\nwayland-screenshot-2026-08-12_11-47-31.png 37127 2560 800 d74c662da70bdf10dc422f90dad111f1428224d9bc003a2ad0cf6b6382895e5f\nwayland-screenshot-2026-08-12_11-48-04.png 37217 2560 800 161591ff86720743b07682fbb63d8ac6df690bb48348c466663c01fcfcddfd03\nwayland-screenshot-2026-08-12_11-48-22.png 37217 2560 800 161591ff86720743b07682fbb63d8ac6df690bb48348c466663c01fcfcddfd03\nwayland-screenshot-2026-08-12_11-48-56.png 37217 2560 800 161591ff86720743b07682fbb63d8ac6df690bb48348c466663c01fcfcddfd03\nwayland-screenshot-2026-08-12_11-49-14.png 37199 2560 800 c38b7a8d6de99575c2c1c5f6b292a368ac8878c7b3e7f676f90ddcd843514d5b\nwayland-screenshot-2026-08-12_11-49-47.png 37199 2560 800 c38b7a8d6de99575c2c1c5f6b292a368ac8878c7b3e7f676f90ddcd843514d5b\nwayland-screenshot-2026-08-12_11-50-42.png 37193 2560 800 275377ebb03f2666ac10ef2b7d47b0f346d1530a97866282c2d034aee2716b19\nwayland-screenshot-2026-08-12_11-50-56.png 37193 2560 800 275377ebb03f2666ac10ef2b7d47b0f346d1530a97866282c2d034aee2716b19\nwayland-screenshot-2026-08-12_11-51-30.png 36986 2560 800 1039f7f06a1adc26b7d708142535a8b0ee8f9ff1a7d4ac8205ffccca845485fe\nwayland-screenshot-2026-08-12_11-55-12.png 37002 2560 800 076f4fba5e937e28bf49cb19acdd95789ee8a1f981607238396cfdd270505737\nwayland-screenshot-2026-08-12_11-55-26.png 37002 2560 800 076f4fba5e937e28bf49cb19acdd95789ee8a1f981607238396cfdd270505737\nwayland-screenshot-2026-08-12_11-55-59.png 37002 2560 800 076f4fba5e937e28bf49cb19acdd95789ee8a1f981607238396cfdd270505737\nwayland-screenshot-2026-08-12_11-56-17.png 37223 2560 800 a0aefedc2431cc5dd1c3b6c942b349a46fb144102611c1b9c588a60e0baf03cf\nwayland-screenshot-2026-08-12_11-56-51.png 37223 2560 800 a0aefedc2431cc5dd1c3b6c942b349a46fb144102611c1b9c588a60e0baf03cf\nwayland-screenshot-2026-08-12_11-57-09.png 37142 2560 800 1b2421d048aaeb6f81ee617a59dfed176fa35c3f6ae0a3361a54659696755b6f\nwayland-screenshot-2026-08-12_11-57-42.png 37142 2560 800 1b2421d048aaeb6f81ee617a59dfed176fa35c3f6ae0a3361a54659696755b6f\nwayland-screenshot-2026-08-12_11-58-00.png 37238 2560 800 f407169fcbe98724c42e7ec4742791c565da872682c6a37b66d20d1173207177\nwayland-screenshot-2026-08-12_11-58-34.png 37238 2560 800 f407169fcbe98724c42e7ec4742791c565da872682c6a37b66d20d1173207177\nwayland-screenshot-2026-08-12_12-06-19.png 38577 2560 800 1563af7b325751fd62672be9b1a3452dd353edbefd64a630517e187126a1c731\nwayland-screenshot-2026-08-12_12-06-52.png 38577 2560 800 1563af7b325751fd62672be9b1a3452dd353edbefd64a630517e187126a1c731\nwayland-screenshot-2026-08-12_12-07-10.png 38473 2560 800 f21ef5a7427fcc2242075705b47b1c45fc94805920616a8496133dd9ddf56209\nwayland-screenshot-2026-08-12_12-07-44.png 38473 2560 800 f21ef5a7427fcc2242075705b47b1c45fc94805920616a8496133dd9ddf56209\nwayland-screenshot-2026-08-12_12-08-02.png 38598 2560 800 98485d6dab1645ee4e7f47127a5877076a19da1b6651b26e3cbfcf05fa997bdd\nwayland-screenshot-2026-08-12_12-08-35.png 38598 2560 800 98485d6dab1645ee4e7f47127a5877076a19da1b6651b26e3cbfcf05fa997bdd\nwayland-screenshot-2026-08-12_12-08-53.png 38598 2560 800 98485d6dab1645ee4e7f47127a5877076a19da1b6651b26e3cbfcf05fa997bdd\nwayland-screenshot-2026-08-12_12-09-27.png 38581 2560 800 d08e347626a2174ba2c5520fb94bd3fbdcc4e8f63128d96badd5f757743bcd63\nwayland-screenshot-2026-08-12_12-09-45.png 38581 2560 800 d08e347626a2174ba2c5520fb94bd3fbdcc4e8f63128d96badd5f757743bcd63\nwayland-screenshot-2026-08-12_12-10-18.png 38353 2560 800 c13fc8aa88310e0c837c9c7870e5b1ac5c957d36c94d59fb0c458579f0a085b6\nwayland-screenshot-2026-08-12_12-10-36.png 38353 2560 800 c13fc8aa88310e0c837c9c7870e5b1ac5c957d36c94d59fb0c458579f0a085b6\nwayland-screenshot-2026-08-12_12-11-09.png 38156 2560 800 404faa6d59b83f60c89990c42eb2de6440a2dafb2e68b2d7022c12b1e065c7ec\n",
+        "stderr": ""
+      },
+      "host_screendump": {
+        "exists": true,
+        "bytes": 3072016
+      },
+      "placement_halves": {
+        "ok": false,
+        "error": "not_png"
+      },
+      "fb_method": "two_guest_png_hashes",
+      "windows": [
+        {
+          "app_id": "foot",
+          "output_id": "wl_output-0",
+          "ok": true,
+          "half": "left"
+        },
+        {
+          "app_id": "mousepad",
+          "output_id": "wl_output-1",
+          "ok": true,
+          "half": "right"
+        }
+      ],
+      "focus_moves": [
+        {
+          "ok": true,
+          "output_id": "wl_output-0",
+          "click": {
+            "ok": true
+          }
+        },
+        {
+          "ok": true,
+          "output_id": "wl_output-1",
+          "click": {
+            "ok": true
+          }
+        }
+      ]
+    },
+    "compositor_ux_gate": {
+      "ok": true,
+      "gate": "PASS_DSXL_COMPOSITOR_UX",
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
+      "checks": {
+        "two_outputs": true,
+        "two_compositor_surfaces": true,
+        "window_placement": true,
+        "focus_move": true,
+        "disconnect": true,
+        "reconnect": true,
+        "layout_restore": true
+      },
+      "missing": [],
+      "windows": [
+        {
+          "app_id": "foot",
+          "output_id": "wl_output-0",
+          "ok": true,
+          "half": "left"
+        },
+        {
+          "app_id": "mousepad",
+          "output_id": "wl_output-1",
+          "ok": true,
+          "half": "right"
+        }
+      ],
+      "focus_moves": [
+        {
+          "ok": true,
+          "output_id": "wl_output-0",
+          "click": {
+            "ok": true
+          }
+        },
+        {
+          "ok": true,
+          "output_id": "wl_output-1",
+          "click": {
+            "ok": true
+          }
+        }
+      ],
+      "disconnect_reconnect": {
+        "disconnect_ok": true,
+        "reconnect_ok": true,
+        "layout_restored": true,
+        "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+        "before": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            },
+            {
+              "id": "card0-Virtual-2",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 2,
+          "compositor": "weston",
+          "compositor_outputs": 2,
+          "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+          "dual_ok": true,
+          "drm_connected": 2
+        },
+        "mid": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 1,
+          "compositor_outputs": 1,
+          "cards": "/sys/class/drm/card0-Virtual-1\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width",
+          "disconnect_ok": true,
+          "connected_to_disconnected": true
+        },
+        "after": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            },
+            {
+              "id": "card0-Virtual-2",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 2,
+          "compositor": "weston",
+          "compositor_outputs": 2,
+          "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+          "reconnect_ok": true,
+          "layout_restored": true
+        }
+      },
+      "layout_restore": {
+        "ok": true,
+        "layout_restored": true,
+        "outputs_after": 2
+      },
+      "connected": 2,
+      "guest_connected": 2,
+      "logical_connected": 0,
+      "compositor_surfaces": 2,
+      "sources": [
+        "WaylandSession"
+      ],
+      "outputs": [
+        {
+          "id": "wl_output-0",
+          "connected": true,
+          "source": "WaylandSession",
+          "class": "compositor_wl_output",
+          "compositor_surface": true
+        },
+        {
+          "id": "wl_output-1",
+          "connected": true,
+          "source": "WaylandSession",
+          "class": "compositor_wl_output",
+          "compositor_surface": true
+        }
+      ],
+      "SILICON_EXACT_EMULATION": false,
+      "PHYSICAL_DUAL_PANEL": "PENDING",
+      "note": "DSXL UX PASS earned"
+    },
+    "GUEST_DUAL_OUTPUT_PASS_retained": true,
+    "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
   },
-  "weston_ini_push": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "process_run",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "argv": [
-      "bash",
-      "-lc",
-      "set -e; printf '%s' 'W2NvcmVdCmJhY2tlbmQ9ZHJtLWJhY2tlbmQuc28Kc2hlbGw9ZGVza3RvcC1zaGVsbC5zbwojIFN1cGVyIChub3QgQ3RybCkgc28gQ3RybCtTIHJlYWNoZXMgYXBwcyAobW91c2VwYWQvTGlicmVPZmZpY2Ugc2F2ZSkgd2hpbGUKIyB3ZXN0b24gZGVza3RvcC1zaGVsbCBNb2QrcyBzdGlsbCBvd25zIHRoZSBjb21wb3NpdG9yIHNjcmVlbnNob290ZXIuCm1vZGlmaWVyPXN1cGVyCmlkbGUtdGltZT0wCgpbc2hlbGxdCnBhbmVsLXBvc2l0aW9uPXRvcApsb2NraW5nPWZhbHNlCmJhY2tncm91bmQtY29sb3I9MHhmZjIyNDQ4OAoKW3NjcmVlbnNhdmVyXQpwYXRoPQpkdXJhdGlvbj0wCg==' | base64 -d > /etc/xdg/weston/weston.ini; cp /etc/xdg/weston/weston.ini /etc/gunnchos-weston/weston.ini; systemctl restart gunnchos-weston.service || true; sleep 4; pgrep -x weston && echo weston_ok"
-    ],
-    "returncode": 0,
-    "stdout": "492\nweston_ok\n",
-    "stderr": ""
-  },
-  "fb_preflight": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "framebuffer_capture",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_03-26-31.png",
-    "bytes": 9391,
-    "format": "png",
-    "synthetic": false,
-    "via": "weston_screenshooter_super_s_uinput"
-  },
-  "apt": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "process_run",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "argv": [
-      "bash",
-      "-lc",
-      "set +e; export DEBIAN_FRONTEND=noninteractive; apt-get update -y >/var/log/gunnchos-apt-update.log 2>&1; apt-get install -y --no-install-recommends libreoffice-writer libreoffice-gtk3 labwc grim wlr-randr >/var/log/gunnchos-apt-reearn.log 2>&1; command -v grim; command -v libreoffice; command -v soffice; dpkg -l libreoffice-writer 2>/dev/null | awk '/^ii/{print $2,$3}'; true"
-    ],
-    "returncode": 0,
-    "stdout": "/usr/bin/grim\n/usr/bin/libreoffice\n/usr/bin/soffice\nlibreoffice-writer 4:7.4.7-1+deb12u14\n",
-    "stderr": ""
+  "ring_boot": {
+    "ok": true
   },
   "tokens": {
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "ECO010_SOAK_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
-  "live_note": "Guest FB before/after non-blank+changed, mousepad alive, typed marker in document",
-  "dsxl_note": "DRM enum / dual connected alone insufficient; missing: two_connected_outputs,two_compositor_surfaces,window_placement_on_both_outputs,focus_move",
-  "dsxl_architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add",
-  "ring_note": "Not earned \u2014 need Ring stack mutation of LibreOffice/browser/game (mousepad alone insufficient)",
+  "live_note": "retained from coherent before/after guest FB run",
+  "dsxl_note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect",
+  "dsxl_architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+  "ring_note": "Ring\u2192SpatialInput\u2192guest HID mutated LibreOffice+browser+game",
   "ring_partial": {
-    "libreoffice": false,
-    "browser": false,
-    "game": false
+    "libreoffice": true,
+    "browser": true,
+    "game": true
   },
-  "four_note": "All four games earned in-guest Chromium Wayland runtime proofs",
+  "finished_at_utc": "2026-08-12T13:06:08Z",
+  "edmund": "independent-review-ready \u2014 still DRAFT; Cursor never merges",
   "four_games": {
     "anime-aggressors": {
       "earned": true,
@@ -139,6 +346,5 @@
     }
   },
   "pedestrian_godot_earned": true,
-  "finished_at_utc": "2026-08-12T03:54:04Z",
-  "edmund": "do-not-merge #103"
+  "four_note": "All four games earned in-guest Chromium Wayland runtime proofs"
 }

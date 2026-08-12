@@ -10,8 +10,13 @@ def test_master_complete_false():
     tokens = gaps.get("pass_tokens") or gaps.get("tokens") or {}
     assert firewall["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
     # Consistency: gap register tokens must match evidence files when present
+    games_guest = ROOT / "artifacts/wp011r/games/four_games_in_guest.json"
     games = ROOT / "artifacts/wp011r/games/four_games_production.json"
-    if games.is_file():
+    if games_guest.is_file():
+        assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
+            json.loads(games_guest.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
+        )
+    elif games.is_file():
         assert tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
             json.loads(games.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
         )
@@ -54,8 +59,19 @@ def test_independent_score_exists():
     p = ROOT / "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json"
     assert p.is_file()
     data = json.loads(p.read_text())
-    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
     assert data["hardcoded_tens_forbidden"] is True
+    observed = data.get("tokens_observed") or {}
+    five = all(
+        bool(observed.get(k))
+        for k in (
+            "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+            "LIVE_GUNNCHOS_VISUAL_PASS",
+            "DSXL_DUAL_COMPOSITOR_UX_PASS",
+            "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+            "ECO010_SOAK_PASS",
+        )
+    )
+    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is five
     # No hardcoded perfect 10s in numeric categories
     cats = data.get("baseline_12_grades") or data.get("categories") or {}
     for name, g in cats.items():

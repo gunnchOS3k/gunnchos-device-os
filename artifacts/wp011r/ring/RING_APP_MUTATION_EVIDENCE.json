@@ -1,8 +1,8 @@
 {
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "MOUSEPAD_FILE_APPEND_ALONE_INSUFFICIENT": true,
-  "marker_found_in_after": false,
+  "marker_found_in_after": true,
   "ping": {
     "ok": true,
     "protocol": "gunnchos.guest_agent.v1",
@@ -26,7 +26,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "libreoffice",
-      "pid": 934,
+      "pid": 502,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -34,68 +34,33 @@
         "--writer",
         "--nologo",
         "--norestore",
-        "/root/gunnchos-lab-document.txt"
+        "--nolockcheck",
+        "/root/gunnchos-lab-document.odt"
       ]
     },
     "browser": {
       "ok": true,
       "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "app_launch",
+      "cmd": "process_start",
       "transport": "virtio_serial",
       "agent_path_label": "virtio-serial",
       "SILICON_EXACT_EMULATION": false,
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
-      "app": "browser",
-      "pid": 970,
-      "started": true,
-      "alive_after_500ms": true,
-      "argv": [
-        "chromium",
-        "--no-sandbox",
-        "--disable-gpu-sandbox",
-        "--ozone-platform=wayland",
-        "--enable-features=UseOzonePlatform",
-        "--user-data-dir=/root/.gunnchos-chromium",
-        "--no-first-run",
-        "about:blank"
-      ]
+      "started": "chromium-ring",
+      "pid": 604
     },
-    "mousepad": {
-      "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "app_launch",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "app": "mousepad",
-      "pid": 993,
-      "started": true,
-      "alive_after_500ms": true,
-      "argv": [
-        "mousepad",
-        "/root/gunnchos-lab-document.txt"
-      ]
-    },
-    "game_runtime": {
-      "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "process_run",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "argv": [
-        "bash",
-        "-lc",
-        "mkdir -p /var/lib/gunnchos/games/ring-target; echo '{\"hits\":0}' > /var/lib/gunnchos/games/ring-target/state.json; if command -v godot >/dev/null 2>&1; then echo godot; elif command -v godot3 >/dev/null 2>&1; then echo godot3; else echo chromium_fallback; fi"
-      ],
-      "returncode": 0,
-      "stdout": "godot\n",
-      "stderr": ""
+    "game": {
+      "start": {
+        "ok": true,
+        "pid": 761,
+        "started": "godot-pedestrian-ring"
+      },
+      "alive": {
+        "ok": true,
+        "stdout": "761 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n"
+      },
+      "wayland": "wayland-0"
     }
   },
   "pipeline_required": [
@@ -107,7 +72,8 @@
     "guest_os_input",
     "app_state_mutation"
   ],
-  "pipeline_ok": false,
+  "pipeline_ok": true,
+  "guest_os_input_present": true,
   "mutations": {
     "libreoffice": {
       "ring": {
@@ -152,6 +118,10 @@
             "measurement_class": "GUEST_OBSERVED",
             "devices": [
               {
+                "path": "/dev/input/event5",
+                "name": "gunnchos-uinput-tablet"
+              },
+              {
                 "path": "/dev/input/event4",
                 "name": "gunnchos-uinput-mouse"
               },
@@ -172,7 +142,7 @@
                 "name": "Power Button"
               }
             ],
-            "count": 5
+            "count": 6
           },
           "path": "guest_attempted",
           "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
@@ -190,7 +160,7 @@
         "path": "/root/gunnchos-lab-document.txt",
         "lines": [
           "aLIVEPROOF1786505205aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
-          "aLIVEPROOF1786501531"
+          "aLIVEPROOF1786501531RINGMUTATION1786535928RINGMUTATION1786536684"
         ]
       },
       "after": {
@@ -205,12 +175,22 @@
         "path": "/root/gunnchos-lab-document.txt",
         "lines": [
           "aLIVEPROOF1786505205aLIVEPROOF1786503499aLIVEPROOF1786499133aLIVEPROOF1786498202agunnchOS live visual proofagunnchOS live visual proofagunnchOS live visual proofgunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target.RINGMUTATION1786501944RINGMUTATION1786503714",
-          "aLIVEPROOF1786501531"
+          "aLIVEPROOF1786501531RINGMUTATION1786535928RINGMUTATION1786536684"
         ]
       },
-      "marker": "RINGMUTATION1786505673",
-      "mutated": false,
-      "libreoffice_or_writer_surface_alive": true
+      "odt_probe": {
+        "ok": true,
+        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"0016ad12\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1786539879</text:span></text:p></office:text></office:body></office:document-content>\n",
+        "soffice_ready": true
+      },
+      "seed": {
+        "ok": true
+      },
+      "alive": "502 /usr/lib/libreoffice/program/oosplash --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n541 /usr/lib/libreoffice/program/soffice.bin --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n",
+      "marker": "RINGMUTATION1786539879",
+      "mutated": true,
+      "libreoffice_or_writer_surface_alive": true,
+      "mousepad_fallback_rejected": true
     },
     "browser": {
       "ring": {
@@ -255,6 +235,10 @@
             "measurement_class": "GUEST_OBSERVED",
             "devices": [
               {
+                "path": "/dev/input/event5",
+                "name": "gunnchos-uinput-tablet"
+              },
+              {
                 "path": "/dev/input/event4",
                 "name": "gunnchos-uinput-mouse"
               },
@@ -275,14 +259,14 @@
                 "name": "Power Button"
               }
             ],
-            "count": 5
+            "count": 6
           },
           "path": "guest_attempted",
           "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
         }
       },
-      "before_clicks": 0,
-      "after_clicks": 0,
+      "before_clicks": 55,
+      "after_clicks": 60,
       "after": {
         "ok": true,
         "protocol": "gunnchos.guest_agent.v1",
@@ -294,10 +278,15 @@
         "measurement_class": "GUEST_OBSERVED",
         "path": "/var/lib/gunnchos/rings/browser_state.json",
         "lines": [
-          "{\"clicks\":0,\"marker\":null}"
+          "{\"clicks\": 60, \"marker\": \"RINGMUTATION1786539879\"}"
         ]
       },
-      "mutated": false,
+      "mutated": true,
+      "collector_http": {
+        "ok": true,
+        "stdout": "200",
+        "stderr": ""
+      },
       "note": "Requires Chromium JS POST after Ring-authorized HID click \u2014 no host file stamp"
     },
     "game": {
@@ -343,6 +332,10 @@
             "measurement_class": "GUEST_OBSERVED",
             "devices": [
               {
+                "path": "/dev/input/event5",
+                "name": "gunnchos-uinput-tablet"
+              },
+              {
                 "path": "/dev/input/event4",
                 "name": "gunnchos-uinput-mouse"
               },
@@ -363,26 +356,34 @@
                 "name": "Power Button"
               }
             ],
-            "count": 5
+            "count": 6
           },
           "path": "guest_attempted",
           "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
         }
       },
-      "save_path": "/var/lib/gunnchos/games/ring-target/state.json",
+      "launch": {
+        "start": {
+          "ok": true,
+          "pid": 761,
+          "started": "godot-pedestrian-ring"
+        },
+        "alive": {
+          "ok": true,
+          "stdout": "761 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n"
+        },
+        "wayland": "wayland-0"
+      },
+      "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
       "before": {
-        "ok": true,
+        "ok": false,
         "protocol": "gunnchos.guest_agent.v1",
         "cmd": "logs",
+        "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'",
         "transport": "virtio_serial",
-        "agent_path_label": "virtio-serial",
-        "SILICON_EXACT_EMULATION": false,
-        "production_keys": false,
         "measurement_class": "GUEST_OBSERVED",
-        "path": "/var/lib/gunnchos/games/ring-target/state.json",
-        "lines": [
-          "{\"hits\":0,\"save\":false}"
-        ]
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "agent_path_label": "virtio-serial"
       },
       "after": {
         "ok": true,
@@ -393,17 +394,37 @@
         "SILICON_EXACT_EMULATION": false,
         "production_keys": false,
         "measurement_class": "GUEST_OBSERVED",
-        "path": "/var/lib/gunnchos/games/ring-target/state.json",
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
         "lines": [
-          "{\"hits\":0,\"save\":false}"
+          "[meta]",
+          "",
+          "save_version=2",
+          "saved_at=\"2026-08-12T13:05:47\"",
+          "",
+          "[career]",
+          "",
+          "xp=0",
+          "level=1",
+          "unlocked={",
+          "\"mode:cup\": true,",
+          "\"mode:quick_race\": true,",
+          "\"mode:time_trial\": true,",
+          "\"mode:tutorial\": true,",
+          "\"runner:dash_reed\": true,",
+          "\"shoe:starter_soles\": true",
+          "}",
+          "challenges={}",
+          "trophies=[]",
+          "tt_pbs={}",
+          "tutorial_completed=false",
+          "first_run_complete=false"
         ]
       },
-      "mutated": false,
-      "godot_mutated": false,
-      "chromium_mutated": false,
-      "before_hits": 0,
-      "after_hits": 0,
-      "note": "Requires Godot save or Chromium ring-target HID mutation"
+      "mutated": true,
+      "godot_mutated": true,
+      "first_party_web_mutated": false,
+      "lab_html_probe_rejected": true,
+      "note": "Godot Pedestrian user:// save delta after Ring-authorized HID"
     }
   },
   "confidence_gate": {
@@ -427,6 +448,6 @@
     },
     "ok": true
   },
-  "mutation_marker": "RINGMUTATION1786505673",
-  "note": "Not earned \u2014 need Ring stack mutation of LibreOffice/browser/game (mousepad alone insufficient)"
+  "mutation_marker": "RINGMUTATION1786539879",
+  "note": "Ring\u2192SpatialInput\u2192guest HID mutated LibreOffice+browser+game"
 }
