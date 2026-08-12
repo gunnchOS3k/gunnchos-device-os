@@ -17,6 +17,7 @@ builds unsigned / NOT_RELEASED — see ``image_realms`` validation.
 """
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import os
@@ -185,17 +186,24 @@ class RealmImageBuilder:
         dest.parent.mkdir(parents=True, exist_ok=True)
         if dest.exists():
             dest.unlink()
-        with tarfile.open(dest, "w:gz", compresslevel=6) as tar:
-            for f in files:
-                arcname = str(f.relative_to(stage))
-                info = tar.gettarinfo(str(f), arcname=arcname)
-                info.mtime = 0
-                info.uid = 0
-                info.gid = 0
-                info.uname = "root"
-                info.gname = "root"
-                with f.open("rb") as fh:
-                    tar.addfile(info, fh)
+        # GzipFile mtime=0 is required: tarfile's default "w:gz" embeds wall-clock
+        # time in the gzip header, which makes consecutive identical rootfs builds
+        # produce different sha256 digests across a 1s boundary.
+        with dest.open("wb") as raw:
+            with gzip.GzipFile(
+                filename="", mode="wb", fileobj=raw, mtime=0, compresslevel=6
+            ) as gz:
+                with tarfile.open(fileobj=gz, mode="w:") as tar:
+                    for f in files:
+                        arcname = str(f.relative_to(stage))
+                        info = tar.gettarinfo(str(f), arcname=arcname)
+                        info.mtime = 0
+                        info.uid = 0
+                        info.gid = 0
+                        info.uname = "root"
+                        info.gname = "root"
+                        with f.open("rb") as fh:
+                            tar.addfile(info, fh)
 
     def _package_manifest(self, stage: Path, files: list[Path]) -> list[dict[str, Any]]:
         rows = []

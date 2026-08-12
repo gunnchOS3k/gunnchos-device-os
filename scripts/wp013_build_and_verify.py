@@ -61,12 +61,19 @@ def check_os_image_builds() -> dict:
     for alias in ("lab", "evt", "factory", "recovery", "production"):
         build_result = builder.build(alias, unsigned=False)
         verify_result = builder.verify(alias)
+        # Prefer on-disk manifest fields over the in-memory return so RESULT
+        # cannot claim signed=true when a later step rewrote the artifact.
+        disk = builder.inspect(alias).get("manifest") or {}
         out[alias] = {
             "build_ok": build_result.get("ok", False),
             "verify_ok": verify_result.get("ok", False),
             "verify_failures": verify_result.get("failures", []),
-            "signed": build_result.get("signed"),
-            "PRODUCTION_RELEASE_CLAIMED": build_result.get("PRODUCTION_RELEASE_CLAIMED"),
+            "signed": bool(disk.get("signed", build_result.get("signed"))),
+            "PRODUCTION_RELEASE_CLAIMED": bool(
+                disk.get("PRODUCTION_RELEASE_CLAIMED", build_result.get("PRODUCTION_RELEASE_CLAIMED"))
+            ),
+            "rootfs_file_count": ((disk.get("artifacts") or {}).get("rootfs_tarball") or {}).get("file_count"),
+            "claim_boundary": disk.get("claim_boundary"),
         }
     return out
 
@@ -221,11 +228,14 @@ def main() -> int:
         "exit_tokens": {},
     }
 
+    # Pytest first: some wp013 tests rebuild EVT/FACTORY with unsigned=True into
+    # os_build/realm_images/. Live checks below must run afterward so RESULT and
+    # on-disk manifests agree on signed=true for DEV-signed realms.
+    pytest_result = run_pytest_suite()
+    result["evidence"]["pytest_tests_wp013"] = pytest_result
+
     realms = check_image_realms()
     result["evidence"]["image_realms"] = realms
-
-    os_image_builds = check_os_image_builds()
-    result["evidence"]["os_image_builds"] = os_image_builds
 
     sdk_pipeline = check_sdk_pipeline()
     result["evidence"]["sdk_pipeline"] = sdk_pipeline
@@ -242,8 +252,9 @@ def main() -> int:
     recovery_svc = check_recovery_serviceability()
     result["evidence"]["recovery_serviceability"] = recovery_svc
 
-    pytest_result = run_pytest_suite()
-    result["evidence"]["pytest_tests_wp013"] = pytest_result
+    # Image builds last so committed realm artifacts match RESULT signed claims.
+    os_image_builds = check_os_image_builds()
+    result["evidence"]["os_image_builds"] = os_image_builds
 
     all_tests_green = pytest_result["ok"]
 
@@ -280,9 +291,11 @@ def main() -> int:
     result["claim_boundary"] = (
         "All exit tokens require both a passing live evidence run in this "
         "script AND a green `tests/wp013` pytest run in the same invocation. "
-        "No production image is built, signed, or released by this work "
-        "package; PRODUCTION_SHIPPING_IMAGE_DEFINITION always stays "
-        "unsigned/NOT_RELEASED."
+        "Realm 'image builds' are deterministic digital rootfs-tarball + "
+        "manifest/SBOM/DEV-sign artifacts (not physical disk images / not "
+        "bootable shipping builds). No production image is built, signed, or "
+        "released by this work package; PRODUCTION_SHIPPING_IMAGE_DEFINITION "
+        "always stays unsigned/NOT_RELEASED."
     )
 
     out_dir = ROOT / "artifacts" / "wp013"

@@ -13,8 +13,8 @@
     "rootfs_tarball": {
       "file_count": 10,
       "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
-      "sha256": "6fe7c1c23bd31f2b2ff00305f82daa5efd88bb344ac6e1f64c3e00e44e5feb89",
-      "size_bytes": 1647
+      "sha256": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa",
+      "size_bytes": 1636
     }
   },
   "claim_boundary": "RECOVERY_IMAGE is the last-resort boot target. Anti-rollback enforced, no dev shell by default, no production keys. Validated only through virtual/simulated boot-failure and rollback tests in this repo, not on physical hardware. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
@@ -98,7 +98,7 @@
     },
     "update_channel": "recovery"
   },
-  "image_hash": "6624ca6635eaf7569bcef9b8f7119afae1827bbcb7b38d585da855ff19a90cff",
+  "image_hash": "e00d395a711fe92e0854d93e60861d0eb879bc85fc7f0d8a0fe502ab19ed42e2",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -156,7 +156,7 @@
   "reproducibility": {
     "file_count": 10,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "6fe7c1c23bd31f2b2ff00305f82daa5efd88bb344ac6e1f64c3e00e44e5feb89",
+    "rootfs_sha256": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4107,16 +4107,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "689ca924bf6415ce02885333a3c48e880a202d497d34607647de8ab74f7e58d20d280983e6baece7b7ed4fb939cf57f577af73bab9c53cbb8d6c65827254a301"
+    "signature_hex": "dc2859703511428f45d217bddb5a3a631550fac5c795e672e1bdebf6ac053253b4ba34421dda2d27171ddcf38ccb1a9e39d21c1526643746efb68f12c80d8106"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
+    "repo_head_sha": "92981f176ff872cbc7b9b3f96c789ad1fb1b3b4b",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T19:42:00Z",
+  "timestamp_utc": "2026-08-12T17:19:02Z",
   "unsigned_requested": false
 }

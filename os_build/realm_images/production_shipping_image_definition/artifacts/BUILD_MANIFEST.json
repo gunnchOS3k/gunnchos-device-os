@@ -13,8 +13,8 @@
     "rootfs_tarball": {
       "file_count": 21,
       "path": "os_build/realm_images/production_shipping_image_definition/artifacts/rootfs.tar.gz",
-      "sha256": "14ddecf328ecdb301730b84b57aac727eaf1a68e22922502ee6b2e4004c1d4d7",
-      "size_bytes": 2289
+      "sha256": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
+      "size_bytes": 2278
     }
   },
   "claim_boundary": "PRODUCTION_SHIPPING_IMAGE_DEFINITION is a complete CONTRACT, not a release. status is always NOT_RELEASED in this repository. trust_roots.key_source is \"none\" \u2014 no production signing key exists, is generated, or is referenced anywhere in this repo. `gunnchctl os-image build production` refuses to run without --unsigned and always emits signing_realm=NOT_RELEASED, claim_boundary=this text, and PRODUCTION_RELEASE_CLAIMED=false. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
@@ -107,7 +107,7 @@
     },
     "update_channel": "production-stable"
   },
-  "image_hash": "b474ff52aae9f070af344a7a5a5436f1b2dffbb96599f607c3de5e3400e299d1",
+  "image_hash": "d0be40fc570557d576ec40bf34133d3889ca3cb4561b1f7070107ee7e0c8ced1",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -220,7 +220,7 @@
   "reproducibility": {
     "file_count": 21,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "14ddecf328ecdb301730b84b57aac727eaf1a68e22922502ee6b2e4004c1d4d7",
+    "rootfs_sha256": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4392,10 +4392,10 @@
   "signing_realm": "none",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
+    "repo_head_sha": "92981f176ff872cbc7b9b3f96c789ad1fb1b3b4b",
     "working_tree_dirty": true
   },
   "status": "NOT_RELEASED",
-  "timestamp_utc": "2026-08-11T19:41:59Z",
+  "timestamp_utc": "2026-08-12T17:19:02Z",
   "unsigned_requested": false
 }

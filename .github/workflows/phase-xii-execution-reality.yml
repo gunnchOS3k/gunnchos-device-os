@@ -63,17 +63,15 @@ jobs:
       - name: Enable corepack / pnpm
         run: |
           set -euo pipefail
+          # Pin pnpm@9 for Node 20. `corepack enable` alone can resolve pnpm 11+,
+          # which requires Node >=22 and crashes on `node:sqlite` under Node 20.
           corepack enable || true
-          if command -v pnpm >/dev/null 2>&1; then
-            pnpm -v
-          else
-            # Avoid npm EEXIST when the Node toolcache already ships pnpm.
-            npm install -g pnpm@9 --force
-            pnpm -v
-          fi
+          corepack prepare pnpm@9.15.9 --activate \
+            || npm install -g pnpm@9.15.9 --force
+          hash -r || true
           node -v
           npm -v
-          pnpm -v || true
+          pnpm -v
 
       - name: Install web game dependencies
         run: |

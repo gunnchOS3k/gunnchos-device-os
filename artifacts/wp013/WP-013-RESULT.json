@@ -1,6 +1,6 @@
 {
   "PRODUCTION_RELEASE_CLAIMED": false,
-  "claim_boundary": "All exit tokens require both a passing live evidence run in this script AND a green `tests/wp013` pytest run in the same invocation. No production image is built, signed, or released by this work package; PRODUCTION_SHIPPING_IMAGE_DEFINITION always stays unsigned/NOT_RELEASED.",
+  "claim_boundary": "All exit tokens require both a passing live evidence run in this script AND a green `tests/wp013` pytest run in the same invocation. Realm 'image builds' are deterministic digital rootfs-tarball + manifest/SBOM/DEV-sign artifacts (not physical disk images / not bootable shipping builds). No production image is built, signed, or released by this work package; PRODUCTION_SHIPPING_IMAGE_DEFINITION always stays unsigned/NOT_RELEASED.",
   "evidence": {
     "ab_update": {
       "boot_ok": true,
@@ -56,6 +56,8 @@
       "evt": {
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
+        "claim_boundary": "EVT realm for hardware bring-up / validation. Signed with DEV keys only, anti-rollback counter enforced, no production keys or real eSIM/factory credentials present. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+        "rootfs_file_count": 38,
         "signed": true,
         "verify_failures": [],
         "verify_ok": true
@@ -63,6 +65,8 @@
       "factory": {
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
+        "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+        "rootfs_file_count": 15,
         "signed": true,
         "verify_failures": [],
         "verify_ok": true
@@ -70,6 +74,8 @@
       "lab": {
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
+        "claim_boundary": "DEV_LAB realm for interactive engineering work. Full debug access, no telemetry upload, no production keys ever present. Not a shippable image. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+        "rootfs_file_count": 38,
         "signed": true,
         "verify_failures": [],
         "verify_ok": true
@@ -77,6 +83,8 @@
       "production": {
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
+        "claim_boundary": "PRODUCTION_SHIPPING_IMAGE_DEFINITION is a complete CONTRACT, not a release. status is always NOT_RELEASED in this repository. trust_roots.key_source is \"none\" \u2014 no production signing key exists, is generated, or is referenced anywhere in this repo. `gunnchctl os-image build production` refuses to run without --unsigned and always emits signing_realm=NOT_RELEASED, claim_boundary=this text, and PRODUCTION_RELEASE_CLAIMED=false. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+        "rootfs_file_count": 21,
         "signed": false,
         "verify_failures": [],
         "verify_ok": true
@@ -84,6 +92,8 @@
       "recovery": {
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
+        "claim_boundary": "RECOVERY_IMAGE is the last-resort boot target. Anti-rollback enforced, no dev shell by default, no production keys. Validated only through virtual/simulated boot-failure and rollback tests in this repo, not on physical hardware. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+        "rootfs_file_count": 10,
         "signed": true,
         "verify_failures": [],
         "verify_ok": true
@@ -92,7 +102,7 @@
     "pytest_tests_wp013": {
       "ok": true,
       "returncode": 0,
-      "tail": "........................................................................ [100%]\n72 passed in 6.53s"
+      "tail": "........................................................................ [100%]\n72 passed in 3.74s"
     },
     "recovery_serviceability": {
       "backup_restore_ok": true,
@@ -136,7 +146,7 @@
     "RECOVERY_SERVICEABILITY_DIGITAL_PASS": true,
     "SDK_PACKAGE_INSTALL_RUN_PASS": true
   },
-  "generated_utc": "2026-08-11T19:40:53Z",
+  "generated_utc": "2026-08-12T17:18:57Z",
   "schema": "gunnchos.wp013.result.v1",
   "title": "gunnchOS Release Engineering + Developer Platform",
   "work_package": "WP-013"

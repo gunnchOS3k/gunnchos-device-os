@@ -13,8 +13,8 @@
     "rootfs_tarball": {
       "file_count": 15,
       "path": "os_build/realm_images/factory_provisioning_image/artifacts/rootfs.tar.gz",
-      "sha256": "37b0b3fe4f0d3fb0cb9a4f5006830c476e5e3a798c4315643fbe68692a11ba16",
-      "size_bytes": 1963
+      "sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+      "size_bytes": 1952
     }
   },
   "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
@@ -113,7 +113,7 @@
     },
     "update_channel": "factory-line"
   },
-  "image_hash": "e8a4a0e8cd25cdeef61dcd39454a063d963565ea9757e87b60fba525b2cdefd7",
+  "image_hash": "ff13a42c90955f05923f9d93eb861e66e223f97de028e67cd4961204eb954654",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -196,7 +196,7 @@
   "reproducibility": {
     "file_count": 15,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "37b0b3fe4f0d3fb0cb9a4f5006830c476e5e3a798c4315643fbe68692a11ba16",
+    "rootfs_sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4243,15 +4243,20 @@
     "version": 1
   },
   "schema": "gunnchos.os_image_build.manifest.v1",
-  "signature": null,
-  "signed": false,
+  "signature": {
+    "algorithm": "Ed25519",
+    "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
+    "public_key_fingerprint": "d0ccabcf3b44f16e",
+    "signature_hex": "c50f3f19bb89bfb83f4f354456b8dc84648df0cc8dea2e2ccd05b0370219ff299447768a5ea785d5b8af2566201bc68b4b09161364cb0dcb04352e5933ad3509"
+  },
+  "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "3b10dd76139f67f214e85cc5d18f387fe560ea3c",
+    "repo_head_sha": "92981f176ff872cbc7b9b3f96c789ad1fb1b3b4b",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-11T19:42:00Z",
-  "unsigned_requested": true
+  "timestamp_utc": "2026-08-12T17:19:01Z",
+  "unsigned_requested": false
 }
