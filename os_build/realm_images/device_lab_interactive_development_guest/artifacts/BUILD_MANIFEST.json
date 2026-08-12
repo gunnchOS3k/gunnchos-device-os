@@ -11,10 +11,10 @@
       "source": "os_build/bootable_reference (shared reference, not realm-specific)"
     },
     "rootfs_tarball": {
-      "file_count": 39,
+      "file_count": 41,
       "path": "os_build/realm_images/device_lab_interactive_development_guest/artifacts/rootfs.tar.gz",
-      "sha256": "42097335e965aa2654b8164a7974b97766ea942815a9daa526e1faf6dfe2a403",
-      "size_bytes": 29726
+      "sha256": "58f222c38f9609512c246b6ef65c2f22b01454539b363b0818bc2d75af8d6993",
+      "size_bytes": 36474
     }
   },
   "claim_boundary": "DEV_LAB realm for interactive engineering work. Full debug access, no telemetry upload, no production keys ever present. Not a shippable image. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
@@ -112,7 +112,7 @@
     },
     "update_channel": "dev-lab"
   },
-  "image_hash": "86668e3611b4b9fc25e136d74ce5c396665f1f0d52ea05f859e6f6982bcdd684",
+  "image_hash": "3f9ec793dc0b20f55870fd3f7c1f030286d2237c4b412e3979137f5365c2d33c",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -166,8 +166,8 @@
     },
     {
       "path": "opt/gunnchos/release_engineering/realm_runtime.py",
-      "sha256": "dec1547ca9985c8fc62bc9d4b22d041dc15f0031ecb2ed8c4189f1861faebdcb",
-      "size_bytes": 16132
+      "sha256": "1678b93ec048910e96b770e5d2bafb079eaef9f1ba691d6584e260a96f1d448b",
+      "size_bytes": 21277
     },
     {
       "path": "opt/gunnchos/release_engineering/sdk/__init__.py",
@@ -180,14 +180,24 @@
       "size_bytes": 4514
     },
     {
+      "path": "opt/gunnchos/release_engineering/sdk/first_party_game_adoption.py",
+      "sha256": "772d286dbbe575c4400e9f74fdc9dc6286a505ff1a8fce7950bdbdfaf1635df3",
+      "size_bytes": 12418
+    },
+    {
+      "path": "opt/gunnchos/release_engineering/sdk/godot_runtime.py",
+      "sha256": "831b582108580c294960e5432acdbb1312e08c7e3c94e6e7dd1454b309acf859",
+      "size_bytes": 9546
+    },
+    {
       "path": "opt/gunnchos/release_engineering/sdk/installer.py",
       "sha256": "ace606d67dd4cd663cf2dad48b77b7134231918d6b84775d610b9c1e19cbc4e6",
       "size_bytes": 7649
     },
     {
       "path": "opt/gunnchos/release_engineering/sdk/manifest.py",
-      "sha256": "1a25d218390aa41b58e0487c9e7d26b06f589abe1b2896a5e4584e79f61848f2",
-      "size_bytes": 3781
+      "sha256": "af8d0abec57dc98cc71f0f814bda3707ff5f7a99c400f10d7e70f89aed4b14d5",
+      "size_bytes": 4198
     },
     {
       "path": "opt/gunnchos/release_engineering/sdk/packager.py",
@@ -196,8 +206,8 @@
     },
     {
       "path": "opt/gunnchos/release_engineering/sdk/runner.py",
-      "sha256": "385a7ebc2761baf8927dc57cdcb46eecf7a74bafe07887fbefd00c64c0fd1cd4",
-      "size_bytes": 4650
+      "sha256": "a0219270b53a54f93a775016c9c0135899ebbd0e430466fe3e4bc8a832dd629f",
+      "size_bytes": 6295
     },
     {
       "path": "opt/gunnchos/release_engineering/serviceability.py",
@@ -313,9 +323,9 @@
   "production_keys_used": false,
   "realm_id": "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST",
   "reproducibility": {
-    "file_count": 39,
+    "file_count": 41,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "42097335e965aa2654b8164a7974b97766ea942815a9daa526e1faf6dfe2a403",
+    "rootfs_sha256": "58f222c38f9609512c246b6ef65c2f22b01454539b363b0818bc2d75af8d6993",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4250,16 +4260,16 @@
           },
           {
             "name": "gunnchos:sha256",
-            "value": "dec1547ca9985c8fc62bc9d4b22d041dc15f0031ecb2ed8c4189f1861faebdcb"
+            "value": "1678b93ec048910e96b770e5d2bafb079eaef9f1ba691d6584e260a96f1d448b"
           },
           {
             "name": "gunnchos:size_bytes",
-            "value": "16132"
+            "value": "21277"
           }
         ],
-        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/realm_runtime.py@dec1547ca998",
+        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/realm_runtime.py@1678b93ec048",
         "type": "file",
-        "version": "dec1547ca998"
+        "version": "1678b93ec048"
       },
       {
         "name": "opt/gunnchos/release_engineering/sdk/__init__.py",
@@ -4302,6 +4312,46 @@
         "version": "e76211c5dd3d"
       },
       {
+        "name": "opt/gunnchos/release_engineering/sdk/first_party_game_adoption.py",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "772d286dbbe575c4400e9f74fdc9dc6286a505ff1a8fce7950bdbdfaf1635df3"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "12418"
+          }
+        ],
+        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/sdk/first_party_game_adoption.py@772d286dbbe5",
+        "type": "file",
+        "version": "772d286dbbe5"
+      },
+      {
+        "name": "opt/gunnchos/release_engineering/sdk/godot_runtime.py",
+        "properties": [
+          {
+            "name": "gunnchos:sbom_source",
+            "value": "rootfs_file"
+          },
+          {
+            "name": "gunnchos:sha256",
+            "value": "831b582108580c294960e5432acdbb1312e08c7e3c94e6e7dd1454b309acf859"
+          },
+          {
+            "name": "gunnchos:size_bytes",
+            "value": "9546"
+          }
+        ],
+        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/sdk/godot_runtime.py@831b58210858",
+        "type": "file",
+        "version": "831b58210858"
+      },
+      {
         "name": "opt/gunnchos/release_engineering/sdk/installer.py",
         "properties": [
           {
@@ -4330,16 +4380,16 @@
           },
           {
             "name": "gunnchos:sha256",
-            "value": "1a25d218390aa41b58e0487c9e7d26b06f589abe1b2896a5e4584e79f61848f2"
+            "value": "af8d0abec57dc98cc71f0f814bda3707ff5f7a99c400f10d7e70f89aed4b14d5"
           },
           {
             "name": "gunnchos:size_bytes",
-            "value": "3781"
+            "value": "4198"
           }
         ],
-        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/sdk/manifest.py@1a25d218390a",
+        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/sdk/manifest.py@af8d0abec57d",
         "type": "file",
-        "version": "1a25d218390a"
+        "version": "af8d0abec57d"
       },
       {
         "name": "opt/gunnchos/release_engineering/sdk/packager.py",
@@ -4370,16 +4420,16 @@
           },
           {
             "name": "gunnchos:sha256",
-            "value": "385a7ebc2761baf8927dc57cdcb46eecf7a74bafe07887fbefd00c64c0fd1cd4"
+            "value": "a0219270b53a54f93a775016c9c0135899ebbd0e430466fe3e4bc8a832dd629f"
           },
           {
             "name": "gunnchos:size_bytes",
-            "value": "4650"
+            "value": "6295"
           }
         ],
-        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/sdk/runner.py@385a7ebc2761",
+        "purl": "pkg:generic/device_lab_interactive_development_guest/opt/gunnchos/release_engineering/sdk/runner.py@a0219270b53a",
         "type": "file",
-        "version": "385a7ebc2761"
+        "version": "a0219270b53a"
       },
       {
         "name": "opt/gunnchos/release_engineering/serviceability.py",
@@ -4846,16 +4896,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "4bff2ed79cdeb334d33d74f4a7306c88cc65a5a64cac348dccf9d7ac3bdc2f6c18074c5a5584165fd89d1b502b8b05abb0b8f2831386f406530ef4cd762bc508"
+    "signature_hex": "80837c03519642ea64c6a1c3d1149862ebfae0af2fc5630aa3760ed490d8c08de35eaa226876d4a83304989b09fd78356f7cda789f373d0f7a1490bd618e420a"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "3a1ac12203eea38d9b5afb6beb7816c58f439da6",
+    "repo_head_sha": "45a2aa712c99a88752d3f58658f9c742f09801ce",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-12T18:35:10Z",
+  "timestamp_utc": "2026-08-12T19:42:56Z",
   "unsigned_requested": false
 }

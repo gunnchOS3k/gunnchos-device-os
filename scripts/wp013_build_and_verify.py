@@ -81,11 +81,11 @@ def check_os_image_builds() -> dict:
 
 def check_sdk_pipeline() -> dict:
     # Stubs may remain as tutorials under sdk/examples — they are NOT adoption proof.
+    # Pedestrian Pursuit is NOT a Python manifest wrapper; see check_first_party_game_sdk.
     real_apps = [
         ("creator_studio", ROOT / "sdk" / "apps" / "creator_studio"),
         ("waike_learning", ROOT / "sdk" / "apps" / "waike_learning"),
         ("gunnchai_tutor", ROOT / "sdk" / "apps" / "gunnchai_tutor"),
-        ("pedestrian_pursuit_ref", ROOT / "sdk" / "apps" / "pedestrian_pursuit_ref"),
     ]
     with tempfile.TemporaryDirectory(prefix="wp013_sdk_") as tmp:
         tmp_path = Path(tmp)
@@ -110,8 +110,17 @@ def check_sdk_pipeline() -> dict:
             for n, _ in real_apps
         )
         results["stubs_retained_as_tutorials_only"] = True
+        results["pedestrian_pursuit_python_wrapper_excluded"] = True
         return results
 
+
+def check_first_party_game_sdk() -> dict:
+    """Real Godot export → gunnchpkg → install/run pipeline for Pedestrian Pursuit."""
+    from gunnchos_device_os.release_engineering.sdk.first_party_game_adoption import (
+        run_first_party_game_sdk_adoption,
+    )
+
+    return run_first_party_game_sdk_adoption(ROOT)
 
 def check_api_compat_gate() -> dict:
     accept = new_manifest(app_id="gunnchos.gate_accept", name="x", capabilities_required=["ring.read"])
@@ -269,6 +278,9 @@ def main() -> int:
     sdk_pipeline = check_sdk_pipeline()
     result["evidence"]["sdk_pipeline"] = sdk_pipeline
 
+    game_sdk = check_first_party_game_sdk()
+    result["evidence"]["first_party_game_sdk"] = game_sdk
+
     api_gate = check_api_compat_gate()
     result["evidence"]["api_compatibility_gate"] = api_gate
 
@@ -315,11 +327,18 @@ def main() -> int:
             all(
                 isinstance(v, dict) and v.get("build_ok") and v.get("install_ok") and v.get("run_ok")
                 for k, v in sdk_pipeline.items()
-                if k not in ("FIRST_PARTY_SDK_ADOPTION_PASS", "stubs_retained_as_tutorials_only")
+                if k
+                not in (
+                    "FIRST_PARTY_SDK_ADOPTION_PASS",
+                    "stubs_retained_as_tutorials_only",
+                    "pedestrian_pursuit_python_wrapper_excluded",
+                )
             )
         )
         and all_tests_green,
         "FIRST_PARTY_SDK_ADOPTION_PASS": bool(sdk_pipeline.get("FIRST_PARTY_SDK_ADOPTION_PASS"))
+        and all_tests_green,
+        "FIRST_PARTY_GAME_SDK_ADOPTION_PASS": bool(game_sdk.get("FIRST_PARTY_GAME_SDK_ADOPTION_PASS"))
         and all_tests_green,
         "API_COMPATIBILITY_GATE_PASS": bool(api_gate["ok"]) and all_tests_green,
         "FACTORY_PROVISIONING_DIGITAL_PASS": bool(factory["ok"]) and all_tests_green,
@@ -328,6 +347,10 @@ def main() -> int:
         "FACTORY_IMAGE_RUNTIME_PASS": bool(realm_runtime.get("FACTORY_IMAGE_RUNTIME_PASS")) and all_tests_green,
         "RECOVERY_IMAGE_RUNTIME_PASS": bool(realm_runtime.get("RECOVERY_IMAGE_RUNTIME_PASS")) and all_tests_green,
         "IMAGE_REALM_POLICY_SEPARATION_PASS": bool(realm_runtime.get("IMAGE_REALM_POLICY_SEPARATION_PASS")) and all_tests_green,
+        "IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS": bool(
+            realm_runtime.get("IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS")
+        )
+        and all_tests_green,
     }
     result["PRODUCTION_RELEASE_CLAIMED"] = False
     result["claim_boundary"] = (

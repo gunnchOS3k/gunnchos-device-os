@@ -32,10 +32,14 @@ def rig(tmp_path):
 
 @pytest.mark.parametrize(
     "app_name",
-    ["creator_studio", "waike_learning", "gunnchai_tutor", "pedestrian_pursuit_ref"],
+    ["creator_studio", "waike_learning", "gunnchai_tutor"],
 )
 def test_first_party_real_app_full_pipeline(rig, app_name):
-    """FIRST_PARTY_SDK_ADOPTION evidence — real apps, not sdk/examples stubs."""
+    """FIRST_PARTY_SDK_ADOPTION evidence — real apps, not sdk/examples stubs.
+
+    Pedestrian Pursuit is covered by FIRST_PARTY_GAME_SDK_ADOPTION_PASS (Godot
+    export-pack runtime), not a Python PACKAGE_MANIFEST wrapper.
+    """
     build_result = rig["builder"].build(REAL_APPS / app_name, rig["out_dir"])
     assert build_result["ok"] is True
     assert build_result["signed"] is True
@@ -55,6 +59,14 @@ def test_first_party_real_app_full_pipeline(rig, app_name):
 
     registry = rig["installer"].list_installed()
     assert install_result["app_id"] in registry["apps"]
+
+
+def test_pedestrian_pursuit_python_wrapper_is_not_adoption_proof():
+    """Guardrail: the old manifest-check wrapper must not be treated as the game."""
+    wrapper = REAL_APPS / "pedestrian_pursuit_ref"
+    assert not wrapper.exists(), "python wrapper pedestrian_pursuit_ref must be removed"
+    harness = REAL_APPS / "pedestrian_pursuit" / "tools" / "gunnchos_sdk_adoption_harness.gd"
+    assert harness.exists()
 
 
 @pytest.mark.parametrize("app_name", ["creator_stub", "waike_stub", "gunnchai_client_stub"])

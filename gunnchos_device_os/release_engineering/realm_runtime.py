@@ -113,6 +113,45 @@ fi
 
 echo "GUNNCHOS_REALM_RUNTIME_EXECUTED=true"
 
+# Behavioral fingerprint — beyond identity string equality.
+BEHAVIOR_CLASS="unknown"
+BEHAVIOR_HAS_FACTORY=0
+BEHAVIOR_HAS_RECOVERY=0
+BEHAVIOR_HAS_GUNNCHCTL=0
+BEHAVIOR_HAS_NO_DEV=0
+BEHAVIOR_UPDATE_CHANNEL=""
+BEHAVIOR_FACTORY_SVC_COUNT=0
+
+if [ -f /opt/gunnchos/factory/FACTORY_ONLY_SERVICES.json ]; then
+  BEHAVIOR_HAS_FACTORY=1
+  BEHAVIOR_FACTORY_SVC_COUNT="$(grep -c '"' /opt/gunnchos/factory/FACTORY_ONLY_SERVICES.json 2>/dev/null || echo 0)"
+fi
+if [ -f /opt/gunnchos/recovery/RECOVERY_POLICY.json ]; then
+  BEHAVIOR_HAS_RECOVERY=1
+fi
+if [ -f /opt/gunnchos/bin/gunnchctl ]; then
+  BEHAVIOR_HAS_GUNNCHCTL=1
+fi
+if [ -f /opt/gunnchos/bin/NO_DEV_TOOLCHAIN.txt ]; then
+  BEHAVIOR_HAS_NO_DEV=1
+fi
+BEHAVIOR_UPDATE_CHANNEL="$(sed -n 's/.*"update_channel"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' /etc/gunnchos/realm.json | head -n 1)"
+
+case "${EXPECTED_REALM}" in
+  EVT_ENGINEERING_IMAGE) BEHAVIOR_CLASS="evt" ;;
+  FACTORY_PROVISIONING_IMAGE) BEHAVIOR_CLASS="factory" ;;
+  RECOVERY_IMAGE) BEHAVIOR_CLASS="recovery" ;;
+esac
+
+echo "GUNNCHOS_REALM_BEHAVIOR_CLASS=${BEHAVIOR_CLASS}"
+echo "GUNNCHOS_REALM_BEHAVIOR_HAS_FACTORY=${BEHAVIOR_HAS_FACTORY}"
+echo "GUNNCHOS_REALM_BEHAVIOR_HAS_RECOVERY=${BEHAVIOR_HAS_RECOVERY}"
+echo "GUNNCHOS_REALM_BEHAVIOR_HAS_GUNNCHCTL=${BEHAVIOR_HAS_GUNNCHCTL}"
+echo "GUNNCHOS_REALM_BEHAVIOR_HAS_NO_DEV=${BEHAVIOR_HAS_NO_DEV}"
+echo "GUNNCHOS_REALM_BEHAVIOR_UPDATE_CHANNEL=${BEHAVIOR_UPDATE_CHANNEL}"
+echo "GUNNCHOS_REALM_BEHAVIOR_FACTORY_SVC_COUNT=${BEHAVIOR_FACTORY_SVC_COUNT}"
+echo "GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT=${BEHAVIOR_CLASS}:f${BEHAVIOR_HAS_FACTORY}:r${BEHAVIOR_HAS_RECOVERY}:g${BEHAVIOR_HAS_GUNNCHCTL}:n${BEHAVIOR_HAS_NO_DEV}:c${BEHAVIOR_UPDATE_CHANNEL}"
+
 PASS=true
 if [ -z "${REALM_ID_JSON}" ] || [ "${REALM_ID_JSON}" != "${EXPECTED_REALM}" ]; then
   PASS=false
@@ -127,8 +166,58 @@ if [ "${SVC_COUNT}" -lt 1 ]; then
   echo "GUNNCHOS_REALM_RUNTIME_ERROR=no_service_units"
 fi
 
+case "${EXPECTED_REALM}" in
+  EVT_ENGINEERING_IMAGE)
+    if [ "${BEHAVIOR_HAS_GUNNCHCTL}" -ne 1 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=evt_missing_gunnchctl"
+    fi
+    if [ "${BEHAVIOR_HAS_FACTORY}" -ne 0 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=evt_has_factory_marker"
+    fi
+    if [ "${BEHAVIOR_HAS_NO_DEV}" -ne 0 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=evt_has_no_dev_marker"
+    fi
+    ;;
+  FACTORY_PROVISIONING_IMAGE)
+    if [ "${BEHAVIOR_HAS_FACTORY}" -ne 1 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=factory_missing_factory_marker"
+    fi
+    if [ "${BEHAVIOR_HAS_GUNNCHCTL}" -ne 0 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=factory_has_gunnchctl"
+    fi
+    if [ "${BEHAVIOR_HAS_NO_DEV}" -ne 1 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=factory_missing_no_dev"
+    fi
+    ;;
+  RECOVERY_IMAGE)
+    if [ "${BEHAVIOR_HAS_RECOVERY}" -ne 1 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=recovery_missing_policy"
+    fi
+    if [ "${BEHAVIOR_HAS_FACTORY}" -ne 0 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=recovery_has_factory_marker"
+    fi
+    if [ "${BEHAVIOR_HAS_GUNNCHCTL}" -ne 0 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=recovery_has_gunnchctl"
+    fi
+    if [ "${BEHAVIOR_HAS_NO_DEV}" -ne 1 ]; then
+      PASS=false
+      echo "GUNNCHOS_REALM_BEHAVIOR_ERROR=recovery_missing_no_dev"
+    fi
+    ;;
+esac
+
 if [ "${PASS}" = "true" ]; then
   echo "GUNNCHOS_REALM_RUNTIME_PASS=true"
+  echo "GUNNCHOS_REALM_BEHAVIORAL_SEPARATION_MARKER=true"
   echo "GUNNCHOS_REALM_RUNTIME_COMPLETE=true"
 else
   echo "GUNNCHOS_REALM_RUNTIME_PASS=false"
@@ -369,6 +458,8 @@ def boot_realm_runtime(
             "PRODUCTION_RELEASE_CLAIMED=false",
             "GUNNCHOS_REALM_RUNTIME_PASS=true",
             "GUNNCHOS_REALM_RUNTIME_COMPLETE=true",
+            "GUNNCHOS_REALM_BEHAVIORAL_SEPARATION_MARKER=true",
+            "GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT=",
         ]
         missing = [m for m in required if m not in log_text]
         ok = not missing and built.get("PRODUCTION_RELEASE_CLAIMED") is False
@@ -457,6 +548,42 @@ def verify_all_realm_runtimes(
         and out["realms"][a]["policy"].get("PRODUCTION_RELEASE_CLAIMED") is False
         for a in RUNTIME_ALIASES
     )
+
+    # Behavioral separation: fingerprints must be present, distinct across
+    # EVT/FACTORY/RECOVERY, and each runtime boot must have passed.
+    fingerprints: dict[str, str] = {}
+    for alias in RUNTIME_ALIASES:
+        boot = out["realms"][alias].get("boot") or {}
+        log_rel = boot.get("log_path")
+        fp = ""
+        if log_rel:
+            log_file = root / log_rel
+            if log_file.exists():
+                for line in log_file.read_text(encoding="utf-8", errors="replace").splitlines():
+                    if line.startswith("GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT="):
+                        fp = line.split("=", 1)[1].strip()
+                        break
+        fingerprints[alias] = fp
+        out["realms"][alias]["behavior_fingerprint"] = fp
+
+    distinct = (
+        len(set(fingerprints.values())) == len(RUNTIME_ALIASES)
+        and all(fingerprints[a] for a in RUNTIME_ALIASES)
+        and all(out["realms"][a].get(TOKEN_BY_ALIAS[a]) for a in RUNTIME_ALIASES)
+    )
+    # Explicit class divergence checks (defense in depth beyond set cardinality).
+    class_ok = (
+        fingerprints.get("evt", "").startswith("evt:")
+        and fingerprints.get("factory", "").startswith("factory:")
+        and fingerprints.get("recovery", "").startswith("recovery:")
+        and ":g1:" in fingerprints.get("evt", "")  # EVT has gunnchctl
+        and ":f1:" in fingerprints.get("factory", "")  # FACTORY has factory marker
+        and ":g0:" in fingerprints.get("factory", "")
+        and ":g0:" in fingerprints.get("recovery", "")
+        and ":f0:" in fingerprints.get("recovery", "")
+    )
+    out["behavior_fingerprints"] = fingerprints
+    out["IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS"] = bool(distinct and class_ok)
     out["EVT_IMAGE_RUNTIME_PASS"] = bool(out["realms"]["evt"]["EVT_IMAGE_RUNTIME_PASS"])
     out["FACTORY_IMAGE_RUNTIME_PASS"] = bool(
         out["realms"]["factory"]["FACTORY_IMAGE_RUNTIME_PASS"]

@@ -25,6 +25,87 @@
       "repair_log_ok": true,
       "wipe_and_rework_ok": true
     },
+    "first_party_game_sdk": {
+      "FIRST_PARTY_GAME_SDK_ADOPTION_PASS": true,
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "accepted_sha_required": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+      "app_id": "gunnchos.pedestrian_pursuit",
+      "claim_boundary": "Digital host Godot 4.5 export-pack + gunnchSDK install/run of Pedestrian Pursuit at an accepted main SHA. Not a shipping store build, not Android APK certification, not PRODUCTION signed. PRODUCTION_RELEASE_CLAIMED=false.",
+      "evidence_path": "artifacts/wp013/first_party_game_sdk/ADOPTION_EVIDENCE.json",
+      "generated_utc": "2026-08-12T19:42:49Z",
+      "ok": true,
+      "python_manifest_wrapper_rejected": true,
+      "schema": "gunnchos.wp013.first_party_game_sdk_adoption.v1",
+      "steps": {
+        "game_state": {
+          "failures": [],
+          "input_events": 2,
+          "mode_label": "Quick Race",
+          "ok": true,
+          "process_pid": 28359,
+          "save_exists": true
+        },
+        "godot_export": {
+          "duration_s": 8.333,
+          "export_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.cache/wp013_game_sdk/export/godot_export_pack.log",
+          "export_mode": "export-pack",
+          "godot_bin": "/Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot",
+          "godot_export_returncode": 0,
+          "godot_version": "4.5.stable.official.876b29033",
+          "import_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.cache/wp013_game_sdk/export/godot_import.log",
+          "ok": true,
+          "pck_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.cache/wp013_game_sdk/export/pedestrian_pursuit.pck",
+          "pck_sha256": "78254701c06f8ba0d0d1a2ddd26add5815ef3aacc36bf866f2320a3f41b1d7a1",
+          "pck_size_bytes": 28917692,
+          "preset": "gunnchos-macos",
+          "savepack_done": true,
+          "teardown_abort_tolerated": false
+        },
+        "incompatible_rejection": {
+          "error": "api_compatibility_gate_rejected",
+          "ok": true
+        },
+        "install_v1": {
+          "action": "installed",
+          "error": null,
+          "ok": true
+        },
+        "launch_runtime": {
+          "evidence_json": "artifacts/wp013/first_party_game_sdk/godot_adoption_evidence.json",
+          "exit_code": 0,
+          "godot_pid_marker": true,
+          "harness_pass_marker": true,
+          "log_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_game_sdk_oi1elcvb/install/apps/gunnchos.pedestrian_pursuit/sandbox/logs/run-1786563767840.log",
+          "ok": true,
+          "stderr_tail": "",
+          "stdout_tail": "Godot Engine v4.5.stable.official.876b29033 - https://godotengine.org\n\nGUNNCHOS_GODOT_ADOPTION_EVIDENCE=/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_game_sdk_oi1elcvb/install/apps/gunnchos.pedestrian_pursuit/sandbox/data/godot_adoption_evidence.json\n{\"app_id\":\"gunnchos.pedestrian_pursuit\",\"display_server\":\"headless\",\"evidence_path\":\"/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_game_sdk_oi1elcvb/install/apps/gunnchos.pedestrian_pursuit/sandbox/data/godot_adoption_evidence.json\",\"failures\":[],\"game_manager\":{\"mode_label\":\"Quick Race\",\"selected_track\":\"verdant_cascade_circuit\"},\"godot_version\":{\"build\":\"official\",\"hash\":\"876b290332ec6f2e6d173d08162a02aa7e6ca46d\",\"hex\":263424,\"major\":4,\"minor\":5,\"patch\":0,\"status\":\"stable\",\"string\":\"4.5-stable (official)\",\"timestamp\":0},\"headless\":true,\"input\":{\"accelerate_parsed\":true,\"events_injected\":2,\"ui_accept_pressed\":true},\"ok\":true,\"process_pid\":28359,\"progression\":{\"after_xp\":17,\"before_xp\":0,\"save_abs\":\"/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_game_sdk_oi1elcvb/install/apps/gunnchos.pedestrian_pursuit/sandbox/home/Library/Application Support/Godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\",\"save_exists\":true,\"save_path\":\"user://pp_progression.cfg\",\"unlocked_challenges\":true,\"unlocked_probe\":true},\"runtime\":\"godot\",\"schema\":\"gunnchos.sdk.godot_adoption_evidence.v1\"}\nGUNNCHOS_FIRST_PARTY_GAME_SDK_ADOPTION_HARNESS_PASS=true\n",
+          "timed_out": false
+        },
+        "package_v1": {
+          "file_count": 2,
+          "ok": true,
+          "package_digest": "2f6fa81308bf23f86e7d78d0dc1806abf733c89a90d4ed5d58e9f42da22ec5f3",
+          "package_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_game_sdk_oi1elcvb/pkgs/gunnchos.pedestrian_pursuit-0.4.0.gunnchpkg",
+          "signed": true
+        },
+        "uninstall": {
+          "ok": true,
+          "removed_version": "0.4.1"
+        },
+        "update": {
+          "action": "updated",
+          "ok": true,
+          "previous_version": "0.4.0",
+          "version": "0.4.1"
+        },
+        "worktree": {
+          "accepted_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+          "ok": true,
+          "reused": true,
+          "worktree": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.cache/wp013_game_sdk/pp_accepted"
+        }
+      }
+    },
     "image_realms": {
       "IMAGE_REALMS_DIGITALLY_COMPLETE": true,
       "ok": true,
@@ -57,7 +138,7 @@
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
         "claim_boundary": "EVT realm for hardware bring-up / validation. Signed with DEV keys only, anti-rollback counter enforced, no production keys or real eSIM/factory credentials present. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
-        "rootfs_file_count": 39,
+        "rootfs_file_count": 41,
         "signed": true,
         "verify_failures": [],
         "verify_ok": true
@@ -75,7 +156,7 @@
         "PRODUCTION_RELEASE_CLAIMED": false,
         "build_ok": true,
         "claim_boundary": "DEV_LAB realm for interactive engineering work. Full debug access, no telemetry upload, no production keys ever present. Not a shippable image. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
-        "rootfs_file_count": 39,
+        "rootfs_file_count": 41,
         "signed": true,
         "verify_failures": [],
         "verify_ok": true
@@ -102,17 +183,24 @@
     "pytest_tests_wp013": {
       "ok": true,
       "returncode": 0,
-      "tail": "........................................................................ [ 92%]\n......                                                                   [100%]\n78 passed in 13.76s"
+      "tail": "........................................................................ [ 91%]\n.......                                                                  [100%]\n79 passed in 27.30s"
     },
     "realm_runtime": {
       "EVT_IMAGE_RUNTIME_PASS": true,
       "FACTORY_IMAGE_RUNTIME_PASS": true,
+      "IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS": true,
       "IMAGE_REALM_POLICY_SEPARATION_PASS": true,
       "RECOVERY_IMAGE_RUNTIME_PASS": true,
+      "behavior_fingerprints": {
+        "evt": "evt:f0:r1:g1:n0:cevt",
+        "factory": "factory:f1:r0:g0:n1:cfactory-line",
+        "recovery": "recovery:f0:r1:g0:n1:crecovery"
+      },
       "claim_boundary": "Realm RUNTIME tokens require QEMU (or Device Lab) execution of each realm rootfs artifact with serial evidence of realm identity + artifact probe. Not physical device boot; not silicon-exact; not a shipping image. PRODUCTION_RELEASE_CLAIMED=false.",
       "realms": {
         "evt": {
           "EVT_IMAGE_RUNTIME_PASS": true,
+          "behavior_fingerprint": "evt:f0:r1:g1:n0:cevt",
           "boot": {
             "PRODUCTION_RELEASE_CLAIMED": false,
             "SILICON_EXACT_EMULATION": false,
@@ -134,7 +222,7 @@
               "-kernel",
               "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/bootable_reference/artifacts/vmlinuz-virt",
               "-initrd",
-              "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_evt_jsb300qe/realm-runtime.cpio.gz",
+              "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_evt_mr1z1ug4/realm-runtime.cpio.gz",
               "-append",
               "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1",
               "-serial",
@@ -142,7 +230,7 @@
               "-monitor",
               "none"
             ],
-            "elapsed_sec": 1.672,
+            "elapsed_sec": 1.688,
             "evidence_path": "artifacts/wp013/realm_runtime/evt/RUNTIME_EVIDENCE.json",
             "log_path": "artifacts/wp013/realm_runtime/evt/qemu_serial_runtime.log",
             "markers_missing": [],
@@ -153,20 +241,22 @@
               "GUNNCHOS_REALM_OS_RELEASE_REALM=EVT_ENGINEERING_IMAGE",
               "PRODUCTION_RELEASE_CLAIMED=false",
               "GUNNCHOS_REALM_RUNTIME_PASS=true",
-              "GUNNCHOS_REALM_RUNTIME_COMPLETE=true"
+              "GUNNCHOS_REALM_RUNTIME_COMPLETE=true",
+              "GUNNCHOS_REALM_BEHAVIORAL_SEPARATION_MARKER=true",
+              "GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT="
             ],
             "mode": "qemu_realm_rootfs_overlay_boot",
             "ok": true,
             "physical_boot_claimed": false,
             "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
             "realm_id": "EVT_ENGINEERING_IMAGE",
-            "rootfs_sha256": "45a35febe66d66811f650cea9eaa3770377b5b60a75f07d4ac4c89f860926034",
+            "rootfs_sha256": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
             "rootfs_tarball": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
             "schema": "gunnchos.wp013.realm_runtime_evidence.v1"
           },
           "policy": {
             "PRODUCTION_RELEASE_CLAIMED": false,
-            "file_count": 39,
+            "file_count": 41,
             "realm_id": "EVT_ENGINEERING_IMAGE",
             "rootfs_present": true,
             "signing_realm": "dev"
@@ -174,6 +264,7 @@
         },
         "factory": {
           "FACTORY_IMAGE_RUNTIME_PASS": true,
+          "behavior_fingerprint": "factory:f1:r0:g0:n1:cfactory-line",
           "boot": {
             "PRODUCTION_RELEASE_CLAIMED": false,
             "SILICON_EXACT_EMULATION": false,
@@ -195,7 +286,7 @@
               "-kernel",
               "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/bootable_reference/artifacts/vmlinuz-virt",
               "-initrd",
-              "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_factory_qfshdnet/realm-runtime.cpio.gz",
+              "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_factory_yohpdzd7/realm-runtime.cpio.gz",
               "-append",
               "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1",
               "-serial",
@@ -203,7 +294,7 @@
               "-monitor",
               "none"
             ],
-            "elapsed_sec": 1.615,
+            "elapsed_sec": 1.548,
             "evidence_path": "artifacts/wp013/realm_runtime/factory/RUNTIME_EVIDENCE.json",
             "log_path": "artifacts/wp013/realm_runtime/factory/qemu_serial_runtime.log",
             "markers_missing": [],
@@ -214,7 +305,9 @@
               "GUNNCHOS_REALM_OS_RELEASE_REALM=FACTORY_PROVISIONING_IMAGE",
               "PRODUCTION_RELEASE_CLAIMED=false",
               "GUNNCHOS_REALM_RUNTIME_PASS=true",
-              "GUNNCHOS_REALM_RUNTIME_COMPLETE=true"
+              "GUNNCHOS_REALM_RUNTIME_COMPLETE=true",
+              "GUNNCHOS_REALM_BEHAVIORAL_SEPARATION_MARKER=true",
+              "GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT="
             ],
             "mode": "qemu_realm_rootfs_overlay_boot",
             "ok": true,
@@ -235,6 +328,7 @@
         },
         "recovery": {
           "RECOVERY_IMAGE_RUNTIME_PASS": true,
+          "behavior_fingerprint": "recovery:f0:r1:g0:n1:crecovery",
           "boot": {
             "PRODUCTION_RELEASE_CLAIMED": false,
             "SILICON_EXACT_EMULATION": false,
@@ -256,7 +350,7 @@
               "-kernel",
               "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/bootable_reference/artifacts/vmlinuz-virt",
               "-initrd",
-              "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_recovery_d216fxaj/realm-runtime.cpio.gz",
+              "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_recovery_stmkx11y/realm-runtime.cpio.gz",
               "-append",
               "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1",
               "-serial",
@@ -264,7 +358,7 @@
               "-monitor",
               "none"
             ],
-            "elapsed_sec": 1.534,
+            "elapsed_sec": 1.505,
             "evidence_path": "artifacts/wp013/realm_runtime/recovery/RUNTIME_EVIDENCE.json",
             "log_path": "artifacts/wp013/realm_runtime/recovery/qemu_serial_runtime.log",
             "markers_missing": [],
@@ -275,7 +369,9 @@
               "GUNNCHOS_REALM_OS_RELEASE_REALM=RECOVERY_IMAGE",
               "PRODUCTION_RELEASE_CLAIMED=false",
               "GUNNCHOS_REALM_RUNTIME_PASS=true",
-              "GUNNCHOS_REALM_RUNTIME_COMPLETE=true"
+              "GUNNCHOS_REALM_RUNTIME_COMPLETE=true",
+              "GUNNCHOS_REALM_BEHAVIORAL_SEPARATION_MARKER=true",
+              "GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT="
             ],
             "mode": "qemu_realm_rootfs_overlay_boot",
             "ok": true,
@@ -325,14 +421,7 @@
         "run_ok": true,
         "stub_content": false
       },
-      "pedestrian_pursuit_ref": {
-        "app_dir": "sdk/apps/pedestrian_pursuit_ref",
-        "build_ok": true,
-        "exit_code": 0,
-        "install_ok": true,
-        "run_ok": true,
-        "stub_content": false
-      },
+      "pedestrian_pursuit_python_wrapper_excluded": true,
       "stubs_retained_as_tutorials_only": true,
       "waike_learning": {
         "app_dir": "sdk/apps/waike_learning",
@@ -351,8 +440,10 @@
     "FACTORY_IMAGE_BUILD_PASS": true,
     "FACTORY_IMAGE_RUNTIME_PASS": true,
     "FACTORY_PROVISIONING_DIGITAL_PASS": true,
+    "FIRST_PARTY_GAME_SDK_ADOPTION_PASS": true,
     "FIRST_PARTY_SDK_ADOPTION_PASS": true,
     "IMAGE_REALMS_DIGITALLY_COMPLETE": true,
+    "IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS": true,
     "IMAGE_REALM_POLICY_SEPARATION_PASS": true,
     "PRODUCTION_IMAGE_DEFINITION_COMPLETE": true,
     "RECOVERY_IMAGE_BUILD_PASS": true,
@@ -360,7 +451,7 @@
     "RECOVERY_SERVICEABILITY_DIGITAL_PASS": true,
     "SDK_PACKAGE_INSTALL_RUN_PASS": true
   },
-  "generated_utc": "2026-08-12T18:34:49Z",
+  "generated_utc": "2026-08-12T19:42:10Z",
   "schema": "gunnchos.wp013.result.v1",
   "title": "gunnchOS Release Engineering + Developer Platform",
   "work_package": "WP-013"

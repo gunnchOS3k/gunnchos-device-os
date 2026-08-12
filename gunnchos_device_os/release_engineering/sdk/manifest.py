@@ -22,6 +22,8 @@ VALID_PERMISSIONS = {
 
 VALID_ARCH_TARGETS = {"aarch64", "x86_64", "wasm32"}
 
+VALID_RUNTIMES = {"python", "godot"}
+
 REQUIRED_FIELDS = (
     "schema",
     "app_id",
@@ -89,6 +91,14 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
             failures.append("bad_dependency_entry")
             break
 
+    runtime = manifest.get("runtime", "python")
+    if runtime not in VALID_RUNTIMES:
+        failures.append("bad_runtime")
+    if runtime == "godot":
+        godot = manifest.get("godot") or {}
+        if not isinstance(godot, dict) or not godot.get("main_pack"):
+            failures.append("godot_main_pack_missing")
+
     return failures
 
 
@@ -106,6 +116,7 @@ def new_manifest(
     capabilities_required: list[str] | None = None,
     dependencies: list[dict[str, str]] | None = None,
     sandbox_network_policy: str = "deny_all",
+    runtime: str = "python",
 ) -> dict[str, Any]:
     return {
         "schema": MANIFEST_SCHEMA,
@@ -117,6 +128,7 @@ def new_manifest(
         "max_os_version": max_os_version,
         "arch_targets": arch_targets or ["aarch64", "x86_64"],
         "entrypoint": entrypoint,
+        "runtime": runtime,
         "permissions": permissions or [],
         "capabilities_required": capabilities_required or [],
         "dependencies": dependencies or [],

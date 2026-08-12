@@ -19,7 +19,7 @@
     "-kernel",
     "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/bootable_reference/artifacts/vmlinuz-virt",
     "-initrd",
-    "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_evt_jsb300qe/realm-runtime.cpio.gz",
+    "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wp013_realm_rt_evt_mr1z1ug4/realm-runtime.cpio.gz",
     "-append",
     "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1",
     "-serial",
@@ -27,7 +27,7 @@
     "-monitor",
     "none"
   ],
-  "elapsed_sec": 1.672,
+  "elapsed_sec": 1.688,
   "log_path": "artifacts/wp013/realm_runtime/evt/qemu_serial_runtime.log",
   "markers_missing": [],
   "markers_required": [
@@ -37,14 +37,16 @@
     "GUNNCHOS_REALM_OS_RELEASE_REALM=EVT_ENGINEERING_IMAGE",
     "PRODUCTION_RELEASE_CLAIMED=false",
     "GUNNCHOS_REALM_RUNTIME_PASS=true",
-    "GUNNCHOS_REALM_RUNTIME_COMPLETE=true"
+    "GUNNCHOS_REALM_RUNTIME_COMPLETE=true",
+    "GUNNCHOS_REALM_BEHAVIORAL_SEPARATION_MARKER=true",
+    "GUNNCHOS_REALM_BEHAVIOR_FINGERPRINT="
   ],
   "mode": "qemu_realm_rootfs_overlay_boot",
   "ok": true,
   "physical_boot_claimed": false,
   "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
   "realm_id": "EVT_ENGINEERING_IMAGE",
-  "rootfs_sha256": "45a35febe66d66811f650cea9eaa3770377b5b60a75f07d4ac4c89f860926034",
+  "rootfs_sha256": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
   "rootfs_tarball": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
   "schema": "gunnchos.wp013.realm_runtime_evidence.v1"
 }

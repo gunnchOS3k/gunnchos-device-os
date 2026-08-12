@@ -44,7 +44,13 @@ def test_recovery_realm_qemu_runtime_boot():
 def test_all_realm_runtimes_earn_tokens():
     result = verify_all_realm_runtimes(ROOT, timeout_sec=90.0)
     assert result["IMAGE_REALM_POLICY_SEPARATION_PASS"] is True
+    assert result["IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS"] is True
     assert result["EVT_IMAGE_RUNTIME_PASS"] is True
     assert result["FACTORY_IMAGE_RUNTIME_PASS"] is True
     assert result["RECOVERY_IMAGE_RUNTIME_PASS"] is True
     assert result.get("PRODUCTION_RELEASE_CLAIMED") is not True
+    fps = result.get("behavior_fingerprints") or {}
+    assert fps.get("evt", "").startswith("evt:")
+    assert fps.get("factory", "").startswith("factory:")
+    assert fps.get("recovery", "").startswith("recovery:")
+    assert len(set(fps.values())) == 3
