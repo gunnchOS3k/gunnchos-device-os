@@ -15,9 +15,9 @@
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
   "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-  "LIVE_GUNNCHOS_VISUAL_PASS": false,
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
   "GUEST_DUAL_OUTPUT_PASS": true,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
@@ -80,10 +80,11 @@
     "qemu_websocket": true
   },
   "notes": [
-    "LIVE: capture path fixed (IEND+stable wait+file_get); complete before/after PNGs committed but typed_marker/document read still fails \u2014 token false",
-    "DSXL: dual wl_output earned; placement_halves PNGs not committed this-run \u2014 token false",
-    "RING: agent stall / Lab sidecars rejected; guest ODT marker not committed \u2014 token false",
-    "FOUR_GAME + ECO010 + GUEST_DUAL_OUTPUT retained"
+    "LIVE: typed_marker in mousepad document + complete IEND before/after guest PNGs same-run",
+    "DSXL: dual placement half PNGs committed (placement_halves.ok); reboot 2\u21921\u21922; focus; layout restore",
+    "RING: guest LibreOffice ODT marker + browser click delta + Godot pp_progression.cfg committed (not Lab sidecars)",
+    "FOUR_GAME + ECO010 + GUEST_DUAL_OUTPUT retained",
+    "five_gate_digital_and true only as digital candidate \u2014 Cursor never merges; independent must accept; shipping master false"
   ],
   "wave6_interactive_guest": {
     "readme": "os_build/device_lab_interactive_guest/README.md",
@@ -109,7 +110,7 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-12T13:18:06Z",
+  "updated_at_utc": "2026-08-12T16:07:47Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-  "five_gate_digital_and": false
+  "five_gate_digital_and": true
 }

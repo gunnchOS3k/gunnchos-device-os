@@ -1,5 +1,5 @@
 {
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
   "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
   "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
   "prefer_fail_over_false_pass": true,
@@ -93,17 +93,17 @@
     "layout_restored": true
   },
   "phase_c_ux": {
-    "placement_proven": false,
-    "focus_ok": false,
-    "fb_both": false,
+    "placement_proven": true,
+    "focus_ok": true,
+    "fb_both": true,
     "windows_launched": {
       "foot": {
         "ok": true,
-        "pid": 624
+        "pid": 604
       },
       "mousepad": {
         "ok": true,
-        "pid": 636
+        "pid": 614
       }
     },
     "guest_shots": {
@@ -116,93 +116,100 @@
       "bytes": 3072016
     },
     "placement_halves": {
-      "ok": false,
-      "error": "not_png"
+      "ok": true,
+      "width": 2560,
+      "height": 800,
+      "left_sha256": "97515f1935c73f370540b87151db528a5eeefefaa193dda5eea09aaf2e49f7dd",
+      "right_sha256": "248f3d357bbf48dff1bfd05b0664a8f2048d83c8e851700b694e479e3bab44d6",
+      "halves_differ": true,
+      "left_nonzero": true,
+      "right_nonzero": true,
+      "left_png": "dsxl_left.png",
+      "right_png": "dsxl_right.png",
+      "left_png_sha256": "b0f0d6112f9768c1cbd091f636e426c3c42693cb9fc548d88e467785fb735a33",
+      "right_png_sha256": "d7c60dd18718d1704eb2a3e6a253b77c161cdbebbae63b664fea760e6172c42e",
+      "committed_png_halves": true
     },
-    "fb_method": "none",
+    "fb_method": "combined_halves_png",
     "this_run_shot_hashes": [],
     "grim_both_stale_rejected": true,
     "windows": [
       {
         "app_id": "foot",
-        "output_id": "",
+        "output_id": "wl_output-0",
         "ok": true,
         "half": "left",
-        "half_png": ""
+        "half_png": "dsxl_left.png"
       },
       {
         "app_id": "mousepad",
-        "output_id": "",
+        "output_id": "wl_output-1",
         "ok": true,
         "half": "right",
-        "half_png": ""
+        "half_png": "dsxl_right.png"
       }
     ],
     "focus_moves": [
       {
-        "ok": false,
-        "output_id": "",
+        "ok": true,
+        "output_id": "wl_output-0",
         "click": {
-          "ok": false
+          "ok": true
         }
       },
       {
-        "ok": false,
-        "output_id": "",
+        "ok": true,
+        "output_id": "wl_output-1",
         "click": {
-          "ok": false
+          "ok": true
         }
       }
     ]
   },
   "compositor_ux_gate": {
-    "ok": false,
-    "gate": "FAIL_DSXL_COMPOSITOR_UX",
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "ok": true,
+    "gate": "PASS_DSXL_COMPOSITOR_UX",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
     "checks": {
       "two_outputs": true,
       "two_compositor_surfaces": true,
-      "window_placement": false,
-      "focus_move": false,
+      "window_placement": true,
+      "focus_move": true,
       "disconnect": true,
       "reconnect": true,
       "layout_restore": true
     },
-    "missing": [
-      "window_placement_on_both_outputs",
-      "focus_move",
-      "framebuffer_both_outputs"
-    ],
+    "missing": [],
     "windows": [
       {
         "app_id": "foot",
-        "output_id": "",
+        "output_id": "wl_output-0",
         "ok": true,
         "half": "left",
-        "half_png": ""
+        "half_png": "dsxl_left.png"
       },
       {
         "app_id": "mousepad",
-        "output_id": "",
+        "output_id": "wl_output-1",
         "ok": true,
         "half": "right",
-        "half_png": ""
+        "half_png": "dsxl_right.png"
       }
     ],
     "focus_moves": [
       {
-        "ok": false,
-        "output_id": "",
+        "ok": true,
+        "output_id": "wl_output-0",
         "click": {
-          "ok": false
+          "ok": true
         }
       },
       {
-        "ok": false,
-        "output_id": "",
+        "ok": true,
+        "output_id": "wl_output-1",
         "click": {
-          "ok": false
+          "ok": true
         }
       }
     ],
@@ -301,8 +308,8 @@
     ],
     "SILICON_EXACT_EMULATION": false,
     "PHYSICAL_DUAL_PANEL": "PENDING",
-    "note": "DRM enum / dual connected alone insufficient; missing: window_placement_on_both_outputs,focus_move,framebuffer_both_outputs"
+    "note": "DSXL UX PASS earned"
   },
   "GUEST_DUAL_OUTPUT_PASS_retained": true,
-  "note": "DRM enum / dual connected alone insufficient; missing: window_placement_on_both_outputs,focus_move,framebuffer_both_outputs"
+  "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
 }

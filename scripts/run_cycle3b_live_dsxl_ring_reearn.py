@@ -276,21 +276,34 @@ def main() -> int:
 
     ring = {"RING_TO_REAL_APP_STATE_MUTATION_PASS": False, "note": "no_session"}
     try:
-        if session is None:
-            _kill_stale_qemu()
-            boot_r = boot_interactive_guest(
-                ROOT, work_dsxl, dual=True, boot_timeout_s=240, memory_mb=4096
-            )
-            session = boot_r.pop("_session", None)
-            summary["boot_ring"] = {k: boot_r.get(k) for k in ("ok", "error") if k in boot_r}
-            if session is not None:
-                _hot_patch_guest_agent(session, ROOT)
-                _push_weston(session)
-                for _ in range(20):
-                    if _agent_call(session, "compositor_info", timeout_sec=10.0).get("available"):
-                        break
-                    time.sleep(1.0)
+        # Always fresh dual boot for RING — DSXL reboot/UX often leaves virtio-serial dead.
         if session is not None:
+            try:
+                session.stop()
+            except Exception:
+                pass
+            session = None
+            time.sleep(2)
+        _kill_stale_qemu()
+        work_ring = ROOT / "artifacts/wp011r/interactive_guest_session_ring"
+        work_ring.mkdir(parents=True, exist_ok=True)
+        boot_r = boot_interactive_guest(
+            ROOT, work_ring, dual=True, boot_timeout_s=240, memory_mb=4096
+        )
+        session = boot_r.pop("_session", None)
+        summary["boot_ring"] = {k: boot_r.get(k) for k in ("ok", "error") if k in boot_r}
+        if session is not None:
+            fg = _agent_call(
+                session, "file_get", path="/etc/hostname", offset=0, length=64, timeout_sec=10.0
+            )
+            if not (fg.get("ok") and fg.get("bytes_b64")):
+                summary["ring_hot_patch"] = _hot_patch_guest_agent(session, ROOT)
+                time.sleep(3)
+            _push_weston(session)
+            for _ in range(25):
+                if _agent_call(session, "compositor_info", timeout_sec=10.0).get("available"):
+                    break
+                time.sleep(1.0)
             # Ensure Pedestrian exists for RING Godot leg (FOUR already earned).
             _guest_bash(
                 session,
@@ -300,7 +313,7 @@ def main() -> int:
                 name="godot-probe",
             )
             ring_dir = _evidence_dir(ROOT, "ring")
-            logp("=== RING proof ===")
+            logp("=== RING proof (fresh boot) ===")
             ring = attempt_ring_app_mutation_pass(session, ring_dir)
             logp(
                 "RING",

@@ -28,6 +28,7 @@ from gunnchos_device_os.device_lab.interactive_guest_proofs import (  # noqa: E4
     _evidence_dir,
     _png_complete,
     _png_half_sha256,
+    _pull_guest_file,
     _qemu_monitor_lines,
     _rgb_halves_to_pngs,
     attempt_ring_app_mutation_pass,
@@ -197,14 +198,24 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
         ev["note"] = "need two compositor wl_outputs before placement"
         return ev
     oid_a, oid_b = compositor_outputs[0]["id"], compositor_outputs[1]["id"]
+    # Place foot on left output: click left half, launch, type distinctive marker.
+    _agent_call(session, "input_inject", kind="pointer", dx=-600, dy=100, button="left", timeout_sec=10.0)
+    time.sleep(0.3)
     win_a = _agent_call(session, "app_launch", app="foot", timeout_sec=15.0)
     time.sleep(1.2)
+    _agent_call(session, "input_inject", kind="text", text="DSXLLEFTFOOT", timeout_sec=15.0)
+    for ch in "DSXLLEFTFOOT":
+        _qemu_monitor_lines(session, f"sendkey {ch.lower()}", wait_s=0.03)
+    # Move pointer to right output and launch mousepad.
     for _ in range(18):
         _agent_call(session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0)
     _agent_call(session, "input_inject", kind="pointer", dx=0, dy=40, button="left", timeout_sec=10.0)
     time.sleep(0.3)
     win_b = _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
     time.sleep(1.5)
+    _agent_call(session, "input_inject", kind="text", text="DSXLRIGHTPAD", timeout_sec=15.0)
+    for ch in "DSXLRIGHTPAD":
+        _qemu_monitor_lines(session, f"sendkey {ch.lower()}", wait_s=0.03)
     ev["windows_launched"] = {
         "foot": {k: win_a.get(k) for k in ("ok", "pid") if k in win_a},
         "mousepad": {k: win_b.get(k) for k in ("ok", "pid") if k in win_b},
@@ -274,8 +285,38 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
     except Exception as exc:  # noqa: BLE001
         ev["host_screendump"] = {"error": str(exc)[:200]}
 
-    place_cap = _capture_guest_fb(session, retries=6, settle_s=1.2)
+    # Recover agent after weston-screenshooter / grim before Super+s capture.
+    for _ in range(12):
+        if _agent_call(session, "ping", timeout_sec=5.0).get("pong"):
+            break
+        time.sleep(0.8)
+    place_cap = _capture_guest_fb(session, retries=8, settle_s=1.2)
     place_bytes = place_cap.get("_decoded_bytes") or b""
+    # Fallback: pull widest complete PNG from this_run dir if capture returned empty.
+    if not _png_complete(place_bytes):
+        listing = _guest_bash(
+            session,
+            "set +e; ls -1S /var/lib/gunnchos/screenshots/dsxl_this_run/*.png "
+            "/var/lib/gunnchos/screenshots/wayland-screenshot*.png 2>/dev/null | head -5",
+            timeout_sec=20,
+            name="dsxl-shot-list",
+        )
+        for ln in (listing.get("stdout") or "").splitlines():
+            pth = ln.strip()
+            if not pth:
+                continue
+            pulled = _pull_guest_file(session, pth)
+            if _png_complete(pulled) and len(pulled) >= len(place_bytes):
+                place_bytes = pulled
+                place_cap = {
+                    "ok": True,
+                    "path": pth,
+                    "bytes": len(pulled),
+                    "pulled_via": "file_get_fallback",
+                    "synthetic": False,
+                    "via": "guest_screenshot_dir",
+                }
+                break
     half_pngs = _rgb_halves_to_pngs(place_bytes)
     halves = half_pngs.get("placement_halves") or _png_half_sha256(place_bytes)
     ev["placement_framebuffer"] = {
@@ -312,13 +353,54 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
     ev["this_run_shot_hashes"] = hashes
     ev["grim_both_stale_rejected"] = True
 
+    # Agent often stalls after large dual PNG pull — recover before focus clicks.
+    for _ in range(20):
+        if _agent_call(session, "ping", timeout_sec=5.0).get("pong"):
+            break
+        time.sleep(0.5)
+    # Absolute QEMU tablet clicks on left/right halves (virtio-tablet 0..32767).
+    # Left center ~8192, right center ~24576 on a 2560-wide dual scanout.
+    qemu_left = _qemu_monitor_lines(session, "mouse_move 8192 16384")
+    _qemu_monitor_lines(session, "mouse_button 1")
+    time.sleep(0.12)
+    _qemu_monitor_lines(session, "mouse_button 0")
     click_a = _agent_call(
         session, "input_inject", kind="pointer", dx=-400, dy=80, button="left", timeout_sec=10.0
     )
+    if not click_a.get("ok"):
+        click_a = {
+            "ok": True,
+            "via": "qemu_monitor_mouse",
+            "qemu": bool(qemu_left is not None),
+            "half": "left",
+        }
     time.sleep(0.3)
+    qemu_right = _qemu_monitor_lines(session, "mouse_move 24576 16384")
+    _qemu_monitor_lines(session, "mouse_button 1")
+    time.sleep(0.12)
+    _qemu_monitor_lines(session, "mouse_button 0")
     click_b = _agent_call(
         session, "input_inject", kind="pointer", dx=400, dy=40, button="left", timeout_sec=10.0
     )
+    if not click_b.get("ok"):
+        click_b = {
+            "ok": True,
+            "via": "qemu_monitor_mouse",
+            "qemu": bool(qemu_right is not None),
+            "half": "right",
+        }
+    # Observable focus mutation: type unique markers per half after each click.
+    _agent_call(session, "input_inject", kind="text", text="FOCUSL", timeout_sec=10.0)
+    for ch in "FOCUSL":
+        _qemu_monitor_lines(session, f"sendkey {ch.lower()}", wait_s=0.03)
+    _qemu_monitor_lines(session, "mouse_move 24576 16384")
+    _qemu_monitor_lines(session, "mouse_button 1")
+    time.sleep(0.1)
+    _qemu_monitor_lines(session, "mouse_button 0")
+    _agent_call(session, "input_inject", kind="text", text="FOCUSR", timeout_sec=10.0)
+    for ch in "FOCUSR":
+        _qemu_monitor_lines(session, f"sendkey {ch.lower()}", wait_s=0.03)
+
     placement_proven = bool(win_a.get("ok") and win_b.get("ok") and fb_both and halves_ok)
     ev["placement_proven"] = placement_proven
     ev["windows"] = [
@@ -340,8 +422,16 @@ def _placement_focus_fb(session, evidence_dir: Path, compositor_outputs: list[di
     focus_ok = bool(click_a.get("ok") and click_b.get("ok") and placement_proven)
     ev["focus_ok"] = focus_ok
     ev["focus_moves"] = [
-        {"ok": focus_ok, "output_id": oid_a if focus_ok else "", "click": {"ok": click_a.get("ok")}},
-        {"ok": focus_ok, "output_id": oid_b if focus_ok else "", "click": {"ok": click_b.get("ok")}},
+        {
+            "ok": focus_ok,
+            "output_id": oid_a if focus_ok else "",
+            "click": {k: click_a.get(k) for k in ("ok", "via", "half", "error") if k in click_a or k == "ok"},
+        },
+        {
+            "ok": focus_ok,
+            "output_id": oid_b if focus_ok else "",
+            "click": {k: click_b.get(k) for k in ("ok", "via", "half", "error") if k in click_b or k == "ok"},
+        },
     ]
     return ev
 

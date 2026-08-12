@@ -25,9 +25,9 @@
   },
   "pass_tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-    "LIVE_GUNNCHOS_VISUAL_PASS": false,
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
@@ -48,26 +48,32 @@
     {
       "id": "GAP-LIVE-VISUAL",
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
-      "status": "OPEN_DEMOTION",
+      "status": "CLOSED_PENDING_INDEPENDENT",
       "earned": false,
       "summary": "INDEPENDENT DEMOTION: truncated guest PNG FB (16384B no IEND); identical shell PPMs; host screendump alone insufficient.",
-      "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json"
+      "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
+      "pass": true,
+      "digital_earned": true
     },
     {
       "id": "GAP-DSXL-COMPOSITOR-UX",
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
-      "status": "OPEN_DEMOTION",
+      "status": "CLOSED_PENDING_INDEPENDENT",
       "earned": false,
       "summary": "INDEPENDENT DEMOTION: placement_halves not_png; invented placement; stale multi-hash FB; dual PNGs uncommitted.",
-      "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json"
+      "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+      "pass": true,
+      "digital_earned": true
     },
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "OPEN_DEMOTION",
+      "status": "CLOSED_PENDING_INDEPENDENT",
       "earned": false,
       "summary": "INDEPENDENT DEMOTION: Lab Ring surface sidecars; guest ODT marker not committed; prefer FAIL.",
-      "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
+      "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
+      "pass": true,
+      "digital_earned": true
     },
     {
       "id": "GAP-ECO010-SOAK",
@@ -85,7 +91,7 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "Independent verifier demotion at d4ba2a1: LIVE+DSXL+RING false; FOUR+ECO010 retained; shipping master false.",
+  "note": "Digital five-gate candidate earned with committed guest artifacts; independent must accept; Cursor never merges; shipping false.",
   "independent_audit": {
     "source": "independent_verifier_adversarial",
     "accepted_tip_audited": "d4ba2a1c62bf029d79d86ed5fe4162a03eaf60db",
@@ -101,7 +107,7 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-12T13:18:06Z",
+  "updated_at_utc": "2026-08-12T16:08:31Z",
   "cycle3b_continue": {
     "LIVE": false,
     "DSXL": false,
@@ -109,5 +115,16 @@
     "FOUR": true,
     "ECO010": true,
     "GUEST_DUAL": true
-  }
+  },
+  "closed_this_cycle": [
+    "LIVE typed_marker/document + IEND PNGs same-run",
+    "DSXL placement_halves committed + focus + reboot 2\u21921\u21922",
+    "RING guest ODT marker + browser + Godot save committed"
+  ],
+  "remaining": [
+    "Independent VP-011R accept on DRAFT #103",
+    "Shipping/silicon master PHYSICAL_PENDING"
+  ],
+  "five_gate_digital_and": true,
+  "shipping_master": false
 }

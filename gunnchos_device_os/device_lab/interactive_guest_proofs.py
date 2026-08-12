@@ -80,6 +80,41 @@ def _agent_call(session: Any, cmd: str, *, timeout_sec: float = 20.0, **kwargs: 
         agent.timeout_sec = old_timeout
 
 
+def _wait_agent(session: Any, *, tries: int = 30, sleep_s: float = 1.0) -> bool:
+    for _ in range(tries):
+        if _agent_call(session, "ping", timeout_sec=5.0).get("pong"):
+            return True
+        time.sleep(sleep_s)
+    return False
+
+
+def _recover_guest_agent(session: Any) -> dict[str, Any]:
+    """Soft-restart guest agent when virtio-serial stalls after Super+s / large pulls."""
+    # Schedule restart out-of-band so we do not pkill the agent mid-process_run.
+    sched = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "rm -f /tmp/ga_soft_restarted; "
+            "( sleep 1; "
+            "  systemctl stop gunnchos-guest-agent.service 2>/dev/null || true; "
+            "  pkill -f '/opt/gunnchos/bin/gunnchos_guest_agent.py' || true; "
+            "  pkill -f '/usr/local/sbin/gunnchos_guest_agent.py' || true; "
+            "  sleep 1; "
+            "  nohup python3 /opt/gunnchos/bin/gunnchos_guest_agent.py "
+            "    >/var/log/gunnchos-guest-agent.log 2>&1 & "
+            "  sleep 1; pgrep -af gunnchos_guest_agent | head > /tmp/ga_soft_restarted; "
+            ") >/tmp/ga_soft_restart.log 2>&1 & echo soft_restart_scheduled",
+        ],
+        timeout_sec=15.0,
+    )
+    time.sleep(4.0)
+    alive = _wait_agent(session, tries=40, sleep_s=0.8)
+    return {"scheduled": sched, "alive": alive}
+
+
 def _require_real_virtio_serial(resp: dict[str, Any]) -> bool:
     """Reject anything answered by the host mailbox stub — never a proof."""
     if not isinstance(resp, dict):
@@ -429,6 +464,18 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
         )
         return result
 
+    # Seed a known empty document so typed marker is unambiguous when saved.
+    _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "printf '' > /root/gunnchos-lab-document.txt; "
+            "sync; wc -c /root/gunnchos-lab-document.txt",
+        ],
+        timeout_sec=15.0,
+    )
     launch = _agent_call(session, "app_launch", app="mousepad", timeout_sec=15.0)
     result["app_launch"] = launch
     time.sleep(3.0)
@@ -475,32 +522,111 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
         except OSError as exc:
             host_cap["before_error"] = str(exc)
 
+    # Super+s can stall virtio-serial — recover before typing/document proof.
+    if not _wait_agent(session, tries=12, sleep_s=0.8):
+        result["agent_recover_pre_type"] = _recover_guest_agent(session)
+
     marker = f"LIVEPROOF{int(time.time())}"
     inj = guest_input.inject_key(
         monitor_sock=getattr(session, "monitor_sock", None), key="a", agent=session.agent
     )
     result["input_injection"] = inj
-    # Re-focus mousepad editor surface before typing marker.
+    # Re-focus mousepad editor (absolute QEMU + uinput) before typing marker.
+    _qemu_monitor_lines(session, "mouse_move 12000 14000")
+    _qemu_monitor_lines(session, "mouse_button 1")
+    time.sleep(0.1)
+    _qemu_monitor_lines(session, "mouse_button 0")
     for dx, dy in ((200, 180), (220, 200), (180, 160)):
         _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0)
         time.sleep(0.25)
-    typed = _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
+    typed = _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=25.0)
+    # Reject mismatched leftover pointer responses from virtio desync.
+    if typed.get("kind") != "text":
+        typed = {
+            "ok": False,
+            "error": "text_inject_kind_mismatch",
+            "got": {k: typed.get(k) for k in ("ok", "kind", "dx", "dy", "error") if k in typed},
+        }
     result["typed_marker"] = typed
-    # Also type via QEMU sendkey as belt-and-suspenders for compositor focus races.
+    # QEMU sendkey is the reliable belt for compositor focus races.
     for ch in marker:
         if ch.isupper():
-            _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.04)
+            _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.05)
         elif ch.isdigit() or ch.islower():
-            _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.04)
-    time.sleep(0.5)
+            _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.05)
+    time.sleep(0.4)
     _agent_call(session, "input_inject", kind="key", key="s", mods=["ctrl"], timeout_sec=10.0)
     _qemu_monitor_lines(session, "sendkey ctrl-s")
     time.sleep(2.0)
-    # Ensure agent is responsive after typing before second Super+s capture.
-    for _ in range(6):
-        if _agent_call(session, "ping", timeout_sec=8.0).get("pong"):
-            break
-        time.sleep(0.8)
+
+    def _read_live_document() -> tuple[dict[str, Any], str]:
+        doc_local: dict[str, Any] = {"ok": False}
+        text_local = ""
+        for _attempt in range(10):
+            if not _agent_call(session, "ping", timeout_sec=8.0).get("pong"):
+                time.sleep(1.0)
+                continue
+            # process_run cat survives when logs/file_get stall.
+            cat = _agent_call(
+                session,
+                "process_run",
+                argv=["bash", "-lc", "cat /root/gunnchos-lab-document.txt; echo; wc -c /root/gunnchos-lab-document.txt"],
+                timeout_sec=20.0,
+            )
+            if cat.get("ok") and (cat.get("stdout") or "").strip() != "":
+                text_local = cat.get("stdout") or ""
+                doc_local = {"ok": True, "via": "process_run_cat", "stdout": text_local[-500:]}
+                return doc_local, text_local
+            doc_local = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
+            text_local = "\n".join(doc_local.get("lines") or [])
+            if doc_local.get("ok") and text_local:
+                return doc_local, text_local
+            raw = _pull_guest_file(session, "/root/gunnchos-lab-document.txt")
+            if raw is not None:
+                # Empty file is a successful read (marker absent).
+                text_local = raw.decode("utf-8", "replace")
+                doc_local = {
+                    "ok": True,
+                    "via": "file_get",
+                    "bytes": len(raw),
+                    "lines": text_local.splitlines()[-40:],
+                }
+                return doc_local, text_local
+            time.sleep(1.0)
+        return doc_local, text_local
+
+    # Read document BEFORE after-capture Super+s — capture often stalls virtio-serial.
+    doc, doc_text = _read_live_document()
+    if marker not in doc_text:
+        # One soft agent recover + retype/resave if first pass missed the file.
+        result["agent_recover_doc"] = _recover_guest_agent(session)
+        _qemu_monitor_lines(session, "mouse_move 12000 14000")
+        _qemu_monitor_lines(session, "mouse_button 1")
+        time.sleep(0.1)
+        _qemu_monitor_lines(session, "mouse_button 0")
+        _agent_call(session, "input_inject", kind="pointer", dx=200, dy=180, button="left", timeout_sec=10.0)
+        time.sleep(0.3)
+        _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=25.0)
+        for ch in marker:
+            if ch.isupper():
+                _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.05)
+            elif ch.isdigit() or ch.islower():
+                _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.05)
+        _qemu_monitor_lines(session, "sendkey ctrl-s")
+        time.sleep(2.0)
+        doc, doc_text = _read_live_document()
+    result["document_after"] = doc
+    input_visible_in_app = bool(marker in doc_text)
+    result["input_visible_app_state"] = {
+        "marker": marker,
+        "found_in_document": input_visible_in_app,
+        "document_read_ok": bool(doc.get("ok")),
+        "document_excerpt": (doc_text or "")[-240:],
+    }
+
+    # Ensure agent is responsive before second Super+s capture.
+    if not _wait_agent(session, tries=8, sleep_s=0.8):
+        result["agent_recover_pre_after_capture"] = _recover_guest_agent(session)
     time.sleep(1.0)
 
     after = _capture_guest_fb(session, retries=8, settle_s=1.2)
@@ -595,33 +721,6 @@ def attempt_live_visual_pass(session: Any, evidence_dir: Path) -> dict[str, Any]
         "via_after": after.get("via"),
         "pulled_via_before": before.get("pulled_via"),
         "pulled_via_after": after.get("pulled_via"),
-    }
-
-    # Observable app-state delta: typed marker must land in the mousepad file.
-    # Super+s / large FB pulls can stall virtio-serial — re-ping then retry reads.
-    doc = {"ok": False}
-    doc_text = ""
-    for attempt in range(8):
-        if not _agent_call(session, "ping", timeout_sec=8.0).get("pong"):
-            time.sleep(1.0)
-            continue
-        doc = _agent_call(session, "logs", path="/root/gunnchos-lab-document.txt", lines=40)
-        doc_text = "\n".join(doc.get("lines") or [])
-        if doc.get("ok") and doc_text:
-            break
-        # Fallback: file_get full document when logs stalls.
-        raw = _pull_guest_file(session, "/root/gunnchos-lab-document.txt")
-        if raw:
-            doc_text = raw.decode("utf-8", "replace")
-            doc = {"ok": True, "via": "file_get", "bytes": len(raw), "lines": doc_text.splitlines()[-40:]}
-            break
-        time.sleep(1.0)
-    result["document_after"] = doc
-    input_visible_in_app = bool(marker in doc_text)
-    result["input_visible_app_state"] = {
-        "marker": marker,
-        "found_in_document": input_visible_in_app,
-        "document_read_ok": bool(doc.get("ok")),
     }
 
     earned = bool(

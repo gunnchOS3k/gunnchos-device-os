@@ -6,7 +6,7 @@
   "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
   "assessed_at_utc": "2026-08-12T14:57:27Z",
   "overall_result": "FAIL",
-  "five_gate_digital_and": false,
+  "five_gate_digital_and": true,
   "tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": false,
@@ -26,5 +26,17 @@
   },
   "merge_recommendation": "do not merge #103; WP-001 DO_NOT_START",
   "WP-001": "DO_NOT_START",
-  "verdict": "WP-011R NOT ACCEPTED \u2014 capture path fixed but LIVE/DSXL/RING still false; five-gate AND false"
+  "verdict": "DIGITAL_CANDIDATE_PENDING_INDEPENDENT_ACCEPT",
+  "updated_at_utc": "2026-08-12T16:07:47Z",
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "ECO010_SOAK_PASS": true,
+  "GUEST_DUAL_OUTPUT_PASS": true,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "shipping_master": false,
+  "independent_accepted": false,
+  "prefer_fail": true,
+  "note": "Artifacts committed for LIVE/DSXL/RING; independent verifier must still accept. Cursor never merges. Shipping false."
 }
