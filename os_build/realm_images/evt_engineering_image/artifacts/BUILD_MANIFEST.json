@@ -13,8 +13,8 @@
     "rootfs_tarball": {
       "file_count": 38,
       "path": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
-      "sha256": "3afb8a4a4245602b90dad4662eba8797d0d76a68451fd8e9f736109a76a5ea01",
-      "size_bytes": 25488
+      "sha256": "4dd47c0c37ddc8e6aa1efee874bc4b2848f077f3f45e333993953d666d0fe911",
+      "size_bytes": 25565
     }
   },
   "claim_boundary": "EVT realm for hardware bring-up / validation. Signed with DEV keys only, anti-rollback counter enforced, no production keys or real eSIM/factory credentials present. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
@@ -112,7 +112,7 @@
     },
     "update_channel": "evt"
   },
-  "image_hash": "6877c55c76856fb62ca7fa777023f04fdade150f5a317ece5c07f6e4c618bdaf",
+  "image_hash": "ae5f86d95e1c337f730d91629cfaaf96b337d2e4c0006db52742a73bf2d43e4c",
   "package_manifest": [
     {
       "path": "etc/gunnchos/realm.json",
@@ -196,8 +196,8 @@
     },
     {
       "path": "opt/gunnchos/release_engineering/sdk/runner.py",
-      "sha256": "b614a887875d997f2145c890796032321578b889ee7ede0372252dd11f6b9aee",
-      "size_bytes": 4364
+      "sha256": "385a7ebc2761baf8927dc57cdcb46eecf7a74bafe07887fbefd00c64c0fd1cd4",
+      "size_bytes": 4650
     },
     {
       "path": "opt/gunnchos/release_engineering/serviceability.py",
@@ -310,7 +310,7 @@
   "reproducibility": {
     "file_count": 38,
     "method": "deterministic_tar(sorted_names, mtime=0, uid=gid=0)",
-    "rootfs_sha256": "3afb8a4a4245602b90dad4662eba8797d0d76a68451fd8e9f736109a76a5ea01",
+    "rootfs_sha256": "4dd47c0c37ddc8e6aa1efee874bc4b2848f077f3f45e333993953d666d0fe911",
     "verifiable_by": "rebuild_and_compare_rootfs_sha256"
   },
   "sbom": {
@@ -4365,16 +4365,16 @@
           },
           {
             "name": "gunnchos:sha256",
-            "value": "b614a887875d997f2145c890796032321578b889ee7ede0372252dd11f6b9aee"
+            "value": "385a7ebc2761baf8927dc57cdcb46eecf7a74bafe07887fbefd00c64c0fd1cd4"
           },
           {
             "name": "gunnchos:size_bytes",
-            "value": "4364"
+            "value": "4650"
           }
         ],
-        "purl": "pkg:generic/evt_engineering_image/opt/gunnchos/release_engineering/sdk/runner.py@b614a887875d",
+        "purl": "pkg:generic/evt_engineering_image/opt/gunnchos/release_engineering/sdk/runner.py@385a7ebc2761",
         "type": "file",
-        "version": "b614a887875d"
+        "version": "385a7ebc2761"
       },
       {
         "name": "opt/gunnchos/release_engineering/serviceability.py",
@@ -4821,16 +4821,16 @@
     "algorithm": "Ed25519",
     "claim_boundary": "Development-only Ed25519 signing keypair for WP-013 release engineering (image realm metadata, A/B update manifests, gunnchSDK packages). Not production keys, not HSM-backed, not a production trust root.",
     "public_key_fingerprint": "d0ccabcf3b44f16e",
-    "signature_hex": "fcb28d528fb62d88f6a868a454cf7c98630ebcc9c6f107fa1c8a8571130669ce8ddcd0d84a188a95626eadab62ed9ee6cd7735ef61d1a69029e7e3597db21006"
+    "signature_hex": "60aefec75dceac2230ca74aba8710bbecac33531b42cee1ff02cc122bdfc4259fb92c9e0ef7c94f9d90b4b62044825b846420ec2c06114fbf208f73ecbc35b0d"
   },
   "signed": true,
   "signing_realm": "dev",
   "source_shas": {
     "branch": "operating-cycle-3b/wp-013-release-engineering",
-    "repo_head_sha": "92981f176ff872cbc7b9b3f96c789ad1fb1b3b4b",
+    "repo_head_sha": "f3e4efbe03558300e56151349472a603b38ba391",
     "working_tree_dirty": true
   },
   "status": "ACTIVE_DEV",
-  "timestamp_utc": "2026-08-12T17:19:01Z",
+  "timestamp_utc": "2026-08-12T18:20:34Z",
   "unsigned_requested": false
 }

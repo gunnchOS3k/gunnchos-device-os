@@ -17,8 +17,9 @@ class RunError(RuntimeError):
 
 
 class PackageRunner:
-    def __init__(self, install_root: Path) -> None:
+    def __init__(self, install_root: Path, *, repo_root: Path | None = None) -> None:
         self.install_root = Path(install_root)
+        self.repo_root = Path(repo_root) if repo_root is not None else None
 
     def _registry(self) -> dict[str, Any]:
         reg_path = self.install_root / "registry.json"
@@ -57,6 +58,9 @@ class PackageRunner:
             "GUNNCHOS_SANDBOX_DATA_DIR": str(data_dir),
             "GUNNCHOS_SANDBOX_NETWORK_POLICY": sandbox_profile.get("network_policy", "deny_all"),
         }
+        if self.repo_root is not None:
+            env["GUNNCHOS_REPO_ROOT"] = str(self.repo_root)
+            env["PYTHONPATH"] = f"{self.repo_root}:{self.repo_root / 'src'}"
 
         run_id = f"run-{int(time.time() * 1000)}"
         started = time.time()

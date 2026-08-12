@@ -79,23 +79,36 @@ def check_os_image_builds() -> dict:
 
 
 def check_sdk_pipeline() -> dict:
-    apps = ["creator_stub", "waike_stub", "gunnchai_client_stub"]
+    # Stubs may remain as tutorials under sdk/examples — they are NOT adoption proof.
+    real_apps = [
+        ("creator_studio", ROOT / "sdk" / "apps" / "creator_studio"),
+        ("waike_learning", ROOT / "sdk" / "apps" / "waike_learning"),
+        ("gunnchai_tutor", ROOT / "sdk" / "apps" / "gunnchai_tutor"),
+        ("pedestrian_pursuit_ref", ROOT / "sdk" / "apps" / "pedestrian_pursuit_ref"),
+    ]
     with tempfile.TemporaryDirectory(prefix="wp013_sdk_") as tmp:
         tmp_path = Path(tmp)
         builder = PackageBuilder(ROOT)
         installer = PackageInstaller(ROOT, tmp_path / "install")
-        runner = PackageRunner(tmp_path / "install")
+        runner = PackageRunner(tmp_path / "install", repo_root=ROOT)
         results = {}
-        for app in apps:
-            build_result = builder.build(ROOT / "sdk" / "examples" / app, tmp_path / "pkgs")
+        for name, app_dir in real_apps:
+            build_result = builder.build(app_dir, tmp_path / "pkgs")
             install_result = installer.install(Path(build_result["package_path"]))
             run_result = runner.run(install_result["app_id"]) if install_result.get("ok") else {"ok": False}
-            results[app] = {
+            results[name] = {
                 "build_ok": build_result.get("ok", False),
                 "install_ok": install_result.get("ok", False),
                 "run_ok": run_result.get("ok", False),
                 "exit_code": run_result.get("exit_code"),
+                "stub_content": False,
+                "app_dir": str(app_dir.relative_to(ROOT)),
             }
+        results["FIRST_PARTY_SDK_ADOPTION_PASS"] = all(
+            bool(results[n].get("build_ok") and results[n].get("install_ok") and results[n].get("run_ok"))
+            for n, _ in real_apps
+        )
+        results["stubs_retained_as_tutorials_only"] = True
         return results
 
 
@@ -218,6 +231,70 @@ def check_recovery_serviceability() -> dict:
         }
 
 
+
+def check_realm_runtime() -> dict:
+    """Behaviorally verify EVT/FACTORY/RECOVERY realm artifacts in Device Lab terms.
+
+    Prefer real QEMU/guest boot when available. Otherwise fail closed on
+    EVT/FACTORY/RECOVERY_IMAGE_RUNTIME_PASS rather than claiming PASS from
+    rootfs-tarball presence alone.
+    """
+    builder = RealmImageBuilder(ROOT)
+    out: dict = {"schema": "gunnchos.wp013.realm_runtime.v1", "realms": {}}
+    qemu = None
+    try:
+        from gunnchos_device_os.device_lab.virtualization.qemu_guest import QemuGuest
+        qemu = QemuGuest
+    except Exception as exc:  # noqa: BLE001
+        out["qemu_import_error"] = str(exc)
+
+    for alias, token in (
+        ("evt", "EVT_IMAGE_RUNTIME_PASS"),
+        ("factory", "FACTORY_IMAGE_RUNTIME_PASS"),
+        ("recovery", "RECOVERY_IMAGE_RUNTIME_PASS"),
+    ):
+        inspect = builder.inspect(alias)
+        manifest = inspect.get("manifest") or {}
+        rootfs = ((manifest.get("artifacts") or {}).get("rootfs_tarball") or {})
+        policy = {
+            "realm_id": manifest.get("realm_id"),
+            "signing_realm": manifest.get("signing_realm") or manifest.get("trust_roots"),
+            "rootfs_present": bool(rootfs.get("path") or rootfs.get("sha256")),
+            "file_count": rootfs.get("file_count"),
+            "PRODUCTION_RELEASE_CLAIMED": bool(manifest.get("PRODUCTION_RELEASE_CLAIMED", False)),
+        }
+        boot = {"attempted": False, "ok": False, "mode": "not_attempted"}
+        # Device Lab interactive guest path already covers DEV lab realm.
+        # For EVT/FACTORY/RECOVERY we require either a successful QEMU probe
+        # against the built rootfs, or an explicit FAIL (no false PASS).
+        if qemu is not None and policy["rootfs_present"]:
+            boot["attempted"] = True
+            boot["mode"] = "qemu_probe_unavailable_or_unsupported"
+            # Honest FAIL until a realm-specific QEMU boot harness exists for
+            # these non-lab rootfs tarballs (lab guest image is separate).
+            boot["ok"] = False
+            boot["reason"] = "realm_rootfs_qemu_boot_harness_not_yet_wired"
+        else:
+            boot["reason"] = "qemu_unavailable_or_rootfs_missing"
+        out["realms"][alias] = {
+            "policy": policy,
+            "boot": boot,
+            token: False,
+        }
+    out["IMAGE_REALM_POLICY_SEPARATION_PASS"] = all(
+        (out["realms"][a]["policy"].get("realm_id") not in (None, ""))
+        and out["realms"][a]["policy"].get("PRODUCTION_RELEASE_CLAIMED") is False
+        for a in ("evt", "factory", "recovery")
+    )
+    out["EVT_IMAGE_RUNTIME_PASS"] = False
+    out["FACTORY_IMAGE_RUNTIME_PASS"] = False
+    out["RECOVERY_IMAGE_RUNTIME_PASS"] = False
+    out["claim_boundary"] = (
+        "Rootfs-tarball + policy separation alone does not earn RUNTIME_PASS. "
+        "RUNTIME tokens stay false until Device Lab boots each realm artifact."
+    )
+    return out
+
 def main() -> int:
     result: dict = {
         "schema": "gunnchos.wp013.result.v1",
@@ -252,6 +329,9 @@ def main() -> int:
     recovery_svc = check_recovery_serviceability()
     result["evidence"]["recovery_serviceability"] = recovery_svc
 
+    realm_runtime = check_realm_runtime()
+    result["evidence"]["realm_runtime"] = realm_runtime
+
     # Image builds last so committed realm artifacts match RESULT signed claims.
     os_image_builds = check_os_image_builds()
     result["evidence"]["os_image_builds"] = os_image_builds
@@ -280,12 +360,22 @@ def main() -> int:
         )
         and all_tests_green,
         "SDK_PACKAGE_INSTALL_RUN_PASS": bool(
-            all(v["build_ok"] and v["install_ok"] and v["run_ok"] for v in sdk_pipeline.values())
+            all(
+                isinstance(v, dict) and v.get("build_ok") and v.get("install_ok") and v.get("run_ok")
+                for k, v in sdk_pipeline.items()
+                if k not in ("FIRST_PARTY_SDK_ADOPTION_PASS", "stubs_retained_as_tutorials_only")
+            )
         )
+        and all_tests_green,
+        "FIRST_PARTY_SDK_ADOPTION_PASS": bool(sdk_pipeline.get("FIRST_PARTY_SDK_ADOPTION_PASS"))
         and all_tests_green,
         "API_COMPATIBILITY_GATE_PASS": bool(api_gate["ok"]) and all_tests_green,
         "FACTORY_PROVISIONING_DIGITAL_PASS": bool(factory["ok"]) and all_tests_green,
         "RECOVERY_SERVICEABILITY_DIGITAL_PASS": bool(recovery_svc["ok"]) and all_tests_green,
+        "EVT_IMAGE_RUNTIME_PASS": bool(realm_runtime.get("EVT_IMAGE_RUNTIME_PASS")) and all_tests_green,
+        "FACTORY_IMAGE_RUNTIME_PASS": bool(realm_runtime.get("FACTORY_IMAGE_RUNTIME_PASS")) and all_tests_green,
+        "RECOVERY_IMAGE_RUNTIME_PASS": bool(realm_runtime.get("RECOVERY_IMAGE_RUNTIME_PASS")) and all_tests_green,
+        "IMAGE_REALM_POLICY_SEPARATION_PASS": bool(realm_runtime.get("IMAGE_REALM_POLICY_SEPARATION_PASS")) and all_tests_green,
     }
     result["PRODUCTION_RELEASE_CLAIMED"] = False
     result["claim_boundary"] = (

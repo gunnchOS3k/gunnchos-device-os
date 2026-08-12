@@ -15,6 +15,7 @@ from gunnchos_device_os.release_engineering.sdk.runner import PackageRunner
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES = REPO_ROOT / "sdk" / "examples"
+REAL_APPS = REPO_ROOT / "sdk" / "apps"
 
 
 @pytest.fixture()
@@ -24,14 +25,18 @@ def rig(tmp_path):
     return {
         "builder": PackageBuilder(REPO_ROOT),
         "installer": PackageInstaller(REPO_ROOT, install_root),
-        "runner": PackageRunner(install_root),
+        "runner": PackageRunner(install_root, repo_root=REPO_ROOT),
         "out_dir": out_dir,
     }
 
 
-@pytest.mark.parametrize("app_name", ["creator_stub", "waike_stub", "gunnchai_client_stub"])
-def test_first_party_stub_full_pipeline(rig, app_name):
-    build_result = rig["builder"].build(EXAMPLES / app_name, rig["out_dir"])
+@pytest.mark.parametrize(
+    "app_name",
+    ["creator_studio", "waike_learning", "gunnchai_tutor", "pedestrian_pursuit_ref"],
+)
+def test_first_party_real_app_full_pipeline(rig, app_name):
+    """FIRST_PARTY_SDK_ADOPTION evidence — real apps, not sdk/examples stubs."""
+    build_result = rig["builder"].build(REAL_APPS / app_name, rig["out_dir"])
     assert build_result["ok"] is True
     assert build_result["signed"] is True
 
@@ -50,6 +55,17 @@ def test_first_party_stub_full_pipeline(rig, app_name):
 
     registry = rig["installer"].list_installed()
     assert install_result["app_id"] in registry["apps"]
+
+
+@pytest.mark.parametrize("app_name", ["creator_stub", "waike_stub", "gunnchai_client_stub"])
+def test_tutorial_stub_pipeline_still_works(rig, app_name):
+    """Stubs remain valid tutorials — not adoption proof."""
+    build_result = rig["builder"].build(EXAMPLES / app_name, rig["out_dir"])
+    assert build_result["ok"] is True
+    install_result = rig["installer"].install(Path(build_result["package_path"]))
+    assert install_result["ok"] is True
+    run_result = rig["runner"].run(install_result["app_id"])
+    assert run_result["ok"] is True
 
 
 def test_tampered_package_rejected(rig):

@@ -102,7 +102,66 @@
     "pytest_tests_wp013": {
       "ok": true,
       "returncode": 0,
-      "tail": "........................................................................ [100%]\n72 passed in 3.74s"
+      "tail": "........................................................................ [ 94%]\n....                                                                     [100%]\n76 passed in 4.72s"
+    },
+    "realm_runtime": {
+      "EVT_IMAGE_RUNTIME_PASS": false,
+      "FACTORY_IMAGE_RUNTIME_PASS": false,
+      "IMAGE_REALM_POLICY_SEPARATION_PASS": true,
+      "RECOVERY_IMAGE_RUNTIME_PASS": false,
+      "claim_boundary": "Rootfs-tarball + policy separation alone does not earn RUNTIME_PASS. RUNTIME tokens stay false until Device Lab boots each realm artifact.",
+      "qemu_import_error": "cannot import name 'QemuGuest' from 'gunnchos_device_os.device_lab.virtualization.qemu_guest' (/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/device_lab/virtualization/qemu_guest.py)",
+      "realms": {
+        "evt": {
+          "EVT_IMAGE_RUNTIME_PASS": false,
+          "boot": {
+            "attempted": false,
+            "mode": "not_attempted",
+            "ok": false,
+            "reason": "qemu_unavailable_or_rootfs_missing"
+          },
+          "policy": {
+            "PRODUCTION_RELEASE_CLAIMED": false,
+            "file_count": 38,
+            "realm_id": "EVT_ENGINEERING_IMAGE",
+            "rootfs_present": true,
+            "signing_realm": "dev"
+          }
+        },
+        "factory": {
+          "FACTORY_IMAGE_RUNTIME_PASS": false,
+          "boot": {
+            "attempted": false,
+            "mode": "not_attempted",
+            "ok": false,
+            "reason": "qemu_unavailable_or_rootfs_missing"
+          },
+          "policy": {
+            "PRODUCTION_RELEASE_CLAIMED": false,
+            "file_count": 15,
+            "realm_id": "FACTORY_PROVISIONING_IMAGE",
+            "rootfs_present": true,
+            "signing_realm": "dev"
+          }
+        },
+        "recovery": {
+          "RECOVERY_IMAGE_RUNTIME_PASS": false,
+          "boot": {
+            "attempted": false,
+            "mode": "not_attempted",
+            "ok": false,
+            "reason": "qemu_unavailable_or_rootfs_missing"
+          },
+          "policy": {
+            "PRODUCTION_RELEASE_CLAIMED": false,
+            "file_count": 10,
+            "realm_id": "RECOVERY_IMAGE",
+            "rootfs_present": true,
+            "signing_realm": "dev"
+          }
+        }
+      },
+      "schema": "gunnchos.wp013.realm_runtime.v1"
     },
     "recovery_serviceability": {
       "backup_restore_ok": true,
@@ -115,39 +174,60 @@
       "transfer_ok": true
     },
     "sdk_pipeline": {
-      "creator_stub": {
+      "FIRST_PARTY_SDK_ADOPTION_PASS": true,
+      "creator_studio": {
+        "app_dir": "sdk/apps/creator_studio",
         "build_ok": true,
         "exit_code": 0,
         "install_ok": true,
-        "run_ok": true
+        "run_ok": true,
+        "stub_content": false
       },
-      "gunnchai_client_stub": {
+      "gunnchai_tutor": {
+        "app_dir": "sdk/apps/gunnchai_tutor",
         "build_ok": true,
         "exit_code": 0,
         "install_ok": true,
-        "run_ok": true
+        "run_ok": true,
+        "stub_content": false
       },
-      "waike_stub": {
+      "pedestrian_pursuit_ref": {
+        "app_dir": "sdk/apps/pedestrian_pursuit_ref",
         "build_ok": true,
         "exit_code": 0,
         "install_ok": true,
-        "run_ok": true
+        "run_ok": true,
+        "stub_content": false
+      },
+      "stubs_retained_as_tutorials_only": true,
+      "waike_learning": {
+        "app_dir": "sdk/apps/waike_learning",
+        "build_ok": true,
+        "exit_code": 0,
+        "install_ok": true,
+        "run_ok": true,
+        "stub_content": false
       }
     }
   },
   "exit_tokens": {
     "API_COMPATIBILITY_GATE_PASS": true,
     "EVT_IMAGE_BUILD_PASS": true,
+    "EVT_IMAGE_RUNTIME_PASS": false,
     "FACTORY_IMAGE_BUILD_PASS": true,
+    "FACTORY_IMAGE_RUNTIME_PASS": false,
     "FACTORY_PROVISIONING_DIGITAL_PASS": true,
+    "FIRST_PARTY_SDK_ADOPTION_PASS": true,
     "IMAGE_REALMS_DIGITALLY_COMPLETE": true,
+    "IMAGE_REALM_POLICY_SEPARATION_PASS": true,
     "PRODUCTION_IMAGE_DEFINITION_COMPLETE": true,
     "RECOVERY_IMAGE_BUILD_PASS": true,
+    "RECOVERY_IMAGE_RUNTIME_PASS": false,
     "RECOVERY_SERVICEABILITY_DIGITAL_PASS": true,
     "SDK_PACKAGE_INSTALL_RUN_PASS": true
   },
-  "generated_utc": "2026-08-12T17:18:57Z",
+  "generated_utc": "2026-08-12T18:20:28Z",
   "schema": "gunnchos.wp013.result.v1",
   "title": "gunnchOS Release Engineering + Developer Platform",
-  "work_package": "WP-013"
+  "work_package": "WP-013R"
 }
