@@ -79,10 +79,15 @@ def test_production_realm_always_builds_unsigned_and_not_released(builder):
     assert result["ok"] is True
     assert result["signed"] is False
     assert result["PRODUCTION_RELEASE_CLAIMED"] is False
+    assert result["SHIPPING_IMAGE"] is False
+    assert result["payload_class"] == "production_intent_digital"
 
     manifest = builder.inspect("production")["manifest"]
     assert manifest["status"] == "NOT_RELEASED"
     assert manifest["production_keys_used"] is False
+    assert manifest["SHIPPING_IMAGE"] is False
+    assert manifest["payload_class"] == "production_intent_digital"
+    assert manifest["artifacts"]["rootfs_tarball"]["size_bytes"] >= 2 * 1024 * 1024
 
 
 def test_evt_build_is_reproducible_across_two_builds(builder):
@@ -100,6 +105,24 @@ def test_evt_realm_rootfs_carries_dev_toolchain_but_factory_does_not(builder):
     factory_paths = {row["path"] for row in factory_manifest["package_manifest"]}
     assert any("bin/gunnchctl" in p for p in evt_paths)
     assert not any("bin/gunnchctl" in p for p in factory_paths)
+    # Production-intent: Alpine base present in both.
+    assert any(p.endswith("etc/alpine-release") or "alpine-release" in p for p in evt_paths)
+    assert any("alpine-release" in p for p in factory_paths)
+    # Full userspace on EVT; factory gets device-os lib but not games tree.
+    assert any("userspace/games" in p for p in evt_paths)
+    assert not any("userspace/games" in p for p in factory_paths)
+
+
+def test_recovery_is_lean_production_intent(builder):
+    result = builder.build("recovery", unsigned=True)
+    assert result["ok"] is True
+    manifest = builder.inspect("recovery")["manifest"]
+    assert manifest["payload_class"] == "production_intent_digital"
+    assert manifest["payload"]["payload_profile"] == "production_intent_recovery"
+    paths = {row["path"] for row in manifest["package_manifest"]}
+    assert any("alpine-release" in p for p in paths)
+    assert not any("userspace/games" in p for p in paths)
+    assert manifest["artifacts"]["rootfs_tarball"]["size_bytes"] >= 2 * 1024 * 1024
 
 
 def test_verify_detects_rootfs_tamper(builder, tmp_path):

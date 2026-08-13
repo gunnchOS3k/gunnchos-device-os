@@ -1,0 +1,325 @@
+{
+  "PRODUCTION_RELEASE_CLAIMED": false,
+  "SHIPPING_IMAGE": false,
+  "architecture_outcome": "A",
+  "architecture_title": "32GB_SYSTEM_ONLY_PLUS_SUPPORTED_MICROSD",
+  "claim_boundary": "Digital measurement of WP-013 realm rootfs.tar.gz artifacts plus shared bootable_reference kernel/initramfs. Not a physical eMMC flash image, not silicon-exact, not signed production shipping. When payload_class is production_intent_digital, rootfs embeds Alpine minirootfs + gunnchOS userspace for MLP-class digital slot-fit \u2014 still SHIPPING_IMAGE=false and PRODUCTION_RELEASE_CLAIMED=false always.",
+  "device_os_tip": "812b1bfbd59d7b4044badb7ebab9d93206c189a6",
+  "fit_assessment": {
+    "any_PRODUCTION_RELEASE_CLAIMED_true": false,
+    "any_SHIPPING_IMAGE_true": false,
+    "current_digital_realm_numeric_fit": true,
+    "production_image_fit_reason": "Production-intent digital A/B (production_shipping_image_definition) and recovery rootfs tarballs embed Alpine minirootfs + gunnchOS userspace, exceed stub ceiling, and compose with shared boot reference under Outcome A 5.0/5.0/2.0 GiB budgets with positive margin. Propose NPI NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 CLOSE for digital slot-fit only. SHIPPING_IMAGE=false; PRODUCTION_RELEASE_CLAIMED=false; no physical flash.",
+    "production_image_fit_verdict": "PASS_PRODUCTION_INTENT_DIGITAL_FIT",
+    "production_intent_digital_present": true,
+    "production_mlp_disk_image_present": false,
+    "production_shipping_status": "NOT_RELEASED",
+    "production_shipping_unsigned": true,
+    "realm_rootfs_artifacts_present": true,
+    "shared_boot_reference_present": true,
+    "stub_like_rootfs_payloads": false
+  },
+  "generated_at_utc": "2026-08-12T23:20:49Z",
+  "larger_emmc_sku_invented": false,
+  "measured_against_main_tip": null,
+  "npi": {
+    "architecture_change_proposal": {
+      "architecture_change_required": false,
+      "invent_larger_emmc_sku": false,
+      "microsd_required_for_mlp_user_content": true,
+      "next_steps": [
+        "Hardware may CLOSE NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 on digital evidence when consuming this IMAGE_FIT_MANIFEST (margin_gib > 0, production_intent)",
+        "Do not claim SHIPPING_IMAGE, physical flash, or PRODUCTION_RELEASE",
+        "Retain Outcome A (32GB system + microSD for MLP user content); no invented eMMC SKU",
+        "Optional: refresh EVT/factory comparison sizes on subsequent remeasures"
+      ],
+      "retain_outcome_a": true
+    },
+    "closure_gate_met": true,
+    "closure_gate_reason": "Production-intent digital A/B (production_shipping_image_definition) and recovery rootfs tarballs embed Alpine minirootfs + gunnchOS userspace, exceed stub ceiling, and compose with shared boot reference under Outcome A 5.0/5.0/2.0 GiB budgets with positive margin. Propose NPI NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001 CLOSE for digital slot-fit only. SHIPPING_IMAGE=false; PRODUCTION_RELEASE_CLAIMED=false; no physical flash.",
+    "closure_scope": "digital_production_intent_slot_fit_only",
+    "defect_id": "NPI_DEFECT-HANDHELD-IMAGE-SLOT-FIT-001",
+    "recommended_status": "CLOSE"
+  },
+  "realms": {
+    "evt_engineering_image": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "SHIPPING_IMAGE": false,
+      "alpine_minirootfs": {
+        "compressed_bytes": 3850365,
+        "sha256": "ead8a4b37867bd19e7417dd078748e2312c0aea364403d96758d63ea8ff261ea",
+        "source": "os_build/bootable_reference/cache/alpine-minirootfs-aarch64.tar.gz"
+      },
+      "build_manifest_path": "os_build/realm_images/evt_engineering_image/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "a2698322bf77d0ff39f79dc821643e95efbe9f9652baede51bc9084b0377bcaf",
+      "ok": true,
+      "payload_class": "production_intent_digital",
+      "payload_profile": "production_intent_ab_userspace",
+      "production_intent_digital": true,
+      "realm_dir": "evt_engineering_image",
+      "realm_id": "EVT_ENGINEERING_IMAGE",
+      "rootfs_tarball": {
+        "compressed_bytes": 6312546,
+        "compressed_gib": 0.005879017,
+        "file_count": 554,
+        "path": "os_build/realm_images/evt_engineering_image/artifacts/rootfs.tar.gz",
+        "sha256": "800fe3b7d0a41edbf02e46eacd1be4a0f7006023a6863bf5f8ad40d4c6b99718",
+        "uncompressed_file_bytes": 12564322,
+        "uncompressed_file_gib": 0.011701437
+      },
+      "signing_realm": "dev",
+      "status": "ACTIVE_DEV",
+      "stub_like": false,
+      "userspace_trees": [
+        "opt/gunnchos/lib/gunnchos_device_os",
+        "opt/gunnchos/userspace/sdk_apps",
+        "opt/gunnchos/userspace/packages",
+        "opt/gunnchos/userspace/games",
+        "opt/gunnchos/userspace/installable_image_prototype.tar.gz"
+      ]
+    },
+    "factory_provisioning_image": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "SHIPPING_IMAGE": false,
+      "alpine_minirootfs": {
+        "compressed_bytes": 3850365,
+        "sha256": "ead8a4b37867bd19e7417dd078748e2312c0aea364403d96758d63ea8ff261ea",
+        "source": "os_build/bootable_reference/cache/alpine-minirootfs-aarch64.tar.gz"
+      },
+      "build_manifest_path": "os_build/realm_images/factory_provisioning_image/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "11f3d6d3f08bb05ad04ca361900a409f259d0ce285048cd99bac5998fd690cd7",
+      "ok": true,
+      "payload_class": "production_intent_digital",
+      "payload_profile": "production_intent_factory",
+      "production_intent_digital": true,
+      "realm_dir": "factory_provisioning_image",
+      "realm_id": "FACTORY_PROVISIONING_IMAGE",
+      "rootfs_tarball": {
+        "compressed_bytes": 4325755,
+        "compressed_gib": 0.004028673,
+        "file_count": 488,
+        "path": "os_build/realm_images/factory_provisioning_image/artifacts/rootfs.tar.gz",
+        "sha256": "c54d02bde4a4ef34af847fb909bcc41ec7f3316438872c30713a9928958d9909",
+        "uncompressed_file_bytes": 10175410,
+        "uncompressed_file_gib": 0.009476589
+      },
+      "signing_realm": "dev",
+      "status": "ACTIVE_DEV",
+      "stub_like": false,
+      "userspace_trees": [
+        "opt/gunnchos/lib/gunnchos_device_os"
+      ]
+    },
+    "production_shipping_image_definition": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "SHIPPING_IMAGE": false,
+      "alpine_minirootfs": {
+        "compressed_bytes": 3850365,
+        "sha256": "ead8a4b37867bd19e7417dd078748e2312c0aea364403d96758d63ea8ff261ea",
+        "source": "os_build/bootable_reference/cache/alpine-minirootfs-aarch64.tar.gz"
+      },
+      "build_manifest_path": "os_build/realm_images/production_shipping_image_definition/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "8e86565943c18ee1be26ebf23fc033e30a20da22ca74f75878daaa12b3370910",
+      "ok": true,
+      "payload_class": "production_intent_digital",
+      "payload_profile": "production_intent_ab_userspace",
+      "production_intent_digital": true,
+      "realm_dir": "production_shipping_image_definition",
+      "realm_id": "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
+      "rootfs_tarball": {
+        "compressed_bytes": 6274218,
+        "compressed_gib": 0.005843321,
+        "file_count": 533,
+        "path": "os_build/realm_images/production_shipping_image_definition/artifacts/rootfs.tar.gz",
+        "sha256": "633dde1fa148908b001d0b714a279e9217e5db2a414fc4d1a0cf1160e573b2f4",
+        "uncompressed_file_bytes": 12400168,
+        "uncompressed_file_gib": 0.011548556
+      },
+      "signing_realm": "none",
+      "status": "NOT_RELEASED",
+      "stub_like": false,
+      "userspace_trees": [
+        "opt/gunnchos/lib/gunnchos_device_os",
+        "opt/gunnchos/userspace/sdk_apps",
+        "opt/gunnchos/userspace/packages",
+        "opt/gunnchos/userspace/games",
+        "opt/gunnchos/userspace/installable_image_prototype.tar.gz"
+      ]
+    },
+    "recovery_image": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "SHIPPING_IMAGE": false,
+      "alpine_minirootfs": {
+        "compressed_bytes": 3850365,
+        "sha256": "ead8a4b37867bd19e7417dd078748e2312c0aea364403d96758d63ea8ff261ea",
+        "source": "os_build/bootable_reference/cache/alpine-minirootfs-aarch64.tar.gz"
+      },
+      "build_manifest_path": "os_build/realm_images/recovery_image/artifacts/BUILD_MANIFEST.json",
+      "image_hash": "6ac470bb3c6eb41d812f7d5405ac9871e2dcf317538434849e96b89db26fed9b",
+      "ok": true,
+      "payload_class": "production_intent_digital",
+      "payload_profile": "production_intent_recovery",
+      "production_intent_digital": true,
+      "realm_dir": "recovery_image",
+      "realm_id": "RECOVERY_IMAGE",
+      "rootfs_tarball": {
+        "compressed_bytes": 3851977,
+        "compressed_gib": 0.003587433,
+        "file_count": 98,
+        "path": "os_build/realm_images/recovery_image/artifacts/rootfs.tar.gz",
+        "sha256": "871b573e9f2a62a52b76f3eaf878995af65ed4bcfb731ca62697277930e31de2",
+        "uncompressed_file_bytes": 8174162,
+        "uncompressed_file_gib": 0.007612782
+      },
+      "signing_realm": "dev",
+      "status": "ACTIVE_DEV",
+      "stub_like": false,
+      "userspace_trees": []
+    }
+  },
+  "schema": "gunnchos.device_os.handheld_image_fit_manifest.v1",
+  "shared_bootable_reference": {
+    "combined_bytes": 14140185,
+    "combined_gib": 0.013169073,
+    "initramfs": {
+      "bytes": 4514073,
+      "gib": 0.004204058,
+      "on_disk_bytes": 4514072,
+      "path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
+      "present": true,
+      "sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "size_source": "shared_boot_pin"
+    },
+    "kernel": {
+      "bytes": 9626112,
+      "gib": 0.008965015,
+      "on_disk_bytes": 9626112,
+      "path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
+      "present": true,
+      "sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
+      "size_source": "shared_boot_pin"
+    },
+    "kind": "shared_bootable_reference",
+    "note": "Shared DEV/QEMU reference \u2014 not realm-specific compiled binaries. Sizes/hashes prefer artifacts/handheld_image_fit/SHARED_BOOT_PIN.json because bootable MANIFEST.json is mutated by BootableReferenceBuilder during CI.",
+    "size_source": "shared_boot_pin"
+  },
+  "sizes_summary_gib": {
+    "evt_rootfs_compressed": 0.005879017,
+    "evt_rootfs_uncompressed": 0.011701437,
+    "factory_rootfs_compressed": 0.004028673,
+    "production_def_rootfs_compressed": 0.005843321,
+    "production_def_rootfs_uncompressed": 0.011548556,
+    "recovery_composed": 0.020781855,
+    "recovery_margin": 1.979218145,
+    "recovery_rootfs_compressed": 0.003587433,
+    "shared_boot_combined": 0.013169073,
+    "slot_a_composed": 0.02471763,
+    "slot_a_margin": 4.97528237,
+    "slot_b_composed": 0.02471763,
+    "slot_b_margin": 4.97528237
+  },
+  "sku_profile": "handheld_hybrid",
+  "slot_budgets_gib": {
+    "recovery": 2.0,
+    "slot_a": 5.0,
+    "slot_b": 5.0
+  },
+  "slot_fit": {
+    "evt_engineering_report_only": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 26704507,
+      "composed_gib": 0.02487051,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 12564322,
+        "shared_kernel_initramfs_bytes": 14140185
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
+      "margin_bytes": 5342004613,
+      "margin_gib": 4.97512949,
+      "payload_class": "production_intent_digital",
+      "production_intent_digital": true,
+      "realm_id": "EVT_ENGINEERING_IMAGE",
+      "slot": "evt_engineering_report_only"
+    },
+    "factory_provisioning_report_only": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 24315595,
+      "composed_gib": 0.022645663,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 10175410,
+        "shared_kernel_initramfs_bytes": 14140185
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
+      "margin_bytes": 5344393525,
+      "margin_gib": 4.977354337,
+      "payload_class": "production_intent_digital",
+      "production_intent_digital": true,
+      "realm_id": "FACTORY_PROVISIONING_IMAGE",
+      "slot": "factory_provisioning_report_only"
+    },
+    "recovery": {
+      "budget_bytes": 2147483648,
+      "budget_gib": 2.0,
+      "composed_bytes": 22314347,
+      "composed_gib": 0.020781855,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 8174162,
+        "shared_kernel_initramfs_bytes": 14140185
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
+      "margin_bytes": 2125169301,
+      "margin_gib": 1.979218145,
+      "payload_class": "production_intent_digital",
+      "production_intent_digital": true,
+      "realm_id": "RECOVERY_IMAGE",
+      "slot": "recovery"
+    },
+    "slot_a": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 26540353,
+      "composed_gib": 0.02471763,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 12400168,
+        "shared_kernel_initramfs_bytes": 14140185
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
+      "margin_bytes": 5342168767,
+      "margin_gib": 4.97528237,
+      "payload_class": "production_intent_digital",
+      "production_intent_digital": true,
+      "realm_id": "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
+      "slot": "slot_a"
+    },
+    "slot_b": {
+      "budget_bytes": 5368709120,
+      "budget_gib": 5.0,
+      "composed_bytes": 26540353,
+      "composed_gib": 0.02471763,
+      "composition": {
+        "method": "uncompressed_rootfs_files + shared_bootable_reference_kernel_initramfs",
+        "rootfs_uncompressed_file_bytes": 12400168,
+        "shared_kernel_initramfs_bytes": 14140185
+      },
+      "fits_budget": true,
+      "honesty": "Numeric fit of production-intent digital rootfs (Alpine + gunnchOS userspace) + shared reference boot vs Outcome A budget. Not physical flash; SHIPPING_IMAGE=false.",
+      "margin_bytes": 5342168767,
+      "margin_gib": 4.97528237,
+      "note": "Proxy uses PRODUCTION_SHIPPING_IMAGE_DEFINITION composed size for both A and B (identical-slot A/B update payload assumption).",
+      "payload_class": "production_intent_digital",
+      "production_intent_digital": true,
+      "realm_id": "PRODUCTION_SHIPPING_IMAGE_DEFINITION",
+      "slot": "slot_b"
+    }
+  }
+}
