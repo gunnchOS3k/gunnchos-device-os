@@ -20,7 +20,20 @@ CLAIM_BOUNDARY = (
 STANDARDS_REGISTER = (
     {"id": "3GPP-Rel17-NTN", "status": "tracked", "normative_uptake": "EXTERNAL_PENDING"},
     {"id": "3GPP-Rel18-NTN", "status": "tracked", "normative_uptake": "EXTERNAL_PENDING"},
+    {
+        "id": "3GPP-Rel-20",
+        "status": "STUDY_OR_NORMATIVE_IN_PROGRESS",
+        "normative_uptake": "EXTERNAL_PENDING",
+        "note": "5G-Advanced + early 6G studies; never 6G certified",
+    },
+    {
+        "id": "3GPP-Rel-21",
+        "status": "TRACKER_ONLY",
+        "normative_uptake": "EXTERNAL_PENDING",
+        "note": "planned normative 6G phase — no freeze in this repo",
+    },
     {"id": "TS-38.821", "status": "referenced", "normative_uptake": "EXTERNAL_PENDING"},
+    {"id": "ITU-R-M.2160", "status": "APPROVED", "normative_uptake": "EXTERNAL_PENDING"},
     {"id": "IoT-NTN-profiles", "status": "draft", "normative_uptake": "EXTERNAL_PENDING"},
 )
 
@@ -144,6 +157,8 @@ class NtnMigrationHarness:
             "future_disabled": fut,
             "standards_register": reg.name,
             "rm520n_ntn_claimed": False,
+            "STANDARDIZED_6G": False,
+            "CARRIER_ACCEPTED": False,
             "claim_boundary": CLAIM_BOUNDARY,
             "frontier_parity_claimed": False,
         }

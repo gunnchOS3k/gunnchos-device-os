@@ -36,8 +36,9 @@ class OrchestratorState(str, Enum):
 
 
 class BearerKind(str, Enum):
-    ETHERNET = "ethernet"  # dock ethernet when profile allows
+    ETHERNET = "ethernet"  # dock ethernet over USB4/TB4 (not TB5)
     WIFI = "wifi"
+    BLUETOOTH = "bluetooth"  # PAN/local — not WAN failover
     CELLULAR = "cellular"  # generic cellular path; no named carrier claim
     NTN_SIMULATED = "ntn_simulated"  # research/sim NTN path only
     OFFLINE = "offline"
@@ -46,7 +47,9 @@ class BearerKind(str, Enum):
 CLAIM_BOUNDARY = (
     "Software orchestrator only. No carrier attach, no SIM/eSIM control, "
     "no radio certification claim. Cellular/NTN are generic or simulated "
-    "bearer classes from device radio capability profiles — not named modems."
+    "bearer classes from device radio capability profiles — not named modems. "
+    "RM520N-GL is 5G NR Sub-6 + LTE only (not NTN, not 6G). Dock is TB4 not TB5. "
+    "STANDARDIZED_6G=false. CARRIER_ACCEPTED=false. Bluetooth is PAN/local."
 )
 
 
@@ -112,6 +115,7 @@ class ConnectivityOrchestrator:
             self.metrics = {
                 BearerKind.ETHERNET.value: BearerMetrics(),
                 BearerKind.WIFI.value: BearerMetrics(),
+                BearerKind.BLUETOOTH.value: BearerMetrics(),
                 BearerKind.CELLULAR.value: BearerMetrics(),
                 BearerKind.NTN_SIMULATED.value: BearerMetrics(),
                 BearerKind.OFFLINE.value: BearerMetrics(
@@ -158,6 +162,7 @@ class ConnectivityOrchestrator:
             for kind in (
                 BearerKind.ETHERNET,
                 BearerKind.WIFI,
+                BearerKind.BLUETOOTH,
                 BearerKind.CELLULAR,
                 BearerKind.NTN_SIMULATED,
             ):
@@ -255,6 +260,10 @@ class ConnectivityOrchestrator:
             "should_switch": should_switch,
             "reason": reason,
             "claim_boundary": CLAIM_BOUNDARY,
+            "STANDARDIZED_6G": False,
+            "CARRIER_ACCEPTED": False,
+            "RM520N_GL_NTN": False,
+            "DOCK_TB5": False,
             "mock": False,
         }
 
@@ -328,6 +337,10 @@ class ConnectivityOrchestrator:
             "history": [asdict(h) for h in self.history],
             "faults": sorted(self.faults),
             "claim_boundary": CLAIM_BOUNDARY,
+            "STANDARDIZED_6G": False,
+            "CARRIER_ACCEPTED": False,
+            "RM520N_GL_NTN": False,
+            "DOCK_TB5": False,
             "mock": False,
         }
 

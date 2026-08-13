@@ -58,6 +58,7 @@ class RadioCapabilityProfile:
     device_id: str
     wifi_class: str = "unknown"
     ethernet_dock: bool = False
+    bluetooth: bool = True
     offline_capable: bool = True
     cellular_class: CellularClass = CellularClass.NONE
     ntn_class: NtnClass = NtnClass.NONE
@@ -72,6 +73,12 @@ class RadioCapabilityProfile:
                 bearer="wifi",
                 supported=bool(self.wifi_class and self.wifi_class != "none"),
                 class_tag=self.wifi_class or "unknown",
+            ),
+            BearerCapability(
+                bearer="bluetooth",
+                supported=self.bluetooth,
+                class_tag="pan_local",
+                notes="PAN/local only — not WAN failover",
             ),
             BearerCapability(
                 bearer="ethernet",
@@ -110,6 +117,7 @@ class RadioCapabilityProfile:
             "device_id": self.device_id,
             "wifi_class": self.wifi_class,
             "ethernet_dock": self.ethernet_dock,
+            "bluetooth": self.bluetooth,
             "offline_capable": self.offline_capable,
             "cellular_class": self.cellular_class.value,
             "ntn_class": self.ntn_class.value,
@@ -126,6 +134,7 @@ def _default_cost_hints(cellular: CellularClass, ntn: NtnClass) -> dict[str, flo
     hints = {
         "wifi": 0.0,
         "ethernet": 0.0,
+        "bluetooth": 0.0,
         "offline": 0.0,
     }
     if cellular != CellularClass.NONE:
@@ -139,6 +148,7 @@ def _default_energy_hints(cellular: CellularClass, ntn: NtnClass) -> dict[str, f
     hints = {
         "wifi": 400.0,
         "ethernet": 150.0,
+        "bluetooth": 80.0,
         "offline": 1.0,
     }
     if cellular != CellularClass.NONE:
@@ -208,11 +218,20 @@ def radio_profile_from_device(device_id: str) -> RadioCapabilityProfile:
     cellular = _parse_cellular(raw_net)
     ntn = _parse_ntn(raw_net)
     offline = bool(raw_net.get("offline_capable", profile.network.offline_capable))
+    # Bluetooth defaults on when Wi-Fi is present (combo radios). Explicit none disables.
+    bt_raw = raw_net.get("bluetooth", raw_net.get("bt"))
+    if bt_raw in (False, "false", "none", "no"):
+        bluetooth = False
+    elif bt_raw in (True, "true", "yes", "pan"):
+        bluetooth = True
+    else:
+        bluetooth = bool(wifi and wifi != "none")
 
     return RadioCapabilityProfile(
         device_id=device_id,
         wifi_class=wifi if wifi else "unknown",
         ethernet_dock=ethernet_dock,
+        bluetooth=bluetooth,
         offline_capable=offline,
         cellular_class=cellular,
         ntn_class=ntn,

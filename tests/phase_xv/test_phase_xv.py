@@ -81,6 +81,8 @@ def test_connectivity_5ga():
     assert result["ok"] is True
     assert result["exit_state"] == "DIGITALLY_VALIDATED"
     assert result["rm520n_ntn_claimed"] is False
+    assert result["STANDARDIZED_6G"] is False
+    assert result["CARRIER_ACCEPTED"] is False
     assert result["handoffs"]["wifi_to_cellular"]["to"] == "cellular"
     assert result["handoffs"]["cellular_to_wifi"]["to"] == "wifi"
 
@@ -93,6 +95,8 @@ def test_ntn_migration():
     assert result["exit_state"] == "DIGITALLY_VALIDATED"
     assert result["normative_ecosystem"] == "EXTERNAL_PENDING"
     assert result["rm520n_ntn_claimed"] is False
+    assert result["STANDARDIZED_6G"] is False
+    assert result["CARRIER_ACCEPTED"] is False
     assert result["future_disabled"]["ok"] is True
 
 

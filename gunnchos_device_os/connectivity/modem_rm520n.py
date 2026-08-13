@@ -12,7 +12,9 @@ import time
 
 CLAIM_BOUNDARY = (
     "Simulated RM520N-GL software path only. No physical modem, no carrier "
-    "attach, no NTN claim. Quectel RM520N-GL is terrestrial 5G sub-6."
+    "attach, no NTN claim. Quectel RM520N-GL is terrestrial 5G NR Sub-6 + LTE "
+    "ONLY — not NTN, not 6G. STANDARDIZED_6G=false. CARRIER_ACCEPTED=false. "
+    "Real eSIM/carrier credentials are EXTERNAL."
 )
 
 RM520N_GL_SKUS = ("RM520N-GL",)
@@ -119,9 +121,17 @@ class SimulatedRM520NGL:
             "ok": True,
             "bearer": "terrestrial",
             "apn": "internet",
+            "pdn_type": "ipv4v6",
             "ip": "10.64.0.2",
+            "ipv4": "10.64.0.2",
+            "ipv6": "2001:db8:7gc:1::2",
             "dns": ["1.1.1.1", "8.8.8.8"],
+            "dns_v4": ["1.1.1.1", "8.8.8.8"],
+            "dns_v6": ["2001:4860:4860::8888"],
             "ntn_claimed": False,
+            "RM520N_GL_NTN": False,
+            "CARRIER_ACCEPTED": False,
+            "simulated": True,
         }
 
     def reconnect(self) -> dict[str, Any]:
