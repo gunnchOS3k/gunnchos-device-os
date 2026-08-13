@@ -1,0 +1,87 @@
+{
+  "schema": "gunnchos.wp011r.independent_verifier.v1",
+  "wave": "WP-011R.2",
+  "role": "independent_verifier",
+  "pr": 108,
+  "branch": "operating-cycle-3b/wp-011r2-lab-reconciliation",
+  "assessed_tip": "e6b229e91e3f35019d0d747f9da94495557ef2ef",
+  "assessed_at_utc": "2026-08-13T04:29:36Z",
+  "overall_result": "INDEPENDENT_FAIL",
+  "INDEPENDENT_PASS": false,
+  "independent_accepted": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "DEVICE_LAB_DEVELOPMENT_GUEST": true,
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "shipping_master": false,
+  "five_gate_digital_and": false,
+  "DEVICE_OS_108_READY_FOR_EDMUND_MERGE": false,
+  "prefer_fail": true,
+  "cursor_never_merges": true,
+  "WP-001": "DO_NOT_START",
+  "complete_policy": {
+    "rule": "Keep GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE=false and SHIPPING_IMAGE=false even when five_gate_digital_and=true, unless the wave packet explicitly allows digital COMPLETE with DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true AND SILICON_EXACT_EMULATION=false.",
+    "packet_allows_digital_complete_on_interactive_guest": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "applied": "Anime honest FAIL keeps four=false → five_gate_digital_and=false; COMPLETE/shipping remain false"
+  },
+  "tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "ECO010_SOAK_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "per_game_independent": {
+    "anime-aggressors": "FAIL",
+    "anime_blocker": "anime_no_input_driven_native_mutation",
+    "anime_do_not_flip_to_pass": true,
+    "foot-racing": "PASS",
+    "earth-species": "PASS",
+    "beatlink-party": "PASS"
+  },
+  "per_token_verdict": [
+    {
+      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "verdict": "FAIL",
+      "note": "Aggregate FAIL: Pedestrian/Archive/Beat Link honest PASS; Anime FAIL anime_no_input_driven_native_mutation (not flipped)"
+    },
+    {
+      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
+      "verdict": "PASS",
+      "note": "Retained guest FB evidence; blob unchanged vs 5d3fabb"
+    },
+    {
+      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "verdict": "PASS",
+      "note": "Retained; blob unchanged vs 5d3fabb"
+    },
+    {
+      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+      "verdict": "PASS",
+      "note": "Retained; blob unchanged vs 5d3fabb"
+    },
+    {
+      "token": "ECO010_SOAK_PASS",
+      "verdict": "PASS",
+      "note": ">=1800s retained; blob unchanged vs 5d3fabb"
+    }
+  ],
+  "canonical_result": "artifacts/wp011r/VP_WP011R2_INDEPENDENT_RESULT.json",
+  "merge_recommendation": "Do not merge DRAFT #108; READY false; Cursor never merges; WP-001 DO_NOT_START; COMPLETE/shipping false",
+  "verdict": "INDEPENDENT_FAIL",
+  "successor_of_pr": 103,
+  "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "wp011r2_reconciliation": {
+    "device-os": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+    "historical_pr103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5"
+  }
+}
