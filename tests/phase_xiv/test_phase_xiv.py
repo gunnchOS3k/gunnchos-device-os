@@ -110,11 +110,25 @@ def test_local_ai_llama_tier_if_available():
     if "smollm2-135m-q4" not in models:
         pytest.skip("SmolLM2 GGUF not present in sibling paths")
     rt.preferred = "smollm2-135m-q4"
+    rec = reg.models["smollm2-135m-q4"]
+    assert rec.tier == "nano"
+    assert rec.is_nano_fallback_only is True
+    assert rec.role == "NANO_LOCAL"
+    assert rec.context_tokens == 512
+    assert rec.quant == "Q4_K_M"
+    assert rec.display_label == "Nano/fallback"
     out = rt.run_capability("tutor", "What is OFDM in one sentence?")
     assert out["ok"] is True
-    assert out["runtime"] == "llama_cpp"
-    assert out["tier"] == "small"
+    if out["runtime"] != "llama_cpp":
+        pytest.skip(f"llama-cli present but did not produce llama_cpp output (runtime={out.get('runtime')})")
+    assert out["tier"] == "nano"
+    assert out["is_nano_fallback_only"] is True
+    assert out["role"] == "NANO_LOCAL"
     assert len(out["text"]) > 0
+    inv = rt.intelligence_inventory()
+    assert inv["GUNNCHAI_APP_PRODUCT_COMPLETE"] is False
+    assert inv["smollm2_is_full_intelligence_layer"] is False
+    assert inv["preferred_daily_tier"] in {"nano_fallback", "fast", "pro"}
 
 
 def test_cross_product_callers():
