@@ -6,31 +6,6 @@
   "ok": true,
   "observation_class": "GUEST_OBSERVED",
   "assign_grade_kinds": [
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "assign_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "assign_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "grade_fixture",
-    "assign_fixture",
-    "grade_fixture",
     "assign_fixture",
     "grade_fixture"
   ],
@@ -46,6 +21,8 @@
   "learner_key_leak": false,
   "teacher_events_present": true,
   "role_acl_ok": true,
+  "fs_hygiene_ok": true,
+  "fs_hygiene_probe": "LEARNER_TEACHER_DATA=ABSENT\nLEARNER_GRADES=ABSENT\nTEACHER_DATA=PRESENT\nDIR=700\nDATA=600\nKEYS_NONEMPTY True\nLEARNER_DATA_KEYS none\n",
   "grades_denied_to_learner": true,
   "acl_probe": "DENY=403\nDENY_KEYS=403\nALLOW=200\nKEYS=200\n",
   "curl": {
@@ -54,5 +31,7 @@
     "returncode": 0
   },
   "claim": "fixture_assign_grade_with_role_acl",
-  "note": "Instructor fixture assign/grade with X-WAIKE-Role ACL. Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
+  "teacher_fs_root": "/var/lib/gunnchos/waike-teacher",
+  "learner_fs_root": "/var/lib/gunnchos/waike",
+  "note": "Instructor fixture assign/grade with X-WAIKE-Role ACL + separate teacher FS (0700/0600). Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
 }

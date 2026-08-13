@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.product_use_rc_001.s1_closer.v1",
-  "finished_at_utc": "2026-08-13T23:14:00Z",
+  "finished_at_utc": "2026-08-13T23:43:26Z",
   "prefer_fail_over_false_pass": true,
   "tokens_remain_false": true,
   "Edmund_mergeable": false,
@@ -8,52 +8,30 @@
     "G13": {
       "ok": true,
       "claim": "fixture_lab_with_role_acl",
-      "shipping_waike_teacher_app": false,
       "role_acl_ok": true,
-      "learner_cannot_fetch_teacher_keys": true,
-      "grades_denied_to_learner": true,
-      "REAL_TEACHER_E6": false,
-      "evidence": "artifacts/product_use/journeys/G13_teacher/"
+      "fs_hygiene_ok": true,
+      "teacher_fs_root": "/var/lib/gunnchos/waike-teacher",
+      "learner_fs_root": "/var/lib/gunnchos/waike",
+      "shipping_waike_teacher_app": false,
+      "REAL_TEACHER_E6": false
     },
     "G15_retained": "PASS_WITH_CAVEAT",
-    "LIVE_visual_retained": true
+    "LIVE_visual_retained": true,
+    "prior_scoped_VP": "6838ca9"
   },
   "left_open_or_demoted": {
-    "G11": "DEMOTED (fixture; no HID quiz_submit; no link_down)",
+    "G11": "DEMOTED",
     "RING": false,
-    "G14": "OPEN (focus_move + git FAIL this run)",
+    "G14": "OPEN (ENOSPC mid-run)",
     "dock": "OPEN",
     "reboot_resume": "NOT_RUN"
   },
   "S1_remaining": [
     "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (Ring still false; no lab_browser; migration-alone forbidden)",
-    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN (attempted; focus_move + git FAIL)",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (blocker: guest_browser_state_not_committed; no lab_browser; migration-alone forbidden)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN (attempt interrupted by host disk ENOSPC)",
     "Handheld dock continuity OPEN",
     "G11 reboot/resume schoolwork NOT_RUN",
     "Persona tokens remain false until full pickup-and-use journeys"
-  ],
-  "results_snapshot": {
-    "G13": {
-      "ok": true,
-      "role_acl_ok": true,
-      "grades_denied_to_learner": true,
-      "learner_key_leak": false,
-      "claim": "fixture_assign_grade_with_role_acl",
-      "acl_probe": "DENY=403\nDENY_KEYS=403\nALLOW=200\nKEYS=200\n",
-      "note": "Instructor fixture assign/grade with X-WAIKE-Role ACL. Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
-    },
-    "G14": {
-      "ok": false,
-      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-      "dsxl_missing": [
-        "focus_move"
-      ],
-      "git_build_test": {
-        "ok": false,
-        "stdout": "",
-        "observation_class": "FAIL"
-      }
-    }
-  }
+  ]
 }

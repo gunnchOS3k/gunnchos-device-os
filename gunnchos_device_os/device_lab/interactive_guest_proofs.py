@@ -53,8 +53,9 @@ def boot_interactive_guest(
 ) -> dict[str, Any]:
     os.environ["GUNNCH_LAB_INTERACTIVE_GUEST"] = "1"
     os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
-    os.environ.setdefault("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", str(boot_timeout_s))
-    os.environ.setdefault("GUNNCHDEVICE_LAB_MEMORY_MB", str(memory_mb))
+    os.environ["GUNNCHDEVICE_LAB_BOOT_TIMEOUT"] = str(boot_timeout_s)
+    # Always honor caller memory_mb (setdefault left stale 4096 and OOM'd tight disks).
+    os.environ["GUNNCHDEVICE_LAB_MEMORY_MB"] = str(int(memory_mb))
     if dual:
         os.environ["GUNNCHDEVICE_LAB_DUAL_GPU"] = "1"
     else:
@@ -1003,16 +1004,29 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
 
     focus_moves: list[dict[str, Any]] = []
     for oid in (oid_a, oid_b):
-        if oid == oid_b:
-            for _ in range(16):
-                _agent_call(session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0)
-            click = _agent_call(
-                session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
-            )
-        else:
-            click = _agent_call(
-                session, "input_inject", kind="pointer", dx=100, dy=100, button="left", timeout_sec=10.0
-            )
+        click: dict[str, Any] = {}
+        for attempt in range(4):
+            if oid == oid_b:
+                for _ in range(16):
+                    _agent_call(
+                        session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0
+                    )
+                click = _agent_call(
+                    session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
+                )
+            else:
+                click = _agent_call(
+                    session, "input_inject", kind="pointer", dx=100, dy=100, button="left", timeout_sec=10.0
+                )
+            if click.get("ok"):
+                break
+            # Guest agent virtio-serial can briefly empty-reply under compositor load.
+            if click.get("error") not in {"unix_connect_failed", "empty_or_unmatched_response"} and (
+                "empty" not in str(click.get("detail") or "").lower()
+                and "unix_connect" not in str(click.get("error") or "")
+            ):
+                break
+            time.sleep(0.6 + 0.3 * attempt)
         focus_moves.append(
             {
                 "ok": bool(click.get("ok")) and placement_proven,

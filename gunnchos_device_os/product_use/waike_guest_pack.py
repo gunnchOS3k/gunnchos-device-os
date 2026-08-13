@@ -168,6 +168,10 @@ document.getElementById('grade').onclick = async () => {
 def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_IT") -> dict[str, Any]:
     slice_ = build_course_slice(repo_root, course_id=course_id)
     out_dir.mkdir(parents=True, exist_ok=True)
+    learner_dir = out_dir / "learner"
+    teacher_dir = out_dir / "teacher"
+    learner_dir.mkdir(parents=True, exist_ok=True)
+    teacher_dir.mkdir(parents=True, exist_ok=True)
     learner_data = {
         k: v
         for k, v in slice_.items()
@@ -195,10 +199,40 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
     )
     if "teacher_answer_keys_for_quiz" in teacher_html or '"answer_keys"' in teacher_html:
         raise RuntimeError("teacher_html_must_not_embed_answer_keys")
+    (learner_dir / "learner.html").write_text(learner_html, encoding="utf-8")
+    (learner_dir / "learner_data.json").write_text(
+        json.dumps(learner_data, indent=2) + "\n", encoding="utf-8"
+    )
+    (learner_dir / "MANIFEST.json").write_text(
+        json.dumps(
+            {
+                "schema": "gunnchos.product_use.waike_guest_pack.v1",
+                "role": "learner",
+                "course_id": course_id,
+                "package_version": slice_["package_version"],
+                "reauthored": False,
+                "owner": "waike-research-ops#43",
+                "learner_has_answer_keys": False,
+                "keys_co_located": False,
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (teacher_dir / "teacher.html").write_text(teacher_html, encoding="utf-8")
+    (teacher_dir / "teacher_data.json").write_text(
+        json.dumps(teacher_data, indent=2) + "\n", encoding="utf-8"
+    )
+    # Flat compatibility copies for deploy (deploy still separates on guest FS).
     (out_dir / "learner.html").write_text(learner_html, encoding="utf-8")
+    (out_dir / "learner_data.json").write_text(
+        json.dumps(learner_data, indent=2) + "\n", encoding="utf-8"
+    )
     (out_dir / "teacher.html").write_text(teacher_html, encoding="utf-8")
-    (out_dir / "learner_data.json").write_text(json.dumps(learner_data, indent=2) + "\n", encoding="utf-8")
-    (out_dir / "teacher_data.json").write_text(json.dumps(teacher_data, indent=2) + "\n", encoding="utf-8")
+    (out_dir / "teacher_data.json").write_text(
+        json.dumps(teacher_data, indent=2) + "\n", encoding="utf-8"
+    )
     (out_dir / "MANIFEST.json").write_text(
         json.dumps(
             {
@@ -207,7 +241,12 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
                 "package_version": slice_["package_version"],
                 "reauthored": False,
                 "owner": "waike-research-ops#43",
-                "learner_has_answer_keys": "answer_keys" in blob,
+                "learner_has_answer_keys": False,
+                "host_layout": "learner/ + teacher/ separated; flat copies for deploy helper",
+                "guest_layout": {
+                    "learner": "/var/lib/gunnchos/waike",
+                    "teacher": "/var/lib/gunnchos/waike-teacher (0700/0600)",
+                },
             },
             indent=2,
         )
@@ -220,4 +259,5 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
         "course_id": course_id,
         "package_version": slice_["package_version"],
         "learner_has_answer_keys": False,
+        "host_separated": True,
     }

@@ -67,24 +67,61 @@ def _read_json_logs(session: Any, path: str) -> dict[str, Any]:
 
 
 def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
-    remote_root = "/var/lib/gunnchos/waike"
-    puts = {}
-    for name in ("learner.html", "teacher.html", "learner_data.json", "teacher_data.json", "MANIFEST.json"):
-        puts[name] = _b64_put(session, f"{remote_root}/{name}", (pack_dir / name).read_bytes())
-    # Collector with role ACL: learner cannot GET teacher HTML/keys/grades without X-WAIKE-Role: teacher.
-    _agent_call(
+    """Deploy learner + teacher packs on *separate* guest FS trees.
+
+    Learner: /var/lib/gunnchos/waike/ (no keys).
+    Teacher: /var/lib/gunnchos/waike-teacher/ mode 0700; teacher_data.json 0600.
+    grades/teacher_state live under teacher root — not co-located with learner pack.
+    """
+    learner_root = "/var/lib/gunnchos/waike"
+    teacher_root = "/var/lib/gunnchos/waike-teacher"
+    puts: dict[str, Any] = {}
+    for name in ("learner.html", "learner_data.json", "MANIFEST.json"):
+        puts[name] = _b64_put(session, f"{learner_root}/{name}", (pack_dir / name).read_bytes())
+    for name in ("teacher.html", "teacher_data.json"):
+        puts[name] = _b64_put(session, f"{teacher_root}/{name}", (pack_dir / name).read_bytes())
+    # Separate trees + restrictive perms; scrub any co-located teacher secrets from learner root.
+    scrub = (
+        "import os, pathlib\n"
+        "L=pathlib.Path('/var/lib/gunnchos/waike')\n"
+        "T=pathlib.Path('/var/lib/gunnchos/waike-teacher')\n"
+        "L.mkdir(parents=True, exist_ok=True)\n"
+        "T.mkdir(parents=True, exist_ok=True)\n"
+        "for name in ('teacher_data.json','teacher.html','teacher_state.json','grades.json'):\n"
+        "    p=L/name\n"
+        "    if p.exists() or p.is_symlink():\n"
+        "        p.unlink()\n"
+        "os.chmod(L, 0o755)\n"
+        "os.chmod(T, 0o700)\n"
+        "for name in ('teacher_data.json','teacher.html'):\n"
+        "    p=T/name\n"
+        "    if not p.exists():\n"
+        "        raise SystemExit('missing_'+name)\n"
+        "    os.chmod(p, 0o600)\n"
+        "(T/'teacher_state.json').write_text('{}')\n"
+        "(T/'grades.json').write_text('{}')\n"
+        "(L/'learner_state.json').write_text('{}')\n"
+        "os.chmod(T/'teacher_state.json', 0o600)\n"
+        "os.chmod(T/'grades.json', 0o600)\n"
+        "assert not (L/'teacher_data.json').exists(), 'learner_still_has_teacher_data'\n"
+        "assert not (L/'grades.json').exists(), 'learner_still_has_grades'\n"
+        "print('LEARNER_NO_TEACHER_DATA')\n"
+        "print('TEACHER_DIR=%o' % (T.stat().st_mode & 0o777))\n"
+        "print('TEACHER_DATA=%o' % ((T/'teacher_data.json').stat().st_mode & 0o777))\n"
+        "print('LEARNER_DIR=%o' % (L.stat().st_mode & 0o777))\n"
+    )
+    _b64_put(session, "/var/tmp/waike_fs_scrub.py", scrub.encode())
+    hygiene = _agent_call(
         session,
         "process_run",
         argv=[
             "bash",
             "-lc",
-            "pkill -f waike-product-use-collector || true; "
-            f"mkdir -p {remote_root}; "
-            f"echo '{{}}' > {remote_root}/learner_state.json; "
-            f"echo '{{}}' > {remote_root}/teacher_state.json; "
-            f"echo '{{}}' > {remote_root}/grades.json",
+            # Avoid pkill -f self-match on this argv (classic: pattern matches the shell line).
+            "pgrep -af 'waike-product-use-collector' | grep -v pgrep | awk '{print $1}' | xargs -r kill 2>/dev/null || true; "
+            "python3 /var/tmp/waike_fs_scrub.py; echo SCRUB_RC=$?",
         ],
-        timeout_sec=20.0,
+        timeout_sec=30.0,
     )
     start = _agent_call(
         session,
@@ -93,8 +130,9 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
         argv=[
             "python3",
             "-c",
-            "import json,http.server,pathlib\n"
-            "R=pathlib.Path('/var/lib/gunnchos/waike')\n"
+            "import json,http.server,pathlib,os\n"
+            "L=pathlib.Path('/var/lib/gunnchos/waike')\n"
+            "T=pathlib.Path('/var/lib/gunnchos/waike-teacher')\n"
             "class H(http.server.BaseHTTPRequestHandler):\n"
             "  def _role(self):\n"
             "    return (self.headers.get('X-WAIKE-Role') or '').strip().lower()\n"
@@ -107,20 +145,19 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
             "    self.send_header('Content-Length',str(len(b)));self.end_headers();self.wfile.write(b)\n"
             "  def do_GET(self):\n"
             "    p=self.path.split('?')[0]; role=self._role()\n"
-            "    if p in ('/','/learner','/learner.html'): self._send((R/'learner.html').read_bytes()); return\n"
+            "    if p in ('/','/learner','/learner.html'): self._send((L/'learner.html').read_bytes()); return\n"
             "    if p in ('/learner_data.json',):\n"
-            "      self._send((R/'learner_data.json').read_bytes(),'application/json'); return\n"
+            "      self._send((L/'learner_data.json').read_bytes(),'application/json'); return\n"
             "    if p in ('/teacher','/teacher.html','/teacher_data.json','/teacher/keys','/grades.json'):\n"
             "      if role!='teacher': self._forbid(); return\n"
             "      if p=='/teacher/keys':\n"
-            "        td=json.loads((R/'teacher_data.json').read_text() if (R/'teacher_data.json').exists() else '{}')\n"
+            "        td=json.loads((T/'teacher_data.json').read_text() if (T/'teacher_data.json').exists() else '{}')\n"
             "        keys=td.get('teacher_answer_keys_for_quiz') or {}\n"
             "        self._send(json.dumps(keys).encode(),'application/json'); return\n"
-            "      if p in ('/teacher','/teacher.html'): self._send((R/'teacher.html').read_bytes()); return\n"
-            "      fp=R/( 'teacher_data.json' if 'teacher_data' in p else 'grades.json')\n"
+            "      if p in ('/teacher','/teacher.html'): self._send((T/'teacher.html').read_bytes()); return\n"
+            "      fp=T/( 'teacher_data.json' if 'teacher_data' in p else 'grades.json')\n"
             "      self._send(fp.read_bytes() if fp.exists() else b'{}','application/json'); return\n"
             "    if p.endswith('.json'):\n"
-            "      # Deny unknown JSON (prevents casual key fetch by path guessing).\n"
             "      self._forbid(); return\n"
             "    self._send(b'ok')\n"
             "  def do_POST(self):\n"
@@ -129,15 +166,16 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
             "    except Exception: doc={'raw':body.decode('utf-8','replace')}\n"
             "    if self.path.startswith('/teacher'):\n"
             "      if self._role()!='teacher': self._forbid(); return\n"
-            "      p=R/'teacher_state.json'; cur=json.loads(p.read_text() if p.exists() else '{}')\n"
+            "      p=T/'teacher_state.json'; cur=json.loads(p.read_text() if p.exists() else '{}')\n"
             "      ev=cur.setdefault('events',[]); ev.append(doc); p.write_text(json.dumps(cur))\n"
+            "      os.chmod(p, 0o600)\n"
             "      if doc.get('kind')=='grade_fixture':\n"
-            "        g=R/'grades.json'; gg=json.loads(g.read_text() if g.exists() else '{}')\n"
-            "        # Never persist raw answer keys into grades.json for learner-visible paths.\n"
+            "        g=T/'grades.json'; gg=json.loads(g.read_text() if g.exists() else '{}')\n"
             "        safe={k:doc.get(k) for k in ('kind','learner_choice','rubric','course_id','ts') if k in doc}\n"
             "        safe['graded']=True; gg['last']=safe; gg['graded']=True; g.write_text(json.dumps(gg))\n"
+            "        os.chmod(g, 0o600)\n"
             "    else:\n"
-            "      p=R/'learner_state.json'; cur=json.loads(p.read_text() if p.exists() else '{}')\n"
+            "      p=L/'learner_state.json'; cur=json.loads(p.read_text() if p.exists() else '{}')\n"
             "      ev=cur.setdefault('events',[]); ev.append(doc); cur['last']=doc; p.write_text(json.dumps(cur))\n"
             "    self.send_response(204); self.end_headers()\n"
             "  def log_message(self,*a): pass\n"
@@ -163,18 +201,27 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
         timeout_sec=20.0,
     )
     acl_out = curl.get("stdout") or ""
+    hyg_out = hygiene.get("stdout") or ""
     acl_ok = (
         "L=200" in acl_out
         and "T403=403" in acl_out
         and "K403=403" in acl_out
         and "TOK=200" in acl_out
     )
+    fs_hygiene_ok = (
+        "LEARNER_NO_TEACHER_DATA" in hyg_out
+        and "TEACHER_DIR=700" in hyg_out
+        and "TEACHER_DATA=600" in hyg_out
+    )
     return {
         "puts": puts,
         "start": start,
         "curl": curl,
-        "remote_root": remote_root,
+        "hygiene": {k: hygiene.get(k) for k in ("ok", "stdout", "returncode")},
+        "remote_learner_root": learner_root,
+        "remote_teacher_root": teacher_root,
         "role_acl_ok": acl_ok,
+        "fs_hygiene_ok": fs_hygiene_ok,
         "role_acl_stdout": acl_out[-400:],
         "surface": "fixture_html_collector_not_shipping_waike",
     }
@@ -399,6 +446,41 @@ def run_g13(session: Any) -> dict[str, Any]:
         and "ALLOW=200" in acl_out
         and "KEYS=200" in acl_out
     )
+    # FS hygiene: keys must not sit beside learner pack; teacher tree is mode 0700 / files 0600.
+    fs = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "set +e; "
+            "L=/var/lib/gunnchos/waike; T=/var/lib/gunnchos/waike-teacher; "
+            "echo LEARNER_TEACHER_DATA=$(test -e $L/teacher_data.json && echo PRESENT || echo ABSENT); "
+            "echo LEARNER_GRADES=$(test -e $L/grades.json && echo PRESENT || echo ABSENT); "
+            "echo TEACHER_DATA=$(test -f $T/teacher_data.json && echo PRESENT || echo ABSENT); "
+            "stat -c 'DIR=%a' $T; stat -c 'DATA=%a' $T/teacher_data.json; "
+            "python3 - <<'PY'\n"
+            "import json,pathlib\n"
+            "td=json.loads(pathlib.Path('/var/lib/gunnchos/waike-teacher/teacher_data.json').read_text())\n"
+            "keys=td.get('teacher_answer_keys_for_quiz') or {}\n"
+            "print('KEYS_NONEMPTY', bool(keys))\n"
+            "ld=pathlib.Path('/var/lib/gunnchos/waike/learner_data.json').read_text()\n"
+            "bad=[k for k in ('teacher_answer_keys_for_quiz','answer_keys','answer_index') if k in ld]\n"
+            "print('LEARNER_DATA_KEYS', ','.join(bad) if bad else 'none')\n"
+            "PY",
+        ],
+        timeout_sec=20.0,
+    )
+    fs_out = fs.get("stdout") or ""
+    fs_hygiene_ok = (
+        "LEARNER_TEACHER_DATA=ABSENT" in fs_out
+        and "LEARNER_GRADES=ABSENT" in fs_out
+        and "TEACHER_DATA=PRESENT" in fs_out
+        and "DIR=700" in fs_out
+        and "DATA=600" in fs_out
+        and "KEYS_NONEMPTY True" in fs_out
+        and "LEARNER_DATA_KEYS none" in fs_out
+    )
     # Chromium cannot easily set custom headers for document navigation; teacher UI fetch uses JS headers.
     # Still open teacher page only after writing a tiny bootstrap that fetches with role header into iframe —
     # for honesty we label Chromium leg as fixture and require ACL probe PASS separately.
@@ -425,8 +507,8 @@ def run_g13(session: Any) -> dict[str, Any]:
         ],
         timeout_sec=20.0,
     )
-    teacher_state = _read_json_logs(session, "/var/lib/gunnchos/waike/teacher_state.json")
-    grades = _read_json_logs(session, "/var/lib/gunnchos/waike/grades.json")
+    teacher_state = _read_json_logs(session, "/var/lib/gunnchos/waike-teacher/teacher_state.json")
+    grades = _read_json_logs(session, "/var/lib/gunnchos/waike-teacher/grades.json")
     learner_state = _read_json_logs(session, "/var/lib/gunnchos/waike/learner_state.json")
     learner_blob = json.dumps(learner_state.get("data") or {})
     leak = any(k in learner_blob for k in LEARNER_FORBIDDEN_KEYS)
@@ -438,20 +520,30 @@ def run_g13(session: Any) -> dict[str, Any]:
     fixture_ops = "assign_fixture" in kinds and "grade_fixture" in kinds and "OK" in curl_out
     out.update(
         {
-            "ok": bool(role_acl_ok and fixture_ops and (not leak) and grades_denied_to_learner),
+            "ok": bool(
+                role_acl_ok
+                and fixture_ops
+                and (not leak)
+                and grades_denied_to_learner
+                and fs_hygiene_ok
+            ),
             "observation_class": "GUEST_OBSERVED",
             "assign_grade_kinds": kinds,
             "grades": grades.get("data"),
             "learner_key_leak": leak,
             "teacher_events_present": bool(events),
             "role_acl_ok": role_acl_ok,
+            "fs_hygiene_ok": fs_hygiene_ok,
+            "fs_hygiene_probe": fs_out,
             "grades_denied_to_learner": grades_denied_to_learner,
             "acl_probe": acl_out,
             "curl": {k: curl.get(k) for k in ("ok", "stdout", "returncode")},
             "claim": "fixture_assign_grade_with_role_acl",
+            "teacher_fs_root": "/var/lib/gunnchos/waike-teacher",
+            "learner_fs_root": "/var/lib/gunnchos/waike",
             "note": (
-                "Instructor fixture assign/grade with X-WAIKE-Role ACL. "
-                "Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
+                "Instructor fixture assign/grade with X-WAIKE-Role ACL + separate teacher FS "
+                "(0700/0600). Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
             ),
         }
     )
@@ -640,10 +732,12 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
         if g13.get("role_acl_ok") and g13.get("ok"):
             by["G13"]["WAIKE"] = (
                 "GUEST_OBSERVED:fixture_assign_grade_with_role_acl;"
+                "fs_separated_waike-teacher_0700;"
                 "not_shipping_waike_teacher_app"
             )
-            by["G13"]["primary_task"] = "GUEST_OBSERVED:fixture_assign_grade_acl"
+            by["G13"]["primary_task"] = "GUEST_OBSERVED:fixture_assign_grade_acl_fs_hygiene"
             by["G13"]["claim"] = "fixture_lab_with_role_acl"
+            by["G13"]["fs_hygiene_ok"] = bool(g13.get("fs_hygiene_ok"))
             by["G13"]["S1"] = 0
         else:
             by["G13"]["WAIKE"] = "DEMOTED_OPEN:fixture_teacher_needs_role_acl"
@@ -716,7 +810,7 @@ def main() -> int:
         work,
         dual=True,
         boot_timeout_s=int(os.environ.get("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "240")),
-        memory_mb=int(os.environ.get("GUNNCHDEVICE_LAB_MEMORY_MB", "4096")),
+        memory_mb=int(os.environ.get("GUNNCHDEVICE_LAB_MEMORY_MB", "2048")),
     )
     session = boot.pop("_session", None)
     summary: dict[str, Any] = {
@@ -786,6 +880,10 @@ def main() -> int:
                 "curl": deploy.get("curl"),
                 "start_ok": bool((deploy.get("start") or {}).get("ok")),
                 "role_acl_ok": bool(deploy.get("role_acl_ok")),
+                "fs_hygiene_ok": bool(deploy.get("fs_hygiene_ok")),
+                "fs_hygiene_stdout": ((deploy.get("hygiene") or {}).get("stdout") or "")[-500:],
+                "remote_learner_root": deploy.get("remote_learner_root"),
+                "remote_teacher_root": deploy.get("remote_teacher_root"),
             }
 
         if _want("G11"):
@@ -794,7 +892,21 @@ def main() -> int:
             (OUT / "G11_waike" / "result.json").write_text(
                 json.dumps(results["G11"], indent=2, default=str) + "\n"
             )
-            shutil.copytree(pack_dir, OUT / "G11_waike" / "pack", dirs_exist_ok=True)
+            # Learner-only evidence pack — never co-copy teacher_data.json keys.
+            pack_dst = OUT / "G11_waike" / "pack"
+            pack_dst.mkdir(parents=True, exist_ok=True)
+            learner_src = pack_dir / "learner"
+            if learner_src.is_dir():
+                shutil.copytree(learner_src, pack_dst / "learner", dirs_exist_ok=True)
+                for name in ("learner.html", "learner_data.json", "MANIFEST.json"):
+                    src = pack_dir / name
+                    if src.exists():
+                        shutil.copy2(src, pack_dst / name)
+            else:
+                for name in ("learner.html", "learner_data.json", "MANIFEST.json"):
+                    src = pack_dir / name
+                    if src.exists():
+                        shutil.copy2(src, pack_dst / name)
         else:
             # Leave demoted: no HID quiz_submit / no real link_down this run.
             results["G11"] = {
@@ -810,6 +922,15 @@ def main() -> int:
             (OUT / "G13_teacher" / "result.json").write_text(
                 json.dumps(results["G13"], indent=2, default=str) + "\n"
             )
+            # Teacher evidence pack only under teacher/
+            tpack = OUT / "G13_teacher" / "pack" / "teacher"
+            tpack.mkdir(parents=True, exist_ok=True)
+            for name in ("teacher.html", "teacher_data.json"):
+                src = (pack_dir / "teacher" / name)
+                if not src.exists():
+                    src = pack_dir / name
+                if src.exists():
+                    shutil.copy2(src, tpack / name)
             claim_path = OUT / "G13_teacher" / (
                 "G13_FIXTURE_ACL_PASS.json" if results["G13"].get("ok") else "G13_FAIL.json"
             )
@@ -820,6 +941,9 @@ def main() -> int:
                         "shipping_waike_teacher_app": False,
                         "REAL_TEACHER_E6": False,
                         "role_acl_ok": bool(results["G13"].get("role_acl_ok")),
+                        "fs_hygiene_ok": bool(results["G13"].get("fs_hygiene_ok")),
+                        "teacher_fs_root": results["G13"].get("teacher_fs_root"),
+                        "learner_fs_root": results["G13"].get("learner_fs_root"),
                         "ok": bool(results["G13"].get("ok")),
                         "learner_cannot_fetch_teacher_keys": bool(
                             results["G13"].get("role_acl_ok")
