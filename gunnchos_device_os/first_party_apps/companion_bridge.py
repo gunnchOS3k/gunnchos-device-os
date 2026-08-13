@@ -215,7 +215,9 @@ def make_handler(repo_root: Path, data_dir: Path) -> type[BaseHTTPRequestHandler
                     _ensure_runtime_env(sandbox, app_id="gunnchos.waike_learning")
                     lesson_id = str(body_in.get("lesson_id") or "wireless_basics_101")
                     role = str(body_in.get("role") or "learner")
-                    result = run_waike_app(lesson_id=lesson_id, role=role)
+                    raw_course = body_in.get("course_id")
+                    course_id = str(raw_course) if raw_course else None
+                    result = run_waike_app(lesson_id=lesson_id, role=role, course_id=course_id)
                     payload = {
                         "ok": bool(result.get("ok")),
                         "wired": True,

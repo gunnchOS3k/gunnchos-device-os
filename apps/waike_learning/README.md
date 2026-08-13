@@ -1,6 +1,8 @@
 # WAIKE Learning (first-party)
 
-Minimal-complete WAIKE application surface for gunnchOS:
-lesson browser, labs/offline packs, progress, educator/learner roles,
-accessibility toggle, portfolio export. Backend session semantics live in
-`gunnchos_device_os.waike_integration` / `first_party_apps.waike_app`.
+Eighteen accepted course IDs from `waike-research-ops` programs, each with a
+distinct executable seed (lesson, assignment, lab, packets). Not a finished
+8-week LMS. HUMAN_E6 and STUDENT_VALIDATED stay false.
+
+Run labs: `python3 scripts/run_waike_course_lab.py`
+Register: `artifacts/waike/WAIKE_COURSE_REGISTER.json`
