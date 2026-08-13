@@ -1,0 +1,152 @@
+{
+  "schema": "gunnchos.ops.factory_rma_support.independent_verifier_result.v1",
+  "work_item": "STREAM-FACTORY-RMA-SUPPORT",
+  "product": "factory_rma_support_digital",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "did_not_touch_field_kit_pr_71": true,
+  "cursor_must_not_merge": true,
+  "prefer_fail_over_false_pass": true,
+  "pr": {
+    "number": 113,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/113",
+    "draft": true,
+    "state": "OPEN",
+    "branch": "operating-cycle-3b/factory-rma-support-digital",
+    "title": "STREAM: factory / RMA / support digital operational model (DEV/TEST)"
+  },
+  "claimed_tip": "83412f88d4c8a75e0e8ee8484ea30b7232371fca",
+  "claimed_tip_short": "83412f8",
+  "claimed_tip_live_confirmed": true,
+  "verified_tip": "83412f88d4c8a75e0e8ee8484ea30b7232371fca",
+  "verified_tip_short": "83412f8",
+  "tip_commit_subject": "feat(ops): add DEV/TEST factory, RMA, and first-use digital workflows",
+  "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "base_main_short": "3858e76",
+  "base_main_confirmed": true,
+  "merge_base_equals_claimed_base": true,
+  "commits_on_pr": 1,
+  "generated_at_utc": "2026-08-13T16:22:00Z",
+  "inspected_paths": {
+    "device_os": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os",
+    "head": "83412f88d4c8a75e0e8ee8484ea30b7232371fca"
+  },
+  "VP_FACTORY_RMA_SUPPORT_INDEPENDENT": "PASS",
+  "DEVICE_OS_113_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "PRODUCTION_RELEASE_CLAIMED": false,
+  "fail_reason": null,
+  "pass_note": "Live DRAFT #113 tip 83412f88d4c8a75e0e8ee8484ea30b7232371fca. CI 39/39 unique checks green including test (764 passed) and gate1. Independent pytest tests/ops 13 passed. Live provision: DEVTEST serial, locally-administered 02: MAC, dummy Ed25519 used only to sign a PKCS#10 CSR then discarded (no BEGIN PRIVATE KEY in store, private_key_pem absent, private_key_exported=false). issued_cert_pem is null / production_ca=false / cert status EXTERNAL_PENDING. eSIM status EXTERNAL_PENDING with iccid=null. RMA commercial_warranty=EXTERNAL and WARRANTY_EXTERNAL is a real terminal state (OPEN→CLOSED illegal). Spares stock/price/lead/MOQ stay UNKNOWN. stream_eval ok is computed from live provision/test/wipe/RMA/first-use predicates, not a literal PASS. Cursor does not merge.",
+  "challenges": {
+    "ci_green_on_tip": {
+      "verdict": "PASS",
+      "head_sha": "83412f88d4c8a75e0e8ee8484ea30b7232371fca",
+      "failed_checks": [],
+      "unique_checks": 39,
+      "passing_checks_count": 39,
+      "pytest_ci": "764 passed, 5 skipped in 544.97s",
+      "test": {
+        "conclusion": "SUCCESS",
+        "workflow": "CI",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31719299439/job/94511907000"
+      },
+      "gate1": {
+        "conclusion": "SUCCESS",
+        "workflow": "Gate 1 post-merge integrity",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31719299229/job/94511906469"
+      },
+      "digital_lock": {
+        "conclusion": "SUCCESS",
+        "workflow": "Continuation IX digital release lock",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31719299239/job/94511906587"
+      },
+      "reality": {
+        "conclusion": "SUCCESS",
+        "workflow": "phase-xii-execution-reality",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31719299398/job/94511906749"
+      }
+    },
+    "factory_devtest_only_no_exported_private_key_csr_not_issued_cert": {
+      "verdict": "PASS",
+      "independent_command": "PYTHONPATH=.:src python3 -m pytest -q tests/ops/ (13 passed) plus live FactoryProvisioningStation.provision_new_device() probe",
+      "serial_prefix": "DEVTEST-",
+      "mac_locally_administered": true,
+      "mac_first_octet_observed": "02",
+      "key_injection": {
+        "dummy_key": true,
+        "production_key": false,
+        "private_key_exported": false,
+        "private_key_pem_in_return_dict": false,
+        "begin_private_key_in_store": false,
+        "hsm_ceremony": "EXTERNAL",
+        "csr_pem_contains_begin_certificate_request": true,
+        "cryptography_load_pem_x509_csr_ok": true,
+        "cryptography_load_pem_x509_certificate_on_csr_raises": true,
+        "csr_subject_org": "gunnchOS DEV/TEST"
+      },
+      "cert_request": {
+        "status": "EXTERNAL_PENDING",
+        "issued_cert_pem": null,
+        "production_ca": false
+      }
+    },
+    "esim_interface_external_pending": {
+      "verdict": "PASS",
+      "status": "EXTERNAL_PENDING",
+      "iccid": null,
+      "activation_code": null
+    },
+    "rma_warranty_external": {
+      "verdict": "PASS",
+      "commercial_warranty": "EXTERNAL",
+      "warranty_path": "WARRANTY_EXTERNAL",
+      "open_to_closed_illegal": true,
+      "open_to_warranty_external_ok": true
+    },
+    "spares_unknown_not_invented": {
+      "verdict": "PASS",
+      "stock_qty": "UNKNOWN",
+      "unit_price": "UNKNOWN",
+      "lead_time_weeks": "UNKNOWN",
+      "moq": "UNKNOWN"
+    },
+    "no_hardcoded_pass": {
+      "verdict": "PASS",
+      "how_pass_is_computed": "stream_eval.evaluate() sets ok=all([provision, test_import, record, wipe, rma_case, first_use, cert_status==EXTERNAL_PENDING, esim_status==EXTERNAL_PENDING, PRODUCTION_RELEASE_CLAIMED is False]). tests/ops assert live API results. Independent probe parsed CSR with cryptography and scanned store JSON for private-key markers.",
+      "hardcoded_pass": false,
+      "PRODUCTION_RELEASE_CLAIMED": false
+    }
+  },
+  "local_reproduction": {
+    "pytest_ops": "13 passed",
+    "evaluate_status": "DIGITAL_PREPARATION",
+    "evaluate_ok": true
+  },
+  "defects_S0_S1": {
+    "verdict": "PASS",
+    "S0_open": 0,
+    "S1_open": 0,
+    "items": []
+  },
+  "remaining_open": [
+    "Production CA issuance and HSM key ceremony (EXTERNAL)",
+    "Carrier eSIM credentials (EXTERNAL_PENDING)",
+    "RFQ / purchase / fab and physical factory line (EXTERNAL)",
+    "Physical media sanitize (EXTERNAL)",
+    "Commercial warranty legal terms / SLA / depot logistics (EXTERNAL)",
+    "Physical Ring pairing and physical dock discovery (EXTERNAL)",
+    "Quoted stock / price / lead-time / MOQ (UNKNOWN; none cited)",
+    "Edmund merge (Cursor never merges)"
+  ],
+  "forbidden": {
+    "merged": false,
+    "PRODUCTION_RELEASE_CLAIMED": false,
+    "production_keys_exported": false,
+    "issued_production_cert": false,
+    "invented_stock_or_price": false,
+    "touched_field_kit_pr_71": false
+  },
+  "claim_boundary": "Independent digital verification of device-os DRAFT #113 factory/RMA/support DIGITAL_PREPARATION. DEV/TEST identities only. Certificate is a CSR request, not an issued production cert. eSIM and commercial warranty remain EXTERNAL. Cursor did not implement and must not merge.",
+  "verdict_summary": "Live DRAFT #113 HEAD 83412f8. CI 39/39 green. Factory paths DEV/TEST; private key not exported; cert is CSR EXTERNAL_PENDING; eSIM EXTERNAL_PENDING; RMA warranty EXTERNAL; no hardcoded PASS. DEVICE_OS_113_READY_FOR_EDMUND_MERGE=true. Cursor does not merge."
+}

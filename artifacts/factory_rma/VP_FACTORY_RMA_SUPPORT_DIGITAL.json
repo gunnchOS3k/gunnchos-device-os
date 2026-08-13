@@ -1,0 +1,39 @@
+{
+  "PRODUCTION_RELEASE_CLAIMED": false,
+  "claim_boundary": "DIGITAL_PREPARATION of factory, RMA, support, supply-chain *fields*, and first-use software flow. DEV/TEST identities only. PRODUCTION_RELEASE_CLAIMED=false. No production keys, production CA, carrier eSIM, RFQ, purchase, or fab. Commercial warranty is EXTERNAL. Physical factory line, physical sanitize, and physical Ring/dock remain EXTERNAL/PHYSICAL. Cursor never merges.",
+  "commercial_warranty": "EXTERNAL",
+  "cursor_merges": false,
+  "external": [
+    "production_keys",
+    "production_ca_issuance",
+    "hsm_key_ceremony",
+    "carrier_esim_credentials",
+    "rfq_purchase_fab",
+    "physical_factory_line",
+    "physical_media_sanitize",
+    "commercial_warranty",
+    "physical_ring_pairing",
+    "physical_dock_discovery",
+    "quoted_stock_price_lead_time_moq"
+  ],
+  "factory": {
+    "cert_request": "EXTERNAL_PENDING",
+    "device_record_ok": true,
+    "esim": "EXTERNAL_PENDING",
+    "physical_media_sanitize": "EXTERNAL",
+    "provision_ok": true,
+    "secure_wipe_ok": true,
+    "test_import_ok": true
+  },
+  "first_use": {
+    "ok": true,
+    "status": "COMPLETE"
+  },
+  "ok": true,
+  "rma": {
+    "case_ok": true,
+    "warranty_path": "WARRANTY_EXTERNAL"
+  },
+  "schema": "gunnchos.ops.factory_rma_support.eval.v1",
+  "status": "DIGITAL_PREPARATION"
+}
