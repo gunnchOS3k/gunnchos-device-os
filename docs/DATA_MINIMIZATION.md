@@ -75,16 +75,17 @@ Default: telemetry **none**, consent **denied**, local-only **true**.
 
 ---
 
-## Export and delete (placeholders)
+## Export and delete (local digital)
 
 Users may request:
 
 ```python
-request_export(user_id)  # export_queued_placeholder
-request_delete(user_id)  # delete_queued_placeholder
+request_export(user_id)  # writes results/privacy/<id>_export.json
+request_delete(user_id)  # wipes surfaces + revokes sessions
 ```
 
-Production implementation requires secure workflow — not in alpha.
+This is a local software DSAR path. It is not GDPR/COPPA certification.
+Legal approval remains HUMAN/EXTERNAL.
 
 ---
 

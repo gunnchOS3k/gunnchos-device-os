@@ -555,6 +555,7 @@ class IdentityService(RuntimeService):
     api_surface = [
         "create_account", "issue_session", "validate_session", "bind_device",
         "local_account", "device_identity", "session", "role", "set_role",
+        "revoke_session", "delete_account",
     ]
 
     def on_start(self) -> None:
@@ -627,6 +628,87 @@ class IdentityService(RuntimeService):
         self._store["role"] = role
         self.persist()
         return {"role": role, "escalation": role in privileged and current not in privileged}
+
+    def api_revoke_session(self, session_id: str) -> dict[str, Any]:
+        return self._id.revoke_session(session_id)
+
+    def api_delete_account(self, account_id: str) -> dict[str, Any]:
+        acct = self._id.accounts.get(account_id)
+        if acct is None:
+            return {"deleted": False, "reason": "unknown_account"}
+        from gunnchos_device_os.unified_identity import AccountStatus, SessionState
+
+        acct.status = AccountStatus.DELETED
+        for sess in self._id.sessions.values():
+            if sess.account_id == account_id and sess.state == SessionState.ACTIVE:
+                sess.state = SessionState.REVOKED
+        self.persist()
+        return {"deleted": True, "account_id": account_id, "sessions_revoked": True}
+
+
+class PrivacyService(RuntimeService):
+    """Local privacy DSAR + youth/sensor gates. Not legal certification."""
+
+    service_id = "privacy"
+    dependencies = ["identity", "permissions", "diagnostics"]
+    api_surface = [
+        "create_profile", "consent", "export", "delete", "retention",
+        "sensor", "ring_pair", "ai_memory", "waike", "game_save", "revoke",
+    ]
+
+    def on_start(self) -> None:
+        from gunnchos_device_os.privacy.controller import PrivacyController
+
+        root = self.config.options.get("privacy_root")
+        self._ctrl = PrivacyController()
+        self._store["claim_boundary"] = self._ctrl.claim_boundary
+        self._store["legal_approval"] = "HUMAN/EXTERNAL"
+        self._root = root
+
+    def api_create_profile(self, user_id: str, profile_type: str = "adult") -> dict[str, Any]:
+        return self._ctrl.create_profile(user_id, profile_type)
+
+    def api_consent(self, user_id: str, state: str, profile_type: str = "adult") -> dict[str, Any]:
+        return self._ctrl.set_consent(user_id, state, profile_type)
+
+    def api_export(self, user_id: str, path: str | None = None) -> dict[str, Any]:
+        from pathlib import Path
+
+        dest = Path(path) if path else Path("results/privacy") / f"{user_id}_export.json"
+        return self._ctrl.export(user_id, dest)
+
+    def api_delete(self, user_id: str) -> dict[str, Any]:
+        return self._ctrl.delete(user_id)
+
+    def api_retention(self, user_id: str) -> dict[str, Any]:
+        return self._ctrl.apply_retention(user_id)
+
+    def api_sensor(
+        self,
+        user_id: str,
+        sensor: str,
+        *,
+        explicit_user_grant: bool = False,
+        guardian_grant: bool = False,
+    ) -> dict[str, Any]:
+        return self._ctrl.request_sensor(
+            user_id, sensor, explicit_user_grant=explicit_user_grant, guardian_grant=guardian_grant
+        )
+
+    def api_ring_pair(self, user_id: str, ring_id: str = "ring-dev-001", *, guardian_grant: bool = False) -> dict[str, Any]:
+        return self._ctrl.pair_ring(user_id, ring_id, guardian_grant=guardian_grant, authenticated=True)
+
+    def api_ai_memory(self, user_id: str, memory: dict[str, Any] | None = None, *, cloud: bool = False) -> dict[str, Any]:
+        return self._ctrl.store_ai_memory(user_id, memory or {"note": "local"}, cloud=cloud)
+
+    def api_waike(self, user_id: str, lesson_id: str = "wireless_basics_101") -> dict[str, Any]:
+        return self._ctrl.waike_progress(user_id, lesson_id)
+
+    def api_game_save(self, user_id: str, game_id: str = "beatlink-party", save: dict[str, Any] | None = None) -> dict[str, Any]:
+        return self._ctrl.game_save(user_id, game_id, save or {"progress": 1})
+
+    def api_revoke(self, user_id: str, name: str) -> dict[str, Any]:
+        return self._ctrl.revoke_permission(user_id, name)
 
 
 class PermissionsService(RuntimeService):
@@ -1443,6 +1525,7 @@ SERVICE_CLASSES: dict[str, type[RuntimeService]] = {
     "continuity": ContinuityService,
     "identity": IdentityService,
     "permissions": PermissionsService,
+    "privacy": PrivacyService,
     "sandbox": SandboxService,
     "updater": UpdaterService,
     "recovery": RecoveryService,

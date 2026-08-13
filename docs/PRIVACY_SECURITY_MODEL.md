@@ -43,7 +43,7 @@ from gunnchos_device_os.privacy_security_model import (
 )
 
 get_telemetry_policy("child", "not_asked")  # enabled: False, category: none
-request_export("user-1")  # status: export_queued_placeholder, mock
+request_export("user-1")  # local JSON export; mock=False; not GDPR certification
 ```
 
 Profile type mapping includes aliases: `pre_k`, `elementary` → `child_profile`; `research_operator` → `research_measurement`.

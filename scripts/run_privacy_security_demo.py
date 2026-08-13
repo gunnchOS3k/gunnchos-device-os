@@ -26,7 +26,8 @@ def main() -> int:
         "delete": request_delete("demo"),
         "event_log": log_event("admin_action", {"action": "mode_change", "message_content": "secret"}),
         "claim_boundary": "Privacy/security model alpha — not certified compliance",
-        "mock": True,
+        "legal_approval": "HUMAN/EXTERNAL",
+        "mock": False,
     }
     dest = ROOT / "results/privacy_security_demo_output.json"
     dest.parent.mkdir(parents=True, exist_ok=True)

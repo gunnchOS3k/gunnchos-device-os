@@ -10,6 +10,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Callable
 import json
+import re
 import threading
 import time
 import uuid
@@ -32,17 +33,37 @@ SENSITIVE_KEYS = {
 }
 
 REDACTED = "[REDACTED]"
+_EMAIL = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
+_PHONE = re.compile(r"\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b")
+_BEARER = re.compile(r"(?i)(bearer\s+)[a-z0-9._\-]+")
+_EXTRA_SENSITIVE = SENSITIVE_KEYS | {
+    "student_name",
+    "full_name",
+    "display_name",
+    "prompt",
+    "transcript",
+    "frame",
+    "screenshot",
+}
+
+
+def redact_string(value: str) -> str:
+    value = _EMAIL.sub("[REDACTED_EMAIL]", value)
+    value = _PHONE.sub("[REDACTED_PHONE]", value)
+    value = _BEARER.sub(r"\1[REDACTED_TOKEN]", value)
+    return value
 
 
 def redact(value: Any, *, parent_key: str | None = None) -> Any:
-    if parent_key and parent_key.lower() in SENSITIVE_KEYS:
+    key = (parent_key or "").lower()
+    if key in _EXTRA_SENSITIVE:
         return REDACTED
     if isinstance(value, dict):
         return {k: redact(v, parent_key=k) for k, v in value.items()}
     if isinstance(value, list):
         return [redact(v, parent_key=parent_key) for v in value]
-    if isinstance(value, str) and parent_key and parent_key.lower() in SENSITIVE_KEYS:
-        return REDACTED
+    if isinstance(value, str):
+        return redact_string(value)
     return value
 
 

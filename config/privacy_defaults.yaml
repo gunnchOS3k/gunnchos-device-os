@@ -46,5 +46,28 @@ data_minimization:
   no_hidden_telemetry: true
   no_keystroke_logging: true
   no_message_content: true
-  export_path: user_data_export_placeholder
-  delete_path: user_data_delete_placeholder
+  no_raw_email_in_logs: true
+  export_path: results/privacy/
+  delete_path: results/privacy/
+  mock: false
+
+surfaces:
+  - accounts
+  - telemetry
+  - ai_context
+  - ai_memory
+  - voice
+  - vision
+  - screen
+  - ring
+  - waike
+  - games
+  - diagnostics
+
+youth:
+  child_cannot_opt_in_telemetry: true
+  child_ai_cloud: deny
+  child_sensors_require_guardian: true
+  minor_ai_cloud: deny
+  legal_approval: HUMAN/EXTERNAL
+  coppa_ferpa_gdpr_claimed: false

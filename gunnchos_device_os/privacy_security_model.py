@@ -1,4 +1,8 @@
-"""Privacy and security model — consent, telemetry, and data minimization."""
+"""Privacy and security model — consent, telemetry, and data minimization.
+
+Export/delete are local DSAR operations via PrivacyController (not placeholders).
+Not legal certification.
+"""
 from __future__ import annotations
 
 from functools import lru_cache
@@ -9,6 +13,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "config" / "privacy_defaults.yaml"
+DEFAULT_STORE = ROOT / "results" / "privacy" / "store.json"
 
 
 @lru_cache(maxsize=1)
@@ -45,19 +50,18 @@ def get_telemetry_policy(profile_type: str, consent_state: str) -> dict[str, Any
     }
 
 
-def request_export(user_id: str) -> dict[str, Any]:
-    return {
-        "user_id": user_id,
-        "status": "export_queued_placeholder",
-        "path": "user_data_export_placeholder",
-        "mock": True,
-    }
+def _controller(persist: bool = True):
+    from gunnchos_device_os.privacy.controller import PrivacyController
+
+    path = DEFAULT_STORE if persist else None
+    return PrivacyController(persist_path=path)
 
 
-def request_delete(user_id: str) -> dict[str, Any]:
-    return {
-        "user_id": user_id,
-        "status": "delete_queued_placeholder",
-        "path": "user_data_delete_placeholder",
-        "mock": True,
-    }
+def request_export(user_id: str, dest: Path | None = None) -> dict[str, Any]:
+    out = dest or (ROOT / "results" / "privacy" / f"{user_id}_export.json")
+    return _controller().export(user_id, out)
+
+
+def request_delete(user_id: str, dest: Path | None = None) -> dict[str, Any]:
+    out = dest or (ROOT / "results" / "privacy" / f"{user_id}_delete.json")
+    return _controller().delete(user_id, dest=out)

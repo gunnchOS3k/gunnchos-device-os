@@ -81,3 +81,14 @@ def test_ai_local_cannot_cloud_export():
     pm = PermissionsManager(role="ai_local")
     result = pm.request("gunnchai", Permission.AI_CLOUD_EXPORT, explicit_user_grant=True)
     assert result["decision"] == Decision.DENY.value
+
+
+def test_child_and_minor_roles_exist():
+    child = PermissionsManager(role="child")
+    assert Permission.CAMERA not in child.allowlist()
+    assert Permission.SCREEN_CAPTURE not in child.allowlist()
+    minor = PermissionsManager(role="minor")
+    assert Permission.FILES_READ in minor.allowlist()
+    assert Permission.AI_CLOUD_EXPORT not in minor.allowlist()
+    screen = child.request("cap", Permission.SCREEN_CAPTURE, explicit_user_grant=True)
+    assert screen["decision"] == Decision.DENY.value
