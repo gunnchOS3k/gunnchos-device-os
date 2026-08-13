@@ -74,6 +74,15 @@ SERVICE_CATALOG: dict[str, dict[str, Any]] = {
         "persistence": "in_memory_grants",
         "fault_injection": True,
     },
+    "privacy": {
+        "title": "Privacy Controller",
+        "module": "gunnchos_device_os.privacy.controller",
+        "deps": ["identity", "permissions", "diagnostics"],
+        "maturity": "digital_integrated",
+        "persistence": "json_store",
+        "fault_injection": True,
+        "notes": "Local DSAR/youth/sensor gates. Not legal certification. HUMAN/EXTERNAL approval pending.",
+    },
     "sandbox": {
         "title": "Sandbox Policy",
         "module": "gunnchos_device_os.sandbox_policy",
@@ -163,6 +172,7 @@ REQUIRED_SERVICE_IDS = (
     "continuity",
     "identity",
     "permissions",
+    "privacy",
     "sandbox",
     "updater",
     "recovery",

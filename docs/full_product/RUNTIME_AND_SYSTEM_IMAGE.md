@@ -4,7 +4,7 @@
 
 Continuation from merged #57 (sandbox, DEV attestation, OTA SM, identity, runtime profiles, dual-screen). This wave adds:
 
-1. Integrated **runtime service architecture** (17 services)
+1. Integrated **runtime service architecture** (18 services, including privacy)
 2. **Reproducible system image** digital path
 3. Dual-screen **workflow stubs + validators**
 4. Expanded **dock continuity simulation** suite

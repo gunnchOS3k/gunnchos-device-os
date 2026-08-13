@@ -23,8 +23,8 @@
 
 | Feature | Status |
 |---------|--------|
-| User data export | `export_queued_placeholder` |
-| User data delete | `delete_queued_placeholder` |
+| User data export | Local JSON DSAR via PrivacyController (not GDPR certification) |
+| User data delete | Local wipe + session revoke (not GDPR certification) |
 | Crash report upload | `crash_reports_placeholder` category only |
 | Fleet telemetry backend | Synthetic mock in launcher |
 | Encrypted log storage | Not implemented |
@@ -37,7 +37,7 @@
 - GDPR compliance
 - COPPA / GDPR-K youth certification
 - SOC 2 / ISO 27001
-- Formal penetration test
+- Formal EXTERNAL pentest (E7) — readiness package only; EXTERNAL_PENTEST_COMPLETE=false
 - WCAG for privacy UX
 
 ---

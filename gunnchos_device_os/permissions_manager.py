@@ -22,6 +22,8 @@ class Permission(str, Enum):
     NOTIFICATIONS = "notifications"
     AI_CLOUD_EXPORT = "ai_cloud_export"
     IDENTITY_READ = "identity_read"
+    SCREEN_CAPTURE = "screen_capture"
+    RING_INPUT = "ring_input"
 
 
 class Decision(str, Enum):
@@ -56,6 +58,17 @@ ROLE_ALLOWLIST: dict[str, set[Permission]] = {
         Permission.IDENTITY_READ,
     },
     "admin": set(Permission),
+    "child": {
+        Permission.FILES_READ,
+        Permission.NOTIFICATIONS,
+    },
+    "minor": {
+        Permission.FILES_READ,
+        Permission.FILES_WRITE,
+        Permission.NOTIFICATIONS,
+        Permission.SENSORS,
+        Permission.IDENTITY_READ,
+    },
     "guest": {
         Permission.FILES_READ,
         Permission.NETWORK,
@@ -79,6 +92,8 @@ SENSITIVE = {
     Permission.LOCATION,
     Permission.AI_CLOUD_EXPORT,
     Permission.FILES_WRITE,
+    Permission.SCREEN_CAPTURE,
+    Permission.RING_INPUT,
 }
 
 

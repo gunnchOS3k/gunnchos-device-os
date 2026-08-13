@@ -1,0 +1,82 @@
+# Machine-readable provenance for first-party + declared third-party components.
+# Status is inventory, not legal clearance. Legal approval remains HUMAN/EXTERNAL.
+schema: gunnchos.component_provenance.v1
+legal_approval: HUMAN/EXTERNAL
+claim_boundary: >
+  Declared licenses from upstream project metadata. Not a legal opinion.
+  UNKNOWN entries are UNKNOWN_RELEASE_BLOCKING until a human records provenance.
+
+components:
+  - id: gunnchos-device-os
+    name: gunnchos-device-os
+    license: MIT
+    provenance: first_party_LICENSE
+    kind: source
+  - id: pytest
+    license: MIT
+    provenance: https://pypi.org/project/pytest/
+    kind: python
+  - id: aiosmtpd
+    license: Apache-2.0
+    provenance: https://pypi.org/project/aiosmtpd/
+    kind: python
+  - id: radicale
+    license: GPL-3.0-or-later
+    provenance: https://pypi.org/project/Radicale/
+    kind: python
+  - id: wsgidav
+    license: MIT
+    provenance: https://pypi.org/project/WsgiDAV/
+    kind: python
+  - id: httpx
+    license: BSD-3-Clause
+    provenance: https://pypi.org/project/httpx/
+    kind: python
+  - id: cryptography
+    license: Apache-2.0 OR BSD-3-Clause
+    provenance: https://pypi.org/project/cryptography/
+    kind: python
+  - id: react
+    license: MIT
+    provenance: https://www.npmjs.com/package/react
+    kind: npm
+  - id: react-dom
+    license: MIT
+    provenance: https://www.npmjs.com/package/react-dom
+    kind: npm
+  - id: vite
+    license: MIT
+    provenance: https://www.npmjs.com/package/vite
+    kind: npm
+  - id: vitest
+    license: MIT
+    provenance: https://www.npmjs.com/package/vitest
+    kind: npm
+  - id: typescript
+    license: Apache-2.0
+    provenance: https://www.npmjs.com/package/typescript
+    kind: npm
+  - id: jsdom
+    license: MIT
+    provenance: https://www.npmjs.com/package/jsdom
+    kind: npm
+  - id: "@vitejs/plugin-react"
+    license: MIT
+    provenance: https://www.npmjs.com/package/@vitejs/plugin-react
+    kind: npm
+  - id: "@testing-library/react"
+    license: MIT
+    provenance: https://www.npmjs.com/package/@testing-library/react
+    kind: npm
+  - id: "@testing-library/jest-dom"
+    license: MIT
+    provenance: https://www.npmjs.com/package/@testing-library/jest-dom
+    kind: npm
+  - id: "@types/react"
+    license: MIT
+    provenance: https://www.npmjs.com/package/@types/react
+    kind: npm
+  - id: "@types/react-dom"
+    license: MIT
+    provenance: https://www.npmjs.com/package/@types/react-dom
+    kind: npm

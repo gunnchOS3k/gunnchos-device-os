@@ -12,14 +12,22 @@ CONSENT_STATES = ("not_asked", "denied", "local_only", "opt_in_aggregate", "opt_
 def set_consent(user_id: str, state: str, profile_type: str = "adult") -> dict[str, Any]:
     if state not in CONSENT_STATES:
         raise ValueError(f"Invalid consent state: {state}")
-    telemetry = get_telemetry_policy(profile_type, state)
+    from gunnchos_device_os.privacy.controller import PrivacyController
+    from gunnchos_device_os.privacy_security_model import DEFAULT_STORE
+
+    ctrl = PrivacyController(persist_path=DEFAULT_STORE)
+    ctrl.create_profile(user_id, profile_type)
+    result = ctrl.set_consent(user_id, state, profile_type)
+    telemetry = result.get("telemetry") or get_telemetry_policy(profile_type, result.get("consent_state") or state)
     return {
         "user_id": user_id,
-        "consent_state": state,
+        "consent_state": result.get("consent_state", state),
         "telemetry": telemetry,
-        "user_message": _consent_message(state),
-        "technical_log": f"consent_set:user={user_id} state={state}",
-        "mock": True,
+        "user_message": _consent_message(str(result.get("consent_state") or state)),
+        "technical_log": f"consent_set:user={user_id} state={result.get('consent_state')}",
+        "denied": bool(result.get("denied")),
+        "reason": result.get("reason"),
+        "mock": False,
     }
 
 
