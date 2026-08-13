@@ -21,7 +21,11 @@
     "reauthored_in_device_os": false,
     "owner": "waike-research-ops",
     "package_version": "owner-546819c6b395",
-    "courses": ["GENERAL_IT", "COMPUTER_NETWORKING", "CYBERSECURITY"],
+    "courses": [
+      "GENERAL_IT",
+      "COMPUTER_NETWORKING",
+      "CYBERSECURITY"
+    ],
     "learner_key_leak": false,
     "teacher_has_answer_keys": true,
     "offline_cache": true,
@@ -34,7 +38,7 @@
     "ok": true,
     "qemu_stopped_clean": true,
     "observation_class": "HOST_OBSERVED",
-    "note": "Session start/stop probe only — not a persona journey PASS and not guest-app evidence."
+    "note": "Session start/stop probe only \u2014 not a persona journey PASS and not guest-app evidence."
   },
   "persona_tokens": {
     "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
@@ -47,18 +51,188 @@
   "STANDARDIZED_6G": false,
   "6G_CERTIFIED": false,
   "CARRIER_ACCEPTED": false,
-  "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+  "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "S0_open": 0,
   "S1_open": [
-    "Full G11–G15 guest-app journeys on real engineering image not independently closed in this DRAFT tip",
-    "Ring pipeline → REAL guest app state mutation not evidenced beyond prior Device Lab infrastructure",
-    "Handheld dock continuity (game save ↔ dock ↔ undock) not closed this cycle"
+    "Full G11\u2013G15 pickup-and-use tokens not earned",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS false (missing focus_move)",
+    "G15 creative mature in-guest app NOT_RUN",
+    "Handheld dock continuity OPEN",
+    "In-guest WAIKE UI / AI journeys NOT_RUN (ingest HOST_OBSERVED only)",
+    "Reboot/resume continuity NOT_RUN"
   ],
   "S2_open": [
-    "HUMAN_E6 / REAL_TEACHER_E6",
-    "VISUAL_MODEL_REVIEW unavailable (no pixel inspect this cycle)",
-    "Beat Link accepted-main pending Edmund merge of #20",
-    "gunnchAI #34 remains BRANCH_EVIDENCE; journeys use accepted main only"
+    "REAL_TEACHER_E6=false",
+    "HUMAN_E6",
+    "Beat Link #20 BRANCH_EVIDENCE until Edmund merge",
+    "gunnchAI #34 BRANCH_EVIDENCE; journeys use accepted main only"
   ],
-  "claim_boundary": "Bounded DRAFT: WAIKE owner ingest + Device Lab profile probe + persona matrix scaffolding. Persona tokens not earned. Cursor does not merge."
+  "claim_boundary": "Bounded DRAFT: WAIKE owner ingest + Device Lab profile probe + persona matrix scaffolding. Persona tokens not earned. Cursor does not merge.",
+  "journey_run": {
+    "schema": "gunnchos.product_use_rc_001.journey_run.v1",
+    "packaged_at_utc": "2026-08-13T22:15:43Z",
+    "source": "artifacts/wp011r after product_use_run_journeys Interactive Guest boot",
+    "prefer_fail_over_false_pass": true,
+    "boot": {
+      "ok": true,
+      "qemu_alive": true,
+      "state": {
+        "backend": "QEMU_HVF",
+        "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+        "qemu_version": "QEMU emulator version 11.0.3",
+        "arch": "aarch64",
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host",
+          "note": "macOS Hypervisor.framework"
+        },
+        "pid": 68992,
+        "boot_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/product_use/interactive_guest_session/qemu_boot.log",
+        "persist_disk": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+        "display_transport": {
+          "kind": "none_headless",
+          "note": "Interactive Guest headless by default; VNC not wired for this boot path yet",
+          "fake_screenshot_only": false,
+          "guest_outputs": []
+        },
+        "guest_agent": {
+          "ready": true,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "measurement_class": "HOST_OBSERVED",
+          "response": {
+            "ok": true,
+            "ready": true,
+            "response": {
+              "ok": true,
+              "protocol": "gunnchos.guest_agent.v1",
+              "cmd": "ping",
+              "transport": "virtio_serial",
+              "agent_path_label": "virtio-serial",
+              "SILICON_EXACT_EMULATION": false,
+              "production_keys": false,
+              "measurement_class": "GUEST_OBSERVED",
+              "pong": true,
+              "boot_complete": true
+            }
+          }
+        },
+        "monitor_sock": "/tmp/gdli-68986-1084b7/mon.sock",
+        "virtio_serial_sock": "/tmp/gdli-68986-1084b7/ga.sock",
+        "guest_outputs": [],
+        "interactive_guest": {
+          "enabled": true,
+          "boot_path": "uefi_primary_disk",
+          "disk_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+          "dual_gpu_requested": true,
+          "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+          "SHIPPING_IMAGE": false
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "claim_boundary": "QEMU virt machine \u2260 transistor-level SoC. SILICON_EXACT_EMULATION=false. VF4/VF5/VF6 PHYSICAL_PENDING. Measurement classes: HOST_OBSERVED for host process liveness; VIRTUAL_CONSTRAINED for guest RAM/disk caps.",
+        "measurement_class_process": "HOST_OBSERVED"
+      },
+      "boot_complete": true,
+      "SILICON_EXACT_EMULATION": false,
+      "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+      "environment": {
+        "ok": true,
+        "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+        "arch": "aarch64",
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host",
+          "note": "macOS Hypervisor.framework"
+        },
+        "version": "QEMU emulator version 11.0.3",
+        "image_arch": "aarch64",
+        "SKIPPED_ENVIRONMENT": false
+      }
+    },
+    "live_visual": {
+      "ok": true,
+      "LIVE_GUNNCHOS_VISUAL_PASS": true,
+      "observation_class": "GUEST_OBSERVED",
+      "evidence_copy": "artifacts/product_use/journeys/G12_G11_live_visual",
+      "typed_marker_found": true
+    },
+    "dsxl": {
+      "ok": false,
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+      "observation_class": "GUEST_OBSERVED_PARTIAL_DUAL_PLACEMENT",
+      "evidence_copy": "artifacts/product_use/journeys/G14_dsxl",
+      "partial": {
+        "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+        "dual_windows_placed": true,
+        "windows": [
+          {
+            "app_id": "foot",
+            "output_id": "wl_output-0",
+            "pid": 595,
+            "ok": true,
+            "placement_proven": true,
+            "half": "left",
+            "half_sha256": "6b2c7972f5fce3e0ce69ebded96129b6d9920990a8b05cbc68c0c1becc17cb12"
+          },
+          {
+            "app_id": "mousepad",
+            "output_id": "wl_output-1",
+            "pid": 604,
+            "ok": true,
+            "placement_proven": true,
+            "half": "right",
+            "half_sha256": "29d88af80bd89408ca0f010e5f91146061f074e5cbe17830143f3350fd4a484e"
+          }
+        ],
+        "missing": [
+          "focus_move"
+        ],
+        "png_captures": [
+          "artifacts/product_use/journeys/G14_dsxl/dsxl_left.png",
+          "artifacts/product_use/journeys/G14_dsxl/dsxl_right.png",
+          "artifacts/product_use/journeys/G14_dsxl/dsxl_placement.png"
+        ],
+        "observation_class": "GUEST_OBSERVED_PARTIAL_DUAL_PLACEMENT"
+      }
+    },
+    "ring": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+      "observation_class": "GUEST_OBSERVED",
+      "evidence_copy": "artifacts/product_use/journeys/G11_ring",
+      "mutations": {
+        "libreoffice": true,
+        "browser": true,
+        "game": true
+      }
+    },
+    "waike_teacher_isolation": {
+      "ok": true,
+      "observation_class": "HOST_OBSERVED",
+      "package_version": "owner-546819c6b395",
+      "learner_key_leak": false,
+      "teacher_has_answer_keys": true,
+      "course_ids": [
+        "GENERAL_IT",
+        "COMPUTER_NETWORKING",
+        "CYBERSECURITY"
+      ],
+      "note": "Owner #43 ingest projection only \u2014 not an in-guest WAIKE UI journey."
+    },
+    "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
+    "handheld_dock_continuity": "OPEN",
+    "persona_tokens_all_false": true,
+    "claim_boundary": "Finite Interactive Guest subset. Persona pickup-and-use tokens remain false. Cursor does not merge. Beat Link #20 BRANCH_EVIDENCE until Edmund merges.",
+    "persona_table_path": "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+    "tokens_earned": {
+      "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+      "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+      "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false
+    }
+  },
+  "ring_mutation": "GUEST_OBSERVED",
+  "handheld_dock_continuity": "OPEN",
+  "updated_at_utc": "2026-08-13T22:15:43Z"
 }
