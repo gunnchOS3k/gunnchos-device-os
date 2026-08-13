@@ -1,0 +1,171 @@
+{
+  "schema": "gunnchos.product_use_rc_001.independent_verifier_result.v1",
+  "work_item": "PRODUCT-USE-RC-001",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "cursor_never_merges": true,
+  "prefer_fail_over_false_pass": true,
+  "GAME-RC-003": "DO_NOT_START",
+  "AI-003": "DO_NOT_START",
+  "WP-001": "DO_NOT_START",
+  "pr": {
+    "number": 115,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/115",
+    "draft": true,
+    "branch": "stream/product-use-rc-001",
+    "title": "PRODUCT-USE-RC-001 bounded DRAFT (partial evidence)"
+  },
+  "claimed_tip_at_handoff": "e4c7e2f98420c8401f6c25ec176d38098ea80fbb",
+  "claimed_tip_live_confirmed": true,
+  "verified_tip": "e4c7e2f98420c8401f6c25ec176d38098ea80fbb",
+  "verified_tip_short": "e4c7e2f",
+  "verified_tip_subject": "feat(product-use): Interactive Guest G11/G12/G14 journey evidence on #115",
+  "tip_note": "Local HEAD and origin/stream/product-use-rc-001 both resolve to claimed tip e4c7e2f. GitHub Actions / gh GraphQL unavailable this run (keyring token invalid) \u2014 CI settlement NOT independently confirmed.",
+  "generated_at_utc": "2026-08-13T22:30:00Z",
+  "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
+  "INDEPENDENT_PASS": false,
+  "HONESTY_OF_STATED_CLAIMS": "FAIL",
+  "HONESTY_NOTE": "Prefer-fail: RING_TO_REAL_APP_STATE_MUTATION_PASS does not survive independent challenge (lab collector browser page + Pedestrian save_version migration path). Persona-token falsity, DSXL=false, WAIKE HOST_OBSERVED, Beat Link/#34 BRANCH labels are otherwise honest.",
+  "TOKEN_LABEL_HONESTY": "PASS",
+  "READY_FOR_EDMUND_MERGE": false,
+  "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
+  "YES_AS_PARTIAL_INGEST_ONLY": false,
+  "YES_AS_PARTIAL_INGEST_ONLY_NOTE": "Tip e4c7e2f packages contested Interactive Guest PASS tokens, not ingest-only. Parent commit 1eeef54 (WAIKE #43 ingest + persona scaffolding, tokens false) could be reconsidered as yes-as-partial-ingest-only if journey PASS claims are dropped or demoted before Edmund merge.",
+  "claim_firewall": {
+    "SHIPPING_IMAGE": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "persona_tokens_all_false": true,
+    "REAL_TEACHER_E6": false,
+    "FOUR_GAME_ACCEPTED_MAIN_RC": false,
+    "gunnchAI3k#34": "OPEN_BRANCH_EVIDENCE_ONLY",
+    "Beat_Link#20": "BRANCH_EVIDENCE_NOT_ACCEPTED_MAIN_RC"
+  },
+  "ci": {
+    "verdict": "UNAVAILABLE",
+    "head_sha": "e4c7e2f98420c8401f6c25ec176d38098ea80fbb",
+    "blocker": "gh auth token in keyring invalid; GraphQL/REST checks Forbidden. Independent verifier could not settle Actions on tip.",
+    "required_settled": false
+  },
+  "challenges": {
+    "1_live_tip_ci": {
+      "tip_match": true,
+      "ci": "UNAVAILABLE",
+      "verdict": "PARTIAL"
+    },
+    "2_journey_evidence_guest_vs_host": {
+      "evidence_root": "artifacts/product_use/journeys",
+      "live_visual": {
+        "claimed": "LIVE_GUNNCHOS_VISUAL_PASS=true GUEST_OBSERVED",
+        "finding": "Guest weston PNG before/after SHA match committed shell_app_*.png; typed marker LIVEPROOF1786658825 present in guest document via virtio-serial agent path. Host QEMU screendump correctly labeled HOST_OBSERVED supporting-only. Untracked LIVE_VISUAL_BLOCKER.json (VNC blank/diff0) is NOT on tip \u2014 do not confuse with committed PASS.",
+        "screenshot_only": false,
+        "verdict": "PASS"
+      },
+      "ring": {
+        "claimed": "RING_TO_REAL_APP_STATE_MUTATION_PASS=true GUEST_OBSERVED (LibreOffice ODT, Chromium clicks, Pedestrian save_version)",
+        "finding": "LibreOffice ODT contains Writer-styled RingSeed+RINGMUTATION marker (rsid span) \u2014 strongest of three. Browser click path is Chromium against intentionally planted in-guest lab_browser collector HTML + Python click counter (fixture-as-product for browser third). Pedestrian pp_progression save_version 1\u21922 with unlock expansion matches code path that accepts Godot load-migration while process alive, not proven HID gameplay mutation. RING_TO_REAL_APPLICATION_INPUT_PASS=false and RING_SPATIAL_ACCURACY=SIMULATED on all three; lab RINGRING surfaces quarantined under _lab_surfaces_forbidden.",
+        "host_as_guest": false,
+        "observer_only_logs": "partial \u2014 artifacts mutated in guest FS, but mutation cause not fully Ring-HID-proven for game/browser",
+        "verdict": "FAIL"
+      },
+      "dsxl": {
+        "claimed": "DSXL_DUAL_COMPOSITOR_UX_PASS=false partial dual placement",
+        "finding": "Committed product_use G14 evidence PASS=false with missing focus_move; PNGs present. Dirty uncommitted artifacts/wp011r/dsxl has PASS=true \u2014 workspace contamination, NOT tip. Tip honesty intact.",
+        "verdict": "PASS"
+      },
+      "verdict": "FAIL"
+    },
+    "3_persona_tokens_false": {
+      "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+      "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+      "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false,
+      "G15_fields": "all journey cells NOT_RUN (except dock OPEN / VISUAL UNAVAILABLE)",
+      "verdict": "PASS"
+    },
+    "4_waike_owner_43": {
+      "owner_commit": "eb3f416300168ad0410eb76bc2e1c72243add8f8",
+      "owner_commit_is_origin_main": true,
+      "provenance_owner_sha256_match_git_blobs": true,
+      "packaged_bytes_byte_identical_to_owner": false,
+      "packaged_canonical_json_equal_owner": true,
+      "reauthored_in_device_os_flag": false,
+      "signature_ok_DEV_TEST": true,
+      "learner_key_leak": false,
+      "teacher_has_answer_keys": true,
+      "observation_class": "HOST_OBSERVED",
+      "in_guest_waike_ui": "NOT_RUN",
+      "finding": "Signed import of accepted #43 main. Packaged files are re-serialized projections (strip+pretty), not hand-copied curriculum rewrite. Learner view has no answer_keys; teacher retains them. Correctly not claimed as guest UI journey.",
+      "verdict": "PASS"
+    },
+    "5_games_accepted_main": {
+      "pedestrian_pursuit_claimed": "cc965fc5d4d6f3a8cb02c1e6d8dfbbd99d173fe3",
+      "pedestrian_origin_main_match": true,
+      "FOUR_GAME_ACCEPTED_MAIN_RC": false,
+      "Beat_Link_20": "BRANCH_EVIDENCE / BEATLINK_20_READY_FOR_EDMUND_MERGE=true does not claim accepted-main RC",
+      "verdict": "PASS"
+    },
+    "6_ai_accepted_main_only": {
+      "gunnchAI3k_main": "c508675",
+      "gunnchAI3k#34": "OPEN_BRANCH_EVIDENCE_ONLY",
+      "persona_AI_cells": "NOT_RUN",
+      "verdict": "PASS"
+    },
+    "7_ring_filesystem_mutation": {
+      "odt_guest_artifact": true,
+      "browser_state_guest_artifact": true,
+      "pp_progression_guest_artifact": true,
+      "mutation_via_real_app_not_host_stamp": "MIXED",
+      "verdict": "FAIL"
+    },
+    "8_host_vs_guest_labels": {
+      "waike_HOST_OBSERVED": true,
+      "device_lab_probe_HOST_OBSERVED": true,
+      "live_visual_guest_FB_GUEST_OBSERVED_host_screendump_HOST_OBSERVED": true,
+      "ring_GUEST_OBSERVED_overclaim_risk": true,
+      "finding": "HOST/GUEST labels mostly honest; Ring GUEST_OBSERVED earn overstates Ring\u2192app causation for browser fixture and Pedestrian migration.",
+      "verdict": "PARTIAL"
+    }
+  },
+  "workspace_contamination_note": "Uncommitted dirty artifacts/wp011r/{dsxl,ring,visual} and untracked LIVE_VISUAL_BLOCKER.json / interactive_guest_session must not be treated as tip evidence. Tip product_use journeys are the audit surface.",
+  "S1_blockers_remaining": [
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS must be demoted or re-earned without lab collector HTML and without save_version migration-alone Pedestrian path",
+    "Full G11\u2013G15 pickup-and-use persona tokens not earned (correctly false)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS false (missing focus_move)",
+    "G15 creative mature in-guest app NOT_RUN",
+    "Handheld dock continuity OPEN",
+    "In-guest WAIKE UI / AI journeys NOT_RUN (ingest remains HOST_OBSERVED only)",
+    "Reboot/resume continuity NOT_RUN",
+    "CI settlement on tip e4c7e2f not independently confirmed (gh auth broken this run)"
+  ],
+  "S2_open_acknowledged": [
+    "REAL_TEACHER_E6=false",
+    "HUMAN_E6",
+    "Beat Link #20 BRANCH_EVIDENCE until Edmund merge",
+    "gunnchAI #34 BRANCH_EVIDENCE; journeys must not treat #34 as accepted truth"
+  ],
+  "evidence_inspected": [
+    "artifacts/product_use/PRODUCT_USE_RC_001_STATUS.json",
+    "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+    "artifacts/product_use/journeys/RUN_SUMMARY.json",
+    "artifacts/product_use/journeys/G12_G11_live_visual/LIVE_VISUAL_EVIDENCE.json",
+    "artifacts/product_use/journeys/G11_ring/RING_APP_MUTATION_EVIDENCE.json",
+    "artifacts/product_use/journeys/G14_dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+    "artifacts/product_use/journeys/waike_teacher_isolation.json",
+    "artifacts/product_use/waike_store/versions/owner-546819c6b395/PACKAGE.json",
+    "gunnchos_device_os/device_lab/interactive_guest_proofs.py",
+    "gunnchos_device_os/product_use/waike_owner_package.py"
+  ],
+  "stamp": {
+    "on_pr": 115,
+    "independent_result": "FAIL",
+    "edmund_mergeable": "NO",
+    "message": "Independent VP FAIL on honesty of journey PASS earn (Ring). Token falsity / WAIKE HOST ingest / DSXL partial / #20+#34 branch labels OK. Cursor does not merge."
+  },
+  "implementer_demotion_applied": true,
+  "implementer_demotion_utc": "2026-08-13T22:23:18Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS_after_demotion": false,
+  "persona_tokens_remain_false": true
+}
