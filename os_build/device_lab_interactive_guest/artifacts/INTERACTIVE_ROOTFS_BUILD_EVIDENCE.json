@@ -1,0 +1,15 @@
+{
+  "schema": "gunnchos.device_lab.interactive_guest_rootfs_build_evidence.v1",
+  "ok": false,
+  "arch": "aarch64",
+  "method": "none",
+  "reason": "no_real_cross_build_method_available: apk post-install trigger scripts must execute real aarch64 Linux binaries; need docker (native linux/arm64 on Apple Silicon) or a Linux host with binfmt_misc+qemu-user-static. Neither found on this host (Darwin arm64). Real minirootfs was fetched (see cache) but package install was NOT attempted, and NO fake PASS is recorded.",
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "production_keys_used": false,
+  "physical_boot_claimed": false,
+  "alpine_version": "3.21.3",
+  "host_system": "Darwin",
+  "host_machine": "arm64"
+}

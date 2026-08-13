@@ -1,18 +1,18 @@
 """WAIKE Learning application — 18-course seeds + offline packs + progress.
 
 Companion contract (do not regress): ``run_waike_app(lesson_id=..., role=...)`` remains
-the entry used by ``/api/waike/start`` on PLATFORM-001. Extra kwargs are optional.
+the entry used by ``/api/waike/start`` on PLATFORM-001. Extra kwargs (``course_id``)
+are optional. Invalid course tokens fail closed.
 
 Claim boundary: digitally executable course *seeds*, not full curriculum, not HUMAN_E6.
 """
 from __future__ import annotations
 
-import json
-import os
 import time
 from pathlib import Path
 from typing import Any
 
+from gunnchos_device_os.first_party_apps import runtime
 from gunnchos_device_os.gunnchai_integration import (
     tutor_prompt_guard,
     tutor_safety_check,
@@ -30,8 +30,8 @@ from gunnchos_device_os.waike_integration import (
 
 CLAIM_BOUNDARY = (
     "Digital WAIKE Learning app with 18 distinct course seeds (lesson/lab/packets) "
-    "plus sandbox progress. Not a full LMS, not complete 8-week authorship, not "
-    "production cloud sync, not student-validated pedagogy."
+    "plus gunnchSDK sandbox progress. Not a full LMS, not complete 8-week authorship, "
+    "not production cloud sync, not student-validated pedagogy."
 )
 
 REQUIRED_PERMISSIONS = ["storage_read", "storage_write", "ai_interface"]
@@ -41,35 +41,16 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
-def _sandbox_dir() -> Path:
-    return Path(os.environ.get("GUNNCHOS_SANDBOX_DATA_DIR") or ".")
+def _progress_path(data_dir: Path) -> Path:
+    return data_dir / "waike_progress.json"
 
 
-def _write_json(path: Path, payload: dict[str, Any]) -> str:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return str(path)
+def _portfolio_path(data_dir: Path) -> Path:
+    return data_dir / "waike_portfolio.json"
 
 
-def _load_json(path: Path, default: dict[str, Any]) -> dict[str, Any]:
-    if not path.exists():
-        return dict(default)
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return dict(default)
-    return data if isinstance(data, dict) else dict(default)
-
-
-def _permissions_ok() -> dict[str, Any]:
-    raw = os.environ.get("GUNNCHOS_APP_PERMISSIONS")
-    if raw is None:
-        # SDK entry and unit tests default-allow local digital use.
-        granted = list(REQUIRED_PERMISSIONS)
-    else:
-        granted = [p.strip() for p in raw.split(",") if p.strip()]
-    missing = [p for p in REQUIRED_PERMISSIONS if p not in granted]
-    return {"ok": not missing, "granted": granted, "missing": missing}
+def _state_path(data_dir: Path) -> Path:
+    return data_dir / "waike_app_state.json"
 
 
 def _load_lesson_markdown(course_id: str) -> str | None:
@@ -110,10 +91,8 @@ def run_waike_app(
     crash_probe: bool = False,
     run_course_lab: bool = True,
 ) -> dict[str, Any]:
-    if crash_probe:
-        raise RuntimeError("waike_app crash_probe")
-
-    perms = _permissions_ok()
+    runtime.intentional_crash_probe(enabled=crash_probe)
+    perms = runtime.assert_permissions(REQUIRED_PERMISSIONS)
     if not perms["ok"]:
         return {
             "ok": False,
@@ -127,27 +106,38 @@ def run_waike_app(
     try:
         resolved = resolve_course_id(token)
     except KeyError:
-        resolved = None
+        return {
+            "ok": False,
+            "app_id": "waike",
+            "error": "unknown_course",
+            "lesson_id": lesson_id,
+            "course_id": course_id,
+            "claim_boundary": CLAIM_BOUNDARY,
+        }
 
-    data_dir = _sandbox_dir()
+    data_dir = runtime.sandbox_data_dir()
     ui = _repo_root() / "apps/waike_learning/index.html"
-    progress_file = data_dir / "waike_progress.json"
-    state_path = data_dir / "waike_app_state.json"
-    app_state = _load_json(
-        state_path,
+    progress_file = _progress_path(data_dir)
+    app_state = runtime.load_json(
+        _state_path(data_dir),
         {"schema": "gunnchos.waike_app.state.v1", "sessions_completed": 0, "last_lesson": None},
     )
 
-    prior = _load_json(progress_file, {})
+    prior = runtime.load_json(progress_file, {})
     prior_key = f"{account}:{lesson_id}"
     prior_pct = float((prior.get(prior_key) or {}).get("pct") or 0.0)
-    target_pct = float(advance_pct) if advance_pct is not None else min(100.0, prior_pct + 25.0 if prior_pct else 25.0)
-    if prior:
-        _write_json(progress_file, prior)
+    if advance_pct is None:
+        target_pct = min(100.0, prior_pct + 25.0 if prior_pct else 25.0)
+    else:
+        target_pct = float(advance_pct)
 
+    if prior:
+        runtime.write_json(progress_file, prior)
+
+    session_lesson = lesson_id if lesson_id in list_offline_lessons() else resolved
     session = run_session(
         profile="student" if role == "learner" else "educator",
-        lesson_id=lesson_id if lesson_id in list_offline_lessons() else (resolved or lesson_id),
+        lesson_id=session_lesson,
         role="student" if role == "learner" else "educator",
         account=account,
         persistence_path=str(progress_file),
@@ -159,27 +149,21 @@ def run_waike_app(
         session["session"]["progress"] = marked
 
     deploy = deploy_lesson(
-        lesson_id if lesson_id in list_offline_lessons() else (resolved or lesson_id),
+        session_lesson,
         "student" if role == "learner" else "educator",
     )
 
-    lab = None
-    lesson_body = None
-    spec = None
-    tutor = {"ok": False, "reply": None}
-    if resolved:
-        spec = course_by_id(resolved)
-        lesson_body = _load_lesson_markdown(resolved)
-        tutor = _tutor_for_course(resolved, role)
-        if run_course_lab:
-            lab = run_lab(resolved)
+    spec = course_by_id(resolved)
+    lesson_body = _load_lesson_markdown(resolved)
+    tutor = _tutor_for_course(resolved, role)
+    lab = run_lab(resolved) if run_course_lab else None
 
     app_state["sessions_completed"] = int(app_state.get("sessions_completed") or 0) + 1
     app_state["last_lesson"] = lesson_id
     app_state["last_course_id"] = resolved
     app_state["last_role"] = role
     app_state["updated_at"] = time.time()
-    persisted_state = _write_json(state_path, app_state)
+    state_path = runtime.write_json(_state_path(data_dir), app_state)
 
     portfolio = {
         "schema": "waike.portfolio.v1",
@@ -192,23 +176,36 @@ def run_waike_app(
         "progress_pct": target_pct,
         "tutor_ok": bool(tutor.get("ok")),
         "lab_ok": bool(lab and lab.get("ok")),
-        "artifact": spec.title if spec else None,
+        "artifact": spec.title,
         "lessons_available": list_offline_lessons(),
         "course_ids": list(COURSE_IDS),
         "full_curriculum_complete": False,
     }
-    portfolio_path = _write_json(data_dir / "waike_portfolio.json", portfolio)
+    portfolio_path = runtime.write_json(_portfolio_path(data_dir), portfolio)
+    log_path = runtime.append_app_log(
+        "waike_learning_run",
+        {
+            "lesson_id": lesson_id,
+            "course_id": resolved,
+            "role": role,
+            "progress_pct": target_pct,
+            "sessions_completed": app_state["sessions_completed"],
+            "tutor_ok": tutor.get("ok"),
+            "lab_ok": bool(lab and lab.get("ok")),
+        },
+    )
 
     result = {
-        "ok": bool(session.get("ok")) and ui.exists() and perms["ok"] and (not resolved or bool(tutor.get("ok"))),
+        "ok": bool(session.get("ok")) and ui.exists() and perms["ok"] and bool(tutor.get("ok")),
         "app_id": "waike",
-        "sdk_app_id": os.environ.get("GUNNCHOS_APP_ID", "gunnchos.waike_learning"),
+        "sdk_app_id": runtime.app_id(),
+        "sdk_version": runtime.app_version(),
         "entry": "apps/waike_learning/index.html",
         "lessons": list_offline_lessons(),
         "course_id": resolved,
-        "course_title": spec.title if spec else None,
+        "course_title": spec.title,
         "lesson_body": lesson_body,
-        "assignment": seed_for(resolved)["assignment"] if resolved else None,
+        "assignment": seed_for(resolved)["assignment"],
         "lab": lab,
         "session": session,
         "deploy": deploy,
@@ -222,13 +219,15 @@ def run_waike_app(
             "captions": True,
         },
         "permissions": perms,
-        "persisted_state_path": persisted_state,
+        "persisted_state_path": state_path,
         "persisted_progress_path": str(progress_file),
         "persisted_sessions_completed": app_state["sessions_completed"],
         "persisted_progress_pct": target_pct,
+        "app_log_path": log_path,
         "ui_present": ui.exists(),
         "mock": False,
         "stub_content": False,
+        "depth_claim": "D5_runtime_candidate",
         "full_curriculum_complete": False,
         "HUMAN_E6": False,
         "STUDENT_VALIDATED": False,
@@ -238,6 +237,7 @@ def run_waike_app(
             "lesson_body",
             "offline_pack_deploy",
             "executable_course_lab",
+            "lab_session",
             "progress_persist",
             "portfolio_export",
             "learner_educator_roles",
@@ -252,5 +252,5 @@ def run_waike_app(
             "HUMAN_E6",
         ],
     }
-    _write_json(data_dir / "waike_learning_run.json", result)
+    runtime.write_json(data_dir / "waike_learning_run.json", result)
     return result

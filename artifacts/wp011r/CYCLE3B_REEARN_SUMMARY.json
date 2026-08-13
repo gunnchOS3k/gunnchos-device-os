@@ -1,0 +1,380 @@
+{
+  "schema": "gunnchos.wp011r.cycle3b_dsxl_ring.v1",
+  "started_at_utc": "2026-08-12T16:27:28Z",
+  "LIVE_GUNNCHOS_VISUAL_PASS_retained": false,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS_retained": true,
+  "ECO010_SOAK_PASS": true,
+  "GUEST_DUAL_OUTPUT_PASS": true,
+  "prefer_fail_over_false_pass": true,
+  "dsxl": {
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+    "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
+    "prefer_fail_over_false_pass": true,
+    "stale_qemu": {
+      "killed": []
+    },
+    "boot_dual": {
+      "ok": true
+    },
+    "enable_dual": {
+      "ok": true,
+      "weston": {
+        "compositor": "weston",
+        "outputs": 2,
+        "available": true
+      },
+      "via": "weston"
+    },
+    "phase_a": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        },
+        {
+          "id": "card0-Virtual-2",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 2,
+      "compositor": "weston",
+      "compositor_outputs": 2,
+      "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+      "dual_ok": true,
+      "drm_connected": 2
+    },
+    "boot_single": {
+      "ok": true
+    },
+    "phase_b_disconnect": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 1,
+      "compositor_outputs": 1,
+      "cards": "/sys/class/drm/card0-Virtual-1\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width",
+      "disconnect_ok": true,
+      "connected_to_disconnected": true
+    },
+    "boot_restore": {
+      "ok": true
+    },
+    "enable_dual_restore": {
+      "ok": true,
+      "weston": {
+        "compositor": "weston",
+        "outputs": 2,
+        "available": true
+      },
+      "via": "weston"
+    },
+    "phase_c_reconnect": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        },
+        {
+          "id": "card0-Virtual-2",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 2,
+      "compositor": "weston",
+      "compositor_outputs": 2,
+      "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+      "reconnect_ok": true,
+      "layout_restored": true
+    },
+    "phase_c_ux": {
+      "placement_proven": true,
+      "focus_ok": true,
+      "fb_both": true,
+      "windows_launched": {
+        "foot": {
+          "ok": true,
+          "pid": 629
+        },
+        "mousepad": {
+          "ok": true,
+          "pid": 638
+        }
+      },
+      "guest_shots": {
+        "ok": true,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_screendump": {
+        "exists": true,
+        "bytes": 3072016
+      },
+      "grim_per_output": {
+        "ok": false
+      },
+      "placement_halves": {
+        "ok": true,
+        "filter_aware": true,
+        "width": 2560,
+        "height": 800,
+        "left_sha256": "b2e1dd2e5445716dc5696357e29f1dff2859e841f65c3681f2071eab9070bd5a",
+        "right_sha256": "6efd011010291a5a1a0dcf1c49fa3ea8cc3fa118c906aa31cb25b5883e33984c",
+        "halves_differ": true,
+        "left_nonzero": true,
+        "right_nonzero": true,
+        "left_mean": 58.45217903645833,
+        "right_mean": 130.05648274739585,
+        "filters_used": [
+          1,
+          2,
+          4
+        ],
+        "means_plausible": true,
+        "left_mean_committed": 58.45217903645833,
+        "right_mean_committed": 130.05648274739585,
+        "means_match_placement_crops": true,
+        "left_png": "dsxl_left.png",
+        "right_png": "dsxl_right.png",
+        "committed_png_halves": true,
+        "fb_method": "filter_aware_composite_crop"
+      },
+      "fb_method": "filter_aware_composite_crop",
+      "this_run_shot_hashes": [],
+      "grim_both_stale_rejected": true,
+      "invented_halves_rejected": true,
+      "windows": [
+        {
+          "app_id": "foot",
+          "output_id": "wl_output-0",
+          "ok": true,
+          "half": "left",
+          "half_png": "dsxl_left.png"
+        },
+        {
+          "app_id": "mousepad",
+          "output_id": "wl_output-1",
+          "ok": true,
+          "half": "right",
+          "half_png": "dsxl_right.png"
+        }
+      ],
+      "focus_moves": [
+        {
+          "ok": true,
+          "output_id": "wl_output-0",
+          "click": {
+            "ok": true
+          }
+        },
+        {
+          "ok": true,
+          "output_id": "wl_output-1",
+          "click": {
+            "ok": true
+          }
+        }
+      ]
+    },
+    "compositor_ux_gate": {
+      "ok": true,
+      "gate": "PASS_DSXL_COMPOSITOR_UX",
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
+      "checks": {
+        "two_outputs": true,
+        "two_compositor_surfaces": true,
+        "window_placement": true,
+        "focus_move": true,
+        "disconnect": true,
+        "reconnect": true,
+        "layout_restore": true
+      },
+      "missing": [],
+      "windows": [
+        {
+          "app_id": "foot",
+          "output_id": "wl_output-0",
+          "ok": true,
+          "half": "left",
+          "half_png": "dsxl_left.png"
+        },
+        {
+          "app_id": "mousepad",
+          "output_id": "wl_output-1",
+          "ok": true,
+          "half": "right",
+          "half_png": "dsxl_right.png"
+        }
+      ],
+      "focus_moves": [
+        {
+          "ok": true,
+          "output_id": "wl_output-0",
+          "click": {
+            "ok": true
+          }
+        },
+        {
+          "ok": true,
+          "output_id": "wl_output-1",
+          "click": {
+            "ok": true
+          }
+        }
+      ],
+      "disconnect_reconnect": {
+        "disconnect_ok": true,
+        "reconnect_ok": true,
+        "layout_restored": true,
+        "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+        "before": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            },
+            {
+              "id": "card0-Virtual-2",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 2,
+          "compositor": "weston",
+          "compositor_outputs": 2,
+          "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+          "dual_ok": true,
+          "drm_connected": 2
+        },
+        "mid": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 1,
+          "compositor_outputs": 1,
+          "cards": "/sys/class/drm/card0-Virtual-1\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width",
+          "disconnect_ok": true,
+          "connected_to_disconnected": true
+        },
+        "after": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            },
+            {
+              "id": "card0-Virtual-2",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 2,
+          "compositor": "weston",
+          "compositor_outputs": 2,
+          "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+          "reconnect_ok": true,
+          "layout_restored": true
+        }
+      },
+      "layout_restore": {
+        "ok": true,
+        "layout_restored": true,
+        "outputs_after": 2
+      },
+      "connected": 2,
+      "guest_connected": 2,
+      "logical_connected": 0,
+      "compositor_surfaces": 2,
+      "sources": [
+        "WaylandSession"
+      ],
+      "outputs": [
+        {
+          "id": "wl_output-0",
+          "connected": true,
+          "source": "WaylandSession",
+          "class": "compositor_wl_output",
+          "compositor_surface": true
+        },
+        {
+          "id": "wl_output-1",
+          "connected": true,
+          "source": "WaylandSession",
+          "class": "compositor_wl_output",
+          "compositor_surface": true
+        }
+      ],
+      "SILICON_EXACT_EMULATION": false,
+      "PHYSICAL_DUAL_PANEL": "PENDING",
+      "note": "DSXL UX PASS earned"
+    },
+    "GUEST_DUAL_OUTPUT_PASS_retained": true,
+    "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
+  },
+  "dsxl_disk_means": {
+    "left": 58.45217903645833,
+    "right": 130.05648274739585,
+    "crop_left": 58.45217903645833,
+    "crop_right": 130.05648274739585,
+    "ok": true
+  },
+  "tokens": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "ECO010_SOAK_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "live_note": "retained from coherent before/after guest FB run",
+  "dsxl_note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect",
+  "dsxl_architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+  "ring_note": "Ring\u2192SpatialInput\u2192guest HID mutated LibreOffice+browser+Godot; guest artifacts committed",
+  "ring_partial": {
+    "libreoffice": true,
+    "browser": true,
+    "game": true
+  },
+  "finished_at_utc": "2026-08-12T16:45:05Z",
+  "edmund": "do-not-merge #103 until independent re-checks DSXL+RING; Cursor never merges",
+  "four_games": null,
+  "pedestrian_godot_earned": true,
+  "four_note": null,
+  "five_gate_digital_and_implementer": true,
+  "independent_accepted": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "updated_at_utc": "2026-08-12T22:08:21Z",
+  "wave": "WP-011R.2",
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "five_gate_digital_and": false,
+  "note": "WP-011R.2 reconciliation: FOUR_GAME demoted; DSXL/RING tokens aligned to evidence"
+}

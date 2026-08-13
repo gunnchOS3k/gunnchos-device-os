@@ -6,10 +6,21 @@
   "api_version": "1.0.0",
   "min_os_version": "0.1.0",
   "max_os_version": null,
-  "arch_targets": ["aarch64", "x86_64"],
+  "arch_targets": [
+    "aarch64",
+    "x86_64"
+  ],
   "entrypoint": "main.py",
-  "permissions": ["storage_read", "storage_write", "ai_interface"],
-  "capabilities_required": ["storage.read", "storage.write", "ai_interface.query"],
+  "permissions": [
+    "storage_read",
+    "storage_write",
+    "ai_interface"
+  ],
+  "capabilities_required": [
+    "storage.read",
+    "storage.write",
+    "ai_interface.query"
+  ],
   "dependencies": [],
   "sandbox_profile": {
     "network_policy": "deny_all",
@@ -17,5 +28,6 @@
     "allow_ipc": false
   },
   "stub_content": false,
-  "source": "gunnchos_device_os.first_party_apps.waike_app"
+  "source": "gunnchos_device_os.first_party_apps.waike_app",
+  "platform001": true
 }

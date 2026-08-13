@@ -54,7 +54,8 @@ function renderProgress() {
         `<p>Role: ${row.role}</p>` +
         `<p>Progress: ${row.pct != null ? row.pct + "%" : "n/a"}</p>` +
         `<p>Lab: ${row.lab_ok == null ? "n/a" : row.lab_ok ? "ran" : "failed"}</p>` +
-        `<p>Source: ${row.source || "local"}</p></article>`
+        `<p>Source: ${row.source || "local"}</p>` +
+        `<p>Started: ${row.started_at || ""}</p></article>`
       );
     })
     .join("");
@@ -90,7 +91,9 @@ function render() {
   labs.innerHTML =
     `<p>${course.lab_hint}</p>` +
     `<p class="hint">Executable lab: <code>python3 scripts/run_waike_course_lab.py --course ${course.course_id}</code></p>`;
-  tutorEl.textContent = course.worked_example;
+  tutorEl.textContent =
+    course.worked_example +
+    " Progress persists via /api/waike/start → first_party_apps.waike_app sandbox when the companion bridge is up.";
   renderProgress();
 }
 
@@ -107,6 +110,7 @@ async function loadCatalog() {
 }
 
 async function hydrateFromSandbox() {
+  setStatus("loading", "Connecting WAIKE shell to gunnchSDK sandbox…");
   try {
     const health = await sdkFetch("/api/health");
     if (!health.ok || !health.wired) throw new Error("bridge_not_wired");
@@ -122,6 +126,7 @@ async function hydrateFromSandbox() {
         pct: portfolio.progress_pct,
         lab_ok: portfolio.lab_ok,
         source: "sdk_sandbox",
+        started_at: new Date((appState.updated_at || Date.now() / 1000) * 1000).toISOString(),
       };
       if (state.courses.some((c) => c.course_id === cid)) state.selected = cid;
     }
@@ -129,9 +134,10 @@ async function hydrateFromSandbox() {
     setStatus("ready", `Wired to SDK sandbox · sessions=${appState.sessions_completed || 0}`);
   } catch (_err) {
     state.wired = false;
+    render();
     setStatus(
-      "ready",
-      "Catalog local. Companion bridge optional — /api/waike/start used when present (fail-closed, no fake durable progress)."
+      "error",
+      "Catalog local. SDK bridge unavailable (fail-closed; local UI only, no fake durable progress)."
     );
   }
 }
@@ -153,11 +159,13 @@ document.getElementById("start-lab").onclick = async () => {
     state.wired = true;
     const result = payload.result || {};
     state.progress[course.course_id] = {
-      status: result.ok ? "in_progress" : "error",
+      started_at: new Date().toISOString(),
       role: state.role,
+      status: result.ok ? "in_progress" : "error",
       pct: result.persisted_progress_pct,
       lab_ok: !!(result.lab && result.lab.ok),
       source: "sdk_sandbox",
+      a11y: document.getElementById("a11y-high-contrast").checked,
     };
     render();
     setStatus(
@@ -201,7 +209,7 @@ document.getElementById("export-portfolio").onclick = async () => {
     a.href = URL.createObjectURL(blob);
     a.download = "waike-portfolio.json";
     a.click();
-    setStatus("error", `Sandbox export unavailable; wrote local UI progress only. ${err.message || err}`);
+    setStatus("error", `RUNTIME_UNAVAILABLE — sandbox export unavailable; wrote local UI progress only. ${err.message || err}`);
   }
 };
 

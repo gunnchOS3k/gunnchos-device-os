@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.experience_review.v1",
   "product": "waike_learning",
-  "generated_utc": "2026-08-13T03:20:00Z",
+  "generated_utc": "2026-08-13T17:30:00Z",
   "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
   "AI_HEURISTIC_REVIEW_ONLY": true,
   "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
@@ -35,13 +35,13 @@
           "id": "WK-ER1-02",
           "severity": "S1",
           "status": "CLOSED_DIGITAL",
-          "finding": "Owner-templated 8-week shells are no longer the only product surface; device-os seeds are pairwise-distinct."
+          "finding": "Owner-templated 8-week shells are no longer the only product surface; device-os seeds are pairwise-distinct. Lesson body + worked example surface for each course."
         },
         {
           "id": "WK-ER1-03",
           "severity": "S2",
           "status": "OPEN",
-          "finding": "Slide/instruction media is outline-only (no pixel deck). VISUAL UNAVAILABLE."
+          "finding": "Slide/instruction media is outline-only (no pixel deck). VISUAL UNAVAILABLE. Role + a11y controls present but completion/reward feedback is still minimal."
         },
         {
           "id": "WK-ER1-04",
@@ -52,8 +52,8 @@
         {
           "id": "WK-ER1-05",
           "severity": "S2",
-          "status": "OPEN",
-          "finding": "Companion /api/waike/start kept for PLATFORM-001 wiring; this PR does not re-ship the multi-app bridge."
+          "status": "CLOSED_DIGITAL",
+          "finding": "Companion shell wired to gunnchSDK durable progress via /api/waike/start → run_waike_app. Course catalog from #109 sits on that same bridge."
         }
       ]
     },
@@ -71,7 +71,7 @@
           "id": "WK-ER2-02",
           "severity": "S2",
           "status": "OPEN",
-          "finding": "Labs execute in Python; in-shell lab animation/kinesthetic capture is not in this packet."
+          "finding": "Labs execute in Python; in-shell lab animation/kinesthetic capture is not in this packet. In-shell progress is card-based and reflects sandbox pct when bridge is up."
         },
         {
           "id": "WK-ER2-03",
@@ -92,5 +92,5 @@
       "note": "Not a game product — ER-3 N/A for this surface."
     }
   },
-  "summary": "WAIKE 18-course seed depth earned as digital product artifacts with honest non-completion. VISUAL inspect UNAVAILABLE. HUMAN_E6 not earned. Owner-repo programs remain templated/stub."
+  "summary": "WAIKE 18-course seed depth plus PLATFORM-001 companion/SDK wiring earned as digital product artifacts with honest non-completion. VISUAL inspect UNAVAILABLE. HUMAN_E6 not earned. Owner-repo programs remain templated/stub. Full curriculum not claimed."
 }

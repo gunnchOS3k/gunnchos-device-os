@@ -1,0 +1,77 @@
+{
+  "builds": {
+    "evt": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_ok": true,
+      "claim_boundary": "EVT realm for hardware bring-up / validation. Signed with DEV keys only, anti-rollback counter enforced, no production keys or real eSIM/factory credentials present. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+      "key_source": null,
+      "production_private_keys_present": null,
+      "rootfs_sha256": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
+      "signed": true,
+      "status": "ACTIVE_DEV",
+      "verify_ok": true
+    },
+    "factory": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_ok": true,
+      "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+      "key_source": null,
+      "production_private_keys_present": null,
+      "rootfs_sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+      "signed": true,
+      "status": "ACTIVE_DEV",
+      "verify_ok": true
+    },
+    "production": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_ok": true,
+      "claim_boundary": "PRODUCTION_SHIPPING_IMAGE_DEFINITION is a complete CONTRACT, not a release. status is always NOT_RELEASED in this repository. trust_roots.key_source is \"none\" \u2014 no production signing key exists, is generated, or is referenced anywhere in this repo. `gunnchctl os-image build production` refuses to run without --unsigned and always emits signing_realm=NOT_RELEASED, claim_boundary=this text, and PRODUCTION_RELEASE_CLAIMED=false. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+      "key_source": "none",
+      "production_private_keys_present": false,
+      "rootfs_sha256": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
+      "signed": false,
+      "status": "NOT_RELEASED",
+      "verify_ok": true
+    },
+    "recovery": {
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "build_ok": true,
+      "claim_boundary": "RECOVERY_IMAGE is the last-resort boot target. Anti-rollback enforced, no dev shell by default, no production keys. Validated only through virtual/simulated boot-failure and rollback tests in this repo, not on physical hardware. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+      "key_source": null,
+      "production_private_keys_present": null,
+      "rootfs_sha256": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa",
+      "signed": true,
+      "status": "ACTIVE_DEV",
+      "verify_ok": true
+    }
+  },
+  "no_production_key": true,
+  "ok": true,
+  "production_not_released": true,
+  "production_unsigned": true,
+  "rootfs_fingerprints": {
+    "evt": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
+    "factory": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+    "production": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
+    "recovery": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa"
+  },
+  "rootfs_fingerprints_differ": true,
+  "runtime": {
+    "EVT_IMAGE_RUNTIME_PASS": true,
+    "FACTORY_IMAGE_RUNTIME_PASS": true,
+    "IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS": true,
+    "IMAGE_REALM_POLICY_SEPARATION_PASS": true,
+    "PRODUCTION_RELEASE_CLAIMED": null,
+    "RECOVERY_IMAGE_RUNTIME_PASS": true,
+    "behavior_fingerprints": {
+      "evt": "evt:f0:r1:g1:n0:cevt",
+      "factory": "factory:f1:r0:g0:n1:cfactory-line",
+      "recovery": "recovery:f0:r1:g0:n1:crecovery"
+    },
+    "behavior_fingerprints_differ": true
+  },
+  "validate": {
+    "IMAGE_REALMS_DIGITALLY_COMPLETE": true,
+    "ok": true
+  }
+}

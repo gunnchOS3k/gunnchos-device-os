@@ -15,6 +15,9 @@ from gunnchos_device_os.bootable_image.builder import BootableImagePaths, Bootab
 
 LAB_IMAGE_SCHEMA = "gunnchos.device_lab.guest_image.manifest.v1"
 LAB_IMAGE_VERSION = "0.1.0-lab-dev"
+# WP-011R: this guest is a Lab development image, not the shipping OS image.
+DEVICE_LAB_DEVELOPMENT_GUEST = True
+SHIPPING_IMAGE = False
 
 
 def _repo_root() -> Path:
@@ -68,6 +71,8 @@ class LabGuestImageBuilder:
             "schema": LAB_IMAGE_SCHEMA,
             "version": LAB_IMAGE_VERSION,
             "hybrid_base": "alpine_minirootfs + gunnchOS overlay",
+            "DEVICE_LAB_DEVELOPMENT_GUEST": DEVICE_LAB_DEVELOPMENT_GUEST,
+            "SHIPPING_IMAGE": SHIPPING_IMAGE,
             "initramfs": str(self.artifacts / "gunnchos-ref-initramfs.cpio.gz"),
             "kernel": str(self.artifacts / "vmlinuz-virt"),
             "manifest": str(manifest),

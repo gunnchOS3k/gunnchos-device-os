@@ -69,7 +69,8 @@ def cmd_run(ns: argparse.Namespace) -> int:
 
     if not getattr(ns, "device", None):
         # No --device: this is a gunnchSDK package run, not a Device Lab
-        # session run (WP-013).
+        # session run (WP-013). Restored after #108 accidentally dropped it
+        # while overlaying historical #103 CLI.
         from gunnchos_device_os.release_engineering.cli import cmd_run_sdk_package
 
         return _out(cmd_run_sdk_package(ns, _repo_root()))
@@ -204,6 +205,20 @@ def cmd_image(ns: argparse.Namespace) -> int:
         return _out(builder.inspect())
     if ns.image_cmd == "verify":
         return _out(builder.verify())
+    if ns.image_cmd == "interactive-manifest":
+        from gunnchos_device_os.device_lab.interactive_image_builder import InteractiveGuestImageBuilder
+
+        ib = InteractiveGuestImageBuilder(_repo_root())
+        return _out({"ok": True, "manifest_path": str(ib.write_manifest())})
+    if ns.image_cmd == "interactive-disk":
+        from gunnchos_device_os.device_lab.interactive_image_builder import InteractiveGuestImageBuilder
+
+        ib = InteractiveGuestImageBuilder(_repo_root())
+        return _out(ib.create_disk_placeholder(arch=ns.arch, size_gb=ns.disk_size_gb))
+    if ns.image_cmd == "interactive-capability":
+        from gunnchos_device_os.device_lab.interactive_image_builder import detect_build_capability
+
+        return _out(detect_build_capability())
     return _out({"ok": False, "error": f"unknown_image_cmd:{ns.image_cmd}"})
 
 
@@ -290,6 +305,31 @@ def cmd_chaos(ns: argparse.Namespace) -> int:
         stop_session(sess.instance_id)
 
 
+def time_tag() -> str:
+    import time as _time
+
+    return _time.strftime("%Y%m%dT%H%M%S", _time.gmtime())
+
+
+def cmd_score(_: argparse.Namespace) -> int:
+    import subprocess
+
+    script = _repo_root() / "scripts" / "device_lab_score_from_register.py"
+    proc = subprocess.run(
+        [sys.executable, str(script)],
+        cwd=str(_repo_root()),
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PYTHONPATH": str(_repo_root())},
+        check=False,
+    )
+    if proc.stdout:
+        print(proc.stdout, end="")
+    if proc.returncode != 0 and proc.stderr:
+        print(proc.stderr, file=sys.stderr)
+    return int(proc.returncode)
+
+
 def cmd_os_image(ns: argparse.Namespace) -> int:
     from gunnchos_device_os.release_engineering.cli import cmd_os_image as _impl
 
@@ -320,31 +360,6 @@ def cmd_uninstall(ns: argparse.Namespace) -> int:
     return _out(_impl(ns, _repo_root()))
 
 
-def time_tag() -> str:
-    import time as _time
-
-    return _time.strftime("%Y%m%dT%H%M%S", _time.gmtime())
-
-
-def cmd_score(_: argparse.Namespace) -> int:
-    import subprocess
-
-    script = _repo_root() / "scripts" / "device_lab_score_from_register.py"
-    proc = subprocess.run(
-        [sys.executable, str(script)],
-        cwd=str(_repo_root()),
-        capture_output=True,
-        text=True,
-        env={**os.environ, "PYTHONPATH": str(_repo_root())},
-        check=False,
-    )
-    if proc.stdout:
-        print(proc.stdout, end="")
-    if proc.returncode != 0 and proc.stderr:
-        print(proc.stderr, file=sys.stderr)
-    return int(proc.returncode)
-
-
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="gunnchctl", description="gunnchDevice Lab CLI")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -370,7 +385,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("run")
     s.add_argument("app")
-    s.add_argument("--device", required=False, help="Device Lab profile id; omit to run an installed gunnchSDK package")
+    s.add_argument(
+        "--device",
+        required=False,
+        help="Device Lab profile id; omit to run an installed gunnchSDK package",
+    )
     s.add_argument("--keep", action="store_true")
     s.add_argument(
         "--real-guest",
@@ -422,6 +441,12 @@ def build_parser() -> argparse.ArgumentParser:
     build_i.set_defaults(func=cmd_image)
     si_sub.add_parser("inspect").set_defaults(func=cmd_image)
     si_sub.add_parser("verify").set_defaults(func=cmd_image)
+    si_sub.add_parser("interactive-manifest").set_defaults(func=cmd_image)
+    interactive_disk_p = si_sub.add_parser("interactive-disk")
+    interactive_disk_p.add_argument("--arch", default="aarch64")
+    interactive_disk_p.add_argument("--disk-size-gb", type=int, default=8)
+    interactive_disk_p.set_defaults(func=cmd_image)
+    si_sub.add_parser("interactive-capability").set_defaults(func=cmd_image)
 
     se = sub.add_parser("ecosystem")
     se_sub = se.add_subparsers(dest="ecosystem_cmd", required=True)
@@ -455,7 +480,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("score").set_defaults(func=cmd_score)
 
-    # -- WP-013: release engineering + developer platform -----------------
+    # WP-013: release engineering + developer platform (must not be dropped
+    # by Device Lab successor overlays).
     oi = sub.add_parser("os-image")
     oi_sub = oi.add_subparsers(dest="os_image_cmd", required=True)
     oi_build = oi_sub.add_parser("build")

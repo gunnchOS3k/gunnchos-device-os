@@ -155,6 +155,20 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
     focus_ok = bool(focus.get("ok") and focus.get("focus", {}).get("output_id") == primary_id)
     if not focus_ok:
         errors.append("focus_wrong_output")
+    # WP-011R: explicit focus move onto secondary output as well
+    focus_secondary = session.display.focus_window("terminal_docs")
+    focus_back = session.display.focus_window("creator_ide")
+    focus_moves = [
+        {**focus, "output_id": (focus.get("focus") or {}).get("output_id")},
+        {
+            **focus_secondary,
+            "output_id": (focus_secondary.get("focus") or {}).get("output_id"),
+        },
+        {
+            **focus_back,
+            "output_id": (focus_back.get("focus") or {}).get("output_id"),
+        },
+    ]
     primary_wins = session.display.windows_on(primary_id) if primary_id else []
     secondary_wins = session.display.windows_on(secondary_id) if secondary_id else []
     assignment_ok = (
@@ -172,6 +186,7 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
             "primary": win_primary,
             "secondary": win_secondary,
             "focus": focus,
+            "focus_moves": focus_moves,
             "primary_wins": primary_wins,
             "secondary_wins": secondary_wins,
         },
@@ -329,6 +344,43 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         degrade_ok = False
         restore_ok = False
 
+    from gunnchos_device_os.device_lab.virtualization.dsxl_outputs import compositor_ux_gate
+
+    # Tag compositor surfaces only when a real compositor plane is evidenced.
+    # guest_agent DRM connector enum / guest_drm class alone must NOT earn UX PASS.
+    ux_outputs = []
+    for o in session.display.outputs:
+        row = dict(o)
+        src = str(row.get("source") or "")
+        cls = str(row.get("class") or "")
+        if src in {"WaylandSession", "qemu_virtio_gpu", "virtio-gpu"} and cls != "guest_drm":
+            row["compositor_surface"] = True
+        elif row.get("compositor_surface") is True and cls == "guest_drm":
+            row["compositor_surface"] = False
+            row["compositor_surface_rejected"] = "guest_drm_enum_alone"
+        ux_outputs.append(row)
+    ux_gate = compositor_ux_gate(
+        outputs=ux_outputs,
+        windows=[w.to_dict() for w in session.display.windows],
+        focus_moves=focus_moves,
+        disconnect_reconnect={
+            "disconnect_ok": bool(locals().get("degrade_ok")),
+            "reconnect_ok": bool(locals().get("restore_ok")),
+            "layout_restored": bool(locals().get("restore_ok")),
+        },
+        layout_restore={"ok": bool(locals().get("restore_ok")), "layout_restored": bool(locals().get("restore_ok"))},
+    )
+    if not ux_gate.get("DSXL_DUAL_COMPOSITOR_UX_PASS"):
+        # Do not fail G06 behavioral scenario solely on UX token — record honestly
+        eng.record(
+            "dsxl_compositor_ux",
+            None,
+            "ux_gate",
+            "DSXL_DUAL_COMPOSITOR_UX_PASS",
+            ux_gate,
+            False,
+        )
+
     ok = (
         two_outputs
         and windows_ok
@@ -360,7 +412,9 @@ def run(*, repo_root: Path, profile_id: str | None = None) -> dict[str, Any]:
         "steps": eng.steps,
         "PHYSICAL_DUAL_PANEL": "PENDING",
         "GUEST_DUAL_OUTPUT_PASS": bool(dual_gate.get("GUEST_DUAL_OUTPUT_PASS")),
+        "DSXL_DUAL_COMPOSITOR_UX_PASS": bool(ux_gate.get("DSXL_DUAL_COMPOSITOR_UX_PASS")),
         "dual_gate": dual_gate,
+        "compositor_ux_gate": ux_gate,
         "HUMAN_VALIDATION": "PENDING",
         "implementer_ready_for_independent_E4_D6": ok,
         "INDEPENDENT_VERIFICATION": "PENDING",

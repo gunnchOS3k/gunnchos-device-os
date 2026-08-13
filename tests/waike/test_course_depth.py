@@ -83,9 +83,15 @@ def test_app_runs_course_lab(tmp_path, monkeypatch):
     assert r1["HUMAN_E6"] is False
     assert (tmp_path / "waike_portfolio.json").exists()
     # Legacy pack still resolves (companion /api/waike/start lesson_id).
-    legacy = run_waike_app(lesson_id="wireless_basics_101")
+    legacy = run_waike_app(lesson_id="wireless_basics_101", role="learner")
     assert legacy["ok"]
     assert legacy["course_id"] == "WIRELESS_6G"
+    starter = run_waike_app(lesson_id="python_starter_pack", role="learner")
+    assert starter["ok"]
+    assert starter["course_id"] == "SOFTWARE_BUILDER"
+    closed = run_waike_app(course_id="NOT_A_REAL_COURSE", lesson_id="NOT_A_REAL_COURSE")
+    assert closed["ok"] is False
+    assert closed["error"] == "unknown_course"
 
 
 def test_offline_lessons_include_courses():

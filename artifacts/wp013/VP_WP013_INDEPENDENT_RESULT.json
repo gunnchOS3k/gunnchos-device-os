@@ -1,0 +1,325 @@
+{
+  "ALL_REQUIRED_CI": "GREEN",
+  "DEVICE_OS_104_READY_FOR_EDMUND_MERGE": true,
+  "PRODUCTION_RELEASE_CLAIMED": false,
+  "S0": 0,
+  "S1": 0,
+  "VP_WP013_INDEPENDENT_RESULT": "PASS",
+  "claim_boundary": "Independent digital verification of WP-013 platform proofs only. No CREATOR/WAIKE/GUNNCHAI product-complete claim. No production release.",
+  "evidence_paths": {
+    "claim_split": "artifacts/wp013/independent/claim_split.json",
+    "game_adoption": "artifacts/wp013/independent/game_adoption.json",
+    "game_sdk_evidence": "artifacts/wp013/first_party_game_sdk/ADOPTION_EVIDENCE.json",
+    "godot_runtime_evidence": "artifacts/wp013/first_party_game_sdk/godot_adoption_evidence.json",
+    "realm_runtime_evt": "artifacts/wp013/realm_runtime/evt/RUNTIME_EVIDENCE.json",
+    "realm_runtime_factory": "artifacts/wp013/realm_runtime/factory/RUNTIME_EVIDENCE.json",
+    "realm_runtime_recovery": "artifacts/wp013/realm_runtime/recovery/RUNTIME_EVIDENCE.json",
+    "realms": "artifacts/wp013/independent/realms.json",
+    "sdk_platform": "artifacts/wp013/independent/sdk_platform.json",
+    "verifier_script": "scripts/vp_wp013_independent_verify.py",
+    "vp_result": "artifacts/wp013/VP_WP013_INDEPENDENT_RESULT.json"
+  },
+  "expected_tip_sha": "e05d3edb82a978a6e4d6e1481ba20d0d53305b94",
+  "generated_utc": "2026-08-12T20:57:15Z",
+  "pr": 104,
+  "pr_note": "PR #104 was already MERGED at verification time; independent artifacts recorded on branch for Edmund/record. Do not re-merge.",
+  "production_release_claimed_observed": false,
+  "schema": "gunnchos.wp013.independent_verifier.v1",
+  "sections": {
+    "adoption_reproof": {
+      "FIRST_PARTY_GAME_SDK_ADOPTION_PASS": true,
+      "PRODUCTION_RELEASE_CLAIMED": false,
+      "accepted_sha_required": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+      "claim_boundary": "Digital host Godot 4.5 export-pack + gunnchSDK install/run of Pedestrian Pursuit at an accepted main SHA. Not a shipping store build, not Android APK certification, not PRODUCTION signed. PRODUCTION_RELEASE_CLAIMED=false.",
+      "error": null,
+      "evidence_path": "artifacts/wp013/first_party_game_sdk/ADOPTION_EVIDENCE.json",
+      "ok": true,
+      "python_manifest_wrapper_rejected": true,
+      "rejects": [],
+      "steps": {
+        "game_state": {
+          "input_events": 2,
+          "mode_label": "Quick Race",
+          "ok": true,
+          "process_pid": 33763,
+          "save_exists": true
+        },
+        "godot_export": {
+          "export_mode": "export-pack",
+          "godot_version": "4.5.stable.official.876b29033",
+          "ok": true,
+          "pck_sha256": "006d8de69cacba5e8399261cdaf8d160b8fb8817ed4e030923042ccf6329a612",
+          "pck_size_bytes": 28902492
+        },
+        "incompatible_rejection": {
+          "ok": true
+        },
+        "install_v1": {
+          "ok": true
+        },
+        "launch_runtime": {
+          "exit_code": 0,
+          "godot_pid_marker": true,
+          "harness_pass_marker": true,
+          "ok": true
+        },
+        "package_v1": {
+          "ok": true
+        },
+        "uninstall": {
+          "ok": true
+        },
+        "update": {
+          "ok": true
+        },
+        "worktree": {
+          "ok": true
+        }
+      },
+      "worktree_meta": {
+        "accepted_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+        "head_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+        "ok": true,
+        "reused": false,
+        "worktree": "/private/tmp/wp013-vp-device-os-e05d3ed/.cache/wp013_game_sdk/pp_accepted"
+      }
+    },
+    "ci": {
+      "all_required_green": true,
+      "failures_or_incomplete": [],
+      "names_success": [
+        "G04 privileged netns + virtual audio (E4 reference)",
+        "Scorecard schema + fixtures",
+        "Supporting subset + S0/S1 merge gate",
+        "accessibility",
+        "ai-system-api",
+        "atomic-update-rollback",
+        "audio-media",
+        "compatibility-corpus",
+        "connectivity-5ga",
+        "continuity",
+        "cross-product-callers",
+        "digital-lock",
+        "driver-hal",
+        "fabric",
+        "files-storage",
+        "frontier-os-base",
+        "gate1",
+        "graphics-compositor",
+        "gunnchplay",
+        "identity",
+        "local-ai",
+        "mdm",
+        "ntn-migration",
+        "package",
+        "performance-power",
+        "profile-drift-gate",
+        "prove-phase-xiv",
+        "prove-phase-xv",
+        "prove-stage2",
+        "qemu-guest-path",
+        "reality",
+        "recovery",
+        "sandbox-security",
+        "sdk",
+        "security-regression",
+        "shell-profiles",
+        "spatial",
+        "stage2-reproof",
+        "support-lifecycle",
+        "test",
+        "user-experience"
+      ],
+      "ok": true,
+      "total_checks": 41
+    },
+    "claim_split": {
+      "FIRST_PARTY_GAME_SDK_ADOPTION_allowed_as_platform_proof": true,
+      "FIRST_PARTY_SDK_ADOPTION_allowed_as_platform_proof": true,
+      "PRODUCTION_RELEASE_CLAIMED_implementer": false,
+      "forbidden_claims_absent_from_exit_tokens": true,
+      "forbidden_claims_not_asserted_true": true,
+      "forbidden_present": [],
+      "forbidden_true_hits": [],
+      "must_remain_false": {
+        "CREATOR_STUDIO_PRODUCT_COMPLETE": false,
+        "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+        "PRODUCTION_RELEASE_CLAIMED": false,
+        "WAIKE_APP_PRODUCT_COMPLETE": false
+      },
+      "ok": true,
+      "sdk_apps_classification": {
+        "creator_studio": {
+          "classification": "thin_client_D4_D5_foundation",
+          "main_lines": 29,
+          "notes": "First-party SDK package caller proving build/package/install/run \u2014 not CREATOR/WAIKE/GUNNCHAI product-complete.",
+          "path": "sdk/apps/creator_studio",
+          "product_complete": false
+        },
+        "gunnchai_tutor": {
+          "classification": "thin_client_D4_D5_foundation",
+          "main_lines": 41,
+          "notes": "First-party SDK package caller proving build/package/install/run \u2014 not CREATOR/WAIKE/GUNNCHAI product-complete.",
+          "path": "sdk/apps/gunnchai_tutor",
+          "product_complete": false
+        },
+        "pedestrian_pursuit": {
+          "classification": "godot_adoption_harness_only",
+          "notes": "Harness + packaging path for FIRST_PARTY_GAME_SDK_ADOPTION platform proof.",
+          "path": "sdk/apps/pedestrian_pursuit",
+          "product_complete": false
+        },
+        "waike_learning": {
+          "classification": "thin_client_D4_D5_foundation",
+          "main_lines": 27,
+          "notes": "First-party SDK package caller proving build/package/install/run \u2014 not CREATOR/WAIKE/GUNNCHAI product-complete.",
+          "path": "sdk/apps/waike_learning",
+          "product_complete": false
+        }
+      },
+      "sdk_examples_are_tutorials_only": [
+        "creator_stub",
+        "gunnchai_client_stub",
+        "waike_stub"
+      ]
+    },
+    "image_realms": {
+      "builds": {
+        "evt": {
+          "PRODUCTION_RELEASE_CLAIMED": false,
+          "build_ok": true,
+          "claim_boundary": "EVT realm for hardware bring-up / validation. Signed with DEV keys only, anti-rollback counter enforced, no production keys or real eSIM/factory credentials present. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+          "key_source": null,
+          "production_private_keys_present": null,
+          "rootfs_sha256": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
+          "signed": true,
+          "status": "ACTIVE_DEV",
+          "verify_ok": true
+        },
+        "factory": {
+          "PRODUCTION_RELEASE_CLAIMED": false,
+          "build_ok": true,
+          "claim_boundary": "FACTORY_PROVISIONING_IMAGE runs only on line stations. All identities, MAC ranges, and eSIM credentials issued through this realm in this repo are DEV/TEST dummies (see factory_provisioning module claim boundary). No production key material and no real eSIM/carrier credentials exist here. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+          "key_source": null,
+          "production_private_keys_present": null,
+          "rootfs_sha256": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+          "signed": true,
+          "status": "ACTIVE_DEV",
+          "verify_ok": true
+        },
+        "production": {
+          "PRODUCTION_RELEASE_CLAIMED": false,
+          "build_ok": true,
+          "claim_boundary": "PRODUCTION_SHIPPING_IMAGE_DEFINITION is a complete CONTRACT, not a release. status is always NOT_RELEASED in this repository. trust_roots.key_source is \"none\" \u2014 no production signing key exists, is generated, or is referenced anywhere in this repo. `gunnchctl os-image build production` refuses to run without --unsigned and always emits signing_realm=NOT_RELEASED, claim_boundary=this text, and PRODUCTION_RELEASE_CLAIMED=false. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+          "key_source": "none",
+          "production_private_keys_present": false,
+          "rootfs_sha256": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
+          "signed": false,
+          "status": "NOT_RELEASED",
+          "verify_ok": true
+        },
+        "recovery": {
+          "PRODUCTION_RELEASE_CLAIMED": false,
+          "build_ok": true,
+          "claim_boundary": "RECOVERY_IMAGE is the last-resort boot target. Anti-rollback enforced, no dev shell by default, no production keys. Validated only through virtual/simulated boot-failure and rollback tests in this repo, not on physical hardware. Digital rootfs-tarball build, not a physical disk image. Kernel/initramfs are reused from the shared bootable_reference artifacts when present locally and are never realm-specific compiled binaries. PRODUCTION_SHIPPING_IMAGE_DEFINITION builds are always unsigned and stamped NOT_RELEASED regardless of the --unsigned flag.",
+          "key_source": null,
+          "production_private_keys_present": null,
+          "rootfs_sha256": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa",
+          "signed": true,
+          "status": "ACTIVE_DEV",
+          "verify_ok": true
+        }
+      },
+      "no_production_key": true,
+      "ok": true,
+      "production_not_released": true,
+      "production_unsigned": true,
+      "rootfs_fingerprints": {
+        "evt": "6cadf59506c85cf67c95e31d3221b3cba5fd6c74f317ae4c0872f66b57beaf96",
+        "factory": "97402964dbad48784a8cef4426c7669bf9f5df876bf9cb5d5a270e007409e0ad",
+        "production": "dcb7ef351eac5376a5870ee63de0e96910475b9902f7e3e0957b474def41118d",
+        "recovery": "8aaeb1b6ec7c74590f6e7abd8c2dddd22b9a34199504a44ed47350c8c1a950aa"
+      },
+      "rootfs_fingerprints_differ": true,
+      "runtime": {
+        "EVT_IMAGE_RUNTIME_PASS": true,
+        "FACTORY_IMAGE_RUNTIME_PASS": true,
+        "IMAGE_REALM_BEHAVIORAL_SEPARATION_PASS": true,
+        "IMAGE_REALM_POLICY_SEPARATION_PASS": true,
+        "PRODUCTION_RELEASE_CLAIMED": null,
+        "RECOVERY_IMAGE_RUNTIME_PASS": true,
+        "behavior_fingerprints": {
+          "evt": "evt:f0:r1:g1:n0:cevt",
+          "factory": "factory:f1:r0:g0:n1:cfactory-line",
+          "recovery": "recovery:f0:r1:g0:n1:crecovery"
+        },
+        "behavior_fingerprints_differ": true
+      },
+      "validate": {
+        "IMAGE_REALMS_DIGITALLY_COMPLETE": true,
+        "ok": true
+      }
+    },
+    "sdk_platform": {
+      "FIRST_PARTY_SDK_ADOPTION_PASS": true,
+      "apps": {
+        "creator_studio": {
+          "app_dir": "sdk/apps/creator_studio",
+          "build_ok": true,
+          "crash_report_path": null,
+          "exit_code": 0,
+          "install_ok": true,
+          "log_ok": true,
+          "run_ok": true,
+          "signed": true
+        },
+        "gunnchai_tutor": {
+          "app_dir": "sdk/apps/gunnchai_tutor",
+          "build_ok": true,
+          "crash_report_path": null,
+          "exit_code": 0,
+          "install_ok": true,
+          "log_ok": true,
+          "run_ok": true,
+          "signed": true
+        },
+        "waike_learning": {
+          "app_dir": "sdk/apps/waike_learning",
+          "build_ok": true,
+          "crash_report_path": null,
+          "exit_code": 0,
+          "install_ok": true,
+          "log_ok": true,
+          "run_ok": true,
+          "signed": true
+        }
+      },
+      "compat_gate_reject_ok": true,
+      "compat_selfcheck": {
+        "API_COMPATIBILITY_GATE_EVALUATED": true,
+        "failures": [],
+        "ok": true,
+        "os_version": "0.3.0",
+        "platform_api_version": "1.1.0",
+        "warnings": []
+      },
+      "crash_path_observed": true,
+      "logs_ok": true,
+      "ok": true,
+      "uninstall_ok": true,
+      "update_ok": true
+    },
+    "severity": {
+      "S0": 0,
+      "S1": 0,
+      "notes": [
+        "Golden Journeys Supporting subset + S0/S1 merge gate SUCCESS on tip; no open S0/S1 in WP-013 evidence."
+      ],
+      "ok": true,
+      "source": "ci_merge_gate_success_plus_artifact_scan"
+    }
+  },
+  "tip_matches_expected": true,
+  "tip_sha": "e05d3edb82a978a6e4d6e1481ba20d0d53305b94",
+  "work_package": "WP-013"
+}

@@ -1,0 +1,146 @@
+{
+  "schema": "gunnchos.device_lab.wp011r.remaining_digital_gaps.v1",
+  "wave": "WP-011R.2",
+  "audited_at_utc": "2026-08-12T01:49:54Z",
+  "base_sha": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "claim_firewall": {
+    "SILICON_EXACT_EMULATION": false,
+    "VF4": "PHYSICAL_PENDING",
+    "VF5": "PHYSICAL_PENDING",
+    "VF6": "PHYSICAL_PENDING",
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "PRODUCTION_READY": false,
+    "DEVICE_LAB_DEVELOPMENT_GUEST": "Alpine/dev guest is DEVICE_LAB_DEVELOPMENT_GUEST \u2014 not a shipping image",
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": "Interactive guest scaffolding \u2014 development guest, never a shipping image",
+    "SHIPPING_IMAGE": false
+  },
+  "required_guest_for_in_guest_proofs": {
+    "note": "LIVE_GUNNCHOS_VISUAL_PASS / DSXL_DUAL_COMPOSITOR_UX_PASS / RING_TO_REAL_APP_STATE_MUTATION_PASS can never be earned on the slim Alpine initramfs-only guest (os_build/device_lab_guest/) because it has no compositor, no persistent rootfs, and no installable apps. The required path forward for all three is the Interactive Development Guest (os_build/device_lab_interactive_guest/, DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true).",
+    "readme": "os_build/device_lab_interactive_guest/README.md",
+    "scaffolding_added_this_wave": true,
+    "scaffolding_earns_no_pass_token": true,
+    "rootfs_build_attempted_on_mac": true,
+    "rootfs_build_result_on_mac": "HONEST_FAIL_NO_DOCKER_OR_CHROOT_BINFMT",
+    "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
+  },
+  "pass_tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
+    "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
+    "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
+    "RING_GUEST_UINPUT_MOUSEPAD_MUTATION": true,
+    "ECO010_SOAK_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "gaps": [
+    {
+      "id": "GAP-FOUR-GAME-RUNTIME",
+      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "EARNED: owner accepted-main artifacts in Interactive Guest (Godot anime/pedestrian; Archive Chromium native save; Beat Link Socket.IO)",
+      "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
+      "pass": true,
+      "digital_earned": true,
+      "required_path": "os_build/device_lab_interactive_guest (interactive_guest) + owner sibling real build systems on accepted mains"
+    },
+    {
+      "id": "GAP-LIVE-VISUAL",
+      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "Independent PASS: IEND-complete before/after PNGs differ; LIVEPROOF OCR-visible; document marker; not host-FB-only.",
+      "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
+      "pass": true,
+      "digital_earned": true,
+      "required_path": "os_build/device_lab_interactive_guest (interactive_guest)"
+    },
+    {
+      "id": "GAP-DSXL-COMPOSITOR-UX",
+      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "EARNED: filter-aware halves + 2\u21921\u21922 reboot reconfig; consistent with DSXL_COMPOSITOR_UX_EVIDENCE.json",
+      "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+      "pass": true,
+      "digital_earned": true,
+      "required_path": "os_build/device_lab_interactive_guest (interactive_guest)"
+    },
+    {
+      "id": "GAP-RING-APP-MUTATION",
+      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "EARNED: ODT RINGMUTATION + browser delta + Godot save_version; diagnostic HTML/game_state LAB_DIAGNOSTIC_ONLY",
+      "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
+      "pass": true,
+      "digital_earned": true,
+      "required_path": "os_build/device_lab_interactive_guest (interactive_guest)"
+    },
+    {
+      "id": "GAP-ECO010-SOAK",
+      "token": "ECO-010",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "ECO-010 1800.05s soak not shortened / not dry-check; inject/recover 10/10. Caveat: cleanup qemu=null and rss_mb flat 17.27 (Lab session members). Does not unlock master alone.",
+      "evidence": "artifacts/wp011r/ECO010_SOAK.json"
+    }
+  ],
+  "independent_score": {
+    "script": "scripts/device_lab_score_independent.py",
+    "output": "artifacts/wp011r/DEVICE_LAB_SCORE_INDEPENDENT.json",
+    "hardcoded_tens_forbidden": true,
+    "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
+  },
+  "master_complete": false,
+  "note": "WP-011R.2 owner-artifact FOUR_GAME attempt. Historical #103 not revived as final. SHIPPING_IMAGE=false; VF4-6 PHYSICAL_PENDING.",
+  "independent_audit": {
+    "source": "independent_verifier_adversarial",
+    "accepted_tip_audited": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
+    "verdict": "FAIL_DEMOTION_DSXL_RING",
+    "five_gate_digital_and": false,
+    "shipping_master": false,
+    "LIVE_PASS": true,
+    "note": "Prefer FAIL over false PASS. Cursor never merges. WP-001 DO_NOT_START."
+  },
+  "score_inflation_risk": [
+    "live_visual_interaction grade inflation from RFB banner or blank screendump noise",
+    "DSXL UX inflation from guest_drm enum labeled as compositor_surface",
+    "FOUR_GAME localStorage harness save vs native game save; Godot-web-fallback as aggregate PASS",
+    "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
+    "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
+  ],
+  "updated_at_utc": "2026-08-13T12:34:11Z",
+  "cycle3b_continue": {
+    "LIVE": false,
+    "DSXL": true,
+    "RING": true,
+    "FOUR": true,
+    "ECO010": true,
+    "GUEST_DUAL": true
+  },
+  "closed_this_cycle": [
+    "LIVE typed_marker/document + IEND PNGs same-run (independent PASS)",
+    "FOUR_GAME owner-artifact Interactive Guest PASS"
+  ],
+  "remaining": [],
+  "five_gate_digital_and": true,
+  "shipping_master": false,
+  "independent_must_reverify": [
+    "DSXL_DUAL_COMPOSITOR_UX_PASS",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS"
+  ],
+  "shipping_gaps_remain": true,
+  "complete_false": true,
+  "assessed_tip": "wp011r2-owner-four-game",
+  "INDEPENDENT_PASS": true,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "independent": {
+    "INDEPENDENT_PASS": true,
+    "reason": "five_gate_digital_and true after FOUR_GAME owner-artifact re-earn"
+  }
+}

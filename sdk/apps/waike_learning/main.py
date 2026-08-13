@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Real WAIKE Learning first-party package entry (18-course seeds, not stub)."""
+"""Real WAIKE Learning first-party package entry (18-course seeds, not stub).
+
+gunnchSDK consumer: uses sandbox env from PackageRunner (GUNNCHOS_SANDBOX_DATA_DIR,
+permissions, app id). Does not bypass the sandbox.
+"""
 from __future__ import annotations
 
 import json
@@ -27,6 +31,8 @@ def main() -> int:
     if "--course" in args:
         course = args[args.index("--course") + 1]
         lesson = course
+    if "--lesson" in args:
+        lesson = args[args.index("--lesson") + 1]
     result = run_waike_app(role=role, lesson_id=lesson, course_id=course, crash_probe=crash)
     data_dir = Path(os.environ.get("GUNNCHOS_SANDBOX_DATA_DIR", "."))
     out = data_dir / "waike_learning_run.json"

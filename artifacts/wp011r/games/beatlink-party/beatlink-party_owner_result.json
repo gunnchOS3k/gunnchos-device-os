@@ -1,0 +1,140 @@
+{
+  "game_id": "beatlink-party",
+  "owner_repo": "gunnchOS3k/beatlink-party",
+  "accepted_main_sha": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+  "runtime_class": "GUEST_CHROMIUM_WAYLAND_PLUS_SOCKETIO",
+  "package_format": "vite_web_dist_plus_node_socketio_server",
+  "HOST_PLAYWRIGHT_REJECTED": true,
+  "http_server_alone_accepted": false,
+  "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
+  "PROBE_FACADE_REJECTED": true,
+  "required_service_topology": [
+    "Express+Socket.IO :3001",
+    "Chromium web"
+  ],
+  "ok": true,
+  "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+  "socketio_prep": {
+    "ok": true,
+    "stdout": "cleaned\nPREP_OK\nNODE_BOOT v20.18.1\n",
+    "stderr": "",
+    "returncode": 0
+  },
+  "socketio_server": {
+    "ok": true,
+    "pid": 873,
+    "started": "beatlink-socketio",
+    "reason": null
+  },
+  "service_topology": {
+    "socketio_health_ok": true,
+    "health_stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}",
+    "room_stdout": "{\"code\":\"CE585\",\"room\":{\"code\":\"CE585\",\"phase\":\"lobby\",\"hostId\":\"http-1786624429767\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
+    "log": "/var/log/gunnchos-beatlink-server.log"
+  },
+  "socketio_server_health": {
+    "ok": true,
+    "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"CE585\",\"room\":{\"code\":\"CE585\",\"phase\":\"lobby\",\"hostId\":\"http-1786624429767\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"CE585\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=CE585\",\"qrText\":\"beatlink:join:CE585|http://localhost:5173/join?code=CE585\",\"expiresAt\":1786631629767},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786624429767,\"expiresAt\":1786631629767,\"hostToken\":\"775a654c-c906-4859-9854-294f90530ba7\"}}\n",
+    "returncode": 0
+  },
+  "lab_observe_server": {
+    "ok": true,
+    "already": true,
+    "http_code": "200"
+  },
+  "chromium_launch": {
+    "ok": true,
+    "pid": 924,
+    "started": "chromium-beatlink-party",
+    "wayland": "wayland-0",
+    "window_display": "wayland",
+    "url": "http://127.0.0.1:18765/host",
+    "reason": null
+  },
+  "socketio_client_probe": {
+    "ok": true,
+    "stdout": "{\"ok\":true,\"id\":\"A6j7DKtyokujR0-sAAAD\",\"connected\":true}\n",
+    "stderr": "",
+    "returncode": 0
+  },
+  "observe_LAB_DIAGNOSTIC_ONLY": {
+    "ok": true,
+    "path": "/var/lib/gunnchos/games/beatlink-party/observe.json",
+    "lines": [
+      "{",
+      "  \"LAB_DIAGNOSTIC_ONLY\": true,",
+      "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
+      "  \"game_id\": \"beatlink-party\",",
+      "  \"input\": 0,",
+      "  \"ts\": 1786590578790,",
+      "  \"native_localStorage\": {",
+      "    \"beatlink_host\": null,",
+      "    \"beatlink_player\": null,",
+      "    \"beatlink_audience\": null",
+      "  },",
+      "  \"has_owner_hook\": false,",
+      "  \"event\": \"observe\",",
+      "  \"received_at\": 1786590578.804099",
+      "}"
+    ]
+  },
+  "room_api_state": {
+    "ok": true,
+    "path": "/var/lib/gunnchos/games/beatlink-party/room_create.json",
+    "lines": [
+      "{\"code\":\"CE585\",\"room\":{\"code\":\"CE585\",\"phase\":\"lobby\",\"hostId\":\"http-1786624429767\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"CE585\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=CE585\",\"qrText\":\"beatlink:join:CE585|http://localhost:5173/join?code=CE585\",\"expiresAt\":1786631629767},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786624429767,\"expiresAt\":1786631629767,\"hostToken\":\"775a654c-c906-4859-9854-294f90530ba7\"}}"
+    ]
+  },
+  "room_api_not_accepted_as_save": true,
+  "leveldb_scrape_LAB_DIAGNOSTIC_ONLY": {
+    "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+    "stdout": "beatlink_hostH\n"
+  },
+  "native_keys": {
+    "ok": true,
+    "keys_found": [
+      "beatlink_host"
+    ],
+    "scrape_hit": true,
+    "room_api_not_accepted_as_save": true
+  },
+  "runtime_process": {
+    "chromium_alive": true,
+    "socketio_alive": true,
+    "chromium": {
+      "alive": true,
+      "pid": 924,
+      "ps": "    924 S<l  /usr/lib/chromium/chromium --show-component-extension-options --enable-gpu-rasterization --no-default-browser-check --disable-pings --media-router=0 --disable-dev-shm-usage --enable-remote-extensions --load-extension= http://127.0.0.1:18765/host --no-sandbox --disable-gpu-sandbox --ozone-platform=wayland --enable-features=UseOzonePlatform --user-data-dir=/root/.gunnchos-chromium-beatl",
+      "zombie_rejected": false,
+      "stat": "S<l"
+    },
+    "socketio": {
+      "alive": true,
+      "pid": 873,
+      "ps": "    873 Sl   /root/owner-games/beatlink-node/node dist/index.js\n",
+      "zombie_rejected": false,
+      "stat": "Sl"
+    }
+  },
+  "input": {
+    "count_observed": 0,
+    "injected": true
+  },
+  "state_mutation": true,
+  "save": {
+    "ok": true,
+    "native_keys_observed": true,
+    "room_api_persisted": false,
+    "note": "Native beatlink_* localStorage required; room API create is not save"
+  },
+  "telemetry": {
+    "BEATLINK_TELEMETRY": true,
+    "socketio_client_connected": true,
+    "server_log": "/var/log/gunnchos-beatlink-server.log"
+  },
+  "shutdown": {
+    "chromium": true,
+    "socketio_server": true
+  },
+  "note": "Owner Beat Link Socket.IO + Chromium alive + native beatlink_* keys"
+}
