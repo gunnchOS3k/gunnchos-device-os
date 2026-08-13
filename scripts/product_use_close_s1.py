@@ -71,7 +71,7 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
     puts = {}
     for name in ("learner.html", "teacher.html", "learner_data.json", "teacher_data.json", "MANIFEST.json"):
         puts[name] = _b64_put(session, f"{remote_root}/{name}", (pack_dir / name).read_bytes())
-    # Collector: learner POST /state, teacher POST /teacher; serves HTML.
+    # Collector with role ACL: learner cannot GET teacher HTML/keys/grades without X-WAIKE-Role: teacher.
     _agent_call(
         session,
         "process_run",
@@ -96,27 +96,46 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
             "import json,http.server,pathlib\n"
             "R=pathlib.Path('/var/lib/gunnchos/waike')\n"
             "class H(http.server.BaseHTTPRequestHandler):\n"
+            "  def _role(self):\n"
+            "    return (self.headers.get('X-WAIKE-Role') or '').strip().lower()\n"
+            "  def _forbid(self):\n"
+            "    self.send_response(403); self.send_header('Content-Type','text/plain');\n"
+            "    b=b'forbidden'; self.send_header('Content-Length',str(len(b))); self.end_headers(); self.wfile.write(b)\n"
             "  def _send(self,data,ctype='text/html'):\n"
             "    b=data if isinstance(data,bytes) else data.encode();\n"
             "    self.send_response(200);self.send_header('Content-Type',ctype);\n"
             "    self.send_header('Content-Length',str(len(b)));self.end_headers();self.wfile.write(b)\n"
             "  def do_GET(self):\n"
-            "    p=self.path.split('?')[0]\n"
-            "    if p in ('/','/learner','/learner.html'): self._send((R/'learner.html').read_bytes())\n"
-            "    elif p in ('/teacher','/teacher.html'): self._send((R/'teacher.html').read_bytes())\n"
-            "    elif p.endswith('.json'):\n"
-            "      fp=R/p.lstrip('/'); self._send(fp.read_bytes() if fp.exists() else b'{}','application/json')\n"
-            "    else: self._send(b'ok')\n"
+            "    p=self.path.split('?')[0]; role=self._role()\n"
+            "    if p in ('/','/learner','/learner.html'): self._send((R/'learner.html').read_bytes()); return\n"
+            "    if p in ('/learner_data.json',):\n"
+            "      self._send((R/'learner_data.json').read_bytes(),'application/json'); return\n"
+            "    if p in ('/teacher','/teacher.html','/teacher_data.json','/teacher/keys','/grades.json'):\n"
+            "      if role!='teacher': self._forbid(); return\n"
+            "      if p=='/teacher/keys':\n"
+            "        td=json.loads((R/'teacher_data.json').read_text() if (R/'teacher_data.json').exists() else '{}')\n"
+            "        keys=td.get('teacher_answer_keys_for_quiz') or {}\n"
+            "        self._send(json.dumps(keys).encode(),'application/json'); return\n"
+            "      if p in ('/teacher','/teacher.html'): self._send((R/'teacher.html').read_bytes()); return\n"
+            "      fp=R/( 'teacher_data.json' if 'teacher_data' in p else 'grades.json')\n"
+            "      self._send(fp.read_bytes() if fp.exists() else b'{}','application/json'); return\n"
+            "    if p.endswith('.json'):\n"
+            "      # Deny unknown JSON (prevents casual key fetch by path guessing).\n"
+            "      self._forbid(); return\n"
+            "    self._send(b'ok')\n"
             "  def do_POST(self):\n"
             "    n=int(self.headers.get('Content-Length') or 0); body=self.rfile.read(n)\n"
             "    try: doc=json.loads(body.decode() or '{}')\n"
             "    except Exception: doc={'raw':body.decode('utf-8','replace')}\n"
             "    if self.path.startswith('/teacher'):\n"
+            "      if self._role()!='teacher': self._forbid(); return\n"
             "      p=R/'teacher_state.json'; cur=json.loads(p.read_text() if p.exists() else '{}')\n"
             "      ev=cur.setdefault('events',[]); ev.append(doc); p.write_text(json.dumps(cur))\n"
             "      if doc.get('kind')=='grade_fixture':\n"
             "        g=R/'grades.json'; gg=json.loads(g.read_text() if g.exists() else '{}')\n"
-            "        gg['last']=doc; gg['graded']=True; g.write_text(json.dumps(gg))\n"
+            "        # Never persist raw answer keys into grades.json for learner-visible paths.\n"
+            "        safe={k:doc.get(k) for k in ('kind','learner_choice','rubric','course_id','ts') if k in doc}\n"
+            "        safe['graded']=True; gg['last']=safe; gg['graded']=True; g.write_text(json.dumps(gg))\n"
             "    else:\n"
             "      p=R/'learner_state.json'; cur=json.loads(p.read_text() if p.exists() else '{}')\n"
             "      ev=cur.setdefault('events',[]); ev.append(doc); cur['last']=doc; p.write_text(json.dumps(cur))\n"
@@ -130,10 +149,35 @@ def _deploy_waike_server(session: Any, pack_dir: Path) -> dict[str, Any]:
     curl = _agent_call(
         session,
         "process_run",
-        argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/learner.html || echo fail"],
-        timeout_sec=15.0,
+        argv=[
+            "bash",
+            "-lc",
+            "set +e; "
+            "L=$(curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/learner.html || echo fail); "
+            "T403=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher.html || echo fail); "
+            "K403=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher/keys || echo fail); "
+            "TOK=$(curl -fsS -o /dev/null -w '%{http_code}' -H 'X-WAIKE-Role: teacher' "
+            "http://127.0.0.1:18767/teacher.html || echo fail); "
+            "echo L=$L T403=$T403 K403=$K403 TOK=$TOK",
+        ],
+        timeout_sec=20.0,
     )
-    return {"puts": puts, "start": start, "curl": curl, "remote_root": remote_root}
+    acl_out = curl.get("stdout") or ""
+    acl_ok = (
+        "L=200" in acl_out
+        and "T403=403" in acl_out
+        and "K403=403" in acl_out
+        and "TOK=200" in acl_out
+    )
+    return {
+        "puts": puts,
+        "start": start,
+        "curl": curl,
+        "remote_root": remote_root,
+        "role_acl_ok": acl_ok,
+        "role_acl_stdout": acl_out[-400:],
+        "surface": "fixture_html_collector_not_shipping_waike",
+    }
 
 
 def _chromium(session: Any, name: str, url: str, udd: str) -> dict[str, Any]:
@@ -174,18 +218,42 @@ def _hid_activate(session: Any) -> None:
 
 
 def run_g11(session: Any) -> dict[str, Any]:
-    out: dict[str, Any] = {"persona": "G11", "observation_class": "GUEST_OBSERVED"}
-    # Save assignment + quiz via HID on learner page
+    """Fixture learner pack evidence — NOT shipping WAIKE product UI.
+
+    Honesty rules (post independent FAIL):
+    - quiz PASS only if this-run HID delta includes quiz_submit (no curl inflation / stale state)
+    - offline labeled as lo-interface local-cache probe unless real link_down/up is proven
+    - surface labeled fixture HTML + collector
+    """
+    out: dict[str, Any] = {
+        "persona": "G11",
+        "observation_class": "GUEST_OBSERVED",
+        "shipping_waike_product": False,
+        "surface": "fixture_html_pack_plus_local_collector",
+    }
     before = _read_json_logs(session, "/var/lib/gunnchos/waike/learner_state.json")
-    _chromium(session, "chromium-waike-learner", "http://127.0.0.1:18767/learner.html", "/root/.gunnchos-chromium-waike-learner")
+    before_events = list(((before.get("data") or {}).get("events") or []))
+    before_n = len(before_events)
+    _chromium(
+        session,
+        "chromium-waike-learner",
+        "http://127.0.0.1:18767/learner.html",
+        "/root/.gunnchos-chromium-waike-learner",
+    )
     _hid_activate(session)
-    # Tab to buttons and activate save + submit (page order: save-assignment then submit-quiz)
     for seq in (("tab",) * 6 + ("ret",), ("tab",) * 2 + ("ret",), ("spc", "ret")):
         for key in seq:
             _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
             time.sleep(0.12)
         time.sleep(0.5)
-    # Also POST from inside guest to prove path even if focus misses buttons.
+    after_hid = _read_json_logs(session, "/var/lib/gunnchos/waike/learner_state.json")
+    after_hid_events = list(((after_hid.get("data") or {}).get("events") or []))
+    hid_delta = after_hid_events[before_n:]
+    hid_kinds = [e.get("kind") for e in hid_delta]
+    hid_assignment = "assignment_draft" in hid_kinds
+    hid_quiz = "quiz_submit" in hid_kinds
+
+    # Curl/process_run is observe-only / non-UI — must NOT earn quiz or lesson PASS.
     curl_save = _agent_call(
         session,
         "process_run",
@@ -194,21 +262,13 @@ def run_g11(session: Any) -> dict[str, Any]:
             "-lc",
             "curl -fsS -X POST http://127.0.0.1:18767/state "
             "-H 'Content-Type: application/json' "
-            "-d '{\"kind\":\"assignment_draft\",\"course_id\":\"GENERAL_IT\",\"lesson_id\":\"GENERAL_IT-w01\",\"text\":\"schoolwork-draft\"}' "
-            "&& curl -fsS -X POST http://127.0.0.1:18767/state "
-            "-H 'Content-Type: application/json' "
-            "-d '{\"kind\":\"quiz_submit\",\"course_id\":\"GENERAL_IT\",\"quiz_id\":\"GENERAL_IT-q01\",\"item_id\":\"git-w1-1\",\"choice_index\":0}' "
-            "&& echo OK",
+            "-d '{\"kind\":\"assignment_draft\",\"course_id\":\"GENERAL_IT\",\"lesson_id\":\"GENERAL_IT-w01\","
+            "\"text\":\"curl-non-ui-observe-only\"}' && echo CURL_OK",
         ],
         timeout_sec=20.0,
     )
-    after = _read_json_logs(session, "/var/lib/gunnchos/waike/learner_state.json")
-    events = ((after.get("data") or {}).get("events") or [])
-    kinds = [e.get("kind") for e in events]
-    lesson_ok = "assignment_draft" in kinds and "quiz_submit" in kinds
 
-    # Offline: prove local WAIKE without mutating routing/DNS (those stranded prior agent calls).
-    # External probe forced via loopback so WAN is not required/assumed.
+    # Offline: honest lo-interface local-cache probe (NOT link_down / link_up).
     offline = _agent_call(
         session,
         "process_run",
@@ -220,53 +280,22 @@ def run_g11(session: Any) -> dict[str, Any]:
             "EXT=$(curl -fsS --connect-timeout 2 --interface lo https://example.com >/dev/null && echo EXTERNAL_OK || echo EXTERNAL_BLOCKED); "
             "STATE=$(test -s /var/lib/gunnchos/waike/learner_state.json && echo STATE_PRESENT || echo STATE_MISSING); "
             "PACK=$(test -s /var/lib/gunnchos/waike/learner.html && echo PACK_PRESENT || echo PACK_MISSING); "
-            "echo LOCAL=$LOCAL; echo $EXT; echo $STATE; echo $PACK; "
-            "python3 - <<'PY'\n"
-            "import json,pathlib\n"
-            "d=json.loads(pathlib.Path('/var/lib/gunnchos/waike/learner_state.json').read_text())\n"
-            "kinds=[e.get('kind') for e in d.get('events') or []]\n"
-            "print('HAS_QUIZ', 'quiz_submit' in kinds)\n"
-            "PY",
+            "echo LOCAL=$LOCAL; echo $EXT; echo $STATE; echo $PACK; echo METHOD=lo_interface_local_cache_probe",
         ],
         timeout_sec=45.0,
     )
     offline_out = offline.get("stdout") or ""
-    offline_ok = (
+    offline_probe_ok = (
         "LOCAL=200" in offline_out
         and "STATE_PRESENT" in offline_out
         and "PACK_PRESENT" in offline_out
         and "EXTERNAL_BLOCKED" in offline_out
-        and "HAS_QUIZ True" in offline_out
     )
+    # Demote: do not claim offline PASS as link_down journey.
+    offline_ok = False
+    reconnect_ok = False
+    reconnect_out = "DEMOTED:no_link_down_so_no_link_up_reconnect"
 
-    reconnect = _agent_call(
-        session,
-        "process_run",
-        argv=[
-            "bash",
-            "-lc",
-            "set +e; "
-            "curl -fsS -o /dev/null -w 'HTTP=%{http_code}\\n' http://127.0.0.1:18767/learner.html; "
-            "python3 - <<'PY'\n"
-            "import json,pathlib\n"
-            "p=pathlib.Path('/var/lib/gunnchos/waike/learner_state.json')\n"
-            "d=json.loads(p.read_text() if p.exists() else '{}')\n"
-            "kinds=[e.get('kind') for e in d.get('events') or []]\n"
-            "print('KINDS', ','.join(kinds))\n"
-            "print('HAS_QUIZ', 'quiz_submit' in kinds)\n"
-            "print('HAS_ASSIGN', 'assignment_draft' in kinds)\n"
-            "PY",
-        ],
-        timeout_sec=30.0,
-    )
-    reconnect_out = reconnect.get("stdout") or ""
-    reconnect_ok = "HTTP=200" in reconnect_out and "HAS_QUIZ True" in reconnect_out
-
-    # Pull artifact to host evidence
-    pull = _agent_call(session, "logs", path="/var/lib/gunnchos/waike/learner_state.json", lines=100)
-    leak_check = _agent_call(session, "logs", path="/var/lib/gunnchos/waike/learner.html", lines=5)
-    learner_html = "\n".join(leak_check.get("lines") or [])
-    # fuller leak scan via process_run
     leak_scan = _agent_call(
         session,
         "process_run",
@@ -276,42 +305,109 @@ def run_g11(session: Any) -> dict[str, Any]:
             "python3 - <<'PY'\n"
             "import pathlib\n"
             "t=pathlib.Path('/var/lib/gunnchos/waike/learner.html').read_text()\n"
-            "bad=[k for k in ('answer_keys','answer_index','instructor_notes','instructor_keys') if k in t]\n"
+            "bad=[k for k in ('answer_keys','answer_index','instructor_notes','instructor_keys',"
+            "'teacher_answer_keys_for_quiz') if k in t]\n"
             "print('LEAK', ','.join(bad) if bad else 'none')\n"
             "PY",
         ],
         timeout_sec=15.0,
     )
+    # Teacher ACL: learner must not fetch keys.
+    acl = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "set +e; "
+            "echo T=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher.html); "
+            "echo K=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher/keys)",
+        ],
+        timeout_sec=15.0,
+    )
+    acl_out = acl.get("stdout") or ""
+    learner_blocked_teacher = "T=403" in acl_out and "K=403" in acl_out
 
+    lesson_quiz_saved = bool(hid_assignment and hid_quiz)  # HID-only; no curl/stale
     out.update(
         {
-            "ok": bool(lesson_ok and offline_ok and reconnect_ok),
-            "lesson_quiz_saved": lesson_ok,
-            "kinds": kinds,
+            "ok": False,  # shipping WAIKE + HID quiz + real offline not closed
+            "lesson_quiz_saved": lesson_quiz_saved,
+            "hid_assignment_draft": hid_assignment,
+            "hid_quiz_submit": hid_quiz,
+            "hid_delta_kinds": hid_kinds,
+            "curl_non_ui_observe_only": True,
             "curl_save": {k: curl_save.get(k) for k in ("ok", "stdout", "returncode")},
-            "offline": {"ok": offline_ok, "stdout": offline_out[-500:]},
-            "reconnect": {"ok": reconnect_ok, "stdout": reconnect_out[-800:]},
-            "before": before.get("data"),
-            "after": after.get("data"),
-            "pull": pull,
+            "offline": {
+                "ok": offline_ok,
+                "probe_ok_lo_interface": offline_probe_ok,
+                "method": "lo_interface_local_cache_probe",
+                "not_link_down": True,
+                "stdout": offline_out[-500:],
+                "demoted": True,
+            },
+            "reconnect": {
+                "ok": reconnect_ok,
+                "demoted": True,
+                "stdout": reconnect_out,
+                "note": "No link_down was performed; link_up reconnect cannot be claimed",
+            },
+            "before_event_count": before_n,
             "learner_key_leak": "LEAK none" not in (leak_scan.get("stdout") or ""),
             "leak_scan": leak_scan.get("stdout"),
-            "waike_source": "accepted_owner_#43_guest_pack",
-            "note": "In-guest Chromium + local collector; curriculum not re-authored.",
+            "learner_blocked_from_teacher_keys": learner_blocked_teacher,
+            "acl_probe": acl_out,
+            "waike_source": "accepted_owner_#43_content_via_fixture_pack",
+            "note": (
+                "Fixture HTML + collector from #43 content. Not shipping WAIKE. "
+                "Quiz PASS requires HID quiz_submit this run; offline link_down demoted."
+            ),
         }
     )
     return out
 
 
 def run_g13(session: Any) -> dict[str, Any]:
-    out: dict[str, Any] = {"persona": "G13", "REAL_TEACHER_E6": False}
-    _chromium(session, "chromium-waike-teacher", "http://127.0.0.1:18767/teacher.html", "/root/.gunnchos-chromium-waike-teacher")
-    _hid_activate(session)
-    for seq in (("tab",) * 4 + ("ret",), ("tab",) * 2 + ("ret",)):
-        for key in seq:
-            _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-            time.sleep(0.12)
-        time.sleep(0.4)
+    out: dict[str, Any] = {
+        "persona": "G13",
+        "REAL_TEACHER_E6": False,
+        "shipping_waike_product": False,
+        "surface": "fixture_html_pack_plus_local_collector",
+    }
+    # Teacher Chromium must send role header via page fetch; collector serves teacher.html only with ACL.
+    # Open via curl-preflight then Chromium with data URL is awkward — use teacher.html after proving ACL.
+    acl = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "set +e; "
+            "echo DENY=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher.html); "
+            "echo DENY_KEYS=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher/keys); "
+            "echo ALLOW=$(curl -fsS -o /dev/null -w '%{http_code}' -H 'X-WAIKE-Role: teacher' "
+            "http://127.0.0.1:18767/teacher.html); "
+            "echo KEYS=$(curl -fsS -o /dev/null -w '%{http_code}' -H 'X-WAIKE-Role: teacher' "
+            "http://127.0.0.1:18767/teacher/keys)",
+        ],
+        timeout_sec=20.0,
+    )
+    acl_out = acl.get("stdout") or ""
+    role_acl_ok = (
+        "DENY=403" in acl_out
+        and "DENY_KEYS=403" in acl_out
+        and "ALLOW=200" in acl_out
+        and "KEYS=200" in acl_out
+    )
+    # Chromium cannot easily set custom headers for document navigation; teacher UI fetch uses JS headers.
+    # Still open teacher page only after writing a tiny bootstrap that fetches with role header into iframe —
+    # for honesty we label Chromium leg as fixture and require ACL probe PASS separately.
+    _chromium(
+        session,
+        "chromium-waike-teacher",
+        "http://127.0.0.1:18767/learner.html",  # do not open teacher.html without role
+        "/root/.gunnchos-chromium-waike-teacher",
+    )
     curl = _agent_call(
         session,
         "process_run",
@@ -319,37 +415,44 @@ def run_g13(session: Any) -> dict[str, Any]:
             "bash",
             "-lc",
             "curl -fsS -X POST http://127.0.0.1:18767/teacher -H 'Content-Type: application/json' "
+            "-H 'X-WAIKE-Role: teacher' "
             "-d '{\"kind\":\"assign_fixture\",\"cohort\":\"cohort-A\",\"quiz_id\":\"GENERAL_IT-q01\"}' && "
             "curl -fsS -X POST http://127.0.0.1:18767/teacher -H 'Content-Type: application/json' "
-            "-d '{\"kind\":\"grade_fixture\",\"learner_choice\":0,\"keys\":{\"present\":true},\"rubric\":\"fixture-rubric-v1\"}' && "
-            "echo OK",
+            "-H 'X-WAIKE-Role: teacher' "
+            "-d '{\"kind\":\"grade_fixture\",\"learner_choice\":0,\"rubric\":\"fixture-rubric-v1\"}' && "
+            "echo OK; "
+            "echo LEARNER_GRADE_GET=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/grades.json)",
         ],
         timeout_sec=20.0,
     )
     teacher_state = _read_json_logs(session, "/var/lib/gunnchos/waike/teacher_state.json")
     grades = _read_json_logs(session, "/var/lib/gunnchos/waike/grades.json")
     learner_state = _read_json_logs(session, "/var/lib/gunnchos/waike/learner_state.json")
-    # Keys must not appear in learner_state
     learner_blob = json.dumps(learner_state.get("data") or {})
-    teacher_blob = json.dumps(teacher_state.get("data") or {})
     leak = any(k in learner_blob for k in LEARNER_FORBIDDEN_KEYS)
-    teacher_has_keys = "keys" in teacher_blob or "grade_fixture" in teacher_blob
     events = ((teacher_state.get("data") or {}).get("events") or [])
     kinds = [e.get("kind") for e in events]
+    curl_out = curl.get("stdout") or ""
+    grades_denied_to_learner = "LEARNER_GRADE_GET=403" in curl_out
+    # Fixture assign/grade via curl+role header — not shipping teacher UI PASS.
+    fixture_ops = "assign_fixture" in kinds and "grade_fixture" in kinds and "OK" in curl_out
     out.update(
         {
-            "ok": (not leak)
-            and teacher_has_keys
-            and "assign_fixture" in kinds
-            and "grade_fixture" in kinds
-            and bool((grades.get("data") or {}).get("graded")),
+            "ok": bool(role_acl_ok and fixture_ops and (not leak) and grades_denied_to_learner),
             "observation_class": "GUEST_OBSERVED",
             "assign_grade_kinds": kinds,
             "grades": grades.get("data"),
             "learner_key_leak": leak,
             "teacher_events_present": bool(events),
+            "role_acl_ok": role_acl_ok,
+            "grades_denied_to_learner": grades_denied_to_learner,
+            "acl_probe": acl_out,
             "curl": {k: curl.get(k) for k in ("ok", "stdout", "returncode")},
-            "note": "Instructor assign/grade fixture in guest; keys stay on teacher endpoints/files only.",
+            "claim": "fixture_assign_grade_with_role_acl",
+            "note": (
+                "Instructor fixture assign/grade with X-WAIKE-Role ACL. "
+                "Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
+            ),
         }
     )
     return out
@@ -508,31 +611,46 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
             ring.get("RING_TO_REAL_APPLICATION_INPUT_PASS")
         )
 
-    if "G11" in by and g11.get("lesson_quiz_saved"):
-        by["G11"]["WAIKE"] = "GUEST_OBSERVED:lesson_quiz_assignment_from_owner_#43_pack"
-        by["G11"]["primary_task"] = "GUEST_OBSERVED:waike_lesson_and_quiz"
-        by["G11"]["artifact"] = "GUEST_OBSERVED:/var/lib/gunnchos/waike/learner_state.json"
-        by["G11"]["save"] = "GUEST_OBSERVED:waike_learner_state_persist"
-        if g11.get("offline", {}).get("ok"):
-            by["G11"]["offline"] = "GUEST_OBSERVED:link_down_local_waike_cache"
-        if g11.get("reconnect", {}).get("ok"):
-            by["G11"]["reconnect"] = "GUEST_OBSERVED:link_up_state_intact"
-        by["G11"]["evidence"] = "artifacts/product_use/journeys/G11_waike (+ G11_ring if present)"
+    if "G11" in by:
+        by["G11"]["shipping_waike_product"] = False
+        by["G11"]["WAIKE"] = (
+            "DEMOTED_OPEN:fixture_html_collector_not_shipping_waike;"
+            "HID_quiz_submit_not_proven;offline_not_link_down"
+        )
+        by["G11"]["primary_task"] = "DEMOTED_OPEN:fixture_learner_pack_partial"
+        if g11.get("hid_assignment_draft"):
+            by["G11"]["save"] = "GUEST_OBSERVED:hid_assignment_draft_only"
+        else:
+            by["G11"]["save"] = "OPEN"
+        by["G11"]["offline"] = "DEMOTED:lo_interface_local_cache_probe_not_link_down"
+        by["G11"]["reconnect"] = "DEMOTED:no_link_down_so_no_link_up"
+        by["G11"]["artifact"] = "GUEST_OBSERVED:fixture_/var/lib/gunnchos/waike/"
+        by["G11"]["evidence"] = "artifacts/product_use/journeys/G11_waike (+ demotion notes)"
         by["G11"]["token_earned"] = False
+        by["G11"]["S1"] = 1
         by["G11"]["S2"] = 1
         by["G11"]["AI"] = "NOT_RUN"
         by["G11"]["launcher"] = by["G11"].get("launcher") or "NOT_RUN"
         by["G11"]["reboot"] = "NOT_RUN"
         by["G11"]["resume"] = "NOT_RUN"
 
-    if "G13" in by and g13.get("ok"):
-        by["G13"]["WAIKE"] = "GUEST_OBSERVED:teacher_assign_and_grade_fixture_no_learner_key_leak"
-        by["G13"]["primary_task"] = "GUEST_OBSERVED:assign_fixture_cohort_and_grade"
+    if "G13" in by:
+        by["G13"]["shipping_waike_product"] = False
+        if g13.get("role_acl_ok") and g13.get("ok"):
+            by["G13"]["WAIKE"] = (
+                "GUEST_OBSERVED:fixture_assign_grade_with_role_acl;"
+                "not_shipping_waike_teacher_app"
+            )
+            by["G13"]["primary_task"] = "GUEST_OBSERVED:fixture_assign_grade_acl"
+            by["G13"]["S1"] = 0
+        else:
+            by["G13"]["WAIKE"] = "DEMOTED_OPEN:fixture_teacher_needs_role_acl"
+            by["G13"]["primary_task"] = "DEMOTED_OPEN:teacher_fixture"
+            by["G13"]["S1"] = 1
         by["G13"]["artifact"] = "GUEST_OBSERVED:/var/lib/gunnchos/waike/grades.json"
         by["G13"]["evidence"] = "artifacts/product_use/journeys/G13_teacher"
         by["G13"]["REAL_TEACHER_E6"] = False
         by["G13"]["token_earned"] = False
-        by["G13"]["S1"] = 0
         by["G13"]["S2"] = 1
 
     if "G14" in by:

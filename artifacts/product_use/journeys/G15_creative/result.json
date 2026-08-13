@@ -1,6 +1,6 @@
 {
   "persona": "G15",
-  "package": "libreoffice-draw",
+  "package": "libreoffice-writer-headless",
   "license_note": "LibreOffice \u2014 MPL-2.0 / mature office suite already on Interactive Guest image",
   "toy_drawing_surface": false,
   "ok": true,
@@ -11,5 +11,8 @@
     "stdout": "1839 bash -lc pgrep -af soffice | head; file /var/lib/gunnchos/creative/concept.pdf; python3 -c \"import pathlib;\\nfor n in ('concept.png','concept.pdf'):\\n p=pathlib.Path('/var/lib/gunnchos/creative')/n\\n print(n, p.stat().st_size if p.exists() else 0)\"\n/var/lib/gunnchos/creative/concept.pdf: PDF document, version 1.6, 1 pages (zip deflate encoded)\n"
   },
   "artifact": "/var/lib/gunnchos/creative/concept.pdf",
-  "note": "LibreOffice Writer ODT \u2192 headless PNG/PDF export (mature package). Not a toy canvas."
+  "note": "Retained: guest LibreOffice headless ODT\u2192PDF. Caveat: not interactive Draw UX; PDF bytes not committed to host evidence dir.",
+  "PASS_WITH_CAVEAT": true,
+  "host_pulled_pdf_binary": false,
+  "interactive_draw_ux": false
 }

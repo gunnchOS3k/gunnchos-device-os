@@ -54,11 +54,13 @@
   "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "S0_open": 0,
   "S1_open": [
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS still open after honest re-earn attempt",
-    "G14 DSXL focus_move / builder git (not in this packet unless separately run)",
+    "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
+    "G13 DEMOTED \u2014 fixture teacher; role ACL coded but guest re-earn OPEN; REAL_TEACHER_E6=false",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (keep demoted until honest re-earn)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN",
     "Handheld dock continuity OPEN",
     "G11 reboot/resume schoolwork NOT_RUN",
-    "Persona tokens remain false until full journeys"
+    "Persona tokens remain false until full pickup-and-use journeys"
   ],
   "S2_open": [
     "REAL_TEACHER_E6=false",
@@ -206,7 +208,8 @@
       },
       "DEMOTED": true,
       "demotion_ref": "artifacts/product_use/journeys/G11_ring/RING_PASS_DEMOTED.json",
-      "note": "Independent VP purged stale nested true on tip ece2b0f — aligns with top-level demotion."
+      "note": "Independent VP purged stale nested true on tip ece2b0f \u2014 aligns with top-level demotion.",
+      "RING_TO_REAL_APPLICATION_INPUT_PASS": false
     },
     "waike_teacher_isolation": {
       "ok": true,
@@ -236,10 +239,10 @@
   },
   "ring_mutation": "DEMOTED_OPEN",
   "handheld_dock_continuity": "OPEN",
-  "updated_at_utc": "2026-08-13T23:01:00Z",
+  "updated_at_utc": "2026-08-13T23:05:57Z",
   "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
   "HONESTY_OF_STATED_CLAIMS": "FAIL",
-  "HONESTY_NOTE": "Independent VP on tip ece2b0f: FAIL — G11 offline link_down mislabel; quiz curl-backed; fixture-as-product; nested journey_run.ring still true. Ring demotion/tokens/#20+#34 OK. Edmund-mergeable NO.",
+  "HONESTY_NOTE": "Independent VP on tip ece2b0f: FAIL \u2014 G11 offline link_down mislabel; quiz curl-backed; fixture-as-product; nested journey_run.ring still true. Ring demotion/tokens/#20+#34 OK. Edmund-mergeable NO.",
   "READY_FOR_EDMUND_MERGE": false,
   "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
@@ -251,8 +254,8 @@
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
     "RING_SPATIAL_ACCURACY": "SIMULATED",
-    "G11_ok": true,
-    "G13_ok": true,
+    "G11_ok": false,
+    "G13_ok": false,
     "G15_ok": true,
     "Edmund_mergeable": false,
     "LIVE_visual_retained": true,
@@ -260,5 +263,16 @@
   },
   "Edmund_mergeable": false,
   "journey_run_ring_nested_stale_true": false,
-  "journey_run_ring_nested_note": "Independent VP demoted stale journey_run.ring.RING_TO_REAL_APP_STATE_MUTATION_PASS=true → false on tip ece2b0f stamp."
+  "journey_run_ring_nested_note": "Independent VP demoted stale journey_run.ring.RING_TO_REAL_APP_STATE_MUTATION_PASS=true \u2192 false on tip ece2b0f stamp.",
+  "honesty_demotion": {
+    "at_utc": "2026-08-13T23:05:57Z",
+    "from_vp": "f5e7c9c",
+    "audited_tip": "ece2b0f",
+    "G11_demoted": true,
+    "G13_demoted": true,
+    "G15_retained_with_caveat": true,
+    "Ring_remains_false": true,
+    "LIVE_visual_retained": true,
+    "acl_code_fix": "X-WAIKE-Role required; teacher keys not embedded in HTML"
+  }
 }

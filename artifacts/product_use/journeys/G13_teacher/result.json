@@ -1,7 +1,7 @@
 {
   "persona": "G13",
   "REAL_TEACHER_E6": false,
-  "ok": true,
+  "ok": false,
   "observation_class": "GUEST_OBSERVED",
   "assign_grade_kinds": [
     "grade_fixture",
@@ -48,5 +48,19 @@
     "stdout": "OK\n",
     "returncode": 0
   },
-  "note": "Instructor assign/grade fixture in guest; keys stay on teacher endpoints/files only."
+  "note": "DEMOTED: fixture-as-product + prior missing role ACL. Code now requires X-WAIKE-Role; re-earn on next guest run.",
+  "shipping_waike_product": false,
+  "surface": "fixture_html_pack_plus_local_collector",
+  "role_acl_ok": false,
+  "demotion": {
+    "demoted_at_utc": "2026-08-13T23:05:57Z",
+    "prior_ok": true,
+    "reasons": [
+      "fixture HTML+collector not shipping WAIKE teacher app",
+      "prior /teacher.html served keys with no role ACL",
+      "curl grade used stub keys; HID teacher UI not proven"
+    ],
+    "acl_fix_in_code": "X-WAIKE-Role teacher required for teacher.html/keys/grades; keys not embedded in HTML",
+    "REAL_TEACHER_E6": false
+  }
 }

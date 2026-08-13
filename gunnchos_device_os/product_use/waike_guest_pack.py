@@ -134,24 +134,33 @@ button{font-size:1.1rem;padding:10px 16px;margin:4px} #keys{font-family:monospac
 <button id="assign">Assign quiz fixture to cohort-A</button></div>
 <div class="card"><h3>Grade fixture</h3>
 <button id="grade">Grade learner fixture submission</button>
-<pre id="keys"></pre></div>
+<button id="load-keys">Load keys (teacher role)</button>
+<pre id="keys">(keys not embedded — require X-WAIKE-Role: teacher via /teacher/keys)</pre></div>
 <p id="status">ready</p>
 <script>
 const DATA = __DATA__;
-document.getElementById('meta').textContent = DATA.course_id + ' · teacher view';
+const ROLE_HEADERS = {'X-WAIKE-Role':'teacher', 'Content-Type':'application/json'};
+document.getElementById('meta').textContent = DATA.course_id + ' · teacher view (keys not in HTML)';
 document.getElementById('lesson').textContent = (DATA.lesson_body||'').slice(0,1200);
-document.getElementById('keys').textContent = JSON.stringify(DATA.teacher_answer_keys_for_quiz || {}, null, 2);
+let cachedKeys = null;
+async function loadKeys(){
+  const r = await fetch('/teacher/keys', {headers:{'X-WAIKE-Role':'teacher'}});
+  if(!r.ok){ document.getElementById('keys').textContent = 'forbidden '+r.status; return null; }
+  cachedKeys = await r.json();
+  document.getElementById('keys').textContent = JSON.stringify(cachedKeys, null, 2);
+  return cachedKeys;
+}
 async function post(kind, extra){
   const body = Object.assign({kind, role:'teacher', course_id: DATA.course_id, ts: Date.now()}, extra||{});
-  await fetch('/teacher', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  await fetch('/teacher', {method:'POST', headers: ROLE_HEADERS, body: JSON.stringify(body)});
   document.getElementById('status').textContent = kind + ' ok';
 }
+document.getElementById('load-keys').onclick = () => loadKeys();
 document.getElementById('assign').onclick = () => post('assign_fixture', {cohort:'cohort-A', quiz_id: (DATA.quiz||{}).quiz_id});
-document.getElementById('grade').onclick = () => post('grade_fixture', {
-  learner_choice: 0,
-  keys: DATA.teacher_answer_keys_for_quiz || {},
-  rubric: 'fixture-rubric-v1'
-});
+document.getElementById('grade').onclick = async () => {
+  const keys = cachedKeys || await loadKeys() || {};
+  post('grade_fixture', { learner_choice: 0, rubric: 'fixture-rubric-v1', keys_ref: 'teacher/keys' });
+};
 </script></body></html>
 """
 
@@ -165,7 +174,10 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
         if k != "teacher_answer_keys_for_quiz"
     }
     teacher_data = dict(slice_)
-    # Ensure learner payload has no forbidden keys.
+    # Teacher HTML must NOT embed answer keys — keys served only via ACL'd /teacher/keys.
+    teacher_page_data = {
+        k: v for k, v in slice_.items() if k != "teacher_answer_keys_for_quiz"
+    }
     blob = json.dumps(learner_data)
     for k in LEARNER_FORBIDDEN_KEYS:
         if k in blob:
@@ -178,9 +190,11 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
     )
     teacher_html = (
         TEACHER_HTML.replace("__COURSE__", course_id).replace(
-            "__DATA__", json.dumps(teacher_data, ensure_ascii=False)
+            "__DATA__", json.dumps(teacher_page_data, ensure_ascii=False)
         )
     )
+    if "teacher_answer_keys_for_quiz" in teacher_html or '"answer_keys"' in teacher_html:
+        raise RuntimeError("teacher_html_must_not_embed_answer_keys")
     (out_dir / "learner.html").write_text(learner_html, encoding="utf-8")
     (out_dir / "teacher.html").write_text(teacher_html, encoding="utf-8")
     (out_dir / "learner_data.json").write_text(json.dumps(learner_data, indent=2) + "\n", encoding="utf-8")

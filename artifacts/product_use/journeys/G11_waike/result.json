@@ -1,8 +1,8 @@
 {
   "persona": "G11",
   "observation_class": "GUEST_OBSERVED",
-  "ok": true,
-  "lesson_quiz_saved": true,
+  "ok": false,
+  "lesson_quiz_saved": false,
   "kinds": [
     "assignment_draft",
     "assignment_draft",
@@ -36,12 +36,17 @@
     "returncode": 0
   },
   "offline": {
-    "ok": true,
-    "stdout": "LOCAL=200\nEXTERNAL_BLOCKED\nSTATE_PRESENT\nPACK_PRESENT\nHAS_QUIZ True\n"
+    "ok": false,
+    "demoted": true,
+    "method": "lo_interface_local_cache_probe",
+    "not_link_down": true,
+    "prior_probe_stdout": "LOCAL=200\nEXTERNAL_BLOCKED\nSTATE_PRESENT\nPACK_PRESENT\nHAS_QUIZ True\n"
   },
   "reconnect": {
-    "ok": true,
-    "stdout": "HTTP=200\nKINDS assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit\nHAS_QUIZ True\nHAS_ASSIGN True\n"
+    "ok": false,
+    "demoted": true,
+    "note": "No link_down performed; link_up reconnect claim demoted",
+    "prior_stdout": "HTTP=200\nKINDS assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit\nHAS_QUIZ True\nHAS_ASSIGN True\n"
   },
   "before": {
     "events": [
@@ -388,5 +393,24 @@
   "learner_key_leak": false,
   "leak_scan": "LEAK none\n",
   "waike_source": "accepted_owner_#43_guest_pack",
-  "note": "In-guest Chromium + local collector; curriculum not re-authored."
+  "note": "DEMOTED after independent FAIL: fixture not shipping WAIKE; offline/quiz honesty FAIL",
+  "hid_quiz_submit": false,
+  "hid_assignment_draft": true,
+  "shipping_waike_product": false,
+  "surface": "fixture_html_pack_plus_local_collector",
+  "demotion": {
+    "demoted_at_utc": "2026-08-13T23:05:57Z",
+    "independent_vp_tip": "ece2b0f",
+    "vp_stamp": "f5e7c9c",
+    "prior_ok": true,
+    "prior_lesson_quiz_saved": true,
+    "prior_offline_ok": true,
+    "prior_reconnect_ok": true,
+    "reasons": [
+      "offline was lo-interface probe not link_down/link_up",
+      "quiz_submit this run was curl/process_run not HID; HID delta assignment_draft only",
+      "stale-state presence inflated lesson_ok",
+      "surface is fixture HTML+collector not shipping WAIKE product"
+    ]
+  }
 }
