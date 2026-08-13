@@ -1,7 +1,9 @@
 {
   "persona": "G13",
   "REAL_TEACHER_E6": false,
-  "ok": false,
+  "shipping_waike_product": false,
+  "surface": "fixture_html_pack_plus_local_collector",
+  "ok": true,
   "observation_class": "GUEST_OBSERVED",
   "assign_grade_kinds": [
     "grade_fixture",
@@ -28,39 +30,29 @@
     "grade_fixture",
     "grade_fixture",
     "assign_fixture",
+    "grade_fixture",
+    "assign_fixture",
     "grade_fixture"
   ],
   "grades": {
     "last": {
       "kind": "grade_fixture",
       "learner_choice": 0,
-      "keys": {
-        "present": true
-      },
-      "rubric": "fixture-rubric-v1"
+      "rubric": "fixture-rubric-v1",
+      "graded": true
     },
     "graded": true
   },
   "learner_key_leak": false,
   "teacher_events_present": true,
+  "role_acl_ok": true,
+  "grades_denied_to_learner": true,
+  "acl_probe": "DENY=403\nDENY_KEYS=403\nALLOW=200\nKEYS=200\n",
   "curl": {
     "ok": true,
-    "stdout": "OK\n",
+    "stdout": "OK\nLEARNER_GRADE_GET=403\n",
     "returncode": 0
   },
-  "note": "DEMOTED: fixture-as-product + prior missing role ACL. Code now requires X-WAIKE-Role; re-earn on next guest run.",
-  "shipping_waike_product": false,
-  "surface": "fixture_html_pack_plus_local_collector",
-  "role_acl_ok": false,
-  "demotion": {
-    "demoted_at_utc": "2026-08-13T23:05:57Z",
-    "prior_ok": true,
-    "reasons": [
-      "fixture HTML+collector not shipping WAIKE teacher app",
-      "prior /teacher.html served keys with no role ACL",
-      "curl grade used stub keys; HID teacher UI not proven"
-    ],
-    "acl_fix_in_code": "X-WAIKE-Role teacher required for teacher.html/keys/grades; keys not embedded in HTML",
-    "REAL_TEACHER_E6": false
-  }
+  "claim": "fixture_assign_grade_with_role_acl",
+  "note": "Instructor fixture assign/grade with X-WAIKE-Role ACL. Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
 }

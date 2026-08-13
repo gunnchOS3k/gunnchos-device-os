@@ -611,7 +611,8 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
             ring.get("RING_TO_REAL_APPLICATION_INPUT_PASS")
         )
 
-    if "G11" in by:
+    # Focused PRODUCT_USE_S1_ONLY runs must not clobber peers they skipped.
+    if "G11" in by and "G11" in results and not g11.get("skipped"):
         by["G11"]["shipping_waike_product"] = False
         by["G11"]["WAIKE"] = (
             "DEMOTED_OPEN:fixture_html_collector_not_shipping_waike;"
@@ -634,7 +635,7 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
         by["G11"]["reboot"] = "NOT_RUN"
         by["G11"]["resume"] = "NOT_RUN"
 
-    if "G13" in by:
+    if "G13" in by and "G13" in results:
         by["G13"]["shipping_waike_product"] = False
         if g13.get("role_acl_ok") and g13.get("ok"):
             by["G13"]["WAIKE"] = (
@@ -642,6 +643,7 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
                 "not_shipping_waike_teacher_app"
             )
             by["G13"]["primary_task"] = "GUEST_OBSERVED:fixture_assign_grade_acl"
+            by["G13"]["claim"] = "fixture_lab_with_role_acl"
             by["G13"]["S1"] = 0
         else:
             by["G13"]["WAIKE"] = "DEMOTED_OPEN:fixture_teacher_needs_role_acl"
@@ -653,11 +655,14 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
         by["G13"]["token_earned"] = False
         by["G13"]["S2"] = 1
 
-    if "G14" in by:
+    if "G14" in by and "G14" in results:
         if g14.get("DSXL_DUAL_COMPOSITOR_UX_PASS"):
             by["G14"]["primary_task"] = "GUEST_OBSERVED:DSXL_DUAL_COMPOSITOR_UX_PASS"
             by["G14"]["apps"] = "GUEST_OBSERVED:foot+mousepad_dual_focus_move"
             by["G14"]["S1"] = 0 if g14.get("git_build_test", {}).get("ok") else 1
+        else:
+            by["G14"]["primary_task"] = "OPEN:DSXL_DUAL_COMPOSITOR_UX_PASS_missing_focus_move"
+            by["G14"]["S1"] = 1
         if g14.get("git_build_test", {}).get("ok"):
             by["G14"]["artifact"] = "GUEST_OBSERVED:safe-test-repo_git_build_test"
             by["G14"]["terminal"] = "GUEST_OBSERVED:git_init_branch_edit_test"
@@ -665,7 +670,7 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
         by["G14"]["token_earned"] = False
         by["G14"]["S2"] = 1
 
-    if "G15" in by and g15.get("ok"):
+    if "G15" in by and "G15" in results and g15.get("ok"):
         by["G15"]["boot"] = "GUEST_OBSERVED:interactive_guest_session"
         by["G15"]["apps"] = "GUEST_OBSERVED:libreoffice"
         by["G15"]["primary_task"] = "GUEST_OBSERVED:libreoffice_odt_to_pdf_or_png_export"
@@ -696,6 +701,9 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
 def main() -> int:
     started = _utc()
     OUT.mkdir(parents=True, exist_ok=True)
+    # Comma list e.g. PRODUCT_USE_S1_ONLY=G13 or G13,G14 — empty means full closer.
+    only_raw = (os.environ.get("PRODUCT_USE_S1_ONLY") or "").strip().upper()
+    only = {x.strip() for x in only_raw.split(",") if x.strip()} if only_raw else set()
     pack_dir = ROOT / "artifacts/product_use/waike_guest_pack"
     pack = write_guest_pack(ROOT, pack_dir, course_id="GENERAL_IT")
     (OUT / "waike_guest_pack_build.json").write_text(json.dumps(pack, indent=2) + "\n")
@@ -718,12 +726,16 @@ def main() -> int:
         "pack": pack,
         "prefer_fail_over_false_pass": True,
         "tokens_remain_false": True,
+        "only": sorted(only) if only else ["ALL"],
     }
     if not boot.get("ok") or session is None:
         summary["error"] = boot.get("error") or "boot_failed"
         (OUT / "S1_CLOSER_SUMMARY.json").write_text(json.dumps(summary, indent=2, default=str) + "\n")
         print(json.dumps(summary, indent=2, default=str))
         return 1
+
+    def _want(name: str) -> bool:
+        return (not only) or name in only
 
     results: dict[str, Any] = {}
     try:
@@ -732,113 +744,180 @@ def main() -> int:
                 break
             time.sleep(2.0)
 
-        # Highest priority: honest Ring re-earn (no lab_browser collector; no migration-alone).
-        ring_dir = OUT / "G11_ring"
-        ring_dir.mkdir(parents=True, exist_ok=True)
-        ring_ev = _evidence_dir(ROOT, "ring")
-        results["RING"] = attempt_ring_app_mutation_pass(session, ring_ev)
-        for name in ("RING_APP_MUTATION_EVIDENCE.json",):
-            src = ring_ev / name
-            if src.exists():
-                shutil.copy2(src, ring_dir / name)
-        for sub in ("document", "browser", "game"):
-            sdir = ring_ev / sub
-            if sdir.exists():
-                shutil.copytree(sdir, ring_dir / sub, dirs_exist_ok=True)
-        (ring_dir / "HONEST_REEARN_NOTE.json").write_text(
-            json.dumps(
-                {
-                    "lab_browser_collector_forbidden": True,
-                    "pedestrian_seed_save_version": "2",
-                    "migration_alone_forbidden": True,
-                    "browser_surface": "RingMemo.html contenteditable → RingMemo.txt",
-                    "RING_TO_REAL_APP_STATE_MUTATION_PASS": bool(
-                        results["RING"].get("RING_TO_REAL_APP_STATE_MUTATION_PASS")
-                    ),
-                    "RING_TO_REAL_APPLICATION_INPUT_PASS": bool(
-                        results["RING"].get("RING_TO_REAL_APPLICATION_INPUT_PASS")
-                    ),
-                    "RING_SPATIAL_ACCURACY": results["RING"].get("RING_SPATIAL_ACCURACY"),
-                    "blocker": results["RING"].get("blocker"),
-                },
-                indent=2,
+        if _want("RING"):
+            # Highest priority: honest Ring re-earn (no lab_browser collector; no migration-alone).
+            ring_dir = OUT / "G11_ring"
+            ring_dir.mkdir(parents=True, exist_ok=True)
+            ring_ev = _evidence_dir(ROOT, "ring")
+            results["RING"] = attempt_ring_app_mutation_pass(session, ring_ev)
+            for name in ("RING_APP_MUTATION_EVIDENCE.json",):
+                src = ring_ev / name
+                if src.exists():
+                    shutil.copy2(src, ring_dir / name)
+            for sub in ("document", "browser", "game"):
+                sdir = ring_ev / sub
+                if sdir.exists():
+                    shutil.copytree(sdir, ring_dir / sub, dirs_exist_ok=True)
+            (ring_dir / "HONEST_REEARN_NOTE.json").write_text(
+                json.dumps(
+                    {
+                        "lab_browser_collector_forbidden": True,
+                        "pedestrian_seed_save_version": "2",
+                        "migration_alone_forbidden": True,
+                        "browser_surface": "RingMemo.html contenteditable → RingMemo.txt",
+                        "RING_TO_REAL_APP_STATE_MUTATION_PASS": bool(
+                            results["RING"].get("RING_TO_REAL_APP_STATE_MUTATION_PASS")
+                        ),
+                        "RING_TO_REAL_APPLICATION_INPUT_PASS": bool(
+                            results["RING"].get("RING_TO_REAL_APPLICATION_INPUT_PASS")
+                        ),
+                        "RING_SPATIAL_ACCURACY": results["RING"].get("RING_SPATIAL_ACCURACY"),
+                        "blocker": results["RING"].get("blocker"),
+                    },
+                    indent=2,
+                )
+                + "\n"
             )
-            + "\n"
-        )
 
-        deploy = _deploy_waike_server(session, pack_dir)
-        summary["deploy"] = {
-            "curl": deploy.get("curl"),
-            "start_ok": bool((deploy.get("start") or {}).get("ok")),
-        }
+        need_waike = _want("G11") or _want("G13")
+        if need_waike:
+            deploy = _deploy_waike_server(session, pack_dir)
+            summary["deploy"] = {
+                "curl": deploy.get("curl"),
+                "start_ok": bool((deploy.get("start") or {}).get("ok")),
+                "role_acl_ok": bool(deploy.get("role_acl_ok")),
+            }
 
-        results["G11"] = run_g11(session)
-        (OUT / "G11_waike").mkdir(parents=True, exist_ok=True)
-        (OUT / "G11_waike" / "result.json").write_text(json.dumps(results["G11"], indent=2, default=str) + "\n")
-        shutil.copytree(pack_dir, OUT / "G11_waike" / "pack", dirs_exist_ok=True)
+        if _want("G11"):
+            results["G11"] = run_g11(session)
+            (OUT / "G11_waike").mkdir(parents=True, exist_ok=True)
+            (OUT / "G11_waike" / "result.json").write_text(
+                json.dumps(results["G11"], indent=2, default=str) + "\n"
+            )
+            shutil.copytree(pack_dir, OUT / "G11_waike" / "pack", dirs_exist_ok=True)
+        else:
+            # Leave demoted: no HID quiz_submit / no real link_down this run.
+            results["G11"] = {
+                "ok": False,
+                "skipped": True,
+                "demoted": True,
+                "note": "Left demoted (PRODUCT_USE_S1_ONLY); fixture not shipping WAIKE",
+            }
 
-        results["G13"] = run_g13(session)
-        (OUT / "G13_teacher").mkdir(parents=True, exist_ok=True)
-        (OUT / "G13_teacher" / "result.json").write_text(json.dumps(results["G13"], indent=2, default=str) + "\n")
+        if _want("G13"):
+            results["G13"] = run_g13(session)
+            (OUT / "G13_teacher").mkdir(parents=True, exist_ok=True)
+            (OUT / "G13_teacher" / "result.json").write_text(
+                json.dumps(results["G13"], indent=2, default=str) + "\n"
+            )
+            claim_path = OUT / "G13_teacher" / (
+                "G13_FIXTURE_ACL_PASS.json" if results["G13"].get("ok") else "G13_FAIL.json"
+            )
+            claim_path.write_text(
+                json.dumps(
+                    {
+                        "claim": "fixture_lab_with_role_acl",
+                        "shipping_waike_teacher_app": False,
+                        "REAL_TEACHER_E6": False,
+                        "role_acl_ok": bool(results["G13"].get("role_acl_ok")),
+                        "ok": bool(results["G13"].get("ok")),
+                        "learner_cannot_fetch_teacher_keys": bool(
+                            results["G13"].get("role_acl_ok")
+                        ),
+                        "grades_denied_to_learner": bool(
+                            results["G13"].get("grades_denied_to_learner")
+                        ),
+                        "note": results["G13"].get("note"),
+                    },
+                    indent=2,
+                )
+                + "\n"
+            )
+            demoted = OUT / "G13_teacher" / "G13_DEMOTED.json"
+            if results["G13"].get("ok") and demoted.exists():
+                demoted.unlink()
 
-        g14_dir = _evidence_dir(ROOT, "dsxl_s1")
-        results["G14"] = run_g14(session, g14_dir)
-        (OUT / "G14_dsxl_s1").mkdir(parents=True, exist_ok=True)
-        (OUT / "G14_dsxl_s1" / "result.json").write_text(json.dumps(results["G14"], indent=2, default=str) + "\n")
-        if g14_dir.exists():
-            for p in g14_dir.glob("*"):
-                if p.is_file() and p.suffix in {".json", ".png"}:
-                    shutil.copy2(p, OUT / "G14_dsxl_s1" / p.name)
+        if _want("G14"):
+            g14_dir = _evidence_dir(ROOT, "dsxl_s1")
+            results["G14"] = run_g14(session, g14_dir)
+            (OUT / "G14_dsxl_s1").mkdir(parents=True, exist_ok=True)
+            (OUT / "G14_dsxl_s1" / "result.json").write_text(
+                json.dumps(results["G14"], indent=2, default=str) + "\n"
+            )
+            if g14_dir.exists():
+                for p in g14_dir.glob("*"):
+                    if p.is_file() and p.suffix in {".json", ".png"}:
+                        shutil.copy2(p, OUT / "G14_dsxl_s1" / p.name)
 
-        results["G15"] = run_g15(session)
-        (OUT / "G15_creative").mkdir(parents=True, exist_ok=True)
-        (OUT / "G15_creative" / "result.json").write_text(json.dumps(results["G15"], indent=2, default=str) + "\n")
-        # pull png if present
-        png_pull = _agent_call(
-            session,
-            "process_run",
-            argv=[
-                "bash",
-                "-lc",
-                "python3 - <<'PY'\n"
-                "import base64,pathlib\n"
-                "p=pathlib.Path('/var/lib/gunnchos/creative/concept.png')\n"
-                "print(base64.b64encode(p.read_bytes()).decode() if p.exists() else '')\n"
-                "PY",
-            ],
-            timeout_sec=30.0,
-        )
-        b64 = (png_pull.get("stdout") or "").strip()
-        if b64:
-            (OUT / "G15_creative" / "concept.png").write_bytes(base64.b64decode(b64))
+        if _want("G15"):
+            results["G15"] = run_g15(session)
+            (OUT / "G15_creative").mkdir(parents=True, exist_ok=True)
+            (OUT / "G15_creative" / "result.json").write_text(
+                json.dumps(results["G15"], indent=2, default=str) + "\n"
+            )
+            png_pull = _agent_call(
+                session,
+                "process_run",
+                argv=[
+                    "bash",
+                    "-lc",
+                    "python3 - <<'PY'\n"
+                    "import base64,pathlib\n"
+                    "p=pathlib.Path('/var/lib/gunnchos/creative/concept.png')\n"
+                    "print(base64.b64encode(p.read_bytes()).decode() if p.exists() else '')\n"
+                    "PY",
+                ],
+                timeout_sec=30.0,
+            )
+            b64 = (png_pull.get("stdout") or "").strip()
+            if b64:
+                (OUT / "G15_creative" / "concept.png").write_bytes(base64.b64decode(b64))
 
         summary["handheld_dock_continuity"] = "OPEN"
-        summary["results"] = {k: {kk: vv for kk, vv in v.items() if kk != "pull"} for k, v in results.items()}
+        summary["results"] = {
+            k: {kk: vv for kk, vv in v.items() if kk != "pull"} for k, v in results.items()
+        }
         table = update_persona_table(results)
         summary["persona_table"] = "artifacts/product_use/PERSONA_JOURNEY_TABLE.json"
-        summary["tokens_earned"] = {r["token_id"]: r.get("token_earned") for r in table.get("rows", [])}
+        summary["tokens_earned"] = {
+            r["token_id"]: r.get("token_earned") for r in table.get("rows", [])
+        }
 
-        # Remaining S1 list
         remaining = []
-        if not results["RING"].get("RING_TO_REAL_APP_STATE_MUTATION_PASS"):
+        ring = results.get("RING") or {}
+        if _want("RING") and not ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS"):
             remaining.append(
                 "RING_TO_REAL_APP_STATE_MUTATION_PASS still open after honest re-earn attempt "
                 "(no lab collector; Pedestrian requires input-driven delta beyond post-load)"
             )
-        if not results["G11"].get("ok"):
-            remaining.append("G11 in-guest WAIKE lesson/quiz/offline incomplete")
-        if not results["G13"].get("ok"):
-            remaining.append("G13 teacher assign/grade incomplete or key leak")
-        if not results["G14"].get("DSXL_DUAL_COMPOSITOR_UX_PASS"):
-            remaining.append("G14 DSXL_DUAL_COMPOSITOR_UX_PASS still false")
-        if not results["G14"].get("git_build_test", {}).get("ok"):
-            remaining.append("G14 git clone/build/test incomplete")
-        if not results["G15"].get("ok"):
+        elif not _want("RING"):
+            remaining.append(
+                "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (not attempted this focused run)"
+            )
+        g11 = results.get("G11") or {}
+        if not g11.get("ok"):
+            remaining.append(
+                "G11 DEMOTED — fixture not shipping WAIKE; HID quiz_submit OPEN; "
+                "offline link_down OPEN (lo-probe only)"
+            )
+        g13 = results.get("G13") or {}
+        if _want("G13") and not g13.get("ok"):
+            remaining.append("G13 teacher assign/grade incomplete or key leak / ACL fail")
+        g14 = results.get("G14") or {}
+        if _want("G14"):
+            if not g14.get("DSXL_DUAL_COMPOSITOR_UX_PASS"):
+                remaining.append("G14 DSXL_DUAL_COMPOSITOR_UX_PASS still false")
+            if not (g14.get("git_build_test") or {}).get("ok"):
+                remaining.append("G14 git clone/build/test incomplete")
+        else:
+            remaining.append("G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN")
+        if _want("G15") and not (results.get("G15") or {}).get("ok"):
             remaining.append("G15 creative export incomplete")
         remaining.append("Handheld dock continuity OPEN")
-        remaining.append("Full persona tokens (pickup-and-use) still false by policy until complete journeys")
-        if results["G11"].get("ok"):
-            remaining.append("G11 reboot/resume schoolwork still NOT_RUN (offline/reconnect closed instead)")
+        remaining.append("G11 reboot/resume schoolwork NOT_RUN")
+        remaining.append(
+            "Persona tokens remain false until full pickup-and-use journeys"
+        )
         summary["S1_remaining"] = remaining
         summary["Edmund_mergeable"] = False
         summary["finished_at_utc"] = _utc()
@@ -849,21 +928,24 @@ def main() -> int:
             "started_at_utc": summary.get("started_at_utc"),
             "finished_at_utc": summary.get("finished_at_utc"),
             "boot_ok": summary.get("boot_ok"),
+            "only": summary.get("only"),
             "RING_TO_REAL_APP_STATE_MUTATION_PASS": bool(
-                results["RING"].get("RING_TO_REAL_APP_STATE_MUTATION_PASS")
+                ring.get("RING_TO_REAL_APP_STATE_MUTATION_PASS")
             ),
             "RING_TO_REAL_APPLICATION_INPUT_PASS": bool(
-                results["RING"].get("RING_TO_REAL_APPLICATION_INPUT_PASS")
+                ring.get("RING_TO_REAL_APPLICATION_INPUT_PASS")
             ),
-            "RING_SPATIAL_ACCURACY": results["RING"].get("RING_SPATIAL_ACCURACY"),
-            "G11_ok": bool(results["G11"].get("ok")),
-            "G13_ok": bool(results["G13"].get("ok")),
-            "G14_DSXL": bool(results["G14"].get("DSXL_DUAL_COMPOSITOR_UX_PASS")),
-            "G14_git": bool(results["G14"].get("git_build_test", {}).get("ok")),
-            "G15_ok": bool(results["G15"].get("ok")),
+            "RING_SPATIAL_ACCURACY": ring.get("RING_SPATIAL_ACCURACY"),
+            "G11_ok": bool(g11.get("ok")),
+            "G13_ok": bool(g13.get("ok")),
+            "G13_claim": g13.get("claim") if g13.get("ok") else None,
+            "G14_DSXL": bool(g14.get("DSXL_DUAL_COMPOSITOR_UX_PASS")),
+            "G14_git": bool((g14.get("git_build_test") or {}).get("ok")),
+            "G15_ok": bool((results.get("G15") or {}).get("ok")),
             "Edmund_mergeable": False,
             "tokens_remain_false": True,
             "LIVE_visual_retained": True,
+            "G15_PASS_WITH_CAVEAT_retained": True,
         }
         status["S1_open"] = remaining
         status["updated_at_utc"] = _utc()

@@ -1,0 +1,124 @@
+{
+  "schema": "gunnchos.product_use_rc_001.s1_closer.v1",
+  "started_at_utc": "2026-08-13T23:11:01Z",
+  "boot_ok": true,
+  "pack": {
+    "ok": true,
+    "out_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/product_use/waike_guest_pack",
+    "course_id": "GENERAL_IT",
+    "package_version": "owner-546819c6b395",
+    "learner_has_answer_keys": false
+  },
+  "prefer_fail_over_false_pass": true,
+  "tokens_remain_false": true,
+  "only": [
+    "G13"
+  ],
+  "deploy": {
+    "curl": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_run",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "argv": [
+        "bash",
+        "-lc",
+        "set +e; L=$(curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/learner.html || echo fail); T403=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher.html || echo fail); K403=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/teacher/keys || echo fail); TOK=$(curl -fsS -o /dev/null -w '%{http_code}' -H 'X-WAIKE-Role: teacher' http://127.0.0.1:18767/teacher.html || echo fail); echo L=$L T403=$T403 K403=$K403 TOK=$TOK"
+      ],
+      "returncode": 0,
+      "stdout": "L=200 T403=403 K403=403 TOK=200\n",
+      "stderr": ""
+    },
+    "start_ok": true,
+    "role_acl_ok": true
+  },
+  "handheld_dock_continuity": "OPEN",
+  "results": {
+    "G11": {
+      "ok": false,
+      "skipped": true,
+      "demoted": true,
+      "note": "Left demoted (PRODUCT_USE_S1_ONLY); fixture not shipping WAIKE"
+    },
+    "G13": {
+      "persona": "G13",
+      "REAL_TEACHER_E6": false,
+      "shipping_waike_product": false,
+      "surface": "fixture_html_pack_plus_local_collector",
+      "ok": true,
+      "observation_class": "GUEST_OBSERVED",
+      "assign_grade_kinds": [
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture"
+      ],
+      "grades": {
+        "last": {
+          "kind": "grade_fixture",
+          "learner_choice": 0,
+          "rubric": "fixture-rubric-v1",
+          "graded": true
+        },
+        "graded": true
+      },
+      "learner_key_leak": false,
+      "teacher_events_present": true,
+      "role_acl_ok": true,
+      "grades_denied_to_learner": true,
+      "acl_probe": "DENY=403\nDENY_KEYS=403\nALLOW=200\nKEYS=200\n",
+      "curl": {
+        "ok": true,
+        "stdout": "OK\nLEARNER_GRADE_GET=403\n",
+        "returncode": 0
+      },
+      "claim": "fixture_assign_grade_with_role_acl",
+      "note": "Instructor fixture assign/grade with X-WAIKE-Role ACL. Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
+    }
+  },
+  "persona_table": "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+  "tokens_earned": {
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false
+  },
+  "S1_remaining": [
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (not attempted this focused run)",
+    "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN",
+    "Handheld dock continuity OPEN",
+    "G11 reboot/resume schoolwork NOT_RUN",
+    "Persona tokens remain false until full pickup-and-use journeys"
+  ],
+  "Edmund_mergeable": false,
+  "finished_at_utc": "2026-08-13T23:11:36Z"
+}

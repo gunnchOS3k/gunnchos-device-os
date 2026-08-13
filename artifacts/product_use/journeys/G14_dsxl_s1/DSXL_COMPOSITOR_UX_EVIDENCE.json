@@ -1,0 +1,329 @@
+{
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
+  "display_info": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "display_info",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "displays": [
+      {
+        "id": "card0-Virtual-1",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      },
+      {
+        "id": "card0-Virtual-2",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      }
+    ],
+    "connected_count": 2,
+    "connector_count": 2,
+    "guest_proven": true,
+    "note": "Enumerated from /sys/class/drm/*/status inside guest (real DRM connector state)."
+  },
+  "dual_output_gate": {
+    "ok": true,
+    "gate": "PASS_GUEST_DUAL",
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "note": "DRM/guest dual enum earned GUEST_DUAL_OUTPUT_PASS only; DSXL_DUAL_COMPOSITOR_UX_PASS requires compositor_ux_gate evidence.",
+    "connected": 2,
+    "guest_connected": 2,
+    "logical_connected": 0,
+    "compositor_surfaces": 0,
+    "sources": [
+      "guest_drm"
+    ],
+    "outputs": [
+      {
+        "id": "card0-Virtual-1",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      },
+      {
+        "id": "card0-Virtual-2",
+        "connected": true,
+        "source": "guest_drm",
+        "class": "guest_drm"
+      }
+    ],
+    "SILICON_EXACT_EMULATION": false,
+    "PHYSICAL_DUAL_PANEL": "PENDING"
+  },
+  "compositor_info": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "compositor_info",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "available": true,
+    "compositor": "weston",
+    "socket": "wayland-0",
+    "outputs": 2,
+    "surfaces": null,
+    "detail": {
+      "wayland_info_returncode": 0,
+      "wayland_info_output_globals": 2
+    },
+    "note": "Real registry query via wayland-info against the running compositor socket."
+  },
+  "windows_launched": {
+    "foot": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "foot",
+      "pid": 424,
+      "started": true,
+      "alive_after_500ms": true,
+      "argv": [
+        "foot"
+      ]
+    },
+    "mousepad": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "app_launch",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "app": "mousepad",
+      "pid": 434,
+      "started": true,
+      "alive_after_500ms": true,
+      "argv": [
+        "mousepad",
+        "/root/gunnchos-lab-document.txt"
+      ]
+    }
+  },
+  "placement_framebuffer": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-13_23-12-13.png",
+    "bytes": 32860,
+    "format": "png",
+    "sha256": "91bd0d1991a63401eb39898ac13ee81e4124d15e3e518e42588e35b467d4580a",
+    "synthetic": false,
+    "via": "weston_screenshooter_super_s_uinput",
+    "png_complete": true,
+    "has_iend": true
+  },
+  "placement_halves": {
+    "ok": true,
+    "filter_aware": true,
+    "width": 2560,
+    "height": 800,
+    "left_sha256": "d444fa0c6b60fa46913260d34d50f148775b4c7531262aeac986d828f751fa30",
+    "right_sha256": "130ef7c04082711d02242ef83ff7ad91d01ac473ea2609853022e223aeef993f",
+    "halves_differ": true,
+    "left_nonzero": true,
+    "right_nonzero": true,
+    "left_mean": 58.377506510416666,
+    "right_mean": 130.1808623046875,
+    "filters_used": [
+      1,
+      2,
+      4
+    ],
+    "means_plausible": true,
+    "left_png": "dsxl_left.png",
+    "right_png": "dsxl_right.png",
+    "left_png_sha256": "b87b65cb9bb57cd457d1c76ccb5b9a4185f9f37cd7b6eaa247cee16cac78449d",
+    "right_png_sha256": "1d3a8eb0d9d45ce9ca3dad511d607a4368409832fb012671918c36c08826b338",
+    "committed_png_halves": true,
+    "means_match_placement_crops": true
+  },
+  "drm_before_list": {
+    "ok": true,
+    "stdout": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\nconnected\nconnected\n",
+    "stderr": ""
+  },
+  "compositor_info_after_reconnect": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "compositor_info",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "available": true,
+    "compositor": "weston",
+    "socket": "wayland-0",
+    "outputs": 2,
+    "surfaces": null,
+    "detail": {
+      "wayland_info_returncode": 0,
+      "wayland_info_output_globals": 2
+    },
+    "note": "Real registry query via wayland-info against the running compositor socket."
+  },
+  "disconnect_attempts": [
+    {
+      "method": "device_del_gpu1",
+      "del_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del g\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'gpu1' not found\r\n(qemu) ",
+      "mid_drm": {
+        "card": "",
+        "status": "557",
+        "raw": {
+          "ok": true,
+          "returncode": 0,
+          "stdout": "557\n",
+          "stderr": ""
+        }
+      },
+      "mid_cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n",
+      "mid_compositor_outputs": 2,
+      "mid_disc": true,
+      "mid_card_drop": false,
+      "mid_comp_drop": false
+    }
+  ],
+  "compositor_ux_gate": {
+    "ok": false,
+    "gate": "FAIL_DSXL_COMPOSITOR_UX",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+    "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
+    "checks": {
+      "two_outputs": true,
+      "two_compositor_surfaces": true,
+      "window_placement": true,
+      "focus_move": false,
+      "disconnect": true,
+      "reconnect": true,
+      "layout_restore": true
+    },
+    "missing": [
+      "focus_move"
+    ],
+    "windows": [
+      {
+        "app_id": "foot",
+        "output_id": "card0-Virtual-1",
+        "pid": 424,
+        "ok": true,
+        "placement_proven": true,
+        "half": "left",
+        "half_sha256": "d444fa0c6b60fa46913260d34d50f148775b4c7531262aeac986d828f751fa30"
+      },
+      {
+        "app_id": "mousepad",
+        "output_id": "card0-Virtual-2",
+        "pid": 434,
+        "ok": true,
+        "placement_proven": true,
+        "half": "right",
+        "half_sha256": "130ef7c04082711d02242ef83ff7ad91d01ac473ea2609853022e223aeef993f"
+      }
+    ],
+    "focus_moves": [
+      {
+        "ok": false,
+        "output_id": "card0-Virtual-1",
+        "click": {
+          "ok": false,
+          "error": "unix_connect_failed",
+          "detail": "empty_or_unmatched_response"
+        }
+      },
+      {
+        "ok": true,
+        "output_id": "card0-Virtual-2",
+        "click": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_inject",
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "SILICON_EXACT_EMULATION": false,
+          "production_keys": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "kind": "pointer",
+          "dx": 0,
+          "dy": 20,
+          "button": "left",
+          "injected_via": "uinput"
+        }
+      }
+    ],
+    "disconnect_reconnect": {
+      "disconnect_ok": true,
+      "reconnect_ok": true,
+      "layout_restored": true,
+      "method": "dual_virtio_gpu_device_del_add",
+      "connector": "gpu1",
+      "before": "unknown",
+      "mid": "557",
+      "after": "660",
+      "del_tail": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'gpu1' not found\r\n(qemu) ",
+      "add_tail": "device_add {\"driver\":\"virtio-gpu-pci\",\"id\":\"gpu1\",\"max_outputs\":1,\"outputs\":[{\"name\":\"ilab1\",\"xres\":1280,\"yres\":800}]}\u001b[K\r\nError: '{\"driver\":\"virtio-gpu-pci\"' is not a valid device model name\r\n(qemu) ",
+      "mid_compositor_outputs": 2,
+      "after_compositor_outputs": 2,
+      "after_cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n",
+      "drm_disconnected": true,
+      "compositor_output_drop": false
+    },
+    "layout_restore": {
+      "ok": true,
+      "layout_restored": true,
+      "outputs_after": 2
+    },
+    "connected": 2,
+    "guest_connected": 2,
+    "logical_connected": 0,
+    "compositor_surfaces": 2,
+    "sources": [
+      "WaylandSession"
+    ],
+    "outputs": [
+      {
+        "id": "card0-Virtual-1",
+        "connected": true,
+        "source": "WaylandSession",
+        "class": "compositor_wl_output",
+        "compositor_surface": true
+      },
+      {
+        "id": "card0-Virtual-2",
+        "connected": true,
+        "source": "WaylandSession",
+        "class": "compositor_wl_output",
+        "compositor_surface": true
+      }
+    ],
+    "SILICON_EXACT_EMULATION": false,
+    "PHYSICAL_DUAL_PANEL": "PENDING",
+    "note": "DRM enum / dual connected alone insufficient; missing: focus_move"
+  },
+  "GUEST_DUAL_OUTPUT_PASS_retained": true,
+  "compositor_output_count": 2,
+  "compositor_surfaces": 2,
+  "note": "DRM enum / dual connected alone insufficient; missing: focus_move",
+  "architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add"
+}
