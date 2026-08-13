@@ -1,228 +1,331 @@
 {
-  "schema": "gunnchos.wp011r.four_game_in_guest.v1",
-  "recorded_at_utc": "2026-08-12T03:52:20Z",
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "schema": "gunnchos.wp011r.four_game_in_guest.v2_owner_artifacts",
+  "recorded_at_utc": "2026-08-13T03:07:40Z",
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
-  "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest. Host Playwright is rejected. In-guest http.server is STATIC_ASSET_SERVER only. Web titles may use in-guest Chromium Wayland as production browser runtime. Pedestrian Pursuit (foot-racing) REQUIRES Godot 4.x production runtime with real input+save \u2014 Chromium/lab_bridge probe autosave is rejected for aggregate. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true.",
+  "PROBE_FACADE_REJECTED": true,
+  "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest using owner real build artifacts at accepted mains. Host Playwright rejected. http.server is STATIC_ASSET_SERVER only. Probe/lab_bridge autosave rejected. Beat Link requires Socket.IO service topology. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false.",
   "SILICON_EXACT_EMULATION": false,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "accepted_mains": {
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b"
+  },
   "games": {
-    "anime-aggressors": {
-      "game_id": "anime-aggressors",
-      "runtime_class": "GUEST_CHROMIUM_WAYLAND",
-      "HOST_PLAYWRIGHT_REJECTED": true,
-      "http_server_alone_accepted": false,
-      "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
-      "chromium_launch": {
-        "ok": true,
-        "pid": 1321,
-        "started": "chromium-anime-aggressors",
-        "wayland": "wayland-0",
-        "reason": null
-      },
-      "state": {
-        "ok": true,
-        "path": "/var/lib/gunnchos/games/anime-aggressors/state.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"anime-aggressors\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786505740286,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786505740.2902048",
-          "}"
-        ]
-      },
-      "save": {
-        "ok": true,
-        "path": "/var/lib/gunnchos/games/anime-aggressors/save_marker.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"anime-aggressors\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786505741087,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786505741.0977838",
-          "}"
-        ]
-      },
-      "chromium_log": {
-        "ok": false,
-        "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-anime-aggressors.log'"
-      },
-      "chromium_alive": true,
-      "input_count": 2,
-      "started": true,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save",
-      "PROBE_FACADE_REJECTED": true,
-      "LAB_DIAGNOSTIC_ONLY": true,
-      "reason": "gunnchos-lab-probe.js / lab_bridge autosave rejected for final FOUR_GAME proof on accepted mains"
-    },
     "beatlink-party": {
       "game_id": "beatlink-party",
-      "runtime_class": "GUEST_CHROMIUM_WAYLAND",
+      "owner_repo": "gunnchOS3k/beatlink-party",
+      "accepted_main_sha": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+      "runtime_class": "GUEST_CHROMIUM_WAYLAND_PLUS_SOCKETIO",
+      "package_format": "vite_web_dist_plus_node_socketio_server",
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
-      "chromium_launch": {
+      "PROBE_FACADE_REJECTED": true,
+      "required_service_topology": [
+        "Express+Socket.IO :3001",
+        "Chromium web"
+      ],
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "socketio_prep": {
         "ok": true,
-        "pid": 1504,
-        "started": "chromium-beatlink-party",
-        "wayland": "wayland-0",
+        "stdout": "PREP_OK\nNODE_BOOT v20.18.1\n",
+        "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n",
+        "returncode": 0
+      },
+      "socketio_server": {
+        "ok": true,
+        "pid": 687,
+        "started": "beatlink-socketio",
         "reason": null
       },
-      "state": {
+      "service_topology": {
+        "socketio_health_ok": true,
+        "health_stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}",
+        "room_stdout": "{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
+        "log": "/var/log/gunnchos-beatlink-server.log"
+      },
+      "socketio_server_health": {
         "ok": true,
-        "path": "/var/lib/gunnchos/games/beatlink-party/state.json",
+        "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"YHSN7\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=YHSN7\",\"qrText\":\"beatlink:join:YHSN7|http://localhost:5173/join?code=YHSN7\",\"expiresAt\":1786597696530},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786590496530,\"expiresAt\":1786597696530,\"hostToken\":\"3d119694-8b6d-4795-a859-39b32a004e00\"}}\n",
+        "returncode": 0
+      },
+      "lab_observe_server": {
+        "ok": true,
+        "already": true,
+        "http_code": "200"
+      },
+      "chromium_launch": {
+        "ok": true,
+        "pid": 738,
+        "started": "chromium-beatlink-party",
+        "wayland": "wayland-0",
+        "window_display": "wayland",
+        "url": "http://127.0.0.1:18765/beatlink-party/index.html",
+        "reason": null
+      },
+      "socketio_client_probe": {
+        "ok": true,
+        "stdout": "{\"ok\":true,\"id\":\"SiF8HDhwtcSsDet4AAAB\",\"connected\":true}\n",
+        "stderr": "",
+        "returncode": 0
+      },
+      "observe_LAB_DIAGNOSTIC_ONLY": {
+        "ok": true,
+        "path": "/var/lib/gunnchos/games/beatlink-party/observe.json",
         "lines": [
           "{",
+          "  \"LAB_DIAGNOSTIC_ONLY\": true,",
+          "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
           "  \"game_id\": \"beatlink-party\",",
-          "  \"input\": 1,",
-          "  \"started\": false,",
-          "  \"ts\": 1786505764508,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786505764.510093",
+          "  \"input\": 2,",
+          "  \"ts\": 1786590510361,",
+          "  \"native_localStorage\": {",
+          "    \"beatlink_host\": null,",
+          "    \"beatlink_player\": null,",
+          "    \"beatlink_audience\": null",
+          "  },",
+          "  \"has_owner_hook\": false,",
+          "  \"event\": \"observe\",",
+          "  \"received_at\": 1786590510.3692582",
           "}"
         ]
       },
+      "room_api_state": {
+        "ok": true,
+        "path": "/var/lib/gunnchos/games/beatlink-party/room_create.json",
+        "lines": [
+          "{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"YHSN7\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=YHSN7\",\"qrText\":\"beatlink:join:YHSN7|http://localhost:5173/join?code=YHSN7\",\"expiresAt\":1786597696530},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786590496530,\"expiresAt\":1786597696530,\"hostToken\":\"3d119694-8b6d-4795-a859-39b32a004e00\"}}"
+        ]
+      },
+      "leveldb_scrape_LAB_DIAGNOSTIC_ONLY": {
+        "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+        "stdout": ""
+      },
+      "leveldb_scrape_after_host": "",
+      "runtime_process": {
+        "chromium_alive": true,
+        "socketio_alive": true,
+        "ps": "s=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,4475006654464388480,7498663938215637905,262144 --field-trial-handle=3,i,5237333238746123006,346778731717748052,262144 --enable-features=UseOzonePlatform --variations-seed-version --pseudonymization-salt-handle=7,i,5721558184829877173,9561025172773113085,4 --trace-process-track-uuid=3190708988185955192\n/usr/lib/chromium/chromium --type=utility --utility-sub-type=network"
+      },
+      "input": {
+        "count_observed": 2,
+        "injected": true
+      },
+      "state_mutation": true,
       "save": {
         "ok": true,
-        "path": "/var/lib/gunnchos/games/beatlink-party/save_marker.json",
-        "lines": [
-          "{",
-          "  \"game_id\": \"beatlink-party\",",
-          "  \"input\": 1,",
-          "  \"started\": false,",
-          "  \"ts\": 1786505764508,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786505764.510093",
-          "}"
-        ]
+        "native_keys_observed": false,
+        "room_api_persisted": true,
+        "note": "Native beatlink_* localStorage preferred; room API proves server state"
       },
-      "chromium_log": {
-        "ok": false,
-        "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-beatlink-party.log'"
+      "telemetry": {
+        "BEATLINK_TELEMETRY": true,
+        "socketio_client_connected": true,
+        "server_log": "/var/log/gunnchos-beatlink-server.log"
       },
-      "chromium_alive": true,
-      "input_count": 1,
-      "started": false,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save",
-      "PROBE_FACADE_REJECTED": true,
-      "LAB_DIAGNOSTIC_ONLY": true,
-      "reason": "gunnchos-lab-probe.js / lab_bridge autosave rejected for final FOUR_GAME proof on accepted mains"
+      "shutdown": {
+        "chromium": true,
+        "socketio_server": true
+      },
+      "note": "Owner Beat Link Socket.IO topology + Chromium with state/persistence"
     },
     "earth-species": {
       "game_id": "earth-species",
+      "owner_repo": "gunnchOS3k/archive-of-life-artifact-world",
+      "accepted_main_sha": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
       "runtime_class": "GUEST_CHROMIUM_WAYLAND",
+      "package_format": "vite_dist_web_directory",
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+      "PROBE_FACADE_REJECTED": true,
+      "native_save_key": "archive_of_life_save",
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "lab_observe_server": {
+        "ok": true,
+        "already": true,
+        "http_code": "200"
+      },
+      "preflight_LAB_DIAGNOSTIC_ONLY": {
+        "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+        "stdout": "<!DOCTYPE html>\n<html data-gunnchos-game=\"earth-species\" data-native-save-keys=\"archive_of_life_save\" lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, in\n\n/* LAB_DIAGNOSTIC_ONLY / NOT_PRODUCT_RUNTIME_EVIDENCE\n * Observes native localStorage keys + input counts. Does not wri\nASSET=index-DTc8QnB_.js\nvar vi=Object.defineProperty;var yi=(s,e,t)=>e in s?vi(s,e,{enumerable:!0,config\nsrc=\"/assets/index-DTc8QnB_.js\"\nBRIDGE_OK\n",
+        "stderr": "curl: (23) Failure writing output to destination\n"
+      },
       "chromium_launch": {
         "ok": true,
-        "pid": 1687,
+        "pid": 1206,
         "started": "chromium-earth-species",
         "wayland": "wayland-0",
+        "window_display": "wayland",
+        "url": "http://127.0.0.1:18765/earth-species/index.html",
         "reason": null
       },
-      "state": {
+      "headless_js_LAB_DIAGNOSTIC_ONLY": {
+        "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+        "stdout": "HEADLESS_RC:0\n15682 /tmp/archive-dom.html\n        <button id=\"btn-new-game\" class=\"btn-primary\">New Expedition</button>\n      <canvas id=\"game-canvas\"></canvas>\n          <div id=\"region-name\">Archive Museum</div>\n  <script src=\"lab_observe_only.js\"></script>\n[ {\n   \"description\": \"\",\n   \"devtoolsFrontendUrl\": \"https://chrome-devtools-frontend.appspot.com/serve_rev/@4744b886309d987d292e43232776d2206cccb13d/inspector.html?ws=127.0.0.1:9222/devtools/page/38562E19F4FF67A83EEDD87628F36295\",\n   \"id\": \"38562E19F4FF67A83EEDD87628F36295\",\n   \"title\": \"Archive of Life: Artifact World\",\n   \"type\": \"page\",\n   \"url\": \"http://127.0.0.1:18765/earth-species/index.htm\n[1629:1656:0813/030915.314598:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[1629:1656:0813/030915.314948:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[1629:1656:0813/030915.314956:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid ty",
+        "stderr": ""
+      },
+      "observe_LAB_DIAGNOSTIC_ONLY": {
         "ok": true,
-        "path": "/var/lib/gunnchos/games/earth-species/state.json",
+        "path": "/var/lib/gunnchos/games/earth-species/observe.json",
         "lines": [
           "{",
+          "  \"LAB_DIAGNOSTIC_ONLY\": true,",
+          "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
           "  \"game_id\": \"earth-species\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786505791487,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786505791.4927473",
+          "  \"input\": 21,",
+          "  \"ts\": 1786590556153,",
+          "  \"native_localStorage\": {",
+          "    \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":400,\\\"y\\\":300,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786590532354}\"",
+          "  },",
+          "  \"has_owner_hook\": true,",
+          "  \"event\": \"observe\",",
+          "  \"received_at\": 1786590556.1555924",
           "}"
         ]
       },
+      "native_localStorage": {
+        "ok": true,
+        "path": "/var/lib/gunnchos/games/earth-species/native_localStorage.json",
+        "lines": [
+          "{",
+          "  \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":400,\\\"y\\\":300,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786590574754}\"",
+          "}"
+        ]
+      },
+      "runtime_process": {
+        "alive": true
+      },
+      "input": {
+        "count_observed": 21,
+        "injected": true,
+        "owner_start_implied_by_native_save": true
+      },
+      "state_mutation": true,
       "save": {
         "ok": true,
-        "path": "/var/lib/gunnchos/games/earth-species/save_marker.json",
+        "native_key": "archive_of_life_save",
+        "present": true,
+        "value_preview": "{\"version\":4,\"player\":{\"x\":400,\"y\":300,\"currentRegion\":\"museum\",\"visitedRegions\":[\"museum\"]},\"artifacts\":[],\"notebook\":[],\"quests\":{\"active\":[\"quest_savanna_intro\",\"quest_forest_tracks\",\"quest_wetland"
+      },
+      "shutdown": {
+        "chromium_udd_killed": true,
+        "headless_udd_killed": true
+      },
+      "note": "Owner Archive dist in Chromium Wayland with native archive_of_life_save"
+    },
+    "anime-aggressors": {
+      "game_id": "anime-aggressors",
+      "owner_repo": "gunnchOS3k/anime-aggressors",
+      "accepted_main_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+      "runtime_class": "GUEST_GODOT4",
+      "package_format": "godot4_project_directory_tar_gz",
+      "HOST_PLAYWRIGHT_REJECTED": true,
+      "http_server_alone_accepted": false,
+      "PROBE_FACADE_REJECTED": true,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "harness": {
+        "ok": true,
+        "stdout": "total 8\ndrwxr-xr-x 2 501 staff 4096 Aug 13 03:09 .\ndrwxr-xr-x 3 501 staff 4096 Aug 12 20:59 ..\n/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg\nHARNESS_EC=0\n",
+        "stderr": "",
+        "returncode": 0
+      },
+      "evidence_search": "",
+      "save": {
+        "ok": true,
+        "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
         "lines": [
-          "{",
-          "  \"game_id\": \"earth-species\",",
-          "  \"input\": 2,",
-          "  \"started\": true,",
-          "  \"ts\": 1786505791487,",
-          "  \"save\": true,",
-          "  \"event\": \"autosave\",",
-          "  \"received_at\": 1786505791.4927473",
-          "}"
+          "[tutorial]",
+          "",
+          "completed=true",
+          "skipped=false"
         ]
       },
-      "chromium_log": {
+      "production_runtime_evidence": {
         "ok": false,
-        "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-chromium-earth-species.log'"
+        "path": "/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json",
+        "reason": "read_failed:[Errno 2] No such file or directory: '/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json'"
       },
-      "chromium_alive": true,
-      "input_count": 2,
-      "started": true,
-      "note": "In-guest Chromium Wayland + asset bridge + uinput\u2192probe state/save",
-      "PROBE_FACADE_REJECTED": true,
-      "LAB_DIAGNOSTIC_ONLY": true,
-      "reason": "gunnchos-lab-probe.js / lab_bridge autosave rejected for final FOUR_GAME proof on accepted mains"
+      "godot_launch": {
+        "ok": true,
+        "pid": 1891,
+        "started": "godot-anime-aggressors",
+        "wayland": "wayland-0",
+        "window_display": "wayland",
+        "reason": null
+      },
+      "runtime_process": {
+        "alive": true,
+        "ps": "[godot] <defunct>\n"
+      },
+      "input": {
+        "injected": true,
+        "keys": [
+          "ret",
+          "spc",
+          "d",
+          "a",
+          "j"
+        ]
+      },
+      "state_mutation": "native_godot_save:/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
+      "shutdown": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "process_run",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "argv": [
+          "bash",
+          "-lc",
+          "python3 - <<'PY'\nimport os, signal, subprocess\nneedle = 'godot-anime'\nout = subprocess.check_output(['ps', '-eo', 'pid,args'], text=True)\nme = os.getpid()\nkilled = []\nfor line in out.splitlines():\n    parts = line.strip().split(None, 1)\n    if len(parts) < 2: continue\n    pid, args = int(parts[0]), parts[1]\n    if pid == me: continue\n    if needle in args:\n        try:\n            os.kill(pid, signal.SIGTERM)\n            killed.append(pid)\n        except OSError:\n            pass\nprint('killed', killed)\nPY"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n"
+      },
+      "note": "Owner Anime Godot4 with native aa_*.cfg persistence"
     },
     "foot-racing": {
       "game_id": "foot-racing",
       "title": "Pedestrian Pursuit",
+      "owner_repo": "gunnchOS3k/pedestrian-pursuit",
+      "accepted_main_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
       "runtime_class": "GUEST_GODOT4",
+      "package_format": "godot4_project_directory_tar_gz",
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "CHROMIUM_WEB_REJECTED_FOR_PEDESTRIAN": true,
+      "PROBE_FACADE_REJECTED": true,
       "ok": true,
       "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "godot": {
         "ok": true,
-        "downloaded": true
-      },
-      "deploy": {
-        "ok": true
+        "downloaded": true,
+        "via": "guest_curl_10.0.2.2:8765"
       },
       "godot_launch": {
         "ok": true,
-        "pid": 1880,
+        "pid": 2007,
         "started": "godot-pedestrian-pursuit",
         "wayland": "wayland-0",
+        "window_display": "wayland",
         "reason": null
       },
-      "save_attempts": [
-        {
-          "ok": false,
-          "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-          "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg'"
-        },
-        {
-          "ok": false,
-          "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/accessibility.cfg",
-          "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/Pedestrian Pursuit/accessibility.cfg'"
-        },
-        {
-          "ok": false,
-          "path": "/root/.local/share/godot/app_userdata/pedestrian-pursuit/pp_progression.cfg",
-          "reason": "read_failed:[Errno 2] No such file or directory: '/root/.local/share/godot/app_userdata/pedestrian-pursuit/pp_progression.cfg'"
-        }
-      ],
-      "godot_alive": true,
       "harness": {
         "ok": true,
-        "stdout": "Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org\n\ntotal 12\ndrwxr-xr-x 3 root root 4096 Aug 12 03:53 .\ndrwxr-xr-x 3 root root 4096 Aug 12 03:04 ..\ndrwxr-xr-x 4 root root 4096 Aug 12 03:54 Pedestrian Pursuit\n/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
+        "stdout": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
         "stderr": ""
       },
       "save": {
@@ -232,7 +335,7 @@
           "[meta]",
           "",
           "save_version=2",
-          "saved_at=\"2026-08-12T03:54:04\"",
+          "saved_at=\"2026-08-13T03:09:40\"",
           "",
           "[career]",
           "",
@@ -253,9 +356,65 @@
           "first_run_complete=false"
         ]
       },
-      "note": "GUEST_GODOT4 save retained as partial; aggregate FAIL until web titles use owner real builds on accepted mains",
-      "partial_for_aggregate": true
+      "runtime_process": {
+        "alive": true,
+        "ps": "[godot] <defunct>\n[godot] <defunct>\n"
+      },
+      "input": {
+        "injected": true
+      },
+      "state_mutation": "pp_progression.cfg present after input/harness",
+      "telemetry": {
+        "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "save_ok": true
+      },
+      "shutdown": {
+        "requested": true
+      },
+      "note": "Owner Pedestrian Pursuit Godot4 with native pp_progression.cfg"
     }
+  },
+  "accepted_sha_verification": {
+    "recorded_at_utc": "2026-08-13T03:07:40Z",
+    "games": {
+      "anime-aggressors": {
+        "owner_repo": "gunnchOS3k/anime-aggressors",
+        "accepted_main_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+        "sibling_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors",
+        "observed_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+        "ok": true,
+        "source": "sibling_checkout",
+        "lab_id": "anime-aggressors"
+      },
+      "pedestrian-pursuit": {
+        "owner_repo": "gunnchOS3k/pedestrian-pursuit",
+        "accepted_main_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+        "sibling_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
+        "observed_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+        "ok": true,
+        "source": "sibling_checkout",
+        "lab_id": "foot-racing"
+      },
+      "archive-of-life-artifact-world": {
+        "owner_repo": "gunnchOS3k/archive-of-life-artifact-world",
+        "accepted_main_sha": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+        "sibling_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world",
+        "observed_sha": "858e8e8fa7e103989e519180fb8da5444ca17594",
+        "ok": true,
+        "source": "owner_artifact_pin",
+        "lab_id": "earth-species"
+      },
+      "beatlink-party": {
+        "owner_repo": "gunnchOS3k/beatlink-party",
+        "accepted_main_sha": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+        "sibling_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/beatlink-party",
+        "observed_sha": "31a56a981ce5fcb8bea19e90eae280264e7a2a6f",
+        "ok": true,
+        "source": "owner_artifact_pin",
+        "lab_id": "beatlink-party"
+      }
+    },
+    "ok": true
   },
   "ping": {
     "ok": true,
@@ -266,101 +425,64 @@
   "compositor_info": {
     "available": true,
     "compositor": "weston",
-    "outputs": 1,
+    "outputs": 2,
     "socket": "wayland-0",
     "ok": true
   },
-  "bundle": {
-    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/artifacts/wp011r/games_guest_bundle",
-    "entries": [
-      "anime-aggressors",
-      "beatlink-party",
-      "earth-species",
-      "foot-racing",
-      "lab_bridge.py"
-    ]
+  "owner_bundle": {
+    "ok": true,
+    "staging": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/artifacts/wp011r/owner_games_guest_bundle",
+    "games": {
+      "anime-aggressors": {
+        "package": "anime-aggressors.game-godot.tar.gz",
+        "hash": "a65f76d2827aec8b38ff3e4605ca1d9398c00593444a53af8d574b96d07dbf6e"
+      },
+      "pedestrian-pursuit": {
+        "package": "pedestrian-pursuit.tar.gz",
+        "hash": "66acd9f423bbf26db17a3b6512677b5f3d7a549c00928a3ff9de50ec57644347"
+      },
+      "archive-of-life-artifact-world": {
+        "package": "archive-of-life-artifact-world.tar.gz",
+        "hash": "ed379bf9e2e20021a41fad823c3cbcb97d512dcfb244fd171b0855a27f4eb926"
+      },
+      "beatlink-party": {
+        "package": "beatlink-party.tar.gz",
+        "hash": "eac469539d0e00c93f99c8711f9a0fe2cd4188c4f2c133e5c328f8c99f185a4c"
+      }
+    }
+  },
+  "host_artifact_httpd": {
+    "port": 8766,
+    "pid": 71797,
+    "listen_ok": true
+  },
+  "godot4": {
+    "ok": true,
+    "via": "guest_curl_10.0.2.2:8765"
   },
   "deploy": {
     "ok": true,
-    "bytes": 123692,
-    "parts": 6,
-    "extract": {
-      "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "process_run",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "argv": [
-        "bash",
-        "-lc",
-        "set -e; rm -rf /root/gunnchos-games; tar -xzf /tmp/games.tar.gz -C /root; test -f /root/gunnchos-games/lab_bridge.py; cp /root/gunnchos-games/lab_bridge.py /opt/gunnchos/bin/lab_bridge.py; ls /root/gunnchos-games"
-      ],
-      "returncode": 0,
-      "stdout": "anime-aggressors\nbeatlink-party\nearth-species\nfoot-racing\nlab_bridge.py\n",
-      "stderr": "tar: gunnchos-games/anime-aggressors/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.3863592 is 1031.832007825 s in the future\ntar: gunnchos-games/anime-aggressors/index.html: time stamp 2026-08-12 03:52:22.3849154 is 1031.830380318 s in the future\ntar: gunnchos-games/anime-aggressors: time stamp 2026-08-12 03:52:22.3862538 is 1031.831689301 s in the future\ntar: gunnchos-games/beatlink-party/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.4234986 is 1031.853040841 s in the future\ntar: gunnchos-games/beatlink-party/index.html: time stamp 2026-08-12 03:52:22.4233534 is 1031.845293634 s in the future\ntar: gunnchos-games/beatlink-party: time stamp 2026-08-12 03:52:22.423438 is 1031.845312026 s in the future\ntar: gunnchos-games/earth-species/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.4368768 is 1031.858643494 s in the future\ntar: gunnchos-games/earth-species/index.html: time stamp 2026-08-12 03:52:22.4346957 is 1031.856431894 s in the future\ntar: gunnchos-games/earth-species: time stamp 2026-08-12 03:52:22.4367993 is 1031.858509202 s in the future\ntar: gunnchos-games/foot-racing/gunnchos-lab-probe.js: time stamp 2026-08-12 03:52:22.4506311 is 1031.866610362 s in the future\ntar: gunnchos-games/foot-racing/index.html: time stamp 2026-08-12 03:52:22.4505205 is 1031.86646197 s in the future\ntar: gunnchos-games/foot-racing: time stamp 2026-08-12 03:52:22.4505801 is 1031.866477321 s in the future\ntar: gunnchos-games/lab_bridge.py: time stamp 2026-08-12 03:52:22.450981 is 1031.866850054 s in the future\ntar: gunnchos-games: time stamp 2026-08-12 03:52:22.4509313 is 1031.866765479 s in the future\n"
-    },
+    "stdout": "===9p===\nGodot_v4.5-stable_linux.arm64\nOWNER_BUNDLE_MANIFEST.json\nanime-aggressors.game-godot.tar.gz\narchive-of-life-artifact-world\narchive-of-life-artifact-world.tar.gz\nbeatlink-party\nbeatlink-party.tar.gz\nlab_observe_only.js\nlab_observe_only.py\npedestrian-pursuit.tar.gz\narchive_vite_rewrite 0\nbeatlink_vite_rewrite 0\nzod_present True\npnpm_hoisted 0 body_parser True\nnode True\nserver True\narchive True\nanime True\npp True\n",
+    "stderr": "ord 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\ntar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'\n",
+    "returncode": -15,
+    "via": "virtio_9p_gdlgames"
+  },
+  "lab_observe_server": {
+    "ok": true,
     "start": {
       "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "process_start",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "started": "lab-bridge",
-      "pid": 1295
+      "pid": 656,
+      "started": "lab-observe"
     },
-    "bridge_log": {
-      "ok": false,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "logs",
-      "reason": "read_failed:[Errno 2] No such file or directory: '/var/log/gunnchos-lab-bridge.log'",
-      "transport": "virtio_serial",
-      "measurement_class": "GUEST_OBSERVED",
-      "path": "/var/log/gunnchos-lab-bridge.log",
-      "agent_path_label": "virtio-serial"
-    }
+    "http_code": "200",
+    "LAB_DIAGNOSTIC_ONLY": true,
+    "NOT_PRODUCT_RUNTIME_EVIDENCE": true
   },
-  "bridge_ready": {
+  "godot45": {
     "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "logs",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/games/bridge_ready.json",
-    "lines": [
-      "{\"ok\": true, \"port\": 18765}"
-    ]
+    "version_stdout": "4.5.stable.official.876b29033\n",
+    "via": "virtio_9p_gdlgames"
   },
-  "ok": false,
-  "note": "All four games earned in-guest Chromium Wayland runtime proofs",
-  "wp011r2_reconciliation": {
-    "at_utc": "2026-08-12T22:08:21Z",
-    "accepted_mains": {
-      "device-os": "3858e760295ad35828ff141919681f2bb8685cf0",
-      "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
-      "anime-aggressors_tip_note": "a320c7c pre-merge tip of #72; merge commit 16df36d",
-      "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
-      "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
-      "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
-      "historical_pr103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5"
-    },
-    "demotion": "probe_facade_and_lab_bridge_insufficient_for_final_four_game_proof",
-    "forbidden": [
-      "HTML recreations",
-      "probe facades",
-      "fake save bridges",
-      "http.server alone",
-      "Python game mirrors"
-    ],
-    "pedestrian_godot_retained_as_partial": true,
-    "web_titles_require_owner_real_build_systems": true
-  }
+  "ok": true,
+  "note": "All four owner-artifact in-guest proofs earned"
 }

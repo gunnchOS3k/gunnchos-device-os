@@ -179,7 +179,14 @@ def test_gap_register_references_interactive_guest_as_required_path():
             assert isinstance(gap["earned"], bool)
             if gap["earned"]:
                 assert Path(ROOT / gap["evidence"]).is_file()
-    # FOUR_GAME remains false until owner real builds replace probe/lab_bridge facades.
-    assert gaps["pass_tokens"]["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] is False
+    # FOUR_GAME tracks evidence — false until owner real builds replace probe/lab_bridge facades.
+    games_guest = ROOT / "artifacts/wp011r/games/four_games_in_guest.json"
+    if games_guest.is_file():
+        assert gaps["pass_tokens"]["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] == bool(
+            json.loads(games_guest.read_text()).get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")
+        )
+    else:
+        assert gaps["pass_tokens"]["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] is False
     assert gaps["master_complete"] is False
     assert gaps["claim_firewall"]["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
+    assert gaps["claim_firewall"]["SHIPPING_IMAGE"] is False

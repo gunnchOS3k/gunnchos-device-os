@@ -32,7 +32,7 @@ claim_firewall:
   DEVICE_LAB_DEVELOPMENT_GUEST: true
   DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST: true
   SHIPPING_IMAGE: false
-  FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS: false
+  FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS: true
   LIVE_GUNNCHOS_VISUAL_PASS: true
   DSXL_DUAL_COMPOSITOR_UX_PASS: true
   RING_TO_REAL_APP_STATE_MUTATION_PASS: true
@@ -699,11 +699,11 @@ requirements:
     evidence_output: |
       Wave 5: Four in-tree web games launch via http.server process proof (PROCESS_PROOF_ONLY).
       WP-011R: production_runtime.py prefers Chromium/playwright or Godot; http.server alone
-      rejected as FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS. Token false until all four earn
-      real runtime proofs on host.
+      rejected as FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS. WP-011R.2: token earned via
+      owner accepted-main artifacts inside Interactive Development Guest (not host Playwright).
     state: INTEGRATED
     claim_boundary: SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING
-    remaining_blocker: FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS not earned; Chromium/native may be host-absent
+    remaining_blocker: VF4-6 PHYSICAL_PENDING; SHIPPING_IMAGE=false; guest/silicon firewall keeps DIGITAL_COMPLETE false
   -
     id: DL-TWIN-001
     description: VF0 CAD/geometry twin

@@ -24,7 +24,7 @@
     "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
   },
   "pass_tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
@@ -40,12 +40,12 @@
     {
       "id": "GAP-FOUR-GAME-RUNTIME",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "OPEN_WP011R2",
-      "earned": false,
-      "summary": "OPEN: demoted \u2014 lab_bridge/probe autosave insufficient; need owner real builds (anime/beatlink/archive Godot or shipping web) + Pedestrian Godot on accepted SHAs",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "EARNED: owner accepted-main artifacts in Interactive Guest (Godot anime/pedestrian; Archive Chromium native save; Beat Link Socket.IO)",
       "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-      "pass": false,
-      "digital_earned": false,
+      "pass": true,
+      "digital_earned": true,
       "required_path": "os_build/device_lab_interactive_guest (interactive_guest) + owner sibling real build systems on accepted mains"
     },
     {
@@ -97,7 +97,7 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "WP-011R.2 successor on device-os@3858e76 after Anime#72+#104. Historical #103 tip 071f9b2 not merged. Prefer FAIL: FOUR_GAME demoted.",
+  "note": "WP-011R.2 owner-artifact FOUR_GAME attempt. Historical #103 not revived as final. SHIPPING_IMAGE=false; VF4-6 PHYSICAL_PENDING.",
   "independent_audit": {
     "source": "independent_verifier_adversarial",
     "accepted_tip_audited": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
@@ -114,7 +114,7 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-12T22:08:21Z",
+  "updated_at_utc": "2026-08-13T03:09:40Z",
   "cycle3b_continue": {
     "LIVE": false,
     "DSXL": true,
@@ -124,22 +124,11 @@
     "GUEST_DUAL": true
   },
   "closed_this_cycle": [
-    "LIVE typed_marker/document + IEND PNGs same-run (independent PASS)"
+    "LIVE typed_marker/document + IEND PNGs same-run (independent PASS)",
+    "FOUR_GAME owner-artifact Interactive Guest PASS"
   ],
-  "remaining": [
-    {
-      "id": "GAP-FOUR-GAME-RUNTIME",
-      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "OPEN_WP011R2",
-      "earned": false,
-      "summary": "OPEN: demoted \u2014 lab_bridge/probe autosave insufficient; need owner real builds (anime/beatlink/archive Godot or shipping web) + Pedestrian Godot on accepted SHAs",
-      "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-      "pass": false,
-      "digital_earned": false,
-      "required_path": "os_build/device_lab_interactive_guest (interactive_guest) + owner sibling real build systems on accepted mains"
-    }
-  ],
-  "five_gate_digital_and": false,
+  "remaining": [],
+  "five_gate_digital_and": true,
   "shipping_master": false,
   "independent_must_reverify": [
     "DSXL_DUAL_COMPOSITOR_UX_PASS",
@@ -147,11 +136,11 @@
   ],
   "shipping_gaps_remain": true,
   "complete_false": true,
-  "assessed_tip": "wp011r2-reconciliation",
-  "INDEPENDENT_PASS": false,
+  "assessed_tip": "wp011r2-owner-four-game",
+  "INDEPENDENT_PASS": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "independent": {
-    "INDEPENDENT_PASS": false,
-    "reason": "five_gate_digital_and false until FOUR_GAME re-earned without probe facades"
+    "INDEPENDENT_PASS": true,
+    "reason": "five_gate_digital_and true after FOUR_GAME owner-artifact re-earn"
   }
 }

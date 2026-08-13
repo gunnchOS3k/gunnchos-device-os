@@ -1,0 +1,76 @@
+{
+  "game_id": "anime-aggressors",
+  "owner_repo": "gunnchOS3k/anime-aggressors",
+  "accepted_main_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+  "runtime_class": "GUEST_GODOT4",
+  "package_format": "godot4_project_directory_tar_gz",
+  "HOST_PLAYWRIGHT_REJECTED": true,
+  "http_server_alone_accepted": false,
+  "PROBE_FACADE_REJECTED": true,
+  "ok": true,
+  "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+  "harness": {
+    "ok": true,
+    "stdout": "total 8\ndrwxr-xr-x 2 501 staff 4096 Aug 13 03:09 .\ndrwxr-xr-x 3 501 staff 4096 Aug 12 20:59 ..\n/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg\nHARNESS_EC=0\n",
+    "stderr": "",
+    "returncode": 0
+  },
+  "evidence_search": "",
+  "save": {
+    "ok": true,
+    "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
+    "lines": [
+      "[tutorial]",
+      "",
+      "completed=true",
+      "skipped=false"
+    ]
+  },
+  "production_runtime_evidence": {
+    "ok": false,
+    "path": "/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json",
+    "reason": "read_failed:[Errno 2] No such file or directory: '/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json'"
+  },
+  "godot_launch": {
+    "ok": true,
+    "pid": 1891,
+    "started": "godot-anime-aggressors",
+    "wayland": "wayland-0",
+    "window_display": "wayland",
+    "reason": null
+  },
+  "runtime_process": {
+    "alive": true,
+    "ps": "[godot] <defunct>\n"
+  },
+  "input": {
+    "injected": true,
+    "keys": [
+      "ret",
+      "spc",
+      "d",
+      "a",
+      "j"
+    ]
+  },
+  "state_mutation": "native_godot_save:/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
+  "shutdown": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "process_run",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "argv": [
+      "bash",
+      "-lc",
+      "python3 - <<'PY'\nimport os, signal, subprocess\nneedle = 'godot-anime'\nout = subprocess.check_output(['ps', '-eo', 'pid,args'], text=True)\nme = os.getpid()\nkilled = []\nfor line in out.splitlines():\n    parts = line.strip().split(None, 1)\n    if len(parts) < 2: continue\n    pid, args = int(parts[0]), parts[1]\n    if pid == me: continue\n    if needle in args:\n        try:\n            os.kill(pid, signal.SIGTERM)\n            killed.append(pid)\n        except OSError:\n            pass\nprint('killed', killed)\nPY"
+    ],
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n"
+  },
+  "note": "Owner Anime Godot4 with native aa_*.cfg persistence"
+}

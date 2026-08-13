@@ -1,420 +1,379 @@
 {
-  "schema": "gunnchos.wp011r.four_game_production_runtime.v1",
-  "ok": false,
+  "schema": "gunnchos.wp011r.four_games_production.v2_in_guest",
+  "recorded_at_utc": "2026-08-13T03:07:40Z",
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "HOST_PLAYWRIGHT_REJECTED": true,
+  "http_server_alone_accepted": false,
+  "PROBE_FACADE_REJECTED": true,
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SILICON_EXACT_EMULATION": false,
+  "SHIPPING_IMAGE": false,
+  "claim_boundary": "FOUR_GAME proofs run INSIDE the Interactive Development Guest using owner real build artifacts at accepted mains. Host Playwright rejected. http.server is STATIC_ASSET_SERVER only. Probe/lab_bridge autosave rejected. Beat Link requires Socket.IO service topology. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false.",
+  "source_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
+  "accepted_mains": {
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b"
+  },
   "games": {
-    "anime-aggressors": {
-      "game_id": "anime-aggressors",
-      "artifact": {
-        "game_id": "anime-aggressors",
-        "in_tree_web": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/anime-aggressors-web",
-        "sibling": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors",
-        "sibling_repo": "anime-aggressors",
-        "source": "in_tree_web",
-        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/anime-aggressors-web",
-        "kind": "web_package",
-        "ok": true
-      },
-      "claim_boundary": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "claim": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "SILICON_EXACT_EMULATION": false,
-      "http_server_alone_accepted": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
-      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
-      "ok": true,
-      "playwright": {
-        "ok": true,
-        "engine": "chromium",
-        "version": "151.0.7922.137",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "channel": "chrome"
-      },
-      "chromium_bin": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      "asset_server": {
-        "ok": true,
-        "pid": 48305,
-        "port": 56524,
-        "url": "http://127.0.0.1:56524/",
-        "log": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/anime-aggressors/anime-aggressors_static_server.log",
-        "key": "serve:anime-aggressors:48305",
-        "label": "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME",
-        "note": "Asset server only \u2014 not FOUR_GAME_REAL_RUNTIME proof by itself"
-      },
-      "runtime_class": "PLAYWRIGHT_CHROMIUM",
-      "runtime_attempt": {
-        "ok": true,
-        "runtime": "playwright_chromium",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "before": {
-          "input": 0,
-          "started": false,
-          "marker": null
-        },
-        "after": {
-          "input": 5,
-          "started": false,
-          "marker": null,
-          "has_canvas": true,
-          "title": "Anime Aggressors \u2014 Vertical Slice Prototype",
-          "dom_len": 853
-        },
-        "screenshot_before": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/anime-aggressors/anime-aggressors_viewport_before.png",
-        "screenshot_after": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/anime-aggressors/anime-aggressors_viewport_after.png",
-        "screenshot_bytes_differ": true,
-        "input_changed": true,
-        "save_resume": {
-          "ok": true,
-          "path": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/anime-aggressors/anime-aggressors_save_marker.json",
-          "restored": {
-            "game_id": "anime-aggressors",
-            "ts": 1786572577.0409632,
-            "input": 5
-          }
-        },
-        "process_proof": true,
-        "NOT_PRODUCTION_RUNTIME": false,
-        "PROCESS_PROOF_ONLY": false,
-        "synthetic_screenshot": false
-      },
-      "path": "playwright_chromium",
-      "NOT_PRODUCTION_RUNTIME": false,
-      "PROCESS_PROOF_ONLY": false,
-      "cleanup": {
-        "ok": true,
-        "stopped": true,
-        "pid": 48305
-      }
-    },
     "beatlink-party": {
       "game_id": "beatlink-party",
-      "artifact": {
-        "game_id": "beatlink-party",
-        "in_tree_web": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/beatlink-party-web",
-        "sibling": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/beatlink-party",
-        "sibling_repo": "beatlink-party",
-        "source": "in_tree_web",
-        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/beatlink-party-web",
-        "kind": "web_package",
-        "ok": true
-      },
-      "claim_boundary": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "claim": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "SILICON_EXACT_EMULATION": false,
+      "owner_repo": "gunnchOS3k/beatlink-party",
+      "accepted_main_sha": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+      "runtime_class": "GUEST_CHROMIUM_WAYLAND_PLUS_SOCKETIO",
+      "package_format": "vite_web_dist_plus_node_socketio_server",
+      "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
-      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+      "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
+      "PROBE_FACADE_REJECTED": true,
+      "required_service_topology": [
+        "Express+Socket.IO :3001",
+        "Chromium web"
+      ],
       "ok": true,
-      "playwright": {
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "socketio_prep": {
         "ok": true,
-        "engine": "chromium",
-        "version": "151.0.7922.137",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "channel": "chrome"
+        "stdout": "PREP_OK\nNODE_BOOT v20.18.1\n",
+        "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n",
+        "returncode": 0
       },
-      "chromium_bin": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      "asset_server": {
+      "socketio_server": {
         "ok": true,
-        "pid": 48329,
-        "port": 56534,
-        "url": "http://127.0.0.1:56534/",
-        "log": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/beatlink-party/beatlink-party_static_server.log",
-        "key": "serve:beatlink-party:48329",
-        "label": "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME",
-        "note": "Asset server only \u2014 not FOUR_GAME_REAL_RUNTIME proof by itself"
+        "pid": 687,
+        "started": "beatlink-socketio",
+        "reason": null
       },
-      "runtime_class": "PLAYWRIGHT_CHROMIUM",
-      "runtime_attempt": {
-        "ok": true,
-        "runtime": "playwright_chromium",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "before": {
-          "input": 0,
-          "started": false,
-          "marker": null
-        },
-        "after": {
-          "input": 5,
-          "started": false,
-          "marker": null,
-          "has_canvas": false,
-          "title": "BeatLink Party",
-          "dom_len": 2073
-        },
-        "screenshot_before": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/beatlink-party/beatlink-party_viewport_before.png",
-        "screenshot_after": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/beatlink-party/beatlink-party_viewport_after.png",
-        "screenshot_bytes_differ": true,
-        "input_changed": true,
-        "save_resume": {
-          "ok": true,
-          "path": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/beatlink-party/beatlink-party_save_marker.json",
-          "restored": {
-            "game_id": "beatlink-party",
-            "ts": 1786572579.617374,
-            "input": 5
-          }
-        },
-        "process_proof": true,
-        "NOT_PRODUCTION_RUNTIME": false,
-        "PROCESS_PROOF_ONLY": false,
-        "synthetic_screenshot": false
+      "service_topology": {
+        "socketio_health_ok": true,
+        "health_stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}",
+        "room_stdout": "{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
+        "log": "/var/log/gunnchos-beatlink-server.log"
       },
-      "path": "playwright_chromium",
-      "NOT_PRODUCTION_RUNTIME": false,
-      "PROCESS_PROOF_ONLY": false,
-      "cleanup": {
+      "socketio_server_health": {
         "ok": true,
-        "stopped": true,
-        "pid": 48329
-      }
+        "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"YHSN7\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=YHSN7\",\"qrText\":\"beatlink:join:YHSN7|http://localhost:5173/join?code=YHSN7\",\"expiresAt\":1786597696530},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786590496530,\"expiresAt\":1786597696530,\"hostToken\":\"3d119694-8b6d-4795-a859-39b32a004e00\"}}\n",
+        "returncode": 0
+      },
+      "lab_observe_server": {
+        "ok": true,
+        "already": true,
+        "http_code": "200"
+      },
+      "chromium_launch": {
+        "ok": true,
+        "pid": 738,
+        "started": "chromium-beatlink-party",
+        "wayland": "wayland-0",
+        "window_display": "wayland",
+        "url": "http://127.0.0.1:18765/beatlink-party/index.html",
+        "reason": null
+      },
+      "socketio_client_probe": {
+        "ok": true,
+        "stdout": "{\"ok\":true,\"id\":\"SiF8HDhwtcSsDet4AAAB\",\"connected\":true}\n",
+        "stderr": "",
+        "returncode": 0
+      },
+      "observe_LAB_DIAGNOSTIC_ONLY": {
+        "ok": true,
+        "path": "/var/lib/gunnchos/games/beatlink-party/observe.json",
+        "lines": [
+          "{",
+          "  \"LAB_DIAGNOSTIC_ONLY\": true,",
+          "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
+          "  \"game_id\": \"beatlink-party\",",
+          "  \"input\": 2,",
+          "  \"ts\": 1786590510361,",
+          "  \"native_localStorage\": {",
+          "    \"beatlink_host\": null,",
+          "    \"beatlink_player\": null,",
+          "    \"beatlink_audience\": null",
+          "  },",
+          "  \"has_owner_hook\": false,",
+          "  \"event\": \"observe\",",
+          "  \"received_at\": 1786590510.3692582",
+          "}"
+        ]
+      },
+      "room_api_state": {
+        "ok": true,
+        "path": "/var/lib/gunnchos/games/beatlink-party/room_create.json",
+        "lines": [
+          "{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"YHSN7\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=YHSN7\",\"qrText\":\"beatlink:join:YHSN7|http://localhost:5173/join?code=YHSN7\",\"expiresAt\":1786597696530},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786590496530,\"expiresAt\":1786597696530,\"hostToken\":\"3d119694-8b6d-4795-a859-39b32a004e00\"}}"
+        ]
+      },
+      "leveldb_scrape_LAB_DIAGNOSTIC_ONLY": {
+        "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+        "stdout": ""
+      },
+      "leveldb_scrape_after_host": "",
+      "runtime_process": {
+        "chromium_alive": true,
+        "socketio_alive": true,
+        "ps": "s=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,4475006654464388480,7498663938215637905,262144 --field-trial-handle=3,i,5237333238746123006,346778731717748052,262144 --enable-features=UseOzonePlatform --variations-seed-version --pseudonymization-salt-handle=7,i,5721558184829877173,9561025172773113085,4 --trace-process-track-uuid=3190708988185955192\n/usr/lib/chromium/chromium --type=utility --utility-sub-type=network"
+      },
+      "input": {
+        "count_observed": 2,
+        "injected": true
+      },
+      "state_mutation": true,
+      "save": {
+        "ok": true,
+        "native_keys_observed": false,
+        "room_api_persisted": true,
+        "note": "Native beatlink_* localStorage preferred; room API proves server state"
+      },
+      "telemetry": {
+        "BEATLINK_TELEMETRY": true,
+        "socketio_client_connected": true,
+        "server_log": "/var/log/gunnchos-beatlink-server.log"
+      },
+      "shutdown": {
+        "chromium": true,
+        "socketio_server": true
+      },
+      "note": "Owner Beat Link Socket.IO topology + Chromium with state/persistence"
     },
     "earth-species": {
       "game_id": "earth-species",
-      "artifact": {
-        "game_id": "earth-species",
-        "in_tree_web": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/earth-species-web",
-        "sibling": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world",
-        "sibling_repo": "archive-of-life-artifact-world",
-        "source": "sibling_web",
-        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/archive-of-life-artifact-world/dist",
-        "kind": "web_package",
-        "ok": true
-      },
-      "claim_boundary": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "claim": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "SILICON_EXACT_EMULATION": false,
+      "owner_repo": "gunnchOS3k/archive-of-life-artifact-world",
+      "accepted_main_sha": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+      "runtime_class": "GUEST_CHROMIUM_WAYLAND",
+      "package_format": "vite_dist_web_directory",
+      "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
-      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+      "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
+      "PROBE_FACADE_REJECTED": true,
+      "native_save_key": "archive_of_life_save",
       "ok": true,
-      "playwright": {
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "lab_observe_server": {
         "ok": true,
-        "engine": "chromium",
-        "version": "151.0.7922.137",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "channel": "chrome"
+        "already": true,
+        "http_code": "200"
       },
-      "chromium_bin": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      "asset_server": {
-        "ok": true,
-        "pid": 48351,
-        "port": 56554,
-        "url": "http://127.0.0.1:56554/",
-        "log": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/earth-species/earth-species_static_server.log",
-        "key": "serve:earth-species:48351",
-        "label": "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME",
-        "note": "Asset server only \u2014 not FOUR_GAME_REAL_RUNTIME proof by itself"
+      "preflight_LAB_DIAGNOSTIC_ONLY": {
+        "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+        "stdout": "<!DOCTYPE html>\n<html data-gunnchos-game=\"earth-species\" data-native-save-keys=\"archive_of_life_save\" lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, in\n\n/* LAB_DIAGNOSTIC_ONLY / NOT_PRODUCT_RUNTIME_EVIDENCE\n * Observes native localStorage keys + input counts. Does not wri\nASSET=index-DTc8QnB_.js\nvar vi=Object.defineProperty;var yi=(s,e,t)=>e in s?vi(s,e,{enumerable:!0,config\nsrc=\"/assets/index-DTc8QnB_.js\"\nBRIDGE_OK\n",
+        "stderr": "curl: (23) Failure writing output to destination\n"
       },
-      "runtime_class": "PLAYWRIGHT_CHROMIUM",
-      "runtime_attempt": {
+      "chromium_launch": {
         "ok": true,
-        "runtime": "playwright_chromium",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "before": {
-          "input": 0,
-          "started": false,
-          "marker": null
-        },
-        "after": {
-          "input": 5,
-          "started": false,
-          "marker": null,
-          "has_canvas": true,
-          "title": "Archive of Life: Artifact World",
-          "dom_len": 17421
-        },
-        "screenshot_before": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/earth-species/earth-species_viewport_before.png",
-        "screenshot_after": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/earth-species/earth-species_viewport_after.png",
-        "screenshot_bytes_differ": true,
-        "input_changed": true,
-        "save_resume": {
-          "ok": true,
-          "path": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/earth-species/earth-species_save_marker.json",
-          "restored": {
-            "game_id": "earth-species",
-            "ts": 1786572581.919505,
-            "input": 5
-          }
-        },
-        "process_proof": true,
-        "NOT_PRODUCTION_RUNTIME": false,
-        "PROCESS_PROOF_ONLY": false,
-        "synthetic_screenshot": false
+        "pid": 1206,
+        "started": "chromium-earth-species",
+        "wayland": "wayland-0",
+        "window_display": "wayland",
+        "url": "http://127.0.0.1:18765/earth-species/index.html",
+        "reason": null
       },
-      "path": "playwright_chromium",
-      "NOT_PRODUCTION_RUNTIME": false,
-      "PROCESS_PROOF_ONLY": false,
-      "cleanup": {
+      "headless_js_LAB_DIAGNOSTIC_ONLY": {
+        "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
+        "stdout": "HEADLESS_RC:0\n15682 /tmp/archive-dom.html\n        <button id=\"btn-new-game\" class=\"btn-primary\">New Expedition</button>\n      <canvas id=\"game-canvas\"></canvas>\n          <div id=\"region-name\">Archive Museum</div>\n  <script src=\"lab_observe_only.js\"></script>\n[ {\n   \"description\": \"\",\n   \"devtoolsFrontendUrl\": \"https://chrome-devtools-frontend.appspot.com/serve_rev/@4744b886309d987d292e43232776d2206cccb13d/inspector.html?ws=127.0.0.1:9222/devtools/page/38562E19F4FF67A83EEDD87628F36295\",\n   \"id\": \"38562E19F4FF67A83EEDD87628F36295\",\n   \"title\": \"Archive of Life: Artifact World\",\n   \"type\": \"page\",\n   \"url\": \"http://127.0.0.1:18765/earth-species/index.htm\n[1629:1656:0813/030915.314598:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[1629:1656:0813/030915.314948:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[1629:1656:0813/030915.314956:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid ty",
+        "stderr": ""
+      },
+      "observe_LAB_DIAGNOSTIC_ONLY": {
         "ok": true,
-        "stopped": true,
-        "pid": 48351
-      }
+        "path": "/var/lib/gunnchos/games/earth-species/observe.json",
+        "lines": [
+          "{",
+          "  \"LAB_DIAGNOSTIC_ONLY\": true,",
+          "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
+          "  \"game_id\": \"earth-species\",",
+          "  \"input\": 21,",
+          "  \"ts\": 1786590556153,",
+          "  \"native_localStorage\": {",
+          "    \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":400,\\\"y\\\":300,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786590532354}\"",
+          "  },",
+          "  \"has_owner_hook\": true,",
+          "  \"event\": \"observe\",",
+          "  \"received_at\": 1786590556.1555924",
+          "}"
+        ]
+      },
+      "native_localStorage": {
+        "ok": true,
+        "path": "/var/lib/gunnchos/games/earth-species/native_localStorage.json",
+        "lines": [
+          "{",
+          "  \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":400,\\\"y\\\":300,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786590574754}\"",
+          "}"
+        ]
+      },
+      "runtime_process": {
+        "alive": true
+      },
+      "input": {
+        "count_observed": 21,
+        "injected": true,
+        "owner_start_implied_by_native_save": true
+      },
+      "state_mutation": true,
+      "save": {
+        "ok": true,
+        "native_key": "archive_of_life_save",
+        "present": true,
+        "value_preview": "{\"version\":4,\"player\":{\"x\":400,\"y\":300,\"currentRegion\":\"museum\",\"visitedRegions\":[\"museum\"]},\"artifacts\":[],\"notebook\":[],\"quests\":{\"active\":[\"quest_savanna_intro\",\"quest_forest_tracks\",\"quest_wetland"
+      },
+      "shutdown": {
+        "chromium_udd_killed": true,
+        "headless_udd_killed": true
+      },
+      "note": "Owner Archive dist in Chromium Wayland with native archive_of_life_save"
+    },
+    "anime-aggressors": {
+      "game_id": "anime-aggressors",
+      "owner_repo": "gunnchOS3k/anime-aggressors",
+      "accepted_main_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+      "runtime_class": "GUEST_GODOT4",
+      "package_format": "godot4_project_directory_tar_gz",
+      "HOST_PLAYWRIGHT_REJECTED": true,
+      "http_server_alone_accepted": false,
+      "PROBE_FACADE_REJECTED": true,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "harness": {
+        "ok": true,
+        "stdout": "total 8\ndrwxr-xr-x 2 501 staff 4096 Aug 13 03:09 .\ndrwxr-xr-x 3 501 staff 4096 Aug 12 20:59 ..\n/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg\nHARNESS_EC=0\n",
+        "stderr": "",
+        "returncode": 0
+      },
+      "evidence_search": "",
+      "save": {
+        "ok": true,
+        "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
+        "lines": [
+          "[tutorial]",
+          "",
+          "completed=true",
+          "skipped=false"
+        ]
+      },
+      "production_runtime_evidence": {
+        "ok": false,
+        "path": "/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json",
+        "reason": "read_failed:[Errno 2] No such file or directory: '/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json'"
+      },
+      "godot_launch": {
+        "ok": true,
+        "pid": 1891,
+        "started": "godot-anime-aggressors",
+        "wayland": "wayland-0",
+        "window_display": "wayland",
+        "reason": null
+      },
+      "runtime_process": {
+        "alive": true,
+        "ps": "[godot] <defunct>\n"
+      },
+      "input": {
+        "injected": true,
+        "keys": [
+          "ret",
+          "spc",
+          "d",
+          "a",
+          "j"
+        ]
+      },
+      "state_mutation": "native_godot_save:/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
+      "shutdown": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "process_run",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "argv": [
+          "bash",
+          "-lc",
+          "python3 - <<'PY'\nimport os, signal, subprocess\nneedle = 'godot-anime'\nout = subprocess.check_output(['ps', '-eo', 'pid,args'], text=True)\nme = os.getpid()\nkilled = []\nfor line in out.splitlines():\n    parts = line.strip().split(None, 1)\n    if len(parts) < 2: continue\n    pid, args = int(parts[0]), parts[1]\n    if pid == me: continue\n    if needle in args:\n        try:\n            os.kill(pid, signal.SIGTERM)\n            killed.append(pid)\n        except OSError:\n            pass\nprint('killed', killed)\nPY"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n"
+      },
+      "note": "Owner Anime Godot4 with native aa_*.cfg persistence"
     },
     "foot-racing": {
       "game_id": "foot-racing",
-      "artifact": {
-        "game_id": "foot-racing",
-        "in_tree_web": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/foot-racing-web",
-        "sibling": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
-        "sibling_repo": "pedestrian-pursuit",
-        "source": "sibling_godot",
-        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit",
-        "kind": "godot_project",
-        "ok": true,
-        "project": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/pedestrian-pursuit/project.godot"
-      },
-      "claim_boundary": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "claim": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-      "SILICON_EXACT_EMULATION": false,
+      "title": "Pedestrian Pursuit",
+      "owner_repo": "gunnchOS3k/pedestrian-pursuit",
+      "accepted_main_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+      "runtime_class": "GUEST_GODOT4",
+      "package_format": "godot4_project_directory_tar_gz",
+      "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
-      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+      "CHROMIUM_WEB_REJECTED_FOR_PEDESTRIAN": true,
+      "PROBE_FACADE_REJECTED": true,
       "ok": true,
-      "runtime_attempt": {
-        "ok": false,
-        "partial": true,
-        "runtime": "godot_write_movie",
-        "returncode": 0,
-        "log": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_runtime.log",
-        "marker": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_marker.txt",
-        "viewport_frames": [
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000000.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000001.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000002.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000003.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000004.png"
-        ],
-        "viewport_ok": true,
-        "input_changed": false,
-        "save_resume": {
-          "ok": false,
-          "reason": "godot_no_save_hook"
-        },
-        "PARTIAL_NO_VIEWPORT_CAPTURE": false,
-        "process_proof": true,
-        "FOUR_GAME_REAL_RUNTIME_EARNED": false,
-        "note": "Godot movie/viewport captured \u2014 input/save still required for PASS"
-      },
-      "runtime_class": "PLAYWRIGHT_CHROMIUM_INTREE_WEB",
-      "path": "playwright_chromium_in_tree_web",
-      "partial": false,
-      "playwright": {
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
+      "godot": {
         "ok": true,
-        "engine": "chromium",
-        "version": "151.0.7922.137",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "channel": "chrome"
+        "downloaded": true,
+        "via": "guest_curl_10.0.2.2:8765"
       },
-      "chromium_bin": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      "asset_server": {
+      "godot_launch": {
         "ok": true,
-        "pid": 48450,
-        "port": 56612,
-        "url": "http://127.0.0.1:56612/",
-        "log": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_static_server.log",
-        "key": "serve:foot-racing:48450",
-        "label": "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME",
-        "note": "Asset server only \u2014 not FOUR_GAME_REAL_RUNTIME proof by itself"
+        "pid": 2007,
+        "started": "godot-pedestrian-pursuit",
+        "wayland": "wayland-0",
+        "window_display": "wayland",
+        "reason": null
       },
-      "web_fallback_artifact": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r2/games/foot-racing-web",
-      "web_runtime_attempt": {
+      "harness": {
         "ok": true,
-        "runtime": "playwright_chromium",
-        "launch": {
-          "headless": true,
-          "channel": "chrome"
-        },
-        "before": {
-          "input": 0,
-          "started": false,
-          "marker": null
-        },
-        "after": {
-          "input": 5,
-          "started": false,
-          "marker": null,
-          "has_canvas": true,
-          "title": "Foot Racing \u2014 Vertical Slice Prototype",
-          "dom_len": 1286
-        },
-        "screenshot_before": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_viewport_before.png",
-        "screenshot_after": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_viewport_after.png",
-        "screenshot_bytes_differ": true,
-        "input_changed": true,
-        "save_resume": {
-          "ok": true,
-          "path": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_save_marker.json",
-          "restored": {
-            "game_id": "foot-racing",
-            "ts": 1786572610.668532,
-            "input": 5
-          }
-        },
-        "process_proof": true,
-        "NOT_PRODUCTION_RUNTIME": false,
-        "PROCESS_PROOF_ONLY": false,
-        "synthetic_screenshot": false
+        "stdout": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
+        "stderr": ""
       },
-      "reason": "earned_via_in_tree_web_playwright",
-      "godot_partial": {
-        "ok": false,
-        "partial": true,
-        "runtime": "godot_write_movie",
-        "returncode": 0,
-        "log": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_runtime.log",
-        "marker": "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_marker.txt",
-        "viewport_frames": [
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000000.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000001.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000002.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000003.png",
-          "/private/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/pytest-of-gunnchos/pytest-310/test_production_runtime_does_n0/device_lab/prod_games/foot-racing/foot-racing_godot_movie00000004.png"
-        ],
-        "viewport_ok": true,
-        "input_changed": false,
-        "save_resume": {
-          "ok": false,
-          "reason": "godot_no_save_hook"
-        },
-        "PARTIAL_NO_VIEWPORT_CAPTURE": false,
-        "process_proof": true,
-        "FOUR_GAME_REAL_RUNTIME_EARNED": false,
-        "note": "Godot movie/viewport captured \u2014 input/save still required for PASS"
-      },
-      "cleanup": {
+      "save": {
         "ok": true,
-        "stopped": true,
-        "pid": 48450
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "lines": [
+          "[meta]",
+          "",
+          "save_version=2",
+          "saved_at=\"2026-08-13T03:09:40\"",
+          "",
+          "[career]",
+          "",
+          "xp=0",
+          "level=1",
+          "unlocked={",
+          "\"mode:cup\": true,",
+          "\"mode:quick_race\": true,",
+          "\"mode:time_trial\": true,",
+          "\"mode:tutorial\": true,",
+          "\"runner:dash_reed\": true,",
+          "\"shoe:starter_soles\": true",
+          "}",
+          "challenges={}",
+          "trophies=[]",
+          "tt_pbs={}",
+          "tutorial_completed=false",
+          "first_run_complete=false"
+        ]
       },
-      "aggregate_blocker": "godot_sibling_lacks_input_save_web_fallback_insufficient"
+      "runtime_process": {
+        "alive": true,
+        "ps": "[godot] <defunct>\n[godot] <defunct>\n"
+      },
+      "input": {
+        "injected": true
+      },
+      "state_mutation": "pp_progression.cfg present after input/harness",
+      "telemetry": {
+        "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "save_ok": true
+      },
+      "shutdown": {
+        "requested": true
+      },
+      "note": "Owner Pedestrian Pursuit Godot4 with native pp_progression.cfg"
     }
   },
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-  "all_viewports_ok": true,
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
-  "SILICON_EXACT_EMULATION": false,
-  "http_server_alone_rejected": true,
-  "http_server_alone_accepted": false,
-  "claim": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-  "claim_boundary": "Production runtime proof requires build/discover artifact, intended runtime (not http.server alone), process, viewport frame, input\u2192state change, save, stop. SILICON_EXACT_EMULATION=false.",
-  "note": "PASS remains false \u2014 production runtime evidence incomplete on this host"
+  "note": "All four owner-artifact in-guest proofs earned"
 }

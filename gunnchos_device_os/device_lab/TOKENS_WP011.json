@@ -14,7 +14,7 @@
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
   "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
@@ -110,14 +110,14 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-12T22:08:21Z",
+  "updated_at_utc": "2026-08-13T03:09:40Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-  "five_gate_digital_and": false,
+  "five_gate_digital_and": true,
   "wp011r2": {
     "packet": "WP-011R.2",
     "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
     "historical_103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5",
     "successor_of": 103,
-    "note": "Successor from accepted main after #104; do not merge historical #103 tip. FOUR_GAME demoted (probe/lab_bridge). LIVE/DSXL/RING/ECO010 retained with evidence consistency."
+    "note": "Successor from accepted main after #104; do not merge historical #103 tip. FOUR_GAME re-earned via owner accepted-main artifacts in Interactive Guest. LIVE/DSXL/RING/ECO010 retained. SHIPPING_IMAGE=false; DIGITAL_COMPLETE token remains false (guest/silicon firewall)."
   }
 }

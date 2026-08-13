@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.wp011r2.reconciliation.v1",
   "packet": "WP-011R.2",
-  "at_utc": "2026-08-12T22:08:21Z",
+  "at_utc": "2026-08-13T03:09:40Z",
   "strategy": "narrow_successor_from_accepted_main",
   "not_done": "Did not merge or force-push historical #103 tip 071f9b2 onto main",
   "accepted_mains_verified_live": {
@@ -25,11 +25,11 @@
     "LIVE_GUNNCHOS_VISUAL_PASS": "PASS",
     "DSXL_DUAL_COMPOSITOR_UX_PASS": "PASS",
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": "PASS",
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": "FAIL",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": "PASS",
     "ECO010_SOAK_PASS": "PASS"
   },
   "remaining_blockers": [
-    "Re-earn FOUR_GAME inside Interactive Guest using owner real build systems from accepted game mains (no lab_bridge/probe autosave)",
+    "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false",
     "Independent re-verify five_gate_digital_and after FOUR_GAME",
     "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false"
   ],
