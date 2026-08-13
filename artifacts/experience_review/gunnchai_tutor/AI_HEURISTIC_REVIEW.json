@@ -1,0 +1,77 @@
+{
+  "schema": "gunnchos.experience_review.v1",
+  "product": "gunnchai_tutor",
+  "generated_utc": "2026-08-12T21:50:00Z",
+  "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
+  "AI_HEURISTIC_REVIEW_ONLY": true,
+  "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
+  "HUMAN_E6": "NOT_EARNED",
+  "HUMAN_COMPREHENSION_E6": "NOT_EARNED",
+  "STUDENT_VALIDATED": false,
+  "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+  "visual_inspect": {
+    "status": "UNAVAILABLE",
+    "reason": "No live rendered UI inspect performed in PLATFORM-001 dogfood; companion HTML/CSS reviewed structurally only — visual polish PASS forbidden from code inspection."
+  },
+  "roles": {
+    "ER1_senior_product_ux": {
+      "mode": "AI_HEURISTIC",
+      "visual_status": "UNAVAILABLE",
+      "findings": [
+        {
+          "id": "AI-ER1-01",
+          "severity": "S2",
+          "status": "CLOSED_DIGITAL",
+          "finding": "Browser Ask posts to /api/gunnchai/ask → run_gunnchai_tutor; CONTINUITY: SDK_SANDBOX_MEMORY. DISCONNECTED_PREVIEW success path removed; fail-closed RUNTIME_UNAVAILABLE."
+        },
+        {
+          "id": "AI-ER1-02",
+          "severity": "S3",
+          "status": "REMEDIATED_DIGITAL",
+          "finding": "Memory panel uses turn cards loaded from sandbox tutor_memory.json."
+        },
+        {
+          "id": "AI-ER1-03",
+          "severity": "S3",
+          "status": "REMEDIATED_DIGITAL",
+          "finding": "Blocked prompts include recovery guidance text from SDK safety gate."
+        },
+        {
+          "id": "AI-ER1-04",
+          "severity": "S2",
+          "status": "REMEDIATED_DIGITAL",
+          "finding": "Empty/loading/error states present for Ask/reply status."
+        }
+      ]
+    },
+    "ER2_student_engagement": {
+      "mode": "AI_HEURISTIC",
+      "applicable": true,
+      "findings": [
+        {
+          "id": "AI-ER2-01",
+          "severity": "S2",
+          "status": "OPEN",
+          "finding": "SDK replies remain local templates — model quality / coaching depth not claimed."
+        },
+        {
+          "id": "AI-ER2-02",
+          "severity": "S3",
+          "status": "OPEN",
+          "finding": "First 30s affordance is clear (Ask), but reward/progress toward mastery is absent."
+        }
+      ],
+      "explicit_non_claims": [
+        "HUMAN_COMPREHENSION_E6 != PASS",
+        "STUDENT_VALIDATED != true",
+        "frontier_model_quality != PASS"
+      ]
+    },
+    "ER3_game_critic": {
+      "mode": "AI_HEURISTIC",
+      "applicable": false,
+      "note": "Not a game product — ER-3 N/A for this surface."
+    }
+  },
+  "summary": "gunnchAI Tutor Ask wired to first_party SDK sandbox memory for platform integration depth. Local-template replies only — frontier model quality + HUMAN_E6 + VISUAL still not claimed/earned."
+}

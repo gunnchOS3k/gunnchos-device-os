@@ -1,0 +1,70 @@
+{
+  "schema": "gunnchos.platform001.remediation.shell_sdk_wiring.v1",
+  "generated_utc": "2026-08-12T21:48:55Z",
+  "pr": 106,
+  "do_not_merge_pr_103": true,
+  "cursor_never_merges": true,
+  "problem": "Independent verifier demoted FIRST_PARTY_*_D5_D6_PASS after thin HTML shells (mock terminal / DISCONNECTED_PREVIEW Ask) overclaimed product-complete D5/D6.",
+  "digital_remediation": [
+    "Added companion_bridge HTTP service invoking first_party_apps.run_* (same paths as sdk/apps lifecycle).",
+    "Creator/WAIKE/gunnchAI companion shells call /api/*; fail-closed RUNTIME_UNAVAILABLE (no fake success).",
+    "gunnchAI Ask continuity = SDK_SANDBOX_MEMORY via tutor_memory.json; DISCONNECTED_PREVIEW success path removed.",
+    "Dogfood prove_companion_shell_wiring + lifecycle re-run; VISUAL_MODEL_REVIEW remains UNAVAILABLE (non-blocking residual)."
+  ],
+  "not_claimed": [
+    "HUMAN_E6",
+    "full_waike_curriculum",
+    "frontier_model_quality",
+    "VISUAL_MODEL_REVIEW",
+    "PRODUCTION_RELEASE",
+    "WP-001"
+  ],
+  "tokens": {
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": true
+  },
+  "token_status": {
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": "PASS",
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": "PASS",
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": "PASS"
+  },
+  "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+  "HUMAN_E6": "NOT_EARNED",
+  "companion_shell_wiring_ok": true,
+  "companion_shell_wiring": {
+    "ok": true,
+    "creator_runtime": "first_party_apps.creator_studio",
+    "waike_runtime": "first_party_apps.waike_app",
+    "gunnchai_continuity": "SDK_SANDBOX_MEMORY",
+    "sandbox_files": {
+      "app_runtime_log": true,
+      "creator_run": true,
+      "creator_state": true,
+      "tutor_memory": true,
+      "tutor_run": true,
+      "waike_run": true,
+      "waike_state": true
+    }
+  },
+  "S2_residual_open_non_blocking": [
+    "s2_open_visual_model_review_unavailable",
+    "html_companion_shell_still_prototype_ux",
+    "full_waike_curriculum_not_claimed",
+    "frontier_model_quality_not_claimed"
+  ],
+  "S2_closed_digitally": [
+    "s2_open_companion_shell_not_wired_to_sdk_runtime",
+    "s2_open_browser_ask_disconnected_from_runtime"
+  ],
+  "evidence": [
+    "artifacts/platform001/PLATFORM001_RESULT.json",
+    "artifacts/platform001/GAP_REGISTER.json",
+    "gunnchos_device_os/first_party_apps/companion_bridge.py",
+    "apps/creator_studio/app.js",
+    "apps/waike_learning/app.js",
+    "apps/gunnchai_tutor/app.js",
+    "scripts/platform001_first_party_dogfood.py",
+    "tests/platform001/test_first_party_app_depth.py"
+  ]
+}

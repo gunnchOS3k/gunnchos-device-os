@@ -1,0 +1,28 @@
+{
+  "schema": "gunnchos.platform001.audit.v1",
+  "base_main_sha": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "pr_104": {
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/104",
+    "merge_commit": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "state": "MERGED"
+  },
+  "do_not_merge_pr_103": true,
+  "pre_audit": {
+    "creator_studio": "Thin sdk/apps wrapper over Cont-VII first_party_apps; tempfile workspace; no sandbox persistence; HTML shell mock run/build.",
+    "waike_learning": "Thin wrapper; progress store defaulted in-memory; no gunnchAI cross-service in app path.",
+    "gunnchai_tutor": "Safety-gate-only entry; mock flags; no first_party app module; no UI tree; not owner-depth tutoring app."
+  },
+  "post_audit": {
+    "creator_studio": "Sandbox workspace persist + SDK lifecycle dogfood + companion shell wired via companion_bridge /api/creator/run → run_creator_studio.",
+    "waike_learning": "Sandbox progress/portfolio + companion shell wired via /api/waike/start → run_waike_app. Curriculum completeness still not claimed.",
+    "gunnchai_tutor": "first_party tutor + Ask wired via /api/gunnchai/ask → run_gunnchai_tutor with SDK_SANDBOX_MEMORY continuity; fail-closed RUNTIME_UNAVAILABLE (no DISCONNECTED_PREVIEW success)."
+  },
+  "independent_verifier_claim_honesty": {
+    "overclaim_found_on_tip_91e1ed0": true,
+    "prior_demotion": "Verifier demoted FIRST_PARTY_* tokens to false/PARTIAL for unwired shells + disconnected Ask.",
+    "remediation_round": "Wire companion shells to first_party sandbox I/O; remove DISCONNECTED_PREVIEW success path; re-earn tokens only with wiring proof + lifecycle; VISUAL stays UNAVAILABLE (non-blocking residual).",
+    "examples_never_product_evidence": true
+  },
+  "examples_never_product_evidence": true,
+  "tokens_file": "artifacts/platform001/PLATFORM001_RESULT.json"
+}

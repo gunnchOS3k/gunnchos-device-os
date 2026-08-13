@@ -19,6 +19,38 @@ from typing import Any
 from gunnchos_device_os.device_lab.guest_agent.client import GuestAgentClient
 from gunnchos_device_os.device_lab.image_builder import LabGuestImageBuilder
 
+# WP-011R: env flag(s) that select the Interactive Development Guest
+# (persistent qcow2 root disk + virtio-gpu/keyboard/tablet) instead of (in
+# addition to) the slim initramfs-only DEVICE_LAB_DEVELOPMENT_GUEST path.
+# See os_build/device_lab_interactive_guest/README.md.
+INTERACTIVE_GUEST_ENV_VARS = (
+    "GUNNCH_LAB_INTERACTIVE_GUEST",
+    "GUNNCHDEVICE_LAB_INTERACTIVE_GUEST",
+)
+
+
+def interactive_guest_enabled() -> bool:
+    return any(
+        (os.environ.get(name) or "").strip().lower() in {"1", "true", "yes"}
+        for name in INTERACTIVE_GUEST_ENV_VARS
+    )
+
+
+def interactive_guest_disk_path(repo_root: Path, *, arch: str = "aarch64") -> Path:
+    """Path QEMU recognizes as the Interactive Guest's persistent root disk.
+
+    Recognition only — does not create or populate the disk. Use
+    InteractiveGuestImageBuilder.create_disk_placeholder() (or the real
+    rootfs build script) to materialize it first.
+    """
+    return (
+        repo_root
+        / "os_build"
+        / "device_lab_interactive_guest"
+        / "artifacts"
+        / f"interactive-root-{arch}.qcow2"
+    )
+
 
 CLAIM = (
     "QEMU virt machine ≠ transistor-level SoC. SILICON_EXACT_EMULATION=false. "
@@ -196,6 +228,40 @@ class QemuGuestSession:
             # Re-resolve strictly for image arch.
             self.qemu_bin, self.arch = qemu_system_bin(prefer_arch=image_arch, repo_root=self.repo_root)
             self.accel = select_accel(self.arch)
+
+        # WP-011R: Interactive Development Guest recognition. Adds
+        # virtio-gpu + virtio-keyboard/tablet + a persistent root disk on
+        # top of the slim guest's kernel/initramfs boot. Fails early and
+        # honestly if the disk placeholder has not been created yet — never
+        # silently falls back to pretending the flag was not set.
+        interactive_guest = interactive_guest_enabled()
+        interactive_disk: Path | None = None
+        if interactive_guest:
+            interactive_disk = interactive_guest_disk_path(self.repo_root, arch=self.arch)
+            if not interactive_disk.exists():
+                return {
+                    "ok": False,
+                    "error": "interactive_guest_disk_missing",
+                    "path": str(interactive_disk),
+                    "note": (
+                        "GUNNCH_LAB_INTERACTIVE_GUEST=1 set but no provisioned root disk "
+                        "found. Run "
+                        "os_build/device_lab_interactive_guest/scripts/"
+                        "provision_interactive_guest_debian_cloud.py first. See "
+                        "os_build/device_lab_interactive_guest/README.md"
+                    ),
+                    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
+                    "SILICON_EXACT_EMULATION": False,
+                }
+            # The Interactive Guest is a full Debian disk with its OWN UEFI
+            # bootloader/kernel (provisioned by debian_cloud_provisioner.py) —
+            # it cannot be booted by attaching it as a secondary virtio-blk
+            # disk under the slim guest's -kernel/-initrd Alpine reference
+            # image (that combination only ever produces the slim guest
+            # boot marker, never a Debian/weston boot). Take a dedicated
+            # UEFI boot path instead and return early.
+            return self._start_interactive_uefi(interactive_disk)
+
         disk = self._ensure_persist_disk()
         self.boot_log = self.work / "qemu_boot.log"
         self.pid_file = self.work / "qemu.pid"
@@ -240,10 +306,13 @@ class QemuGuestSession:
             str(initrd),
             "-append",
             (
-                "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1 "
-                "gunnchos.lab_persist=1 gunnchos.guest_agent=1"
-                if self.arch == "aarch64"
-                else "console=ttyS0 rdinit=/init panic=1 gunnchos.lab_persist=1 gunnchos.guest_agent=1"
+                (
+                    "console=ttyAMA0 earlyprintk=serial rdinit=/init panic=1 "
+                    "gunnchos.lab_persist=1 gunnchos.guest_agent=1"
+                    if self.arch == "aarch64"
+                    else "console=ttyS0 rdinit=/init panic=1 gunnchos.lab_persist=1 gunnchos.guest_agent=1"
+                )
+                + (" gunnchos.interactive_guest=1" if interactive_guest else "")
             ),
             "-drive",
             f"file={disk},if=virtio,format={'qcow2' if disk.suffix == '.qcow2' else 'raw'}",
@@ -269,27 +338,77 @@ class QemuGuestSession:
         if os.environ.get("GUNNCHDEVICE_LAB_USERNET", "").lower() in {"1", "true", "yes"}:
             cmd += ["-netdev", "user,id=n0,restrict=on", "-device", "virtio-net-device,netdev=n0"]
 
-        # Optional dual virtio-gpu scanouts for DS-XL guest dual attempt
+        # WP-011R Interactive Guest: attach the persistent root disk +
+        # real virtio keyboard/tablet input devices (in addition to the
+        # existing QEMU-monitor sendkey path used by the slim guest).
+        if interactive_guest and interactive_disk is not None:
+            cmd += [
+                "-drive",
+                f"file={interactive_disk},if=virtio,format=qcow2",
+                "-device",
+                "virtio-keyboard-pci",
+                "-device",
+                "virtio-tablet-pci",
+            ]
+
+        # Optional dual virtio-gpu scanouts for DS-XL guest dual attempt,
+        # or a single virtio-gpu scanout for the Interactive Guest compositor.
         guest_outputs: list[dict[str, Any]] = []
-        enable_gpu = dual_guest and os.environ.get("GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU", "1").lower() in {
+        enable_gpu = (dual_guest or interactive_guest) and os.environ.get(
+            "GUNNCHDEVICE_LAB_ENABLE_VIRTIO_GPU", "1"
+        ).lower() in {
             "1",
             "true",
             "yes",
         }
-        if enable_gpu:
-            # QEMU ≥11: set outputs[].xres/yres so scanouts start Connected in guest DRM.
-            # max_outputs alone leaves Virtual-2 disconnected under headless/single-head.
-            # Output names must be ≤12 chars (QEMU virtio-gpu EDID name limit).
-            gpu_dev = (
-                '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":2,'
-                '"outputs":['
-                '{"name":"lab0","xres":1280,"yres":800},'
-                '{"name":"lab1","xres":1280,"yres":800}'
-                "]}"
-            )
-            cmd += ["-device", gpu_dev]
-            # Device attached ≠ guest-proven dual. Keep GUEST_DUAL_OUTPUT_PASS false
-            # until guest agent display_info proves two guest outputs.
+        if enable_gpu and dual_guest:
+            # QEMU ≥11: outputs[] is realize-time only; qom-set after realize rejected.
+            # virtio-gpu-pci also does NOT support hotplug (device_del rejected).
+            # Working architecture:
+            #   * Single gpu0 max_outputs=2 so Weston drm-backend sees 2 wl_outputs
+            #     (separate PCI GPUs only yield 1 weston output — drm-backend binds one card).
+            #   * Secondary disconnect/reconnect = QEMU reboot reconfig (max_outputs 2→1→2).
+            # Optional GUNNCHDEVICE_LAB_DUAL_VIRTIO_GPU_DEVICES=1 keeps dual-PCI experiment.
+            import os as _os
+            dual_pci = _os.environ.get("GUNNCHDEVICE_LAB_DUAL_VIRTIO_GPU_DEVICES", "").lower() in {
+                "1", "true", "yes"
+            }
+            max_out = int(_os.environ.get("GUNNCHDEVICE_LAB_VIRTIO_GPU_MAX_OUTPUTS", "2" if not dual_pci else "1"))
+            if dual_pci:
+                gpu0 = (
+                    '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":1,'
+                    '"outputs":[{"name":"lab0","xres":1280,"yres":800}]}'
+                )
+                gpu1 = (
+                    '{"driver":"virtio-gpu-pci","id":"gpu1","max_outputs":1,'
+                    '"outputs":[{"name":"lab1","xres":1280,"yres":800}]}'
+                )
+                cmd += ["-device", gpu0, "-device", gpu1]
+                note = "dual PCI virtio-gpu (no hotplug); weston may bind only card0"
+            else:
+                outs = ",".join(
+                    f'{{"name":"lab{i}","xres":1280,"yres":800}}' for i in range(max(1, max_out))
+                )
+                gpu_dev = (
+                    f'{{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":{max(1, max_out)},'
+                    f'"outputs":[{outs}]}}'
+                )
+                cmd += ["-device", gpu_dev]
+                note = f"virtio-gpu max_outputs={max_out}; DSXL disconnect via reboot reconfig"
+            guest_outputs = [
+                {
+                    "id": f"guest-gpu0-out{i}",
+                    "role": "primary" if i == 0 else "secondary",
+                    "connected": False,
+                    "source": "qemu_virtio_gpu_device_attached",
+                    "class": "host_device_intent",
+                    "note": note,
+                }
+                for i in range(max(2 if dual_pci else max_out, 1))
+            ]
+        elif enable_gpu and interactive_guest:
+            # Single scanout is enough for a non-dual Interactive Guest compositor.
+            cmd += ["-device", "virtio-gpu-pci,id=gpu0"]
             guest_outputs = [
                 {
                     "id": "guest-gpu0-out0",
@@ -297,16 +416,11 @@ class QemuGuestSession:
                     "connected": False,
                     "source": "qemu_virtio_gpu_device_attached",
                     "class": "host_device_intent",
-                    "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
-                },
-                {
-                    "id": "guest-gpu0-out1",
-                    "role": "secondary",
-                    "connected": False,
-                    "source": "qemu_virtio_gpu_device_attached",
-                    "class": "host_device_intent",
-                    "note": "virtio-gpu max_outputs=2 + outputs xres/yres; awaiting guest DRM proof",
-                },
+                    "note": (
+                        "virtio-gpu attached for Interactive Guest compositor; "
+                        "awaiting real guest compositor_info proof"
+                    ),
+                }
             ]
 
         # Display transport: real VNC (+ websocket when supported) — not fake screenshots
@@ -589,6 +703,267 @@ class QemuGuestSession:
             "monitor_sock": str(self.monitor_sock) if self.monitor_sock else None,
             "virtio_serial_sock": str(self.virtio_serial_sock) if self.virtio_serial_sock else None,
             "guest_outputs": guest_outputs,
+            "interactive_guest": {
+                "enabled": interactive_guest,
+                "disk_path": str(interactive_disk) if interactive_disk is not None else None,
+                "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": interactive_guest,
+                "note": (
+                    "virtio-gpu/keyboard/tablet + persistent disk recognized by QEMU launcher; "
+                    "does not by itself prove a booted compositor — see guest_agent compositor_info"
+                    if interactive_guest
+                    else "Interactive Guest not requested (slim DEVICE_LAB_DEVELOPMENT_GUEST path)"
+                ),
+            },
+            "SILICON_EXACT_EMULATION": False,
+            "claim_boundary": CLAIM,
+            "measurement_class_process": "HOST_OBSERVED",
+        }
+        (self.work / "qemu_session.json").write_text(json.dumps(self.state, indent=2) + "\n", encoding="utf-8")
+        return {
+            "ok": True,
+            "qemu_alive": _pid_alive(pid),
+            "state": self.state,
+            "boot_complete": self.boot_complete,
+            "SILICON_EXACT_EMULATION": False,
+            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
+        }
+
+    def _start_interactive_uefi(self, disk: Path) -> dict[str, Any]:
+        """Boot the provisioned Interactive Development Guest as a real UEFI guest.
+
+        Distinct from the slim guest's direct -kernel/-initrd boot: the disk
+        here has its own bootloader (grub-efi) and kernel installed by
+        cloud-init on real Debian aarch64, so QEMU must boot it via UEFI
+        pflash with the disk as the *primary* boot device — virtio-gpu,
+        virtio-keyboard, virtio-tablet, and the virtio-serial guest agent
+        channel are attached the same way the slim guest attaches them.
+        """
+        from gunnchos_device_os.device_lab.debian_cloud_provisioner import find_edk2_firmware
+
+        edk2_code = find_edk2_firmware()
+        if edk2_code is None:
+            return {
+                "ok": False,
+                "error": "edk2_firmware_missing",
+                "note": "aarch64 UEFI firmware (edk2-aarch64-code.fd) not found on this host",
+                "SILICON_EXACT_EMULATION": False,
+            }
+        self.boot_log = self.work / "qemu_boot.log"
+        self.pid_file = self.work / "qemu.pid"
+        for p in (self.boot_log, self.pid_file):
+            if p.exists():
+                p.unlink()
+        sock_dir = Path(f"/tmp/gdli-{os.getpid()}-{abs(hash(str(self.work))) % 10_000_000:x}")
+        sock_dir.mkdir(parents=True, exist_ok=True)
+        self.monitor_sock = sock_dir / "mon.sock"
+        self.virtio_serial_sock = sock_dir / "ga.sock"
+        for name, target in (("qemu-monitor.sock", self.monitor_sock), ("guest-agent.sock", self.virtio_serial_sock)):
+            link = self.work / name
+            try:
+                if link.exists() or link.is_symlink():
+                    link.unlink()
+                link.symlink_to(target)
+            except OSError:
+                pass
+        self.state["sock_dir"] = str(sock_dir)
+
+        vars_flash = self.work / "edk2-aarch64-vars.fd"
+        # Prefer Homebrew's nvram template (edk2-arm-vars.fd) over a zeroed
+        # flash — blank vars can land in the UEFI shell after PCI topology changes.
+        if not vars_flash.exists() or vars_flash.stat().st_size == 0:
+            template_candidates = [
+                Path("/opt/homebrew/share/qemu/edk2-arm-vars.fd"),
+                Path("/opt/homebrew/opt/qemu/share/qemu/edk2-arm-vars.fd"),
+                Path("/usr/share/qemu/edk2-arm-vars.fd"),
+            ]
+            copied = False
+            for tmpl in template_candidates:
+                if tmpl.is_file():
+                    shutil.copyfile(tmpl, vars_flash)
+                    copied = True
+                    break
+            if not copied:
+                with vars_flash.open("wb") as fh:
+                    fh.truncate(edk2_code.stat().st_size)
+
+        dual_guest = bool(
+            (self.profile.get("profile_id") == "dsxl_coder")
+            or self.profile.get("dual_screen")
+            or os.environ.get("GUNNCHDEVICE_LAB_DUAL_GPU", "").lower() in {"1", "true", "yes"}
+        )
+        # Dual outputs: single gpu0 max_outputs=2 (weston-friendly). Hotplug unsupported.
+        # DSXL secondary disconnect = reboot reconfig (GUNNCHDEVICE_LAB_VIRTIO_GPU_MAX_OUTPUTS).
+        import os as _os
+        dual_pci = _os.environ.get("GUNNCHDEVICE_LAB_DUAL_VIRTIO_GPU_DEVICES", "").lower() in {
+            "1", "true", "yes"
+        }
+        if dual_guest and dual_pci:
+            gpu_devices = [
+                '{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":1,'
+                '"outputs":[{"name":"ilab0","xres":1280,"yres":800}]}',
+                '{"driver":"virtio-gpu-pci","id":"gpu1","max_outputs":1,'
+                '"outputs":[{"name":"ilab1","xres":1280,"yres":800}]}',
+            ]
+        elif dual_guest:
+            max_out = int(_os.environ.get("GUNNCHDEVICE_LAB_VIRTIO_GPU_MAX_OUTPUTS", "2"))
+            outs = ",".join(
+                f'{{"name":"ilab{i}","xres":1280,"yres":800}}' for i in range(max(1, max_out))
+            )
+            gpu_devices = [
+                f'{{"driver":"virtio-gpu-pci","id":"gpu0","max_outputs":{max(1, max_out)},'
+                f'"outputs":[{outs}]}}'
+            ]
+        else:
+            gpu_devices = ["virtio-gpu-pci,id=gpu0"]
+
+        cmd = [
+            self.qemu_bin,
+            "-machine",
+            f"virt,accel={self.accel['accel']}",
+            "-cpu",
+            self.accel["cpu"],
+            "-smp",
+            str(self.smp),
+            "-m",
+            str(self.memory_mb),
+            "-drive",
+            f"if=pflash,format=raw,readonly=on,file={edk2_code}",
+            "-drive",
+            f"if=pflash,format=raw,file={vars_flash}",
+            # Explicit bootindex keeps UEFI on the Linux root disk when PCI
+            # slot order changes (GPU/keyboard inserted ahead of the disk).
+            "-drive",
+            f"file={disk},if=none,format=qcow2,id=hd0",
+            "-device",
+            "virtio-blk-pci,drive=hd0,bootindex=1",
+        ]
+        for gd in gpu_devices:
+            cmd += ["-device", gd]
+        cmd += [
+            "-device",
+            "virtio-keyboard-pci",
+            "-device",
+            "virtio-tablet-pci",
+        ]
+        # Continue assembling the rest of the UEFI cmd (serial/monitor/agent).
+        cmd += [
+            "-serial",
+            f"file:{self.boot_log}",
+            "-display",
+            "none",
+            "-pidfile",
+            str(self.pid_file),
+            "-monitor",
+            f"unix:{self.monitor_sock},server,nowait",
+            "-chardev",
+            f"socket,path={self.virtio_serial_sock},server=on,wait=off,id=ga0",
+            "-device",
+            "virtio-serial-pci,id=virtio-serial0",
+            "-device",
+            "virtserialport,bus=virtio-serial0.0,chardev=ga0,name=org.gunnchos.guest_agent.0",
+            "-daemonize",
+        ]
+        if os.environ.get("GUNNCHDEVICE_LAB_INTERACTIVE_NET", "1").lower() in {"1", "true", "yes"}:
+            # Default restrict=on (lab isolation). Set GUNNCHDEVICE_LAB_NET_RESTRICT=0
+            # when guest apt/package fetch is required for honest re-earn proofs.
+            restrict = os.environ.get("GUNNCHDEVICE_LAB_NET_RESTRICT", "1").lower() not in {
+                "0",
+                "false",
+                "no",
+                "off",
+            }
+            netdev = "user,id=n0,restrict=on" if restrict else "user,id=n0"
+            cmd += [
+                "-netdev",
+                netdev,
+                "-device",
+                "virtio-net-pci,netdev=n0",
+            ]
+        # Optional host→guest 9p share for in-guest game assets (FOUR_GAME proofs).
+        games_9p = (os.environ.get("GUNNCH_LAB_GAMES_9P_PATH") or "").strip()
+        if games_9p and Path(games_9p).is_dir():
+            cmd += [
+                "-fsdev",
+                f"local,id=gdlgames,path={games_9p},security_model=none,readonly=on",
+                "-device",
+                "virtio-9p-pci,fsdev=gdlgames,mount_tag=gdlgames",
+            ]
+        (self.work / "qemu_cmd.json").write_text(
+            json.dumps({"cmd": cmd, "accel": self.accel, "arch": self.arch, "interactive_uefi": True}, indent=2)
+            + "\n",
+            encoding="utf-8",
+        )
+        completed = self._run_qemu(cmd)
+        if isinstance(completed, dict):
+            return completed
+        if getattr(completed, "returncode", 1) != 0:
+            return {
+                "ok": False,
+                "error": "qemu_start_failed",
+                "stderr": getattr(completed, "stderr", ""),
+                "stdout": getattr(completed, "stdout", ""),
+                "cmd": cmd,
+                "SILICON_EXACT_EMULATION": False,
+            }
+        pid = None
+        for _ in range(50):
+            if self.pid_file.exists():
+                try:
+                    pid = int(self.pid_file.read_text(encoding="utf-8").strip())
+                    break
+                except ValueError:
+                    pass
+            time.sleep(0.1)
+        if pid is None or not _pid_alive(pid):
+            return {
+                "ok": False,
+                "error": "qemu_pid_missing",
+                "stderr": getattr(completed, "stderr", ""),
+                "SILICON_EXACT_EMULATION": False,
+            }
+        self.started_at = time.time()
+        self.agent = GuestAgentClient(
+            self.virtio_serial_sock,
+            timeout_sec=5.0,
+            extras={"transport_preference": "virtio_serial"},
+        )
+        boot_timeout = float(os.environ.get("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", "180"))
+        ready = self.agent.wait_ready(timeout_sec=boot_timeout)
+        self.boot_complete = bool(ready.get("ready"))
+        self.display_transport = {
+            "kind": "none_headless",
+            "note": "Interactive Guest headless by default; VNC not wired for this boot path yet",
+            "fake_screenshot_only": False,
+            "guest_outputs": [],
+        }
+        self.state = {
+            "backend": f"QEMU_{self.accel['accel'].upper()}",
+            "qemu_bin": self.qemu_bin,
+            "qemu_version": _qemu_version(self.qemu_bin),
+            "arch": self.arch,
+            "accel": self.accel,
+            "pid": pid,
+            "boot_log": str(self.boot_log),
+            "persist_disk": str(disk),
+            "display_transport": self.display_transport,
+            "guest_agent": {
+                "ready": self.boot_complete,
+                "transport": (ready.get("response") or {}).get("transport"),
+                "agent_path_label": (ready.get("response") or {}).get("agent_path_label"),
+                "measurement_class": "HOST_OBSERVED",
+                "response": ready,
+            },
+            "monitor_sock": str(self.monitor_sock),
+            "virtio_serial_sock": str(self.virtio_serial_sock),
+            "guest_outputs": [],
+            "interactive_guest": {
+                "enabled": True,
+                "boot_path": "uefi_primary_disk",
+                "disk_path": str(disk),
+                "dual_gpu_requested": dual_guest,
+                "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
+                "SHIPPING_IMAGE": False,
+            },
             "SILICON_EXACT_EMULATION": False,
             "claim_boundary": CLAIM,
             "measurement_class_process": "HOST_OBSERVED",

@@ -1,0 +1,76 @@
+{
+  "schema": "gunnchos.experience_review.v1",
+  "product": "creator_studio",
+  "generated_utc": "2026-08-12T21:50:00Z",
+  "EXPERIENCE_REVIEW_COUNCIL": "ACTIVE",
+  "AI_HEURISTIC_REVIEW_ONLY": true,
+  "HUMAN_E6_NOT_EARNED_BY_AI_REVIEW": true,
+  "HUMAN_E6": "NOT_EARNED",
+  "HUMAN_COMPREHENSION_E6": "NOT_EARNED",
+  "STUDENT_VALIDATED": false,
+  "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+  "visual_inspect": {
+    "status": "UNAVAILABLE",
+    "reason": "No live rendered UI inspect performed in PLATFORM-001 dogfood; companion HTML/CSS reviewed structurally only — visual polish PASS forbidden from code inspection."
+  },
+  "roles": {
+    "ER1_senior_product_ux": {
+      "mode": "AI_HEURISTIC",
+      "visual_status": "UNAVAILABLE",
+      "findings": [
+        {
+          "id": "CS-ER1-01",
+          "severity": "S2",
+          "status": "CLOSED_DIGITAL",
+          "finding": "Companion shell invokes /api/creator/run → run_creator_studio sandbox I/O; fail-closed RUNTIME_UNAVAILABLE when bridge down."
+        },
+        {
+          "id": "CS-ER1-01b",
+          "severity": "S2",
+          "status": "CLOSED_DIGITAL",
+          "finding": "Shell wired to gunnchSDK sandbox runtime I/O via companion_bridge (proved in dogfood)."
+        },
+        {
+          "id": "CS-ER1-02",
+          "severity": "S3",
+          "status": "OPEN",
+          "finding": "Header/polish still prototype; primary action hierarchy remains weak."
+        },
+        {
+          "id": "CS-ER1-03",
+          "severity": "S3",
+          "status": "OPEN",
+          "finding": "DS-XL layout toggle exists as a class flip only; dual-screen composition not visually validated."
+        },
+        {
+          "id": "CS-ER1-04",
+          "severity": "S2",
+          "status": "REMEDIATED_DIGITAL",
+          "finding": "Empty/loading/error states present in companion shell status + terminal."
+        }
+      ]
+    },
+    "ER2_student_engagement": {
+      "mode": "AI_HEURISTIC",
+      "applicable": true,
+      "findings": [
+        {
+          "id": "CS-ER2-01",
+          "severity": "S3",
+          "status": "OPEN",
+          "finding": "Package artifact payoff is now echoed from SDK run stdout in terminal, but visual polish still unverified."
+        }
+      ],
+      "explicit_non_claims": [
+        "HUMAN_COMPREHENSION_E6 != PASS",
+        "STUDENT_VALIDATED != true"
+      ]
+    },
+    "ER3_game_critic": {
+      "mode": "AI_HEURISTIC",
+      "applicable": false,
+      "note": "Not a game product — ER-3 N/A for this surface."
+    }
+  },
+  "summary": "Creator Studio SDK runtime + companion bridge wiring earned for platform integration depth. VISUAL still UNAVAILABLE; HUMAN_E6 not earned. Prototype polish S3 remains OPEN."
+}

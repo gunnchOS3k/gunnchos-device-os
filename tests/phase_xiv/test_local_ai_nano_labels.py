@@ -155,11 +155,30 @@ def test_gunnchai_tutor_local_path_stamps_nano_inventory(tmp_path):
     assert out["reply"]["tier"] not in {"fast", "pro", "small"}
 
 
+def test_sdk_gunnchai_tutor_requires_first_party_import():
+    text = (ROOT / "sdk" / "apps" / "gunnchai_tutor" / "main.py").read_text(encoding="utf-8")
+    assert "from gunnchos_device_os.first_party_apps.gunnchai_tutor import run_gunnchai_tutor" in text
+    assert "except ImportError" not in text
+    assert "import invoke_gunnchai_tutor_local" not in text
+    assert "invoke_gunnchai_tutor_local(" not in text
+    manifest = json.loads(
+        (ROOT / "sdk" / "apps" / "gunnchai_tutor" / "manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["version"] >= "0.3.0"
+    assert manifest["source"] == "gunnchos_device_os.first_party_apps.gunnchai_tutor"
+    assert manifest["platform001"] is True
+    assert "ai_interface" in manifest["permissions"]
+    assert "ai_interface.query" in manifest["capabilities_required"]
+    assert "storage_read" in manifest["permissions"]
+    assert "storage_write" in manifest["permissions"]
+
+
 def test_sdk_gunnchai_tutor_entrypoint_invokes_local_ai(tmp_path, monkeypatch):
     import runpy
 
     monkeypatch.setenv("GUNNCHOS_REPO_ROOT", str(ROOT))
     monkeypatch.setenv("GUNNCHOS_SANDBOX_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("GUNNCHOS_APP_PERMISSIONS", "storage_read,storage_write,ai_interface")
     monkeypatch.setattr(
         "sys.argv",
         [str(ROOT / "sdk" / "apps" / "gunnchai_tutor" / "main.py")],
@@ -171,9 +190,11 @@ def test_sdk_gunnchai_tutor_entrypoint_invokes_local_ai(tmp_path, monkeypatch):
     assert payload["ok"] is True
     assert payload["GUNNCHAI_APP_PRODUCT_COMPLETE"] is False
     assert payload["HUMAN_E6"] is False
-    assert payload["tutor_entrypoint"] in {
-        "os_local_ai_nano_fallback",
-        "first_party_run_gunnchai_tutor",
-    }
+    assert payload["tutor_entrypoint"] == "first_party_run_gunnchai_tutor"
+    assert payload["persisted_session_count"] >= 1
     assert payload["intelligence"]["smollm2_is_full_intelligence_layer"] is False
     assert payload["intelligence"]["nano"]["is_nano_fallback_only"] is True
+    assert payload["intelligence"]["nano_fallback_only"] is True
+    assert payload["intelligence"]["owner_gunnchai_sha"]
+    assert payload["intelligence"]["preferred_daily_tier"] in {"fast", "pro", "nano_fallback", "micro"}
+    assert "weights_present" in payload["intelligence"]

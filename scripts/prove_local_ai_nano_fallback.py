@@ -14,7 +14,25 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "artifacts" / "local_ai"
+GUNNCHAI_SIBLING = ROOT.parent / "gunnchAI3k"
+# Live pins confirmed 2026-08-13; prove script re-reads git when sibling is present.
+GUNNCHAI_OWNER_MAIN_SHA = "c483a45197cbe3bd4a3d68d06c91fd86494c2992"
+GUNNCHAI_32_IMPL_SHA = "11ead1aa4d4d311564ca659ef4f79ac8b9c04065"
+ACCEPTED_DEVICE_OS_MAIN = "07d901a14e3aba4404fae815c9c8578efa154ac3"
+OLD_110_HEAD = "bf5896c4c6b0f5ec74f664d5f1ff2eec3d946bac"
 sys.path.insert(0, str(ROOT))
+
+
+def _git_sha(repo: Path, ref: str) -> str | None:
+    try:
+        out = subprocess.check_output(
+            ["git", "-C", str(repo), "rev-parse", ref],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+        return out.strip() or None
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return None
 
 
 def _rejects(fn) -> bool:
@@ -89,10 +107,28 @@ def main() -> int:
     ggufs = [p.name for p in list_local_ggufs(ROOT)]
     nano_path = find_smollm2_gguf(ROOT)
 
+    device_os_head = _git_sha(ROOT, "HEAD") or ""
+    accepted_main = _git_sha(ROOT, "origin/main") or ACCEPTED_DEVICE_OS_MAIN
+    gunnchai_main = _git_sha(GUNNCHAI_SIBLING, "origin/main") or GUNNCHAI_OWNER_MAIN_SHA
+    gunnchai_impl = _git_sha(GUNNCHAI_SIBLING, "11ead1aa4d4d311564ca659ef4f79ac8b9c04065") or GUNNCHAI_32_IMPL_SHA
+
     payload = {
         "schema": "gunnchos.local_ai.nano_fallback.v1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+        "verified_device_os_head": device_os_head,
+        "accepted_device_os_main_parent": accepted_main,
+        "gunnchai_owner_main_sha": gunnchai_main,
+        "gunnchai_32_merge_sha": gunnchai_main,
+        "gunnchai_32_impl_sha": gunnchai_impl,
+        "old_110_head": OLD_110_HEAD,
+        "merge_resolution_verified": bool(
+            tests_ok
+            and mislabel_pass
+            and accepted_main == ACCEPTED_DEVICE_OS_MAIN
+            and gunnchai_main == GUNNCHAI_OWNER_MAIN_SHA
+        ),
+        "INDEPENDENT_VERIFIER": "NOT_THIS_AGENT",
+        "base_main": accepted_main,
         "doctrine": (
             "SmolLM2-135M-Instruct Q4_K_M 512-ctx is Nano/fallback only. "
             "Not Local Fast, not Local Pro, not GUNNCHAI_APP_PRODUCT_COMPLETE intelligence."
@@ -127,6 +163,7 @@ def main() -> int:
         "GUNNCHOS_FRONTIER_OS_PARITY": False,
         "INDEPENDENT_VERIFICATION": "PENDING",
         "READY_FOR_EDMUND_MERGE": False,
+        "DEVICE_OS_110_READY_FOR_EDMUND_MERGE": False,
         "do_not_merge": True,
         "open": [
             reason

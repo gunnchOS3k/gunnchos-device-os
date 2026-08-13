@@ -1,0 +1,29 @@
+[Unit]
+Description=gunnchOS Device Lab Interactive Guest Weston compositor (DRM/virtio-gpu backend)
+After=seatd.service systemd-user-sessions.service systemd-logind.service local-fs.target
+Wants=seatd.service systemd-logind.service
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+# openvt -w keeps this unit alive for as long as weston runs (without -w,
+# openvt returns immediately and systemd marks the unit inactive).
+Environment=XDG_RUNTIME_DIR=/run/gunnchos-wayland
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_CONFIG_HOME=/etc/gunnchos-weston
+Environment=LIBSEAT_BACKEND=seatd
+WorkingDirectory=/var/lib/gunnchos/screenshots
+ExecStartPre=/bin/mkdir -p /run/gunnchos-wayland /var/lib/gunnchos/screenshots /var/log
+ExecStartPre=/bin/chmod 700 /run/gunnchos-wayland
+ExecStartPre=-/sbin/modprobe uinput
+ExecStartPre=-/bin/systemctl stop getty@tty1.service
+ExecStart=/usr/bin/openvt -c 1 -f -s -w -- /usr/bin/weston --backend=drm-backend.so --socket=wayland-0 --log=/var/log/gunnchos-weston.log
+Restart=on-failure
+RestartSec=2
+User=root
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

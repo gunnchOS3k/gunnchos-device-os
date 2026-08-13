@@ -1,0 +1,111 @@
+{
+  "schema": "gunnchos.waike.pr109_main_merge_resolution.v1",
+  "pr": 109,
+  "branch": "operating-cycle-3b/waike-18-course-product-depth",
+  "strategy": "git merge --no-ff origin/main (no force-push, no rebase)",
+  "accepted_main_sha": "57a70260eaa602f4b9d44ddef576dae7a5df00cb",
+  "accepted_main_includes": ["#105", "#106", "#107", "#108"],
+  "old_109_head": "a381fa67134c265ca5921cd86535217ac49bc6dd",
+  "merge_base": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "DEVICE_OS_109_READY_FOR_EDMUND_MERGE": "NOT_SET_BY_THIS_AGENT",
+  "old_vp_moved_to": "artifacts/waike/history/VP_WAIKE_COURSE_INDEPENDENT_RESULT.pre_main_merge.json",
+  "old_vp_covers_new_tip": false,
+  "independent_verifier": "NOT_THIS_AGENT",
+  "conflicts": [
+    {
+      "path": "apps/waike_learning/app.js",
+      "resolution": "Combined #109 18-course catalog (courses.json, select course → lesson → lab/assignment → tutor) with #106 companion/SDK wiring (/api/health, /api/waike/start, /api/waike/progress). Persist and reopen via sandbox state.last_course_id. Fail-closed RUNTIME_UNAVAILABLE if bridge absent. Kept started_at/a11y from #106 and lab_ok/course_id from #109. Did not keep PACKS pack-ID browser."
+    },
+    {
+      "path": "apps/waike_learning/index.html",
+      "resolution": "Kept #109 course/lesson/assignment/lab shell and honesty banner (full curriculum/HUMAN_E6/STUDENT_VALIDATED false). Kept #106 role, high-contrast, progress export, and tutor note that progress goes through /api/waike/start. No polish campaign."
+    },
+    {
+      "path": "apps/waike_learning/style.css",
+      "resolution": "Kept #109 course-list and honesty styles; added #106 #lesson-content h4. High-contrast from both sides preserved."
+    },
+    {
+      "path": "artifacts/experience_review/waike_learning/AI_HEURISTIC_REVIEW.json",
+      "resolution": "Union of #109 18-course seed honesty (DIGITAL_SEED_NOT_COHORT_READY, course_complete=0) and #106 CLOSED_DIGITAL companion wiring (WK-ER1-05). VISUAL UNAVAILABLE. HUMAN_E6 not earned. No curriculum-complete claim."
+    },
+    {
+      "path": "artifacts/experience_review/waike_learning/SUMMARY.md",
+      "resolution": "Both D5/D6 platform integration earned AND 18-course seed depth with explicit non-completion. Companion fail-closed if bridge absent."
+    },
+    {
+      "path": "gunnchos_device_os/first_party_apps/waike_app.py",
+      "resolution": "Uses #106 runtime helpers (assert_permissions, sandbox_data_dir, load/write_json, append_app_log, intentional_crash_probe, app_id/version). Adds #109 course_id, 18-course seeds, executable labs, tutor-per-course. Legacy lesson_id wireless_basics_101→WIRELESS_6G and python_starter_pack→SOFTWARE_BUILDER. Invalid course returns ok=false error=unknown_course. Default run_waike_app(lesson_id=..., role=...) unchanged for PLATFORM-001."
+    },
+    {
+      "path": "sdk/apps/waike_learning/main.py",
+      "resolution": "Remains gunnchSDK consumer (sandbox env from PackageRunner; calls run_waike_app; does not bypass sandbox). Default lesson wireless_basics_101. Optional --course/--lesson for #109 launch. Crash probe still delegated to runtime.intentional_crash_probe."
+    },
+    {
+      "path": "sdk/apps/waike_learning/manifest.json",
+      "resolution": "Took #106 formatting + platform001=true. capabilities_required are storage.read, storage.write, ai_interface.query (NOT ai.interface). No unknown IDs."
+    }
+  ],
+  "non_conflict_followups": [
+    {
+      "path": "gunnchos_device_os/first_party_apps/companion_bridge.py",
+      "note": "Accepted-main #106 handler kept; additionally forwards optional course_id from JSON body so the #109 web shell can launch by course. lesson_id+role contract unchanged."
+    },
+    {
+      "path": "tests/waike/test_course_depth.py",
+      "note": "Added python_starter_pack→SOFTWARE_BUILDER and invalid-course fail-closed assertions next to existing wireless_basics_101 mapping."
+    }
+  ],
+  "preserved_from_main": [
+    "companion_bridge",
+    "waike_app runtime contract",
+    "gunnchai_integration",
+    "sdk runner",
+    "sdk/apps/waike_learning",
+    "apps/waike_learning",
+    "#106 D5/D6 package/install/run/persist/update/uninstall",
+    "#107 handheld image fit artifacts",
+    "#108 WP-011R.2 device-lab files"
+  ],
+  "preserved_from_109": {
+    "course_ids": [
+      "DIGITAL_CONFIDENCE",
+      "IT_SUPPORT_HARDWARE",
+      "SOFTWARE_BUILDER",
+      "NETWORKING_INFRA",
+      "CYBER_SOC",
+      "DATA_DASHBOARDS",
+      "AI_ML_EDGE",
+      "EMBEDDED_PROTOTYPING",
+      "WIRELESS_6G",
+      "PM_AGILE_LSS",
+      "GAME_DEV_INTERACTIVE",
+      "SEVEN_GC_APPRENTICESHIP",
+      "CLOUD_DEVOPS",
+      "COMM_PD_ETHICS",
+      "ROBOTICS_CONTROL",
+      "GUNNCHOS_PRODUCT_LAB",
+      "HARDWARE_ENGINEERING",
+      "DATA_VIZ_BI"
+    ],
+    "product_real_seed": 18,
+    "product_templated": 0,
+    "product_stub": 0,
+    "owner_templated": 12,
+    "owner_stub": 6,
+    "course_complete": 0,
+    "FULL_8_WEEK": "OPEN",
+    "SLIDE": "OPEN",
+    "CLASSROOM": "OPEN",
+    "STUDENT_PILOT": "OPEN",
+    "HUMAN_E6": false,
+    "STUDENT_VALIDATED": false,
+    "COHORT_READY": false
+  },
+  "not_claimed": [
+    "full_curriculum",
+    "HUMAN_E6",
+    "STUDENT_VALIDATED",
+    "COHORT_READY",
+    "old_VP_covers_post_merge_tip"
+  ]
+}

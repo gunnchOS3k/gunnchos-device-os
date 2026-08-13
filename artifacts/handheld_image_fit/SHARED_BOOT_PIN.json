@@ -1,0 +1,17 @@
+{
+  "artifacts": {
+    "initramfs": {
+      "path": "os_build/bootable_reference/artifacts/gunnchos-ref-initramfs.cpio.gz",
+      "sha256": "3e53431577143af1e7bb78894f11d7c6272096e42df8fe4354832452887a5e9d",
+      "size_bytes": 4514073
+    },
+    "kernel": {
+      "path": "os_build/bootable_reference/artifacts/vmlinuz-virt",
+      "sha256": "749eb77d8c0a887868166c220e36411400b9bed5df6443b201c96950faf0f8ac",
+      "size_bytes": 9626112
+    }
+  },
+  "combined_bytes": 14140185,
+  "note": "Pinned shared boot sizes for IMAGE_FIT; bootable MANIFEST.json is mutated mid-pytest.",
+  "schema": "gunnchos.device_os.handheld_image_fit.shared_boot_pin.v1"
+}

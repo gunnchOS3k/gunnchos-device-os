@@ -9,28 +9,34 @@
 <body>
   <header>
     <h1>WAIKE Learning</h1>
-    <p>Wireless + AI Kinesthetic Education — offline packs, labs, progress</p>
+    <p>Eighteen courses, tracked separately — seeds you can run, not a finished LMS.</p>
+    <p id="shell-status" data-state="ready">Loading courses…</p>
+    <p id="honesty" class="hint">Full curriculum complete: <strong>false</strong>. HUMAN_E6: <strong>false</strong>. STUDENT_VALIDATED: <strong>false</strong>.</p>
   </header>
-  <main class="grid">
+  <main class="layout">
     <section>
-      <h2>Course / lesson browser</h2>
-      <ul id="lessons"></ul>
+      <h2>Courses</h2>
+      <ul id="courses"></ul>
     </section>
-    <section>
-      <h2>Labs & offline packs</h2>
+    <section class="wide">
+      <h2 id="lesson-title">Lesson</h2>
+      <article id="lesson-content"></article>
+      <h3>Assignment</h3>
+      <div id="assignment"></div>
+      <h3>Lab (live repo-linked)</h3>
       <div id="labs"></div>
-      <button id="start-lab">Start selected lesson</button>
+      <button type="button" id="start-lab">Start course seed (persist progress)</button>
     </section>
     <section>
-      <h2>Progress & portfolio</h2>
-      <pre id="progress"></pre>
-      <button id="export-portfolio">Export portfolio JSON</button>
+      <h2>Progress &amp; portfolio</h2>
+      <div id="progress"></div>
+      <button type="button" id="export-portfolio">Export portfolio JSON</button>
     </section>
     <section>
-      <h2>Roles & accessibility</h2>
+      <h2>Roles, tutor, accessibility</h2>
       <label>Role <select id="role"><option>learner</option><option>educator</option></select></label>
       <label><input type="checkbox" id="a11y-high-contrast"/> High contrast</label>
-      <p id="tutor-note">gunnchAI tutoring hooks via ai_interface (local/DEV).</p>
+      <p id="tutor-note">Progress persists via /api/waike/start → first_party_apps.waike_app sandbox when the companion bridge is up. Curriculum completeness not claimed.</p>
     </section>
   </main>
   <script src="app.js"></script>

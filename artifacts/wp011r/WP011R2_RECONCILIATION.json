@@ -1,0 +1,38 @@
+{
+  "schema": "gunnchos.wp011r2.reconciliation.v1",
+  "packet": "WP-011R.2",
+  "at_utc": "2026-08-13T12:34:11Z",
+  "strategy": "narrow_successor_from_accepted_main",
+  "not_done": "Did not merge or force-push historical #103 tip 071f9b2 onto main",
+  "accepted_mains_verified_live": {
+    "device-os": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "anime-aggressors_tip_note": "a320c7c pre-merge tip of #72; merge commit 16df36d",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+    "historical_pr103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5"
+  },
+  "ci_fixes": [
+    "Ring: restore RING_TO_REAL_APPLICATION_INPUT_PASS=true (wave4); keep RING_TO_REAL_APP_STATE separate",
+    "DSXL: align gaps pass_tokens with DSXL_COMPOSITOR_UX_EVIDENCE.json",
+    "required_path: add interactive_guest required_path on LIVE/DSXL/RING/FOUR_GAME gaps",
+    "Chromium reasons: production_runtime always sets reason/partial when not earned",
+    "duplicate truth stores: TOKENS/gaps/VP/evidence synchronized",
+    "shallow WP-007 SHA: inherited fetch-depth:0 + BASE_SHA from main/#104"
+  ],
+  "gates": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": "PASS",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": "PASS",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": "PASS",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": "PASS",
+    "ECO010_SOAK_PASS": "PASS"
+  },
+  "remaining_blockers": [
+    "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false",
+    "Independent re-verify five_gate_digital_and after FOUR_GAME",
+    "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false"
+  ],
+  "cursor_never_merges": true,
+  "WP-001": "DO_NOT_START"
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "gunnchos.wp011r.implementer_result.v1",
+  "wave": "WP-011R.2",
+  "role": "implementer",
+  "pr": null,
+  "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
+  "recorded_at_utc": "2026-08-12T16:47:18Z",
+  "overall_result": "INDEPENDENT_FAIL",
+  "prefer_fail_over_false_pass": true,
+  "tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "ECO010_SOAK_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "dsxl_fix": {
+    "filter_aware_decoder": true,
+    "left_mean": 58.45217903645833,
+    "right_mean": 130.05648274739585,
+    "means_match_placement_crops": true,
+    "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+    "reconnect": "2\u21921\u21922"
+  },
+  "ring_fix": {
+    "odt_marker": "RINGMUTATION1786552403",
+    "document_state_absent": true,
+    "lab_ringring_forbidden": true,
+    "browser_clicks": 70,
+    "godot_process_alive": true,
+    "godot_save_mutation": "save_version 1\u21922 with ring:seed retained"
+  },
+  "edmund": "do-not-merge #103 until independent re-checks DSXL+RING; Cursor never merges; WP-001 DO_NOT_START",
+  "successor_of_pr": 103,
+  "assessed_tip": "operating-cycle-3b/wp-011r2-lab-reconciliation",
+  "assessed_at_utc": "2026-08-12T22:08:21Z",
+  "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "INDEPENDENT_PASS": false,
+  "independent_accepted": false,
+  "five_gate_digital_and": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "SHIPPING_IMAGE": false,
+  "per_token_verdict": [
+    {
+      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "verdict": "FAIL",
+      "note": "Probe/lab_bridge facades demoted; need owner real builds on accepted mains"
+    },
+    {
+      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
+      "verdict": "PASS",
+      "note": "Retained guest FB evidence"
+    },
+    {
+      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "verdict": "PASS",
+      "note": "Aligned with DSXL evidence (was inconsistent on #103 tip)"
+    },
+    {
+      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+      "verdict": "PASS",
+      "note": "Retained; diagnostic surfaces labeled LAB_DIAGNOSTIC_ONLY"
+    },
+    {
+      "token": "ECO010_SOAK_PASS",
+      "verdict": "PASS",
+      "note": ">=1800s retained"
+    }
+  ],
+  "wp011r2_reconciliation": {
+    "device-os": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "anime-aggressors_tip_note": "a320c7c pre-merge tip of #72; merge commit 16df36d",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+    "historical_pr103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5"
+  }
+}

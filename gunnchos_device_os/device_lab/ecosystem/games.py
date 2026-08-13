@@ -16,7 +16,9 @@ from typing import Any
 
 CLAIM = (
     "Device Lab workload launch with real host process proof (web server / Godot). "
-    "SILICON_EXACT_EMULATION=false. Not physical silicon game performance."
+    "SILICON_EXACT_EMULATION=false. Not physical silicon game performance. "
+    "python -m http.server alone is PROCESS_PROOF_ONLY / NOT_PRODUCTION_RUNTIME "
+    "and never earns FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS."
 )
 
 # Canonical four games (in-tree web packages; sibling Godot when discovered).
@@ -161,6 +163,8 @@ def launch_web_game(
         "port": port,
         "profile": meta["profile"],
         "fixture_as_launch": False,
+        "label": "PROCESS_PROOF_ONLY",
+        "NOT_PRODUCTION_RUNTIME": True,
     }
     key = f"{game_id}:{proc.pid}"
     _GAME_PROCS[key] = proc
@@ -168,12 +172,16 @@ def launch_web_game(
         "ok": bool(alive),
         "path": "web_http_server",
         "process_proof": bool(alive),
+        "PROCESS_PROOF_ONLY": True,
+        "NOT_PRODUCTION_RUNTIME": True,
+        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": False,
         "pid": proc.pid,
         "game_id": game_id,
         "evidence": evidence,
         "claim_boundary": CLAIM,
         "SILICON_EXACT_EMULATION": False,
         "intent_only": False,
+        "note": "http.server alone rejected as FOUR_GAME_REAL_RUNTIME proof",
     }
     (work / f"{game_id}_launch.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
@@ -294,7 +302,14 @@ def launch_all_four_games(*, repo_root: Path, work: Path) -> dict[str, Any]:
         "siblings": {k: str(v) for k, v in discover_sibling_roots(repo_root).items()},
         "claim_boundary": CLAIM,
         "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
-        "note": "Four-game Lab workload launches with process proof; not ECO-010 soak.",
+        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": False,
+        "PROCESS_PROOF_ONLY": True,
+        "NOT_PRODUCTION_RUNTIME": True,
+        "note": (
+            "Four-game Lab workload launches with http.server process proof only; "
+            "NOT_PRODUCTION_RUNTIME. Use production_runtime.run_all_four_production "
+            "for FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS. Not ECO-010 soak."
+        ),
     }
     work.mkdir(parents=True, exist_ok=True)
     (work / "four_games.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")

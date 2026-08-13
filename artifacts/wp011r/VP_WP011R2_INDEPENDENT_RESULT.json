@@ -1,0 +1,313 @@
+{
+  "schema": "gunnchos.wp011r2.independent_verifier_result.v1",
+  "work_item": "WP-011R.2",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "did_not_revive_historical_103_as_final": true,
+  "prefer_fail_over_false_pass": true,
+  "cursor_never_merges": true,
+  "WP-001": "DO_NOT_START",
+  "pr": {
+    "number": 108,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/108",
+    "draft": true,
+    "branch": "operating-cycle-3b/wp-011r2-lab-reconciliation",
+    "title": "feat(device-lab): WP-011R.2 Device Lab reconciliation (successor to #103)",
+    "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "historical_pr103_tip_not_final": "071f9b28b2cccd0549885e5f8427af4db3c162c5"
+  },
+  "claimed_tip_at_handoff": "7435557bec8e9ebecccc2ad3f0818cdbad280720",
+  "claimed_tip_live_confirmed": true,
+  "claimed_tip_subject": "feat(device-lab): guest-agent parse_input_event overlay earns FOUR_GAME",
+  "verified_tip": "7435557bec8e9ebecccc2ad3f0818cdbad280720",
+  "verified_tip_short": "7435557",
+  "verified_tip_subject": "feat(device-lab): guest-agent parse_input_event overlay earns FOUR_GAME",
+  "tip_note": "Handoff tip 7435557 confirmed live on DRAFT #108 (full SHA 7435557bec8e9ebecccc2ad3f0818cdbad280720). Independent verify did not implement the parse_input_event overlay and must not merge. This VP commit is evidence-only.",
+  "generated_at_utc": "2026-08-13T13:07:28Z",
+  "VP_WP011R2_INDEPENDENT_RESULT": "PASS",
+  "INDEPENDENT_PASS": true,
+  "five_gate_digital_and": true,
+  "DEVICE_OS_108_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "claim_firewall": {
+    "SHIPPING_IMAGE": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "VF4": "PHYSICAL_PENDING",
+    "VF5": "PHYSICAL_PENDING",
+    "VF6": "PHYSICAL_PENDING"
+  },
+  "accepted_owner_mains_live": {
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b"
+  },
+  "ci": {
+    "verdict": "PASS",
+    "head_sha": "7435557bec8e9ebecccc2ad3f0818cdbad280720",
+    "required_settled": true,
+    "any_failure": false,
+    "pass_count": 46,
+    "fail_count": 0,
+    "pending_count": 0,
+    "unique_check_names": 41,
+    "infra_flake_note": "digital-lock and reality initially failed installing firefox/chromium snaps (api.snapcraft.io HTTP 503 / header timeout). Independent verifier reran those jobs only; they then passed. Not an overlay-code defect. test+gate1+qemu-guest-path were green on first settlement.",
+    "key_checks_on_verified_tip": [
+      {
+        "name": "test",
+        "conclusion": "success",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31700727966/job/94448946618"
+      },
+      {
+        "name": "gate1",
+        "conclusion": "success",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31700727891/job/94448946036"
+      },
+      {
+        "name": "qemu-guest-path",
+        "conclusion": "success",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31700727906/job/94448945721"
+      },
+      {
+        "name": "digital-lock",
+        "conclusion": "success",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31700727976/job/94456716126"
+      },
+      {
+        "name": "reality",
+        "conclusion": "success",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31700727945/job/94453496512"
+      }
+    ]
+  },
+  "gates": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": {
+      "verdict": "PASS",
+      "weakened": false,
+      "evidence": "artifacts/wp011r/visual/LIVE_VISUAL_EVIDENCE.json",
+      "git_object_id_unchanged_vs_5d3fabb": "53e52e41f94c42f2535277fd48b483321297d508",
+      "note": "Blob identical at 5d3fabb/e6b229e/7435557. Overlay earn did not rewrite LIVE evidence."
+    },
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": {
+      "verdict": "PASS",
+      "weakened": false,
+      "evidence": "artifacts/wp011r/dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+      "git_object_id_unchanged_vs_5d3fabb": "cc7780d178f4fa5d2b51b738a0f2e391ef25ccd6",
+      "note": "Blob identical at 5d3fabb/e6b229e/7435557. Token not flipped false. SILICON_EXACT_EMULATION=false in packet."
+    },
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": {
+      "verdict": "PASS",
+      "weakened": false,
+      "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
+      "git_object_id_unchanged_vs_5d3fabb": "87c5de6486b9ca3660bba6bdca0700a51dfbd0a3",
+      "note": "Blob identical at 5d3fabb/e6b229e/7435557. RING_TO_REAL_APPLICATION_INPUT_PASS remains true. Diagnostic HTML/game_state still LAB_DIAGNOSTIC_ONLY leftovers."
+    },
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": {
+      "verdict": "PASS",
+      "implementer_claimed": true,
+      "independent_earned": true,
+      "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
+      "recorded_at_utc": "2026-08-13T12:32:51Z",
+      "note": "Independent challenge of guest-agent Input.parse_input_event overlay on LIVE owner Godot/page. Overlay is not ProductionGateHarness, not --quit-after, not a Python game mirror, not http.server-alone. Mailbox stub returns ok=false stub=true for godot_input_overlay; live install was virtio-serial guest_agent_cmd. Overlay GDScript actually contains Input.parse_input_event and waits for BootScene._ready_to_start. skip_tutorial() is the only owner writer of aa_first_run skipped=true (boot does not persist skip). Pedestrian/Archive/Beat Link remain honest. SHA pin does not report drifted sibling as observed_sha.",
+      "overlay_honesty": {
+        "parse_input_event_in_overlay_script": true,
+        "waits_bootscene_ready_to_start": true,
+        "skip_tutorial_ui_path": true,
+        "no_direct_GameState_skip_tutorial_write": true,
+        "no_get_tree_quit": true,
+        "no_production_gate_harness_argv": true,
+        "no_quit_after_argv": true,
+        "mailbox_stub_cannot_fake_overlay": true,
+        "live_transport": "virtio_serial",
+        "hardcoded_pass_rejected": true
+      },
+      "per_game": {
+        "anime-aggressors": {
+          "verdict": "PASS",
+          "owner_repo": "gunnchOS3k/anime-aggressors",
+          "required_accepted_main": "16df36d0025a6d124817a1800de65abef689d51f",
+          "package_sha256": "a65f76d2827aec8b38ff3e4605ca1d9398c00593444a53af8d574b96d07dbf6e",
+          "sha_source": "sibling_checkout",
+          "observed_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+          "build_command": "godot --path game-godot (owner Godot 4.5 project)",
+          "runtime_class": "GUEST_GODOT4",
+          "guest_install": "/root/owner-games/anime-aggressors from anime-aggressors.game-godot.tar.gz",
+          "runtime_process": "PASS — pid 773 STAT Sl /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3; not <defunct>; same pid alive after overlay",
+          "overlay": "guest_agent_cmd godot_input_overlay wrote device_lab_input_overlay.gd autoload DeviceLabInputOverlay; via=Input.parse_input_event; production_gate_harness=false; quit_after=false",
+          "overlay_status": "phase=done ready_to_start=true skipped_ui=true scene=res://scenes/menus/ModeSelectScene.tscn via=Input.parse_input_event — written by live Godot FileAccess, not host Python",
+          "input": "LIVE tree Input.parse_input_event(ui_accept) after BootScene._ready_to_start, then Skip Tutorial UI (owner tutorial_scene._on_skip_pressed → GameState.skip_tutorial)",
+          "state_mutation": "PASS — seeded aa_first_run.cfg completed=false skipped=false → skipped=true AFTER overlay. BootScene does not persist skipped=true; only GameState.skip_tutorial/_persist_first_run does. Default aa_save.cfg career 0/0/0 rejected as mutation (boot_wrote_aa_save presence is not earn).",
+          "save": "native user://aa_first_run.cfg mutated while pid 773 Sl",
+          "shutdown": "pkill requested",
+          "forbidden_check": "Owner Godot project; headless ProductionGateHarness rejected as sole proof; not HTML recreation; not --quit-after; not Python mirror"
+        },
+        "foot-racing": {
+          "verdict": "PASS",
+          "title": "Pedestrian Pursuit",
+          "owner_repo": "gunnchOS3k/pedestrian-pursuit",
+          "required_accepted_main": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+          "package_sha256": "66acd9f423bbf26db17a3b6512677b5f3d7a549c00928a3ff9de50ec57644347",
+          "owner_artifact_meta_hash_stale": "d0a217e1be17751b6835611c0942ee0d23bf809e2077e73d9e542d5a305d0b60",
+          "sha_source": "sibling_checkout",
+          "observed_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+          "build_command": "godot --path . (owner Godot 4.5 project)",
+          "runtime_class": "GUEST_GODOT4",
+          "guest_install": "/root/pedestrian-pursuit from pedestrian-pursuit.tar.gz",
+          "runtime_process": "PASS — pid 692 STAT Dl then Sl full godot argv; not zombie before or after input",
+          "input": "keys injected (ret/spc/w/d/a) while Wayland GUI alive",
+          "state_mutation": "PASS — seeded pp_progression.cfg save_version 1→2; saved_at 2026-01-01→2026-08-13T12:33:31; extra unlocked modes; independent pedestrian_cfg_mutated via=seeded_v1_to_v2 ok=true; not first-run defaults / not --quit-after",
+          "save": "native user://pp_progression.cfg mutated while pid 692 alive non-zombie",
+          "logs": "headless_quit_after_rejected=true",
+          "shutdown": "pkill requested",
+          "forbidden_check": "Owner Godot project; Chromium web correctly rejected for Pedestrian"
+        },
+        "earth-species": {
+          "verdict": "PASS",
+          "title": "Archive of Life",
+          "owner_repo": "gunnchOS3k/archive-of-life-artifact-world",
+          "required_accepted_main": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+          "package_sha256": "1fc7e6f9c8089bbcca76b90f7c917528066336cb86e18eaf66ce7e92592a2460",
+          "index_asset": "index-DTc8QnB_.js",
+          "index_sha256_packaged": "0e1f2ac6b3b1fcd7e6180eab8f5288659aec9ccaeefb10d8f792080ef4efee50",
+          "owner_artifact_index_sha256_stale": "7d30353d68197ccd20cbf28240f78ed3b42125a984f2f09cf45cb899b0c29110",
+          "sha_source": "owner_artifact_pin",
+          "observed_sha": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+          "sibling_head_not_observed": "858e8e8fa7e103989e519180fb8da5444ca17594",
+          "build_command": "npm ci && npm run build",
+          "runtime_class": "GUEST_CHROMIUM_WAYLAND",
+          "guest_install": "owner dist served by labeled STATIC_ASSET_SERVER :18765",
+          "runtime_process": "PASS — chromium pid 1151 STAT S<l ozone-platform=wayland; not zombie",
+          "overlay": "guest_agent_cmd browser_input_overlay wrote lab_input_overlay.js; via=KeyboardEvent+real_button; no localStorage.setItem",
+          "input": "real #btn-new-game click + KeyboardEvent WASD/map on LIVE owner page",
+          "state_mutation": "PASS — native archive_of_life_save player x=721.768 y=274.800 currentRegion=museum vs default museum spawn 400,300; independent archive_save_mutated_from_default ok=true (position mutation AFTER overlay; region still museum is allowed when position moved)",
+          "save": "native localStorage archive_of_life_save version=4 from owner saveGame; observer labeled LAB_DIAGNOSTIC_ONLY",
+          "logs": "observe.json / native_localStorage.json",
+          "shutdown": "chromium UDD killed",
+          "provenance": "Packaged JS is index-DTc8QnB_.js sha256=0e1f2ac6 (accepted-main asset), lacks successor capturePolishHook. Sibling HEAD 858e8e8 is NOT reported as observed_sha. pin_lie_forbidden=true.",
+          "forbidden_check": "Owner vite dist, not device-os HTML recreation. http.server labeled static asset server only."
+        },
+        "beatlink-party": {
+          "verdict": "PASS",
+          "owner_repo": "gunnchOS3k/beatlink-party",
+          "required_accepted_main": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+          "package_sha256": "c2570007806357471ffed2046c18b9f7ca0400cf352146598fc2c13e82d165f7",
+          "web_asset": "index-Do6lu92x.js",
+          "built_from_claimed": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+          "sha_source": "owner_artifact_pin",
+          "observed_sha": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+          "sibling_head_not_observed": "31a56a981ce5fcb8bea19e90eae280264e7a2a6f",
+          "build_command": "pnpm install --frozen-lockfile && VITE_API_URL=http://127.0.0.1:3001 VITE_WS_URL=http://127.0.0.1:3001 pnpm -r build",
+          "runtime_class": "GUEST_CHROMIUM_WAYLAND_PLUS_SOCKETIO",
+          "guest_install": "web dist + node dist/index.js Socket.IO :3001 + linux-arm64 node",
+          "runtime_process": "PASS — chromium pid 924 STAT S<l + socketio pid 873 STAT Sl node dist/index.js; health {status:ok,service:beatlink-party,roomStore:memory}",
+          "input": "pointer+keys injected on /host; observe.json input=0 because lab_observe is not the /host SPA; Socket.IO client connected id A6j7DKtyokujR0-sAAAD",
+          "state_mutation": "PASS — native beatlink_host observed in Chromium LevelDB scrape after /host load; room API create explicitly NOT accepted as save (room_api_persisted=false)",
+          "save": "native_keys_observed=true keys_found=[beatlink_host]; observe localStorage still null (diagnostic miss, not room-API-as-save)",
+          "logs": "/var/log/gunnchos-beatlink-server.log",
+          "shutdown": "chromium + socketio pkill requested",
+          "provenance": "Packaged RoomManager CallAndResponse count=1 matches 4b3970c not draft 31a56a9 (count=8). Packaged web asset index-Do6lu92x.js. observed_sha is accepted main, not sibling HEAD. Topology is real Socket.IO, not static page alone.",
+          "forbidden_check": "Not http.server alone. Probe/lab_observe labeled LAB_DIAGNOSTIC_ONLY. Chromium loaded owner dist via :18765 while Socket.IO ran on :3001."
+        }
+      },
+      "earn_function_defects_closed": [
+        "Godot alive now requires launched pid STAT not Z and argv not <defunct>",
+        "Anime/Pedestrian earned = launch.ok AND alive0 AND alive1 AND mut.ok (no OR save_ok tautology)",
+        "Pedestrian rejects first-run default presence and --quit-after as sole proof",
+        "Archive rejects default museum spawn x=400,y=300 as mutation",
+        "Beat Link rejects room API create as save; requires beatlink_* native keys",
+        "honest_sha_entry reports accepted_main_sha as observed_sha on pin; sibling_head recorded separately",
+        "Anime overlay is Input.parse_input_event on LIVE owner tree after _ready_to_start; not hardcoded PASS; mailbox stub cannot install overlay"
+      ]
+    },
+    "ECO010_SOAK_PASS": {
+      "verdict": "PASS",
+      "weakened": false,
+      "evidence": "artifacts/wp011r/ECO010_SOAK.json",
+      "git_object_id_unchanged_vs_5d3fabb": "cb2e60b82bfb7d0610aba4bd0210acb590fc4ac3",
+      "duration_sec_ran": 1800.05,
+      "duration_shortened_to_pass": false,
+      "dry_check": false,
+      "note": "Blob identical at 5d3fabb/e6b229e/7435557. ≥1800s soak retained. Token not flipped false."
+    }
+  },
+  "five_gate_and": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": "PASS",
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": "PASS",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": "PASS",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": "PASS",
+    "ECO010_SOAK_PASS": "PASS",
+    "result": true
+  },
+  "defects_S0_S1": {
+    "verdict": "PASS",
+    "S0_open": 0,
+    "S1_open": 0,
+    "items": [
+      {
+        "id": "S1-FOUR-GAME-FALSE-PASS",
+        "severity": "S1",
+        "status": "CLOSED",
+        "summary": "Tautological earners / zombie-as-alive / headless-default saves / room-API-as-save / SHA pin-lie closed on e6b229e. Anime input-driven native mutation earned on 7435557 via live Input.parse_input_event overlay (not boot write, not ProductionGateHarness, not --quit-after)."
+      },
+      {
+        "id": "S1-SCORE-COMPLETE-INFLATION",
+        "severity": "S1",
+        "status": "CLOSED",
+        "summary": "DEVICE_LAB_SCORE_INDEPENDENT.json and TOKENS keep GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE=false even with five_gate_digital_and=true; score script hardcodes master_complete=False on interactive guest."
+      }
+    ]
+  },
+  "not_silently_weakened": {
+    "LIVE": true,
+    "DSXL": true,
+    "RING": true,
+    "ECO010": true,
+    "SHIPPING_IMAGE_false": true,
+    "COMPLETE_false": true,
+    "VF4_6_PHYSICAL_PENDING": true,
+    "WP013_CLI": "Restored on ceea429; retained on 7435557 (CI test+gate1 green). Not a FIVE-GATE token."
+  },
+  "forbidden_as_final_proof": {
+    "html_recreation": "not used as earn path for Godot titles",
+    "probe_facade": "lab_observe_only.js/py labeled LAB_DIAGNOSTIC_ONLY / NOT_PRODUCT_RUNTIME_EVIDENCE",
+    "fake_save_bridge": "observer does not write game saves; overlay JS has no localStorage.setItem; Beat Link room API create not accepted as save",
+    "hardcoded_state_marker": "not used for owner_result earn; Anime earned = launch.ok AND alive0 AND alive1 AND mut.ok",
+    "http_server_alone": "rejected as proof; STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME only; Beat Link requires Socket.IO :3001",
+    "python_game_mirror": "not used",
+    "godot_zombie_as_alive": "rejected — pid STAT Z / <defunct> is FAIL",
+    "sha_pin_lie": "rejected — observed_sha is accepted_main_sha on pin; drifted sibling recorded as sibling_head only",
+    "production_gate_harness": "rejected as sole Anime proof; overlay refuses production-gate / quit-after cmdline",
+    "quit_after": "rejected as sole mutation proof",
+    "boot_write_as_skip": "rejected — BootScene does not persist skipped=true; only GameState.skip_tutorial does"
+  },
+  "remaining_blockers": [
+    "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false; COMPLETE remains false (interactive guest + silicon inexact — five-gate AND does not inflate COMPLETE)",
+    "Cursor never merges; WP-001 DO_NOT_START. DEVICE_OS_108_READY_FOR_EDMUND_MERGE=true is Edmund-only."
+  ],
+  "residual_non_blocking": [
+    "OWNER_ARTIFACT pedestrian artifact_hash_sha256 d0a217e1 is stale vs packaged tar 66acd9f4 (guest used 66acd9f4; observed_sha still accepted main)",
+    "OWNER_ARTIFACT archive index_sha256 7d30353d is stale vs packaged index-DTc8QnB_.js 0e1f2ac6",
+    "Anime overlay also has emit_signal('pressed') fallback after parse_input_event; mutation still requires owner skip_tutorial persist on the live tree",
+    "digital-lock/reality required snapcraft.io reruns (503/timeout) before green; not an overlay defect"
+  ],
+  "remediation": {
+    "required": false,
+    "done_this_verify": [
+      "Reran snapcraft-503 digital-lock/reality jobs until green on live tip 7435557",
+      "Recorded independent VP on DRAFT #108 at live tip 7435557"
+    ],
+    "not_done": [
+      "Did not implement the parse_input_event overlay",
+      "Did not merge",
+      "Did not revive historical #103 tip 071f9b2 as final",
+      "Did not weaken LIVE/DSXL/RING/ECO010",
+      "Did not flip SHIPPING_IMAGE or COMPLETE true"
+    ]
+  },
+  "local_pytest": "tests/device_lab/test_four_game_honest.py + test_wp011r_tokens.py 21 passed",
+  "claim_boundary": "Digital independent verification of gunnchos-device-os DRAFT #108 after guest-agent Input.parse_input_event overlay. LIVE/DSXL/RING/ECO010 retained PASS (blobs unchanged vs 5d3fabb). Anime independent PASS (live non-zombie Godot + BootScene._ready_to_start + parse_input_event + aa_first_run skipped=true after overlay, not boot write). Pedestrian/Archive/Beat Link independent PASS. SHA pin does not report drifted sibling as observed_sha. five_gate_digital_and=true. SCORE COMPLETE=false. SHIPPING_IMAGE=false. VF4-6 PHYSICAL_PENDING. DEVICE_OS_108_READY_FOR_EDMUND_MERGE=true. Cursor did not implement the overlay and must not merge.",
+  "verdict_summary": "Live tip 7435557bec8e9ebecccc2ad3f0818cdbad280720 confirmed; CI 46/46 green after snapcraft-503 reruns. Anime PASS (pid 773 Sl + overlay_status ready_to_start/done/skipped_ui + seeded aa_first_run skipped false→true via owner skip_tutorial after parse_input_event). Pedestrian PASS (non-zombie Godot + native pp_progression 1→2). Archive PASS (non-zombie Chromium + post-overlay position 721.8,274.8 vs default 400,300). Beat Link PASS (Socket.IO+Chromium alive + native beatlink_host; room API not save). SHA pin honest. LIVE/DSXL/RING/ECO010 not weakened. five_gate_digital_and=true. SCORE COMPLETE=false. SHIPPING_IMAGE=false. DEVICE_OS_108_READY_FOR_EDMUND_MERGE=true. VF4-6 PHYSICAL_PENDING."
+}

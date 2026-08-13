@@ -1,0 +1,71 @@
+{
+  "schema": "gunnchos.wp011r.implementer_followup.v1",
+  "role": "implementer_followup_after_independent_fail",
+  "pr": null,
+  "assessed_at_utc": "2026-08-12T22:08:21Z",
+  "overall_result": "INDEPENDENT_FAIL",
+  "tokens": {
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "GUEST_DUAL_OUTPUT_PASS": true,
+    "ECO010_SOAK_PASS": true,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
+  },
+  "engineering_progress": [
+    "weston.ini modifier=super; guest FB via Super+s screenshooter (non-empty after)",
+    "reject empty screenshots in guest agent",
+    "compositor_ux_gate wired; self-demoted false PASS (noop disconnect)",
+    "Ring path requires LibreOffice/browser/game (mousepad alone insufficient)",
+    "Pedestrian Godot4 aarch64 deploy path added (download SSL still open on host)"
+  ],
+  "merge_recommendation": "do not merge #103 yet",
+  "WP-001": "DO_NOT_START",
+  "wave": "WP-011R.2",
+  "successor_of_pr": 103,
+  "assessed_tip": "operating-cycle-3b/wp-011r2-lab-reconciliation",
+  "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "INDEPENDENT_PASS": false,
+  "independent_accepted": false,
+  "five_gate_digital_and": false,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "SHIPPING_IMAGE": false,
+  "per_token_verdict": [
+    {
+      "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "verdict": "FAIL",
+      "note": "Probe/lab_bridge facades demoted; need owner real builds on accepted mains"
+    },
+    {
+      "token": "LIVE_GUNNCHOS_VISUAL_PASS",
+      "verdict": "PASS",
+      "note": "Retained guest FB evidence"
+    },
+    {
+      "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
+      "verdict": "PASS",
+      "note": "Aligned with DSXL evidence (was inconsistent on #103 tip)"
+    },
+    {
+      "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+      "verdict": "PASS",
+      "note": "Retained; diagnostic surfaces labeled LAB_DIAGNOSTIC_ONLY"
+    },
+    {
+      "token": "ECO010_SOAK_PASS",
+      "verdict": "PASS",
+      "note": ">=1800s retained"
+    }
+  ],
+  "wp011r2_reconciliation": {
+    "device-os": "3858e760295ad35828ff141919681f2bb8685cf0",
+    "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
+    "anime-aggressors_tip_note": "a320c7c pre-merge tip of #72; merge commit 16df36d",
+    "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+    "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+    "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+    "historical_pr103_tip": "071f9b28b2cccd0549885e5f8427af4db3c162c5"
+  }
+}

@@ -8,16 +8,19 @@ import json
 import time
 
 
+from gunnchos_device_os.waike_curriculum.catalog import COURSE_IDS, LEGACY_PACK_TO_COURSE
+
 CLAIM_BOUNDARY = (
-    "Digital WAIKE learning runtime using repo lesson packs. Not a full LMS, "
-    "not production cloud sync."
+    "Digital WAIKE learning runtime using repo lesson packs and 18-course seeds. "
+    "Not a full LMS, not production cloud sync, not curriculum-complete."
 )
 
-OFFLINE_PACKS = [
+LEGACY_OFFLINE_PACKS = [
     "waike_gary_upnow_intro",
     "wireless_basics_101",
     "python_starter_pack",
 ]
+OFFLINE_PACKS = list(LEGACY_OFFLINE_PACKS) + list(COURSE_IDS)
 
 
 def _repo_root() -> Path:
@@ -52,13 +55,34 @@ def _load_yaml_lessons() -> list[dict[str, Any]]:
     return lessons
 
 
+def _course_id_for_pack(lesson_id: str) -> str | None:
+    if lesson_id in COURSE_IDS:
+        return lesson_id
+    return LEGACY_PACK_TO_COURSE.get(lesson_id)
+
+
 def deploy_lesson(lesson_id: str, profile: str) -> dict[str, Any]:
     if lesson_id not in OFFLINE_PACKS:
         return {"deployed": False, "reason": "lesson_not_found", "mock": False}
     packs = _load_yaml_lessons()
+    course_id = _course_id_for_pack(lesson_id)
+    course_dir = None
+    if course_id:
+        candidate = _repo_root() / "content/waike/courses" / course_id / "lesson.md"
+        if candidate.exists():
+            course_dir = str(candidate.parent)
+            packs.append(
+                {
+                    "source": f"content/waike/courses/{course_id}/lesson.md",
+                    "bytes": candidate.stat().st_size,
+                    "present": True,
+                }
+            )
     return {
         "deployed": True,
         "lesson_id": lesson_id,
+        "course_id": course_id,
+        "course_dir": course_dir,
         "profile": profile,
         "offline_capable": True,
         "content_sources": packs,
@@ -141,7 +165,8 @@ def run_session(
             "role": role,
             "account": account,
             "offline_pack": lesson_id,
-            "labs": ["lab-intro", "lab-check"],
+            "course_id": deployed.get("course_id"),
+            "labs": ["lab-intro", "lab-check", "course_seed_lab"],
             "tutor": tutor,
             "accessibility": a11y,
             "educator": educator,

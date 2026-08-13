@@ -320,7 +320,7 @@ class SurfaceRegistry:
             return self.document
         if target == "browser":
             return self.browser
-        if target == "games":
+        if target in {"game", "games"}:
             return self.games
         raise KeyError(target)
 

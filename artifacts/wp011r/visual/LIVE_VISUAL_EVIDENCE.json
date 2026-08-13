@@ -1,0 +1,221 @@
+{
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
+  "RFB_HANDSHAKE_ALONE_ACCEPTED": false,
+  "HOST_SCREENDUMP_ALONE_INSUFFICIENT": true,
+  "ping": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "ping",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "pong": true,
+    "boot_complete": true
+  },
+  "compositor_info": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "compositor_info",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "available": true,
+    "compositor": "weston",
+    "socket": "wayland-0",
+    "outputs": 2,
+    "surfaces": null,
+    "detail": {
+      "wayland_info_returncode": 0,
+      "wayland_info_output_globals": 2
+    },
+    "note": "Real registry query via wayland-info against the running compositor socket."
+  },
+  "app_launch": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "app_launch",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "app": "mousepad",
+    "pid": 609,
+    "started": true,
+    "alive_after_500ms": true,
+    "argv": [
+      "mousepad",
+      "/root/gunnchos-lab-document.txt"
+    ]
+  },
+  "framebuffer_before": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_15-10-41.png",
+    "bytes": 27424,
+    "format": "png",
+    "sha256": "b61f92dd951b49facef719fbc67c7b4898dfc03ccefc8e011fb5624f4c3a1fe5",
+    "synthetic": false,
+    "via": "weston_screenshooter_super_s_uinput",
+    "png_complete": true,
+    "has_iend": true
+  },
+  "input_injection": {
+    "ok": true,
+    "path": "qemu_monitor_sendkey",
+    "key": "a",
+    "observed": {
+      "monitor_accepted": true,
+      "key": "a",
+      "agent": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "input_observe",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "devices": [
+          {
+            "path": "/dev/input/event4",
+            "name": "gunnchos-uinput-mouse"
+          },
+          {
+            "path": "/dev/input/event3",
+            "name": "gunnchos-uinput-kbd"
+          },
+          {
+            "path": "/dev/input/event2",
+            "name": "QEMU Virtio Tablet"
+          },
+          {
+            "path": "/dev/input/event1",
+            "name": "QEMU Virtio Keyboard"
+          },
+          {
+            "path": "/dev/input/event0",
+            "name": "Power Button"
+          }
+        ],
+        "count": 5
+      }
+    },
+    "attempts": [
+      {
+        "ok": true,
+        "command": "sendkey a",
+        "reply": "(qemu) s\u001b[K\u001b[Dse\u001b[K\u001b[D\u001b[Dsen\u001b[K\u001b[D\u001b[D\u001b[Dsend\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dsendk\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendke\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dsendkey a\u001b[K\r\n(qemu) ",
+        "via": "qemu_monitor"
+      }
+    ],
+    "SILICON_EXACT_EMULATION": false,
+    "claim_boundary": "Conventional input injection targets QEMU virt guest or hybrid Lab surfaces. Not physical HID SI. SILICON_EXACT_EMULATION=false."
+  },
+  "typed_marker": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "input_inject",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "kind": "text",
+    "text": "LIVEPROOF1786547491",
+    "injected_via": "uinput"
+  },
+  "document_after": {
+    "ok": true,
+    "via": "process_run_cat",
+    "stdout": "aLIVEPROOF1786547491LIVEPROOF1786547491\n39 /root/gunnchos-lab-document.txt\n"
+  },
+  "input_visible_app_state": {
+    "marker": "LIVEPROOF1786547491",
+    "found_in_document": true,
+    "document_read_ok": true,
+    "document_excerpt": "aLIVEPROOF1786547491LIVEPROOF1786547491\n39 /root/gunnchos-lab-document.txt\n"
+  },
+  "framebuffer_after": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "framebuffer_capture",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_15-11-59.png",
+    "bytes": 30041,
+    "format": "png",
+    "sha256": "2a7993eb7996ef06f47a3e6a2800b8126c12c80daa5fcd953ad72cd836302602",
+    "synthetic": false,
+    "via": "weston_screenshooter_super_s_uinput",
+    "png_complete": true,
+    "has_iend": true
+  },
+  "host_screendump": {
+    "ok": true,
+    "RFB_HANDSHAKE_ALONE_ACCEPTED": false,
+    "before_exists": true,
+    "after_exists": true,
+    "before_nonblank": true,
+    "after_nonblank": true,
+    "before_sha256": "43aab258ab11e863cfe98292991fcce4e0abccae8ef8d2b9ae597de7ba9cd971",
+    "after_sha256": "3bb7338a28ea6f9a25d94b70b7858cd0f0035c592a24f632649f1c14fc605813",
+    "changed": true,
+    "measurement_class": "HOST_OBSERVED",
+    "committed_paths": [
+      "host_fb_before.ppm",
+      "host_fb_after.ppm"
+    ],
+    "note": "QEMU monitor screendump PPM \u2014 supporting only; guest FB required for PASS"
+  },
+  "guest_framebuffer": {
+    "before_ok": true,
+    "after_ok": true,
+    "before_nonblank": true,
+    "after_nonblank": true,
+    "before_png_complete": true,
+    "after_png_complete": true,
+    "before_bytes": 27424,
+    "after_bytes": 30041,
+    "before_sha256": "b61f92dd951b49facef719fbc67c7b4898dfc03ccefc8e011fb5624f4c3a1fe5",
+    "after_sha256": "2a7993eb7996ef06f47a3e6a2800b8126c12c80daa5fcd953ad72cd836302602",
+    "changed": true,
+    "before_path": "shell_app_before.png",
+    "after_path": "shell_app_after.png",
+    "via_before": "weston_screenshooter_super_s_uinput",
+    "via_after": "weston_screenshooter_super_s_uinput",
+    "pulled_via_before": null,
+    "pulled_via_after": null
+  },
+  "non_blank_capture": true,
+  "diff_bytes": 2617,
+  "before_after_changed": true,
+  "missing": [],
+  "note": "Independent PASS: guest FB IEND+delta + OCR-visible LIVEPROOF + document marker",
+  "INDEPENDENT_ACCEPT": {
+    "at_utc": "2026-08-12T16:20:00Z",
+    "tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
+    "verdict": "PASS",
+    "checks": {
+      "iend_complete_before_after": true,
+      "pngs_differ": true,
+      "liveproof_ocr_visible": true,
+      "document_marker": true,
+      "not_host_fb_only": true
+    }
+  }
+}
