@@ -41,6 +41,15 @@ from gunnchos_device_os.device_lab.interactive_guest_proofs import (
     _qemu_monitor_lines,
     _require_real_virtio_serial,
 )
+from gunnchos_device_os.device_lab.guest_agent_overlays import (
+    ANIME_OVERLAY_GD,
+    ANIME_OVERLAY_REL,
+    ANIME_STATUS_PATH,
+    ARCHIVE_OVERLAY_JS,
+    ARCHIVE_OVERLAY_JS_SOURCE,
+    ARCHIVE_PATCH_PY,
+    GODOT_PATCH_PY,
+)
 from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
     ACCEPTED_MAINS,
     LAB_TO_OWNER,
@@ -67,12 +76,12 @@ ANIME_SAVE = "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_save.cfg
 ANIME_FIRST = "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg"
 ANIME_USERDATA = "/root/.local/share/godot/app_userdata/Anime Aggressors"
 ANIME_NEXT_ENGINEERING_STEP = (
-    "Lab compositor HID (uinput + QEMU sendkey) does not reach Godot 4.5 "
-    "InputMap while the Wayland window is alive. Next: guest-agent "
-    "Input.parse_input_event overlay in the live owner project (not "
-    "ProductionGateHarness, not --quit-after) that taps ui_accept after "
-    "BootScene._ready_to_start, then focuses TutorialScene Skip Tutorial."
+    "Guest-agent Input.parse_input_event overlay did not mutate "
+    "aa_first_run.cfg (skip/complete) or post-input career persist. "
+    "HID remains non-InputMap. Not ProductionGateHarness / --quit-after."
 )
+ANIME_PROJECT = "/root/owner-games/anime-aggressors"
+ARCHIVE_WEB_ROOT = "/root/owner-games/earth-species"
 _QEMU_KEY = {
     "ret": "ret",
     "enter": "ret",
@@ -713,6 +722,96 @@ def _prime_hid(session: Any) -> dict[str, Any]:
     )
 
 
+def _install_godot_input_overlay(session: Any, project: str = ANIME_PROJECT) -> dict[str, Any]:
+    """Guest-agent overlay: write parse_input_event autoload into LIVE owner project."""
+    script_b64 = base64.b64encode(ANIME_OVERLAY_GD.encode("utf-8")).decode("ascii")
+    cmd = _agent_call(
+        session,
+        "godot_input_overlay",
+        project=project,
+        script_b64=script_b64,
+        timeout_sec=25.0,
+    )
+    if cmd.get("ok") and not cmd.get("stub"):
+        return {
+            "ok": True,
+            "via": "guest_agent_cmd",
+            "cmd": {
+                k: cmd.get(k)
+                for k in ("ok", "script_path", "autoload", "reason", "via")
+                if k in cmd
+            },
+        }
+    put = _guest_write_text(session, f"{project}/{ANIME_OVERLAY_REL}", ANIME_OVERLAY_GD)
+    _guest_write_text(session, "/tmp/patch_godot_overlay.py", GODOT_PATCH_PY)
+    run = _agent_call(
+        session,
+        "process_run",
+        argv=["python3", "/tmp/patch_godot_overlay.py", project],
+        timeout_sec=20.0,
+    )
+    stdout = run.get("stdout") or ""
+    return {
+        "ok": bool(put.get("ok") and "OVERLAY_PATCHED True" in stdout),
+        "via": "file_put_fallback",
+        "cmd": {k: cmd.get(k) for k in ("ok", "reason", "cmd") if k in cmd},
+        "put_ok": bool(put.get("ok")),
+        "stdout": stdout[:300],
+        "stderr": (run.get("stderr") or "")[:200],
+    }
+
+
+def _install_archive_input_overlay(session: Any, root: str = ARCHIVE_WEB_ROOT) -> dict[str, Any]:
+    """Guest-agent overlay: KeyboardEvent + real #btn-new-game on LIVE owner page."""
+    script_b64 = base64.b64encode(ARCHIVE_OVERLAY_JS_SOURCE.encode("utf-8")).decode("ascii")
+    cmd = _agent_call(
+        session,
+        "browser_input_overlay",
+        root=root,
+        script_b64=script_b64,
+        script_name=ARCHIVE_OVERLAY_JS,
+        timeout_sec=25.0,
+    )
+    if cmd.get("ok") and not cmd.get("stub"):
+        return {
+            "ok": True,
+            "via": "guest_agent_cmd",
+            "cmd": {k: cmd.get(k) for k in ("ok", "script_path", "reason", "via") if k in cmd},
+        }
+    put = _guest_write_text(session, f"{root}/{ARCHIVE_OVERLAY_JS}", ARCHIVE_OVERLAY_JS_SOURCE)
+    _guest_write_text(session, "/tmp/patch_archive_overlay.py", ARCHIVE_PATCH_PY)
+    run = _agent_call(
+        session,
+        "process_run",
+        argv=["python3", "/tmp/patch_archive_overlay.py", root, ARCHIVE_OVERLAY_JS],
+        timeout_sec=20.0,
+    )
+    stdout = run.get("stdout") or ""
+    return {
+        "ok": bool(put.get("ok") and "OVERLAY_PATCHED True" in stdout),
+        "via": "file_put_fallback",
+        "cmd": {k: cmd.get(k) for k in ("ok", "reason", "cmd") if k in cmd},
+        "put_ok": bool(put.get("ok")),
+        "stdout": stdout[:300],
+        "stderr": (run.get("stderr") or "")[:200],
+    }
+
+
+def _read_overlay_status(session: Any, path: str) -> dict[str, Any]:
+    raw = _read_guest_text(session, path)
+    if not raw.strip():
+        return {"present": False, "raw": ""}
+    try:
+        obj = json.loads(raw)
+    except json.JSONDecodeError:
+        return {"present": True, "raw": raw[:400], "parse_ok": False}
+    if not isinstance(obj, dict):
+        return {"present": True, "raw": raw[:400], "parse_ok": False}
+    obj["present"] = True
+    obj["parse_ok"] = True
+    return obj
+
+
 def _anime_userdata_snapshot(session: Any) -> dict[str, str]:
     listing = _guest_bash(
         session,
@@ -859,10 +958,12 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
     out["save_before"] = before[:400]
     out["headless_harness_rejected"] = True
     out["production_gate_not_sole_proof"] = True
-    out["hid_paths"] = ["qemu_monitor_sendkey", "guest_uinput"]
+    out["quit_after_rejected"] = True
+    out["overlay_install"] = _install_godot_input_overlay(session, ANIME_PROJECT)
+    out["hid_paths"] = ["guest_agent_parse_input_event_overlay", "qemu_monitor_sendkey", "guest_uinput"]
     out["prime_hid"] = _prime_hid(session)
     wayland, launch, alive0 = _launch_godot_wayland(
-        session, name="godot-anime-aggressors", project="/root/owner-games/anime-aggressors"
+        session, name="godot-anime-aggressors", project=ANIME_PROJECT
     )
     out["godot_launch"] = {
         "ok": launch.get("ok"),
@@ -888,23 +989,64 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
         out["note"] = "Anime Godot Wayland process not alive non-zombie — FAIL"
         _guest_bash(session, "pkill -f '/root/owner-games/anime-aggressors' || true", timeout_sec=10)
         return out
-    # Splash + BootScene preload/tween must finish before ui_accept is honored.
-    time.sleep(6.0)
+    # Overlay waits for BootScene._ready_to_start then parse_input_event.
+    # Snapshot boot persist before overlay has had time to Skip.
+    time.sleep(4.0)
     pre_hid = _anime_userdata_snapshot(session)
     out["save_before_hid"] = {
         "first": (pre_hid.get("first") or "")[:200],
         "save": (pre_hid.get("save") or "")[:200],
         "boot_wrote_aa_save": bool((pre_hid.get("save") or "").strip()),
     }
-    drive = _drive_anime_input_map(
-        session, before, save_before_hid=pre_hid.get("save") or ""
-    )
-    alive1 = _pid_alive_non_zombie(session, launch.get("pid"))
-    out["runtime_process_after_input"] = alive1
-    snap = drive.get("snap") or _anime_userdata_snapshot(session)
-    mut = drive.get("mut") or _anime_mutation_from_snapshot(
+    drive: dict[str, Any] = {"ok": False, "phase": "overlay_wait", "trace": []}
+    snap = pre_hid
+    mut = _anime_mutation_from_snapshot(
         before, snap, save_before_hid=pre_hid.get("save") or ""
     )
+    overlay_status: dict[str, Any] = {}
+    for _i in range(55):
+        overlay_status = _read_overlay_status(session, ANIME_STATUS_PATH)
+        snap = _anime_userdata_snapshot(session)
+        mut = _anime_mutation_from_snapshot(
+            before, snap, save_before_hid=pre_hid.get("save") or ""
+        )
+        phase = str(overlay_status.get("phase") or "")
+        if mut.get("ok"):
+            drive = {
+                "ok": True,
+                "phase": phase or "overlay_mutated",
+                "trace": [phase],
+            }
+            break
+        if phase in {"done", "tutorial_not_reached"}:
+            time.sleep(0.4)
+            snap = _anime_userdata_snapshot(session)
+            mut = _anime_mutation_from_snapshot(
+                before, snap, save_before_hid=pre_hid.get("save") or ""
+            )
+            drive = {
+                "ok": bool(mut.get("ok")),
+                "phase": phase,
+                "trace": [phase],
+            }
+            break
+        time.sleep(0.7)
+    out["overlay_status"] = {
+        k: overlay_status.get(k)
+        for k in ("present", "phase", "ready_to_start", "scene", "via", "skipped_ui")
+        if k in overlay_status
+    }
+    if not mut.get("ok"):
+        # HID remains non-InputMap; keep a short spray only as diagnostic, not OR-pass.
+        drive = _drive_anime_input_map(
+            session, before, save_before_hid=pre_hid.get("save") or ""
+        )
+        snap = drive.get("snap") or _anime_userdata_snapshot(session)
+        mut = drive.get("mut") or _anime_mutation_from_snapshot(
+            before, snap, save_before_hid=pre_hid.get("save") or ""
+        )
+    alive1 = _pid_alive_non_zombie(session, launch.get("pid"))
+    out["runtime_process_after_input"] = alive1
     if not mut.get("ok"):
         snap = _anime_userdata_snapshot(session)
         mut = _anime_mutation_from_snapshot(
@@ -919,10 +1061,12 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
     }
     out["input"] = {
         "injected": True,
-        "via": "qemu_sendkey+uinput",
+        "via": "guest_agent_Input.parse_input_event_overlay",
         "phase": drive.get("phase"),
         "trace": drive.get("trace") or [],
-        "actions": ["ui_accept", "Start Game click", "tutorial Skip", "p1 movement"],
+        "actions": ["parse_input_event ui_accept", "Start Game", "tutorial Skip"],
+        "production_gate_harness": False,
+        "quit_after": False,
     }
     earned = bool(
         launch.get("ok")
@@ -936,7 +1080,8 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
     out["ok"] = earned
     out["state_mutation"] = mut.get("via") if earned else None
     out["note"] = (
-        "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by HID/InputMap"
+        "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by "
+        "guest-agent Input.parse_input_event overlay"
         if earned
         else "Anime honest FAIL — live non-zombie + input-driven native mutation required"
     )
@@ -1085,6 +1230,7 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
     udd = f"/root/.gunnchos-chromium-{game_id}"
     udd_js = f"{udd}-js"
     out["lab_observe_server"] = _ensure_lab_observe_server(session)
+    out["overlay_install"] = _install_archive_input_overlay(session, ARCHIVE_WEB_ROOT)
     pre = _guest_bash(
         session,
         f"rm -rf /var/lib/gunnchos/games/{game_id} {udd} {udd_js}; mkdir -p /var/lib/gunnchos/games/{game_id} {udd} {udd_js}; "
@@ -1120,6 +1266,7 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
             "--remote-debugging-port=9222",
             f"--user-data-dir={udd}",
             "--no-first-run",
+            "--disable-http-cache",
             "--autoplay-policy=no-user-gesture-required",
             url,
         ],
@@ -1139,40 +1286,56 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
         "url": url,
         "reason": launch.get("reason"),
     }
-    time.sleep(8.0)
-    # New Game / Continue then movement (owner saveGame on region/travel).
-    # Dual HID: QEMU sendkey is the RING-proven belt; uinput alone missed Godot/Chromium.
-    for x, y in ((12000, 14000), (8192, 16384), (10000, 18000)):
-        _inject_hid_click(session, x, y)
-        time.sleep(0.25)
-    for key in ("tab", "tab", "ret", "ret", "spc", "ret"):
-        _inject_hid_key(session, key, hold_ms=160)
-        time.sleep(0.12)
-    for key in ("d", "d", "d", "w", "w", "a", "s", "d", "d", "w", "d", "w", "a", "d", "d", "d", "d", "w", "w", "p"):
-        _inject_hid_key(session, key, hold_ms=140)
-        time.sleep(0.08)
-    time.sleep(3.0)
-    # Headless Chromium executes the same owner bundle (JS/localStorage) when the
-    # Wayland window process cannot paint. Labeled diagnostic; native save is still
-    # owner saveGame() via #btn-new-game / __aolStartExpedition.
-    headless = _guest_bash(
-        session,
-        "set +e; "
-        f"chromium --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage "
-        f"--user-data-dir={udd_js} --no-first-run --virtual-time-budget=20000 "
-        f"--dump-dom '{url}' > /tmp/archive-dom.html 2>/tmp/archive-headless.err; "
-        "echo HEADLESS_RC:$?; "
-        "wc -c /tmp/archive-dom.html; "
-        "grep -E 'btn-new-game|Archive Museum|game-canvas|lab_observe_only' /tmp/archive-dom.html | head; "
-        "curl -fsS http://127.0.0.1:9222/json 2>/dev/null | head -c 400; echo; "
-        "tail -20 /tmp/archive-headless.err",
-        timeout_sec=60,
-        name="archive-headless-js",
-    )
+    # Overlay clicks #btn-new-game then KeyboardEvent WASD / map savanna / P-save.
+    # Default museum spawn from boot start is NOT mutation; poll owner save.
+    native_save = None
+    mut: dict[str, Any] = {"ok": False}
+    input_count = 0
+    for _i in range(36):
+        time.sleep(0.7)
+        native = _agent_call(
+            session, "logs", path=f"/var/lib/gunnchos/games/{game_id}/native_localStorage.json", lines=80
+        )
+        observe = _agent_call(
+            session, "logs", path=f"/var/lib/gunnchos/games/{game_id}/observe.json", lines=80
+        )
+        native_save = None
+        if observe.get("ok") and observe.get("lines"):
+            try:
+                blob = json.loads("\n".join(observe["lines"]))
+                input_count = int(blob.get("input") or 0)
+                native_save = (blob.get("native_localStorage") or {}).get("archive_of_life_save")
+                if blob.get("overlay") == "device_lab_input_overlay" and blob.get("event"):
+                    input_count = max(input_count, 1)
+            except Exception:
+                pass
+        if native.get("ok") and native.get("lines") and not native_save:
+            try:
+                native_save = json.loads("\n".join(native["lines"])).get("archive_of_life_save")
+            except Exception:
+                pass
+        mut = archive_save_mutated_from_default(native_save)
+        if mut.get("ok"):
+            break
+    out["overlay_poll"] = {"mutated": bool(mut.get("ok")), "input_count": input_count}
+    if not mut.get("ok"):
+        # Dual HID diagnostic only — compositor HID previously did not move Archive.
+        for x, y in ((12000, 14000), (8192, 16384), (10000, 18000)):
+            _inject_hid_click(session, x, y)
+            time.sleep(0.25)
+        for key in ("tab", "tab", "ret", "ret", "spc", "ret"):
+            _inject_hid_key(session, key, hold_ms=160)
+            time.sleep(0.12)
+        for key in ("d", "d", "d", "w", "w", "a", "s", "d", "d", "w", "d", "w", "a", "d", "d", "d", "d", "w", "w", "p"):
+            _inject_hid_key(session, key, hold_ms=140)
+            time.sleep(0.08)
+        time.sleep(2.0)
+    # Do not run a second headless Chromium with the overlay — it POSTs a
+    # fresh default museum save to the same observe sink and would clobber.
     out["headless_js_LAB_DIAGNOSTIC_ONLY"] = {
         "NOT_PRODUCT_RUNTIME_EVIDENCE": True,
-        "stdout": (headless.get("stdout") or "")[:1200],
-        "stderr": (headless.get("stderr") or "")[:300],
+        "skipped": True,
+        "reason": "overlay_live_page_must_not_be_clobbered_by_second_udd",
     }
     # Trigger in-game movement that should call saveGame(); observe native key.
     native = _agent_call(
@@ -1234,6 +1397,7 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
     out["input"] = {
         "count_observed": input_count,
         "injected": True,
+        "via": "guest_agent_KeyboardEvent_overlay",
         "owner_start_implied_by_native_save": bool(native_save),
         "default_spawn_not_mutation": bool(mut.get("default_spawn")),
     }
@@ -1601,6 +1765,8 @@ def attempt_owner_four_game_in_guest_pass(
     pr = _agent_call(session, "process_run", argv=["bash", "-lc", "echo hi"], timeout_sec=10.0)
     if not (pr.get("ok") and "hi" in str(pr.get("stdout") or "")):
         result["agent_hot_patch"] = _hot_patch_guest_agent(session, repo_root)
+    # Overlay cmds may be missing on the live agent; file_put fallback installs
+    # the parse_input_event / KeyboardEvent overlays without restarting it.
 
     comp = _agent_call(session, "compositor_info")
     result["compositor_info"] = {

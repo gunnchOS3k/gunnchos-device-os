@@ -783,6 +783,8 @@ class DebianCloudInteractiveGuestProvisioner:
                 "framebuffer_capture",
                 "compositor_info",
                 "app_launch",
+                "godot_input_overlay",
+                "browser_input_overlay",
             ],
             "provision_ok": ok,
             "dry_run": dry_run,

@@ -192,5 +192,11 @@ def test_finish_manifest_provision_ok_true_still_earns_no_pass_token(tmp_path: P
     for token in FORBIDDEN_PASS_TOKENS:
         assert manifest.get(token) is not True
     assert set(manifest["required_packages"]) >= set(REQUIRED_APT_PACKAGES)
-    for cmd in ("framebuffer_capture", "compositor_info", "app_launch"):
+    for cmd in (
+        "framebuffer_capture",
+        "compositor_info",
+        "app_launch",
+        "godot_input_overlay",
+        "browser_input_overlay",
+    ):
         assert cmd in manifest["guest_agent_commands"]

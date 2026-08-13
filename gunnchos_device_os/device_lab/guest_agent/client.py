@@ -17,7 +17,8 @@ from typing import Any
 PROTOCOL = "gunnchos.guest_agent.v1"
 
 # Full command list, including WP-011R Interactive Guest additions
-# (framebuffer_capture, compositor_info, app_launch). See
+# (framebuffer_capture, compositor_info, app_launch, godot_input_overlay,
+# browser_input_overlay). See
 # gunnchos_device_os/device_lab/guest_agent/PROTOCOL.md for the honest
 # per-command contract.
 SUPPORTED_COMMANDS = (
@@ -38,6 +39,8 @@ SUPPORTED_COMMANDS = (
     "framebuffer_capture",
     "compositor_info",
     "app_launch",
+    "godot_input_overlay",
+    "browser_input_overlay",
     "file_put",
     "file_get",
 )
@@ -309,6 +312,17 @@ class GuestAgentClient:
                 "note": (
                     "app_launch requires an Interactive Guest with a real compositor "
                     "and installed apps; not available via mailbox stub"
+                ),
+            }
+        if cmd in {"godot_input_overlay", "browser_input_overlay"}:
+            return {
+                **base,
+                "ok": False,
+                "stub": True,
+                "installed": False,
+                "note": (
+                    f"{cmd} requires a live Interactive Guest project/page; "
+                    "mailbox stub does not mutate owner saves"
                 ),
             }
         return {**base, "cmd": cmd, "note": "unknown_cmd_ack"}

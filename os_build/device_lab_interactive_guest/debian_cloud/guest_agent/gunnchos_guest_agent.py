@@ -949,6 +949,116 @@ def cmd_framebuffer_capture(req: dict[str, Any]) -> dict[str, Any]:
     )
 
 
+def _patch_project_godot_autoload(text: str) -> str:
+    line = 'DeviceLabInputOverlay="*res://device_lab_input_overlay.gd"'
+    if "DeviceLabInputOverlay=" in text:
+        return text
+    if "[autoload]" not in text:
+        return text.rstrip() + f"\n\n[autoload]\n{line}\n"
+    idx = text.index("[autoload]")
+    next_section = text.find("\n[", idx + len("[autoload]"))
+    if next_section == -1:
+        body, suffix = text, ""
+    else:
+        body, suffix = text[:next_section], text[next_section:]
+    if not body.endswith("\n"):
+        body += "\n"
+    return body + line + "\n" + suffix
+
+
+def _patch_index_html_script(html: str, script_src: str) -> str:
+    if script_src in html:
+        return html
+    tag = f'  <script src="{script_src}"></script>\n'
+    if "</body>" in html:
+        return html.replace("</body>", tag + "</body>", 1)
+    return html.rstrip() + "\n" + tag
+
+
+def cmd_godot_input_overlay(req: dict[str, Any]) -> dict[str, Any]:
+    """Install Input.parse_input_event overlay into a LIVE owner Godot project.
+
+    Writes device_lab_input_overlay.gd and registers the autoload. Does not
+    launch ProductionGateHarness or --quit-after. Mutation proof remains the
+    owner process native save after the overlay injects real InputEvents.
+    """
+    import base64
+
+    project = str(req.get("project") or "")
+    if not project:
+        return _fail("godot_input_overlay", "missing_project")
+    root = Path(project)
+    godot = root / "project.godot"
+    if not godot.is_file():
+        return _fail("godot_input_overlay", "project_godot_missing", project=project)
+    b64 = str(req.get("script_b64") or "")
+    if not b64:
+        return _fail("godot_input_overlay", "missing_script_b64")
+    try:
+        script = base64.b64decode(b64.encode("ascii"), validate=False)
+    except Exception as exc:  # noqa: BLE001
+        return _fail("godot_input_overlay", f"b64_decode_failed:{exc}")
+    if b"Input.parse_input_event" not in script:
+        return _fail("godot_input_overlay", "script_missing_parse_input_event")
+    if b"get_tree().quit" in script:
+        return _fail("godot_input_overlay", "quit_after_forbidden")
+    try:
+        (root / "device_lab_input_overlay.gd").write_bytes(script)
+        original = godot.read_text(encoding="utf-8")
+        patched = _patch_project_godot_autoload(original)
+        if patched != original:
+            godot.write_text(patched, encoding="utf-8")
+    except OSError as exc:
+        return _fail("godot_input_overlay", f"write_failed:{exc}", project=project)
+    return _ok(
+        "godot_input_overlay",
+        project=project,
+        script_path=str(root / "device_lab_input_overlay.gd"),
+        autoload="DeviceLabInputOverlay",
+        patched_project=patched != original if "patched" in locals() else True,
+        production_gate_harness=False,
+        quit_after=False,
+        via="Input.parse_input_event",
+    )
+
+
+def cmd_browser_input_overlay(req: dict[str, Any]) -> dict[str, Any]:
+    """Install KeyboardEvent / real-button overlay into a LIVE owner web page."""
+    import base64
+
+    root = Path(str(req.get("root") or ""))
+    if not root.is_dir():
+        return _fail("browser_input_overlay", "missing_root", root=str(root))
+    index = root / "index.html"
+    if not index.is_file():
+        return _fail("browser_input_overlay", "index_html_missing", root=str(root))
+    b64 = str(req.get("script_b64") or "")
+    if not b64:
+        return _fail("browser_input_overlay", "missing_script_b64")
+    try:
+        script = base64.b64decode(b64.encode("ascii"), validate=False)
+    except Exception as exc:  # noqa: BLE001
+        return _fail("browser_input_overlay", f"b64_decode_failed:{exc}")
+    if b"localStorage.setItem" in script:
+        return _fail("browser_input_overlay", "localstorage_write_forbidden")
+    name = str(req.get("script_name") or "lab_input_overlay.js")
+    try:
+        (root / name).write_bytes(script)
+        original = index.read_text(encoding="utf-8")
+        patched = _patch_index_html_script(original, name)
+        if patched != original:
+            index.write_text(patched, encoding="utf-8")
+    except OSError as exc:
+        return _fail("browser_input_overlay", f"write_failed:{exc}", root=str(root))
+    return _ok(
+        "browser_input_overlay",
+        root=str(root),
+        script_path=str(root / name),
+        patched_index=name in patched if "patched" in locals() else True,
+        via="KeyboardEvent+real_button",
+    )
+
+
 def cmd_app_launch(req: dict[str, Any]) -> dict[str, Any]:
     app = str(req.get("app") or "")
     argv = APP_COMMANDS.get(app)
@@ -992,6 +1102,8 @@ HANDLERS = {
     "framebuffer_capture": cmd_framebuffer_capture,
     "compositor_info": cmd_compositor_info,
     "app_launch": cmd_app_launch,
+    "godot_input_overlay": cmd_godot_input_overlay,
+    "browser_input_overlay": cmd_browser_input_overlay,
     "file_put": cmd_file_put,
     "file_get": cmd_file_get,
 }

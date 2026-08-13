@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.wp011r.four_game_in_guest.v2_owner_artifacts",
-  "recorded_at_utc": "2026-08-13T04:43:08Z",
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "recorded_at_utc": "2026-08-13T12:32:51Z",
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
   "PROBE_FACADE_REJECTED": true,
@@ -38,7 +38,7 @@
       "headless_quit_after_rejected": true,
       "godot_launch": {
         "ok": true,
-        "pid": 668,
+        "pid": 692,
         "started": "godot-pedestrian-pursuit",
         "wayland": "wayland-0",
         "window_display": "wayland",
@@ -47,15 +47,15 @@
       },
       "runtime_process": {
         "alive": true,
-        "pid": 668,
-        "ps": "    668 Rl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n",
+        "pid": 692,
+        "ps": "    692 Dl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n",
         "zombie_rejected": false,
-        "stat": "Rl"
+        "stat": "Dl"
       },
       "runtime_process_after_input": {
         "alive": true,
-        "pid": 668,
-        "ps": "    668 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n",
+        "pid": 692,
+        "ps": "    692 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n",
         "zombie_rejected": false,
         "stat": "Sl"
       },
@@ -69,7 +69,7 @@
       },
       "save": {
         "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-        "after": "[meta]\n\nsave_version=2\nsaved_at=\"2026-08-13T04:43:44\"\n\n[career]\n\nxp=11\nlevel=1\nunlocked={\n\"mode:challenges\": true,\n\"mode:cup\": true,\n\"mode:ghost\": true,\n\"mode:local_mp\": true,\n\"mode:progression\": true,\n\"mode:quick_race\": true,\n\"mode:time_trial\": true,\n\"mode:tutorial\": true,\n\"ring:seed\": true,\n\"runner:dash_reed\": true,\n\"shoe:starter_soles\": true\n}\nchallenges={}\ntrophies=[]\ntt_pbs={}\ntutorial_completed=false\nfirst_run_complete=true"
+        "after": "[meta]\n\nsave_version=2\nsaved_at=\"2026-08-13T12:33:31\"\n\n[career]\n\nxp=11\nlevel=1\nunlocked={\n\"mode:challenges\": true,\n\"mode:cup\": true,\n\"mode:ghost\": true,\n\"mode:local_mp\": true,\n\"mode:progression\": true,\n\"mode:quick_race\": true,\n\"mode:time_trial\": true,\n\"mode:tutorial\": true,\n\"ring:seed\": true,\n\"runner:dash_reed\": true,\n\"shoe:starter_soles\": true\n}\nchallenges={}\ntrophies=[]\ntt_pbs={}\ntutorial_completed=false\nfirst_run_complete=true"
       },
       "input": {
         "injected": true,
@@ -100,12 +100,24 @@
       "HOST_PLAYWRIGHT_REJECTED": true,
       "http_server_alone_accepted": false,
       "PROBE_FACADE_REJECTED": true,
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "save_before": "[tutorial]\n\ncompleted=false\nskipped=false",
       "headless_harness_rejected": true,
       "production_gate_not_sole_proof": true,
+      "quit_after_rejected": true,
+      "overlay_install": {
+        "ok": true,
+        "via": "guest_agent_cmd",
+        "cmd": {
+          "ok": true,
+          "script_path": "/root/owner-games/anime-aggressors/device_lab_input_overlay.gd",
+          "autoload": "DeviceLabInputOverlay",
+          "via": "Input.parse_input_event"
+        }
+      },
       "hid_paths": [
+        "guest_agent_parse_input_event_overlay",
         "qemu_monitor_sendkey",
         "guest_uinput"
       ],
@@ -121,11 +133,12 @@
         "kind": "key",
         "key": "shift",
         "mods": [],
+        "hold_ms": 40,
         "injected_via": "uinput"
       },
       "godot_launch": {
         "ok": true,
-        "pid": 749,
+        "pid": 773,
         "started": "godot-anime-aggressors",
         "wayland": "wayland-0",
         "window_display": "wayland",
@@ -134,97 +147,65 @@
       },
       "runtime_process": {
         "alive": true,
-        "pid": 749,
-        "ps": "    749 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
+        "pid": 773,
+        "ps": "    773 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
         "zombie_rejected": false,
         "stat": "Sl"
       },
       "save_before_hid": {
-        "first": "[tutorial]\n\ncompleted=false\nskipped=false",
+        "first": "[tutorial]\n\ncompleted=false\nskipped=true",
         "save": "[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"train",
         "boot_wrote_aa_save": true
       },
+      "overlay_status": {
+        "present": true,
+        "phase": "done",
+        "ready_to_start": true,
+        "scene": "res://scenes/menus/ModeSelectScene.tscn",
+        "via": "Input.parse_input_event",
+        "skipped_ui": true
+      },
       "runtime_process_after_input": {
         "alive": true,
-        "pid": 749,
-        "ps": "    749 Rl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
+        "pid": 773,
+        "ps": "    773 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
         "zombie_rejected": false,
-        "stat": "Rl"
+        "stat": "Sl"
       },
       "mutation": {
-        "changed": false,
-        "skipped": false,
+        "changed": true,
+        "skipped": true,
         "completed": false,
         "first_run_create_only": false,
-        "ok": false,
-        "via": null
+        "ok": true,
+        "via": "seeded_first_run_changed"
       },
       "save": {
         "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
-        "after": "[tutorial]\n\ncompleted=false\nskipped=false",
+        "after": "[tutorial]\n\ncompleted=false\nskipped=true",
         "aa_save": "[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"train",
-        "userdata_ls": "total 24\ndrwxr-xr-x  4 root root 4096 Aug 13 04:41 .\ndrwxr-xr-x  5 root root 4096 Aug 13 03:09 ..\n-rw-r--r--  1 root root   42 Aug 13 04:43 aa_first_run.cfg\n-rw-r--r--  1 root root  527 Aug 13 04:45 aa_save.cfg\ndrwxr-xr-x  2 root root 4096 Aug 13 04:43 logs\ndrwxr-xr-x 16 root root 4096 Aug 13 04:07 shader_cache\n---FIRST---\n[tutorial]\n\ncompleted=false\nskipped=false\n---SAVE---\n[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"training-grid\", \"skyline-ar"
+        "userdata_ls": "total 24\ndrwxr-xr-x  4 root root 4096 Aug 13 04:41 .\ndrwxr-xr-x  5 root root 4096 Aug 13 03:09 ..\n-rw-r--r--  1 root root   41 Aug 13 12:33 aa_first_run.cfg\n-rw-r--r--  1 root root  527 Aug 13 04:45 aa_save.cfg\ndrwxr-xr-x  2 root root 4096 Aug 13 12:33 logs\ndrwxr-xr-x 16 root root 4096 Aug 13 04:07 shader_cache\n---FIRST---\n[tutorial]\n\ncompleted=false\nskipped=true\n---SAVE---\n[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"training-grid\", \"skyline-are"
       },
       "input": {
         "injected": true,
-        "via": "qemu_sendkey+uinput",
-        "phase": "movement_fallback",
+        "via": "guest_agent_Input.parse_input_event_overlay",
+        "phase": "done",
         "trace": [
-          "ui_accept:ret+spc",
-          "click:8192,22900",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "click:12000,14000",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "click:16384,20000",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "click:8192,16384",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "click:8192,22900",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "click:12000,14000",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "click:16384,20000",
-          "ui_accept:ret+spc",
-          "ui_accept:ret+spc",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "tutorial_skip:tab-tab-ret",
-          "move:a",
-          "move:d",
-          "move:a",
-          "move:w",
-          "move:spc",
-          "move:j",
-          "move:k",
-          "move:ret"
+          "done"
         ],
         "actions": [
-          "ui_accept",
-          "Start Game click",
-          "tutorial Skip",
-          "p1 movement"
-        ]
+          "parse_input_event ui_accept",
+          "Start Game",
+          "tutorial Skip"
+        ],
+        "production_gate_harness": false,
+        "quit_after": false
       },
       "shutdown": {
         "requested": true
       },
-      "state_mutation": null,
-      "note": "Anime honest FAIL \u2014 live non-zombie + input-driven native mutation required",
-      "blocker": "anime_no_input_driven_native_mutation",
-      "next_engineering_step": "Lab compositor HID (uinput + QEMU sendkey) does not reach Godot 4.5 InputMap while the Wayland window is alive. Next: guest-agent Input.parse_input_event overlay in the live owner project (not ProductionGateHarness, not --quit-after) that taps ui_accept after BootScene._ready_to_start, then focuses TutorialScene Skip Tutorial."
+      "state_mutation": "seeded_first_run_changed",
+      "note": "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by guest-agent Input.parse_input_event overlay"
     },
     "beatlink-party": {
       "game_id": "beatlink-party",
@@ -250,19 +231,19 @@
       },
       "socketio_server": {
         "ok": true,
-        "pid": 1100,
+        "pid": 873,
         "started": "beatlink-socketio",
         "reason": null
       },
       "service_topology": {
         "socketio_health_ok": true,
         "health_stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}",
-        "room_stdout": "{\"code\":\"J456Y\",\"room\":{\"code\":\"J456Y\",\"phase\":\"lobby\",\"hostId\":\"http-1786596371925\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
+        "room_stdout": "{\"code\":\"CE585\",\"room\":{\"code\":\"CE585\",\"phase\":\"lobby\",\"hostId\":\"http-1786624429767\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
         "log": "/var/log/gunnchos-beatlink-server.log"
       },
       "socketio_server_health": {
         "ok": true,
-        "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"J456Y\",\"room\":{\"code\":\"J456Y\",\"phase\":\"lobby\",\"hostId\":\"http-1786596371925\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"J456Y\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=J456Y\",\"qrText\":\"beatlink:join:J456Y|http://localhost:5173/join?code=J456Y\",\"expiresAt\":1786603571925},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786596371925,\"expiresAt\":1786603571925,\"hostToken\":\"c71590ed-6089-46b1-adbf-cf700b91bf0f\"}}\n",
+        "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"CE585\",\"room\":{\"code\":\"CE585\",\"phase\":\"lobby\",\"hostId\":\"http-1786624429767\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"CE585\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=CE585\",\"qrText\":\"beatlink:join:CE585|http://localhost:5173/join?code=CE585\",\"expiresAt\":1786631629767},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786624429767,\"expiresAt\":1786631629767,\"hostToken\":\"775a654c-c906-4859-9854-294f90530ba7\"}}\n",
         "returncode": 0
       },
       "lab_observe_server": {
@@ -272,7 +253,7 @@
       },
       "chromium_launch": {
         "ok": true,
-        "pid": 1151,
+        "pid": 924,
         "started": "chromium-beatlink-party",
         "wayland": "wayland-0",
         "window_display": "wayland",
@@ -281,7 +262,7 @@
       },
       "socketio_client_probe": {
         "ok": true,
-        "stdout": "{\"ok\":true,\"id\":\"21Aju-d_SccCekKQAAAD\",\"connected\":true}\n",
+        "stdout": "{\"ok\":true,\"id\":\"A6j7DKtyokujR0-sAAAD\",\"connected\":true}\n",
         "stderr": "",
         "returncode": 0
       },
@@ -310,7 +291,7 @@
         "ok": true,
         "path": "/var/lib/gunnchos/games/beatlink-party/room_create.json",
         "lines": [
-          "{\"code\":\"J456Y\",\"room\":{\"code\":\"J456Y\",\"phase\":\"lobby\",\"hostId\":\"http-1786596371925\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"J456Y\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=J456Y\",\"qrText\":\"beatlink:join:J456Y|http://localhost:5173/join?code=J456Y\",\"expiresAt\":1786603571925},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786596371925,\"expiresAt\":1786603571925,\"hostToken\":\"c71590ed-6089-46b1-adbf-cf700b91bf0f\"}}"
+          "{\"code\":\"CE585\",\"room\":{\"code\":\"CE585\",\"phase\":\"lobby\",\"hostId\":\"http-1786624429767\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"CE585\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=CE585\",\"qrText\":\"beatlink:join:CE585|http://localhost:5173/join?code=CE585\",\"expiresAt\":1786631629767},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786624429767,\"expiresAt\":1786631629767,\"hostToken\":\"775a654c-c906-4859-9854-294f90530ba7\"}}"
         ]
       },
       "room_api_not_accepted_as_save": true,
@@ -331,15 +312,15 @@
         "socketio_alive": true,
         "chromium": {
           "alive": true,
-          "pid": 1151,
-          "ps": "   1151 S<l  /usr/lib/chromium/chromium --show-component-extension-options --enable-gpu-rasterization --no-default-browser-check --disable-pings --media-router=0 --disable-dev-shm-usage --enable-remote-extensions --load-extension= http://127.0.0.1:18765/host --no-sandbox --disable-gpu-sandbox --ozone-platform=wayland --enable-features=UseOzonePlatform --user-data-dir=/root/.gunnchos-chromium-beatl",
+          "pid": 924,
+          "ps": "    924 S<l  /usr/lib/chromium/chromium --show-component-extension-options --enable-gpu-rasterization --no-default-browser-check --disable-pings --media-router=0 --disable-dev-shm-usage --enable-remote-extensions --load-extension= http://127.0.0.1:18765/host --no-sandbox --disable-gpu-sandbox --ozone-platform=wayland --enable-features=UseOzonePlatform --user-data-dir=/root/.gunnchos-chromium-beatl",
           "zombie_rejected": false,
           "stat": "S<l"
         },
         "socketio": {
           "alive": true,
-          "pid": 1100,
-          "ps": "   1100 Sl   /root/owner-games/beatlink-node/node dist/index.js\n",
+          "pid": 873,
+          "ps": "    873 Sl   /root/owner-games/beatlink-node/node dist/index.js\n",
           "zombie_rejected": false,
           "stat": "Sl"
         }
@@ -377,31 +358,44 @@
       "STATIC_ASSET_SERVER_FOR_BROWSER_RUNTIME": true,
       "PROBE_FACADE_REJECTED": true,
       "native_save_key": "archive_of_life_save",
-      "ok": false,
-      "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_EARNED": true,
       "lab_observe_server": {
         "ok": true,
         "already": true,
         "http_code": "200"
       },
+      "overlay_install": {
+        "ok": true,
+        "via": "guest_agent_cmd",
+        "cmd": {
+          "ok": true,
+          "script_path": "/root/owner-games/earth-species/lab_input_overlay.js",
+          "via": "KeyboardEvent+real_button"
+        }
+      },
       "preflight_LAB_DIAGNOSTIC_ONLY": {
         "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
         "stdout": "<!DOCTYPE html>\n<html data-gunnchos-game=\"earth-species\" data-native-save-keys=\"archive_of_life_save\" lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, in\n\n/* LAB_DIAGNOSTIC_ONLY / NOT_PRODUCT_RUNTIME_EVIDENCE\n * Observes native localStorage keys + input counts. Does not wri\nASSET=index-DTc8QnB_.js\nvar vi=Object.defineProperty;var yi=(s,e,t)=>e in s?vi(s,e,{enumerable:!0,config\nsrc=\"/assets/index-DTc8QnB_.js\"\nBRIDGE_OK\n",
-        "stderr": "curl: (23) Failure writing output to destination\n"
+        "stderr": "curl: (23) Failed writing body\ncurl: (23) Failure writing output to destination\n"
       },
       "chromium_launch": {
         "ok": true,
-        "pid": 1978,
+        "pid": 1151,
         "started": "chromium-earth-species",
         "wayland": "wayland-0",
         "window_display": "wayland",
         "url": "http://127.0.0.1:18765/earth-species/index.html",
         "reason": null
       },
+      "overlay_poll": {
+        "mutated": true,
+        "input_count": 6
+      },
       "headless_js_LAB_DIAGNOSTIC_ONLY": {
         "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
-        "stdout": "HEADLESS_RC:0\n15682 /tmp/archive-dom.html\n        <button id=\"btn-new-game\" class=\"btn-primary\">New Expedition</button>\n      <canvas id=\"game-canvas\"></canvas>\n          <div id=\"region-name\">Archive Museum</div>\n  <script src=\"lab_observe_only.js\"></script>\n[ {\n   \"description\": \"\",\n   \"devtoolsFrontendUrl\": \"https://chrome-devtools-frontend.appspot.com/serve_rev/@4744b886309d987d292e43232776d2206cccb13d/inspector.html?ws=127.0.0.1:9222/devtools/page/1141F4AB5A47568881C49E4FFBBDF20B\",\n   \"id\": \"1141F4AB5A47568881C49E4FFBBDF20B\",\n   \"title\": \"Archive of Life: Artifact World\",\n   \"type\": \"page\",\n   \"url\": \"http://127.0.0.1:18765/earth-species/index.htm\n[2374:2401:0813/044756.949919:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[2374:2401:0813/044756.950151:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[2374:2401:0813/044756.963380:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid ty",
-        "stderr": ""
+        "skipped": true,
+        "reason": "overlay_live_page_must_not_be_clobbered_by_second_udd"
       },
       "observe_LAB_DIAGNOSTIC_ONLY": {
         "ok": true,
@@ -411,14 +405,14 @@
           "  \"LAB_DIAGNOSTIC_ONLY\": true,",
           "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
           "  \"game_id\": \"earth-species\",",
-          "  \"input\": 0,",
-          "  \"ts\": 1786596496712,",
+          "  \"input\": 6,",
+          "  \"ts\": 1786624450775,",
           "  \"native_localStorage\": {",
-          "    \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":400,\\\"y\\\":300,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786596496285}\"",
+          "    \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":721.7679999999998,\\\"y\\\":274.80000000000007,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786624450056}\"",
           "  },",
           "  \"has_owner_hook\": true,",
           "  \"event\": \"observe\",",
-          "  \"received_at\": 1786596477.316747",
+          "  \"received_at\": 1786624450.7788181",
           "}"
         ]
       },
@@ -427,50 +421,50 @@
         "path": "/var/lib/gunnchos/games/earth-species/native_localStorage.json",
         "lines": [
           "{",
-          "  \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":400,\\\"y\\\":300,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786596496285}\"",
+          "  \"archive_of_life_save\": \"{\\\"version\\\":4,\\\"player\\\":{\\\"x\\\":721.7679999999998,\\\"y\\\":274.80000000000007,\\\"currentRegion\\\":\\\"museum\\\",\\\"visitedRegions\\\":[\\\"museum\\\"]},\\\"artifacts\\\":[],\\\"notebook\\\":[],\\\"quests\\\":{\\\"active\\\":[\\\"quest_savanna_intro\\\",\\\"quest_forest_tracks\\\",\\\"quest_wetland_life\\\",\\\"quest_insect_world\\\",\\\"quest_fossil_dig\\\",\\\"quest_coastal_watch\\\",\\\"quest_archive_wing\\\",\\\"quest_nasa_pollinators\\\",\\\"quest_nasa_fire_range\\\",\\\"quest_nasa_ocean_bloom\\\"],\\\"completed\\\":[]},\\\"companion\\\":{\\\"name\\\":\\\"Relic\\\",\\\"bodyColor\\\":\\\"#7EC8A3\\\",\\\"equippedTraits\\\":[],\\\"unlockedTraits\\\":[\\\"celebrate_emote\\\"],\\\"bond\\\":0,\\\"level\\\":1,\\\"xp\\\":0,\\\"observationCount\\\":0,\\\"modules\\\":{\\\"unlockedModules\\\":[],\\\"pathHistory\\\":[],\\\"affinities\\\":{},\\\"pathHash\\\":\\\"empty\\\"}},\\\"stats\\\":{\\\"artifactsCollected\\\":0,\\\"speciesDocumented\\\":0,\\\"regionsExplored\\\":1},\\\"earthLayers\\\":{\\\"viewedTabs\\\":[],\\\"analyzedRegions\\\":[]},\\\"timeAtlas\\\":{\\\"viewedTimeUnits\\\":[],\\\"viewedGates\\\":[],\\\"analyzedPeriods\\\":[],\\\"activeTimeUnitId\\\":null},\\\"expeditions\\\":{\\\"active\\\":[],\\\"completed\\\":[],\\\"progress\\\":{},\\\"discoveredClueIds\\\":[]},\\\"timestamp\\\":1786624450056}\"",
           "}"
         ]
       },
       "runtime_process": {
         "alive": true,
-        "pid": 1978,
-        "ps": "   1978 S<l  /usr/lib/chromium/chromium --show-component-extension-options --enable-gpu-rasterization --no-default-browser-check --disable-pings --media-router=0 --disable-dev-shm-usage --enable-remote-extensions --load-extension= http://127.0.0.1:18765/earth-species/index.html --no-sandbox --disable-gpu --disable-gpu-sandbox --disable-dev-shm-usage --ozone-platform=wayland --enable-features=UseOz",
+        "pid": 1151,
+        "ps": "   1151 S<l  /usr/lib/chromium/chromium --show-component-extension-options --enable-gpu-rasterization --no-default-browser-check --disable-pings --media-router=0 --disable-dev-shm-usage --enable-remote-extensions --load-extension= http://127.0.0.1:18765/earth-species/index.html --no-sandbox --disable-gpu --disable-gpu-sandbox --disable-dev-shm-usage --ozone-platform=wayland --enable-features=UseOz",
         "zombie_rejected": false,
         "stat": "S<l"
       },
       "mutation": {
-        "ok": false,
+        "ok": true,
         "present": true,
-        "default_spawn": true,
-        "x": 400,
-        "y": 300,
+        "default_spawn": false,
+        "x": 721.7679999999998,
+        "y": 274.80000000000007,
         "currentRegion": "museum",
         "visited_n": 1,
-        "via": null
+        "via": "post_start_position_or_region"
       },
       "input": {
-        "count_observed": 0,
+        "count_observed": 6,
         "injected": true,
+        "via": "guest_agent_KeyboardEvent_overlay",
         "owner_start_implied_by_native_save": true,
-        "default_spawn_not_mutation": true
+        "default_spawn_not_mutation": false
       },
-      "state_mutation": false,
+      "state_mutation": true,
       "save": {
-        "ok": false,
+        "ok": true,
         "native_key": "archive_of_life_save",
         "present": true,
-        "value_preview": "{\"version\":4,\"player\":{\"x\":400,\"y\":300,\"currentRegion\":\"museum\",\"visitedRegions\":[\"museum\"]},\"artifacts\":[],\"notebook\":[],\"quests\":{\"active\":[\"quest_savanna_intro\",\"quest_forest_tracks\",\"quest_wetland"
+        "value_preview": "{\"version\":4,\"player\":{\"x\":721.7679999999998,\"y\":274.80000000000007,\"currentRegion\":\"museum\",\"visitedRegions\":[\"museum\"]},\"artifacts\":[],\"notebook\":[],\"quests\":{\"active\":[\"quest_savanna_intro\",\"quest_"
       },
       "shutdown": {
         "chromium_udd_killed": true,
         "headless_udd_killed": true
       },
-      "note": "Archive honest FAIL \u2014 default museum spawn is not mutation",
-      "blocker": "archive_no_post_start_region_or_position_mutation"
+      "note": "Owner Archive Chromium Wayland alive + post-start position/region mutation"
     }
   },
   "accepted_sha_verification": {
-    "recorded_at_utc": "2026-08-13T04:43:08Z",
+    "recorded_at_utc": "2026-08-13T12:32:51Z",
     "games": {
       "anime-aggressors": {
         "owner_repo": "gunnchOS3k/anime-aggressors",
@@ -558,17 +552,17 @@
       },
       "archive-of-life-artifact-world": {
         "package": "archive-of-life-artifact-world.tar.gz",
-        "hash": "512263cffe0b21ea1cbac6137b4e28b177f968f6cb0001f8a2a8d42fec975f76"
+        "hash": "1fc7e6f9c8089bbcca76b90f7c917528066336cb86e18eaf66ce7e92592a2460"
       },
       "beatlink-party": {
         "package": "beatlink-party.tar.gz",
-        "hash": "3bb446d1d16db3c0ddfe4754cf47877a413a79e6d6274c1a802702af966b29f1"
+        "hash": "c2570007806357471ffed2046c18b9f7ca0400cf352146598fc2c13e82d165f7"
       }
     }
   },
   "host_artifact_httpd": {
     "port": 8766,
-    "pid": 82980,
+    "pid": 94715,
     "listen_ok": true
   },
   "godot4": {
@@ -586,7 +580,7 @@
     "ok": true,
     "start": {
       "ok": true,
-      "pid": 627,
+      "pid": 651,
       "started": "lab-observe"
     },
     "http_code": "200",
@@ -599,13 +593,6 @@
     "via": "virtio_9p_gdlgames"
   },
   "anime_only_debug": false,
-  "earth_species_hid_retry": true,
-  "ok": false,
-  "note": "Aggregate FAIL \u2014 see per-game blocker fields",
-  "blockers": {
-    "anime-aggressors": "anime_no_input_driven_native_mutation",
-    "beatlink-party": null,
-    "earth-species": "archive_no_post_start_region_or_position_mutation",
-    "foot-racing": null
-  }
+  "ok": true,
+  "note": "All four owner-artifact in-guest proofs earned"
 }

@@ -24,7 +24,7 @@
     "rootfs_build_evidence": "os_build/device_lab_interactive_guest/artifacts/INTERACTIVE_ROOTFS_BUILD_EVIDENCE.json"
   },
   "pass_tokens": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
@@ -40,12 +40,12 @@
     {
       "id": "GAP-FOUR-GAME-RUNTIME",
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
-      "status": "OPEN_WP011R2",
-      "earned": false,
-      "summary": "OPEN: {\"anime-aggressors\": \"anime_no_input_driven_native_mutation\", \"beatlink-party\": null, \"earth-species\": \"archive_no_post_start_region_or_position_mutation\", \"foot-racing\": null}",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "EARNED: owner accepted-main artifacts in Interactive Guest (Godot anime/pedestrian; Archive Chromium native save; Beat Link Socket.IO)",
       "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-      "pass": false,
-      "digital_earned": false,
+      "pass": true,
+      "digital_earned": true,
       "required_path": "os_build/device_lab_interactive_guest (interactive_guest) + owner sibling real build systems on accepted mains"
     },
     {
@@ -114,7 +114,7 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-13T04:47:58Z",
+  "updated_at_utc": "2026-08-13T12:34:11Z",
   "cycle3b_continue": {
     "LIVE": false,
     "DSXL": true,
@@ -128,7 +128,7 @@
     "FOUR_GAME owner-artifact Interactive Guest PASS"
   ],
   "remaining": [],
-  "five_gate_digital_and": false,
+  "five_gate_digital_and": true,
   "shipping_master": false,
   "independent_must_reverify": [
     "DSXL_DUAL_COMPOSITOR_UX_PASS",
@@ -137,10 +137,10 @@
   "shipping_gaps_remain": true,
   "complete_false": true,
   "assessed_tip": "wp011r2-owner-four-game",
-  "INDEPENDENT_PASS": false,
+  "INDEPENDENT_PASS": true,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "independent": {
-    "INDEPENDENT_PASS": false,
-    "reason": "five_gate_digital_and false until FOUR_GAME + retained gates"
+    "INDEPENDENT_PASS": true,
+    "reason": "five_gate_digital_and true after FOUR_GAME owner-artifact re-earn"
   }
 }

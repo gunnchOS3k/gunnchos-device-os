@@ -163,6 +163,35 @@ def test_complete_stays_false_on_interactive_guest():
     assert five_gate_and(four=False, live=True, dsxl=True, ring=True, eco010=True) is False
 
 
+def test_guest_agent_overlays_are_honest_and_patch_live_project():
+    from gunnchos_device_os.device_lab.guest_agent_overlays import (
+        ANIME_OVERLAY_GD,
+        ARCHIVE_OVERLAY_JS_SOURCE,
+        overlay_is_honest,
+        patch_index_html,
+        patch_project_godot,
+    )
+
+    anime = overlay_is_honest(ANIME_OVERLAY_GD, kind="anime")
+    assert anime["parse_input_event"] is True
+    assert anime["waits_ready_to_start"] is True
+    assert anime["skip_tutorial_ui"] is True
+    assert "Start Battle" in ANIME_OVERLAY_GD
+    assert "Mode Select" not in ANIME_OVERLAY_GD or "Tutorial" in ANIME_OVERLAY_GD
+    assert anime["no_direct_skip_tutorial"] is True
+    assert anime["no_complete_tutorial"] is True
+    assert anime["no_tree_quit"] is True
+    archive = overlay_is_honest(ARCHIVE_OVERLAY_JS_SOURCE, kind="archive")
+    assert archive["real_new_game_click"] is True
+    assert archive["keyboard_events"] is True
+    assert archive["no_localstorage_write"] is True
+    assert archive["no_aol_accept"] is True
+    patched = patch_project_godot("[autoload]\nGameState=\"*res://scripts/core/GameState.gd\"\n\n[display]\n")
+    assert 'DeviceLabInputOverlay="*res://device_lab_input_overlay.gd"' in patched
+    html = patch_index_html("<html><body></body></html>")
+    assert "lab_input_overlay.js" in html
+
+
 def test_verify_accepted_shas_uses_honest_entry(tmp_path, monkeypatch):
     from gunnchos_device_os.device_lab import owner_four_game_artifacts as art
 

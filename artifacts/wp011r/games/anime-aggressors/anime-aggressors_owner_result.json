@@ -7,12 +7,24 @@
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
   "PROBE_FACADE_REJECTED": true,
-  "ok": false,
-  "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+  "ok": true,
+  "FOUR_GAME_REAL_RUNTIME_EARNED": true,
   "save_before": "[tutorial]\n\ncompleted=false\nskipped=false",
   "headless_harness_rejected": true,
   "production_gate_not_sole_proof": true,
+  "quit_after_rejected": true,
+  "overlay_install": {
+    "ok": true,
+    "via": "guest_agent_cmd",
+    "cmd": {
+      "ok": true,
+      "script_path": "/root/owner-games/anime-aggressors/device_lab_input_overlay.gd",
+      "autoload": "DeviceLabInputOverlay",
+      "via": "Input.parse_input_event"
+    }
+  },
   "hid_paths": [
+    "guest_agent_parse_input_event_overlay",
     "qemu_monitor_sendkey",
     "guest_uinput"
   ],
@@ -28,11 +40,12 @@
     "kind": "key",
     "key": "shift",
     "mods": [],
+    "hold_ms": 40,
     "injected_via": "uinput"
   },
   "godot_launch": {
     "ok": true,
-    "pid": 749,
+    "pid": 773,
     "started": "godot-anime-aggressors",
     "wayland": "wayland-0",
     "window_display": "wayland",
@@ -41,95 +54,63 @@
   },
   "runtime_process": {
     "alive": true,
-    "pid": 749,
-    "ps": "    749 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
+    "pid": 773,
+    "ps": "    773 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
     "zombie_rejected": false,
     "stat": "Sl"
   },
   "save_before_hid": {
-    "first": "[tutorial]\n\ncompleted=false\nskipped=false",
+    "first": "[tutorial]\n\ncompleted=false\nskipped=true",
     "save": "[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"train",
     "boot_wrote_aa_save": true
   },
+  "overlay_status": {
+    "present": true,
+    "phase": "done",
+    "ready_to_start": true,
+    "scene": "res://scenes/menus/ModeSelectScene.tscn",
+    "via": "Input.parse_input_event",
+    "skipped_ui": true
+  },
   "runtime_process_after_input": {
     "alive": true,
-    "pid": 749,
-    "ps": "    749 Rl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
+    "pid": 773,
+    "ps": "    773 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
     "zombie_rejected": false,
-    "stat": "Rl"
+    "stat": "Sl"
   },
   "mutation": {
-    "changed": false,
-    "skipped": false,
+    "changed": true,
+    "skipped": true,
     "completed": false,
     "first_run_create_only": false,
-    "ok": false,
-    "via": null
+    "ok": true,
+    "via": "seeded_first_run_changed"
   },
   "save": {
     "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
-    "after": "[tutorial]\n\ncompleted=false\nskipped=false",
+    "after": "[tutorial]\n\ncompleted=false\nskipped=true",
     "aa_save": "[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"train",
-    "userdata_ls": "total 24\ndrwxr-xr-x  4 root root 4096 Aug 13 04:41 .\ndrwxr-xr-x  5 root root 4096 Aug 13 03:09 ..\n-rw-r--r--  1 root root   42 Aug 13 04:43 aa_first_run.cfg\n-rw-r--r--  1 root root  527 Aug 13 04:45 aa_save.cfg\ndrwxr-xr-x  2 root root 4096 Aug 13 04:43 logs\ndrwxr-xr-x 16 root root 4096 Aug 13 04:07 shader_cache\n---FIRST---\n[tutorial]\n\ncompleted=false\nskipped=false\n---SAVE---\n[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"training-grid\", \"skyline-ar"
+    "userdata_ls": "total 24\ndrwxr-xr-x  4 root root 4096 Aug 13 04:41 .\ndrwxr-xr-x  5 root root 4096 Aug 13 03:09 ..\n-rw-r--r--  1 root root   41 Aug 13 12:33 aa_first_run.cfg\n-rw-r--r--  1 root root  527 Aug 13 04:45 aa_save.cfg\ndrwxr-xr-x  2 root root 4096 Aug 13 12:33 logs\ndrwxr-xr-x 16 root root 4096 Aug 13 04:07 shader_cache\n---FIRST---\n[tutorial]\n\ncompleted=false\nskipped=true\n---SAVE---\n[meta]\n\nsave_version=2\n\n[career]\n\nwins=0\nlosses=0\nmatches=0\n\n[progress]\n\nfighters=[\"ember-vale\", \"rook-ironside\", \"juno-spark\", \"kaia-windrow\", \"nix-calder\", \"orion-vell\", \"vesper-nyx\"]\nstages=[\"training-grid\", \"skyline-are"
   },
   "input": {
     "injected": true,
-    "via": "qemu_sendkey+uinput",
-    "phase": "movement_fallback",
+    "via": "guest_agent_Input.parse_input_event_overlay",
+    "phase": "done",
     "trace": [
-      "ui_accept:ret+spc",
-      "click:8192,22900",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "click:12000,14000",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "click:16384,20000",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "click:8192,16384",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "click:8192,22900",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "click:12000,14000",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "click:16384,20000",
-      "ui_accept:ret+spc",
-      "ui_accept:ret+spc",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "tutorial_skip:tab-tab-ret",
-      "move:a",
-      "move:d",
-      "move:a",
-      "move:w",
-      "move:spc",
-      "move:j",
-      "move:k",
-      "move:ret"
+      "done"
     ],
     "actions": [
-      "ui_accept",
-      "Start Game click",
-      "tutorial Skip",
-      "p1 movement"
-    ]
+      "parse_input_event ui_accept",
+      "Start Game",
+      "tutorial Skip"
+    ],
+    "production_gate_harness": false,
+    "quit_after": false
   },
   "shutdown": {
     "requested": true
   },
-  "state_mutation": null,
-  "note": "Anime honest FAIL \u2014 live non-zombie + input-driven native mutation required",
-  "blocker": "anime_no_input_driven_native_mutation",
-  "next_engineering_step": "Lab compositor HID (uinput + QEMU sendkey) does not reach Godot 4.5 InputMap while the Wayland window is alive. Next: guest-agent Input.parse_input_event overlay in the live owner project (not ProductionGateHarness, not --quit-after) that taps ui_accept after BootScene._ready_to_start, then focuses TutorialScene Skip Tutorial."
+  "state_mutation": "seeded_first_run_changed",
+  "note": "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by guest-agent Input.parse_input_event overlay"
 }

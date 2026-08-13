@@ -122,7 +122,13 @@ def test_detect_build_capability_structure():
 
 
 def test_guest_agent_supported_commands_include_interactive_additions():
-    for cmd in ("framebuffer_capture", "compositor_info", "app_launch"):
+    for cmd in (
+        "framebuffer_capture",
+        "compositor_info",
+        "app_launch",
+        "godot_input_overlay",
+        "browser_input_overlay",
+    ):
         assert cmd in SUPPORTED_COMMANDS
 
 
@@ -146,6 +152,11 @@ def test_guest_agent_mailbox_stub_honest_for_interactive_commands(tmp_path: Path
     assert launch.get("ok") is False
     assert launch.get("stub") is True
     assert launch.get("started") is False
+
+    overlay = client.call("godot_input_overlay", project="/tmp/missing")
+    assert overlay.get("ok") is False
+    assert overlay.get("stub") is True
+    assert overlay.get("installed") is False
 
 
 def test_qemu_interactive_guest_env_flag_recognition(monkeypatch: pytest.MonkeyPatch):

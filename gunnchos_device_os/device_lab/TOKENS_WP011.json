@@ -14,7 +14,7 @@
   "DEVICE_LAB_DEVELOPMENT_GUEST": true,
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
   "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
@@ -94,7 +94,9 @@
     "guest_agent_new_commands": [
       "framebuffer_capture",
       "compositor_info",
-      "app_launch"
+      "app_launch",
+      "godot_input_overlay",
+      "browser_input_overlay"
     ],
     "qemu_env_flag": "GUNNCH_LAB_INTERACTIVE_GUEST",
     "required_for_tokens": [
@@ -110,9 +112,9 @@
   "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
   "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
   "ECO010_SOAK_PASS": true,
-  "updated_at_utc": "2026-08-13T04:47:58Z",
+  "updated_at_utc": "2026-08-13T12:34:11Z",
   "four_game_evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-  "five_gate_digital_and": false,
+  "five_gate_digital_and": true,
   "wp011r2": {
     "packet": "WP-011R.2",
     "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
