@@ -1,0 +1,254 @@
+{
+  "schema": "gunnchos.waike_course.independent_verifier_result.v2_post_main_merge",
+  "work_item": "PLATFORM-successor-waike-18-course-seed-depth",
+  "product": "waike_learning",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "did_not_force_push": true,
+  "did_not_touch_pr_103": true,
+  "did_not_start_waves_4_to_7": true,
+  "seed_remediation_applied": false,
+  "pr": {
+    "number": 109,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/109",
+    "draft": false,
+    "state": "MERGED",
+    "branch": "operating-cycle-3b/waike-18-course-product-depth",
+    "title": "WAIKE 18-course product seed depth (not LMS complete)",
+    "merged_at_utc": "2026-08-13T17:35:47Z",
+    "merged_by": "gunnchOS3k",
+    "github_merge_commit": "07d901a14e3aba4404fae815c9c8578efa154ac3",
+    "note": "Edmund merged #109 during independent CI poll. This agent did not merge. CI on verified tip subsequently settled all-green."
+  },
+  "verified_tip": "8b516205357cb9c308dfd3567a8038e286b10e3d",
+  "verified_tip_short": "8b51620",
+  "verified_tip_live_confirmed": true,
+  "tip_commit_subject": "Merge origin/main into operating-cycle-3b/waike-18-course-product-depth",
+  "old_head_before_merge": "a381fa67134c265ca5921cd86535217ac49bc6dd",
+  "old_head_before_merge_confirmed": true,
+  "accepted_main_parent": "57a70260eaa602f4b9d44ddef576dae7a5df00cb",
+  "accepted_main_parent_short": "57a7026",
+  "accepted_main_parent_live_confirmed_at_verify_start": true,
+  "accepted_main_parent_includes": ["#105", "#106", "#107", "#108"],
+  "merge_parents": [
+    "a381fa67134c265ca5921cd86535217ac49bc6dd",
+    "57a70260eaa602f4b9d44ddef576dae7a5df00cb"
+  ],
+  "origin_main_at_vp_write": "07d901a14e3aba4404fae815c9c8578efa154ac3",
+  "origin_main_at_vp_write_is_github_merge_of_109": true,
+  "merge_resolution_verified": true,
+  "generated_at_utc": "2026-08-13T17:41:04Z",
+  "old_vp_history_only": {
+    "path": "artifacts/waike/history/VP_WAIKE_COURSE_INDEPENDENT_RESULT.pre_main_merge.json",
+    "covers_this_tip": false,
+    "stale_verified_tip": "4c241b39f18e4e4c48622ae27d08cff2c8720966",
+    "note": "Pre-main-merge VP is history only. It must not be presented as covering 8b51620."
+  },
+  "VP_WAIKE_109_POST_MAIN_MERGE": "PASS",
+  "VP_WAIKE_COURSE_INDEPENDENT_RESULT": "PASS",
+  "S0": 0,
+  "S1": 0,
+  "S0_open": [],
+  "S1_open": [],
+  "CI": {
+    "verdict": "PASS",
+    "head_sha": "8b516205357cb9c308dfd3567a8038e286b10e3d",
+    "failed_checks": [],
+    "pending_checks": [],
+    "passing_check_runs": 44,
+    "unique_check_names": 41,
+    "all_required_settled": true,
+    "no_failure": true,
+    "test": {
+      "conclusion": "SUCCESS",
+      "workflow": "CI",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31725847956/job/94533906677"
+    },
+    "gate1": {
+      "conclusion": "SUCCESS",
+      "workflow": "Gate 1 post-merge integrity",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31725847947/job/94533907038"
+    },
+    "qemu_guest_path": {
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31725845414/job/94533897623"
+    },
+    "digital_lock": {
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31725847945/job/94533906671"
+    },
+    "sdk": {
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31725847897/job/94533907124"
+    },
+    "golden_journeys_s0_s1_merge_gate": {
+      "conclusion": "SUCCESS",
+      "note": "two duplicate GJ workflows both pass"
+    }
+  },
+  "PR109_MERGEABLE": true,
+  "PR109_MERGEABLE_NOTE": "Last observed while OPEN: mergeable=MERGEABLE (mergeStateStatus=UNSTABLE while CI in progress). GitHub state at VP write: MERGED. Independent verifier did not merge.",
+  "DEVICE_OS_109_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "READY_NOTE": "PASS + CI all-green on 8b51620 + S0=S1=0 + was MERGEABLE while open. Edmund already merged to 07d901a at 17:35:47Z before this VP landed.",
+  "FULL_WAIKE_CURRICULUM_COMPLETE": false,
+  "COHORT_READY": false,
+  "HUMAN_E6": false,
+  "STUDENT_VALIDATED": false,
+  "packet_scope": "SEED_NOT_COHORT_READY",
+  "fail_reason": null,
+  "pass_note": "Post-main-merge independent PASS on live tip 8b51620 (parents a381fa67 + 57a7026). CI 44/44 green including test+gate1. #106 companion_bridge / run_waike_app(lesson_id, role) / ai_interface.query / SDK sandbox dogfood / fail-closed bridge-absent preserved. 18 distinct executable seeds (independent word 5-gram Jaccard < 0.35). Labs 18/18 execute. Legacy wireless_basics_101→WIRELESS_6G and python_starter_pack→SOFTWARE_BUILDER; invalid course fail-closed. Zero deletions vs origin/main at 57a7026 (#107 19/19 and #108 127/127 present). Stale VP 4c241b3 is history only. Honesty flags remain false. Edmund merged #109 to main 07d901a during CI poll; this agent did not merge.",
+  "challenges": {
+    "ci_green_on_tip": {
+      "verdict": "PASS",
+      "head_sha": "8b516205357cb9c308dfd3567a8038e286b10e3d"
+    },
+    "pr106_behavior_not_lost": {
+      "verdict": "PASS",
+      "companion_bridge": true,
+      "run_waike_app_kwargs": "run_waike_app(lesson_id=..., role=...)",
+      "capability": "ai_interface.query",
+      "not_capability": "ai.interface",
+      "manifest_capabilities_required": ["storage.read", "storage.write", "ai_interface.query"],
+      "compat_ok": true,
+      "sdk_sandbox_dogfood": {
+        "build_ok": true,
+        "signed": true,
+        "install_ok": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "writes_only_in_sandbox_data_dir": true,
+        "sandbox_files": [
+          "waike_progress.json",
+          "app_runtime.log",
+          "waike_app_state.json",
+          "waike_portfolio.json",
+          "waike_learning_run.json"
+        ]
+      },
+      "fail_closed_if_bridge_absent": true,
+      "ui_runtime_unavailable": true
+    },
+    "pr109_eighteen_course_seeds": {
+      "verdict": "PASS",
+      "ids_present": [
+        "DIGITAL_CONFIDENCE",
+        "IT_SUPPORT_HARDWARE",
+        "SOFTWARE_BUILDER",
+        "NETWORKING_INFRA",
+        "CYBER_SOC",
+        "DATA_DASHBOARDS",
+        "AI_ML_EDGE",
+        "EMBEDDED_PROTOTYPING",
+        "WIRELESS_6G",
+        "PM_AGILE_LSS",
+        "GAME_DEV_INTERACTIVE",
+        "SEVEN_GC_APPRENTICESHIP",
+        "CLOUD_DEVOPS",
+        "COMM_PD_ETHICS",
+        "ROBOTICS_CONTROL",
+        "GUNNCHOS_PRODUCT_LAB",
+        "HARDWARE_ENGINEERING",
+        "DATA_VIZ_BI"
+      ],
+      "count": 18,
+      "s1_threshold": 0.35,
+      "independent_jaccard_5gram": {
+        "method": "word 5-grams (re.findall [a-z0-9]+); not character n-grams; recomputed from files, not copied from register",
+        "lesson_md_worst": 0.0263,
+        "lesson_md_worst_pair": ["COMM_PD_ETHICS", "DATA_VIZ_BI"],
+        "all_markdown_worst": 0.0253,
+        "json_raw_worst": 0.1333,
+        "json_id_stripped_worst": 0.2816,
+        "json_id_stripped_worst_pair": ["CLOUD_DEVOPS", "HARDWARE_ENGINEERING"],
+        "json_values_no_schema_worst": 0.0484,
+        "solver_source_worst": 0.0345,
+        "pairs_ge_0_35_on_lessons_json_solvers": 0
+      },
+      "file_hash_uniqueness": "all 12 required artifacts unique 18/18 (no identical-file reskins)",
+      "lab_py_wrappers": {
+        "worst_jaccard": 0.65,
+        "note": "content/*/lab.py files are generated entrypoint wrappers. Executable solvers in gunnchos_device_os/waike_curriculum/labs.py are domain-distinct (worst 0.0345). Not treated as templated seeds.",
+        "reject_as_templated_seed": false
+      },
+      "labs_execute": {
+        "run_all_labs_ok": true,
+        "count": 18,
+        "subprocess_lab_py_exit0": 18
+      }
+    },
+    "legacy_and_fail_closed": {
+      "verdict": "PASS",
+      "wireless_basics_101": {"ok": true, "course_id": "WIRELESS_6G"},
+      "python_starter_pack": {"ok": true, "course_id": "SOFTWARE_BUILDER"},
+      "invalid_course": {"ok": false, "error": "unknown_course"}
+    },
+    "sdk_app_does_not_bypass_sandbox": {
+      "verdict": "PASS",
+      "main_reads_GUNNCHOS_SANDBOX_DATA_DIR": true,
+      "package_runner_sets_sandbox_env": true,
+      "persisted_files_only_under_sandbox_data": true,
+      "leak": []
+    },
+    "accepted_107_108_not_removed": {
+      "verdict": "PASS",
+      "deletions_vs_origin_main_at_57a7026": 0,
+      "pr107_files_on_head": "19/19",
+      "pr108_files_on_head": "127/127",
+      "unrelated_deletions": false
+    },
+    "no_hardcoded_pass_or_stale_vp": {
+      "verdict": "PASS",
+      "this_vp_covers_tip": "8b516205357cb9c308dfd3567a8038e286b10e3d",
+      "stale_vp_not_presented_as_covering_tip": true
+    }
+  },
+  "local_pytest": {
+    "tests/waike": "PASS",
+    "tests/test_waike_integration.py": "PASS",
+    "tests/platform001/test_waike_progress_and_tutor_binding": "PASS",
+    "tests/platform001/test_companion_bridge_wires_sandbox_io": "PASS",
+    "tests/platform001/test_platform001_full_lifecycle[waike_learning]": "PASS",
+    "tests/wp013/test_sdk_pipeline.py::test_first_party_real_app_full_pipeline[waike_learning]": "PASS",
+    "tests/test_handheld_image_fit_manifest.py": "LOCAL_FAIL_BOOT_BINARIES_ABSENT_CI_PASS",
+    "local_handheld_note": "Live emit on this Mac worktree has shared_boot_reference_present=false because gitignored vmlinuz-virt/initramfs are absent. IMAGE_FIT_MANIFEST.json and handheld_image_fit.py are identical to origin/main 57a7026. CI job 'test' on 8b51620 passed (includes these tests). Not a merge-resolution defect; not used to weaken CI."
+  },
+  "counts": {
+    "accepted_course_ids": 18,
+    "product_real_seed": 18,
+    "product_templated": 0,
+    "product_stub": 0,
+    "course_complete": 0,
+    "labs_executed_subprocess": 18,
+    "labs_independent_expected_pass": 18
+  },
+  "residual_open": {
+    "FULL_8_WEEK_AUTHORSHIP": "OPEN",
+    "SLIDE_PIXEL_DECKS": "OPEN",
+    "FRONTIER_GUNNCHAI_MODEL": "OPEN",
+    "DEVICE_LAB_CLASSROOM_PIXELS": "OPEN",
+    "STUDENT_PILOT": "OPEN",
+    "OWNER_REPO_PROGRAMS_STILL_TEMPLATED_OR_STUB": "OPEN",
+    "HUMAN_E6": "NOT_EARNED",
+    "STUDENT_VALIDATED": false,
+    "LAB_PY_ENTRYPOINT_WRAPPERS_SHARE_TEMPLATE": "RESIDUAL_NOT_SEED_FAIL",
+    "COHORT_READY": "NOT_CLAIMED",
+    "FULL_WAIKE_CURRICULUM_COMPLETE": false
+  },
+  "edmund_action": {
+    "already_merged_109_to_main": true,
+    "main_sha": "07d901a14e3aba4404fae815c9c8578efa154ac3",
+    "do_not_merge_again": true,
+    "do_not_start_waves_4_to_7": true,
+    "do_not_touch_pr_103": true,
+    "optional_followup": "This VP commit lands on the #109 branch after GitHub merge; cherry-pick onto main if canonical evidence must live on accepted main.",
+    "non_claims": [
+      "FULL_WAIKE_CURRICULUM_COMPLETE",
+      "COHORT_READY",
+      "HUMAN_E6",
+      "STUDENT_VALIDATED",
+      "stale_VP_4c241b3_covers_8b51620"
+    ]
+  }
+}
