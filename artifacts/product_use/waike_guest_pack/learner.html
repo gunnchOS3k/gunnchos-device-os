@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<title>WAIKE Learner — GENERAL_IT</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:820px;margin:24px auto;padding:0 16px;background:#f7f4ef;color:#1a1a1a}
+h1{font-size:1.6rem} .card{background:#fff;border:1px solid #ddd;padding:16px;margin:12px 0}
+button{font-size:1.1rem;padding:10px 16px;margin:4px} .ok{color:#0a7} .bad{color:#a00}
+#status{font-weight:600}
+</style></head><body>
+<h1>WAIKE Learner</h1>
+<p id="meta"></p>
+<div class="card"><h2 id="lesson-title"></h2><article id="lesson"></article></div>
+<div class="card"><h3>Worked example</h3><div id="example"></div></div>
+<div class="card"><h3>Assignment</h3><div id="assignment"></div>
+<button id="save-assignment">Save assignment draft</button></div>
+<div class="card"><h3>Quiz</h3><div id="quiz"></div>
+<button id="submit-quiz">Submit quiz answer</button></div>
+<p id="status">ready</p>
+<script>
+const DATA = {"package_version": "owner-546819c6b395", "course_id": "GENERAL_IT", "title": "General IT — Operator to Support Specialist", "lesson_id": "GENERAL_IT-w01", "lesson_title": "The Civic Tech Desk — three jobs a computer actually has", "lesson_body": "At the Gary Civic Tech Desk the machine in front of a patron is not a personality. It remembers (files), it calculates (apps), and it talks (network). Beginners freeze when a window disappears because they cannot name which of those three jobs failed. Ticket 4417 from the library kiosk is a remember-job failure: the essay lived in a browser temp store and the idle timer (1200 seconds) wiped the session. Naming the job changes the next action. You do not 'fix the Internet' for a missing file.\n\nOperator confidence is a spoken path. Say `Documents/waike/desk/4417` out loud before you copy anything. If that folder is missing, create it. Extra folders on the Desktop are clutter, not success. The lab marks required paths; it does not grade wallpaper.\n\nPrivacy is operational, not a poster. The desk forbids storing SSNs, library-card PANs, or passwords in ticket notes. If a patron dictates a password, you write 'credential reset requested' and walk them through a reset — you never type their secret into chat.\n\nThis week you will also meet the WAIKE Consensus Ladder in miniature: what you saw, what you inferred, what you still need. 'The kiosk is broken' is not an observation. 'Idle logout at 1200s discarded an unsaved textarea' is.", "worked_example": "Idle policy 1200s = 20 minutes. Patron sat down at 14:02, last keystroke 14:07, return 14:28. Session is gone. Restore from the auto-save folder if present; do not disable the timer as your first move — the timer is a shared-kiosk control.", "assignment": {"id": "a01", "prompt": "Build the required folder tree for ticket 4417, write a four-line operator journal (remember / calculate / talk / what broke), and describe one restore method that is not Ctrl+Z. No patron PII."}, "quiz": {"quiz_id": "GENERAL_IT-q01", "week": 1, "items": [{"id": "git-w1-1", "kind": "mcq", "stem": "Ticket 4417 lost an essay after 20 idle minutes. Which job failed first?", "choices": ["Remember (session/files)", "Talk (network)", "Calculate (CPU thermal)", "Print spooler"]}, {"id": "git-w1-2", "kind": "mcq", "stem": "Idle logout is 1200 seconds. How many minutes is that?", "choices": ["12", "20", "15", "1200"]}, {"id": "git-w1-3", "kind": "mcq", "stem": "A patron dictates a password at the desk. What do you record in the ticket?", "choices": ["The password in plaintext", "A screenshot of the login form", "'credential reset requested' and no secret", "The library card PAN"]}, {"id": "git-w1-4", "kind": "mcq", "stem": "Which statement is an observation, not an inference?", "choices": ["The kiosk is broken", "The Internet is down", "Someone hacked the kiosk", "The textarea was empty after idle logout at 14:28"]}, {"id": "git-w1-5", "kind": "mcq", "stem": "Why does the lab mark extra Desktop folders as clutter?", "choices": ["Required paths are the contract; extras are not the job", "Desktop is faster storage", "Windows forbids Desktop folders", "Antivirus scans Desktop only"]}, {"id": "git-w1-6", "kind": "mcq", "stem": "Which restore method is acceptable for 4417 besides Undo?", "choices": ["Disable the idle timer forever", "Copy from auto-save or previous export if present", "Reimage the kiosk immediately", "Post the essay to Discord"]}]}};
+const STATE_URL = '/state';
+document.getElementById('meta').textContent = DATA.course_id + ' · ' + DATA.package_version + ' · learner (no keys)';
+document.getElementById('lesson-title').textContent = DATA.lesson_title;
+document.getElementById('lesson').textContent = DATA.lesson_body.slice(0, 2500);
+document.getElementById('example').textContent = DATA.worked_example.slice(0, 1200);
+document.getElementById('assignment').textContent = (DATA.assignment.prompt || DATA.assignment || '').toString().slice(0, 800);
+const quiz = DATA.quiz || {items:[]};
+const item = (quiz.items || [])[0] || {stem:'(no item)', choices:['A']};
+let chosen = 0;
+const q = document.getElementById('quiz');
+q.innerHTML = '<p>' + item.stem + '</p>' + (item.choices||[]).map((c,i)=>
+  '<label><input type="radio" name="c" value="'+i+'"'+(i===0?' checked':'')+'> '+c+'</label><br/>'
+).join('');
+q.addEventListener('change', e => { if(e.target.name==='c') chosen = Number(e.target.value); });
+async function post(kind, extra){
+  const body = Object.assign({kind, course_id: DATA.course_id, lesson_id: DATA.lesson_id, ts: Date.now()}, extra||{});
+  await fetch(STATE_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  document.getElementById('status').textContent = kind + ' saved';
+}
+document.getElementById('save-assignment').onclick = () => post('assignment_draft', {text: 'draft-for-' + DATA.lesson_id});
+document.getElementById('submit-quiz').onclick = () => post('quiz_submit', {quiz_id: quiz.quiz_id, item_id: item.id, choice_index: chosen});
+</script></body></html>

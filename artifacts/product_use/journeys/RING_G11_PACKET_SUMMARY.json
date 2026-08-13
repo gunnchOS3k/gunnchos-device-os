@@ -1,0 +1,636 @@
+{
+  "schema": "gunnchos.product_use_rc_001.ring_g11_packet.v1",
+  "started_at_utc": "2026-08-13T22:53:21Z",
+  "boot_ok": true,
+  "pack": {
+    "ok": true,
+    "out_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/product_use/waike_guest_pack",
+    "course_id": "GENERAL_IT",
+    "package_version": "owner-546819c6b395",
+    "learner_has_answer_keys": false
+  },
+  "prefer_fail_over_false_pass": true,
+  "tokens_remain_false": true,
+  "Edmund_mergeable": false,
+  "LIVE_visual_retained": true,
+  "deploy": {
+    "curl": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_run",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "argv": [
+        "bash",
+        "-lc",
+        "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18767/learner.html || echo fail"
+      ],
+      "returncode": 0,
+      "stdout": "200",
+      "stderr": ""
+    },
+    "start_ok": true
+  },
+  "results": {
+    "RING": {
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+      "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
+      "MOUSEPAD_FILE_APPEND_ALONE_INSUFFICIENT": true,
+      "marker_found_in_after": true,
+      "ping": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "ping",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "pong": true,
+        "boot_complete": true
+      },
+      "app_launches": {
+        "libreoffice": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "app_launch",
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "SILICON_EXACT_EMULATION": false,
+          "production_keys": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "app": "libreoffice",
+          "pid": 450,
+          "started": true,
+          "alive_after_500ms": true,
+          "argv": [
+            "libreoffice",
+            "--writer",
+            "--nologo",
+            "--norestore",
+            "--nolockcheck",
+            "/root/gunnchos-lab-document.odt"
+          ]
+        },
+        "browser": {
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "process_start",
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "SILICON_EXACT_EMULATION": false,
+          "production_keys": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "started": "chromium-ring",
+          "pid": 770
+        },
+        "game": {
+          "start": {
+            "ok": true,
+            "pid": 1157,
+            "started": "godot-pedestrian-ring"
+          },
+          "alive": {
+            "ok": true,
+            "stdout": "1157 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1162 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
+          },
+          "wayland": "wayland-0",
+          "process_alive": true,
+          "alive_after_mutation": {
+            "ok": true,
+            "stdout": "ALIVE\n1157 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1214 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
+          },
+          "harness_rejected": true,
+          "first_run_create_rejected": false,
+          "migration_alone_rejected": true,
+          "post_load_baseline_required": true
+        }
+      },
+      "guest_artifacts": {
+        "ok": false,
+        "odt_path_guest": "/root/gunnchos-lab-document.odt",
+        "odt_bytes": 8925,
+        "odt_marker": "RINGMUTATION1786661612",
+        "lab_browser_collector_forbidden": true,
+        "committed_odt": "document/ring_editor_buffer.odt",
+        "lab_ringring_rejected": true,
+        "lab_document_state_forbidden": true,
+        "document_state_present": false
+      },
+      "blocker": "guest_browser_state_not_committed",
+      "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+      "RING_SPATIAL_ACCURACY": "SIMULATED",
+      "honesty": {
+        "lab_browser_collector_forbidden": true,
+        "pedestrian_migration_alone_forbidden": true,
+        "seed_save_version": "2",
+        "browser_evidence": "RingMemo.txt contenteditable document autosave",
+        "spatial_labeled": "SIMULATED"
+      },
+      "pipeline_required": [
+        "ring_simulator",
+        "authenticated_packet",
+        "RingService",
+        "SpatialInputService",
+        "confidence_gate",
+        "guest_os_input",
+        "app_state_mutation"
+      ],
+      "pipeline_ok": false,
+      "guest_os_input_present": true,
+      "confidence_gate": {
+        "low": {
+          "ok": true,
+          "delivered": false,
+          "reject": {
+            "reason": "low_confidence",
+            "confidence": 0.2
+          },
+          "via_stack": true
+        },
+        "wrong": {
+          "ok": true,
+          "delivered": false,
+          "reject": {
+            "reason": "wrong_target",
+            "requested": "browser"
+          },
+          "via_stack": true
+        },
+        "ok": true
+      },
+      "mutation_marker": "RINGMUTATION1786661612",
+      "note": "Not earned \u2014 need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)"
+    },
+    "G11": {
+      "persona": "G11",
+      "observation_class": "GUEST_OBSERVED",
+      "ok": true,
+      "lesson_quiz_saved": true,
+      "kinds": [
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "quiz_submit",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "quiz_submit",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "quiz_submit",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "quiz_submit",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "assignment_draft",
+        "quiz_submit"
+      ],
+      "curl_save": {
+        "ok": true,
+        "stdout": "OK\n",
+        "returncode": 0
+      },
+      "offline": {
+        "ok": true,
+        "stdout": "LOCAL=200\nEXTERNAL_BLOCKED\nSTATE_PRESENT\nPACK_PRESENT\nHAS_QUIZ True\n"
+      },
+      "reconnect": {
+        "ok": true,
+        "stdout": "HTTP=200\nKINDS assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit\nHAS_QUIZ True\nHAS_ASSIGN True\n"
+      },
+      "before": {
+        "events": [
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786659754577,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786659755514,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786659755786,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786660450171,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786660451107,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786660451384,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661055168,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661056100,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661056373,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661431095,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661432031,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661432329,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          }
+        ],
+        "last": {
+          "kind": "quiz_submit",
+          "course_id": "GENERAL_IT",
+          "quiz_id": "GENERAL_IT-q01",
+          "item_id": "git-w1-1",
+          "choice_index": 0
+        }
+      },
+      "after": {
+        "events": [
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786659754577,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786659755514,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786659755786,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786660450171,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786660451107,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786660451384,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661055168,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661056100,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661056373,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661431095,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661432031,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661432329,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661825138,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661826074,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "ts": 1786661826347,
+            "text": "draft-for-GENERAL_IT-w01"
+          },
+          {
+            "kind": "assignment_draft",
+            "course_id": "GENERAL_IT",
+            "lesson_id": "GENERAL_IT-w01",
+            "text": "schoolwork-draft"
+          },
+          {
+            "kind": "quiz_submit",
+            "course_id": "GENERAL_IT",
+            "quiz_id": "GENERAL_IT-q01",
+            "item_id": "git-w1-1",
+            "choice_index": 0
+          }
+        ],
+        "last": {
+          "kind": "quiz_submit",
+          "course_id": "GENERAL_IT",
+          "quiz_id": "GENERAL_IT-q01",
+          "item_id": "git-w1-1",
+          "choice_index": 0
+        }
+      },
+      "learner_key_leak": false,
+      "leak_scan": "LEAK none\n",
+      "waike_source": "accepted_owner_#43_guest_pack",
+      "note": "In-guest Chromium + local collector; curriculum not re-authored."
+    },
+    "G13": {
+      "persona": "G13",
+      "REAL_TEACHER_E6": false,
+      "ok": true,
+      "observation_class": "GUEST_OBSERVED",
+      "assign_grade_kinds": [
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "grade_fixture",
+        "assign_fixture",
+        "grade_fixture"
+      ],
+      "grades": {
+        "last": {
+          "kind": "grade_fixture",
+          "learner_choice": 0,
+          "keys": {
+            "present": true
+          },
+          "rubric": "fixture-rubric-v1"
+        },
+        "graded": true
+      },
+      "learner_key_leak": false,
+      "teacher_events_present": true,
+      "curl": {
+        "ok": true,
+        "stdout": "OK\n",
+        "returncode": 0
+      },
+      "note": "Instructor assign/grade fixture in guest; keys stay on teacher endpoints/files only."
+    },
+    "G15": {
+      "persona": "G15",
+      "package": "libreoffice-draw",
+      "license_note": "LibreOffice \u2014 MPL-2.0 / mature office suite already on Interactive Guest image",
+      "toy_drawing_surface": false,
+      "ok": true,
+      "observation_class": "GUEST_OBSERVED",
+      "stdout": "/usr/bin/soffice\nODT_OK\nconvert /root/creative/concept.odt -> /var/lib/gunnchos/creative/concept.pdf using filter : writer_pdf_Export\nOverwriting: /var/lib/gunnchos/creative/concept.pdf\nconvert /root/creative/concept.odt -> /var/lib/gunnchos/creative/concept.html using filter : HTML:EmbedImages\nOverwriting: /var/lib/gunnchos/creative/concept.html\ntotal 24\ndrwxr-xr-x 2 root root 4096 Aug 13 22:57 .\ndrwxr-xr-x 7 root root 4096 Aug 13 22:45 ..\n-rw-r--r-- 1 root root  586 Aug 13 22:57 concept.html\n-rw-r--r-- 1 root root 9728 Aug 13 22:57 concept.pdf\nCREATIVE_EXPORT_OK PDF\n",
+      "preview": {
+        "ok": true,
+        "stdout": "1839 bash -lc pgrep -af soffice | head; file /var/lib/gunnchos/creative/concept.pdf; python3 -c \"import pathlib;\\nfor n in ('concept.png','concept.pdf'):\\n p=pathlib.Path('/var/lib/gunnchos/creative')/n\\n print(n, p.stat().st_size if p.exists() else 0)\"\n/var/lib/gunnchos/creative/concept.pdf: PDF document, version 1.6, 1 pages (zip deflate encoded)\n"
+      },
+      "artifact": "/var/lib/gunnchos/creative/concept.pdf",
+      "note": "LibreOffice Writer ODT \u2192 headless PNG/PDF export (mature package). Not a toy canvas."
+    }
+  },
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+  "RING_SPATIAL_ACCURACY": "SIMULATED",
+  "G11_ok": true,
+  "G13_ok": true,
+  "G15_ok": true,
+  "S1_remaining": [
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS still open after honest re-earn attempt",
+    "G14 DSXL focus_move / builder git (not in this packet unless separately run)",
+    "Handheld dock continuity OPEN",
+    "G11 reboot/resume schoolwork NOT_RUN",
+    "Persona tokens remain false until full journeys"
+  ],
+  "persona_table": "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+  "tokens_earned": {
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false
+  },
+  "finished_at_utc": "2026-08-13T22:57:42Z"
+}
