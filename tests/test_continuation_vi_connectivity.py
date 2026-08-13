@@ -15,7 +15,14 @@ from gunnchos_device_os.runtime.service_base import ServiceConfig
 
 def test_bearer_set_and_no_fake_current_ntn():
     bearers = build_default_bearers()
-    assert set(bearers) == {"ethernet", "wifi", "terrestrial", "future_ntn", "ntn_simulated"}
+    assert set(bearers) == {
+        "ethernet",
+        "wifi",
+        "bluetooth",
+        "terrestrial",
+        "future_ntn",
+        "ntn_simulated",
+    }
     future = bearers["future_ntn"]
     assert isinstance(future, FutureNTNBearer)
     assert future.supported is False

@@ -974,23 +974,65 @@ class ConnectivityService(RuntimeService):
     api_surface = [
         "evaluate", "active_bearer", "inject_fault", "interfaces", "bearer_metrics",
         "route_choice", "failover", "degraded_offline", "modem_rm520n", "list_bearers",
+        "airplane", "reconnect", "cellular_manager", "ntn_taxonomy", "honest_tokens",
     ]
 
     def on_start(self) -> None:
         from gunnchos_device_os.connectivity_orchestrator import ConnectivityOrchestrator
         from gunnchos_device_os.connectivity.bearers import build_default_bearers
+        from gunnchos_device_os.connectivity.cellular_manager import CellularManager
         from gunnchos_device_os.connectivity.modem_rm520n import ModemManagerFacade
+        from gunnchos_device_os.connectivity.policy import MultiBearerPolicy
 
         self._orch = ConnectivityOrchestrator()
         self._bearers = build_default_bearers()
         self._modem = ModemManagerFacade()
+        self._cellular = CellularManager(modem=self._modem.modem)
+        self._policy = MultiBearerPolicy(orch=self._orch)
         self._store["bearer"] = "offline"
 
     def api_list_bearers(self) -> dict[str, Any]:
+        from gunnchos_device_os.connectivity.honest_tokens import honest_tokens
+
         return {
             "bearers": {k: v.to_dict() for k, v in self._bearers.items()},
             "future_ntn_fake_current": False,
+            "bluetooth_wan": False,
+            **honest_tokens(),
         }
+
+    def api_honest_tokens(self) -> dict[str, Any]:
+        from gunnchos_device_os.connectivity.honest_tokens import honest_tokens
+
+        return honest_tokens()
+
+    def api_ntn_taxonomy(self) -> dict[str, Any]:
+        from gunnchos_device_os.connectivity.bearers import ntn_taxonomy
+
+        return ntn_taxonomy(self._bearers)
+
+    def api_airplane(self, enabled: bool = True) -> dict[str, Any]:
+        self._cellular.set_airplane(enabled)
+        result = self._policy.set_airplane(enabled)
+        if enabled:
+            self.api_degraded_offline()
+        self._store["airplane"] = enabled
+        self.persist()
+        return result
+
+    def api_reconnect(self) -> dict[str, Any]:
+        cellular = self._cellular.recover()
+        policy = self._policy.reconnect()
+        return {"cellular": cellular, "policy": policy}
+
+    def api_cellular_manager(self, action: str = "snapshot") -> dict[str, Any]:
+        if action == "bringup":
+            return self._cellular.full_bringup()
+        if action == "esim":
+            return self._cellular.esim.list_profiles()
+        if action == "recover":
+            return self._cellular.recover()
+        return self._cellular.snapshot()
 
     def api_interfaces(self) -> list[dict[str, Any]]:
         return [v.probe() for v in self._bearers.values()]
@@ -1054,6 +1096,7 @@ class ConnectivityService(RuntimeService):
             mapping = {
                 "ethernet": BearerKind.ETHERNET,
                 "wifi": BearerKind.WIFI,
+                "bluetooth": BearerKind.BLUETOOTH,
                 "terrestrial": BearerKind.CELLULAR,
                 "ntn_simulated": BearerKind.NTN_SIMULATED,
             }

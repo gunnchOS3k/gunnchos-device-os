@@ -1,0 +1,191 @@
+{
+  "schema": "gunnchos.connectivity.ntn.independent_verifier_result.v1",
+  "work_item": "device-os-111-connectivity-ntn-honest-5ga",
+  "product": "connectivity_ntn",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "did_not_touch_pr_71": true,
+  "pair": {
+    "device_os_pr": 111,
+    "field_kit_pr": 72,
+    "field_kit_aggregation_pr_71": "NOT_MERGED_NOT_TOUCHED"
+  },
+  "pr": {
+    "number": 111,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/111",
+    "draft": true,
+    "state": "OPEN",
+    "branch": "operating-cycle-3b/connectivity-orchestrator-honest-5ga-ntn",
+    "title": "feat(connectivity): honest multi-bearer orchestrator + 5G-A/NTN software path"
+  },
+  "claimed_tip": "5f88143f9f8a59b3bd98c2b24c4330fcd1c2f346",
+  "claimed_tip_short": "5f88143",
+  "claimed_tip_live_confirmed": true,
+  "verified_tip": "5f88143f9f8a59b3bd98c2b24c4330fcd1c2f346",
+  "verified_tip_short": "5f88143",
+  "tip_commit_subject": "feat(connectivity): honest multi-bearer policy, cellular manager, Rel-20/21 tracker",
+  "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "base_main_short": "3858e76",
+  "base_main_confirmed": true,
+  "merge_base_equals_claimed_base": true,
+  "commits_on_pr": 1,
+  "generated_at_utc": "2026-08-13T15:10:11Z",
+  "inspected_paths": {
+    "device_os": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os",
+    "head": "5f88143f9f8a59b3bd98c2b24c4330fcd1c2f346"
+  },
+  "VP_CONNECTIVITY_NTN_INDEPENDENT": "PASS",
+  "DEVICE_OS_111_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "cursor_must_not_merge": true,
+  "fail_reason": null,
+  "pass_note": "Connectivity/NTN packet PASS on live tip 5f88143: CI 42 unique / 44 rows green including test+gate1+connectivity-5ga+ntn-migration. RM520N-GL is terrestrial 5G NR Sub-6+LTE only (RM520N_GL_NTN=false, RM520N_GL_6G=false). Dock Ethernet is TB4 not TB5. STANDARDIZED_6G=false, CARRIER_ACCEPTED=false. Real eSIM/carrier credentials EXTERNAL (download refused, activation codes stripped). Three NTN classes are real types in bearers.py (TerrestrialBearer / FutureNTNBearer disabled SKU / SimulatedNTNBearer). Rel-21 is TRACKER_ONLY with no freeze/compliance claim. Tracker ok is computed from register strings, not a hardcoded PASS.",
+  "challenges": {
+    "ci_green_on_tip": {
+      "verdict": "PASS",
+      "head_sha": "5f88143f9f8a59b3bd98c2b24c4330fcd1c2f346",
+      "failed_checks": [],
+      "unique_checks": 42,
+      "passing_check_rows": 44,
+      "test": {
+        "conclusion": "SUCCESS",
+        "workflow": "CI",
+        "duration": "10m18s",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31712717597/job/94489548798"
+      },
+      "gate1": {
+        "conclusion": "SUCCESS",
+        "workflow": "Gate 1 post-merge integrity",
+        "duration": "9m38s",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31712717638/job/94489546689"
+      },
+      "connectivity_5ga": {
+        "conclusion": "SUCCESS",
+        "workflow": "phase-xv-final-os",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31712717826/job/94489546960"
+      },
+      "ntn_migration": {
+        "conclusion": "SUCCESS",
+        "workflow": "phase-xv-final-os",
+        "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31712717826/job/94489547001"
+      }
+    },
+    "rm520n_gl_not_ntn_or_6g": {
+      "verdict": "PASS",
+      "sku": "RM520N-GL",
+      "tech": ["nr5g-sub6", "lte"],
+      "RM520N_GL_NTN": false,
+      "RM520N_GL_6G": false,
+      "ntn_claimed_on_enumerate": false,
+      "ntn_supported": false,
+      "independent_raises": {
+        "label_ntn": true,
+        "label_6g": true
+      },
+      "evidence": [
+        "gunnchos_device_os/connectivity/honest_tokens.py",
+        "gunnchos_device_os/connectivity/modem_rm520n.py",
+        "gunnchos_device_os/connectivity/bearers.py TerrestrialBearer"
+      ]
+    },
+    "dock_not_tb5": {
+      "verdict": "PASS",
+      "DOCK_TB4": true,
+      "DOCK_TB5": false,
+      "ethernet_connect": {"dock_tb4": true, "dock_tb5": false}
+    },
+    "standardized_6g_and_carrier_accepted_false": {
+      "verdict": "PASS",
+      "STANDARDIZED_6G": false,
+      "CARRIER_ACCEPTED": false,
+      "LIVE_NTN": false,
+      "LIVE_CARRIER_ATTACH": false,
+      "PHYSICAL_RF": false
+    },
+    "real_esim_carrier_external": {
+      "verdict": "PASS",
+      "REAL_ESIM_CREDENTIALS": "EXTERNAL",
+      "REAL_CARRIER_CREDENTIALS": "EXTERNAL",
+      "esim_download_ok": false,
+      "esim_download_status": "EXTERNAL_PENDING",
+      "activation_code_stripped": true,
+      "physical_attach": false
+    },
+    "ntn_three_class_split_real_in_code": {
+      "verdict": "PASS",
+      "classes": {
+        "terrestrial": "TerrestrialBearer / NtnPathClass.TERRESTRIAL / sku=RM520N-GL / ntn=false",
+        "future_modem": "FutureNTNBearer / NtnPathClass.FUTURE_NTN_CAPABLE_MODEM / supported=false / sku=None / not_rm520n_gl",
+        "simulated": "SimulatedNTNBearer / NtnPathClass.SOFTWARE_NTN_SIMULATION / live_ntn=false"
+      },
+      "distinct_types": 3,
+      "future_connect_ok": false,
+      "future_never_selected_by_wan_policy": true,
+      "forced_future_supported_still_not_selected": true
+    },
+    "rel21_tracker_only_not_compliance": {
+      "verdict": "PASS",
+      "rel20_status": "STUDY_OR_NORMATIVE_IN_PROGRESS",
+      "rel21_status": "TRACKER_ONLY",
+      "forbidden_includes_6g_certified": true,
+      "rm520n_ntn_claimed": false,
+      "rm520n_6g_claimed": false
+    },
+    "no_hardcoded_pass": {
+      "verdict": "PASS",
+      "note": "Imt2030MigrationHarness.ok is computed from STANDARDIZED_6G/CARRIER_ACCEPTED constants plus Rel-20/21 register strings. CellularManager.full_bringup.ok depends on sim+register+attach. Field-kit sibling tracker fails if TRACKER_ONLY is removed from the Rel-21 snapshot (independent mutation challenge).",
+      "handover_matrix_ok_true_without_execution": "P2 residual — static path declaration, not used as VP PASS"
+    }
+  },
+  "findings": [
+    {
+      "severity": "P2",
+      "title": "assert_honest overwrites incoming True instead of refusing",
+      "path": "gunnchos_device_os/connectivity/honest_tokens.py",
+      "introduced_by_this_pr": true,
+      "packet_fail": false,
+      "detail": "Docstring says refuse forbidden claims, but out.update(tokens) runs before the True-check, so a caller passing STANDARDIZED_6G=True is silently sanitized to False and never raises. Canonical module constants remain False. Residual honesty-helper defect, not a token FAIL."
+    },
+    {
+      "severity": "P2",
+      "title": "handover_matrix hardcodes ok=True without executing a handoff",
+      "path": "gunnchos_device_os/connectivity/cellular_stack.py",
+      "introduced_by_this_pr": false,
+      "packet_fail": false,
+      "detail": "Returns a static wifi→terrestrial→ethernet→ntn_simulated path with ok=True. Not treated as live RF evidence. Residual."
+    },
+    {
+      "severity": "P2",
+      "title": "Simulated RM520N fixture uses PLMN 310260 not test 00101",
+      "path": "gunnchos_device_os/connectivity/modem_rm520n.py",
+      "introduced_by_this_pr": false,
+      "packet_fail": false,
+      "detail": "Fixture IMSI/ICCID/PLMN look like T-Mobile US identifiers. Labeled simulated; CellularManager marks real_operator_sim=false. Residual honesty nit."
+    }
+  ],
+  "residual_open": {
+    "PHYSICAL_MODEM_ATTACH": "OPEN",
+    "LIVE_CARRIER_ATTACH": false,
+    "LIVE_NTN": false,
+    "REAL_ESIM_CREDENTIALS": "EXTERNAL",
+    "STANDARDIZED_6G": false,
+    "CARRIER_ACCEPTED": false,
+    "DOCK_TB5": false,
+    "REL21_FREEZE": "OPEN_TRACKER_ONLY",
+    "FUTURE_NTN_CAPABLE_MODEM_SKU": "NOT_SELECTED",
+    "FIELD_KIT_PR_71_AGGREGATION": "NOT_MERGED",
+    "ASSERT_HONEST_OVERWRITE": "RESIDUAL_P2",
+    "RADIO_CAPABILITY_NTN_CLASS_TWO_VALUE": "RESIDUAL_none_or_simulated_only_future_sku_absent"
+  },
+  "local_pytest": {
+    "tests/test_connectivity_policy.py": "PASS",
+    "tests/test_cellular_manager.py": "PASS",
+    "tests/test_imt2030_migration.py": "PASS",
+    "tests/test_continuation_vi_connectivity.py": "PASS",
+    "tests/test_connectivity_orchestrator.py": "PASS",
+    "tests/test_radio_capability.py": "PASS",
+    "tests/phase_xv/test_phase_xv.py": "PASS (13 passed; sandbox write to artifacts/phase_xv needed all perms)",
+    "independent_three_class_and_token_script": "PASS"
+  }
+}

@@ -159,9 +159,11 @@ svc_domain_call() {
       ;;
     fleet_agent:ping_identity) echo "identity_reachable=true" ;;
     connectivity:loopback) echo "lo=up" ;;
-    connectivity:interfaces) echo "bearers=ethernet,wifi,terrestrial,future_ntn,ntn_simulated future_ntn_fake_current=false" ;;
-    connectivity:modem_rm520n) echo "sku=RM520N-GL attached=true ntn_claimed=false simulated=true" ;;
+    connectivity:interfaces) echo "bearers=ethernet,wifi,bluetooth,terrestrial,future_ntn,ntn_simulated future_ntn_fake_current=false bluetooth_wan=false" ;;
+    connectivity:modem_rm520n) echo "sku=RM520N-GL attached=true ntn_claimed=false simulated=true STANDARDIZED_6G=false CARRIER_ACCEPTED=false" ;;
     connectivity:route_choice) echo "active=wifi degraded=false offline=false" ;;
+    connectivity:airplane) echo "airplane=true wan=offline bluetooth_pan=optional STANDARDIZED_6G=false CARRIER_ACCEPTED=false" ;;
+    connectivity:cellular_manager) echo "sim=interface esim=EXTERNAL_PENDING apn=internet ipv4v6=true airplane=false ntn_claimed=false CARRIER_ACCEPTED=false" ;;
     display:current) echo "mode=handheld brightness=0.7 orientation=landscape" ;;
     display:outputs) echo "outputs=internal" ;;
     display:set_brightness)

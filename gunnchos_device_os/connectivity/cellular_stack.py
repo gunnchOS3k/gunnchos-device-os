@@ -8,11 +8,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field, asdict
 from typing import Any
 
+from gunnchos_device_os.connectivity.cellular_manager import CellularManager
+from gunnchos_device_os.connectivity.honest_tokens import honest_tokens
 from gunnchos_device_os.connectivity.modem_rm520n import ModemManagerFacade, SimulatedRM520NGL
 
 CLAIM_BOUNDARY = (
     "Digital cellular software stack abstraction only. No physical modem attach, "
-    "no carrier acceptance, no NTN claim on terrestrial RM520N-GL."
+    "no carrier acceptance, no NTN claim on terrestrial RM520N-GL. "
+    "STANDARDIZED_6G=false. CARRIER_ACCEPTED=false. eSIM credentials EXTERNAL."
 )
 
 STACK_COMPONENTS = (
@@ -27,10 +30,12 @@ STACK_COMPONENTS = (
 class CellularSoftwareStack:
     modem: SimulatedRM520NGL = field(default_factory=SimulatedRM520NGL)
     facade: ModemManagerFacade = field(init=False)
+    manager: CellularManager = field(init=False)
     nm_connected: bool = False
 
     def __post_init__(self) -> None:
         self.facade = ModemManagerFacade(modem=self.modem)
+        self.manager = CellularManager(modem=self.modem)
 
     def probe_components(self) -> dict[str, Any]:
         return {
@@ -57,6 +62,7 @@ class CellularSoftwareStack:
             "claim_boundary": CLAIM_BOUNDARY,
             "mock": False,
             "simulated": True,
+            **honest_tokens(),
         }
 
     def handover_matrix(self) -> dict[str, Any]:
@@ -66,8 +72,10 @@ class CellularSoftwareStack:
             "ok": True,
             "path": path,
             "future_ntn_separate": True,
+            "bluetooth_not_wan": True,
             "claim_boundary": CLAIM_BOUNDARY,
             "mock": False,
+            **honest_tokens(),
         }
 
     def to_dict(self) -> dict[str, Any]:

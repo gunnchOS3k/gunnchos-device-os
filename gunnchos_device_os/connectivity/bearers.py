@@ -1,21 +1,42 @@
 """Vendor-agnostic bearer capability interfaces for connectivity orchestration.
 
-Connectivity manager depends only on these capability surfaces — not modem
-SKUs. FutureNTNBearer is a modular placeholder (no fake current NTN claim).
-SimulatedNTNBearer is the only NTN path usable in digital tests today.
+Three NTN-related classes, never collapsed:
+  * TerrestrialBearer — RM520N-GL 5G NR Sub-6 + LTE; ntn_claimed=false
+  * FutureNTNBearer / FutureNtnCapableModem — disabled SKU slot, not RM520N-GL
+  * SimulatedNTNBearer — software NTN research path only
+
+Bluetooth is PAN/local. Do not treat it as WAN failover.
 """
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict, field
+from enum import Enum
 from typing import Any
+
+from gunnchos_device_os.connectivity.honest_tokens import (
+    CARRIER_ACCEPTED,
+    DOCK_TB5,
+    RM520N_GL_NTN,
+    STANDARDIZED_6G,
+    honest_tokens,
+)
 
 
 CLAIM_BOUNDARY = (
     "Software bearer capability interfaces only. No carrier attach, no live "
-    "NTN certification, no fake current NTN. FutureNTNBearer is modular and "
-    "disabled until a real NTN path exists."
+    "NTN certification, no fake current NTN. RM520N-GL is terrestrial 5G NR "
+    "Sub-6 + LTE only. Future NTN-capable modem is a disabled SKU slot — not "
+    "this modem. Dock is TB4 not TB5. STANDARDIZED_6G=false. CARRIER_ACCEPTED=false."
 )
+
+
+class NtnPathClass(str, Enum):
+    """Honest NTN path taxonomy — do not infer from RM520N-GL."""
+
+    TERRESTRIAL = "terrestrial"  # RM520N-GL; not NTN
+    FUTURE_NTN_CAPABLE_MODEM = "future_ntn_capable_modem"  # SKU not selected
+    SOFTWARE_NTN_SIMULATION = "software_ntn_simulation"
 
 
 @dataclass
@@ -102,7 +123,7 @@ class BearerCapability(ABC):
 class EthernetBearer(BearerCapability):
     name: str = "ethernet"
     kind: str = "ethernet"
-    notes: str = "Dock/Ethernet path when profile allows"
+    notes: str = "Dock Ethernet over USB4/TB4 (not TB5) when profile allows"
 
     def connect(self) -> dict[str, Any]:
         if not self.supported:
@@ -112,7 +133,13 @@ class EthernetBearer(BearerCapability):
         self.metrics.latency_ms = min(self.metrics.latency_ms, 5.0)
         self.metrics.loss_pct = 0.0
         self.metrics.security_score = max(self.metrics.security_score, 0.9)
-        return {"ok": True, "bearer": self.name, "state": "connected"}
+        return {
+            "ok": True,
+            "bearer": self.name,
+            "state": "connected",
+            "dock_tb4": True,
+            "dock_tb5": False,
+        }
 
     def disconnect(self) -> dict[str, Any]:
         self.metrics.available = False
@@ -142,13 +169,44 @@ class WiFiBearer(BearerCapability):
 
 
 @dataclass
+class BluetoothBearer(BearerCapability):
+    """Bluetooth PAN/local path — never a WAN failover candidate."""
+
+    name: str = "bluetooth"
+    kind: str = "bluetooth"
+    notes: str = "PAN/local only; not WAN failover"
+
+    def connect(self) -> dict[str, Any]:
+        if not self.supported:
+            return {"ok": False, "reason": "unsupported"}
+        self.metrics.available = True
+        self.metrics.offline = False
+        if self.metrics.signal_dbm is None:
+            self.metrics.signal_dbm = -60.0
+        self.metrics.latency_ms = min(self.metrics.latency_ms, 40.0)
+        self.metrics.loss_pct = min(self.metrics.loss_pct, 2.0)
+        return {
+            "ok": True,
+            "bearer": self.name,
+            "state": "connected",
+            "wan": False,
+            "pan": True,
+        }
+
+    def disconnect(self) -> dict[str, Any]:
+        self.metrics.available = False
+        return {"ok": True, "bearer": self.name, "state": "disconnected", "wan": False}
+
+
+@dataclass
 class TerrestrialBearer(BearerCapability):
-    """Terrestrial cellular (e.g. RM520N-GL 5G sub-6 software path)."""
+    """Terrestrial cellular — RM520N-GL 5G NR Sub-6 + LTE. Not NTN, not 6G."""
 
     name: str = "terrestrial"
     kind: str = "cellular"
-    notes: str = "Terrestrial 5G sub-6 software path; no NTN claim"
+    notes: str = "RM520N-GL terrestrial 5G NR Sub-6 + LTE; ntn_claimed=false"
     modem_sku: str = "RM520N-GL"
+    ntn_path_class: str = NtnPathClass.TERRESTRIAL.value
 
     def connect(self) -> dict[str, Any]:
         if not self.supported:
@@ -164,43 +222,71 @@ class TerrestrialBearer(BearerCapability):
             "bearer": self.name,
             "state": "connected",
             "modem_sku": self.modem_sku,
+            "ntn_path_class": self.ntn_path_class,
             "ntn_claimed": False,
+            "RM520N_GL_NTN": RM520N_GL_NTN,
+            "STANDARDIZED_6G": STANDARDIZED_6G,
+            "CARRIER_ACCEPTED": CARRIER_ACCEPTED,
+            "DOCK_TB5": DOCK_TB5,
         }
 
     def disconnect(self) -> dict[str, Any]:
         self.metrics.available = False
-        return {"ok": True, "bearer": self.name, "state": "disconnected", "ntn_claimed": False}
+        return {
+            "ok": True,
+            "bearer": self.name,
+            "state": "disconnected",
+            "ntn_claimed": False,
+            "RM520N_GL_NTN": False,
+        }
 
 
 @dataclass
 class FutureNTNBearer(BearerCapability):
-    """Modular future NTN slot — intentionally unsupported / not claimed."""
+    """Future NTN-capable modem SKU slot — not RM520N-GL, not selected, disabled."""
 
     name: str = "future_ntn"
     kind: str = "ntn_future"
     supported: bool = False
-    notes: str = "Future NTN placeholder — no fake current NTN"
+    notes: str = "Future NTN-capable modem SKU not selected — not RM520N-GL"
+    modem_sku: str | None = None
+    ntn_path_class: str = NtnPathClass.FUTURE_NTN_CAPABLE_MODEM.value
 
     def connect(self) -> dict[str, Any]:
         return {
             "ok": False,
             "bearer": self.name,
-            "reason": "future_ntn_not_available",
+            "reason": "future_ntn_capable_modem_not_selected",
             "fake_current_ntn": False,
+            "ntn_path_class": self.ntn_path_class,
+            "modem_sku": self.modem_sku,
+            "not_rm520n_gl": True,
+            "RM520N_GL_NTN": False,
             "claim_boundary": CLAIM_BOUNDARY,
         }
 
     def disconnect(self) -> dict[str, Any]:
-        return {"ok": True, "bearer": self.name, "state": "idle", "fake_current_ntn": False}
+        return {
+            "ok": True,
+            "bearer": self.name,
+            "state": "idle",
+            "fake_current_ntn": False,
+            "not_rm520n_gl": True,
+        }
+
+
+# Explicit alias used by the NTN taxonomy docs/tests.
+FutureNtnCapableModem = FutureNTNBearer
 
 
 @dataclass
 class SimulatedNTNBearer(BearerCapability):
-    """Research/sim NTN path only — explicitly simulated."""
+    """Software NTN simulation — research path only. Not a modem SKU claim."""
 
     name: str = "ntn_simulated"
     kind: str = "ntn_simulated"
-    notes: str = "Simulated NTN research path only"
+    notes: str = "Software NTN simulation only — not RM520N-GL NTN"
+    ntn_path_class: str = NtnPathClass.SOFTWARE_NTN_SIMULATION.value
 
     def connect(self) -> dict[str, Any]:
         if not self.supported:
@@ -218,27 +304,62 @@ class SimulatedNTNBearer(BearerCapability):
             "state": "connected_simulated",
             "simulated": True,
             "fake_current_ntn": False,
+            "ntn_path_class": self.ntn_path_class,
+            "RM520N_GL_NTN": False,
+            "LIVE_NTN": False,
         }
 
     def disconnect(self) -> dict[str, Any]:
         self.metrics.available = False
-        return {"ok": True, "bearer": self.name, "state": "disconnected", "simulated": True}
+        return {
+            "ok": True,
+            "bearer": self.name,
+            "state": "disconnected",
+            "simulated": True,
+            "ntn_path_class": self.ntn_path_class,
+        }
 
 
 def build_default_bearers(*, ntn_simulated: bool = True) -> dict[str, BearerCapability]:
     return {
         "ethernet": EthernetBearer(),
         "wifi": WiFiBearer(),
+        "bluetooth": BluetoothBearer(),
         "terrestrial": TerrestrialBearer(),
         "future_ntn": FutureNTNBearer(),
         "ntn_simulated": SimulatedNTNBearer(supported=ntn_simulated),
     }
 
 
-def select_bearer(bearers: dict[str, BearerCapability]) -> dict[str, Any]:
-    """Simple preference: ethernet > wifi > terrestrial > ntn_simulated > offline.
+def ntn_taxonomy(bearers: dict[str, BearerCapability] | None = None) -> dict[str, Any]:
+    pool = bearers or build_default_bearers()
+    return {
+        "terrestrial": {
+            "class": NtnPathClass.TERRESTRIAL.value,
+            "sku": "RM520N-GL",
+            "ntn": False,
+            "tech": ["nr5g-sub6", "lte"],
+        },
+        "future_ntn_capable_modem": {
+            "class": NtnPathClass.FUTURE_NTN_CAPABLE_MODEM.value,
+            "sku": None,
+            "selected": False,
+            "not_rm520n_gl": True,
+            "supported": pool["future_ntn"].supported,
+        },
+        "software_ntn_simulation": {
+            "class": NtnPathClass.SOFTWARE_NTN_SIMULATION.value,
+            "simulated": True,
+            "live_ntn": False,
+        },
+        **honest_tokens(),
+    }
 
-    FutureNTNBearer is never selected.
+
+def select_bearer(bearers: dict[str, BearerCapability]) -> dict[str, Any]:
+    """WAN preference: ethernet > wifi > terrestrial > ntn_simulated > offline.
+
+    FutureNTNBearer is never selected. Bluetooth is PAN/local, not WAN.
     """
     preference = ("ethernet", "wifi", "terrestrial", "ntn_simulated")
     chosen = None
@@ -257,6 +378,7 @@ def select_bearer(bearers: dict[str, BearerCapability]) -> dict[str, Any]:
             "reason": "no_available_bearer",
             "claim_boundary": CLAIM_BOUNDARY,
             "mock": False,
+            **honest_tokens(),
         }
     return {
         "active": chosen.name,
@@ -266,4 +388,5 @@ def select_bearer(bearers: dict[str, BearerCapability]) -> dict[str, Any]:
         "metrics": chosen.metrics.to_dict(),
         "claim_boundary": CLAIM_BOUNDARY,
         "mock": False,
+        **honest_tokens(),
     }

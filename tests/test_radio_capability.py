@@ -39,7 +39,7 @@ def test_handheld_includes_ntn_simulated():
 def test_wearables_wifi_only_path():
     p = radio_profile_from_device("wearables_arena_set")
     names = set(p.supported_bearer_names())
-    assert names == {"wifi", "offline"}
+    assert names == {"wifi", "bluetooth", "offline"}
 
 
 def test_matrix_covers_all_devices():
