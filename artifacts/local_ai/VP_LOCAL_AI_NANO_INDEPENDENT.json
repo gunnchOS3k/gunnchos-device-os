@@ -1,0 +1,234 @@
+{
+  "schema": "gunnchos.local_ai.nano_fallback.independent_verifier_result.v1",
+  "verification_packet": "VP_LOCAL_AI_110_POST_MAIN_MERGE",
+  "VP_LOCAL_AI_110_POST_MAIN_MERGE": "PASS",
+  "VP_LOCAL_AI_NANO_INDEPENDENT": "PASS",
+  "work_item": "device-os-110-local-ai-nano-fallback-post-main-merge",
+  "product": "local_ai",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_perform_conflict_resolution": true,
+  "did_not_merge": true,
+  "did_not_force_push": true,
+  "did_not_touch_pr_103": true,
+  "did_not_start_wave5": true,
+  "generated_at_utc": "2026-08-13T18:10:00Z",
+  "pr": {
+    "number": 110,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/110",
+    "title": "fix(local_ai): SmolLM2 is Nano fallback only (not Fast/Pro)",
+    "branch": "operating-cycle-3b/local-ai-nano-fallback",
+    "state": "MERGED",
+    "draft": false,
+    "merged_at_utc": "2026-08-13T17:53:51Z",
+    "merge_commit": "9d1ea7c0fa7b0a5d4c96a9b62ea4b016660293b5",
+    "github_base_oid_at_merge": "07d901a14e3aba4404fae815c9c8578efa154ac3"
+  },
+  "verified_device_os_head": "0017bba87ef00c270d1655d369786cecd14358f8",
+  "verified_device_os_head_short": "0017bba",
+  "verified_tip_subject": "docs(local_ai): record PR #110 main-merge resolution and regenerate Nano VP",
+  "expected_tip_live_confirmed": true,
+  "accepted_device_os_main_parent": "07d901a14e3aba4404fae815c9c8578efa154ac3",
+  "accepted_device_os_main_parent_short": "07d901a",
+  "accepted_main_includes": ["#105", "#106", "#107", "#108", "#109"],
+  "gunnchai_owner_main_sha": "c483a45197cbe3bd4a3d68d06c91fd86494c2992",
+  "gunnchai_32_merge_sha": "c483a45197cbe3bd4a3d68d06c91fd86494c2992",
+  "gunnchai_32_impl_sha": "11ead1aa4d4d311564ca659ef4f79ac8b9c04065",
+  "merge_resolution_verified": true,
+  "merge_commit_on_branch": "863dfdffb23c808313f9598ff31b07b497e74a33",
+  "merge_parents": [
+    "bf5896c4c6b0f5ec74f664d5f1ff2eec3d946bac",
+    "07d901a14e3aba4404fae815c9c8578efa154ac3"
+  ],
+  "old_110_head": "bf5896c4c6b0f5ec74f664d5f1ff2eec3d946bac",
+  "S0": 0,
+  "S1": 0,
+  "CI": "GREEN",
+  "PR110_MERGEABLE": "MERGED",
+  "PR110_MERGEABLE_LAST_OPEN_OBSERVATION": "MERGEABLE",
+  "DEVICE_OS_110_READY_FOR_EDMUND_MERGE": false,
+  "READY_FOR_EDMUND_MERGE": false,
+  "READY_reason": "Packet PASS on 0017bba (CI 41/41 green, S0=S1=0, challenges PASS) but PR #110 is already MERGED at 9d1ea7c (2026-08-13T17:53:51Z) onto accepted main 07d901a. This agent did not merge. No remaining Edmund merge action on #110.",
+  "cursor_must_not_merge": true,
+  "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+  "GUNNCHAI_FRONTIER_PRODUCT_PARITY": false,
+  "HUMAN_E6": false,
+  "LOCAL_FAST_REAL_PRODUCT_TIER": "OPEN",
+  "LOCAL_PRO_REAL_PRODUCT_TIER": "OPEN",
+  "stale_vp_not_reused": true,
+  "stale_vps_rejected_as_covering_this_tip": [
+    {
+      "path": "artifacts/local_ai/history/VP_LOCAL_AI_NANO_FALLBACK.pre_main_merge.json",
+      "covers": "bf5896c",
+      "covers_0017bba": false
+    },
+    {
+      "path": "artifacts/local_ai/VP_LOCAL_AI_NANO_FALLBACK.json",
+      "covers": "863dfdf",
+      "author": "merge-resolution agent (INDEPENDENT_VERIFICATION=PENDING)",
+      "covers_0017bba": false,
+      "not_reused": true
+    },
+    {
+      "path": "field-kit artifacts/local_ai/VP_LOCAL_AI_NANO_INDEPENDENT.json (pre-merge)",
+      "covers": "bf5896c",
+      "covers_0017bba": false
+    }
+  ],
+  "ci": {
+    "tip": "0017bba87ef00c270d1655d369786cecd14358f8",
+    "status": "GREEN",
+    "all_required_complete": true,
+    "failed_checks": [],
+    "unique_checks": 41,
+    "passing_checks_count": 41,
+    "settled_at_utc": "2026-08-13T18:03:59Z",
+    "test": {
+      "conclusion": "SUCCESS",
+      "workflow": "CI",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31727832462/job/94540552213"
+    },
+    "gate1": {
+      "conclusion": "SUCCESS",
+      "workflow": "Gate 1 post-merge integrity",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31727832541/job/94540552522"
+    },
+    "local_ai": {
+      "conclusion": "SUCCESS",
+      "workflow": "phase-xiv-frontier-os",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31727832550/job/94540552325"
+    },
+    "sdk": {
+      "conclusion": "SUCCESS",
+      "workflow": "phase-xiv-frontier-os",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31727832550/job/94540552568"
+    },
+    "s0_s1_merge_gate": {
+      "conclusion": "SUCCESS",
+      "workflow": "Golden Journeys (WP-003)",
+      "name": "Supporting subset + S0/S1 merge gate",
+      "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/31727832559/job/94540553060"
+    }
+  },
+  "challenges": {
+    "ci_green_on_tip": {
+      "verdict": "PASS",
+      "require_no_failure": true,
+      "failed_checks": [],
+      "unique_success": 41
+    },
+    "accepted_106_first_party_not_bypassed": {
+      "verdict": "PASS",
+      "sdk_main_required_import": "from gunnchos_device_os.first_party_apps.gunnchai_tutor import run_gunnchai_tutor",
+      "fail_closed_if_missing": true,
+      "except_ImportError_present": false,
+      "silent_invoke_gunnchai_tutor_local_fallback": false,
+      "tutor_entrypoint_on_sdk_run": "first_party_run_gunnchai_tutor",
+      "first_party_module_present": true,
+      "companion_bridge_calls_run_gunnchai_tutor": true
+    },
+    "waike_109_not_broken": {
+      "verdict": "PASS",
+      "tests_waike": "7 passed (tests/waike)",
+      "tests_waike_integration": "2 passed",
+      "WIRELESS_6G_lab": true,
+      "SOFTWARE_BUILDER_lab": true,
+      "legacy_python_starter_pack_maps_to": "SOFTWARE_BUILDER",
+      "tutor_binds_waike_lesson": true,
+      "ai_interface_permission_on_tutor_and_waike": true
+    },
+    "manifest_not_downgraded": {
+      "verdict": "PASS",
+      "path": "sdk/apps/gunnchai_tutor/manifest.json",
+      "version": "0.3.0",
+      "version_not_below_0_3_0": true,
+      "ai_interface.query": true,
+      "source": "gunnchos_device_os.first_party_apps.gunnchai_tutor",
+      "source_is_not_phase_xiv_local_ai": true,
+      "platform001": true,
+      "permissions": ["storage_read", "storage_write", "ai_interface"],
+      "capabilities_required": ["storage.read", "storage.write", "ai_interface.query"]
+    },
+    "smollm2_not_fast_or_pro": {
+      "verdict": "PASS",
+      "doctrine": "SmolLM2-135M Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro.",
+      "display_label": "Nano/fallback",
+      "is_nano_fallback_only": true,
+      "claim_fast_rejected": true,
+      "claim_pro_rejected": true,
+      "claim_small_rejected": true,
+      "fake_fast_weights_present": false,
+      "fake_pro_weights_present": false,
+      "ggufs_on_disk": ["SmolLM2-135M-Instruct-Q4_K_M.gguf"]
+    },
+    "gunnchai_32_owner_sha_pinned": {
+      "verdict": "PASS",
+      "live_origin_main": "c483a45197cbe3bd4a3d68d06c91fd86494c2992",
+      "live_origin_main_subject": "Merge pull request #32 from gunnchOS3k/stream/gunnchai-independent-eval-runtime",
+      "pr32_state": "MERGED",
+      "pr32_merge_commit": "c483a45197cbe3bd4a3d68d06c91fd86494c2992",
+      "impl_sha_present": "11ead1aa4d4d311564ca659ef4f79ac8b9c04065",
+      "pinned_in_sdk_main": true,
+      "matches_expected": true
+    },
+    "device_lab_local_ai_not_regressed": {
+      "verdict": "PASS",
+      "tests": "tests/device_lab/test_device_lab_foundation.py -k 'local_ai or g08 or G08' → 3 passed, 18 deselected",
+      "live_scenario": {
+        "scenario_id": "LAB-SCENARIO-LOCAL-AI-TUTOR",
+        "ok": true,
+        "primary_model_proof": "PASS_REAL_RUNTIME",
+        "path": "phase_xii_llama",
+        "runtime": "llama.cpp",
+        "primary_is_micro_deterministic": false,
+        "foundation_harness_ok": true,
+        "INDEPENDENT_VERIFICATION_token_in_scenario": "PENDING"
+      },
+      "fail_closed_when_micro_primary": "test_g08_ok_false_when_micro_forced PASS"
+    },
+    "no_hardcoded_pass": {
+      "verdict": "PASS",
+      "local_ai_module_hardcoded_PASS": false,
+      "g08_ok_computed_from_runtime": true,
+      "prove_script_verdict_from_tests_and_mislabel": true,
+      "this_vp_verdict_from_observed_checks": true
+    }
+  },
+  "local_pytest": {
+    "batch_a_nano_platform001_waike_sdk": "31 passed in 3.78s",
+    "batch_b_device_lab_g08": "3 passed, 18 deselected in 0.87s",
+    "batch_c_llama_tier_if_available": "1 skipped in 48.04s",
+    "total_observed": "34 passed, 1 skipped"
+  },
+  "s0_s1": {
+    "waike_register_S0_open": [],
+    "waike_register_S1_open": [],
+    "live_audit_S0_open_courses": [],
+    "live_audit_S1_open_courses": [],
+    "golden_journeys_s0_s1_merge_gate_ci": "SUCCESS",
+    "S0": 0,
+    "S1": 0
+  },
+  "honesty": {
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+    "GUNNCHAI_FRONTIER_PRODUCT_PARITY": false,
+    "HUMAN_E6": false,
+    "smollm2_is_full_intelligence_layer": false,
+    "LOCAL_FAST_REAL_PRODUCT_TIER": "OPEN",
+    "LOCAL_PRO_REAL_PRODUCT_TIER": "OPEN",
+    "fast_weights_present": false,
+    "pro_weights_present": false,
+    "nano_gguf_present": true,
+    "nano_gguf_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/models/local/SmolLM2-135M-Instruct-Q4_K_M.gguf"
+  },
+  "remaining_ai_gaps": [
+    "Local Fast GGUF (360M-class) not on disk — LOCAL_FAST_REAL_PRODUCT_TIER=OPEN",
+    "Local Pro GGUF (1.5B-class) not on disk — LOCAL_PRO_REAL_PRODUCT_TIER=OPEN",
+    "GUNNCHAI_APP_PRODUCT_COMPLETE remains false (OS companion UX / Fast-Pro daily intelligence not earned)",
+    "GUNNCHAI_FRONTIER_PRODUCT_PARITY remains false",
+    "HUMAN_E6 remains false (not started)",
+    "Invoke failover order residual (Fast→Nano→Pro vs preferred Fast→Pro→Nano) untriggered until Fast/Pro GGUFs exist"
+  ],
+  "edmund_action": "None on #110 merge — already MERGED at 9d1ea7c onto 07d901a. Independent VP is the post-merge record. Do not re-merge. Optional: cherry-pick this VP commit onto main if the artifact is wanted on main. Cursor must not merge, force-push, or start wave 5.",
+  "pass_note": "Independent PASS on live tip 0017bba after origin/main merge resolution: CI 41/41 unique checks green including test+gate1+local-ai+sdk+S0/S1 gate; #106 first-party run_gunnchai_tutor is REQUIRED and fail-closed (no ImportError→local-ai success); #109 WAIKE labs/integration intact; manifest 0.3.0 source first_party_apps.gunnchai_tutor platform001=true ai_interface.query; SmolLM2 Nano/fallback only with no fake Fast/Pro weights; gunnchAI #32 owner SHA c483a451 / impl 11ead1aa live-verified; Device Lab G08 PASS_REAL_RUNTIME via phase_xii_llama; stale VPs not reused; no hardcoded PASS. PR #110 already merged by others at 17:53:51Z; DEVICE_OS_110_READY_FOR_EDMUND_MERGE=false."
+}
