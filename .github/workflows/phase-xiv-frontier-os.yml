@@ -85,7 +85,7 @@ jobs:
           python-version: "3.12"
       - run: python3 -m pip install -r requirements.txt
       - name: Local AI registry + micro tier (llama optional)
-        run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_local_ai_registry_hash_fallback tests/phase_xiv/test_phase_xiv.py::test_local_ai_llama_tier_if_available
+        run: python3 -m pytest -q tests/phase_xiv/test_phase_xiv.py::test_local_ai_registry_hash_fallback tests/phase_xiv/test_phase_xiv.py::test_local_ai_llama_tier_if_available tests/phase_xiv/test_local_ai_nano_labels.py
 
   cross-product-callers:
     runs-on: ubuntu-latest

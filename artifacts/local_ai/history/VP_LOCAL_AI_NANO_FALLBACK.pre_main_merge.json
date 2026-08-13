@@ -1,0 +1,87 @@
+{
+  "schema": "gunnchos.local_ai.nano_fallback.v1",
+  "generated_at": "2026-08-13T14:29:46.402039+00:00",
+  "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "doctrine": "SmolLM2-135M-Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro, not GUNNCHAI_APP_PRODUCT_COMPLETE intelligence.",
+  "tests": {
+    "ok": true,
+    "rc": 0,
+    "out": "...........                                                              [100%]\n11 passed in 0.64s\n",
+    "err": ""
+  },
+  "registered": [
+    "micro-deterministic-v1"
+  ],
+  "disk": {
+    "ggufs": [
+      "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+    ],
+    "nano_gguf_present": true,
+    "nano_gguf_name": "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+    "local_fast_weights_present": false,
+    "local_pro_weights_present": false
+  },
+  "intelligence": {
+    "schema": "gunnchos.local_ai.intelligence_inventory.v1",
+    "nano": {
+      "present": true,
+      "model_id": null,
+      "tier": null,
+      "role": null,
+      "display_label": "Nano/fallback",
+      "is_nano_fallback_only": true,
+      "context_tokens": 512,
+      "quant": "Q4_K_M",
+      "parameters": "135M",
+      "filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+    },
+    "fast": {
+      "present": false,
+      "model_id": null,
+      "open": true,
+      "reason": "Local Fast GGUF (360M-class) not on disk \u2014 registry slot only"
+    },
+    "pro": {
+      "present": false,
+      "model_id": null,
+      "open": true,
+      "reason": "Local Pro GGUF (1.5B-class) not on disk \u2014 registry slot only"
+    },
+    "preferred": "micro-deterministic-v1",
+    "preferred_daily_tier": "micro",
+    "smollm2_is_full_intelligence_layer": false,
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+    "HUMAN_E6": false,
+    "claim_boundary": "SmolLM2-135M Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro, not app-product-complete intelligence."
+  },
+  "tutor": {
+    "ok": true,
+    "entrypoint": "invoke_gunnchai_tutor_local",
+    "tier": "micro",
+    "runtime": "deterministic_micro",
+    "is_nano_fallback_only": false,
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false
+  },
+  "mislabel_attempts": {
+    "claim_fast_rejected": true,
+    "claim_pro_rejected": true,
+    "claim_small_rejected": true,
+    "claim_local_fast_display_rejected": true
+  },
+  "mislabel_rejected": true,
+  "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+  "HUMAN_E6": false,
+  "GUNNCHOS_FRONTIER_OS_PARITY": false,
+  "INDEPENDENT_VERIFICATION": "PENDING",
+  "READY_FOR_EDMUND_MERGE": false,
+  "do_not_merge": true,
+  "open": [
+    "Local Fast GGUF (360M-class) not on disk \u2014 registry slot only",
+    "Local Pro GGUF (1.5B-class) not on disk \u2014 registry slot only",
+    "gunnchai_tutor first_party run_gunnchai_tutor / companion_bridge live on DRAFT #106 \u2014 this PR does not regress that contract",
+    "HUMAN_E6 not started",
+    "GUNNCHAI_APP_PRODUCT_COMPLETE remains false until Fast/Pro weights and OS-companion UX are earned"
+  ],
+  "claim_boundary": "SmolLM2-135M Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro, not app-product-complete intelligence.",
+  "verdict": "PASS"
+}

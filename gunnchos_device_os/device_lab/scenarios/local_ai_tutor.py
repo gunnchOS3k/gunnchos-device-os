@@ -53,6 +53,7 @@ def _try_real_local_ai(repo_root: Path, evidence: Path) -> dict[str, Any]:
     has_llama_bin = bool(shutil.which("llama-cli") or shutil.which("llama-cpp") or shutil.which("llama-server"))
 
     result = runtime.run_capability("tutor", "Explain fractions with a simple example for a student")
+    inventory = runtime.intelligence_inventory()
     is_micro = result.get("runtime") == "deterministic_micro"
     # Primary proof requires real model path when available; if unavailable, fail-closed honesty
     if is_micro and not (has_llama_model and has_llama_bin):
@@ -93,9 +94,17 @@ def _try_real_local_ai(repo_root: Path, evidence: Path) -> dict[str, Any]:
         "runtime": result.get("runtime"),
         "model": (result.get("route") or {}).get("model_id"),
         "model_hash": (result.get("route") or {}).get("sha256"),
+        "tier": result.get("tier"),
+        "role": result.get("role"),
+        "display_label": result.get("display_label"),
+        "is_nano_fallback_only": result.get("is_nano_fallback_only"),
+        "preferred_daily_tier": inventory.get("preferred_daily_tier"),
+        "smollm2_is_full_intelligence_layer": False,
+        "GUNNCHAI_APP_PRODUCT_COMPLETE": False,
         "primary_is_micro_deterministic": False,
         "text": str(result.get("text") or "")[:400],
         "registered": registered,
+        "intelligence": inventory,
         "measurement": "HOST_OBSERVED",
         "TARGET_HW_PERF": "PENDING",
         "xii_error": xii_err,

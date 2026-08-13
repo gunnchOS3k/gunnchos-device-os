@@ -1,0 +1,133 @@
+{
+  "schema": "gunnchos.local_ai.pr110_main_merge_resolution.v1",
+  "pr": 110,
+  "branch": "operating-cycle-3b/local-ai-nano-fallback",
+  "strategy": "git merge --no-ff origin/main (no force-push, no rebase, no push to main)",
+  "worktree": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-pr110-merge",
+  "accepted_device_os_main_parent": "07d901a14e3aba4404fae815c9c8578efa154ac3",
+  "accepted_main_includes": ["#105", "#106", "#107", "#108", "#109"],
+  "old_110_head": "bf5896c4c6b0f5ec74f664d5f1ff2eec3d946bac",
+  "merge_base": "3858e760295ad35828ff141919681f2bb8685cf0",
+  "merge_commit": "863dfdffb23c808313f9598ff31b07b497e74a33",
+  "merge_parents": [
+    "bf5896c4c6b0f5ec74f664d5f1ff2eec3d946bac",
+    "07d901a14e3aba4404fae815c9c8578efa154ac3"
+  ],
+  "gunnchai_owner_main_sha": "c483a45197cbe3bd4a3d68d06c91fd86494c2992",
+  "gunnchai_32_merge_sha": "c483a45197cbe3bd4a3d68d06c91fd86494c2992",
+  "gunnchai_32_impl_sha": "11ead1aa4d4d311564ca659ef4f79ac8b9c04065",
+  "merge_resolution_verified": true,
+  "DEVICE_OS_110_READY_FOR_EDMUND_MERGE": false,
+  "INDEPENDENT_VERIFIER": "NOT_THIS_AGENT",
+  "old_vp_moved_to": "artifacts/local_ai/history/VP_LOCAL_AI_NANO_FALLBACK.pre_main_merge.json",
+  "old_vp_covers_new_tip": false,
+  "canonical_vp": "artifacts/local_ai/VP_LOCAL_AI_NANO_FALLBACK.json",
+  "conflicts": [
+    {
+      "path": "sdk/apps/gunnchai_tutor/main.py",
+      "resolution": "REQUIRED import run_gunnchai_tutor from first_party_apps.gunnchai_tutor (accepted #106). Fail closed — no ImportError catch, no silent invoke_gunnchai_tutor_local fallback, still report success. After run_gunnchai_tutor succeeds, stamp intelligence inventory (tiers, preferred_daily_tier, weights_present, nano_fallback_only, owner_gunnchai_sha) without replacing tutor execution. Keep persisted_session_count from main. SmolLM2 remains Nano/fallback only. GUNNCHAI_APP_PRODUCT_COMPLETE and HUMAN_E6 stay false."
+    },
+    {
+      "path": "sdk/apps/gunnchai_tutor/manifest.json",
+      "resolution": "Kept accepted-main contract: version 0.3.0, permissions storage_read/storage_write/ai_interface, capabilities storage.read/storage.write/ai_interface.query, source gunnchos_device_os.first_party_apps.gunnchai_tutor, platform001=true. Added #110 honesty block (SmolLM2 Nano/fallback only; product-complete and HUMAN_E6 false). Did not downgrade to 0.2.0 or source phase_xiv.local_ai."
+    }
+  ],
+  "non_conflict_followups": [
+    {
+      "path": "tests/phase_xiv/test_local_ai_nano_labels.py",
+      "note": "SDK entrypoint must use first_party_run_gunnchai_tutor; added fail-closed import/manifest assertions."
+    },
+    {
+      "path": "scripts/prove_local_ai_nano_fallback.py",
+      "note": "Pin verified_device_os_head, accepted_device_os_main_parent, gunnchai_owner_main_sha, gunnchai_32_merge_sha, merge_resolution_verified. DEVICE_OS_110_READY_FOR_EDMUND_MERGE remains false."
+    },
+    {
+      "path": ".gitignore",
+      "note": "Keep PR110_MAIN_MERGE_RESOLUTION.json and artifacts/local_ai/history/**."
+    }
+  ],
+  "preserved_from_main": [
+    "first_party_apps/gunnchai_tutor.py",
+    "first_party_apps/companion_bridge.py",
+    "first_party_apps/runtime.py",
+    "gunnchai_integration.py",
+    "sdk/apps/gunnchai_tutor required run_gunnchai_tutor (fail closed)",
+    "sdk/apps/gunnchai_tutor/manifest.json v0.3.0 source first_party_apps.gunnchai_tutor platform001=true ai_interface.query",
+    "#106 D5/D6 first-party tutor/WAIKE/Creator",
+    "#107 handheld image fit artifacts",
+    "#108 WP-011R.2 device-lab files",
+    "#109 WAIKE 18-course seed + lesson context → tutor via ai_interface.query → persist"
+  ],
+  "preserved_from_110": [
+    "phase_xiv/local_ai",
+    "device_lab/scenarios/local_ai_tutor.py",
+    "scripts/prove_local_ai_nano_fallback.py",
+    "tests/phase_xiv/test_local_ai_nano_labels.py",
+    "tests/phase_xiv/test_phase_xiv.py",
+    ".github/workflows/phase-xiv-frontier-os.yml",
+    "SmolLM2-135M Q4_K_M 512-ctx = NANO_LOCAL is_nano_fallback_only=true"
+  ],
+  "routing": {
+    "order": ["valid Fast weights+runtime", "valid Pro weights+runtime", "Nano fallback", "micro where allowed"],
+    "smollm2_is_not_fast": true,
+    "smollm2_is_not_pro": true,
+    "fast_pro_weights_present": false,
+    "fast_pro_open": true
+  },
+  "manifest_final": {
+    "path": "sdk/apps/gunnchai_tutor/manifest.json",
+    "version": "0.3.0",
+    "source": "gunnchos_device_os.first_party_apps.gunnchai_tutor",
+    "platform001": true,
+    "permissions": ["storage_read", "storage_write", "ai_interface"],
+    "capabilities_required": ["storage.read", "storage.write", "ai_interface.query"]
+  },
+  "tutor_path": {
+    "sdk_entrypoint": "sdk/apps/gunnchai_tutor/main.py",
+    "required_import": "gunnchos_device_os.first_party_apps.gunnchai_tutor.run_gunnchai_tutor",
+    "fail_closed_on_missing_import": true,
+    "silent_local_ai_fallback": false,
+    "stamp_after_success": true
+  },
+  "inventory": {
+    "nano_gguf_present": true,
+    "nano_filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+    "nano_role": "NANO_LOCAL",
+    "is_nano_fallback_only": true,
+    "local_fast_weights_present": false,
+    "local_pro_weights_present": false,
+    "preferred_daily_tier_without_llama_opt_in": "micro",
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+    "HUMAN_E6": false
+  },
+  "waike_regression": {
+    "WIRELESS_6G": "PASS (tests/waike/test_course_depth.py)",
+    "SOFTWARE_BUILDER": "PASS (legacy python_starter_pack maps to SOFTWARE_BUILDER)",
+    "curriculum_expanded": false,
+    "ai_interface.query": true
+  },
+  "device_lab_local_ai": {
+    "tests": "tests/device_lab/test_device_lab_foundation.py -k 'local_ai or g08 or G08'",
+    "result": "3 passed, 18 deselected"
+  },
+  "tests": {
+    "phase_xiv/test_local_ai_nano_labels.py": "10 passed",
+    "phase_xiv/test_local_ai_registry_hash_fallback": "1 passed",
+    "wp013/test_sdk_pipeline.py": "19 passed",
+    "tests/platform001": "10 passed",
+    "tests/waike": "7 passed",
+    "tests/test_waike_integration.py": "2 passed",
+    "device_lab g08/local_ai": "3 passed",
+    "scripts/prove_local_ai_nano_fallback.py": "PASS",
+    "scripts/platform001_first_party_dogfood.py": "PASS (D5/D6 tokens true; VISUAL UNAVAILABLE)"
+  },
+  "not_claimed": [
+    "finished AI companion quality",
+    "GUNNCHAI_APP_PRODUCT_COMPLETE",
+    "HUMAN_E6",
+    "Local Fast/Pro daily intelligence",
+    "physical performance",
+    "DEVICE_OS_110_READY_FOR_EDMUND_MERGE",
+    "Cursor merge of PR #110"
+  ]
+}
