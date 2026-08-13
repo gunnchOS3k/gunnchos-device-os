@@ -10,12 +10,22 @@ Honesty contract
 """
 from __future__ import annotations
 
+import base64
 import json
 import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from gunnchos_device_os.device_lab.four_game_honest import (
+    anime_cfg_mutated,
+    archive_save_mutated_from_default,
+    beatlink_native_keys_present,
+    launched_pid_alive_non_zombie,
+    parse_ps_pid_stat_args,
+    pedestrian_cfg_mutated,
+)
 
 from gunnchos_device_os.device_lab.interactive_guest_four_games import (
     PEDESTRIAN_GODOT_SAVE,
@@ -41,7 +51,10 @@ CLAIM = (
     "FOUR_GAME proofs run INSIDE the Interactive Development Guest using owner "
     "real build artifacts at accepted mains. Host Playwright rejected. "
     "http.server is STATIC_ASSET_SERVER only. Probe/lab_bridge autosave rejected. "
-    "Beat Link requires Socket.IO service topology. "
+    "Beat Link requires Socket.IO topology AND native beatlink_* keys "
+    "(room API create is not save). "
+    "Godot <defunct> is FAIL. Headless --quit-after / ProductionGateHarness is not "
+    "sole mutation proof. Input-driven native persist required. "
     "SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. "
     "SHIPPING_IMAGE=false."
 )
@@ -98,6 +111,78 @@ def _ensure_lab_observe_server(session: Any, *, restart: bool = False) -> dict[s
         "LAB_DIAGNOSTIC_ONLY": True,
         "NOT_PRODUCT_RUNTIME_EVIDENCE": True,
     }
+
+
+def _guest_write_text(session: Any, path: str, text: str) -> dict[str, Any]:
+    payload = base64.b64encode(text.encode("utf-8")).decode("ascii")
+    return _agent_call(session, "file_put", path=path, bytes_b64=payload, timeout_sec=20.0)
+
+
+def _pid_alive_non_zombie(session: Any, pid: Any) -> dict[str, Any]:
+    try:
+        want = int(pid)
+    except (TypeError, ValueError):
+        return {"alive": False, "reason": "no_pid", "pid": pid}
+    r = _guest_bash(
+        session,
+        f"ps -o pid=,stat=,args= -p {want} 2>/dev/null || true",
+        timeout_sec=10,
+        name="pid-stat",
+    )
+    stdout = r.get("stdout") or ""
+    rows = parse_ps_pid_stat_args(stdout)
+    alive = launched_pid_alive_non_zombie(want, rows)
+    return {
+        "alive": alive,
+        "pid": want,
+        "ps": stdout[:400],
+        "zombie_rejected": not alive,
+        "stat": (rows[0]["stat"] if rows else None),
+    }
+
+
+def _wait_pid_alive(session: Any, pid: Any, *, tries: int = 24, delay_s: float = 0.5) -> dict[str, Any]:
+    last = {"alive": False, "reason": "no_pid", "pid": pid}
+    for _ in range(max(1, tries)):
+        last = _pid_alive_non_zombie(session, pid)
+        if last.get("alive"):
+            return last
+        time.sleep(delay_s)
+    return last
+
+
+def _launch_godot_wayland(session: Any, *, name: str, project: str) -> tuple[str, dict[str, Any], dict[str, Any]]:
+    """RING-proven Wayland+opengl3. gl_compatibility produced Godot zombies."""
+    wayland = _wayland_socket(session)
+    launch = _agent_call(
+        session,
+        "process_start",
+        name=name,
+        argv=[
+            "/opt/gunnchos/bin/godot",
+            "--path",
+            project,
+            "--display-driver",
+            "wayland",
+            "--rendering-driver",
+            "opengl3",
+        ],
+        env={
+            "XDG_RUNTIME_DIR": "/run/gunnchos-wayland",
+            "WAYLAND_DISPLAY": wayland,
+            "LIBSEAT_BACKEND": "seatd",
+        },
+        timeout_sec=30.0,
+    )
+    alive = _wait_pid_alive(session, launch.get("pid"), tries=30, delay_s=0.5)
+    return wayland, launch, alive
+
+
+def _read_guest_text(session: Any, path: str) -> str:
+    blob = _agent_call(session, "logs", path=path, lines=120)
+    if blob.get("ok") and blob.get("lines"):
+        return "\n".join(blob["lines"])
+    return ""
 
 
 def _wayland_socket(session: Any) -> str:
@@ -575,74 +660,20 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
     }
     _guest_bash(
         session,
+        "pkill -f godot || true; "
         "rm -rf '/root/.local/share/godot/app_userdata/Anime Aggressors'; "
-        "mkdir -p /var/lib/gunnchos/games/anime-aggressors /var/log",
+        "mkdir -p '/root/.local/share/godot/app_userdata/Anime Aggressors' "
+        "/var/lib/gunnchos/games/anime-aggressors /var/log",
         timeout_sec=20,
     )
-    wayland = _wayland_socket(session)
-    # Prefer production-gate harness for deterministic native save + input proof,
-    # then also keep a short Wayland process for window/display evidence.
-    harness = _guest_bash(
-        session,
-        "set +e; cd /root/owner-games/anime-aggressors; "
-        "rm -f gate1/evidence/out/actual_production_runtime.json; "
-        "mkdir -p gate1/evidence/out; "
-        "/opt/gunnchos/bin/godot --path . --headless --quit-after 90 -- --production-gate "
-        ">/var/log/gunnchos-anime-harness.log 2>&1; ec=$?; "
-        "ls -la gate1/evidence/out/ 2>/dev/null; "
-        "find /root/.local/share/godot -name 'aa_*.cfg' 2>/dev/null | head; "
-        "echo HARNESS_EC=$ec",
-        timeout_sec=180,
-        name="anime-harness",
-    )
-    out["harness"] = {k: harness.get(k) for k in ("ok", "stdout", "stderr", "returncode") if k in harness}
-    save = _agent_call(session, "logs", path=ANIME_SAVE, lines=80)
-    if not (save.get("ok") and save.get("lines")):
-        save = _agent_call(session, "logs", path=ANIME_FIRST, lines=80)
-    evid = _agent_call(
-        session,
-        "logs",
-        path="/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json",
-        lines=200,
-    )
-    # Harness may write under user:// relative gate1 path — also search.
-    if not (evid.get("ok") and evid.get("lines")):
-        found = _guest_bash(
-            session,
-            "find /root/owner-games/anime-aggressors /root/.local/share/godot -name actual_production_runtime.json 2>/dev/null | head -5",
-            timeout_sec=20,
-        )
-        out["evidence_search"] = (found.get("stdout") or "")[:400]
-        for line in (found.get("stdout") or "").splitlines():
-            path = line.strip()
-            if path:
-                evid = _agent_call(session, "logs", path=path, lines=200)
-                if evid.get("ok"):
-                    break
-    out["save"] = {k: save.get(k) for k in ("ok", "path", "lines", "reason") if k in save}
-    out["production_runtime_evidence"] = {
-        k: evid.get(k) for k in ("ok", "path", "lines", "reason") if k in evid
-    }
-
-    launch = _agent_call(
-        session,
-        "process_start",
-        name="godot-anime-aggressors",
-        argv=[
-            "/opt/gunnchos/bin/godot",
-            "--path",
-            "/root/owner-games/anime-aggressors",
-            "--display-driver",
-            "wayland",
-            "--rendering-driver",
-            "gl_compatibility",
-        ],
-        env={
-            "XDG_RUNTIME_DIR": "/run/gunnchos-wayland",
-            "WAYLAND_DISPLAY": wayland,
-            "LIBSEAT_BACKEND": "seatd",
-        },
-        timeout_sec=30.0,
+    seed = "[tutorial]\n\ncompleted=false\nskipped=false\n"
+    _guest_write_text(session, ANIME_FIRST, seed)
+    before = _read_guest_text(session, ANIME_FIRST)
+    out["save_before"] = before[:400]
+    out["headless_harness_rejected"] = True
+    out["production_gate_not_sole_proof"] = True
+    wayland, launch, alive0 = _launch_godot_wayland(
+        session, name="godot-anime-aggressors", project="/root/owner-games/anime-aggressors"
     )
     out["godot_launch"] = {
         "ok": launch.get("ok"),
@@ -650,50 +681,71 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
         "started": launch.get("started"),
         "wayland": wayland,
         "window_display": "wayland",
+        "rendering_driver": "opengl3",
         "reason": launch.get("reason"),
     }
+    out["runtime_process"] = alive0
+    if not alive0.get("alive"):
+        glog = _guest_bash(
+            session,
+            "dmesg | tail -5; ls -la /root/.local/share/godot/app_userdata/ 2>/dev/null | head; "
+            "cat /var/log/gunnchos-anime-harness.log 2>/dev/null | tail -20 || true",
+            timeout_sec=15,
+        )
+        out["godot_fail_log"] = (glog.get("stdout") or "")[:800]
+        out["blocker"] = "godot_wayland_process_zombie_or_dead"
+        out["FOUR_GAME_REAL_RUNTIME_EARNED"] = False
+        out["ok"] = False
+        out["note"] = "Anime Godot Wayland process not alive non-zombie — FAIL"
+        _guest_bash(session, "pkill -f '/root/owner-games/anime-aggressors' || true", timeout_sec=10)
+        return out
+    time.sleep(3.0)
     time.sleep(4.0)
-    for key in ("ret", "ret", "spc", "d", "d", "a", "j", "spc"):
-        _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-        time.sleep(0.15)
-    procs = _guest_bash(
-        session,
-        "ps -eo args | grep -i '[g]odot' | grep -i anime || ps -eo args | grep -i '[g]odot' | head",
-        timeout_sec=10,
+    keys = (
+        "ret", "ret", "spc",
+        "tab", "tab", "tab", "tab", "tab", "ret",
+        "down", "down", "down", "ret",
+        "esc", "ret", "spc", "d", "a", "j", "tab", "ret",
     )
-    alive = "godot" in ((procs.get("stdout") or "").lower())
-    out["runtime_process"] = {"alive": alive, "ps": (procs.get("stdout") or "")[:500]}
-    out["input"] = {"injected": True, "keys": ["ret", "spc", "d", "a", "j"]}
-    harness_ok = False
-    if evid.get("ok") and evid.get("lines"):
-        try:
-            blob = json.loads("\n".join(evid["lines"]))
-            harness_ok = bool(blob.get("all_steps_pass"))
-            out["telemetry"] = {
-                "source": "actual_production_runtime.json",
-                "all_steps_pass": harness_ok,
-                "engine": blob.get("engine"),
-                "steps": len(blob.get("steps") or []),
-            }
-        except Exception as exc:  # noqa: BLE001
-            out["telemetry_parse_error"] = str(exc)
-    save_ok = bool(save.get("ok") and save.get("lines"))
-    # Native user:// aa_*.cfg after harness/launch is owner persistence — not a probe facade.
-    earned = bool(out["godot_launch"].get("ok") and save_ok and (harness_ok or save_ok))
-    if save_ok and out["godot_launch"].get("ok"):
-        earned = True
-        out["state_mutation"] = f"native_godot_save:{save.get('path')}"
-    out["shutdown"] = _kill_matching_pythonish(session, "godot-anime")  # may no-op
+    for key in keys:
+        _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
+        time.sleep(0.18)
+    time.sleep(2.0)
+    alive1 = _pid_alive_non_zombie(session, launch.get("pid"))
+    out["runtime_process_after_input"] = alive1
+    after_first = _read_guest_text(session, ANIME_FIRST)
+    after_save = _read_guest_text(session, ANIME_SAVE)
+    mut = anime_cfg_mutated(before, after_first)
+    if not mut["ok"] and after_save and after_save.strip():
+        mut = {"ok": True, "via": "aa_save_cfg_after_input", "changed": True}
+    out["mutation"] = mut
+    out["save"] = {"path": ANIME_FIRST, "after": after_first[:400], "aa_save": after_save[:200]}
+    out["input"] = {"injected": True, "keys": list(keys)}
+    earned = bool(
+        launch.get("ok")
+        and alive0.get("alive")
+        and alive1.get("alive")
+        and mut.get("ok")
+    )
     _guest_bash(session, "pkill -f '/root/owner-games/anime-aggressors' || true", timeout_sec=10)
+    out["shutdown"] = {"requested": True}
     out["FOUR_GAME_REAL_RUNTIME_EARNED"] = earned
     out["ok"] = earned
+    out["state_mutation"] = mut.get("via") if earned else None
     out["note"] = (
-        "Owner Anime Godot4 with native aa_*.cfg persistence"
+        "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by input"
         if earned
-        else "Anime owner Godot proof incomplete — see harness/save/launch"
+        else "Anime honest FAIL — live non-zombie + input-driven native mutation required"
     )
     if not earned:
-        out["blocker"] = out.get("blocker") or "anime_owner_godot_incomplete"
+        out["blocker"] = (
+            out.get("blocker")
+            or (
+                "godot_wayland_process_zombie_or_dead"
+                if not alive1.get("alive")
+                else "anime_no_input_driven_native_mutation"
+            )
+        )
     return out
 
 
@@ -717,32 +769,42 @@ def _run_pedestrian_godot(session: Any, repo_root: Path) -> dict[str, Any]:
     if not godot.get("ok"):
         out["blocker"] = godot.get("error") or "godot4_unavailable"
         return out
+    seed_cfg = (
+        "[meta]\n\n"
+        "save_version=1\n"
+        'saved_at="2026-01-01T00:00:00"\n\n'
+        "[career]\n\n"
+        "xp=11\n"
+        "level=1\n"
+        "unlocked={\n"
+        '"mode:cup": true,\n'
+        '"mode:quick_race": true,\n'
+        '"mode:time_trial": true,\n'
+        '"mode:tutorial": true,\n'
+        '"runner:dash_reed": true,\n'
+        '"shoe:starter_soles": true,\n'
+        '"ring:seed": true\n'
+        "}\n"
+        "challenges={}\n"
+        "trophies=[]\n"
+        "tt_pbs={}\n"
+        "tutorial_completed=false\n"
+        "first_run_complete=true\n"
+    )
     _guest_bash(
         session,
+        "pkill -f godot || true; "
         "rm -rf '/root/.local/share/godot/app_userdata/Pedestrian Pursuit'; "
-        "mkdir -p /var/lib/gunnchos/games/foot-racing /var/log",
+        "mkdir -p '/root/.local/share/godot/app_userdata/Pedestrian Pursuit' "
+        "/var/lib/gunnchos/games/foot-racing /var/log",
         timeout_sec=20,
     )
-    wayland = _wayland_socket(session)
-    launch = _agent_call(
-        session,
-        "process_start",
-        name="godot-pedestrian-pursuit",
-        argv=[
-            "/opt/gunnchos/bin/godot",
-            "--path",
-            "/root/pedestrian-pursuit",
-            "--display-driver",
-            "wayland",
-            "--rendering-driver",
-            "gl_compatibility",
-        ],
-        env={
-            "XDG_RUNTIME_DIR": "/run/gunnchos-wayland",
-            "WAYLAND_DISPLAY": wayland,
-            "LIBSEAT_BACKEND": "seatd",
-        },
-        timeout_sec=30.0,
+    _guest_write_text(session, PEDESTRIAN_GODOT_SAVE, seed_cfg)
+    before = _read_guest_text(session, PEDESTRIAN_GODOT_SAVE)
+    out["save_before"] = before[:400]
+    out["headless_quit_after_rejected"] = True
+    wayland, launch, alive0 = _launch_godot_wayland(
+        session, name="godot-pedestrian-pursuit", project="/root/pedestrian-pursuit"
     )
     out["godot_launch"] = {
         "ok": launch.get("ok"),
@@ -750,53 +812,52 @@ def _run_pedestrian_godot(session: Any, repo_root: Path) -> dict[str, Any]:
         "started": launch.get("started"),
         "wayland": wayland,
         "window_display": "wayland",
+        "rendering_driver": "opengl3",
         "reason": launch.get("reason"),
     }
-    time.sleep(5.0)
-    for key in ("ret", "ret", "spc", "ret", "w", "w", "d", "a", "spc"):
+    out["runtime_process"] = alive0
+    if not alive0.get("alive"):
+        out["blocker"] = "godot_wayland_process_zombie_or_dead"
+        out["FOUR_GAME_REAL_RUNTIME_EARNED"] = False
+        out["ok"] = False
+        out["note"] = "Pedestrian Godot Wayland process not alive non-zombie — FAIL"
+        _guest_bash(session, "pkill -f '/root/pedestrian-pursuit' || true", timeout_sec=10)
+        return out
+    time.sleep(3.0)
+    keys = ("ret", "ret", "spc", "ret", "w", "w", "d", "a", "spc")
+    for key in keys:
         _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
         time.sleep(0.2)
     time.sleep(3.0)
-    save = _agent_call(session, "logs", path=PEDESTRIAN_GODOT_SAVE, lines=80)
-    if not (save.get("ok") and save.get("lines")):
-        harness = _guest_bash(
-            session,
-            "set +e; cd /root/pedestrian-pursuit; "
-            "/opt/gunnchos/bin/godot --path . --headless --quit-after 12 "
-            ">/var/log/gunnchos-pp-harness.log 2>&1; "
-            "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null",
-            timeout_sec=60,
-            name="pp-harness",
-        )
-        out["harness"] = {k: harness.get(k) for k in ("ok", "stdout", "stderr") if k in harness}
-        save = _agent_call(session, "logs", path=PEDESTRIAN_GODOT_SAVE, lines=80)
-    out["save"] = {k: save.get(k) for k in ("ok", "path", "lines", "reason") if k in save}
-    procs = _guest_bash(
-        session,
-        "ps -eo args | grep -i '[g]odot' | grep -i pedestrian || ps -eo args | grep -i '[g]odot' | head",
-        timeout_sec=10,
+    alive1 = _pid_alive_non_zombie(session, launch.get("pid"))
+    out["runtime_process_after_input"] = alive1
+    after = _read_guest_text(session, PEDESTRIAN_GODOT_SAVE)
+    mut = pedestrian_cfg_mutated(before, after)
+    out["mutation"] = mut
+    out["save"] = {"path": PEDESTRIAN_GODOT_SAVE, "after": after[:500]}
+    out["input"] = {"injected": True, "keys": list(keys)}
+    earned = bool(
+        launch.get("ok")
+        and alive0.get("alive")
+        and alive1.get("alive")
+        and mut.get("ok")
     )
-    alive = "godot" in ((procs.get("stdout") or "").lower())
-    out["runtime_process"] = {"alive": alive, "ps": (procs.get("stdout") or "")[:500]}
-    out["input"] = {"injected": True}
-    save_ok = bool(save.get("ok") and save.get("lines"))
-    # Require GUI launch success + native save. Headless-only save without launch attempt fails.
-    earned = bool(out["godot_launch"].get("ok") and save_ok and (alive or save_ok))
-    if save_ok and out["godot_launch"].get("ok"):
-        earned = True
-        out["state_mutation"] = "pp_progression.cfg present after input/harness"
-    out["telemetry"] = {"save_path": PEDESTRIAN_GODOT_SAVE, "save_ok": save_ok}
     _guest_bash(session, "pkill -f '/root/pedestrian-pursuit' || true", timeout_sec=10)
     out["shutdown"] = {"requested": True}
     out["FOUR_GAME_REAL_RUNTIME_EARNED"] = earned
     out["ok"] = earned
+    out["state_mutation"] = mut.get("via") if earned else None
     out["note"] = (
-        "Owner Pedestrian Pursuit Godot4 with native pp_progression.cfg"
+        "Owner Pedestrian Godot4 Wayland alive + seeded pp_progression.cfg mutated"
         if earned
-        else "Pedestrian owner Godot proof incomplete"
+        else "Pedestrian honest FAIL — live non-zombie + input-driven native mutation required"
     )
     if not earned:
-        out["blocker"] = "pedestrian_owner_godot_incomplete"
+        out["blocker"] = (
+            "godot_wayland_process_zombie_or_dead"
+            if not alive1.get("alive")
+            else "pedestrian_no_input_driven_native_mutation"
+        )
     return out
 
 
@@ -881,7 +942,7 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
     for key in ("tab", "tab", "ret", "ret", "spc", "ret"):
         _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
         time.sleep(0.2)
-    for key in ("d", "d", "d", "w", "w", "a", "s", "d", "d", "w", "d", "w", "a", "d"):
+    for key in ("d", "d", "d", "w", "w", "a", "s", "d", "d", "w", "d", "w", "a", "d", "d", "d", "d", "w", "w", "p"):
         _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
         time.sleep(0.12)
     time.sleep(5.0)
@@ -950,35 +1011,50 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
         }
         if "archive_of_life_save" in (scrape.get("stdout") or ""):
             native_save = "OBSERVED_IN_CHROMIUM_LEVELDB"
-    procs = _guest_bash(session, "ps -eo args | grep -i '[c]hromium' | head", timeout_sec=10)
-    alive = "chromium" in ((procs.get("stdout") or "").lower())
-    out["runtime_process"] = {"alive": alive}
+    alive = _pid_alive_non_zombie(session, launch.get("pid"))
+    if not alive.get("alive"):
+        procs = _guest_bash(
+            session, "ps -eo pid,stat,args | grep -i '[c]hromium' | head", timeout_sec=10
+        )
+        rows = parse_ps_pid_stat_args(procs.get("stdout") or "")
+        alive = {
+            "alive": any(r["alive_non_zombie"] and "chromium" in r["args"].lower() for r in rows),
+            "ps": (procs.get("stdout") or "")[:400],
+            "fallback_any_non_zombie_chromium": True,
+        }
+    out["runtime_process"] = alive
+    mut = archive_save_mutated_from_default(native_save)
+    out["mutation"] = mut
     out["input"] = {
         "count_observed": input_count,
         "injected": True,
         "owner_start_implied_by_native_save": bool(native_save),
+        "default_spawn_not_mutation": bool(mut.get("default_spawn")),
     }
-    out["state_mutation"] = bool(native_save or input_count >= 1)
-    save_ok = bool(native_save)
+    out["state_mutation"] = bool(mut.get("ok"))
     out["save"] = {
-        "ok": save_ok,
+        "ok": bool(mut.get("ok")),
         "native_key": "archive_of_life_save",
         "present": bool(native_save),
         "value_preview": (str(native_save)[:200] if native_save else None),
     }
-    earned = bool(alive and out["chromium_launch"].get("ok") and save_ok)
+    earned = bool(alive.get("alive") and out["chromium_launch"].get("ok") and mut.get("ok"))
     _kill_matching_pythonish(session, udd)
     _kill_matching_pythonish(session, udd_js)
     out["shutdown"] = {"chromium_udd_killed": True, "headless_udd_killed": True}
     out["FOUR_GAME_REAL_RUNTIME_EARNED"] = earned
     out["ok"] = earned
     out["note"] = (
-        "Owner Archive dist in Chromium Wayland with native archive_of_life_save"
+        "Owner Archive Chromium Wayland alive + post-start position/region mutation"
         if earned
-        else "Archive owner web proof incomplete — need input+native save"
+        else "Archive honest FAIL — default museum spawn is not mutation"
     )
     if not earned:
-        out["blocker"] = "archive_native_save_or_input_missing"
+        out["blocker"] = (
+            "chromium_process_zombie_or_dead"
+            if not alive.get("alive")
+            else "archive_no_post_start_region_or_position_mutation"
+        )
     return out
 
 
@@ -1010,8 +1086,10 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
         "for line in out.splitlines():\n"
         "    parts=line.strip().split(None,1)\n"
         "    if len(parts)<2: continue\n"
+        "    if not parts[0].isdigit(): continue\n"
         "    pid, args = int(parts[0]), parts[1]\n"
-        "    if pid==me: continue\n"
+        "    if pid==me or pid==os.getppid(): continue\n"
+        "    if 'python3' in args or '-lc' in args: continue\n"
         "    if 'beatlink-node/node' in args and 'dist/index.js' in args:\n"
         "        try: os.kill(pid, signal.SIGTERM)\n"
         "        except OSError: pass\n"
@@ -1107,7 +1185,8 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
         timeout_sec=15,
     )
     wayland = _wayland_socket(session)
-    url = f"http://127.0.0.1:18765/{game_id}/index.html"
+    # BrowserRouter SPA: /host runs owner HostPage which storeHostToken → beatlink_host.
+    url = "http://127.0.0.1:18765/host"
     launch = _agent_call(
         session,
         "process_start",
@@ -1188,16 +1267,12 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
         except Exception as exc:  # noqa: BLE001
             out["observe_parse_error"] = str(exc)
 
-    # Persistence: host token may appear after create-room UI; also accept room_create.json
-    # from real HTTP API as server-side state mutation, plus browser input observe.
     room = _agent_call(
         session, "logs", path="/var/lib/gunnchos/games/beatlink-party/room_create.json", lines=40
     )
     out["room_api_state"] = {k: room.get(k) for k in ("ok", "path", "lines", "reason") if k in room}
-    room_ok = bool(room.get("ok") and room.get("lines") and "code" in "\n".join(room.get("lines") or []))
+    out["room_api_not_accepted_as_save"] = True
 
-    # Write a host token via real browser localStorage only if the page did; else
-    # require socket connect + chromium alive + input as partial and use API room as state.
     scrape = _guest_bash(
         session,
         f"set +e; strings '{udd}/Default/Local Storage/leveldb/'* 2>/dev/null | "
@@ -1209,32 +1284,19 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
         "NOT_PRODUCT_RUNTIME_EVIDENCE": True,
         "stdout": (scrape.get("stdout") or "")[:500],
     }
-    native_present = any(
-        native.get(k) for k in ("beatlink_host", "beatlink_player", "beatlink_audience")
-    ) or ("beatlink_" in (scrape.get("stdout") or ""))
-
-    # Force a real persistence write through the web app's own API path: open host URL
-    # with room code if we have one — still owner UI; then re-check localStorage.
-    room_code = None
-    if room_ok:
-        try:
-            room_code = json.loads("\n".join(room["lines"])).get("code")
-        except Exception:
-            room_code = None
-    if room_code:
-        host_url = f"http://127.0.0.1:18765/{game_id}/index.html#/host/{room_code}"
-        _guest_bash(
-            session,
-            f"set +e; chromium --no-sandbox --ozone-platform=wayland "
-            f"--user-data-dir={udd} --no-first-run '{host_url}' >/dev/null 2>&1 & "
-            "sleep 4; echo navigated",
-            timeout_sec=30,
+    keys = beatlink_native_keys_present(native, scrape.get("stdout") or "")
+    if not keys.get("ok"):
+        # Re-observe after HostPage auto-create had time to storeHostToken.
+        time.sleep(3.0)
+        observe2 = _agent_call(
+            session, "logs", path=f"/var/lib/gunnchos/games/{game_id}/observe.json", lines=80
         )
-        time.sleep(2.0)
-        for key in ("ret", "tab", "ret", "spc"):
-            _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-            time.sleep(0.2)
-        time.sleep(2.0)
+        native2 = {}
+        if observe2.get("ok") and observe2.get("lines"):
+            try:
+                native2 = json.loads("\n".join(observe2["lines"])).get("native_localStorage") or {}
+            except Exception:
+                native2 = {}
         scrape2 = _guest_bash(
             session,
             f"strings '{udd}/Default/Local Storage/leveldb/'* 2>/dev/null | "
@@ -1242,28 +1304,25 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
             timeout_sec=20,
         )
         out["leveldb_scrape_after_host"] = (scrape2.get("stdout") or "")[:500]
-        if "beatlink_" in (scrape2.get("stdout") or ""):
-            native_present = True
+        keys = beatlink_native_keys_present(native2 or native, scrape2.get("stdout") or "")
+    native_present = bool(keys.get("ok"))
+    out["native_keys"] = keys
 
-    procs = _guest_bash(
-        session,
-        "ps -eo args | grep -E '[c]hromium|[n]ode.*dist/index' | head -20",
-        timeout_sec=10,
-    )
-    alive_browser = "chromium" in ((procs.get("stdout") or "").lower())
-    alive_server = "dist/index" in ((procs.get("stdout") or "").lower()) or health_ok
+    cr_alive = _pid_alive_non_zombie(session, launch.get("pid"))
+    srv_alive = _pid_alive_non_zombie(session, start.get("pid"))
     out["runtime_process"] = {
-        "chromium_alive": alive_browser,
-        "socketio_alive": alive_server,
-        "ps": (procs.get("stdout") or "")[:600],
+        "chromium_alive": bool(cr_alive.get("alive")),
+        "socketio_alive": bool(srv_alive.get("alive") or health_ok),
+        "chromium": cr_alive,
+        "socketio": srv_alive,
     }
     out["input"] = {"count_observed": input_count, "injected": True}
-    out["state_mutation"] = bool(room_ok or native_present)
+    out["state_mutation"] = native_present
     out["save"] = {
-        "ok": bool(native_present or room_ok),
+        "ok": native_present,
         "native_keys_observed": native_present,
-        "room_api_persisted": room_ok,
-        "note": "Native beatlink_* localStorage preferred; room API proves server state",
+        "room_api_persisted": False,
+        "note": "Native beatlink_* localStorage required; room API create is not save",
     }
     out["telemetry"] = {
         "BEATLINK_TELEMETRY": True,
@@ -1274,9 +1333,8 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
         health_ok
         and sio_ok
         and out["chromium_launch"].get("ok")
-        and alive_browser
-        and input_count >= 1
-        and (native_present or room_ok)
+        and cr_alive.get("alive")
+        and native_present
     )
     _kill_matching_pythonish(session, udd)
     _guest_bash(
@@ -1289,12 +1347,16 @@ def _run_beatlink_socketio(session: Any) -> dict[str, Any]:
     out["FOUR_GAME_REAL_RUNTIME_EARNED"] = earned
     out["ok"] = earned
     out["note"] = (
-        "Owner Beat Link Socket.IO topology + Chromium with state/persistence"
+        "Owner Beat Link Socket.IO + Chromium alive + native beatlink_* keys"
         if earned
-        else "Beat Link owner topology/proof incomplete"
+        else "Beat Link honest FAIL — native beatlink_* keys required (not room API)"
     )
     if not earned:
-        out["blocker"] = "beatlink_owner_topology_or_persistence_incomplete"
+        out["blocker"] = (
+            "chromium_process_zombie_or_dead"
+            if not cr_alive.get("alive")
+            else "beatlink_native_keys_missing"
+        )
     return out
 
 
@@ -1426,12 +1488,17 @@ def attempt_owner_four_game_in_guest_pass(
                 (evidence_dir / "four_games_in_guest.json").write_text(json.dumps(result, indent=2) + "\n")
                 return result
 
-        # Per-game proofs: Socket.IO/web first while guest agent is healthy,
-        # then Godot titles (heavier; can stress virtio-serial).
+        # Godot first (RING-proven opengl3) while RAM is free; Chromium after.
+        result["games"]["foot-racing"] = _run_pedestrian_godot(session, repo_root)
+        result["games"]["anime-aggressors"] = _run_anime_godot(session)
+        _guest_bash(
+            session,
+            "pkill -9 -f /opt/gunnchos/bin/godot || true; sleep 1",
+            timeout_sec=15,
+            name="godot-clear-before-web",
+        )
         result["games"]["beatlink-party"] = _run_beatlink_socketio(session)
         result["games"]["earth-species"] = _run_archive_chromium(session)
-        result["games"]["anime-aggressors"] = _run_anime_godot(session)
-        result["games"]["foot-racing"] = _run_pedestrian_godot(session, repo_root)
     finally:
         try:
             httpd.terminate()

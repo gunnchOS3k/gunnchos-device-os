@@ -105,11 +105,10 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
         # Gap register false wins only when evidence also false / absent PASS
         dsxl_ux = bool(dsxl_ev.get("DSXL_DUAL_COMPOSITOR_UX_PASS"))
 
-    # Master is evidence-derived only — never trust TOKENS.json alone.
-    master = bool(four and live and ring_mut and dsxl_ux and eco_pass)
-    if tokens.get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE") is True and not master:
-        # Refuse inflated master claim without all five evidence gates.
-        master = False
+    five = bool(four and live and dsxl_ux and ring_mut and eco_pass)
+    # Packet forbids COMPLETE on interactive guest + SILICON_EXACT=false + SHIPPING_IMAGE=false.
+    # five-gate AND is a separate digital token — never inflate COMPLETE from it.
+    _ = tokens  # tokens may claim COMPLETE; evidence-derived COMPLETE stays false.
 
     # Grades: never emit hardcoded 10 unless evidence clearly earns full digital depth
     grades = {
@@ -219,8 +218,10 @@ def grade_categories(gaps: dict[str, Any], tokens: dict[str, Any]) -> dict[str, 
             "DSXL_DUAL_COMPOSITOR_UX_PASS": dsxl_ux,
             "RING_TO_REAL_APP_STATE_MUTATION_PASS": ring_mut,
             "ECO010_SOAK_PASS": eco_pass,
-            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": master,
+            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
+            "five_gate_digital_and": five,
         },
+        "five_gate_digital_and": five,
     }
 
 
@@ -250,13 +251,15 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001
         reg_score = {"error": str(exc)}
 
-    master_complete = bool(scored["tokens_observed"].get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"))
+    master_complete = False
+    five_gate = bool(scored.get("five_gate_digital_and"))
     out = {
         "schema": "gunnchos.device_lab.score_independent.v1",
         "wave": "WP-011R",
         "baseline_12_grades": grades,
         "grade_mean_of_12": mean,
         "tokens_observed": scored["tokens_observed"],
+        "five_gate_digital_and": five_gate,
         "gaps_register": str(GAPS.relative_to(ROOT)) if GAPS.is_file() else None,
         "register_score_crosscheck": {
             "grade_mean_of_12": (reg_score or {}).get("grade_mean_of_12"),
@@ -271,9 +274,11 @@ def main() -> int:
         "VF6": "PHYSICAL_PENDING",
         "note": (
             "Independent recomputation from wp011r evidence files + gap register. "
-            "Not gunnchctl score alone. Master is evidence-derived from "
-            "FOUR_GAME+LIVE+DSXL+RING+ECO010 only (never TOKENS.json alone). "
-            "SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING."
+            "five_gate_digital_and is FOUR_GAME+LIVE+DSXL+RING+ECO010. "
+            "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE stays false on "
+            "interactive guest + SILICON_EXACT_EMULATION=false + SHIPPING_IMAGE=false "
+            "(never inflate COMPLETE from five-gate AND). "
+            "VF4/5/6 PHYSICAL_PENDING."
         ),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)

@@ -270,7 +270,9 @@ def test_independent_score_no_hardcoded_tens():
             "ECO010_SOAK_PASS",
         )
     )
-    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is five
+    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
+    assert data.get("five_gate_digital_and") is five
+    assert (data.get("tokens_observed") or {}).get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE") is False
     for name, g in data["baseline_12_grades"].items():
         assert int(g["grade"]) < 10, name
         assert g.get("hardcoded") is False

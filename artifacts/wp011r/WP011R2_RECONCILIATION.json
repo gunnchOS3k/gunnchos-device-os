@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.wp011r2.reconciliation.v1",
   "packet": "WP-011R.2",
-  "at_utc": "2026-08-13T03:09:40Z",
+  "at_utc": "2026-08-13T04:11:56Z",
   "strategy": "narrow_successor_from_accepted_main",
   "not_done": "Did not merge or force-push historical #103 tip 071f9b2 onto main",
   "accepted_mains_verified_live": {
@@ -25,12 +25,11 @@
     "LIVE_GUNNCHOS_VISUAL_PASS": "PASS",
     "DSXL_DUAL_COMPOSITOR_UX_PASS": "PASS",
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": "PASS",
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": "PASS",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": "FAIL",
     "ECO010_SOAK_PASS": "PASS"
   },
   "remaining_blockers": [
-    "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false",
-    "Independent re-verify five_gate_digital_and after FOUR_GAME",
+    "FOUR_GAME blockers: {\"anime-aggressors\": \"anime_no_input_driven_native_mutation\", \"beatlink-party\": null, \"earth-species\": null, \"foot-racing\": null}",
     "VF4-6 PHYSICAL_PENDING; SILICON_EXACT_EMULATION=false; SHIPPING_IMAGE=false"
   ],
   "cursor_never_merges": true,

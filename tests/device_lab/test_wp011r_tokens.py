@@ -71,7 +71,10 @@ def test_independent_score_exists():
             "ECO010_SOAK_PASS",
         )
     )
-    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is five
+    # COMPLETE must stay false on interactive guest; five-gate AND is separate.
+    assert data["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] is False
+    assert data.get("five_gate_digital_and") is five
+    assert (data.get("tokens_observed") or {}).get("GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE") is False
     # No hardcoded perfect 10s in numeric categories
     cats = data.get("baseline_12_grades") or data.get("categories") or {}
     for name, g in cats.items():

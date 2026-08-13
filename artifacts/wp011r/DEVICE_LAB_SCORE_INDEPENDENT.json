@@ -91,7 +91,7 @@
       "grade": 9,
       "axis": "DIGITAL",
       "evidence": [
-        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=True",
+        "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS=False",
         "ECO-010=PASS",
         "RING_TO_REAL_APP_STATE_MUTATION_PASS=True",
         "DSXL_DUAL_COMPOSITOR_UX_PASS=True"
@@ -111,13 +111,15 @@
   },
   "grade_mean_of_12": 6.17,
   "tokens_observed": {
-    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "ECO010_SOAK_PASS": true,
-    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "five_gate_digital_and": false
   },
+  "five_gate_digital_and": false,
   "gaps_register": "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
   "register_score_crosscheck": {
     "grade_mean_of_12": 6.58,
@@ -125,10 +127,10 @@
   },
   "hardcoded_tens_forbidden": true,
   "any_grade_is_10": false,
-  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": true,
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "SILICON_EXACT_EMULATION": false,
   "VF4": "PHYSICAL_PENDING",
   "VF5": "PHYSICAL_PENDING",
   "VF6": "PHYSICAL_PENDING",
-  "note": "Independent recomputation from wp011r evidence files + gap register. Not gunnchctl score alone. Master is evidence-derived from FOUR_GAME+LIVE+DSXL+RING+ECO010 only (never TOKENS.json alone). SILICON_EXACT_EMULATION=false; VF4/5/6 PHYSICAL_PENDING."
+  "note": "Independent recomputation from wp011r evidence files + gap register. five_gate_digital_and is FOUR_GAME+LIVE+DSXL+RING+ECO010. GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE stays false on interactive guest + SILICON_EXACT_EMULATION=false + SHIPPING_IMAGE=false (never inflate COMPLETE from five-gate AND). VF4/5/6 PHYSICAL_PENDING."
 }

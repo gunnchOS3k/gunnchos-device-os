@@ -7,70 +7,77 @@
   "HOST_PLAYWRIGHT_REJECTED": true,
   "http_server_alone_accepted": false,
   "PROBE_FACADE_REJECTED": true,
-  "ok": true,
-  "FOUR_GAME_REAL_RUNTIME_EARNED": true,
-  "harness": {
-    "ok": true,
-    "stdout": "total 8\ndrwxr-xr-x 2 501 staff 4096 Aug 13 03:09 .\ndrwxr-xr-x 3 501 staff 4096 Aug 12 20:59 ..\n/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg\nHARNESS_EC=0\n",
-    "stderr": "",
-    "returncode": 0
-  },
-  "evidence_search": "",
-  "save": {
-    "ok": true,
-    "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
-    "lines": [
-      "[tutorial]",
-      "",
-      "completed=true",
-      "skipped=false"
-    ]
-  },
-  "production_runtime_evidence": {
-    "ok": false,
-    "path": "/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json",
-    "reason": "read_failed:[Errno 2] No such file or directory: '/root/owner-games/anime-aggressors/gate1/evidence/out/actual_production_runtime.json'"
-  },
+  "ok": false,
+  "FOUR_GAME_REAL_RUNTIME_EARNED": false,
+  "save_before": "[tutorial]\n\ncompleted=false\nskipped=false",
+  "headless_harness_rejected": true,
+  "production_gate_not_sole_proof": true,
   "godot_launch": {
     "ok": true,
-    "pid": 1891,
+    "pid": 772,
     "started": "godot-anime-aggressors",
     "wayland": "wayland-0",
     "window_display": "wayland",
+    "rendering_driver": "opengl3",
     "reason": null
   },
   "runtime_process": {
     "alive": true,
-    "ps": "[godot] <defunct>\n"
+    "pid": 772,
+    "ps": "    772 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
+    "zombie_rejected": false,
+    "stat": "Sl"
+  },
+  "runtime_process_after_input": {
+    "alive": true,
+    "pid": 772,
+    "ps": "    772 Sl   /opt/gunnchos/bin/godot --path /root/owner-games/anime-aggressors --display-driver wayland --rendering-driver opengl3\n",
+    "zombie_rejected": false,
+    "stat": "Sl"
+  },
+  "mutation": {
+    "changed": false,
+    "skipped": false,
+    "completed": false,
+    "first_run_create_only": false,
+    "ok": false,
+    "via": null
+  },
+  "save": {
+    "path": "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
+    "after": "[tutorial]\n\ncompleted=false\nskipped=false",
+    "aa_save": ""
   },
   "input": {
     "injected": true,
     "keys": [
       "ret",
+      "ret",
+      "spc",
+      "tab",
+      "tab",
+      "tab",
+      "tab",
+      "tab",
+      "ret",
+      "down",
+      "down",
+      "down",
+      "ret",
+      "esc",
+      "ret",
       "spc",
       "d",
       "a",
-      "j"
+      "j",
+      "tab",
+      "ret"
     ]
   },
-  "state_mutation": "native_godot_save:/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg",
   "shutdown": {
-    "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "process_run",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "argv": [
-      "bash",
-      "-lc",
-      "python3 - <<'PY'\nimport os, signal, subprocess\nneedle = 'godot-anime'\nout = subprocess.check_output(['ps', '-eo', 'pid,args'], text=True)\nme = os.getpid()\nkilled = []\nfor line in out.splitlines():\n    parts = line.strip().split(None, 1)\n    if len(parts) < 2: continue\n    pid, args = int(parts[0]), parts[1]\n    if pid == me: continue\n    if needle in args:\n        try:\n            os.kill(pid, signal.SIGTERM)\n            killed.append(pid)\n        except OSError:\n            pass\nprint('killed', killed)\nPY"
-    ],
-    "returncode": 1,
-    "stdout": "",
-    "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n"
+    "requested": true
   },
-  "note": "Owner Anime Godot4 with native aa_*.cfg persistence"
+  "state_mutation": null,
+  "note": "Anime honest FAIL \u2014 live non-zombie + input-driven native mutation required",
+  "blocker": "anime_no_input_driven_native_mutation"
 }

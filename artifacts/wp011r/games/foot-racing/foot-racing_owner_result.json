@@ -16,61 +16,60 @@
     "downloaded": true,
     "via": "guest_curl_10.0.2.2:8765"
   },
+  "save_before": "[meta]\n\nsave_version=1\nsaved_at=\"2026-01-01T00:00:00\"\n\n[career]\n\nxp=11\nlevel=1\nunlocked={\n\"mode:cup\": true,\n\"mode:quick_race\": true,\n\"mode:time_trial\": true,\n\"mode:tutorial\": true,\n\"runner:dash_reed\": true,\n\"shoe:starter_soles\": true,\n\"ring:seed\": true\n}\nchallenges={}\ntrophies=[]\ntt_pbs={}\ntutorial_completed=false\nfirst_run_complete=true",
+  "headless_quit_after_rejected": true,
   "godot_launch": {
     "ok": true,
-    "pid": 2007,
+    "pid": 691,
     "started": "godot-pedestrian-pursuit",
     "wayland": "wayland-0",
     "window_display": "wayland",
+    "rendering_driver": "opengl3",
     "reason": null
-  },
-  "harness": {
-    "ok": true,
-    "stdout": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg\n",
-    "stderr": ""
-  },
-  "save": {
-    "ok": true,
-    "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-    "lines": [
-      "[meta]",
-      "",
-      "save_version=2",
-      "saved_at=\"2026-08-13T03:09:40\"",
-      "",
-      "[career]",
-      "",
-      "xp=0",
-      "level=1",
-      "unlocked={",
-      "\"mode:cup\": true,",
-      "\"mode:quick_race\": true,",
-      "\"mode:time_trial\": true,",
-      "\"mode:tutorial\": true,",
-      "\"runner:dash_reed\": true,",
-      "\"shoe:starter_soles\": true",
-      "}",
-      "challenges={}",
-      "trophies=[]",
-      "tt_pbs={}",
-      "tutorial_completed=false",
-      "first_run_complete=false"
-    ]
   },
   "runtime_process": {
     "alive": true,
-    "ps": "[godot] <defunct>\n[godot] <defunct>\n"
+    "pid": 691,
+    "ps": "    691 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n",
+    "zombie_rejected": false,
+    "stat": "Sl"
+  },
+  "runtime_process_after_input": {
+    "alive": true,
+    "pid": 691,
+    "ps": "    691 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n",
+    "zombie_rejected": false,
+    "stat": "Sl"
+  },
+  "mutation": {
+    "changed": true,
+    "first_run_create_only": false,
+    "default_unmutated_presence": false,
+    "headless_default_rejected": false,
+    "ok": true,
+    "via": "seeded_v1_to_v2"
+  },
+  "save": {
+    "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+    "after": "[meta]\n\nsave_version=2\nsaved_at=\"2026-08-13T04:10:44\"\n\n[career]\n\nxp=11\nlevel=1\nunlocked={\n\"mode:challenges\": true,\n\"mode:cup\": true,\n\"mode:ghost\": true,\n\"mode:local_mp\": true,\n\"mode:progression\": true,\n\"mode:quick_race\": true,\n\"mode:time_trial\": true,\n\"mode:tutorial\": true,\n\"ring:seed\": true,\n\"runner:dash_reed\": true,\n\"shoe:starter_soles\": true\n}\nchallenges={}\ntrophies=[]\ntt_pbs={}\ntutorial_completed=false\nfirst_run_complete=true"
   },
   "input": {
-    "injected": true
-  },
-  "state_mutation": "pp_progression.cfg present after input/harness",
-  "telemetry": {
-    "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-    "save_ok": true
+    "injected": true,
+    "keys": [
+      "ret",
+      "ret",
+      "spc",
+      "ret",
+      "w",
+      "w",
+      "d",
+      "a",
+      "spc"
+    ]
   },
   "shutdown": {
     "requested": true
   },
-  "note": "Owner Pedestrian Pursuit Godot4 with native pp_progression.cfg"
+  "state_mutation": "seeded_v1_to_v2",
+  "note": "Owner Pedestrian Godot4 Wayland alive + seeded pp_progression.cfg mutated"
 }

@@ -15,6 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from gunnchos_device_os.device_lab.four_game_honest import honest_sha_entry
+
 ACCEPTED_MAINS: dict[str, dict[str, str]] = {
     "anime-aggressors": {
         "owner_repo": "gunnchOS3k/anime-aggressors",
@@ -155,31 +157,17 @@ def verify_accepted_shas(repo_root: Path, *, allow_artifact_pin: bool = True) ->
     for key, spec in ACCEPTED_MAINS.items():
         sib = _discover_sibling(repo_root, spec["sibling"])
         sha = _git_sha(sib) if sib else None
-        ok = False
-        source = None
-        if sib and sha and (
-            sha == spec["accepted_main_sha"] or sha.startswith(spec["accepted_main_sha"][:12])
-        ):
-            ok = True
-            source = "sibling_checkout"
         meta = load_owner_artifact_meta(repo_root, key) if allow_artifact_pin else None
-        if not ok and meta and meta.get("accepted_main_sha") == spec["accepted_main_sha"]:
-            # Packaged artifact was built from the accepted main even if the
-            # sibling working tree later drifted — still valid for guest deploy.
-            ok = True
-            source = "owner_artifact_pin"
-            sha = sha or meta.get("accepted_main_sha")
-        entry = {
-            "owner_repo": spec["owner_repo"],
-            "accepted_main_sha": spec["accepted_main_sha"],
-            "sibling_path": str(sib) if sib else None,
-            "observed_sha": sha,
-            "ok": ok,
-            "source": source,
-            "lab_id": spec["lab_id"],
-        }
+        entry = honest_sha_entry(
+            accepted_main_sha=spec["accepted_main_sha"],
+            sibling_head=sha,
+            meta=meta if allow_artifact_pin else None,
+            owner_repo=spec["owner_repo"],
+            lab_id=spec["lab_id"],
+            sibling_path=str(sib) if sib else None,
+        )
         out["games"][key] = entry
-        if not ok:
+        if not entry.get("ok"):
             out["ok"] = False
     return out
 
@@ -340,6 +328,15 @@ class H(SimpleHTTPRequestHandler):
         from urllib.parse import unquote, urlparse
         p = unquote(urlparse(path).path)
         rel = p.lstrip("/")
+        # Beat Link BrowserRouter SPA fallback so /host runs owner HostPage → storeHostToken.
+        if rel == "sw.js":
+            cand = ROOT / "beatlink-party" / "sw.js"
+            if cand.is_file():
+                return str(cand)
+        if rel.split("/")[0] in ("host", "join", "play", "audience"):
+            idx = ROOT / "beatlink-party" / "index.html"
+            if idx.is_file():
+                return str(idx)
         # Game-prefixed paths.
         for prefix, folder in (("earth-species/", "earth-species"), ("beatlink-party/", "beatlink-party")):
             if rel.startswith(prefix):

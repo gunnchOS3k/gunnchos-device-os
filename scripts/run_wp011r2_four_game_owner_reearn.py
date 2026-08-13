@@ -102,6 +102,8 @@ def _sync_tokens(four_pass: bool, four_result: dict) -> None:
     tokens_path = ROOT / "gunnchos_device_os/device_lab/TOKENS_WP011.json"
     tokens = json.loads(tokens_path.read_text(encoding="utf-8"))
     tokens["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] = bool(four_pass)
+    tokens["five_gate_digital_and"] = bool(five)
+    tokens["GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE"] = False
     tokens["updated_at_utc"] = _utc()
     tokens_path.write_text(json.dumps(tokens, indent=2) + "\n", encoding="utf-8")
 
@@ -143,6 +145,18 @@ def _sync_tokens(four_pass: bool, four_result: dict) -> None:
 
 
 def main() -> int:
+    # Demote FOUR_GAME before boot so a crash cannot leave a false PASS.
+    _sync_tokens(False, {"blocker": "honest_reearn_in_progress"})
+    evid = ROOT / "artifacts/wp011r/games/four_games_in_guest.json"
+    if evid.is_file():
+        try:
+            blob = json.loads(evid.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            blob = {}
+        blob["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] = False
+        blob["ok"] = False
+        blob["note"] = "Demoted pending honest re-earn (non-tautological criteria)"
+        evid.write_text(json.dumps(blob, indent=2) + "\n", encoding="utf-8")
     work = ROOT / "artifacts" / "wp011r" / "interactive_guest_session_four"
     work.mkdir(parents=True, exist_ok=True)
     edk2_vars_src = Path("/opt/homebrew/share/qemu/edk2-arm-vars.fd")

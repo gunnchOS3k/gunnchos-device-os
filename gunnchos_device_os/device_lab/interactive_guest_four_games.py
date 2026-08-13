@@ -478,6 +478,7 @@ def _kill_matching_pythonish(session: Any, needle: str) -> dict[str, Any]:
             "for line in out.splitlines():\n"
             "    parts = line.strip().split(None, 1)\n"
             "    if len(parts) < 2: continue\n"
+            "    if not parts[0].isdigit(): continue\n"
             "    pid, args = int(parts[0]), parts[1]\n"
             "    if pid == me: continue\n"
             "    if needle in args:\n"

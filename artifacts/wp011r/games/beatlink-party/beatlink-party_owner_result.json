@@ -16,25 +16,25 @@
   "FOUR_GAME_REAL_RUNTIME_EARNED": true,
   "socketio_prep": {
     "ok": true,
-    "stdout": "PREP_OK\nNODE_BOOT v20.18.1\n",
-    "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\nValueError: invalid literal for int() with base 10: 'PID'\n",
+    "stdout": "cleaned\nPREP_OK\nNODE_BOOT v20.18.1\n",
+    "stderr": "",
     "returncode": 0
   },
   "socketio_server": {
     "ok": true,
-    "pid": 687,
+    "pid": 854,
     "started": "beatlink-socketio",
     "reason": null
   },
   "service_topology": {
     "socketio_health_ok": true,
     "health_stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}",
-    "room_stdout": "{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
+    "room_stdout": "{\"code\":\"53AAY\",\"room\":{\"code\":\"53AAY\",\"phase\":\"lobby\",\"hostId\":\"http-1786594274307\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs",
     "log": "/var/log/gunnchos-beatlink-server.log"
   },
   "socketio_server_health": {
     "ok": true,
-    "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"YHSN7\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=YHSN7\",\"qrText\":\"beatlink:join:YHSN7|http://localhost:5173/join?code=YHSN7\",\"expiresAt\":1786597696530},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786590496530,\"expiresAt\":1786597696530,\"hostToken\":\"3d119694-8b6d-4795-a859-39b32a004e00\"}}\n",
+    "stdout": "{\"status\":\"ok\",\"service\":\"beatlink-party\",\"roomStore\":\"memory\"}\n{\"code\":\"53AAY\",\"room\":{\"code\":\"53AAY\",\"phase\":\"lobby\",\"hostId\":\"http-1786594274307\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"53AAY\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=53AAY\",\"qrText\":\"beatlink:join:53AAY|http://localhost:5173/join?code=53AAY\",\"expiresAt\":1786601474307},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786594274307,\"expiresAt\":1786601474307,\"hostToken\":\"dbbdc444-ba41-4771-9826-351261b65ca7\"}}\n",
     "returncode": 0
   },
   "lab_observe_server": {
@@ -44,16 +44,16 @@
   },
   "chromium_launch": {
     "ok": true,
-    "pid": 738,
+    "pid": 905,
     "started": "chromium-beatlink-party",
     "wayland": "wayland-0",
     "window_display": "wayland",
-    "url": "http://127.0.0.1:18765/beatlink-party/index.html",
+    "url": "http://127.0.0.1:18765/host",
     "reason": null
   },
   "socketio_client_probe": {
     "ok": true,
-    "stdout": "{\"ok\":true,\"id\":\"SiF8HDhwtcSsDet4AAAB\",\"connected\":true}\n",
+    "stdout": "{\"ok\":true,\"id\":\"lQuOae1UfNQiKI3dAAAD\",\"connected\":true}\n",
     "stderr": "",
     "returncode": 0
   },
@@ -65,8 +65,8 @@
       "  \"LAB_DIAGNOSTIC_ONLY\": true,",
       "  \"NOT_PRODUCT_RUNTIME_EVIDENCE\": true,",
       "  \"game_id\": \"beatlink-party\",",
-      "  \"input\": 2,",
-      "  \"ts\": 1786590510361,",
+      "  \"input\": 0,",
+      "  \"ts\": 1786590578790,",
       "  \"native_localStorage\": {",
       "    \"beatlink_host\": null,",
       "    \"beatlink_player\": null,",
@@ -74,7 +74,7 @@
       "  },",
       "  \"has_owner_hook\": false,",
       "  \"event\": \"observe\",",
-      "  \"received_at\": 1786590510.3692582",
+      "  \"received_at\": 1786590578.804099",
       "}"
     ]
   },
@@ -82,29 +82,50 @@
     "ok": true,
     "path": "/var/lib/gunnchos/games/beatlink-party/room_create.json",
     "lines": [
-      "{\"code\":\"YHSN7\",\"room\":{\"code\":\"YHSN7\",\"phase\":\"lobby\",\"hostId\":\"http-1786590496530\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"YHSN7\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=YHSN7\",\"qrText\":\"beatlink:join:YHSN7|http://localhost:5173/join?code=YHSN7\",\"expiresAt\":1786597696530},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786590496530,\"expiresAt\":1786597696530,\"hostToken\":\"3d119694-8b6d-4795-a859-39b32a004e00\"}}"
+      "{\"code\":\"53AAY\",\"room\":{\"code\":\"53AAY\",\"phase\":\"lobby\",\"hostId\":\"http-1786594274307\",\"players\":[],\"audience\":[],\"selectedSongId\":null,\"pastedLinkUrl\":null,\"linkResolveResult\":null,\"gameMode\":\"BeatTap\",\"difficulty\":\"casual\",\"calibrationOffsetMs\":0,\"countdown\":null,\"gameStartTime\":null,\"gameDurationMs\":45000,\"teamScore\":0,\"crowdMeter\":50,\"capacityProfile\":\"party\",\"rematchRound\":0,\"joinQr\":{\"code\":\"53AAY\",\"joinPath\":\"/join\",\"joinUrl\":\"http://localhost:5173/join?code=53AAY\",\"qrText\":\"beatlink:join:53AAY|http://localhost:5173/join?code=53AAY\",\"expiresAt\":1786601474307},\"privacy\":{\"redactDisplayNames\":false,\"telemetryEnabled\":true,\"telemetryRetentionMs\":900000,\"audienceSandboxByDefault\":false},\"teamScores\":{\"A\":0,\"B\":0,\"solo\":0},\"createdAt\":1786594274307,\"expiresAt\":1786601474307,\"hostToken\":\"dbbdc444-ba41-4771-9826-351261b65ca7\"}}"
     ]
   },
+  "room_api_not_accepted_as_save": true,
   "leveldb_scrape_LAB_DIAGNOSTIC_ONLY": {
     "NOT_PRODUCT_RUNTIME_EVIDENCE": true,
-    "stdout": ""
+    "stdout": "beatlink_hostH\n"
   },
-  "leveldb_scrape_after_host": "",
+  "native_keys": {
+    "ok": true,
+    "keys_found": [
+      "beatlink_host"
+    ],
+    "scrape_hit": true,
+    "room_api_not_accepted_as_save": true
+  },
   "runtime_process": {
     "chromium_alive": true,
     "socketio_alive": true,
-    "ps": "s=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,4475006654464388480,7498663938215637905,262144 --field-trial-handle=3,i,5237333238746123006,346778731717748052,262144 --enable-features=UseOzonePlatform --variations-seed-version --pseudonymization-salt-handle=7,i,5721558184829877173,9561025172773113085,4 --trace-process-track-uuid=3190708988185955192\n/usr/lib/chromium/chromium --type=utility --utility-sub-type=network"
+    "chromium": {
+      "alive": true,
+      "pid": 905,
+      "ps": "    905 S<l  /usr/lib/chromium/chromium --show-component-extension-options --enable-gpu-rasterization --no-default-browser-check --disable-pings --media-router=0 --disable-dev-shm-usage --enable-remote-extensions --load-extension= http://127.0.0.1:18765/host --no-sandbox --disable-gpu-sandbox --ozone-platform=wayland --enable-features=UseOzonePlatform --user-data-dir=/root/.gunnchos-chromium-beatl",
+      "zombie_rejected": false,
+      "stat": "S<l"
+    },
+    "socketio": {
+      "alive": true,
+      "pid": 854,
+      "ps": "    854 Sl   /root/owner-games/beatlink-node/node dist/index.js\n",
+      "zombie_rejected": false,
+      "stat": "Sl"
+    }
   },
   "input": {
-    "count_observed": 2,
+    "count_observed": 0,
     "injected": true
   },
   "state_mutation": true,
   "save": {
     "ok": true,
-    "native_keys_observed": false,
-    "room_api_persisted": true,
-    "note": "Native beatlink_* localStorage preferred; room API proves server state"
+    "native_keys_observed": true,
+    "room_api_persisted": false,
+    "note": "Native beatlink_* localStorage required; room API create is not save"
   },
   "telemetry": {
     "BEATLINK_TELEMETRY": true,
@@ -115,5 +136,5 @@
     "chromium": true,
     "socketio_server": true
   },
-  "note": "Owner Beat Link Socket.IO topology + Chromium with state/persistence"
+  "note": "Owner Beat Link Socket.IO + Chromium alive + native beatlink_* keys"
 }
