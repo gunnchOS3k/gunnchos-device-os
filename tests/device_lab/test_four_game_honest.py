@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from gunnchos_device_os.device_lab.four_game_honest import (
     anime_cfg_mutated,
+    anime_default_career_save,
     archive_save_mutated_from_default,
     beatlink_native_keys_present,
     five_gate_and,
@@ -66,6 +67,45 @@ def test_anime_seeded_skip_is_mutation():
     after = "[tutorial]\ncompleted=false\nskipped=true\n"
     r = anime_cfg_mutated(before, after)
     assert r["ok"] is True
+
+
+def test_anime_hid_qemu_key_map_covers_ui_accept_and_skip():
+    from gunnchos_device_os.device_lab.owner_four_game_guest import _QEMU_KEY
+
+    assert _QEMU_KEY["ret"] == "ret"
+    assert _QEMU_KEY["spc"] == "spc"
+    assert _QEMU_KEY["tab"] == "tab"
+    assert _QEMU_KEY["down"] == "down"
+
+
+def test_anime_default_career_save_is_not_mutation():
+    default = "[meta]\nsave_version=2\n[career]\nwins=0\nlosses=0\nmatches=0\n"
+    assert anime_default_career_save(default) is True
+    played = "[meta]\nsave_version=2\n[career]\nwins=1\nlosses=0\nmatches=1\n"
+    assert anime_default_career_save(played) is False
+
+
+def test_anime_aa_save_after_hid_is_mutation_boot_create_is_not():
+    from gunnchos_device_os.device_lab.owner_four_game_guest import (
+        _anime_mutation_from_snapshot,
+    )
+
+    first = "[tutorial]\ncompleted=false\nskipped=false"
+    default = "[meta]\nsave_version=2\n[career]\nwins=0\nlosses=0\nmatches=0\n"
+    played = "[meta]\nsave_version=2\n[career]\nwins=1\nlosses=0\nmatches=1\n"
+    boot = _anime_mutation_from_snapshot(
+        first, {"first": first, "save": default}, save_before_hid=default
+    )
+    assert boot["ok"] is False
+    default_create = _anime_mutation_from_snapshot(
+        first, {"first": first, "save": default}, save_before_hid=""
+    )
+    assert default_create["ok"] is False
+    hid = _anime_mutation_from_snapshot(
+        first, {"first": first, "save": played}, save_before_hid=""
+    )
+    assert hid["ok"] is True
+    assert hid["via"] == "aa_save_cfg_after_input"
 
 
 def test_archive_default_museum_spawn_is_not_mutation():

@@ -20,6 +20,7 @@ from typing import Any
 
 from gunnchos_device_os.device_lab.four_game_honest import (
     anime_cfg_mutated,
+    anime_default_career_save,
     archive_save_mutated_from_default,
     beatlink_native_keys_present,
     launched_pid_alive_non_zombie,
@@ -37,6 +38,7 @@ from gunnchos_device_os.device_lab.interactive_guest_four_games import (
 )
 from gunnchos_device_os.device_lab.interactive_guest_proofs import (
     _evidence_dir,
+    _qemu_monitor_lines,
     _require_real_virtio_serial,
 )
 from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
@@ -63,6 +65,25 @@ LAB_IDS = ("anime-aggressors", "beatlink-party", "earth-species", "foot-racing")
 
 ANIME_SAVE = "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_save.cfg"
 ANIME_FIRST = "/root/.local/share/godot/app_userdata/Anime Aggressors/aa_first_run.cfg"
+ANIME_USERDATA = "/root/.local/share/godot/app_userdata/Anime Aggressors"
+ANIME_NEXT_ENGINEERING_STEP = (
+    "Lab compositor HID (uinput + QEMU sendkey) does not reach Godot 4.5 "
+    "InputMap while the Wayland window is alive. Next: guest-agent "
+    "Input.parse_input_event overlay in the live owner project (not "
+    "ProductionGateHarness, not --quit-after) that taps ui_accept after "
+    "BootScene._ready_to_start, then focuses TutorialScene Skip Tutorial."
+)
+_QEMU_KEY = {
+    "ret": "ret",
+    "enter": "ret",
+    "kpenter": "kp_enter",
+    "spc": "spc",
+    "space": "spc",
+    "tab": "tab",
+    "down": "down",
+    "up": "up",
+    "esc": "esc",
+}
 
 
 def _ensure_lab_observe_server(session: Any, *, restart: bool = False) -> dict[str, Any]:
@@ -645,6 +666,172 @@ echo DEPLOY_OK
     return _guest_bash(session, script, timeout_sec=600.0, name="owner-deploy")
 
 
+def _inject_hid_key(session: Any, key: str, *, hold_ms: int = 180) -> dict[str, Any]:
+    """Dual HID: QEMU USB/PS2 sendkey (RING-proven) + guest uinput."""
+    qkey = _QEMU_KEY.get(key.lower()) or (key.lower() if len(key) == 1 else key.lower())
+    hold_ms = max(40, min(int(hold_ms), 800))
+    mon = _qemu_monitor_lines(session, f"sendkey {qkey} {hold_ms}", wait_s=hold_ms / 1000.0 + 0.04)
+    uin = _agent_call(
+        session, "input_inject", kind="key", key=key, hold_ms=hold_ms, timeout_sec=8.0
+    )
+    return {
+        "key": key,
+        "qemu": bool(mon is not None),
+        "uinput_ok": bool(uin.get("ok")),
+        "injected_via": "qemu_sendkey+uinput",
+    }
+
+
+def _inject_hid_click(session: Any, x: int, y: int) -> dict[str, Any]:
+    """Absolute tablet click (QEMU usb-tablet 0–32767 + guest uinput tablet)."""
+    mon_m = _qemu_monitor_lines(session, f"mouse_move {int(x)} {int(y)}", wait_s=0.05)
+    mon_d = _qemu_monitor_lines(session, "mouse_button 1", wait_s=0.08)
+    mon_u = _qemu_monitor_lines(session, "mouse_button 0", wait_s=0.05)
+    uin = _agent_call(
+        session,
+        "input_inject",
+        kind="pointer",
+        abs=True,
+        x=int(x),
+        y=int(y),
+        button="left",
+        timeout_sec=8.0,
+    )
+    return {
+        "x": x,
+        "y": y,
+        "qemu": bool(mon_m or mon_d or mon_u),
+        "uinput_ok": bool(uin.get("ok")),
+        "injected_via": "qemu_tablet+uinput_tablet",
+    }
+
+
+def _prime_hid(session: Any) -> dict[str, Any]:
+    """Create uinput devices before Godot starts so libinput/weston see the seat."""
+    return _agent_call(
+        session, "input_inject", kind="key", key="shift", hold_ms=40, timeout_sec=8.0
+    )
+
+
+def _anime_userdata_snapshot(session: Any) -> dict[str, str]:
+    listing = _guest_bash(
+        session,
+        f"ls -la '{ANIME_USERDATA}' 2>/dev/null; echo '---FIRST---'; "
+        f"cat '{ANIME_FIRST}' 2>/dev/null; echo '---SAVE---'; "
+        f"cat '{ANIME_SAVE}' 2>/dev/null; echo '---RULES---'; "
+        f"cat '{ANIME_USERDATA}/aa_rulesets.cfg' 2>/dev/null || true",
+        timeout_sec=15,
+        name="anime-userdata",
+    )
+    text = listing.get("stdout") or ""
+    first = ""
+    save = ""
+    if "---FIRST---" in text and "---SAVE---" in text:
+        first = text.split("---FIRST---", 1)[1].split("---SAVE---", 1)[0]
+    if "---SAVE---" in text and "---RULES---" in text:
+        save = text.split("---SAVE---", 1)[1].split("---RULES---", 1)[0]
+    return {
+        "ls": text[:1200],
+        "first": first.strip(),
+        "save": save.strip(),
+        "raw_ok": bool(listing.get("ok")),
+    }
+
+
+def _anime_mutation_from_snapshot(
+    before_first: str, snap: dict[str, str], *, save_before_hid: str = ""
+) -> dict[str, Any]:
+    mut = anime_cfg_mutated(before_first, snap.get("first") or "")
+    if mut.get("ok"):
+        return mut
+    save = (snap.get("save") or "").strip()
+    prior = (save_before_hid or "").strip()
+    # Career/settings persist is owner GameState._persist_save(). Presence that
+    # already existed before HID, or the default 0/0/0 career profile, is boot
+    # create — not input-driven (independent verify rejected this OR-pass).
+    if (
+        save
+        and save != prior
+        and "save_version" in save
+        and "[career]" in save
+        and not anime_default_career_save(save)
+    ):
+        return {
+            "ok": True,
+            "via": "aa_save_cfg_after_input",
+            "changed": True,
+            "skipped": False,
+            "completed": False,
+            "pre_hid_save_empty": not bool(prior),
+        }
+    if save and anime_default_career_save(save):
+        mut["default_career_save_rejected"] = True
+    return mut
+
+
+def _drive_anime_input_map(
+    session: Any, before_first: str, *, save_before_hid: str = ""
+) -> dict[str, Any]:
+    """Drive Boot Start Game (ui_accept) then Tutorial Skip via real HID.
+
+    BootScene ignores ui_accept until _ready_to_start (preload + intro tween).
+    TutorialScene focus order: Start Guided → Next Step → Skip Tutorial.
+    """
+    trace: list[str] = []
+    clicks = (
+        (8192, 16384),   # left output center (dual 2560x800 tablet)
+        (8192, 22900),   # Start Game, center-bottom of 1280x720 in 1280x800
+        (12000, 14000),  # RING-proven focus click
+        (16384, 20000),
+    )
+
+    def _poll() -> dict[str, Any]:
+        snap = _anime_userdata_snapshot(session)
+        mut = _anime_mutation_from_snapshot(
+            before_first, snap, save_before_hid=save_before_hid
+        )
+        return {"snap": snap, "mut": mut}
+
+    # Phase A: wait for title, click Start Game, spray ui_accept (Enter/Space).
+    for i in range(16):
+        if i % 2 == 0:
+            clk = clicks[(i // 2) % len(clicks)]
+            _inject_hid_click(session, clk[0], clk[1])
+            trace.append(f"click:{clk[0]},{clk[1]}")
+        _inject_hid_key(session, "ret", hold_ms=200)
+        _inject_hid_key(session, "spc", hold_ms=160)
+        trace.append("ui_accept:ret+spc")
+        time.sleep(0.7)
+        polled = _poll()
+        if polled["mut"].get("ok"):
+            return {"ok": True, "phase": "title_ui_accept", "trace": trace[-24:], **polled}
+
+    # Phase B: tutorial Skip Tutorial (two tabs from Start Guided, then ui_accept).
+    for i in range(10):
+        _inject_hid_key(session, "tab", hold_ms=120)
+        _inject_hid_key(session, "tab", hold_ms=120)
+        _inject_hid_key(session, "ret", hold_ms=200)
+        _inject_hid_key(session, "down", hold_ms=120)
+        _inject_hid_key(session, "down", hold_ms=120)
+        _inject_hid_key(session, "ret", hold_ms=200)
+        trace.append("tutorial_skip:tab-tab-ret")
+        time.sleep(0.6)
+        polled = _poll()
+        if polled["mut"].get("ok"):
+            return {"ok": True, "phase": "tutorial_skip", "trace": trace[-24:], **polled}
+
+    # Phase C: movement / attack in case Skip entered guided battle instead.
+    for key in ("a", "d", "a", "w", "spc", "j", "k", "ret"):
+        _inject_hid_key(session, key, hold_ms=140)
+        trace.append(f"move:{key}")
+    time.sleep(1.5)
+    polled = _poll()
+    polled["trace"] = trace[-40:]
+    polled["ok"] = bool(polled["mut"].get("ok"))
+    polled["phase"] = "movement_fallback"
+    return polled
+
+
 def _run_anime_godot(session: Any) -> dict[str, Any]:
     out: dict[str, Any] = {
         "game_id": "anime-aggressors",
@@ -672,6 +859,8 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
     out["save_before"] = before[:400]
     out["headless_harness_rejected"] = True
     out["production_gate_not_sole_proof"] = True
+    out["hid_paths"] = ["qemu_monitor_sendkey", "guest_uinput"]
+    out["prime_hid"] = _prime_hid(session)
     wayland, launch, alive0 = _launch_godot_wayland(
         session, name="godot-anime-aggressors", project="/root/owner-games/anime-aggressors"
     )
@@ -689,7 +878,7 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
         glog = _guest_bash(
             session,
             "dmesg | tail -5; ls -la /root/.local/share/godot/app_userdata/ 2>/dev/null | head; "
-            "cat /var/log/gunnchos-anime-harness.log 2>/dev/null | tail -20 || true",
+            "cat /var/log/gunnchos-anime.log 2>/dev/null | tail -40 || true",
             timeout_sec=15,
         )
         out["godot_fail_log"] = (glog.get("stdout") or "")[:800]
@@ -699,28 +888,42 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
         out["note"] = "Anime Godot Wayland process not alive non-zombie — FAIL"
         _guest_bash(session, "pkill -f '/root/owner-games/anime-aggressors' || true", timeout_sec=10)
         return out
-    time.sleep(3.0)
-    time.sleep(4.0)
-    keys = (
-        "ret", "ret", "spc",
-        "tab", "tab", "tab", "tab", "tab", "ret",
-        "down", "down", "down", "ret",
-        "esc", "ret", "spc", "d", "a", "j", "tab", "ret",
+    # Splash + BootScene preload/tween must finish before ui_accept is honored.
+    time.sleep(6.0)
+    pre_hid = _anime_userdata_snapshot(session)
+    out["save_before_hid"] = {
+        "first": (pre_hid.get("first") or "")[:200],
+        "save": (pre_hid.get("save") or "")[:200],
+        "boot_wrote_aa_save": bool((pre_hid.get("save") or "").strip()),
+    }
+    drive = _drive_anime_input_map(
+        session, before, save_before_hid=pre_hid.get("save") or ""
     )
-    for key in keys:
-        _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-        time.sleep(0.18)
-    time.sleep(2.0)
     alive1 = _pid_alive_non_zombie(session, launch.get("pid"))
     out["runtime_process_after_input"] = alive1
-    after_first = _read_guest_text(session, ANIME_FIRST)
-    after_save = _read_guest_text(session, ANIME_SAVE)
-    mut = anime_cfg_mutated(before, after_first)
-    if not mut["ok"] and after_save and after_save.strip():
-        mut = {"ok": True, "via": "aa_save_cfg_after_input", "changed": True}
+    snap = drive.get("snap") or _anime_userdata_snapshot(session)
+    mut = drive.get("mut") or _anime_mutation_from_snapshot(
+        before, snap, save_before_hid=pre_hid.get("save") or ""
+    )
+    if not mut.get("ok"):
+        snap = _anime_userdata_snapshot(session)
+        mut = _anime_mutation_from_snapshot(
+            before, snap, save_before_hid=pre_hid.get("save") or ""
+        )
     out["mutation"] = mut
-    out["save"] = {"path": ANIME_FIRST, "after": after_first[:400], "aa_save": after_save[:200]}
-    out["input"] = {"injected": True, "keys": list(keys)}
+    out["save"] = {
+        "path": ANIME_FIRST,
+        "after": (snap.get("first") or "")[:400],
+        "aa_save": (snap.get("save") or "")[:200],
+        "userdata_ls": (snap.get("ls") or "")[:600],
+    }
+    out["input"] = {
+        "injected": True,
+        "via": "qemu_sendkey+uinput",
+        "phase": drive.get("phase"),
+        "trace": drive.get("trace") or [],
+        "actions": ["ui_accept", "Start Game click", "tutorial Skip", "p1 movement"],
+    }
     earned = bool(
         launch.get("ok")
         and alive0.get("alive")
@@ -733,7 +936,7 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
     out["ok"] = earned
     out["state_mutation"] = mut.get("via") if earned else None
     out["note"] = (
-        "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by input"
+        "Owner Anime Godot4 Wayland alive + seeded aa_first_run.cfg mutated by HID/InputMap"
         if earned
         else "Anime honest FAIL — live non-zombie + input-driven native mutation required"
     )
@@ -746,6 +949,8 @@ def _run_anime_godot(session: Any) -> dict[str, Any]:
                 else "anime_no_input_driven_native_mutation"
             )
         )
+        if out["blocker"] == "anime_no_input_driven_native_mutation":
+            out["next_engineering_step"] = ANIME_NEXT_ENGINEERING_STEP
     return out
 
 
@@ -936,16 +1141,17 @@ def _run_archive_chromium(session: Any) -> dict[str, Any]:
     }
     time.sleep(8.0)
     # New Game / Continue then movement (owner saveGame on region/travel).
-    for dx, dy in ((480, 360), (480, 420), (200, 200), (400, 300), (600, 400)):
-        _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=5.0)
-        time.sleep(0.35)
+    # Dual HID: QEMU sendkey is the RING-proven belt; uinput alone missed Godot/Chromium.
+    for x, y in ((12000, 14000), (8192, 16384), (10000, 18000)):
+        _inject_hid_click(session, x, y)
+        time.sleep(0.25)
     for key in ("tab", "tab", "ret", "ret", "spc", "ret"):
-        _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
-        time.sleep(0.2)
-    for key in ("d", "d", "d", "w", "w", "a", "s", "d", "d", "w", "d", "w", "a", "d", "d", "d", "d", "w", "w", "p"):
-        _agent_call(session, "input_inject", kind="key", key=key, timeout_sec=5.0)
+        _inject_hid_key(session, key, hold_ms=160)
         time.sleep(0.12)
-    time.sleep(5.0)
+    for key in ("d", "d", "d", "w", "w", "a", "s", "d", "d", "w", "d", "w", "a", "d", "d", "d", "d", "w", "w", "p"):
+        _inject_hid_key(session, key, hold_ms=140)
+        time.sleep(0.08)
+    time.sleep(3.0)
     # Headless Chromium executes the same owner bundle (JS/localStorage) when the
     # Wayland window process cannot paint. Labeled diagnostic; native save is still
     # owner saveGame() via #btn-new-game / __aolStartExpedition.
@@ -1489,16 +1695,24 @@ def attempt_owner_four_game_in_guest_pass(
                 return result
 
         # Godot first (RING-proven opengl3) while RAM is free; Chromium after.
-        result["games"]["foot-racing"] = _run_pedestrian_godot(session, repo_root)
+        anime_only = os.environ.get("GUNNCH_FOUR_GAME_ANIME_ONLY") == "1"
+        result["anime_only_debug"] = anime_only
+        if not anime_only:
+            result["games"]["foot-racing"] = _run_pedestrian_godot(session, repo_root)
         result["games"]["anime-aggressors"] = _run_anime_godot(session)
-        _guest_bash(
-            session,
-            "pkill -9 -f /opt/gunnchos/bin/godot || true; sleep 1",
-            timeout_sec=15,
-            name="godot-clear-before-web",
-        )
-        result["games"]["beatlink-party"] = _run_beatlink_socketio(session)
-        result["games"]["earth-species"] = _run_archive_chromium(session)
+        if not anime_only:
+            _guest_bash(
+                session,
+                "pkill -9 -f /opt/gunnchos/bin/godot || true; sleep 1",
+                timeout_sec=15,
+                name="godot-clear-before-web",
+            )
+            result["games"]["beatlink-party"] = _run_beatlink_socketio(session)
+            arch = _run_archive_chromium(session)
+            if not arch.get("FOUR_GAME_REAL_RUNTIME_EARNED"):
+                result["earth_species_hid_retry"] = True
+                arch = _run_archive_chromium(session)
+            result["games"]["earth-species"] = arch
     finally:
         try:
             httpd.terminate()

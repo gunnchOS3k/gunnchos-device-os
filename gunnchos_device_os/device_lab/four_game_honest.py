@@ -107,6 +107,18 @@ def pedestrian_cfg_mutated(before: str, after: str) -> dict[str, Any]:
     return out
 
 
+def anime_default_career_save(save: str) -> bool:
+    """Default GameState._persist_save() profile is not input-driven mutation."""
+    s = (save or "").replace(" ", "")
+    return bool(
+        s
+        and "save_version=2" in s
+        and "wins=0" in s
+        and "losses=0" in s
+        and "matches=0" in s
+    )
+
+
 def anime_cfg_mutated(before: str, after: str) -> dict[str, Any]:
     """Seeded aa_first_run.cfg must change (skip or complete). Harness-only create is FAIL."""
     b = (before or "").strip()

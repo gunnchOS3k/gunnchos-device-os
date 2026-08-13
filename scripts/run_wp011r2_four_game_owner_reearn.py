@@ -145,18 +145,21 @@ def _sync_tokens(four_pass: bool, four_result: dict) -> None:
 
 
 def main() -> int:
+    anime_only = os.environ.get("GUNNCH_FOUR_GAME_ANIME_ONLY") == "1"
     # Demote FOUR_GAME before boot so a crash cannot leave a false PASS.
-    _sync_tokens(False, {"blocker": "honest_reearn_in_progress"})
-    evid = ROOT / "artifacts/wp011r/games/four_games_in_guest.json"
-    if evid.is_file():
-        try:
-            blob = json.loads(evid.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            blob = {}
-        blob["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] = False
-        blob["ok"] = False
-        blob["note"] = "Demoted pending honest re-earn (non-tautological criteria)"
-        evid.write_text(json.dumps(blob, indent=2) + "\n", encoding="utf-8")
+    # Anime-only HID probe must not wipe earned sibling evidence.
+    if not anime_only:
+        _sync_tokens(False, {"blocker": "honest_reearn_in_progress"})
+        evid = ROOT / "artifacts/wp011r/games/four_games_in_guest.json"
+        if evid.is_file():
+            try:
+                blob = json.loads(evid.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                blob = {}
+            blob["FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS"] = False
+            blob["ok"] = False
+            blob["note"] = "Demoted pending honest re-earn (non-tautological criteria)"
+            evid.write_text(json.dumps(blob, indent=2) + "\n", encoding="utf-8")
     work = ROOT / "artifacts" / "wp011r" / "interactive_guest_session_four"
     work.mkdir(parents=True, exist_ok=True)
     edk2_vars_src = Path("/opt/homebrew/share/qemu/edk2-arm-vars.fd")
@@ -193,7 +196,7 @@ def main() -> int:
             if c.get("available"):
                 break
             time.sleep(2)
-        evid = _evidence_dir(ROOT, "games")
+        evid = _evidence_dir(ROOT, "games_anime_hid_probe" if anime_only else "games")
         four = attempt_owner_four_game_in_guest_pass(session, ROOT, evid)
         out["four_game"] = {
             "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": four.get(
@@ -206,21 +209,27 @@ def main() -> int:
                 for g in LAB_IDS
             },
         }
-        _sync_tokens(bool(four.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")), four)
-        # Independent score recompute
-        try:
-            from scripts.device_lab_score_independent import main as score_main  # type: ignore
+        if anime_only:
+            probe = ROOT / "artifacts/wp011r/games/anime-aggressors/anime_hid_probe.json"
+            probe.parent.mkdir(parents=True, exist_ok=True)
+            probe.write_text(json.dumps(four, indent=2) + "\n", encoding="utf-8")
+            out["anime_only_debug"] = True
+        else:
+            _sync_tokens(bool(four.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")), four)
+            # Independent score recompute
+            try:
+                from scripts.device_lab_score_independent import main as score_main  # type: ignore
 
-            score_main([])
-        except Exception:
-            # Fallback: invoke as module file
-            import subprocess
+                score_main([])
+            except Exception:
+                # Fallback: invoke as module file
+                import subprocess
 
-            subprocess.run(
-                [sys.executable, str(ROOT / "scripts/device_lab_score_independent.py")],
-                cwd=str(ROOT),
-                check=False,
-            )
+                subprocess.run(
+                    [sys.executable, str(ROOT / "scripts/device_lab_score_independent.py")],
+                    cwd=str(ROOT),
+                    check=False,
+                )
     finally:
         try:
             session.stop()

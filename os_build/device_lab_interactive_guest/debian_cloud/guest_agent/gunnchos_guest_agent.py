@@ -446,8 +446,13 @@ def _get_uinput_tablet():
 _KEYNAME_MAP = {
     "ret": "KEY_ENTER",
     "enter": "KEY_ENTER",
+    "kpenter": "KEY_KPENTER",
     "spc": "KEY_SPACE",
     "space": "KEY_SPACE",
+    "tab": "KEY_TAB",
+    "down": "KEY_DOWN",
+    "up": "KEY_UP",
+    "esc": "KEY_ESC",
     "ctrl": "KEY_LEFTCTRL",
     "shift": "KEY_LEFTSHIFT",
     "super": "KEY_LEFTMETA",
@@ -484,15 +489,24 @@ def cmd_input_inject(req: dict[str, Any]) -> dict[str, Any]:
         if kind == "key":
             key = str(req.get("key") or "")
             mods = req.get("mods") or []
+            hold_ms = int(req.get("hold_ms") or 80)
+            hold_ms = max(20, min(hold_ms, 800))
             codes = [_key_to_evdev(m) for m in mods] + [_key_to_evdev(key)]
             for c in codes:
                 kbd.write(e.EV_KEY, c, 1)
             kbd.syn()
-            time.sleep(0.02)
+            time.sleep(hold_ms / 1000.0)
             for c in reversed(codes):
                 kbd.write(e.EV_KEY, c, 0)
             kbd.syn()
-            return _ok("input_inject", kind="key", key=key, mods=mods, injected_via="uinput")
+            return _ok(
+                "input_inject",
+                kind="key",
+                key=key,
+                mods=mods,
+                hold_ms=hold_ms,
+                injected_via="uinput",
+            )
         if kind == "text":
             text = str(req.get("text") or "")
             for ch in text:
