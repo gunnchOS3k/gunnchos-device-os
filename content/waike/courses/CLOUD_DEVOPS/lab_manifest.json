@@ -1,0 +1,15 @@
+{
+  "schema": "waike.live_lab.v1",
+  "course_id": "CLOUD_DEVOPS",
+  "entrypoint": "lab.py",
+  "solver": "lab_cloud_devops",
+  "live_repo_path": "gunnchos_device_os/waike_curriculum/labs.py::lab_cloud_devops",
+  "fixture": {
+    "manifest": {
+      "image": "waike-lab:0.1",
+      "replicas": 2,
+      "port": 8080,
+      "privileged": false
+    }
+  }
+}

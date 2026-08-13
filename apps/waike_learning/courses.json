@@ -1,0 +1,168 @@
+{
+  "schema": "waike.course_catalog.ui.v1",
+  "full_curriculum_complete": false,
+  "courses": [
+    {
+      "course_id": "DIGITAL_CONFIDENCE",
+      "title": "Digital Confidence to Computer Operator",
+      "kinesthetic_hook": "Hands on a real keyboard: create, copy, and recover a folder tree without a mouse.",
+      "lesson_excerpt": "Operator confidence is not 'being good with computers.' It is knowing which of three jobs you asked the machine to do: remember (files), calculate (apps), or talk (network). Beginners freeze when a window disappears because they cannot name the job that failed.",
+      "worked_example": "Say the path out loud: Documents/waike/lab1. If that folder is missing, create it before copying. The lab marks missing paths \u2014 extras on the Desktop are clutter, not success.",
+      "assignment": "1) Create the required tree and screenshot or list it (`ls` / File Explorer).\n2) Write a 4-line operator journal: remember / calculate / talk / what broke.\n3) Restore the deleted note without using Undo as your only method.",
+      "lab_hint": "Hands on a real keyboard: create, copy, and recover a folder tree without a mouse."
+    },
+    {
+      "course_id": "IT_SUPPORT_HARDWARE",
+      "title": "IT Support and Hardware Foundations",
+      "kinesthetic_hook": "Open a (virtual) ticket, name the failing subsystem, and pick the swap part.",
+      "lesson_excerpt": "A ticket is a promise to restore someone's work, not a chat thread. Hardware foundations start at power, then storage, then memory, then the OS. Swapping parts before naming the subsystem is how labs waste DIMMs.",
+      "worked_example": "If apps crash on a 4 GB machine, add or reseat RAM before you blame the OS.",
+      "assignment": "Triage three tickets (boot / crash / fan). For each: subsystem, whether to swap now, and one log you would collect. No vendor names required.",
+      "lab_hint": "Open a (virtual) ticket, name the failing subsystem, and pick the swap part."
+    },
+    {
+      "course_id": "SOFTWARE_BUILDER",
+      "title": "Software Builder Zero-to-Hero",
+      "kinesthetic_hook": "Write a tiny function, run its checks, and ship a README that a stranger can run.",
+      "lesson_excerpt": "Shipping is smaller than 'becoming a developer.' A stranger must run what you wrote. That means a function with checks, a README with one command, and no secrets in the repo.",
+      "worked_example": "49 is Retry. 50 is L. Off-by-one on the boundary is the usual bug.",
+      "assignment": "Implement band() for the four thresholds. Add one extra failing score. Document the run command in README. Do not copy a cooking analogy.",
+      "lab_hint": "Write a tiny function, run its checks, and ship a README that a stranger can run."
+    },
+    {
+      "course_id": "NETWORKING_INFRA",
+      "title": "Networking and Internet Infrastructure",
+      "kinesthetic_hook": "Compute a subnet's network address and usable hosts from a CIDR on paper then in code.",
+      "lesson_excerpt": "An IPv4 address is 32 bits wearing dots. CIDR steals high bits for the network and leaves the rest for hosts. /26 means 6 host bits \u2014 64 addresses, 62 usable if you still believe in network and broadcast addresses.",
+      "worked_example": "/26 leaves 6 host bits. 2^6=64 addresses; usable is 62 when broadcast exists.",
+      "assignment": "Compute network and usable hosts for 192.168.10.40/26 and one /28 of your choice.",
+      "lab_hint": "Compute a subnet's network address and usable hosts from a CIDR on paper then in code."
+    },
+    {
+      "course_id": "CYBER_SOC",
+      "title": "Cybersecurity Foundations and SOC Readiness",
+      "kinesthetic_hook": "Triage a fake auth log: count bursts, never paste secrets, write a one-line incident note.",
+      "lesson_excerpt": "A SOC junior does not 'hack back.' They count, threshold, and write one honest sentence. AUTH_FAIL lines that pile onto one user are a burst. Bursts are not proof of an attacker \u2014 they are proof you should look.",
+      "worked_example": "No. ada crossed the threshold; your note should say 'burst,' not 'attacker.'",
+      "assignment": "Write a 3-sentence incident note from the fixture. Name burst users. No secrets.",
+      "lab_hint": "Triage a fake auth log: count bursts, never paste secrets, write a one-line incident note."
+    },
+    {
+      "course_id": "DATA_DASHBOARDS",
+      "title": "Data, Databases, and Dashboards",
+      "kinesthetic_hook": "Fold a CSV into a top-N table you could pin on a Gary lab wall.",
+      "lesson_excerpt": "A dashboard that cannot be rebuilt from a CSV is decoration. Start with group-by and top-N. Gary logged 20 lab hours, Ghana 5, Geelong 9 \u2014 the wall chart should match the arithmetic, not a designer\u2019s guess.",
+      "worked_example": "Sum hours first. Gary is 12+8=20 and should lead the top-N.",
+      "assignment": "Recompute top-2 site hours by hand. Change top_n to 3 and explain what appears.",
+      "lab_hint": "Fold a CSV into a top-N table you could pin on a Gary lab wall."
+    },
+    {
+      "course_id": "AI_ML_EDGE",
+      "title": "AI/ML and Edge AI Foundations",
+      "kinesthetic_hook": "Classify 2-D samples with 1-NN on-device \u2014 no cloud round trip.",
+      "lesson_excerpt": "Edge AI in this seed is 1-nearest-neighbor in 2-D. No GPU, no cloud, no 'training pipeline.' You store a few labeled points and assign each query the label of the closest training point by squared Euclidean distance.",
+      "worked_example": "(1.9,2.1) sits next to (2,2) signal. (0.1,0.2) sits next to noise at the origin.",
+      "assignment": "Classify two queries by hand against the three training points, then run the lab.",
+      "lab_hint": "Classify 2-D samples with 1-NN on-device \u2014 no cloud round trip."
+    },
+    {
+      "course_id": "EMBEDDED_PROTOTYPING",
+      "title": "Embedded Systems and Device Prototyping",
+      "kinesthetic_hook": "Turn a pin list into a GPIO bitmask and explain why pin 0 is special.",
+      "lesson_excerpt": "A GPIO bitmask is a set of pins encoded as bits. Pin 3 set means OR with 1<<3. Pin 0 is not 'optional' \u2014 it is bit 0, value 1, and firmware people forget it because zero looks like off.",
+      "worked_example": "Pins 0,3,7 \u2192 bits 1 + 8 + 128 = 137 = 0x89. If you see 0x88, pin 0 was dropped.",
+      "assignment": "Compute the mask on paper. Explain pin 0 in one sentence. Run the lab.",
+      "lab_hint": "Turn a pin list into a GPIO bitmask and explain why pin 0 is special."
+    },
+    {
+      "course_id": "WIRELESS_6G",
+      "title": "Wireless, DSP, and 6G Foundations",
+      "kinesthetic_hook": "Count OFDM overhead: cyclic prefix vs occupied subcarriers, then say it in one sentence.",
+      "lesson_excerpt": "OFDM packs many narrow subcarriers into one symbol. A cyclic prefix copies the tail onto the front so delayed copies still look circular. That prefix is not free: samples spent on CP are samples not spent on new data.",
+      "worked_example": "64 FFT samples plus 16 cyclic-prefix samples. Overhead 16/80, occupancy 52/64.",
+      "assignment": "Compute symbol_samples, cp_overhead, occupancy, and say it in one sentence.",
+      "lab_hint": "Count OFDM overhead: cyclic prefix vs occupied subcarriers, then say it in one sentence."
+    },
+    {
+      "course_id": "PM_AGILE_LSS",
+      "title": "Project Management, Agile, and Lean Six Sigma",
+      "kinesthetic_hook": "Walk a sticky-note critical path; the lab computes the same length.",
+      "lesson_excerpt": "Critical path is the longest chain of dependent work, not the noisiest standup. Lean Six Sigma will wait; today you only add durations along predecessors.",
+      "worked_example": "A-B-D is 2+3+4=9. C finishes earlier, so it does not extend D beyond B.",
+      "assignment": "Draw the four-box graph. Mark the 9-day path. Name one task with slack.",
+      "lab_hint": "Walk a sticky-note critical path; the lab computes the same length."
+    },
+    {
+      "course_id": "GAME_DEV_INTERACTIVE",
+      "title": "Game Development and Interactive Media",
+      "kinesthetic_hook": "Move two AABBs until they overlap, then resolve the minimum translation vector.",
+      "lesson_excerpt": "Axis-aligned bounding boxes are rectangles that do not rotate. They overlap when they overlap on X and on Y. The minimum translation vector (MTV) is the smallest push that separates them \u2014 usually along the shallower axis.",
+      "worked_example": "A ends at x=10, B starts at 8 \u2192 2px on X. Y overlap is larger, so MTV is on X.",
+      "assignment": "Predict overlap and MTV, then run the lab. Move B until overlap is false.",
+      "lab_hint": "Move two AABBs until they overlap, then resolve the minimum translation vector."
+    },
+    {
+      "course_id": "SEVEN_GC_APPRENTICESHIP",
+      "title": "7GC AI-RAN Research Apprenticeship",
+      "kinesthetic_hook": "Compute Shannon capacity for a toy RAN slice and write the assumption list.",
+      "lesson_excerpt": "Shannon capacity C = B log2(1+SNR) is an upper bound under AWGN, not a 7GC field measurement. A 1 MHz slice at SNR=3 linear yields about 2 Mbit/s. Real RAN overhead, scheduling, and hardware make that number optimistic.",
+      "worked_example": "1e6 * log2(1+3) \u2248 2.0 Mbps. That is a bound, not a campus measurement.",
+      "assignment": "Compute C. Write four assumptions. State one reason a drive-test would differ.",
+      "lab_hint": "Compute Shannon capacity for a toy RAN slice and write the assumption list."
+    },
+    {
+      "course_id": "CLOUD_DEVOPS",
+      "title": "Cloud and DevOps",
+      "kinesthetic_hook": "Reject a broken service manifest before it reaches a cluster.",
+      "lesson_excerpt": "Clusters forgive nothing you forgot to reject at the gate. A class manifest needs an image with a tag, a positive replica count, a legal port, and no privileged flag. Privileged containers are forbidden in this classroom cluster even if a blog said they are 'easier for hardware.'",
+      "worked_example": "A passing fixture has image:tag, replicas\u22651, port in 1\u201365535, privileged false.",
+      "assignment": "Break the fixture four ways (tag, replicas, port, privileged) and record errors.",
+      "lab_hint": "Reject a broken service manifest before it reaches a cluster."
+    },
+    {
+      "course_id": "COMM_PD_ETHICS",
+      "title": "Communication, Professional Development, and Ethics",
+      "kinesthetic_hook": "Redact emails and phones from a peer draft without changing the meaning.",
+      "lesson_excerpt": "Professional writing in WAIKE is specific and kind, and it does not leak PII. Emails and US-style phone numbers in a peer draft get replaced with [EMAIL] and [PHONE] so a screenshot can leave the room.",
+      "worked_example": "Keep 'Call Maya at [PHONE] or [EMAIL] before class.' Meaning stays; digits go.",
+      "assignment": "Redact the fixture. Then redact a paragraph you invent that contains one email.",
+      "lab_hint": "Redact emails and phones from a peer draft without changing the meaning."
+    },
+    {
+      "course_id": "ROBOTICS_CONTROL",
+      "title": "Robotics and Control",
+      "kinesthetic_hook": "Take one P-controller step toward a heading; feel overshoot vs gain.",
+      "lesson_excerpt": "A proportional controller does one thing: delta = Kp * error. Heading 10\u00b0, target 30\u00b0, Kp=0.5 \u2192 you add 10\u00b0 and land at 20\u00b0. You did not arrive yet. Large Kp overshoots; you can feel it by turning a chair too fast toward a tape mark.",
+      "worked_example": "error=20, delta=10, next=20. You are halfway; the controller is not a teleport.",
+      "assignment": "Compute the next heading. Repeat with Kp=2 and describe overshoot risk.",
+      "lab_hint": "Take one P-controller step toward a heading; feel overshoot vs gain."
+    },
+    {
+      "course_id": "GUNNCHOS_PRODUCT_LAB",
+      "title": "gunnchOS Device OS and Product Lab",
+      "kinesthetic_hook": "Parse a device session JSON and report honest uptime \u2014 no fake 100% claims.",
+      "lesson_excerpt": "Product lab honesty: uptime is stop minus start, summed. If a slide claims 100% and the sessions say 90 seconds in a longer window, the slide is wrong. This course sits on gunnchOS device sessions \u2014 still not a claim that Device Lab visual tokens are earned here.",
+      "worked_example": "Only if stop-start covers the whole window. The fixture totals 90 s, not 'always up.'",
+      "assignment": "Compute total and mean uptime. Invent a dishonest claim and show the lab flags it.",
+      "lab_hint": "Parse a device session JSON and report honest uptime \u2014 no fake 100% claims."
+    },
+    {
+      "course_id": "HARDWARE_ENGINEERING",
+      "title": "Hardware Engineering",
+      "kinesthetic_hook": "Build a voltage divider on paper, then let the lab check Vout.",
+      "lesson_excerpt": "A voltage divider is two resistors in series. Vout = Vin * R2/(R1+R2) when you take the tap across R2. 5 V, 1 k\u03a9, 3 k\u03a9 \u2192 3.75 V. Current is Vin/(R1+R2).",
+      "worked_example": "Tap across R2: 5 * 3000/4000 = 3.75 V. Current 5/4000 = 1.25 mA.",
+      "assignment": "Compute Vout and current. Swap R1/R2 and predict the new Vout.",
+      "lab_hint": "Build a voltage divider on paper, then let the lab check Vout."
+    },
+    {
+      "course_id": "DATA_VIZ_BI",
+      "title": "Data Visualization and Business Intelligence",
+      "kinesthetic_hook": "Bin a series into a histogram you could explain to a non-engineer sponsor.",
+      "lesson_excerpt": "A histogram is a count of values that fell into edges. Edges [0,3,6,10] make three bins: [0,3), [3,6), [6,10]. The last bin includes the right edge so 10 does not fall on the floor. Values 1,2,2,5,9 \u2192 counts 3,1,1.",
+      "worked_example": "Yes for this lab. 1,2,2 land in bin 0; 5 in bin 1; 9 in bin 2 \u2192 [3,1,1].",
+      "assignment": "Bin the fixture by hand. Add a value of 10 and update the last bin.",
+      "lab_hint": "Bin a series into a histogram you could explain to a non-engineer sponsor."
+    }
+  ]
+}

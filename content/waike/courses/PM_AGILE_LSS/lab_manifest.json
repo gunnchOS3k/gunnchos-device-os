@@ -1,0 +1,38 @@
+{
+  "schema": "waike.live_lab.v1",
+  "course_id": "PM_AGILE_LSS",
+  "entrypoint": "lab.py",
+  "solver": "lab_pm_agile_lss",
+  "live_repo_path": "gunnchos_device_os/waike_curriculum/labs.py::lab_pm_agile_lss",
+  "fixture": {
+    "tasks": [
+      {
+        "id": "A",
+        "days": 2,
+        "preds": []
+      },
+      {
+        "id": "B",
+        "days": 3,
+        "preds": [
+          "A"
+        ]
+      },
+      {
+        "id": "C",
+        "days": 1,
+        "preds": [
+          "A"
+        ]
+      },
+      {
+        "id": "D",
+        "days": 4,
+        "preds": [
+          "B",
+          "C"
+        ]
+      }
+    ]
+  }
+}
