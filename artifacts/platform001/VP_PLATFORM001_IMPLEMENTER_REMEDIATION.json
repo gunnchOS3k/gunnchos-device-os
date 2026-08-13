@@ -1,0 +1,30 @@
+{
+  "schema": "gunnchos.vp.platform001.implementer_remediation.v1",
+  "role": "IMPLEMENTER",
+  "not_independent_verifier": true,
+  "pr": 106,
+  "do_not_merge_pr_103": true,
+  "cursor_never_merges": true,
+  "prior_independent_verdict": {
+    "file": "artifacts/platform001/VP_PLATFORM001_INDEPENDENT_RESULT.json",
+    "DEVICE_OS_106_READY_FOR_EDMUND_MERGE": false,
+    "tokens_demoted": true,
+    "reason": "Thin shells / DISCONNECTED_PREVIEW Ask overclaimed FIRST_PARTY D5/D6 PASS"
+  },
+  "remediation_evidence": "artifacts/platform001/REMEDIATION_SHELL_SDK_WIRING.json",
+  "self_challenge": "artifacts/platform001/SELF_CHALLENGE.json",
+  "dogfood_result": "artifacts/platform001/PLATFORM001_RESULT.json",
+  "claim_after_remediation": {
+    "CREATOR_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "WAIKE_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "GUNNCHAI_FIRST_PARTY_APP_D5_D6_PASS": true,
+    "meaning": "platform integration depth (lifecycle + companion shell↔SDK sandbox I/O + Ask continuity)",
+    "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+    "HUMAN_E6": "NOT_EARNED",
+    "full_waike_curriculum": false,
+    "frontier_model_quality": false,
+    "PRODUCTION_RELEASE_CLAIMED": false
+  },
+  "ready_for_independent_reverify": true,
+  "note": "Tip after this commit is for a fresh Independent Verifier. Implementer does not set DEVICE_OS_106_READY_FOR_EDMUND_MERGE=true."
+}

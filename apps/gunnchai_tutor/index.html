@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>gunnchAI Tutor</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>gunnchAI Tutor</h1>
+    <p>Local-first tutoring · AI suggests · human verifies · WAIKE lesson binding</p>
+    <p id="shell-status" data-state="empty">Checking shell status…</p>
+    <p id="continuity" class="hint"></p>
+  </header>
+  <main class="grid">
+    <section>
+      <h2>Session</h2>
+      <label>Profile
+        <select id="profile"><option>student</option><option>educator</option><option>coder</option></select>
+      </label>
+      <label>Topic <input id="topic" value="wireless_basics"/></label>
+      <label>WAIKE lesson
+        <select id="lesson">
+          <option>wireless_basics_101</option>
+          <option>waike_gary_upnow_intro</option>
+          <option>python_starter_pack</option>
+          <option value="">(none)</option>
+        </select>
+      </label>
+    </section>
+    <section>
+      <h2>Ask (SDK runtime)</h2>
+      <textarea id="prompt" rows="5">Explain OFDM at a high level</textarea>
+      <button id="ask">Ask tutor</button>
+      <p class="hint">Ask posts to /api/gunnchai/ask → first_party_apps.gunnchai_tutor sandbox memory. Fail-closed if bridge is down (no fake preview replies).</p>
+    </section>
+    <section>
+      <h2>Reply</h2>
+      <pre id="reply">Waiting for a question…</pre>
+      <p id="safety">Safety: local gates on</p>
+    </section>
+    <section>
+      <h2>Memory (local preview turns)</h2>
+      <div id="memory"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
