@@ -195,15 +195,18 @@
       }
     },
     "ring": {
-      "ok": true,
-      "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
-      "observation_class": "GUEST_OBSERVED",
+      "ok": false,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+      "observation_class": "DEMOTED_OPEN",
       "evidence_copy": "artifacts/product_use/journeys/G11_ring",
       "mutations": {
         "libreoffice": true,
         "browser": true,
         "game": true
-      }
+      },
+      "DEMOTED": true,
+      "demotion_ref": "artifacts/product_use/journeys/G11_ring/RING_PASS_DEMOTED.json",
+      "note": "Independent VP purged stale nested true on tip ece2b0f — aligns with top-level demotion."
     },
     "waike_teacher_isolation": {
       "ok": true,
@@ -233,13 +236,15 @@
   },
   "ring_mutation": "DEMOTED_OPEN",
   "handheld_dock_continuity": "OPEN",
-  "updated_at_utc": "2026-08-13T22:57:42Z",
+  "updated_at_utc": "2026-08-13T23:01:00Z",
   "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
   "HONESTY_OF_STATED_CLAIMS": "FAIL",
+  "HONESTY_NOTE": "Independent VP on tip ece2b0f: FAIL — G11 offline link_down mislabel; quiz curl-backed; fixture-as-product; nested journey_run.ring still true. Ring demotion/tokens/#20+#34 OK. Edmund-mergeable NO.",
   "READY_FOR_EDMUND_MERGE": false,
   "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
   "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "independent_vp_path": "artifacts/product_use/VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT.json",
+  "independent_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",
   "ring_g11_packet": {
     "started_at_utc": "2026-08-13T22:53:21Z",
     "finished_at_utc": "2026-08-13T22:57:42Z",
@@ -250,7 +255,10 @@
     "G13_ok": true,
     "G15_ok": true,
     "Edmund_mergeable": false,
-    "LIVE_visual_retained": true
+    "LIVE_visual_retained": true,
+    "independent_honesty": "FAIL"
   },
-  "Edmund_mergeable": false
+  "Edmund_mergeable": false,
+  "journey_run_ring_nested_stale_true": false,
+  "journey_run_ring_nested_note": "Independent VP demoted stale journey_run.ring.RING_TO_REAL_APP_STATE_MUTATION_PASS=true → false on tip ece2b0f stamp."
 }
