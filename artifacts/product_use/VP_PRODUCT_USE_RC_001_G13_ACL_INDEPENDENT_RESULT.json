@@ -1,0 +1,148 @@
+{
+  "schema": "gunnchos.product_use_rc_001.g13_acl_independent_verifier.v1",
+  "work_item": "PRODUCT-USE-RC-001",
+  "scope": "G13_fixture_lab_with_role_acl_honesty_ONLY",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "cursor_never_merges": true,
+  "prefer_fail_over_false_pass": true,
+  "GAME-RC-003": "DO_NOT_START",
+  "AI-003": "DO_NOT_START",
+  "WP-001": "DO_NOT_START",
+  "pr": {
+    "number": 115,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/115",
+    "draft": true,
+    "branch": "stream/product-use-rc-001",
+    "title": "PRODUCT-USE-RC-001 bounded DRAFT (partial evidence)"
+  },
+  "claimed_tip_at_handoff": "af675e53d086930227be8c512330b3aeee088b19",
+  "claimed_tip_live_confirmed": true,
+  "verified_tip": "af675e53d086930227be8c512330b3aeee088b19",
+  "verified_tip_short": "af675e5",
+  "verified_tip_subject": "feat(product-use): re-earn G13 fixture ACL; leave G11/Ring/G14 honest",
+  "origin_stream_product_use_rc_001": "af675e53d086930227be8c512330b3aeee088b19",
+  "generated_at_utc": "2026-08-13T23:16:45Z",
+  "VP_G13_ACL_HONESTY": "PASS",
+  "INDEPENDENT_PASS_SCOPED": true,
+  "HONESTY_OF_STATED_G13_CLAIMS": "PASS",
+  "HONESTY_NOTE": "Scoped PASS on tip af675e5 for fixture_lab_with_role_acl only. Guest evidence + independent host repro of the same collector show learner/no-role/wrong-role GET teacher.html|/teacher/keys|/grades.json|/teacher_data.json → 403; teacher role → 200; teacher POST assign/grade → 204; learner POST grade → 403. learner.html + learner_data.json have no answer keys; teacher.html no longer embeds keys (loads via ACL'd /teacher/keys). Labels remain fixture / not shipping WAIKE; TEACHER_DIGITAL_PICKUP_AND_USE_READY=false; REAL_TEACHER_E6=false. LIVE visual PASS and G15 PASS_WITH_CAVEAT retained. Ring false; G11 demoted. Residual (does not flip this scoped PASS): teacher_data.json with keys still co-planted on guest FS beside learner pack — HTTP ACL is header/fixture isolation, not OS secret separation. Spoofable X-WAIKE-Role is consistent with fixture_lab label.",
+  "READY_FOR_EDMUND_MERGE": false,
+  "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
+  "YES_AS_PARTIAL_INGEST_ONLY": true,
+  "YES_AS_PARTIAL_INGEST_ONLY_NOTE": "G13 fixture ACL honesty holds as labeled. Full PRODUCT-USE-RC-001 still NO for Edmund — G11/Ring/G14/dock/reboot/persona tokens remain open/demoted.",
+  "claim_firewall": {
+    "SHIPPING_IMAGE": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "shipping_waike_teacher_app": false,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "REAL_TEACHER_E6": false,
+    "persona_tokens_all_false": true,
+    "G13_claim": "fixture_lab_with_role_acl"
+  },
+  "challenges": {
+    "1_live_tip_reproduce_acl": {
+      "tip_match": true,
+      "guest_console": "artifacts/product_use/s1_g13_acl_console.log + journeys/G13_teacher/result.json acl_probe DENY=403 DENY_KEYS=403 ALLOW=200 KEYS=200; LEARNER_GRADE_GET=403",
+      "independent_host_repro_of_collector": {
+        "DENY_teacher_html": 403,
+        "DENY_keys": 403,
+        "DENY_grades": 403,
+        "DENY_teacher_data": 403,
+        "DENY_wrong_role_learner": 403,
+        "ALLOW_teacher": 200,
+        "KEYS_teacher": 200,
+        "learner_html": 200,
+        "learner_POST_grade": 403,
+        "teacher_POST_assign": 204,
+        "teacher_POST_grade": 204
+      },
+      "verdict": "PASS"
+    },
+    "2_no_keys_in_learner_visible_html_or_learner_packs": {
+      "learner_html_forbidden_key_fields": false,
+      "learner_data_json_forbidden_key_fields": false,
+      "teacher_html_embeds_answer_keys": false,
+      "teacher_html_loads_keys_via_acl_endpoint": true,
+      "teacher_data_json_has_keys": true,
+      "fs_colocation_residual": "teacher_data.json co-planted under /var/lib/gunnchos/waike/ (and G11 pack copy) — bypasses HTTP ACL via direct FS read; not embedded in learner HTML/data",
+      "verdict": "PASS",
+      "verdict_note": "Challenge wording is HTML/learner packs embed. Embed fixed. FS colocation residual logged under S1 hygiene, not a G13 label lie."
+    },
+    "3_labels_fixture_not_shipping_waike": {
+      "claim": "fixture_lab_with_role_acl",
+      "shipping_waike_product": false,
+      "REAL_TEACHER_E6": false,
+      "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "persona_table_WAIKE": "GUEST_OBSERVED:fixture_assign_grade_with_role_acl;not_shipping_waike_teacher_app",
+      "token_inflation": false,
+      "verdict": "PASS"
+    },
+    "4_g15_caveat_and_live_visual_retained": {
+      "G15_PASS_WITH_CAVEAT": true,
+      "G15_caveat_text_present": true,
+      "G15_note": "Retained: guest LibreOffice headless ODT→PDF. Caveat: not interactive Draw UX; PDF bytes not committed to host evidence dir.",
+      "LIVE_GUNNCHOS_VISUAL_PASS": true,
+      "verdict": "PASS"
+    },
+    "5_ring_false_g11_demoted": {
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+      "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+      "G11_token_earned": false,
+      "G11_primary_task": "DEMOTED_OPEN:fixture_learner_pack_partial",
+      "G11_WAIKE": "DEMOTED_OPEN:fixture_html_collector_not_shipping_waike;HID_quiz_submit_not_proven;offline_not_link_down",
+      "verdict": "PASS"
+    }
+  },
+  "prior_fail_delta": {
+    "prior_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",
+    "prior_g13_issues": [
+      "teacher.html served without role ACL",
+      "teacher_html_embeds_answer_keys",
+      "fixture overclaimed as product isolation"
+    ],
+    "now_fixed_on_af675e5": [
+      "X-WAIKE-Role ACL on teacher HTML/keys/grades/teacher_data + teacher POST",
+      "teacher.html does not embed keys",
+      "explicit fixture_lab_with_role_acl + REAL_TEACHER_E6=false + teacher token false"
+    ]
+  },
+  "S1_remaining": [
+    "G11 DEMOTED — fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (Ring still false; no lab_browser; migration-alone forbidden)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN (attempted; focus_move + git FAIL)",
+    "Handheld dock continuity OPEN",
+    "G11 reboot/resume schoolwork NOT_RUN",
+    "Persona tokens remain false until full pickup-and-use journeys",
+    "G13 residual hygiene: move teacher_data.json / keys off learner-co-located FS path (HTTP ACL only today)"
+  ],
+  "S2_open_acknowledged": [
+    "REAL_TEACHER_E6=false",
+    "HUMAN_E6",
+    "Beat Link #20 BRANCH_EVIDENCE until Edmund merge",
+    "gunnchAI #34 BRANCH_EVIDENCE"
+  ],
+  "evidence_inspected": [
+    "git HEAD / origin/stream/product-use-rc-001 = af675e5",
+    "scripts/product_use_close_s1.py (collector ACL + run_g13)",
+    "gunnchos_device_os/product_use/waike_guest_pack.py",
+    "artifacts/product_use/waike_guest_pack/{learner,teacher}.{html,json}",
+    "artifacts/product_use/journeys/G13_teacher/{result.json,G13_FIXTURE_ACL_PASS.json}",
+    "artifacts/product_use/s1_g13_acl_console.log",
+    "artifacts/product_use/journeys/S1_CLOSER_SUMMARY.json",
+    "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+    "artifacts/product_use/PRODUCT_USE_RC_001_STATUS.json",
+    "artifacts/product_use/RUN_SUMMARY.json",
+    "artifacts/product_use/journeys/G15_creative/result.json",
+    "artifacts/product_use/journeys/G12_G11_live_visual/LIVE_VISUAL_EVIDENCE.json",
+    "artifacts/product_use/journeys/G11_waike/pack/"
+  ],
+  "stamp": {
+    "on_pr": 115,
+    "scoped_result": "PASS",
+    "edmund_mergeable": "NO",
+    "message": "Scoped independent VP PASS on G13 fixture_lab_with_role_acl honesty at af675e5. Edmund-mergeable NO. Cursor does not merge."
+  }
+}
