@@ -2,10 +2,10 @@
   "schema": "gunnchos.wp011r.independent_verifier.v1",
   "wave": "WP-011R.2",
   "role": "independent_verifier",
-  "pr": null,
-  "branch": "operating-cycle-3a/wp-011r-lab-10-acceptance",
-  "assessed_tip": "operating-cycle-3b/wp-011r2-lab-reconciliation",
-  "assessed_at_utc": "2026-08-12T22:08:21Z",
+  "pr": 108,
+  "branch": "operating-cycle-3b/wp-011r2-lab-reconciliation",
+  "assessed_tip": "e6b229e91e3f35019d0d747f9da94495557ef2ef",
+  "assessed_at_utc": "2026-08-13T04:29:36Z",
   "overall_result": "INDEPENDENT_FAIL",
   "INDEPENDENT_PASS": false,
   "independent_accepted": false,
@@ -16,6 +16,7 @@
   "SHIPPING_IMAGE": false,
   "shipping_master": false,
   "five_gate_digital_and": false,
+  "DEVICE_OS_108_READY_FOR_EDMUND_MERGE": false,
   "prefer_fail": true,
   "cursor_never_merges": true,
   "WP-001": "DO_NOT_START",
@@ -24,21 +25,8 @@
     "packet_allows_digital_complete_on_interactive_guest": false,
     "SILICON_EXACT_EMULATION": false,
     "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
-    "applied": "five gates PASS \u2192 INDEPENDENT_PASS + five_gate_digital_and=true; COMPLETE/shipping remain false"
+    "applied": "Anime honest FAIL keeps four=false → five_gate_digital_and=false; COMPLETE/shipping remain false"
   },
-  "challenged_and_cleared": [
-    "DSXL filter-aware decode: placement filters [1,2,4]; left/right MSE=0 vs placement crops; means 58.452/130.056; not near-black; PNGs committed",
-    "DSXL dual wl_output + focus + 2\u21921\u21922 reboot reconfig + layout_restore evidenced in DSXL_COMPOSITOR_UX_EVIDENCE.json",
-    "RING document_state absent; no RINGRING/lab:// in ring+dsxl blobs",
-    "RING ODT contains RINGMUTATION1786552403",
-    "RING browser clicks 65\u219270 (delta 5); committed browser_state clicks=70",
-    "RING Godot save_version 1\u21922 with process alive=true / alive_after_mutation; first_run_create_rejected",
-    "Same-run full stack: CYCLE3B_DSXL_RING_FIX.log DSXL then RING in window 16:27\u201316:45Z"
-  ],
-  "residual_non_blocking": [
-    "Tracked Lab observe-only leftovers remain: ring/game/game_state.json (anime-aggressors) and ring/browser/lab_browser.html \u2014 evidence rejects them as earning paths; contain neither RINGRING nor lab://; not used for RING PASS"
-  ],
-  "rejected_as_insufficient": [],
   "tokens": {
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
@@ -48,79 +36,49 @@
     "ECO010_SOAK_PASS": true,
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
+  "per_game_independent": {
+    "anime-aggressors": "FAIL",
+    "anime_blocker": "anime_no_input_driven_native_mutation",
+    "anime_do_not_flip_to_pass": true,
+    "foot-racing": "PASS",
+    "earth-species": "PASS",
+    "beatlink-party": "PASS"
+  },
   "per_token_verdict": [
     {
       "token": "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS",
       "verdict": "FAIL",
-      "note": "Probe/lab_bridge facades demoted; need owner real builds on accepted mains"
+      "note": "Aggregate FAIL: Pedestrian/Archive/Beat Link honest PASS; Anime FAIL anime_no_input_driven_native_mutation (not flipped)"
     },
     {
       "token": "LIVE_GUNNCHOS_VISUAL_PASS",
       "verdict": "PASS",
-      "note": "Retained guest FB evidence"
+      "note": "Retained guest FB evidence; blob unchanged vs 5d3fabb"
     },
     {
       "token": "DSXL_DUAL_COMPOSITOR_UX_PASS",
       "verdict": "PASS",
-      "note": "Aligned with DSXL evidence (was inconsistent on #103 tip)"
+      "note": "Retained; blob unchanged vs 5d3fabb"
     },
     {
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "verdict": "PASS",
-      "note": "Retained; diagnostic surfaces labeled LAB_DIAGNOSTIC_ONLY"
+      "note": "Retained; blob unchanged vs 5d3fabb"
     },
     {
       "token": "ECO010_SOAK_PASS",
       "verdict": "PASS",
-      "note": ">=1800s retained"
+      "note": ">=1800s retained; blob unchanged vs 5d3fabb"
     }
   ],
-  "evidence_spot_checks": {
-    "shell_app_before_png_bytes": 27424,
-    "shell_app_after_png_bytes": 30041,
-    "shell_app_png_has_iend": true,
-    "shell_app_png_differ": true,
-    "dsxl_dual_pngs_committed": true,
-    "dsxl_placement_filters": [
-      1,
-      2,
-      4
-    ],
-    "dsxl_placement_halves_match_left_right": true,
-    "dsxl_left_mse_vs_placement_crop": 0.0,
-    "dsxl_right_mse_vs_placement_crop": 0.0,
-    "dsxl_left_mean_rgb": 58.45217903706035,
-    "dsxl_right_mean_rgb": 130.05648274655783,
-    "dsxl_placement_left_half_mean_rgb": 58.45217903706035,
-    "dsxl_placement_right_half_mean_rgb": 130.05648274655783,
-    "dsxl_2_1_2_layout_restore": true,
-    "ring_odt_has_RINGMUTATION": true,
-    "ring_odt_marker": "RINGMUTATION1786552403",
-    "ring_document_state_present": false,
-    "ring_ringring_in_ring_dsxl_blobs": false,
-    "ring_lab_scheme_in_ring_dsxl_blobs": false,
-    "ring_browser_clicks_before": 65,
-    "ring_browser_clicks_after": 70,
-    "ring_browser_click_delta": 5,
-    "ring_godot_alive_ok": true,
-    "ring_godot_save_version_before": 1,
-    "ring_godot_save_version_after": 2,
-    "ring_godot_first_run_create_rejected": true,
-    "same_run_dsxl_then_ring": true,
-    "same_run_window_utc": "2026-08-12T16:27:28Z..2026-08-12T16:45:05Z",
-    "residual_lab_game_state_tracked": true,
-    "residual_lab_browser_html_tracked": true
-  },
-  "merge_recommendation": "Edmund may merge #103 after INDEPENDENT_PASS; Cursor never merges; WP-001 DO_NOT_START; COMPLETE/shipping false",
-  "edmund_merge_order": "merge-ready-for-Edmund-only (Cursor never merges); keep COMPLETE/shipping false; WP-001 DO_NOT_START",
-  "verdict": "INDEPENDENT_PASS",
-  "note": "Skeptical re-check of tip 9d8ce2d cleared prior DSXL invented-halves and RING Lab RINGRING/first-run demotions. Five-gate AND true. COMPLETE/shipping remain false per packet policy (interactive guest + SILICON_EXACT=false does not auto-complete). Cursor never merges.",
+  "canonical_result": "artifacts/wp011r/VP_WP011R2_INDEPENDENT_RESULT.json",
+  "merge_recommendation": "Do not merge DRAFT #108; READY false; Cursor never merges; WP-001 DO_NOT_START; COMPLETE/shipping false",
+  "verdict": "INDEPENDENT_FAIL",
   "successor_of_pr": 103,
   "base_main": "3858e760295ad35828ff141919681f2bb8685cf0",
   "wp011r2_reconciliation": {
     "device-os": "3858e760295ad35828ff141919681f2bb8685cf0",
     "anime-aggressors": "16df36d0025a6d124817a1800de65abef689d51f",
-    "anime-aggressors_tip_note": "a320c7c pre-merge tip of #72; merge commit 16df36d",
     "pedestrian-pursuit": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
     "archive-of-life-artifact-world": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
     "beatlink-party": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
