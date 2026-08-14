@@ -1,14 +1,12 @@
 {
-  "tip_base": "c45e5d7",
+  "tip_base": "2e09bad",
   "work_item": "PRODUCT-USE-RC-001",
   "pr": 115,
-  "updated_at_utc": "2026-08-14T02:18:19Z",
-  "closed_this_packet": [
-    "interactive_root_overlay_recreated"
-  ],
-  "failed_or_skipped": [
-    "G14_disk_guard_skip",
-    "RING_disk_guard_skip"
+  "updated_at_utc": "2026-08-14T02:40:32Z",
+  "closed_this_packet": [],
+  "aborted": [
+    "G14_disk_guard",
+    "RING_disk_guard"
   ],
   "retained": [
     "G13_FS_ACL",
@@ -18,5 +16,5 @@
   "persona_tokens_all_false": true,
   "Edmund_mergeable": false,
   "ready_for_scoped_reverify": false,
-  "note": "Overlay reprovision PASS only. No G14/Ring PASS. Scoped verify not warranted until guest retry with >=8Gi."
+  "note": "No new PASS. Re-attempt G14/Ring only with sustained >=8Gi (prefer 12Gi)."
 }

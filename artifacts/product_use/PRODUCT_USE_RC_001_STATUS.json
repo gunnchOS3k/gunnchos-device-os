@@ -54,8 +54,8 @@
   "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "S0_open": 0,
   "S1_open": [
-    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (skipped this packet: disk_guard Avail<8Gi after overlay reprovision)",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (skipped this packet: disk_guard; prior blocker guest_browser_state_not_committed)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (this run ABORTED_DISK_GUARD mid-guest; prior FAIL missing placement+focus_move)",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (this run ABORTED_DISK_GUARD; prior blocker guest_browser_state_not_committed)",
     "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
     "Handheld dock continuity OPEN",
     "G11 reboot/resume schoolwork NOT_RUN",
@@ -238,7 +238,7 @@
   },
   "ring_mutation": "DEMOTED_OPEN",
   "handheld_dock_continuity": "OPEN",
-  "updated_at_utc": "2026-08-14T02:18:19Z",
+  "updated_at_utc": "2026-08-14T02:40:32Z",
   "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
   "HONESTY_OF_STATED_CLAIMS": "FAIL",
   "HONESTY_NOTE": "Independent VP on tip ece2b0f: FAIL \u2014 G11 offline link_down mislabel; quiz curl-backed; fixture-as-product; nested journey_run.ring still true. Ring demotion/tokens/#20+#34 OK. Edmund-mergeable NO.",
@@ -275,27 +275,26 @@
     "acl_code_fix": "X-WAIKE-Role required; teacher keys not embedded in HTML"
   },
   "s1_closer": {
-    "finished_at_utc": "2026-08-14T02:18:19Z",
-    "tip_base": "c45e5d7",
-    "overlay_reprovision": {
-      "ok": true,
-      "backing": "os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
-      "disk": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
-      "size_bytes": 3842506752,
-      "sha256": "8d9e502a002a96286d0039e10ad07be4500fcc30166dbd1a19d6d211348343d3",
-      "debian_backing_preserved": true
-    },
+    "finished_at_utc": "2026-08-14T02:40:32Z",
+    "tip_base": "2e09bad",
     "disk_guard": {
       "required_gi": 8,
-      "post_reprovision_avail_gi": 2.96,
-      "guest_retry": "SKIPPED"
+      "pre_run_gi": 8.54,
+      "post_abort_gi": 3.14,
+      "mid_run_breach": true,
+      "breach_log_lines": 38,
+      "action": "STOPPED_GUEST_LEFT_OPEN"
     },
     "G13_ok": true,
     "G13_fs_hygiene_retained": true,
     "G14_DSXL": false,
+    "G14_this_run": "ABORTED_DISK_GUARD",
     "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_this_run": "ABORTED_DISK_GUARD",
     "LIVE_visual_retained": true,
     "G15_PASS_WITH_CAVEAT_retained": true,
+    "overlay_preserved": true,
+    "debian_backing_preserved": true,
     "Edmund_mergeable": false,
     "tokens_remain_false": true
   }

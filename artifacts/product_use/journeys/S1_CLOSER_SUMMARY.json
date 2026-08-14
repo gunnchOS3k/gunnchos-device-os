@@ -1,14 +1,12 @@
 {
   "schema": "gunnchos.product_use_rc_001.s1_closer.v1",
-  "finished_at_utc": "2026-08-14T02:18:19Z",
-  "tip_base": "c45e5d7",
+  "finished_at_utc": "2026-08-14T02:40:32Z",
+  "tip_base": "2e09bad",
   "prefer_fail_over_false_pass": true,
   "tokens_remain_false": true,
   "Edmund_mergeable": false,
-  "closed_this_packet": [
-    "interactive_guest_overlay_reprovision_from_debian"
-  ],
-  "skipped_for_disk_guard": [
+  "closed_this_packet": [],
+  "aborted_disk_guard": [
     "G14",
     "RING"
   ],
@@ -18,16 +16,18 @@
     "G15": "PASS_WITH_CAVEAT"
   },
   "disk": {
-    "avail_gi": 2.96,
+    "pre_gi": 8.54,
+    "post_gi": 3.14,
     "gate_gi": 8,
-    "debian_backing_preserved": true
+    "breach": true
   },
   "S1_remaining": [
-    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (skipped this packet: disk_guard Avail<8Gi after overlay reprovision)",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (skipped this packet: disk_guard; prior blocker guest_browser_state_not_committed)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (this run ABORTED_DISK_GUARD mid-guest; prior FAIL missing placement+focus_move)",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (this run ABORTED_DISK_GUARD; prior blocker guest_browser_state_not_committed)",
     "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
     "Handheld dock continuity OPEN",
     "G11 reboot/resume schoolwork NOT_RUN",
     "Persona tokens remain false until full pickup-and-use journeys"
-  ]
+  ],
+  "note": "Guest stopped when Avail <8Gi. No PASS invented. Dock OPEN; reboot/resume NOT_RUN."
 }
