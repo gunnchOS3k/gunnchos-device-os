@@ -1,29 +1,22 @@
 {
-  "tip_base": "61d6e05",
+  "tip_base": "c45e5d7",
   "work_item": "PRODUCT-USE-RC-001",
   "pr": 115,
-  "updated_at_utc": "2026-08-14T00:41:26Z",
-  "closed_this_packet": [],
-  "attempted_fail": [
-    "G14_DSXL",
-    "RING_honest_reearn"
+  "updated_at_utc": "2026-08-14T02:18:19Z",
+  "closed_this_packet": [
+    "interactive_root_overlay_recreated"
+  ],
+  "failed_or_skipped": [
+    "G14_disk_guard_skip",
+    "RING_disk_guard_skip"
   ],
   "retained": [
-    "G13_FS_ACL_VP_61d6e05",
-    "LIVE_visual_PASS",
+    "G13_FS_ACL",
+    "LIVE_visual",
     "G15_PASS_WITH_CAVEAT"
-  ],
-  "demoted_left": [
-    "G11"
-  ],
-  "open": [
-    "G14",
-    "Ring",
-    "dock",
-    "reboot_resume"
   ],
   "persona_tokens_all_false": true,
   "Edmund_mergeable": false,
   "ready_for_scoped_reverify": false,
-  "note": "No new PASS claims this packet \u2014 G14/Ring honest FAIL after disk-guarded guest attempt."
+  "note": "Overlay reprovision PASS only. No G14/Ring PASS. Scoped verify not warranted until guest retry with >=8Gi."
 }

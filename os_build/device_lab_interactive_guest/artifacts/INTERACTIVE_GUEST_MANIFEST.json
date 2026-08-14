@@ -11,17 +11,17 @@
   },
   "claim_boundary": "gunnchOS Device Lab Interactive Development Guest: Debian 12 genericcloud arm64 cloud image, provisioned guest-natively inside QEMU via cloud-init (no Mac foreign-arch chroot/binfmt/Docker). DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. SILICON_EXACT_EMULATION=false. A successful provision run means packages installed and the guest reported readiness over its own serial console \u2014 it does not by itself earn LIVE_GUNNCHOS_VISUAL_PASS, DSXL_DUAL_COMPOSITOR_UX_PASS, or RING_TO_REAL_APP_STATE_MUTATION_PASS; those require a live guest-agent session with real evidence.",
   "disk": {
-    "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
+    "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
     "note": "qcow2 with backing_file=base cloud image; base image cached separately, never committed to git",
-    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
-    "sha256": "33df3dec365310f832be2500ef875186f6865a01eb75ccedb23c984dda78c964",
-    "size_bytes": 2870018048
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+    "sha256": "8d9e502a002a96286d0039e10ad07be4500fcc30166dbd1a19d6d211348343d3",
+    "size_bytes": 3842506752
   },
   "download": {
     "cached": true,
     "downloaded_this_run": false,
     "expected_sha512": "0ddd6ae10dad18535fc8a8167065e78565a04b721cae3e946a3ca4fda2ce54ac7a7546a09b9c0bca6bd101db3ab950056da19dc452113631dc7bbce7c96a404f",
-    "image_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gate-worktrees/device-os-wp-011r/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
+    "image_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
     "image_url": "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-arm64.qcow2",
     "ok": true,
     "sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
@@ -45,11 +45,14 @@
     "reboot",
     "framebuffer_capture",
     "compositor_info",
-    "app_launch"
+    "app_launch",
+    "godot_input_overlay",
+    "browser_input_overlay"
   ],
   "optional_packages": [
     "godot3",
-    "grim"
+    "labwc",
+    "wlr-randr"
   ],
   "pass_tokens_earned_by_this_manifest": [],
   "provision_method": "qemu_debian_genericcloud_cloud_init_guest_native",
@@ -75,7 +78,10 @@
     "pipewire-alsa",
     "wireplumber",
     "openssh-server",
-    "foot"
+    "foot",
+    "grim",
+    "libreoffice-writer",
+    "libreoffice-gtk3"
   ],
   "schema": "gunnchos.device_lab.interactive_guest_image.manifest.v1",
   "version": "1.0.0-debian-cloud-init"

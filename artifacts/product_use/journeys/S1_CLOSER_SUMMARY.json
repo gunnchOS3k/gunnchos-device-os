@@ -1,47 +1,30 @@
 {
   "schema": "gunnchos.product_use_rc_001.s1_closer.v1",
-  "finished_at_utc": "2026-08-14T00:41:26Z",
-  "tip_base": "61d6e05",
-  "disk_guard": {
-    "required_gi": 8,
-    "pre_run_gi": 8.32,
-    "post_run_gi": 6.3
-  },
+  "finished_at_utc": "2026-08-14T02:18:19Z",
+  "tip_base": "c45e5d7",
   "prefer_fail_over_false_pass": true,
   "tokens_remain_false": true,
   "Edmund_mergeable": false,
-  "closed_this_packet": [],
+  "closed_this_packet": [
+    "interactive_guest_overlay_reprovision_from_debian"
+  ],
+  "skipped_for_disk_guard": [
+    "G14",
+    "RING"
+  ],
   "retained": {
-    "G13": "fixture_lab_with_role_acl + FS hygiene (VP 61d6e05)",
+    "G13": "fixture_lab_with_role_acl+FS",
     "LIVE_visual": "PASS",
     "G15": "PASS_WITH_CAVEAT"
   },
-  "attempted": {
-    "G14": {
-      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-      "missing": [
-        "window_placement_on_both_outputs",
-        "focus_move"
-      ],
-      "git_ok": false
-    },
-    "RING": {
-      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-      "blocker": "guest_browser_state_not_committed",
-      "lab_browser_forbidden": true,
-      "migration_alone_forbidden": true
-    }
-  },
-  "left_open_or_demoted": {
-    "G11": "DEMOTED",
-    "G14": "OPEN",
-    "RING": false,
-    "dock": "OPEN",
-    "reboot_resume": "NOT_RUN"
+  "disk": {
+    "avail_gi": 2.96,
+    "gate_gi": 8,
+    "debian_backing_preserved": true
   },
   "S1_remaining": [
-    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (missing window_placement_on_both_outputs + focus_move; git FAIL)",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (blocker: guest_browser_state_not_committed; no lab_browser; migration-alone forbidden)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (skipped this packet: disk_guard Avail<8Gi after overlay reprovision)",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (skipped this packet: disk_guard; prior blocker guest_browser_state_not_committed)",
     "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
     "Handheld dock continuity OPEN",
     "G11 reboot/resume schoolwork NOT_RUN",

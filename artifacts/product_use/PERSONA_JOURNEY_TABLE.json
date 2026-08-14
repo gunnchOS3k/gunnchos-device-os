@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.product_use.persona_journey_table.v1",
   "generated_at_utc": "2026-08-13T22:15:43Z",
-  "note": "Post-61d6e05: G14/Ring guest re-attempted with disk guard (>=8Gi). G14 FAIL missing window_placement+focus_move. Ring FAIL guest_browser_state_not_committed. G13 FS+ACL retained. G11 demoted. Dock OPEN. Tokens false.",
+  "note": "Overlay interactive-root-aarch64.qcow2 recreated from debian-12-genericcloud-arm64.qcow2 (provision ok). G14/Ring guest retry SKIPPED: Avail dropped below 8Gi disk guard after provision. G13/LIVE/G15 retained. Tokens false. No invented PASS.",
   "tokens_earned": false,
   "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "handheld_dock_continuity": "OPEN",
@@ -117,7 +117,7 @@
       "launcher": "NOT_RUN",
       "apps": "GUEST_OBSERVED_PARTIAL:dual_window_placement_pngs;focus_move_fail",
       "network": "NOT_RUN",
-      "primary_task": "OPEN:DSXL_DUAL_COMPOSITOR_UX_PASS_missing_placement_and_focus_move",
+      "primary_task": "OPEN:DSXL_skipped_disk_guard_after_reprovision",
       "artifact": "GUEST_OBSERVED:dsxl_left/right/placement.png",
       "save": "NOT_RUN",
       "reboot": "NOT_RUN",
@@ -174,7 +174,7 @@
     }
   ],
   "run_summary": "artifacts/product_use/journeys/RUN_SUMMARY.json",
-  "updated_at_utc": "2026-08-14T00:41:26Z",
+  "updated_at_utc": "2026-08-14T02:18:19Z",
   "independent_vp": "FAIL",
   "HONESTY_OF_STATED_CLAIMS": "DEMOTED_APPLIED",
   "independent_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",
