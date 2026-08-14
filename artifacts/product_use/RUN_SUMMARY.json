@@ -1,16 +1,17 @@
 {
-  "tip_base": "6838ca9",
+  "tip_base": "8b77dcd",
   "work_item": "PRODUCT-USE-RC-001",
   "pr": 115,
-  "updated_at_utc": "2026-08-13T23:43:26Z",
+  "updated_at_utc": "2026-08-14T00:30:43Z",
   "closed_this_packet": [
-    "G13_fs_key_colocation_hygiene"
+    "G13_fs_key_colocation_hygiene",
+    "G13_fixture_lab_with_role_acl"
   ],
   "retained": [
-    "G13_fixture_lab_with_role_acl",
     "LIVE_visual_PASS",
     "G15_PASS_WITH_CAVEAT",
-    "scoped_VP_6838ca9"
+    "scoped_VP_6838ca9",
+    "prior_VP_9841a2e"
   ],
   "demoted_left": [
     "G11",
@@ -23,6 +24,7 @@
   ],
   "persona_tokens_all_false": true,
   "Edmund_mergeable": false,
-  "ready_for_scoped_reverify": true,
-  "reverify_scope": "G13 FS hygiene (waike-teacher 0700/0600; learner without teacher_data/grades) + prior ACL honesty"
+  "ready_for_scoped_reverify": false,
+  "reverify_scope": "G13 FS hygiene + ACL live re-pass after ENOSPC recovery",
+  "disk_avail_at_reverify": "6.0Gi_after / ~10Gi_start"
 }
