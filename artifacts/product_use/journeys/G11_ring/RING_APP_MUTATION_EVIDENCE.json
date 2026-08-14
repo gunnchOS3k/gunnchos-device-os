@@ -26,7 +26,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "libreoffice",
-      "pid": 454,
+      "pid": 431,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -48,23 +48,23 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "started": "chromium-ring",
-      "pid": 774
+      "pid": 750
     },
     "game": {
       "start": {
         "ok": true,
-        "pid": 1142,
+        "pid": 1140,
         "started": "godot-pedestrian-ring"
       },
       "alive": {
         "ok": true,
-        "stdout": "1142 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1147 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
+        "stdout": "1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1145 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
       },
       "wayland": "wayland-0",
       "process_alive": true,
       "alive_after_mutation": {
         "ok": true,
-        "stdout": "ALIVE\n1142 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1199 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
+        "stdout": "ALIVE\n1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1197 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
       },
       "harness_rejected": true,
       "first_run_create_rejected": false,
@@ -75,8 +75,8 @@
   "guest_artifacts": {
     "ok": false,
     "odt_path_guest": "/root/gunnchos-lab-document.odt",
-    "odt_bytes": 8929,
-    "odt_marker": "RINGMUTATION1786664346",
+    "odt_bytes": 8928,
+    "odt_marker": "RINGMUTATION1786667678",
     "lab_browser_collector_forbidden": true,
     "committed_odt": "document/ring_editor_buffer.odt",
     "lab_ringring_rejected": true,
@@ -130,7 +130,7 @@
               {
                 "ok": true,
                 "command": "mouse_button 1",
-                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+                "reply": "m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
                 "via": "qemu_monitor"
               }
             ],
@@ -208,14 +208,14 @@
       },
       "odt_probe": {
         "ok": true,
-        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"0004c530\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1786664346</text:span></text:p></office:text></office:body></office:document-content>\n",
+        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"00152926\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1786667678</text:span></text:p></office:text></office:body></office:document-content>\n",
         "soffice_ready": true
       },
       "seed": {
         "ok": true
       },
-      "alive": "454 /usr/lib/libreoffice/program/oosplash --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n485 /usr/lib/libreoffice/program/soffice.bin --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n",
-      "marker": "RINGMUTATION1786664346",
+      "alive": "431 /usr/lib/libreoffice/program/oosplash --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n462 /usr/lib/libreoffice/program/soffice.bin --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n",
+      "marker": "RINGMUTATION1786667678",
       "mutated": true,
       "libreoffice_or_writer_surface_alive": true,
       "mousepad_fallback_rejected": true
@@ -245,7 +245,7 @@
               {
                 "ok": true,
                 "command": "mouse_button 1",
-                "reply": "m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
                 "via": "qemu_monitor"
               }
             ],
@@ -383,18 +383,18 @@
       "launch": {
         "start": {
           "ok": true,
-          "pid": 1142,
+          "pid": 1140,
           "started": "godot-pedestrian-ring"
         },
         "alive": {
           "ok": true,
-          "stdout": "1142 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1147 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
+          "stdout": "1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1145 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
         },
         "wayland": "wayland-0",
         "process_alive": true,
         "alive_after_mutation": {
           "ok": true,
-          "stdout": "ALIVE\n1142 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1199 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
+          "stdout": "ALIVE\n1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1197 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
         },
         "harness_rejected": true,
         "first_run_create_rejected": false,
@@ -444,6 +444,6 @@
     },
     "ok": true
   },
-  "mutation_marker": "RINGMUTATION1786664346",
+  "mutation_marker": "RINGMUTATION1786667678",
   "note": "Not earned \u2014 need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)"
 }

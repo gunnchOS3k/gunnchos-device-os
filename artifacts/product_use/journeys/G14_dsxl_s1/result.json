@@ -3,21 +3,32 @@
   "ok": false,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
   "dsxl_missing": [
+    "window_placement_on_both_outputs",
     "focus_move"
   ],
   "focus_moves": [
     {
       "ok": false,
-      "output_id": "card0-Virtual-1",
+      "output_id": "",
       "click": {
-        "ok": false,
-        "error": "unix_connect_failed",
-        "detail": "empty_or_unmatched_response"
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "input_inject",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "kind": "pointer",
+        "dx": 100,
+        "dy": 100,
+        "button": "left",
+        "injected_via": "uinput"
       }
     },
     {
-      "ok": true,
-      "output_id": "card0-Virtual-2",
+      "ok": false,
+      "output_id": "",
       "click": {
         "ok": true,
         "protocol": "gunnchos.guest_agent.v1",

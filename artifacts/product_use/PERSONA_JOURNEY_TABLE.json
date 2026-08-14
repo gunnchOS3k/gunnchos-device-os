@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.product_use.persona_journey_table.v1",
   "generated_at_utc": "2026-08-13T22:15:43Z",
-  "note": "G13 fixture_lab_with_role_acl + FS hygiene (waike-teacher 0700/0600; learner pack without keys). G11 demoted. Ring false. G14 OPEN (prior ENOSPC). Dock OPEN. Tokens false. Live G13 reverify 2026-08-14T00:30:43Z.",
+  "note": "Post-61d6e05: G14/Ring guest re-attempted with disk guard (>=8Gi). G14 FAIL missing window_placement+focus_move. Ring FAIL guest_browser_state_not_committed. G13 FS+ACL retained. G11 demoted. Dock OPEN. Tokens false.",
   "tokens_earned": false,
   "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "handheld_dock_continuity": "OPEN",
@@ -117,7 +117,7 @@
       "launcher": "NOT_RUN",
       "apps": "GUEST_OBSERVED_PARTIAL:dual_window_placement_pngs;focus_move_fail",
       "network": "NOT_RUN",
-      "primary_task": "OPEN:DSXL_DUAL_COMPOSITOR_UX_PASS_disk_blocked_mid_run",
+      "primary_task": "OPEN:DSXL_DUAL_COMPOSITOR_UX_PASS_missing_placement_and_focus_move",
       "artifact": "GUEST_OBSERVED:dsxl_left/right/placement.png",
       "save": "NOT_RUN",
       "reboot": "NOT_RUN",
@@ -174,7 +174,7 @@
     }
   ],
   "run_summary": "artifacts/product_use/journeys/RUN_SUMMARY.json",
-  "updated_at_utc": "2026-08-14T00:30:43Z",
+  "updated_at_utc": "2026-08-14T00:41:26Z",
   "independent_vp": "FAIL",
   "HONESTY_OF_STATED_CLAIMS": "DEMOTED_APPLIED",
   "independent_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",

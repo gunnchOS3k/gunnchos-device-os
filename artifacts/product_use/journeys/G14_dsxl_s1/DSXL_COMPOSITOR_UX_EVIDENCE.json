@@ -90,7 +90,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "foot",
-      "pid": 424,
+      "pid": 1223,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -107,7 +107,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "mousepad",
-      "pid": 434,
+      "pid": 1232,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -125,39 +125,37 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-13_23-12-13.png",
-    "bytes": 32860,
-    "format": "png",
-    "sha256": "91bd0d1991a63401eb39898ac13ee81e4124d15e3e518e42588e35b467d4580a",
+    "path": "/var/lib/gunnchos/screenshots/fb0_1786667887906.ppm",
+    "bytes": 3072016,
+    "format": "ppm",
     "synthetic": false,
-    "via": "weston_screenshooter_super_s_uinput",
-    "png_complete": true,
-    "has_iend": true
+    "via": "fbdev_ppm",
+    "attempts": [
+      {
+        "via": "grim_wayland",
+        "rc": 1,
+        "stderr": "compositor doesn't support wlr-screencopy-unstable-v1\n"
+      },
+      {
+        "via": "weston_screenshooter_cli",
+        "rc": 255,
+        "stderr": "weston_screenshooter@6: error 0: screenshooter failed: permission denied. Debug protocol must be enabled\n"
+      },
+      {
+        "via": "weston_screenshooter_super_s_uinput",
+        "injected": true
+      },
+      {
+        "via": "weston_screenshooter_super_s_uinput",
+        "rejected_empty": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-14_00-37-59.png",
+        "size": 0
+      }
+    ]
   },
   "placement_halves": {
-    "ok": true,
+    "ok": false,
     "filter_aware": true,
-    "width": 2560,
-    "height": 800,
-    "left_sha256": "d444fa0c6b60fa46913260d34d50f148775b4c7531262aeac986d828f751fa30",
-    "right_sha256": "130ef7c04082711d02242ef83ff7ad91d01ac473ea2609853022e223aeef993f",
-    "halves_differ": true,
-    "left_nonzero": true,
-    "right_nonzero": true,
-    "left_mean": 58.377506510416666,
-    "right_mean": 130.1808623046875,
-    "filters_used": [
-      1,
-      2,
-      4
-    ],
-    "means_plausible": true,
-    "left_png": "dsxl_left.png",
-    "right_png": "dsxl_right.png",
-    "left_png_sha256": "b87b65cb9bb57cd457d1c76ccb5b9a4185f9f37cd7b6eaa247cee16cac78449d",
-    "right_png_sha256": "1d3a8eb0d9d45ce9ca3dad511d607a4368409832fb012671918c36c08826b338",
-    "committed_png_halves": true,
-    "means_match_placement_crops": true
+    "error": "not_png"
   },
   "drm_before_list": {
     "ok": true,
@@ -190,11 +188,11 @@
       "del_tail": "D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del g\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'gpu1' not found\r\n(qemu) ",
       "mid_drm": {
         "card": "",
-        "status": "557",
+        "status": "1477",
         "raw": {
           "ok": true,
           "returncode": 0,
-          "stdout": "557\n",
+          "stdout": "1477\n",
           "stderr": ""
         }
       },
@@ -213,48 +211,59 @@
     "checks": {
       "two_outputs": true,
       "two_compositor_surfaces": true,
-      "window_placement": true,
+      "window_placement": false,
       "focus_move": false,
       "disconnect": true,
       "reconnect": true,
       "layout_restore": true
     },
     "missing": [
+      "window_placement_on_both_outputs",
       "focus_move"
     ],
     "windows": [
       {
         "app_id": "foot",
-        "output_id": "card0-Virtual-1",
-        "pid": 424,
+        "output_id": "",
+        "pid": 1223,
         "ok": true,
-        "placement_proven": true,
+        "placement_proven": false,
         "half": "left",
-        "half_sha256": "d444fa0c6b60fa46913260d34d50f148775b4c7531262aeac986d828f751fa30"
+        "half_sha256": null
       },
       {
         "app_id": "mousepad",
-        "output_id": "card0-Virtual-2",
-        "pid": 434,
+        "output_id": "",
+        "pid": 1232,
         "ok": true,
-        "placement_proven": true,
+        "placement_proven": false,
         "half": "right",
-        "half_sha256": "130ef7c04082711d02242ef83ff7ad91d01ac473ea2609853022e223aeef993f"
+        "half_sha256": null
       }
     ],
     "focus_moves": [
       {
         "ok": false,
-        "output_id": "card0-Virtual-1",
+        "output_id": "",
         "click": {
-          "ok": false,
-          "error": "unix_connect_failed",
-          "detail": "empty_or_unmatched_response"
+          "ok": true,
+          "protocol": "gunnchos.guest_agent.v1",
+          "cmd": "input_inject",
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "SILICON_EXACT_EMULATION": false,
+          "production_keys": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "kind": "pointer",
+          "dx": 100,
+          "dy": 100,
+          "button": "left",
+          "injected_via": "uinput"
         }
       },
       {
-        "ok": true,
-        "output_id": "card0-Virtual-2",
+        "ok": false,
+        "output_id": "",
         "click": {
           "ok": true,
           "protocol": "gunnchos.guest_agent.v1",
@@ -279,8 +288,8 @@
       "method": "dual_virtio_gpu_device_del_add",
       "connector": "gpu1",
       "before": "unknown",
-      "mid": "557",
-      "after": "660",
+      "mid": "1477",
+      "after": "1581",
       "del_tail": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'gpu1' not found\r\n(qemu) ",
       "add_tail": "device_add {\"driver\":\"virtio-gpu-pci\",\"id\":\"gpu1\",\"max_outputs\":1,\"outputs\":[{\"name\":\"ilab1\",\"xres\":1280,\"yres\":800}]}\u001b[K\r\nError: '{\"driver\":\"virtio-gpu-pci\"' is not a valid device model name\r\n(qemu) ",
       "mid_compositor_outputs": 2,
@@ -319,11 +328,11 @@
     ],
     "SILICON_EXACT_EMULATION": false,
     "PHYSICAL_DUAL_PANEL": "PENDING",
-    "note": "DRM enum / dual connected alone insufficient; missing: focus_move"
+    "note": "DRM enum / dual connected alone insufficient; missing: window_placement_on_both_outputs,focus_move"
   },
   "GUEST_DUAL_OUTPUT_PASS_retained": true,
   "compositor_output_count": 2,
   "compositor_surfaces": 2,
-  "note": "DRM enum / dual connected alone insufficient; missing: focus_move",
+  "note": "DRM enum / dual connected alone insufficient; missing: window_placement_on_both_outputs,focus_move",
   "architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add"
 }

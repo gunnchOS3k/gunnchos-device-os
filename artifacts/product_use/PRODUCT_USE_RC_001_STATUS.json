@@ -54,9 +54,9 @@
   "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "S0_open": 0,
   "S1_open": [
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (missing window_placement_on_both_outputs + focus_move; git FAIL)",
     "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (blocker: guest_browser_state_not_committed; no lab_browser; migration-alone forbidden)",
     "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
-    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS / focus_move OPEN (prior host disk ENOSPC mid-run)",
     "Handheld dock continuity OPEN",
     "G11 reboot/resume schoolwork NOT_RUN",
     "Persona tokens remain false until full pickup-and-use journeys"
@@ -238,7 +238,7 @@
   },
   "ring_mutation": "DEMOTED_OPEN",
   "handheld_dock_continuity": "OPEN",
-  "updated_at_utc": "2026-08-14T00:30:43Z",
+  "updated_at_utc": "2026-08-14T00:41:26Z",
   "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
   "HONESTY_OF_STATED_CLAIMS": "FAIL",
   "HONESTY_NOTE": "Independent VP on tip ece2b0f: FAIL \u2014 G11 offline link_down mislabel; quiz curl-backed; fixture-as-product; nested journey_run.ring still true. Ring demotion/tokens/#20+#34 OK. Edmund-mergeable NO.",
@@ -275,26 +275,27 @@
     "acl_code_fix": "X-WAIKE-Role required; teacher keys not embedded in HTML"
   },
   "s1_closer": {
-    "started_at_utc": "2026-08-14T00:29:10Z",
-    "finished_at_utc": "2026-08-14T00:29:46Z",
+    "finished_at_utc": "2026-08-14T00:41:26Z",
+    "tip_base": "61d6e05",
+    "disk_guard_gi": 8,
     "boot_ok": true,
     "only": [
-      "G13"
+      "G14",
+      "RING"
     ],
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
-    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
-    "RING_SPATIAL_ACCURACY": null,
-    "G11_ok": false,
     "G13_ok": true,
-    "G13_claim": "fixture_lab_with_role_acl",
+    "G13_fs_hygiene_retained": true,
     "G14_DSXL": false,
+    "G14_missing": [
+      "window_placement_on_both_outputs",
+      "focus_move"
+    ],
     "G14_git": false,
-    "G15_ok": false,
-    "Edmund_mergeable": false,
-    "tokens_remain_false": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_blocker": "guest_browser_state_not_committed",
     "LIVE_visual_retained": true,
     "G15_PASS_WITH_CAVEAT_retained": true,
-    "G13_fs_hygiene_ok": true,
-    "live_reverify_note": "Backing debian qcow restored after ENOSPC cleanup; live G13 FS+ACL re-pass"
+    "Edmund_mergeable": false,
+    "tokens_remain_false": true
   }
 }
