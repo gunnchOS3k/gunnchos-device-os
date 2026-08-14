@@ -1,0 +1,18 @@
+{
+  "persona": "G15",
+  "package": "libreoffice-writer-headless",
+  "license_note": "LibreOffice \u2014 MPL-2.0 / mature office suite already on Interactive Guest image",
+  "toy_drawing_surface": false,
+  "ok": true,
+  "observation_class": "GUEST_OBSERVED",
+  "stdout": "/usr/bin/soffice\nODT_OK\nconvert /root/creative/concept.odt -> /var/lib/gunnchos/creative/concept.pdf using filter : writer_pdf_Export\nOverwriting: /var/lib/gunnchos/creative/concept.pdf\nconvert /root/creative/concept.odt -> /var/lib/gunnchos/creative/concept.html using filter : HTML:EmbedImages\nOverwriting: /var/lib/gunnchos/creative/concept.html\ntotal 24\ndrwxr-xr-x 2 root root 4096 Aug 13 22:57 .\ndrwxr-xr-x 7 root root 4096 Aug 13 22:45 ..\n-rw-r--r-- 1 root root  586 Aug 13 22:57 concept.html\n-rw-r--r-- 1 root root 9728 Aug 13 22:57 concept.pdf\nCREATIVE_EXPORT_OK PDF\n",
+  "preview": {
+    "ok": true,
+    "stdout": "1839 bash -lc pgrep -af soffice | head; file /var/lib/gunnchos/creative/concept.pdf; python3 -c \"import pathlib;\\nfor n in ('concept.png','concept.pdf'):\\n p=pathlib.Path('/var/lib/gunnchos/creative')/n\\n print(n, p.stat().st_size if p.exists() else 0)\"\n/var/lib/gunnchos/creative/concept.pdf: PDF document, version 1.6, 1 pages (zip deflate encoded)\n"
+  },
+  "artifact": "/var/lib/gunnchos/creative/concept.pdf",
+  "note": "Retained: guest LibreOffice headless ODT\u2192PDF. Caveat: not interactive Draw UX; PDF bytes not committed to host evidence dir.",
+  "PASS_WITH_CAVEAT": true,
+  "host_pulled_pdf_binary": false,
+  "interactive_draw_ux": false
+}

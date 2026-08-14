@@ -1,0 +1,181 @@
+{
+  "schema": "gunnchos.product_use_rc_001.independent_verifier_result.v1",
+  "work_item": "PRODUCT-USE-RC-001",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "cursor_never_merges": true,
+  "prefer_fail_over_false_pass": true,
+  "GAME-RC-003": "DO_NOT_START",
+  "AI-003": "DO_NOT_START",
+  "WP-001": "DO_NOT_START",
+  "pr": {
+    "number": 115,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/115",
+    "draft": true,
+    "branch": "stream/product-use-rc-001",
+    "title": "PRODUCT-USE-RC-001 bounded DRAFT (partial evidence)"
+  },
+  "claimed_tip_at_handoff": "ece2b0f4843add817db6f9eefb978b135a4f2826",
+  "claimed_tip_live_confirmed": true,
+  "verified_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",
+  "verified_tip_short": "ece2b0f",
+  "verified_tip_subject": "feat(product-use): G11 WAIKE + G13/G15 guest packs; honest Ring re-earn attempt",
+  "tip_note": "Local HEAD and origin/stream/product-use-rc-001 both resolve to claimed tip ece2b0f. Prior tip e4c7e2f VP FAIL + Ring demotion retained as baseline; this stamp audits NEW G11/G13/G15 partial claims only.",
+  "generated_at_utc": "2026-08-13T23:01:00Z",
+  "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
+  "INDEPENDENT_PASS": false,
+  "HONESTY_OF_STATED_CLAIMS": "FAIL",
+  "HONESTY_NOTE": "Prefer-fail on honesty of post-demotion partial packet: G11 offline/reconnect is mislabeled (persona table claims link_down/link_up; OFFLINE_NOTE + script use --interface lo only). G11 quiz_submit this run is curl/process_run-backed (HID delta = assignment_draft only). G11/G13 surfaces are planted HTML+collector fixtures, not shipping WAIKE. PRODUCT_USE_RC_001_STATUS still nests journey_run.ring.RING_TO_REAL_APP_STATE_MUTATION_PASS=true while top-level is false. Ring demotion/false, persona tokens false, Beat Link/#34 branch labels, Edmund-mergeable NO otherwise hold.",
+  "TOKEN_LABEL_HONESTY": "PASS",
+  "READY_FOR_EDMUND_MERGE": false,
+  "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
+  "YES_AS_PARTIAL_INGEST_ONLY": false,
+  "YES_AS_PARTIAL_INGEST_ONLY_NOTE": "Packet still packages contested G11/G13/G15 journey PASS-shaped claims plus stale nested Ring true. Not ingest-only.",
+  "claim_firewall": {
+    "SHIPPING_IMAGE": false,
+    "SILICON_EXACT_EMULATION": false,
+    "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+    "persona_tokens_all_false": true,
+    "REAL_TEACHER_E6": false,
+    "FOUR_GAME_ACCEPTED_MAIN_RC": false,
+    "gunnchAI3k#34": "OPEN_BRANCH_EVIDENCE_ONLY",
+    "Beat_Link#20": "BRANCH_EVIDENCE_NOT_ACCEPTED_MAIN_RC"
+  },
+  "ci": {
+    "verdict": "PARTIAL_IN_PROGRESS",
+    "head_sha": "ece2b0f4843add817db6f9eefb978b135a4f2826",
+    "note": "Most Actions green at stamp time; digital-lock, gate1, qemu-guest-path (x2), reality, test, prove-phase-xv still pending. Tip SHA match confirmed via gh.",
+    "required_settled": false
+  },
+  "challenges": {
+    "1_live_tip_ci": {
+      "tip_match": true,
+      "ci": "PARTIAL_IN_PROGRESS",
+      "verdict": "PARTIAL"
+    },
+    "2_g11_in_guest_waike_offline": {
+      "claimed": "G11 in-guest WAIKE lesson/quiz from accepted #43 + local offline/reconnect PASS; no terminal",
+      "content_from_owner_43": true,
+      "guest_chromium_opened_learner_html": true,
+      "shipping_waike_product": false,
+      "surface": "fixture HTML pack + Python ThreadingHTTPServer collector on 127.0.0.1:18767 (waike-product-use-collector)",
+      "hid_delta_this_run": "3x assignment_draft (draft-for-GENERAL_IT-w01) only",
+      "quiz_submit_this_run": "curl/process_run schoolwork-draft+quiz_submit (content-identical append; no Chromium HID quiz proven)",
+      "stale_state_inflation": "before already had 20 events including quiz_submit; lesson_ok checks presence not this-run delta",
+      "offline_method": "curl --interface lo to force EXTERNAL_BLOCKED; NOT ip_link_down / route delete / resolv mutation",
+      "offline_note_admits_not_link_down": true,
+      "persona_table_offline_label": "GUEST_OBSERVED:link_down_local_waike_cache — DISHONEST",
+      "persona_table_reconnect_label": "GUEST_OBSERVED:link_up_state_intact — DISHONEST (no prior link-down)",
+      "terminal": "no interactive foot for G11; heavy bash -lc via guest-agent process_run (AUTOMATED_GUEST_AGENT)",
+      "observation_class": "GUEST_OBSERVED for guest FS/HTTP OK; HOST ingest path remains separate HOST_OBSERVED — but offline label is not honest GUEST link-down",
+      "verdict": "FAIL"
+    },
+    "3_g13_assign_grade_key_leak": {
+      "claimed": "G13 instructor assign/grade fixture, no learner key leak PASS",
+      "learner_html_pack_key_leak": false,
+      "teacher_html_embeds_answer_keys": true,
+      "role_acl": false,
+      "finding": "Same collector serves /teacher.html to any local client — learner role isolation is path convention only, not ACL. Curl grade uses stub keys {present:true}; HID may post real keys into teacher_state. Learner pack/data correctly stripped of answer_keys.",
+      "fixture_as_product": true,
+      "REAL_TEACHER_E6": false,
+      "verdict": "PARTIAL — no learner-pack key leak holds; assign/grade path is fixture+curl; claim overstates isolation"
+    },
+    "4_g15_odt_pdf": {
+      "claimed": "G15 LibreOffice ODT→PDF export PASS",
+      "guest_soffice_headless_convert": true,
+      "artifact_guest_path": "/var/lib/gunnchos/creative/concept.pdf",
+      "pdf_file_magic_in_stdout": true,
+      "host_pulled_pdf_binary": false,
+      "odt_source": "python zipfile minimal Writer ODT (not interactive Draw UX)",
+      "package_field_says_libreoffice_draw": true,
+      "toy_canvas": false,
+      "finding": "Real LibreOffice on guest produced a PDF on guest FS (log+file magic). Not toy canvas. Not interactive creative journey; no committed PDF bytes in evidence dir.",
+      "verdict": "PASS_WITH_CAVEAT"
+    },
+    "5_ring_still_demoted": {
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+      "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+      "RING_SPATIAL_ACCURACY": "SIMULATED",
+      "lab_collector_restored": false,
+      "pedestrian_migration_alone_counted": false,
+      "honest_reearn_note": true,
+      "stale_nested_true_in_STATUS_journey_run_ring": "purged_to_false_on_this_stamp",
+      "finding": "Top-level / RUN_SUMMARY / RING evidence correctly false after forbidding lab-collector + migration-alone. Stamp also demoted leftover journey_run.ring nested true in STATUS.",
+      "verdict": "PASS"
+    },
+    "6_persona_tokens_all_false": {
+      "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+      "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+      "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false,
+      "G11_ok_G13_ok_G15_ok_are_not_persona_RC_tokens": true,
+      "verdict": "PASS"
+    },
+    "7_host_vs_guest_labels": {
+      "waike_owner_ingest_HOST_OBSERVED": true,
+      "live_visual_GUEST_OBSERVED_retained": true,
+      "g11_offline_link_down_label": "DISHONEST",
+      "g11_g13_fixture_GUEST_OBSERVED": "acceptable for guest FS/HTTP if labeled fixture; overclaim if read as shipping WAIKE",
+      "verdict": "FAIL"
+    },
+    "8_beatlink_34_not_accepted_main": {
+      "FOUR_GAME_ACCEPTED_MAIN_RC": false,
+      "Beat_Link_20": "BRANCH_EVIDENCE / BEATLINK_20_READY_FOR_EDMUND_MERGE=true does not claim accepted-main RC",
+      "gunnchAI3k#34": "OPEN_BRANCH_EVIDENCE_ONLY",
+      "verdict": "PASS"
+    },
+    "9_live_visual_retained": {
+      "LIVE_GUNNCHOS_VISUAL_PASS": true,
+      "prior_independent_retained": true,
+      "verdict": "PASS"
+    }
+  },
+  "S1_blockers_remaining": [
+    "G11 offline/reconnect must be real link-down/up (or labels demoted to lo-interface local-cache probe) — current link_down persona labels are false",
+    "G11 quiz must be proven via Chromium/HID (or curl path explicitly labeled non-UI); presence-in-stale-state cannot earn lesson_quiz PASS",
+    "G11/G13 fixture collector must not be presented as shipping WAIKE product session; role ACL if claiming learner key isolation beyond pack strip",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS still open — re-earn without lab collector / migration-alone (nested STATUS stale true purged on this VP stamp)",
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS false (missing focus_move)",
+    "G15 pull PDF/PNG bytes into evidence; interactive creative UX still open; persona CREATIVE token false",
+    "Handheld dock continuity OPEN",
+    "G11 reboot/resume schoolwork NOT_RUN",
+    "Full G11–G15 pickup-and-use persona tokens remain false (correct)",
+    "CI not fully settled on tip (pending digital-lock/gate1/qemu-guest-path/reality/test/prove-phase-xv at stamp)"
+  ],
+  "S2_open_acknowledged": [
+    "REAL_TEACHER_E6=false",
+    "HUMAN_E6",
+    "Beat Link #20 BRANCH_EVIDENCE until Edmund merge",
+    "gunnchAI #34 BRANCH_EVIDENCE; journeys must not treat #34 as accepted truth"
+  ],
+  "evidence_inspected": [
+    "artifacts/product_use/PRODUCT_USE_RC_001_STATUS.json",
+    "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+    "artifacts/product_use/journeys/RUN_SUMMARY.json",
+    "artifacts/product_use/journeys/RING_G11_PACKET_SUMMARY.json",
+    "artifacts/product_use/journeys/G11_waike/result.json",
+    "artifacts/product_use/journeys/G11_waike/OFFLINE_NOTE.json",
+    "artifacts/product_use/journeys/G13_teacher/result.json",
+    "artifacts/product_use/journeys/G15_creative/result.json",
+    "artifacts/product_use/journeys/G11_ring/RING_APP_MUTATION_EVIDENCE.json",
+    "artifacts/product_use/journeys/G11_ring/HONEST_REEARN_NOTE.json",
+    "artifacts/product_use/journeys/G11_ring/RING_PASS_DEMOTED.json",
+    "artifacts/product_use/journeys/G12_G11_live_visual/LIVE_VISUAL_EVIDENCE.json",
+    "artifacts/product_use/waike_guest_pack/*",
+    "gunnchos_device_os/product_use/waike_guest_pack.py",
+    "scripts/product_use_close_s1.py"
+  ],
+  "stamp": {
+    "on_pr": 115,
+    "independent_result": "FAIL",
+    "edmund_mergeable": "NO",
+    "message": "Independent VP FAIL on honesty of post-Ring-demotion partial claims (G11 offline mislabel + curl-backed quiz + fixture-as-product; STATUS nested Ring true). LIVE visual / Ring false / persona tokens false / #20+#34 branch labels OK. Edmund-mergeable NO. Cursor does not merge."
+  },
+  "implementer_demotion_applied": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS_after_demotion": false,
+  "persona_tokens_remain_false": true,
+  "prior_vp_tip": "e4c7e2f98420c8401f6c25ec176d38098ea80fbb",
+  "this_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826"
+}

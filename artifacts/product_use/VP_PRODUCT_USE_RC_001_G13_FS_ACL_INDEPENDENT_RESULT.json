@@ -1,0 +1,115 @@
+{
+  "schema": "gunnchos.product_use_rc_001.g13_fs_acl_hygiene_independent_verifier.v1",
+  "work_item": "PRODUCT-USE-RC-001",
+  "scope": "G13_FS_key_colocation_hygiene_PLUS_fixture_lab_with_role_acl_ONLY",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "cursor_never_merges": true,
+  "prefer_fail_over_false_pass": true,
+  "pr": {
+    "number": 115,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/115",
+    "draft": true,
+    "branch": "stream/product-use-rc-001"
+  },
+  "claimed_tip_at_request": "9841a2e",
+  "live_tip_at_start": "8b77dcda54f7bd2aff4ea3f7e7e73fcd72cae26a",
+  "verified_tip": "8b77dcda54f7bd2aff4ea3f7e7e73fcd72cae26a",
+  "verified_tip_short": "8b77dcd",
+  "hygiene_fix_tip": "f06d67a00951e4ab67bf916099bd1ee688fc6fef",
+  "prior_scoped_ACL_VP_retained": "6838ca9",
+  "prior_FS_ACL_VP_retained": "32d4a78/8b77dcd",
+  "generated_at_utc": "2026-08-14T00:30:43Z",
+  "disk": {
+    "volume": "/System/Volumes/Data",
+    "avail_start": "~10Gi",
+    "avail_after_backing_restore": "6.4Gi",
+    "avail_after_g13_reverify": "6.0Gi",
+    "note": "ENOSPC recovery held; debian backing qcow restored (~326Mi) to re-enable guest boot; mid-run did not re-fill to ENOSPC"
+  },
+  "VP_G13_FS_ACL_HYGIENE": "PASS",
+  "INDEPENDENT_PASS_SCOPED": true,
+  "HONESTY_OF_STATED_G13_FS_ACL_CLAIMS": "PASS",
+  "HONESTY_NOTE": "Live reverify PASS after ENOSPC recovery on tip 8b77dcd (+stamp): waike-teacher DIR=700 DATA=600; learner teacher_data/grades ABSENT; ACL learner 403 / teacher 200 with X-WAIKE-Role; assign/grade OK; no key leak; fixture_lab_with_role_acl; not shipping WAIKE; TEACHER token false; REAL_TEACHER_E6=false; LIVE+G15 PASS_WITH_CAVEAT retained; Ring false; G11 demoted. Residuals: host flat pack still co-ships teacher_* for deploy; spoofable X-WAIKE-Role.",
+  "READY_FOR_EDMUND_MERGE": false,
+  "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
+  "YES_AS_PARTIAL_INGEST_ONLY": true,
+  "claim_firewall": {
+    "shipping_waike_teacher_app": false,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "REAL_TEACHER_E6": false,
+    "persona_tokens_all_false": true,
+    "G13_claim": "fixture_lab_with_role_acl"
+  },
+  "challenges": {
+    "1_perms": {
+      "verdict": "PASS",
+      "DIR": 700,
+      "DATA": 600,
+      "teacher_fs_root": "/var/lib/gunnchos/waike-teacher",
+      "evidence": "LEARNER_NO_TEACHER_DATA\nTEACHER_DIR=700\nTEACHER_DATA=600\nLEARNER_DIR=755\nSCRUB_RC=0\n"
+    },
+    "2_scrub": {
+      "verdict": "PASS",
+      "teacher_data": "ABSENT",
+      "grades": "ABSENT",
+      "fs_hygiene_probe": "LEARNER_TEACHER_DATA=ABSENT\nLEARNER_GRADES=ABSENT\nTEACHER_DATA=PRESENT\nDIR=700\nDATA=600\nKEYS_NONEMPTY True\nLEARNER_DATA_KEYS none\n",
+      "host_learner_dir": [
+        "MANIFEST.json",
+        "learner.html",
+        "learner_data.json"
+      ]
+    },
+    "3_acl": {
+      "verdict": "PASS",
+      "DENY": 403,
+      "DENY_KEYS": 403,
+      "ALLOW": 200,
+      "KEYS": 200,
+      "LEARNER_GRADE_GET": 403,
+      "acl_probe": "DENY=403\nDENY_KEYS=403\nALLOW=200\nKEYS=200\n",
+      "deploy_curl": "L=200 T403=403 K403=403 TOK=200\n",
+      "assign_grade_ok": true,
+      "learner_key_leak": false,
+      "prior_ACL_VP": "6838ca9"
+    },
+    "4_labels": {
+      "verdict": "PASS",
+      "claim": "fixture_lab_with_role_acl",
+      "tokens_false": true,
+      "REAL_TEACHER_E6": false,
+      "shipping_waike_teacher_app": false
+    },
+    "5_shipping": {
+      "verdict": "PASS",
+      "shipping_waike_teacher_app": false,
+      "LIVE": true,
+      "G15_PASS_WITH_CAVEAT": true,
+      "RING": false,
+      "G11": "DEMOTED",
+      "G14": "OPEN_ENOSPC_prior"
+    }
+  },
+  "S1_remaining": [
+    "G11 DEMOTED",
+    "RING OPEN",
+    "G14 OPEN ENOSPC/focus_move",
+    "dock OPEN",
+    "reboot NOT_RUN",
+    "tokens false"
+  ],
+  "live_reverify": {
+    "boot_ok": true,
+    "started_at_utc": "2026-08-14T00:29:10Z",
+    "finished_at_utc": "2026-08-14T00:29:46Z",
+    "console_log": "artifacts/product_use/s1_g13_hygiene_console_reverify.log",
+    "S1_CLOSER_SUMMARY": "artifacts/product_use/journeys/S1_CLOSER_SUMMARY.json"
+  },
+  "stamp": {
+    "on_pr": 115,
+    "scoped_result": "PASS",
+    "edmund_mergeable": "NO",
+    "message": "Scoped VP PASS G13 FS+ACL live reverify on 8b77dcd. Edmund-mergeable NO. Cursor does not merge."
+  }
+}

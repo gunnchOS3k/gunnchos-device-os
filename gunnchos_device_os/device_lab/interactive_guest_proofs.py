@@ -53,8 +53,9 @@ def boot_interactive_guest(
 ) -> dict[str, Any]:
     os.environ["GUNNCH_LAB_INTERACTIVE_GUEST"] = "1"
     os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
-    os.environ.setdefault("GUNNCHDEVICE_LAB_BOOT_TIMEOUT", str(boot_timeout_s))
-    os.environ.setdefault("GUNNCHDEVICE_LAB_MEMORY_MB", str(memory_mb))
+    os.environ["GUNNCHDEVICE_LAB_BOOT_TIMEOUT"] = str(boot_timeout_s)
+    # Always honor caller memory_mb (setdefault left stale 4096 and OOM'd tight disks).
+    os.environ["GUNNCHDEVICE_LAB_MEMORY_MB"] = str(int(memory_mb))
     if dual:
         os.environ["GUNNCHDEVICE_LAB_DUAL_GPU"] = "1"
     else:
@@ -1003,16 +1004,29 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
 
     focus_moves: list[dict[str, Any]] = []
     for oid in (oid_a, oid_b):
-        if oid == oid_b:
-            for _ in range(16):
-                _agent_call(session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0)
-            click = _agent_call(
-                session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
-            )
-        else:
-            click = _agent_call(
-                session, "input_inject", kind="pointer", dx=100, dy=100, button="left", timeout_sec=10.0
-            )
+        click: dict[str, Any] = {}
+        for attempt in range(4):
+            if oid == oid_b:
+                for _ in range(16):
+                    _agent_call(
+                        session, "input_inject", kind="pointer", dx=80, dy=0, button=None, timeout_sec=5.0
+                    )
+                click = _agent_call(
+                    session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
+                )
+            else:
+                click = _agent_call(
+                    session, "input_inject", kind="pointer", dx=100, dy=100, button="left", timeout_sec=10.0
+                )
+            if click.get("ok"):
+                break
+            # Guest agent virtio-serial can briefly empty-reply under compositor load.
+            if click.get("error") not in {"unix_connect_failed", "empty_or_unmatched_response"} and (
+                "empty" not in str(click.get("detail") or "").lower()
+                and "unix_connect" not in str(click.get("error") or "")
+            ):
+                break
+            time.sleep(0.6 + 0.3 * attempt)
         focus_moves.append(
             {
                 "ok": bool(click.get("ok")) and placement_proven,
@@ -1524,52 +1538,87 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "mousepad_fallback_rejected": True,
     }
 
-    # --- Browser path: Ring-authorized HID click must change in-guest collector via Chromium JS ---
-    # Serve over HTTP (file:// often blocks fetch to 127.0.0.1). Collector also serves HTML.
-    br_state_path = "/var/lib/gunnchos/rings/browser_state.json"
+    # --- Browser path: real Chromium document (contenteditable memo), NOT lab_browser click collector ---
+    # Autosave writes typed body to Documents/RingMemo.txt — document persistence, not a click counter.
+    memo_html_path = "/root/Documents/RingMemo.html"
+    memo_txt_path = "/root/Documents/RingMemo.txt"
+    br_state_path = memo_txt_path  # evidence path alias for pull logic below
     _agent_call(
         session,
         "process_run",
         argv=[
             "bash",
             "-lc",
-            "pkill -f ring-browser-collector || true; pkill -f gunnchos-chromium-ring || true; "
-            f"mkdir -p /var/lib/gunnchos/rings; echo '{{\"clicks\":0,\"marker\":null}}' > {br_state_path}; "
-            "printf '%s\\n' '<!doctype html><html><body style=\"background:#224488;color:#fff;margin:0\">"
-            "<h1>gunnchOS Ring Browser Target</h1>"
-            "<button id=b autofocus style=\"font-size:64px;padding:48px;width:90vw;height:50vh\">CLICK</button>"
+            "pkill -f ring-memo-server || true; pkill -f ring_memo_server || true; "
+            "pkill -f '18766' || true; pkill -f gunnchos-chromium-ring || true; "
+            "fuser -k 18776/tcp 2>/dev/null || true; "
+            "mkdir -p /root/Documents /var/lib/gunnchos/rings; "
+            "rm -f /var/lib/gunnchos/rings/lab_browser.html /var/lib/gunnchos/rings/browser_state.json; "
+            "printf '%s\\n' '<!doctype html><html><head><meta charset=utf-8><title>Ring Memo</title></head>"
+            "<body style=\"font-family:sans-serif;margin:24px;background:#faf7f2;color:#111\">"
+            "<h1>Ring Memo</h1>"
+            "<p>Real document surface — type below. Content autosaves to RingMemo.txt.</p>"
+            "<textarea id=ed autofocus rows=16 "
+            "style=\"width:95%;min-height:50vh;border:1px solid #888;padding:16px;background:#fff;font-size:22px\">"
+            "MemoStart</textarea>"
             "<script>"
-            "function hit(){fetch('/click',{method:'POST',body:'1'}).catch(function(){});}"
-            "document.addEventListener('click',hit,true);"
-            "document.addEventListener('keydown',hit,true);"
-            "document.addEventListener('pointerdown',hit,true);"
-            "setTimeout(function(){try{document.getElementById('b').focus();}catch(e){}},200);"
-            "</script></body></html>' > /var/lib/gunnchos/rings/lab_browser.html",
+            "const ed=document.getElementById(\"ed\");"
+            "function save(){fetch(\"/save\",{method:\"POST\",headers:{\"Content-Type\":\"text/plain\"},"
+            "body:ed.value}).catch(function(){});}"
+            "ed.addEventListener(\"input\",save);"
+            "ed.addEventListener(\"keyup\",save);"
+            "window.addEventListener(\"load\",function(){ed.focus(); ed.setSelectionRange(ed.value.length, ed.value.length); save();});"
+            "setInterval(function(){try{ed.focus();}catch(e){}},1000);"
+            "</script></body></html>' > "
+            + memo_html_path
+            + "; : > "
+            + memo_txt_path,
         ],
+        timeout_sec=20.0,
+    )
+    memo_server_py = "/var/lib/gunnchos/rings/ring_memo_server.py"
+    server_src = (
+        "import http.server, pathlib\n"
+        "DOC=pathlib.Path('/root/Documents'); html=DOC/'RingMemo.html'; txt=DOC/'RingMemo.txt'\n"
+        "class H(http.server.BaseHTTPRequestHandler):\n"
+        "  def do_GET(self):\n"
+        "    data=html.read_bytes() if self.path.split('?',1)[0] in ('/','/RingMemo.html','/index.html') else b'ok'\n"
+        "    self.send_response(200); self.send_header('Content-Type','text/html; charset=utf-8'); "
+        "self.send_header('Content-Length', str(len(data))); self.end_headers(); self.wfile.write(data)\n"
+        "  def do_POST(self):\n"
+        "    n=int(self.headers.get('Content-Length') or 0); body=self.rfile.read(n)\n"
+        "    txt.write_bytes(body); self.send_response(204); self.end_headers()\n"
+        "  def log_message(self,*a): pass\n"
+        "http.server.ThreadingHTTPServer(('127.0.0.1',18776),H).serve_forever()\n"
+    )
+    _agent_call(
+        session,
+        "file_put",
+        path=memo_server_py,
+        bytes_b64=base64.b64encode(server_src.encode("utf-8")).decode("ascii"),
         timeout_sec=20.0,
     )
     _agent_call(
         session,
         "process_start",
-        name="ring-browser-collector",
-        argv=[
-            "python3",
-            "-c",
-            "import json,http.server,pathlib;\n"
-            "ROOT=pathlib.Path('/var/lib/gunnchos/rings');p=ROOT/'browser_state.json';html=ROOT/'lab_browser.html'\n"
-            "class H(http.server.BaseHTTPRequestHandler):\n"
-            "  def do_GET(self):\n"
-            "    data=html.read_bytes() if self.path in ('/','/index.html','/lab_browser.html') else b'ok'\n"
-            "    self.send_response(200);self.send_header('Content-Type','text/html');self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)\n"
-            "  def do_POST(self):\n"
-            "    n=json.loads(p.read_text() if p.exists() else '{}');n['clicks']=int(n.get('clicks') or 0)+1;\n"
-            f"    n['marker']='{marker}';p.write_text(json.dumps(n));self.send_response(204);self.end_headers()\n"
-            "  def log_message(self,*a): pass\n"
-            "http.server.ThreadingHTTPServer(('127.0.0.1',18766),H).serve_forever()",
-        ],
+        name="ring-memo-server",
+        argv=["python3", memo_server_py],
         timeout_sec=15.0,
     )
-    time.sleep(0.8)
+    for _ in range(20):
+        probe = _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/RingMemo.html || echo fail",
+            ],
+            timeout_sec=10.0,
+        )
+        if (probe.get("stdout") or "").strip().startswith("200"):
+            break
+        time.sleep(0.3)
     _agent_call(
         session,
         "process_run",
@@ -1593,64 +1642,96 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "--user-data-dir=/root/.gunnchos-chromium-ring",
             "--no-first-run",
             "--kiosk",
-            "http://127.0.0.1:18766/lab_browser.html",
+            "http://127.0.0.1:18776/RingMemo.html",
         ],
         timeout_sec=20.0,
     )
     launches["browser"] = br_launch
     time.sleep(8.0)
+    # Chromium can race the memo server — re-assert HTTP 200 before HID.
+    _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "pgrep -af ring_memo_server || (python3 /var/lib/gunnchos/rings/ring_memo_server.py & sleep 1); "
+            "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/RingMemo.html || echo fail",
+        ],
+        timeout_sec=20.0,
+    )
     curl_ok = _agent_call(
         session,
         "process_run",
-        argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18766/lab_browser.html || echo fail"],
+        argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/RingMemo.html || echo fail"],
         timeout_sec=15.0,
     )
-    br_before = _agent_call(session, "logs", path=br_state_path, lines=10)
+    br_before = _agent_call(session, "logs", path=memo_txt_path, lines=20)
     ring_br = rings.inject(target="browser", confidence=0.92, gesture="click")
     if ring_br.get("via_stack"):
-        _hid_burst(("tab", "tab", "ret", "spc", "c", "ret", "spc", "ret", "a", "d"), clicks=6)
+        # Focus editable, type marker via Ring-authorized HID (not click-counter POSTs).
+        for _ in range(3):
+            _qemu_monitor_lines(session, "mouse_move 14000 18000")
+            _qemu_monitor_lines(session, "mouse_button 1")
+            time.sleep(0.15)
+            _qemu_monitor_lines(session, "mouse_button 0")
+            time.sleep(0.2)
+        _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
+        typed = _agent_call(session, "input_inject", kind="text", text=" " + marker, timeout_sec=20.0)
+        if typed.get("ok"):
+            uinput_ok = True
+        for ch in marker:
+            if ch.isupper():
+                _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.05)
+            elif ch.isdigit() or ch.islower():
+                _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.05)
+        time.sleep(1.0)
+        _agent_call(session, "input_inject", kind="key", key="spc", timeout_sec=5.0)
         time.sleep(2.0)
-        st0 = _agent_call(session, "logs", path=br_state_path, lines=10)
-        try:
-            c0 = int(json.loads("\n".join(st0.get("lines") or []) or "{}").get("clicks") or 0)
-        except Exception:
-            c0 = 0
-        if c0 < 1:
-            _hid_burst(("ret", "spc", "c", "ret"), clicks=8)
-            time.sleep(2.0)
+        # Force a save POST from inside guest JS context via CDP-less fallback:
+        # append marker through the memo HTTP API only if editor already received HID
+        # (still require marker to appear from typed path). Poll memo file.
+        for _ in range(5):
+            probe = _agent_call(session, "logs", path=memo_txt_path, lines=40)
+            if marker in "\n".join(probe.get("lines") or []):
+                break
+            # Re-focus + retype once more
+            _qemu_monitor_lines(session, "mouse_button 1")
+            time.sleep(0.1)
+            _qemu_monitor_lines(session, "mouse_button 0")
+            _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
+            time.sleep(1.5)
     _ring_browser_curl = curl_ok
-    br_after = _agent_call(session, "logs", path=br_state_path, lines=20)
-    br_before_clicks = 0
-    br_after_clicks = 0
-    try:
-        br_before_clicks = int(json.loads("\n".join(br_before.get("lines") or []) or "{}").get("clicks") or 0)
-    except Exception:
-        pass
-    try:
-        br_after_obj = json.loads("\n".join(br_after.get("lines") or []) or "{}")
-        br_after_clicks = int(br_after_obj.get("clicks") or 0)
-    except Exception:
-        br_after_obj = {}
+    br_after = _agent_call(session, "logs", path=memo_txt_path, lines=40)
+    br_before_text = "\n".join(br_before.get("lines") or [])
+    br_after_text = "\n".join(br_after.get("lines") or [])
     br_mutated = bool(
         ring_br.get("via_stack")
-        and br_after_clicks > br_before_clicks
-        and br_after_obj.get("marker") == marker
+        and marker in br_after_text
+        and br_after_text != br_before_text
+        and "lab_browser" not in br_after_text
     )
     mutations["browser"] = {
         "ring": {k: ring_br.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
-        "before_clicks": br_before_clicks,
-        "after_clicks": br_after_clicks,
-        "after": br_after,
+        "before_text": br_before_text[:200],
+        "after_text": br_after_text[:400],
+        "memo_path": memo_txt_path,
+        "memo_html": memo_html_path,
+        "lab_collector_html_forbidden": True,
+        "click_counter_forbidden": True,
         "mutated": br_mutated,
-        "collector_http": {k: _ring_browser_curl.get(k) for k in ("ok", "stdout", "stderr") if k in _ring_browser_curl},
-        "note": "Requires Chromium JS POST after Ring-authorized HID click — no host file stamp",
+        "http_doc_ok": {k: _ring_browser_curl.get(k) for k in ("ok", "stdout", "stderr") if k in _ring_browser_curl},
+        "note": (
+            "Chromium real RingMemo.html contenteditable document; HID typing must appear in "
+            "RingMemo.txt autosave. lab_browser.html click-collector forbidden."
+        ),
     }
 
-    # --- Game: first-party Pedestrian Godot save MUTATION with process alive=true ---
-    # Independent rejects first-run create with alive=false and Lab RINGRING sidecars.
+    # --- Game: Pedestrian — seed already save_version=2 so v1→v2 migration alone cannot earn ---
+    # Require post-load baseline then HID-driven byte change (xp/unlocks/saved content), process alive.
     seed_cfg = (
         "[meta]\n\n"
-        "save_version=1\n"
+        "save_version=2\n"
         'saved_at="2026-01-01T00:00:00"\n\n'
         "[career]\n\n"
         "xp=11\n"
@@ -1764,12 +1845,14 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         argv=["bash", "-lc", "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null; echo ---; date +%s"],
         timeout_sec=15.0,
     )
+    # Post-load settle WITHOUT HID — capture baseline so load-migration / autosave alone cannot earn.
+    time.sleep(5.0)
+    game_mid_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
     ring_game = rings.inject(target="games", confidence=0.92, gesture="click")
     if ring_game.get("via_stack") and alive.get("ok"):
         _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
         time.sleep(4.0)
-    # Prefer in-process migration/mutation while GUI Godot remains alive (seed was v1).
-    # Never earn via headless first-run create with dead process.
+    # Never earn via headless first-run create with dead process; never earn v1→v2 migration alone.
     alive_after = _agent_call(
         session,
         "process_run",
@@ -1793,40 +1876,93 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         ],
         timeout_sec=15.0,
     )
+
+    def _xp(txt: str) -> int | None:
+        for ln in txt.splitlines():
+            if ln.strip().startswith("xp="):
+                try:
+                    return int(ln.split("=", 1)[1].strip())
+                except Exception:
+                    return None
+        return None
+
+    def _save_ver(txt: str) -> str:
+        for ln in txt.splitlines():
+            if ln.strip().startswith("save_version="):
+                return ln.split("=", 1)[1].strip()
+        return ""
+
     godot_mutated = False
     save_path_used = game_paths[0]
     before_used: dict[str, Any] = {}
     after_used: dict[str, Any] = {}
     first_run_create = False
+    migration_alone_rejected = False
     for p in game_paths:
-        btxt = "\n".join((game_before_snaps[p].get("lines") or []))
+        seed_txt = "\n".join((game_before_snaps[p].get("lines") or []))
+        mid_txt = "\n".join((game_mid_snaps[p].get("lines") or []))
         atxt = "\n".join((game_after_snaps[p].get("lines") or []))
-        created = bool(game_after_snaps[p].get("ok") and atxt and not btxt)
-        changed = bool(btxt and atxt and atxt != btxt)
-        if created and not btxt:
+        baseline = mid_txt or seed_txt
+        created = bool(game_after_snaps[p].get("ok") and atxt and not seed_txt)
+        if created and not seed_txt:
             first_run_create = True
-        # Require mutation of pre-seeded save while process alive — reject first-run create.
-        if ring_game.get("via_stack") and process_alive and changed and not created:
+        # Seed is already v2 — reject if the only delta vs seed is save_version rewrite / timestamp.
+        if seed_txt and atxt and atxt != seed_txt:
+            seed_v, after_v = _save_ver(seed_txt), _save_ver(atxt)
+            if seed_v == "1" and after_v == "2":
+                migration_alone_rejected = True
+            # Strip volatile saved_at lines for causation check
+            def _norm(t: str) -> str:
+                return "\n".join(
+                    ln for ln in t.splitlines() if not ln.strip().startswith("saved_at=")
+                )
+
+            if _norm(seed_txt) == _norm(atxt) and seed_v != after_v:
+                migration_alone_rejected = True
+                continue
+        # Require HID-driven change beyond post-load baseline while process alive.
+        hid_changed = bool(baseline and atxt and atxt != baseline)
+        xp_before, xp_after = _xp(baseline), _xp(atxt)
+        xp_moved = xp_before is not None and xp_after is not None and xp_after != xp_before
+        unlock_moved = ('"ring:seed"' in baseline) != ('"ring:seed"' in atxt) or (
+            baseline.count("true") != atxt.count("true") and hid_changed
+        )
+        input_driven = bool(hid_changed and (xp_moved or unlock_moved or (marker[:8] in atxt)))
+        # Also accept clear non-timestamp content delta after HID beyond mid baseline.
+        if hid_changed and not input_driven:
+            def _norm2(t: str) -> str:
+                return "\n".join(
+                    ln for ln in t.splitlines() if not ln.strip().startswith("saved_at=")
+                )
+
+            input_driven = _norm2(baseline) != _norm2(atxt)
+        if (
+            ring_game.get("via_stack")
+            and process_alive
+            and hid_changed
+            and input_driven
+            and not created
+            and _save_ver(seed_txt or baseline) == "2"
+        ):
             godot_mutated = True
             save_path_used = p
-            before_used = game_before_snaps[p]
+            before_used = game_mid_snaps[p] if mid_txt else game_before_snaps[p]
             after_used = game_after_snaps[p]
+            launches["game"]["input_driven"] = {
+                "xp_before": xp_before,
+                "xp_after": xp_after,
+                "xp_moved": xp_moved,
+                "hid_changed_beyond_post_load_baseline": True,
+                "seed_save_version": "2",
+                "migration_alone_rejected": True,
+            }
             break
-    # If HID did not change bytes yet but seed was v1, Godot load migrates→save while alive.
-    if not godot_mutated and ring_game.get("via_stack") and process_alive:
-        for p in game_paths:
-            btxt = "\n".join((game_before_snaps[p].get("lines") or []))
-            atxt = "\n".join((game_after_snaps[p].get("lines") or []))
-            if btxt and atxt and atxt != btxt and "save_version=2" in atxt:
-                godot_mutated = True
-                save_path_used = p
-                before_used = game_before_snaps[p]
-                after_used = game_after_snaps[p]
-                break
-    # Explicitly reject headless harness first-run path (prior false PASS).
+    # Explicitly reject headless harness / migration-alone paths (prior false PASS).
     if not godot_mutated:
         launches["game"]["harness_rejected"] = True
         launches["game"]["first_run_create_rejected"] = bool(first_run_create or not process_alive)
+        launches["game"]["migration_alone_rejected"] = True
+        launches["game"]["post_load_baseline_required"] = True
     # First-party web game fallback REJECTED for RING PASS (Lab anime-aggressors / lab://).
     web_mutated = False
     web_state = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
@@ -1850,6 +1986,9 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "process_alive": process_alive,
         "first_run_create_rejected": True,
         "headless_harness_rejected": True,
+        "migration_alone_rejected": True,
+        "seed_save_version": "2",
+        "post_load_baseline_required": True,
         "first_party_web_mutated": False,
         "lab_anime_aggressors_rejected": True,
         "lab_html_probe_rejected": True,
@@ -1859,9 +1998,9 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "note": "Lab anime-aggressors surface never earns RING_TO_REAL_APP_STATE_MUTATION_PASS",
         },
         "note": (
-            "Godot Pedestrian save mutation while process alive=true after Ring-authorized HID"
+            "Godot Pedestrian input-driven save change beyond post-load baseline; seed already save_version=2"
             if game_mutated
-            else "Requires Godot Pedestrian save mutation with process alive=true (first-run/dead rejected)"
+            else "Requires HID-driven Pedestrian save delta beyond post-load baseline (migration-alone/first-run rejected)"
         ),
     }
 
@@ -1919,12 +2058,25 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             guest_artifacts["odt_bytes"] = len(raw)
             guest_artifacts["odt_marker"] = marker
             break
-    # Browser state from guest (not Lab Playwright sidecar).
-    br_raw = _pull_guest_file(session, br_state_path)
-    if br_raw:
-        (br_dir / "browser_state.json").write_bytes(br_raw)
-        guest_artifacts["browser_state"] = "browser/browser_state.json"
+    # Browser memo from guest (real document autosave — not lab_browser click collector).
+    br_raw = _pull_guest_file(session, memo_txt_path)
+    br_html = _pull_guest_file(session, memo_html_path)
+    if br_raw and marker.encode("utf-8") in br_raw:
+        (br_dir / "RingMemo.txt").write_bytes(br_raw)
+        guest_artifacts["browser_memo"] = "browser/RingMemo.txt"
         guest_artifacts["browser_bytes"] = len(br_raw)
+        guest_artifacts["browser_marker"] = marker
+        # Compat key for PASS gate (memo replaces click-counter browser_state.json).
+        guest_artifacts["browser_state"] = "browser/RingMemo.txt"
+    if br_html:
+        (br_dir / "RingMemo.html").write_bytes(br_html)
+        guest_artifacts["browser_html"] = "browser/RingMemo.html"
+    # Forbid reintroducing planted collector evidence as PASS artifacts.
+    for banned in ("lab_browser.html", "browser_state.json"):
+        banned_p = br_dir / banned
+        if banned_p.exists():
+            banned_p.unlink()
+    guest_artifacts["lab_browser_collector_forbidden"] = True
     # First-party Godot save if mutated while alive.
     if godot_mutated and process_alive and save_path_used and str(save_path_used).startswith("/"):
         graw = _pull_guest_file(session, str(save_path_used))
@@ -2000,9 +2152,25 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         earned = False
         result["blocker"] = "via_stack_required_for_all_three"
 
+    # Aggregate APPLICATION_INPUT only if RingsBackend observe path earned on all three legs.
+    app_input_flags = []
+    for t in ("libreoffice", "browser", "game"):
+        osp = ((mutations.get(t) or {}).get("ring") or {}).get("os_input_path") or {}
+        app_input_flags.append(bool(osp.get("RING_TO_REAL_APPLICATION_INPUT_PASS")))
+    app_input_earned = bool(earned and app_input_flags and all(app_input_flags))
+
     result.update(
         {
             "RING_TO_REAL_APP_STATE_MUTATION_PASS": earned,
+            "RING_TO_REAL_APPLICATION_INPUT_PASS": app_input_earned,
+            "RING_SPATIAL_ACCURACY": "SIMULATED",
+            "honesty": {
+                "lab_browser_collector_forbidden": True,
+                "pedestrian_migration_alone_forbidden": True,
+                "seed_save_version": "2",
+                "browser_evidence": "RingMemo.txt contenteditable document autosave",
+                "spatial_labeled": "SIMULATED",
+            },
             "pipeline_required": pipeline,
             "pipeline_ok": earned,
             "guest_os_input_present": bool(uinput_ok),
@@ -2011,9 +2179,9 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "mutation_marker": marker,
             "marker_found_in_after": bool(mutations["libreoffice"].get("mutated")),
             "note": (
-                "Ring→SpatialInput→guest HID mutated LibreOffice+browser+Godot; guest artifacts committed"
+                "Ring→SpatialInput→guest HID mutated LibreOffice+RingMemo+Pedestrian (input-driven, no lab collector / no migration-alone); guest artifacts committed"
                 if earned
-                else "Not earned — need Ring stack mutation of LibreOffice/browser/Godot with committed guest artifacts (Lab sidecars rejected)"
+                else "Not earned — need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)"
             ),
         }
     )

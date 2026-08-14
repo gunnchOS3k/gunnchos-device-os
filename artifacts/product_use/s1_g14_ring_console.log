@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/scripts/product_use_close_s1.py", line 1097, in <module>
+    raise SystemExit(main())
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/scripts/product_use_close_s1.py", line 966, in main
+    results["G14"] = run_g14(session, g14_dir)
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/scripts/product_use_close_s1.py", line 554, in run_g14
+    dsxl = attempt_dsxl_dual_compositor_pass(session, evidence_dir)
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/device_lab/interactive_guest_proofs.py", line 948, in attempt_dsxl_dual_compositor_pass
+    (evidence_dir / "dsxl_placement.png").write_bytes(place_bytes)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1265, in write_bytes
+    with self.open(mode='wb') as f:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1242, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1110, in _opener
+    return self._accessor.open(self, flags, mode)
+OSError: [Errno 28] No space left on device: '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/wp011r/dsxl_s1/dsxl_placement.png'

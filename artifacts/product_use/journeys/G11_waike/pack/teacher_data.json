@@ -1,0 +1,117 @@
+{
+  "package_version": "owner-546819c6b395",
+  "course_id": "GENERAL_IT",
+  "title": "General IT \u2014 Operator to Support Specialist",
+  "lesson_id": "GENERAL_IT-w01",
+  "lesson_title": "The Civic Tech Desk \u2014 three jobs a computer actually has",
+  "lesson_body": "At the Gary Civic Tech Desk the machine in front of a patron is not a personality. It remembers (files), it calculates (apps), and it talks (network). Beginners freeze when a window disappears because they cannot name which of those three jobs failed. Ticket 4417 from the library kiosk is a remember-job failure: the essay lived in a browser temp store and the idle timer (1200 seconds) wiped the session. Naming the job changes the next action. You do not 'fix the Internet' for a missing file.\n\nOperator confidence is a spoken path. Say `Documents/waike/desk/4417` out loud before you copy anything. If that folder is missing, create it. Extra folders on the Desktop are clutter, not success. The lab marks required paths; it does not grade wallpaper.\n\nPrivacy is operational, not a poster. The desk forbids storing SSNs, library-card PANs, or passwords in ticket notes. If a patron dictates a password, you write 'credential reset requested' and walk them through a reset \u2014 you never type their secret into chat.\n\nThis week you will also meet the WAIKE Consensus Ladder in miniature: what you saw, what you inferred, what you still need. 'The kiosk is broken' is not an observation. 'Idle logout at 1200s discarded an unsaved textarea' is.",
+  "worked_example": "Idle policy 1200s = 20 minutes. Patron sat down at 14:02, last keystroke 14:07, return 14:28. Session is gone. Restore from the auto-save folder if present; do not disable the timer as your first move \u2014 the timer is a shared-kiosk control.",
+  "assignment": {
+    "id": "a01",
+    "prompt": "Build the required folder tree for ticket 4417, write a four-line operator journal (remember / calculate / talk / what broke), and describe one restore method that is not Ctrl+Z. No patron PII."
+  },
+  "quiz": {
+    "quiz_id": "GENERAL_IT-q01",
+    "week": 1,
+    "items": [
+      {
+        "id": "git-w1-1",
+        "kind": "mcq",
+        "stem": "Ticket 4417 lost an essay after 20 idle minutes. Which job failed first?",
+        "choices": [
+          "Remember (session/files)",
+          "Talk (network)",
+          "Calculate (CPU thermal)",
+          "Print spooler"
+        ]
+      },
+      {
+        "id": "git-w1-2",
+        "kind": "mcq",
+        "stem": "Idle logout is 1200 seconds. How many minutes is that?",
+        "choices": [
+          "12",
+          "20",
+          "15",
+          "1200"
+        ]
+      },
+      {
+        "id": "git-w1-3",
+        "kind": "mcq",
+        "stem": "A patron dictates a password at the desk. What do you record in the ticket?",
+        "choices": [
+          "The password in plaintext",
+          "A screenshot of the login form",
+          "'credential reset requested' and no secret",
+          "The library card PAN"
+        ]
+      },
+      {
+        "id": "git-w1-4",
+        "kind": "mcq",
+        "stem": "Which statement is an observation, not an inference?",
+        "choices": [
+          "The kiosk is broken",
+          "The Internet is down",
+          "Someone hacked the kiosk",
+          "The textarea was empty after idle logout at 14:28"
+        ]
+      },
+      {
+        "id": "git-w1-5",
+        "kind": "mcq",
+        "stem": "Why does the lab mark extra Desktop folders as clutter?",
+        "choices": [
+          "Required paths are the contract; extras are not the job",
+          "Desktop is faster storage",
+          "Windows forbids Desktop folders",
+          "Antivirus scans Desktop only"
+        ]
+      },
+      {
+        "id": "git-w1-6",
+        "kind": "mcq",
+        "stem": "Which restore method is acceptable for 4417 besides Undo?",
+        "choices": [
+          "Disable the idle timer forever",
+          "Copy from auto-save or previous export if present",
+          "Reimage the kiosk immediately",
+          "Post the essay to Discord"
+        ]
+      }
+    ]
+  },
+  "teacher_answer_keys_for_quiz": [
+    {
+      "id": "git-w1-1",
+      "answer_index": 0,
+      "explanation": "The idle timer discarded session state \u2014 a remember job."
+    },
+    {
+      "id": "git-w1-2",
+      "answer_index": 1,
+      "explanation": "1200/60 = 20."
+    },
+    {
+      "id": "git-w1-3",
+      "answer_index": 2,
+      "explanation": "Never store secrets in tickets."
+    },
+    {
+      "id": "git-w1-4",
+      "answer_index": 3,
+      "explanation": "Observation names what you saw and when."
+    },
+    {
+      "id": "git-w1-5",
+      "answer_index": 0,
+      "explanation": "The tree is the acceptance test."
+    },
+    {
+      "id": "git-w1-6",
+      "answer_index": 1,
+      "explanation": "Look for auto-save; do not destroy shared policy first."
+    }
+  ]
+}

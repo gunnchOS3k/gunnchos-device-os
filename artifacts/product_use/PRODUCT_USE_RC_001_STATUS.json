@@ -1,0 +1,301 @@
+{
+  "schema": "gunnchos.product_use_rc_001.status.v1",
+  "work_item": "PRODUCT-USE-RC-001",
+  "stream": "C",
+  "generated_at_utc": "2026-08-13T22:00:00Z",
+  "BEATLINK_20_READY_FOR_EDMUND_MERGE": true,
+  "beatlink_pr": "https://github.com/gunnchOS3k/beatlink-party/pull/20",
+  "beatlink_tip": "f0b599c7eac1e86bd2f8189d4a18b5dd98aba476",
+  "FOUR_GAME_ACCEPTED_MAIN_RC": false,
+  "FOUR_GAME_NOTE": "Stays false until Edmund merges Beat Link #20. Archive #29 / Anime #75 / Pedestrian #16 are accepted-main.",
+  "accepted_mains_verified": {
+    "archive-of-life-artifact-world#29": "c2be7a26f56f1d80251cdb3ad7218e57c272635d",
+    "anime-aggressors#75": "4c817f820ae8c992b5bac0d20e52c999650ca287",
+    "pedestrian-pursuit#16": "cc965fc5d4d6f3a8cb02c1e6d8dfbbd99d173fe3",
+    "waike-research-ops#43": "eb3f416300168ad0410eb76bc2e1c72243add8f8",
+    "gunnchAI3k_main": "c508675",
+    "gunnchAI3k#34": "OPEN_BRANCH_EVIDENCE_ONLY"
+  },
+  "waike_ingest": {
+    "ok": true,
+    "reauthored_in_device_os": false,
+    "owner": "waike-research-ops",
+    "package_version": "owner-546819c6b395",
+    "courses": [
+      "GENERAL_IT",
+      "COMPUTER_NETWORKING",
+      "CYBERSECURITY"
+    ],
+    "learner_key_leak": false,
+    "teacher_has_answer_keys": true,
+    "offline_cache": true,
+    "rollback_tested": true,
+    "signing_tier": "DEV_TEST"
+  },
+  "device_lab_probe": {
+    "profile": "student_14_5",
+    "instance_id": "dev-b393c15c",
+    "ok": true,
+    "qemu_stopped_clean": true,
+    "observation_class": "HOST_OBSERVED",
+    "note": "Session start/stop probe only \u2014 not a persona journey PASS and not guest-app evidence."
+  },
+  "persona_tokens": {
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false
+  },
+  "REAL_TEACHER_E6": false,
+  "STANDARDIZED_6G": false,
+  "6G_CERTIFIED": false,
+  "CARRIER_ACCEPTED": false,
+  "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
+  "S0_open": 0,
+  "S1_open": [
+    "G14 DSXL_DUAL_COMPOSITOR_UX_PASS OPEN (this run ABORTED_DISK_GUARD mid-guest; prior FAIL missing placement+focus_move)",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN (this run ABORTED_DISK_GUARD; prior blocker guest_browser_state_not_committed)",
+    "G11 DEMOTED \u2014 fixture not shipping WAIKE; HID quiz_submit OPEN; offline link_down OPEN (lo-probe only)",
+    "Handheld dock continuity OPEN",
+    "G11 reboot/resume schoolwork NOT_RUN",
+    "Persona tokens remain false until full pickup-and-use journeys"
+  ],
+  "S2_open": [
+    "REAL_TEACHER_E6=false",
+    "HUMAN_E6",
+    "Beat Link #20 BRANCH_EVIDENCE",
+    "gunnchAI #34 BRANCH_EVIDENCE"
+  ],
+  "claim_boundary": "Bounded DRAFT: WAIKE owner ingest + Device Lab profile probe + persona matrix scaffolding. Persona tokens not earned. Cursor does not merge.",
+  "journey_run": {
+    "schema": "gunnchos.product_use_rc_001.journey_run.v1",
+    "packaged_at_utc": "2026-08-13T22:15:43Z",
+    "source": "artifacts/wp011r after product_use_run_journeys Interactive Guest boot",
+    "prefer_fail_over_false_pass": true,
+    "boot": {
+      "ok": true,
+      "qemu_alive": true,
+      "state": {
+        "backend": "QEMU_HVF",
+        "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+        "qemu_version": "QEMU emulator version 11.0.3",
+        "arch": "aarch64",
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host",
+          "note": "macOS Hypervisor.framework"
+        },
+        "pid": 68992,
+        "boot_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/artifacts/product_use/interactive_guest_session/qemu_boot.log",
+        "persist_disk": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+        "display_transport": {
+          "kind": "none_headless",
+          "note": "Interactive Guest headless by default; VNC not wired for this boot path yet",
+          "fake_screenshot_only": false,
+          "guest_outputs": []
+        },
+        "guest_agent": {
+          "ready": true,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "measurement_class": "HOST_OBSERVED",
+          "response": {
+            "ok": true,
+            "ready": true,
+            "response": {
+              "ok": true,
+              "protocol": "gunnchos.guest_agent.v1",
+              "cmd": "ping",
+              "transport": "virtio_serial",
+              "agent_path_label": "virtio-serial",
+              "SILICON_EXACT_EMULATION": false,
+              "production_keys": false,
+              "measurement_class": "GUEST_OBSERVED",
+              "pong": true,
+              "boot_complete": true
+            }
+          }
+        },
+        "monitor_sock": "/tmp/gdli-68986-1084b7/mon.sock",
+        "virtio_serial_sock": "/tmp/gdli-68986-1084b7/ga.sock",
+        "guest_outputs": [],
+        "interactive_guest": {
+          "enabled": true,
+          "boot_path": "uefi_primary_disk",
+          "disk_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
+          "dual_gpu_requested": true,
+          "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+          "SHIPPING_IMAGE": false
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "claim_boundary": "QEMU virt machine \u2260 transistor-level SoC. SILICON_EXACT_EMULATION=false. VF4/VF5/VF6 PHYSICAL_PENDING. Measurement classes: HOST_OBSERVED for host process liveness; VIRTUAL_CONSTRAINED for guest RAM/disk caps.",
+        "measurement_class_process": "HOST_OBSERVED"
+      },
+      "boot_complete": true,
+      "SILICON_EXACT_EMULATION": false,
+      "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+      "environment": {
+        "ok": true,
+        "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+        "arch": "aarch64",
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host",
+          "note": "macOS Hypervisor.framework"
+        },
+        "version": "QEMU emulator version 11.0.3",
+        "image_arch": "aarch64",
+        "SKIPPED_ENVIRONMENT": false
+      }
+    },
+    "live_visual": {
+      "ok": true,
+      "LIVE_GUNNCHOS_VISUAL_PASS": true,
+      "observation_class": "GUEST_OBSERVED",
+      "evidence_copy": "artifacts/product_use/journeys/G12_G11_live_visual",
+      "typed_marker_found": true
+    },
+    "dsxl": {
+      "ok": false,
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+      "observation_class": "GUEST_OBSERVED_PARTIAL_DUAL_PLACEMENT",
+      "evidence_copy": "artifacts/product_use/journeys/G14_dsxl",
+      "partial": {
+        "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+        "dual_windows_placed": true,
+        "windows": [
+          {
+            "app_id": "foot",
+            "output_id": "wl_output-0",
+            "pid": 595,
+            "ok": true,
+            "placement_proven": true,
+            "half": "left",
+            "half_sha256": "6b2c7972f5fce3e0ce69ebded96129b6d9920990a8b05cbc68c0c1becc17cb12"
+          },
+          {
+            "app_id": "mousepad",
+            "output_id": "wl_output-1",
+            "pid": 604,
+            "ok": true,
+            "placement_proven": true,
+            "half": "right",
+            "half_sha256": "29d88af80bd89408ca0f010e5f91146061f074e5cbe17830143f3350fd4a484e"
+          }
+        ],
+        "missing": [
+          "focus_move"
+        ],
+        "png_captures": [
+          "artifacts/product_use/journeys/G14_dsxl/dsxl_left.png",
+          "artifacts/product_use/journeys/G14_dsxl/dsxl_right.png",
+          "artifacts/product_use/journeys/G14_dsxl/dsxl_placement.png"
+        ],
+        "observation_class": "GUEST_OBSERVED_PARTIAL_DUAL_PLACEMENT"
+      }
+    },
+    "ring": {
+      "ok": false,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+      "observation_class": "DEMOTED_OPEN",
+      "evidence_copy": "artifacts/product_use/journeys/G11_ring",
+      "mutations": {
+        "libreoffice": true,
+        "browser": true,
+        "game": true
+      },
+      "DEMOTED": true,
+      "demotion_ref": "artifacts/product_use/journeys/G11_ring/RING_PASS_DEMOTED.json",
+      "note": "Independent VP purged stale nested true on tip ece2b0f \u2014 aligns with top-level demotion.",
+      "RING_TO_REAL_APPLICATION_INPUT_PASS": false
+    },
+    "waike_teacher_isolation": {
+      "ok": true,
+      "observation_class": "HOST_OBSERVED",
+      "package_version": "owner-546819c6b395",
+      "learner_key_leak": false,
+      "teacher_has_answer_keys": true,
+      "course_ids": [
+        "GENERAL_IT",
+        "COMPUTER_NETWORKING",
+        "CYBERSECURITY"
+      ],
+      "note": "Owner #43 ingest projection only \u2014 not an in-guest WAIKE UI journey."
+    },
+    "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
+    "handheld_dock_continuity": "OPEN",
+    "persona_tokens_all_false": true,
+    "claim_boundary": "Finite Interactive Guest subset. Persona pickup-and-use tokens remain false. Cursor does not merge. Beat Link #20 BRANCH_EVIDENCE until Edmund merges.",
+    "persona_table_path": "artifacts/product_use/PERSONA_JOURNEY_TABLE.json",
+    "tokens_earned": {
+      "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+      "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+      "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+      "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false
+    }
+  },
+  "ring_mutation": "DEMOTED_OPEN",
+  "handheld_dock_continuity": "OPEN",
+  "updated_at_utc": "2026-08-14T02:40:32Z",
+  "VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT": "FAIL",
+  "HONESTY_OF_STATED_CLAIMS": "FAIL",
+  "HONESTY_NOTE": "Independent VP on tip ece2b0f: FAIL \u2014 G11 offline link_down mislabel; quiz curl-backed; fixture-as-product; nested journey_run.ring still true. Ring demotion/tokens/#20+#34 OK. Edmund-mergeable NO.",
+  "READY_FOR_EDMUND_MERGE": false,
+  "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "independent_vp_path": "artifacts/product_use/VP_PRODUCT_USE_RC_001_INDEPENDENT_RESULT.json",
+  "independent_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",
+  "ring_g11_packet": {
+    "started_at_utc": "2026-08-13T22:53:21Z",
+    "finished_at_utc": "2026-08-13T22:57:42Z",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
+    "RING_SPATIAL_ACCURACY": "SIMULATED",
+    "G11_ok": false,
+    "G13_ok": false,
+    "G15_ok": true,
+    "Edmund_mergeable": false,
+    "LIVE_visual_retained": true,
+    "independent_honesty": "FAIL"
+  },
+  "Edmund_mergeable": false,
+  "journey_run_ring_nested_stale_true": false,
+  "journey_run_ring_nested_note": "Independent VP demoted stale journey_run.ring.RING_TO_REAL_APP_STATE_MUTATION_PASS=true \u2192 false on tip ece2b0f stamp.",
+  "honesty_demotion": {
+    "at_utc": "2026-08-13T23:05:57Z",
+    "from_vp": "f5e7c9c",
+    "audited_tip": "ece2b0f",
+    "G11_demoted": true,
+    "G13_demoted": true,
+    "G15_retained_with_caveat": true,
+    "Ring_remains_false": true,
+    "LIVE_visual_retained": true,
+    "acl_code_fix": "X-WAIKE-Role required; teacher keys not embedded in HTML"
+  },
+  "s1_closer": {
+    "finished_at_utc": "2026-08-14T02:40:32Z",
+    "tip_base": "2e09bad",
+    "disk_guard": {
+      "required_gi": 8,
+      "pre_run_gi": 8.54,
+      "post_abort_gi": 3.14,
+      "mid_run_breach": true,
+      "breach_log_lines": 38,
+      "action": "STOPPED_GUEST_LEFT_OPEN"
+    },
+    "G13_ok": true,
+    "G13_fs_hygiene_retained": true,
+    "G14_DSXL": false,
+    "G14_this_run": "ABORTED_DISK_GUARD",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_this_run": "ABORTED_DISK_GUARD",
+    "LIVE_visual_retained": true,
+    "G15_PASS_WITH_CAVEAT_retained": true,
+    "overlay_preserved": true,
+    "debian_backing_preserved": true,
+    "Edmund_mergeable": false,
+    "tokens_remain_false": true
+  }
+}

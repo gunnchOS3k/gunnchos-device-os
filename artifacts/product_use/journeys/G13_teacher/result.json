@@ -1,0 +1,37 @@
+{
+  "persona": "G13",
+  "REAL_TEACHER_E6": false,
+  "shipping_waike_product": false,
+  "surface": "fixture_html_pack_plus_local_collector",
+  "ok": true,
+  "observation_class": "GUEST_OBSERVED",
+  "assign_grade_kinds": [
+    "assign_fixture",
+    "grade_fixture"
+  ],
+  "grades": {
+    "last": {
+      "kind": "grade_fixture",
+      "learner_choice": 0,
+      "rubric": "fixture-rubric-v1",
+      "graded": true
+    },
+    "graded": true
+  },
+  "learner_key_leak": false,
+  "teacher_events_present": true,
+  "role_acl_ok": true,
+  "fs_hygiene_ok": true,
+  "fs_hygiene_probe": "LEARNER_TEACHER_DATA=ABSENT\nLEARNER_GRADES=ABSENT\nTEACHER_DATA=PRESENT\nDIR=700\nDATA=600\nKEYS_NONEMPTY True\nLEARNER_DATA_KEYS none\n",
+  "grades_denied_to_learner": true,
+  "acl_probe": "DENY=403\nDENY_KEYS=403\nALLOW=200\nKEYS=200\n",
+  "curl": {
+    "ok": true,
+    "stdout": "OK\nLEARNER_GRADE_GET=403\n",
+    "returncode": 0
+  },
+  "claim": "fixture_lab_with_role_acl",
+  "teacher_fs_root": "/var/lib/gunnchos/waike-teacher",
+  "learner_fs_root": "/var/lib/gunnchos/waike",
+  "note": "Instructor fixture assign/grade with X-WAIKE-Role ACL + separate teacher FS (0700/0600). Not shipping WAIKE teacher app. REAL_TEACHER_E6=false."
+}

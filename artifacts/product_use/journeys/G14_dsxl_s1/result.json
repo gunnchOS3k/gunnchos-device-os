@@ -1,0 +1,56 @@
+{
+  "persona": "G14",
+  "ok": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "dsxl_missing": [
+    "window_placement_on_both_outputs",
+    "focus_move"
+  ],
+  "focus_moves": [
+    {
+      "ok": false,
+      "output_id": "",
+      "click": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "input_inject",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "kind": "pointer",
+        "dx": 100,
+        "dy": 100,
+        "button": "left",
+        "injected_via": "uinput"
+      }
+    },
+    {
+      "ok": false,
+      "output_id": "",
+      "click": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "input_inject",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "kind": "pointer",
+        "dx": 0,
+        "dy": 20,
+        "button": "left",
+        "injected_via": "uinput"
+      }
+    }
+  ],
+  "git_build_test": {
+    "ok": false,
+    "stdout": "",
+    "observation_class": "FAIL"
+  },
+  "observation_class": "PARTIAL_OR_FAIL",
+  "raw_pass_flag": false
+}
