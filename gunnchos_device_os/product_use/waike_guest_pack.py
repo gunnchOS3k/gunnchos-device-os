@@ -1,7 +1,8 @@
 """Build self-contained in-guest WAIKE HTML packs from signed owner ingest.
 
-Does not re-author curriculum — projects accepted #43 learner/teacher ingest
-into static pages the Interactive Guest Chromium can open.
+Does not re-author curriculum — projects accepted #43+#44 six-course
+learner/teacher ingest into static pages the Interactive Guest Chromium can
+open. Catalog course_ids stay owner-exact.
 
 Reads the on-disk waike_store (already signed at ingest time). Does not import
 cryptography / re-verify signatures at pack-build time so journey runners can
@@ -167,6 +168,8 @@ document.getElementById('grade').onclick = async () => {
 
 def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_IT") -> dict[str, Any]:
     slice_ = build_course_slice(repo_root, course_id=course_id)
+    _version, learner_doc, _teacher_doc = _load_active_ingest(repo_root)
+    catalog_ids = [c.get("course_id") for c in (learner_doc.get("courses") or [])]
     out_dir.mkdir(parents=True, exist_ok=True)
     learner_dir = out_dir / "learner"
     teacher_dir = out_dir / "teacher"
@@ -211,7 +214,8 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
                 "course_id": course_id,
                 "package_version": slice_["package_version"],
                 "reauthored": False,
-                "owner": "waike-research-ops#43",
+                "owner": "waike-research-ops#43+#44",
+                "catalog_course_ids": catalog_ids,
                 "learner_has_answer_keys": False,
                 "keys_co_located": False,
             },
@@ -240,7 +244,9 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
                 "course_id": course_id,
                 "package_version": slice_["package_version"],
                 "reauthored": False,
-                "owner": "waike-research-ops#43",
+                "owner": "waike-research-ops#43+#44",
+                "catalog_course_ids": catalog_ids,
+                "stale_three_course_pack": False,
                 "learner_has_answer_keys": False,
                 "host_layout": "learner/ + teacher/ separated; flat copies for deploy helper",
                 "guest_layout": {
@@ -258,6 +264,7 @@ def write_guest_pack(repo_root: Path, out_dir: Path, course_id: str = "GENERAL_I
         "out_dir": str(out_dir),
         "course_id": course_id,
         "package_version": slice_["package_version"],
+        "catalog_course_ids": catalog_ids,
         "learner_has_answer_keys": False,
         "host_separated": True,
     }

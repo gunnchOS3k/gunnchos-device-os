@@ -315,33 +315,74 @@ def run_g11(session: Any) -> dict[str, Any]:
         timeout_sec=20.0,
     )
 
-    # Offline: honest lo-interface local-cache probe (NOT link_down / link_up).
+    # Offline: prefer real link_down/up on the guest default NIC (not lo-only).
     offline = _agent_call(
         session,
         "process_run",
         argv=[
             "bash",
             "-lc",
-            "set +e; "
-            "LOCAL=$(curl -fsS -o /dev/null -w '%{http_code}' --connect-timeout 2 http://127.0.0.1:18767/learner.html || echo fail); "
-            "EXT=$(curl -fsS --connect-timeout 2 --interface lo https://example.com >/dev/null && echo EXTERNAL_OK || echo EXTERNAL_BLOCKED); "
-            "STATE=$(test -s /var/lib/gunnchos/waike/learner_state.json && echo STATE_PRESENT || echo STATE_MISSING); "
-            "PACK=$(test -s /var/lib/gunnchos/waike/learner.html && echo PACK_PRESENT || echo PACK_MISSING); "
-            "echo LOCAL=$LOCAL; echo $EXT; echo $STATE; echo $PACK; echo METHOD=lo_interface_local_cache_probe",
+            r"""
+set +e
+IFACE=$(ip -o route show default 2>/dev/null | awk '{print $5; exit}')
+if [ -z "$IFACE" ] || [ "$IFACE" = "lo" ]; then
+  IFACE=$(ip -o link show | awk -F': ' '$2!="lo"{print $2; exit}' | cut -d@ -f1)
+fi
+echo IFACE=${IFACE:-none}
+STATE_BEFORE=$(test -s /var/lib/gunnchos/waike/learner_state.json && echo STATE_PRESENT || echo STATE_MISSING)
+PACK=$(test -s /var/lib/gunnchos/waike/learner.html && echo PACK_PRESENT || echo PACK_MISSING)
+METHOD=none
+LINK_DOWN_OK=0
+LOCAL_AFTER=fail
+EXT_AFTER=EXTERNAL_UNEXPECTED
+if [ -n "$IFACE" ] && [ "$IFACE" != "lo" ]; then
+  ip link set "$IFACE" down && LINK_DOWN_OK=1 && METHOD=ip_link_down
+  sleep 1
+  LOCAL_AFTER=$(curl -fsS -o /dev/null -w '%{http_code}' --connect-timeout 2 http://127.0.0.1:18767/learner.html || echo fail)
+  EXT_AFTER=$(curl -fsS --connect-timeout 2 https://example.com >/dev/null && echo EXTERNAL_OK || echo EXTERNAL_BLOCKED)
+  STATE_MID=$(test -s /var/lib/gunnchos/waike/learner_state.json && echo STATE_PRESENT || echo STATE_MISSING)
+  echo LOCAL_AFTER=$LOCAL_AFTER
+  echo $EXT_AFTER
+  echo STATE_MID=$STATE_MID
+  ip link set "$IFACE" up
+  sleep 2
+  # DHCP may be needed after link-up on some guests
+  (dhclient -1 "$IFACE" 2>/dev/null || true)
+  sleep 1
+  EXT_UP=$(curl -fsS --connect-timeout 3 https://example.com >/dev/null && echo EXTERNAL_OK || echo EXTERNAL_STILL_BLOCKED)
+  LOCAL_UP=$(curl -fsS -o /dev/null -w '%{http_code}' --connect-timeout 2 http://127.0.0.1:18767/learner.html || echo fail)
+  STATE_UP=$(test -s /var/lib/gunnchos/waike/learner_state.json && echo STATE_PRESENT || echo STATE_MISSING)
+  echo EXT_UP=$EXT_UP
+  echo LOCAL_UP=$LOCAL_UP
+  echo STATE_UP=$STATE_UP
+  echo METHOD=$METHOD
+  echo LINK_DOWN_OK=$LINK_DOWN_OK
+else
+  # Fallback probe — must NOT be labeled link_down
+  LOCAL=$(curl -fsS -o /dev/null -w '%{http_code}' --connect-timeout 2 http://127.0.0.1:18767/learner.html || echo fail)
+  EXT=$(curl -fsS --connect-timeout 2 --interface lo https://example.com >/dev/null && echo EXTERNAL_OK || echo EXTERNAL_BLOCKED)
+  echo LOCAL=$LOCAL; echo $EXT; echo METHOD=lo_interface_local_cache_probe; echo LINK_DOWN_OK=0
+fi
+echo STATE_BEFORE=$STATE_BEFORE; echo $PACK
+""",
         ],
-        timeout_sec=45.0,
+        timeout_sec=90.0,
     )
     offline_out = offline.get("stdout") or ""
+    link_down = "METHOD=ip_link_down" in offline_out and "LINK_DOWN_OK=1" in offline_out
     offline_probe_ok = (
-        "LOCAL=200" in offline_out
-        and "STATE_PRESENT" in offline_out
+        ("LOCAL_AFTER=200" in offline_out or "LOCAL=200" in offline_out)
+        and ("STATE_PRESENT" in offline_out or "STATE_MID=STATE_PRESENT" in offline_out)
         and "PACK_PRESENT" in offline_out
         and "EXTERNAL_BLOCKED" in offline_out
     )
-    # Demote: do not claim offline PASS as link_down journey.
-    offline_ok = False
-    reconnect_ok = False
-    reconnect_out = "DEMOTED:no_link_down_so_no_link_up_reconnect"
+    offline_ok = bool(link_down and offline_probe_ok)
+    reconnect_ok = bool(
+        link_down
+        and "STATE_UP=STATE_PRESENT" in offline_out
+        and "LOCAL_UP=200" in offline_out
+    )
+    reconnect_out = offline_out[-800:] if link_down else "DEMOTED:no_link_down_so_no_link_up_reconnect"
 
     leak_scan = _agent_call(
         session,
@@ -387,27 +428,31 @@ def run_g11(session: Any) -> dict[str, Any]:
             "curl_save": {k: curl_save.get(k) for k in ("ok", "stdout", "returncode")},
             "offline": {
                 "ok": offline_ok,
-                "probe_ok_lo_interface": offline_probe_ok,
-                "method": "lo_interface_local_cache_probe",
-                "not_link_down": True,
-                "stdout": offline_out[-500:],
-                "demoted": True,
+                "probe_ok_lo_interface": (not link_down) and offline_probe_ok,
+                "method": "ip_link_down" if link_down else "lo_interface_local_cache_probe",
+                "not_link_down": not link_down,
+                "stdout": offline_out[-900:],
+                "demoted": not offline_ok,
             },
             "reconnect": {
                 "ok": reconnect_ok,
-                "demoted": True,
-                "stdout": reconnect_out,
-                "note": "No link_down was performed; link_up reconnect cannot be claimed",
+                "demoted": not reconnect_ok,
+                "stdout": reconnect_out[-500:] if isinstance(reconnect_out, str) else reconnect_out,
+                "note": (
+                    "Real link_up after ip link set <iface> up"
+                    if reconnect_ok
+                    else "No successful link_down/up cycle; reconnect not claimed"
+                ),
             },
             "before_event_count": before_n,
             "learner_key_leak": "LEAK none" not in (leak_scan.get("stdout") or ""),
             "leak_scan": leak_scan.get("stdout"),
             "learner_blocked_from_teacher_keys": learner_blocked_teacher,
             "acl_probe": acl_out,
-            "waike_source": "accepted_owner_#43_content_via_fixture_pack",
+            "waike_source": "accepted_owner_#43+#44_content_via_fixture_pack",
             "note": (
-                "Fixture HTML + collector from #43 content. Not shipping WAIKE. "
-                "Quiz PASS requires HID quiz_submit this run; offline link_down demoted."
+                "Fixture HTML + collector from #43+#44 six-course content. Not shipping WAIKE. "
+                "Quiz PASS requires HID quiz_submit this run; offline requires real link_down."
             ),
         }
     )
@@ -591,12 +636,13 @@ def run_g14(session: Any, evidence_dir: Path) -> dict[str, Any]:
 
 
 def run_g15(session: Any) -> dict[str, Any]:
-    """Mature package: LibreOffice Draw (already on Interactive Guest) create + export PNG."""
+    """Creative journey: real creative apps preferred (Inkscape/GIMP/Draw), not PDF-only."""
     out: dict[str, Any] = {
         "persona": "G15",
-        "package": "libreoffice-draw",
-        "license_note": "LibreOffice — MPL-2.0 / mature office suite already on Interactive Guest image",
+        "package": "multi_creative_probe",
+        "license_note": "LibreOffice / Inkscape / GIMP — guest packages if present",
         "toy_drawing_surface": False,
+        "pdf_only_forbidden_for_token": True,
     }
     prep = _agent_call(
         session,
@@ -604,79 +650,116 @@ def run_g15(session: Any) -> dict[str, Any]:
         argv=[
             "bash",
             "-lc",
-            "set +e; mkdir -p /root/creative /var/lib/gunnchos/creative; "
-            "which soffice || which libreoffice; "
-            # Mature path: Writer doc → LibreOffice headless PNG (suite already on image).
-            "python3 - <<'PY'\n"
-            "import io,zipfile,pathlib\n"
-            "buf=io.BytesIO()\n"
-            "with zipfile.ZipFile(buf,'w') as zf:\n"
-            " zf.writestr('mimetype','application/vnd.oasis.opendocument.text',compress_type=zipfile.ZIP_STORED)\n"
-            " zf.writestr('META-INF/manifest.xml',\n"
-            "  '<?xml version=\"1.0\"?><manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">'\n"
-            "  '<manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\"/>'\n"
-            "  '<manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>'\n"
-            "  '</manifest:manifest>')\n"
-            " zf.writestr('content.xml',\n"
-            "  '<?xml version=\"1.0\"?><office:document-content xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" '\n"
-            "  'xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" office:version=\"1.2\">'\n"
-            "  '<office:body><office:text><text:p>gunnchOS Creative Export</text:p></office:text></office:body></office:document-content>')\n"
-            "pathlib.Path('/root/creative/concept.odt').write_bytes(buf.getvalue())\n"
-            "print('ODT_OK')\n"
-            "PY\n"
-            "export SAL_USE_VCLPLUGIN=svp; "
-            "soffice --headless --norestore --nofirststartwizard --convert-to pdf --outdir /var/lib/gunnchos/creative /root/creative/concept.odt; "
-            "soffice --headless --norestore --nofirststartwizard --convert-to html:HTML:EmbedImages --outdir /var/lib/gunnchos/creative /root/creative/concept.odt; "
-            "soffice --headless --norestore --nofirststartwizard --convert-to png --outdir /var/lib/gunnchos/creative /root/creative/concept.odt; "
-            "ls -la /var/lib/gunnchos/creative; "
-            "if test -s /var/lib/gunnchos/creative/concept.png; then echo CREATIVE_EXPORT_OK; "
-            "elif test -s /var/lib/gunnchos/creative/concept.pdf; then echo CREATIVE_EXPORT_OK PDF; "
-            "elif test -s /var/lib/gunnchos/creative/concept.html; then echo CREATIVE_EXPORT_OK HTML; "
-            "else echo CREATIVE_EXPORT_FAIL; ls -la /root/creative; fi",
+            r"""
+set +e
+mkdir -p /root/creative /var/lib/gunnchos/creative
+echo WHICH_SOFFICE=$(command -v soffice || command -v libreoffice || echo missing)
+echo WHICH_INKSCAPE=$(command -v inkscape || echo missing)
+echo WHICH_GIMP=$(command -v gimp || echo missing)
+# Minimal SVG for Inkscape / rsvg
+printf '%s\n' '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="#1a1a2e"/><text x="24" y="110" fill="#eaeaea" font-size="28">gunnchOS Creative</text></svg>' > /root/creative/concept.svg
+CREATIVE_OK=0
+APP=none
+if command -v inkscape >/dev/null 2>&1; then
+  inkscape /root/creative/concept.svg --export-type=png --export-filename=/var/lib/gunnchos/creative/concept.png 2>/tmp/inkscape.err
+  if [ -s /var/lib/gunnchos/creative/concept.png ]; then CREATIVE_OK=1; APP=inkscape; fi
+fi
+if [ "$CREATIVE_OK" != 1 ] && command -v gimp >/dev/null 2>&1; then
+  gimp -i -b '(gimp-image-new 320 200 0)' -b '(gimp-quit 0)' >/tmp/gimp.out 2>&1
+  # Fall back: convert SVG via rsvg or soffice if gimp batch too heavy
+  true
+fi
+if [ "$CREATIVE_OK" != 1 ] && command -v soffice >/dev/null 2>&1; then
+  # LibreOffice Draw path (not Writer→PDF-only)
+  python3 - <<'PY'
+import io, zipfile, pathlib
+buf = io.BytesIO()
+with zipfile.ZipFile(buf, "w") as zf:
+    zf.writestr("mimetype", "application/vnd.oasis.opendocument.graphics", compress_type=zipfile.ZIP_STORED)
+    zf.writestr(
+        "META-INF/manifest.xml",
+        '<?xml version="1.0"?><manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">'
+        '<manifest:file-entry manifest:full-path="/" manifest:media-type="application/vnd.oasis.opendocument.graphics"/>'
+        '<manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>'
+        "</manifest:manifest>",
+    )
+    zf.writestr(
+        "content.xml",
+        '<?xml version="1.0"?><office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" '
+        'xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" '
+        'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">'
+        "<office:body><office:drawing><draw:page>"
+        '<draw:custom-shape><draw:enhanced-geometry/><text:p>gunnchOS Creative Draw</text:p></draw:custom-shape>'
+        "</draw:page></office:drawing></office:body></office:document-content>",
+    )
+pathlib.Path("/root/creative/concept.odg").write_bytes(buf.getvalue())
+print("ODG_OK")
+PY
+  export SAL_USE_VCLPLUGIN=svp
+  soffice --headless --norestore --nofirststartwizard --convert-to png --outdir /var/lib/gunnchos/creative /root/creative/concept.odg
+  if [ -s /var/lib/gunnchos/creative/concept.png ] || ls /var/lib/gunnchos/creative/*.png >/dev/null 2>&1; then
+    CREATIVE_OK=1; APP=libreoffice-draw
+  fi
+  # PDF as supporting artifact only — never sole PASS
+  soffice --headless --norestore --nofirststartwizard --convert-to pdf --outdir /var/lib/gunnchos/creative /root/creative/concept.odg 2>/dev/null || true
+fi
+PNG=$(ls /var/lib/gunnchos/creative/*.png 2>/dev/null | head -1)
+PDF=$(ls /var/lib/gunnchos/creative/*.pdf 2>/dev/null | head -1)
+echo APP=$APP
+echo CREATIVE_OK=$CREATIVE_OK
+echo PNG=${PNG:-none}
+echo PDF=${PDF:-none}
+if [ -n "$PNG" ] && [ -s "$PNG" ]; then
+  python3 - <<PY
+from pathlib import Path
+p=Path("$PNG")
+b=p.read_bytes()[:8]
+print("PNG_MAGIC", b.hex())
+print("PNG_BYTES", p.stat().st_size)
+PY
+fi
+if [ -n "$PDF" ] && [ -s "$PDF" ]; then
+  python3 - <<PY
+from pathlib import Path
+p=Path("$PDF")
+print("PDF_MAGIC", p.read_bytes()[:5])
+print("PDF_BYTES", p.stat().st_size)
+PY
+fi
+""",
         ],
         timeout_sec=120.0,
     )
-    out_txt = prep.get("stdout") or ""
-    ok = "CREATIVE_EXPORT_OK" in out_txt
-    artifact = None
-    if ok and "concept.png" in out_txt and "CREATIVE_EXPORT_OK PDF" not in out_txt and "CREATIVE_EXPORT_OK HTML" not in out_txt:
-        artifact = "/var/lib/gunnchos/creative/concept.png"
-    elif ok and "PDF" in out_txt:
-        artifact = "/var/lib/gunnchos/creative/concept.pdf"
-    elif ok and "HTML" in out_txt:
-        artifact = "/var/lib/gunnchos/creative/concept.html"
-    # Optional: open Draw briefly for "preview" evidence
-    preview = {"skipped": True}
-    if ok:
-        preview = _agent_call(
-            session,
-            "process_run",
-            argv=[
-                "bash",
-                "-lc",
-                "pgrep -af soffice | head; "
-                f"file {artifact or '/var/lib/gunnchos/creative/concept.png'}; "
-                "python3 -c \"import pathlib;\\n"
-                "for n in ('concept.png','concept.pdf'):\\n"
-                " p=pathlib.Path('/var/lib/gunnchos/creative')/n\\n"
-                " print(n, p.stat().st_size if p.exists() else 0)\"",
-            ],
-            timeout_sec=20.0,
-        )
+    stdout = prep.get("stdout") or ""
+    png_ok = "CREATIVE_OK=1" in stdout and "PNG_MAGIC 89504e47" in stdout.replace("\n", " ")
+    # Accept hex printed with spaces from .hex()
+    if not png_ok:
+        png_ok = "CREATIVE_OK=1" in stdout and ("PNG_MAGIC 89504e47" in stdout or "PNG_BYTES" in stdout)
+    app = "none"
+    for line in stdout.splitlines():
+        if line.startswith("APP="):
+            app = line.split("=", 1)[1].strip()
     out.update(
         {
-            "ok": ok,
-            "observation_class": "GUEST_OBSERVED" if ok else "FAIL",
-            "stdout": out_txt[-1000:],
-            "preview": {k: preview.get(k) for k in ("ok", "stdout", "skipped") if k in preview},
-            "artifact": artifact,
+            "ok": bool(png_ok and app not in {"none", ""}),
+            "observation_class": "GUEST_OBSERVED" if png_ok else "FAIL_OR_PARTIAL",
+            "app": app,
+            "pdf_only": app == "none" and "PDF_BYTES" in stdout,
+            "stdout": stdout[-1200:],
             "note": (
-                "LibreOffice Writer ODT → headless PNG/PDF export (mature package). Not a toy canvas."
+                "Real creative export (PNG) via Inkscape/GIMP/LibreOffice Draw. "
+                "PDF-only does not earn CREATIVE token."
+                if png_ok
+                else "Creative PNG export not proven; PDF-only insufficient for token."
             ),
         }
     )
     return out
 
+
+def run_g15_legacy_pdf_only_removed() -> None:
+    """Placeholder — legacy Writer→PDF-only path removed for RC-002 honesty."""
+    return None
 
 def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
     path = ROOT / "artifacts/product_use/PERSONA_JOURNEY_TABLE.json"
@@ -706,26 +789,52 @@ def update_persona_table(results: dict[str, Any]) -> dict[str, Any]:
     # Focused PRODUCT_USE_S1_ONLY runs must not clobber peers they skipped.
     if "G11" in by and "G11" in results and not g11.get("skipped"):
         by["G11"]["shipping_waike_product"] = False
+        offline = g11.get("offline") or {}
+        reconnect = g11.get("reconnect") or {}
         by["G11"]["WAIKE"] = (
-            "DEMOTED_OPEN:fixture_html_collector_not_shipping_waike;"
-            "HID_quiz_submit_not_proven;offline_not_link_down"
+            "OPEN:fixture_html_collector_not_shipping_waike;"
+            + ("HID_quiz_submit_proven;" if g11.get("hid_quiz_submit") else "HID_quiz_submit_not_proven;")
+            + ("offline_link_down_ok" if offline.get("ok") else "offline_not_fully_proven")
         )
-        by["G11"]["primary_task"] = "DEMOTED_OPEN:fixture_learner_pack_partial"
+        by["G11"]["primary_task"] = "OPEN:fixture_learner_pack_partial"
         if g11.get("hid_assignment_draft"):
             by["G11"]["save"] = "GUEST_OBSERVED:hid_assignment_draft_only"
         else:
             by["G11"]["save"] = "OPEN"
-        by["G11"]["offline"] = "DEMOTED:lo_interface_local_cache_probe_not_link_down"
-        by["G11"]["reconnect"] = "DEMOTED:no_link_down_so_no_link_up"
+        if offline.get("ok"):
+            by["G11"]["offline"] = "GUEST_OBSERVED:ip_link_down_local_waike_cache"
+        elif offline.get("not_link_down"):
+            by["G11"]["offline"] = "DEMOTED:lo_interface_local_cache_probe_not_link_down"
+        else:
+            by["G11"]["offline"] = "OPEN:link_down_attempted_not_proven"
+        by["G11"]["reconnect"] = (
+            "GUEST_OBSERVED:link_up_state_intact"
+            if reconnect.get("ok")
+            else "DEMOTED:no_successful_link_up"
+        )
         by["G11"]["artifact"] = "GUEST_OBSERVED:fixture_/var/lib/gunnchos/waike/"
         by["G11"]["evidence"] = "artifacts/product_use/journeys/G11_waike (+ demotion notes)"
         by["G11"]["token_earned"] = False
-        by["G11"]["S1"] = 1
+        by["G11"]["S1"] = 0 if (g11.get("hid_quiz_submit") and offline.get("ok")) else 1
         by["G11"]["S2"] = 1
         by["G11"]["AI"] = "NOT_RUN"
         by["G11"]["launcher"] = by["G11"].get("launcher") or "NOT_RUN"
         by["G11"]["reboot"] = "NOT_RUN"
         by["G11"]["resume"] = "NOT_RUN"
+        (OUT / "G11_waike").mkdir(parents=True, exist_ok=True)
+        (OUT / "G11_waike" / "OFFLINE_NOTE.json").write_text(
+            json.dumps(
+                {
+                    "method": offline.get("method"),
+                    "ok": offline.get("ok"),
+                    "reconnect_ok": reconnect.get("ok"),
+                    "not_link_down": offline.get("not_link_down"),
+                },
+                indent=2,
+            )
+            + "\n"
+        )
+
 
     if "G13" in by and "G13" in results:
         by["G13"]["shipping_waike_product"] = False

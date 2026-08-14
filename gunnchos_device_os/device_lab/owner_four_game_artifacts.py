@@ -17,30 +17,35 @@ from typing import Any
 
 from gunnchos_device_os.device_lab.four_game_honest import honest_sha_entry
 
+# PRODUCT-USE-RC-002: pin to current accepted mains (refresh at stream start).
 ACCEPTED_MAINS: dict[str, dict[str, str]] = {
     "anime-aggressors": {
         "owner_repo": "gunnchOS3k/anime-aggressors",
-        "accepted_main_sha": "16df36d0025a6d124817a1800de65abef689d51f",
+        "accepted_main_sha": "4c817f820ae8c992b5bac0d20e52c999650ca287",
         "sibling": "anime-aggressors",
         "lab_id": "anime-aggressors",
+        "note": "accepted-main after #75 GAME-RC-001; do not reclassify ALPHA as RC",
     },
     "pedestrian-pursuit": {
         "owner_repo": "gunnchOS3k/pedestrian-pursuit",
-        "accepted_main_sha": "3f4dafd0e455a0cf22523bab48a094a542d3141d",
+        "accepted_main_sha": "cc965fc5d4d6f3a8cb02c1e6d8dfbbd99d173fe3",
         "sibling": "pedestrian-pursuit",
         "lab_id": "foot-racing",
+        "note": "accepted-main after #16 GAME-RC-001",
     },
     "archive-of-life-artifact-world": {
         "owner_repo": "gunnchOS3k/archive-of-life-artifact-world",
-        "accepted_main_sha": "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa",
+        "accepted_main_sha": "c2be7a26f56f1d80251cdb3ad7218e57c272635d",
         "sibling": "archive-of-life-artifact-world",
         "lab_id": "earth-species",
+        "note": "accepted-main after #29 GAME-RC-002",
     },
     "beatlink-party": {
         "owner_repo": "gunnchOS3k/beatlink-party",
-        "accepted_main_sha": "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b",
+        "accepted_main_sha": "b64ecb9d8223424f5d6e4b686d50f98fb7f73b05",
         "sibling": "beatlink-party",
         "lab_id": "beatlink-party",
+        "note": "accepted-main after #20 GAME-RC-002",
     },
 }
 

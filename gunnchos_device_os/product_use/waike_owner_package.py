@@ -1,9 +1,15 @@
 """Ingest accepted WAIKE owner packages without re-authoring curriculum.
 
-Source of truth: waike-research-ops (accepted #43 / main). Device-os stores a
-signed, versioned import of owner ingest artifacts, projects learner vs teacher
-views, offline-caches them, and supports migration/rollback. Instructor keys
-must never appear in the learner projection.
+Source of truth: waike-research-ops accepted main after #43+#44 (six-course
+digital RC catalog). Exact owner course_ids:
+
+  GENERAL_IT, COMPUTER_NETWORKING, CYBERSECURITY, SOFTWARE_BUILDER,
+  HARDWARE_ENGINEERING (+ EMBEDDED_PROTOTYPING track), PM_AGILE_LSS
+
+Device-os stores a signed, versioned import of owner ingest artifacts, projects
+learner vs teacher views, offline-caches them, and supports migration/rollback.
+Instructor keys must never appear in the learner projection. Do not re-author
+curriculum here; do not keep a stale three-course pack as the active store.
 """
 from __future__ import annotations
 
@@ -19,6 +25,16 @@ from gunnchos_device_os.release_engineering import dev_keys
 
 SCHEMA = "gunnchos.product_use.waike_owner_package.v1"
 STORE_REL = Path("artifacts/product_use/waike_store")
+REQUIRED_OWNER_COURSE_IDS = frozenset(
+    {
+        "GENERAL_IT",
+        "COMPUTER_NETWORKING",
+        "CYBERSECURITY",
+        "SOFTWARE_BUILDER",
+        "HARDWARE_ENGINEERING",
+        "PM_AGILE_LSS",
+    }
+)
 LEARNER_FORBIDDEN_KEYS = frozenset(
     {
         "answer_index",
@@ -117,6 +133,13 @@ class WaikeOwnerPackageStore:
             raise ValueError(f"unexpected_learner_schema:{learner_doc.get('schema')}")
         if teacher_doc.get("schema") != "waike.teacher_ingest.v1":
             raise ValueError(f"unexpected_teacher_schema:{teacher_doc.get('schema')}")
+
+        course_ids = [c.get("course_id") for c in learner_doc.get("courses", [])]
+        missing = sorted(REQUIRED_OWNER_COURSE_IDS - set(course_ids))
+        if missing:
+            raise ValueError(f"stale_or_incomplete_owner_catalog_missing:{missing}")
+        if len(course_ids) < 6:
+            raise ValueError(f"stale_three_course_pack_rejected:count={len(course_ids)}")
 
         # Defense in depth: never trust owner learner file without stripping.
         learner_view = _strip_learner_secrets(learner_doc)
