@@ -253,6 +253,30 @@ class QemuGuestSession:
                     "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
                     "SILICON_EXACT_EMULATION": False,
                 }
+            # Prefer sealed-base + regenerable COW overlay (base_image_pipeline).
+            # Never mutate the sealed engineering image during persona runs.
+            try:
+                from gunnchos_device_os.device_lab.base_image_pipeline import (
+                    resolve_boot_disk,
+                )
+
+                resolved = resolve_boot_disk(self.repo_root, arch=self.arch)
+                if not resolved.get("ok"):
+                    return {
+                        "ok": False,
+                        "error": resolved.get("error") or "overlay_resolve_failed",
+                        "resolve": resolved,
+                        "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
+                        "SILICON_EXACT_EMULATION": False,
+                    }
+                interactive_disk = Path(str(resolved["disk"]))
+                self.state["boot_disk_resolve"] = resolved
+            except Exception as exc:  # noqa: BLE001 — fall back to base path honestly
+                self.state["boot_disk_resolve"] = {
+                    "ok": False,
+                    "fallback": "base_qcow",
+                    "error": str(exc),
+                }
             # The Interactive Guest is a full Debian disk with its OWN UEFI
             # bootloader/kernel (provisioned by debian_cloud_provisioner.py) —
             # it cannot be booted by attaching it as a secondary virtio-blk

@@ -2,148 +2,80 @@
   "schema": "gunnchos.product_use_rc_002.status.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "stream": "A",
-  "tip": "c10353e5edda0f71f7d29c619b105dcac70db7d4",
+  "tip": "a68fb94592a7118170de7a20172cdab1a4d228ea",
   "pr": {
     "number": 116,
     "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/116",
     "draft": true
   },
-  "updated_at_utc": "2026-08-15T01:17:03Z",
-  "HOST_RESOURCE_BLOCKED": false,
-  "host_space": {
-    "free_gib": 67.95,
-    "required_gib": 25,
-    "preferred_gib": 40,
-    "required_ok": true,
-    "preferred_ok": true
-  },
-  "owner_sha_pins": {
-    "waike-research-ops": "d36e97db6595",
-    "gunnchAI3k": "b646ac050cce",
-    "anime-aggressors": "4c817f820ae8",
-    "pedestrian-pursuit": "cc965fc5d4d6",
-    "archive-of-life-artifact-world": "c2be7a26f56f",
-    "beatlink-party": "b64ecb9d8223",
-    "gunnchos-hardware-industrial-design": "6c0b025e5055",
-    "gunnchos-7gc-ai-ran-field-kit": "2e8baa365ea6",
-    "gunnchos-6g-security-trust-privacy-lab": "d276579333a8"
-  },
-  "four_game_sha_match": true,
-  "waike_catalog_ingested": {
-    "ok": true,
-    "six_course_ok": true,
-    "course_ids": [
-      "GENERAL_IT",
-      "COMPUTER_NETWORKING",
-      "CYBERSECURITY",
-      "SOFTWARE_BUILDER",
-      "HARDWARE_ENGINEERING",
-      "PM_AGILE_LSS"
-    ],
-    "package_version": "owner-cabe2a4c425f",
-    "signing_tier": "DEV_TEST",
-    "rollback_tested": false,
-    "learner_key_leak": false,
-    "stale_three_course_active": false,
-    "reauthored_in_device_os": false
-  },
-  "ai_matrix_consumed": {
-    "ok": true,
-    "counts": {
-      "COMPLETE": 7,
-      "OPEN": 6,
-      "PARTIAL": 3
-    },
-    "COMPLETE": [
-      "AI-UR-001",
-      "AI-UR-002",
-      "AI-UR-003",
-      "AI-UR-004",
-      "AI-UR-005",
-      "AI-UR-006",
-      "AI-UR-016"
-    ],
-    "PARTIAL": [
-      "AI-UR-007",
-      "AI-UR-011",
-      "AI-UR-013"
-    ],
-    "OPEN": [
-      "AI-UR-008",
-      "AI-UR-009",
-      "AI-UR-010",
-      "AI-UR-012",
-      "AI-UR-014",
-      "AI-UR-015"
-    ],
-    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
-    "persona_safe_capabilities": {
-      "artifacts": {
-        "status": "COMPLETE",
-        "task_id": "AI-UR-003"
-      },
-      "local_fast": {
-        "status": "COMPLETE",
-        "task_id": "AI-UR-016"
-      },
-      "projects_memory": {
-        "status": "COMPLETE",
-        "task_id": "AI-UR-002"
-      },
-      "socratic": {
-        "status": "COMPLETE",
-        "task_id": "AI-UR-004"
-      },
-      "source_grounded": {
-        "status": "COMPLETE",
-        "task_id": "AI-UR-006"
-      },
-      "tool_permission": {
-        "status": "COMPLETE",
-        "task_id": "AI-UR-005"
-      }
-    }
-  },
-  "four_game_regression": {
-    "status": "NOT_RUN_PENDING_GUEST_DISK",
-    "FOUR_GAME_ACCEPTED_MAIN_RC": false,
-    "ALPHA_reclassified_as_RC": false,
-    "surrogates": false
-  },
-  "persona_table": "artifacts/product_use/PERSONA_JOURNEY_TABLE.json (RC-001 retained; RC-002 guest re-run pending)",
-  "ring": "OPEN",
-  "dock": "OPEN",
-  "reboot_update_recovery": "OPEN",
-  "interactive_guest_reprovision": {
-    "status": "IN_PROGRESS_ORPHAN_QEMU_STILL_DOWNLOADING",
-    "prior_error": "provision_timeout_no_sentinel",
-    "note": "Accidental cleanup of interactive-root qcow2 forced reprovision; apt still downloading. No invented guest PASS."
-  },
+  "updated_at_utc": "2026-08-15T19:16:46Z",
+  "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
   "persona_tokens": {
     "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
     "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
     "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
-    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
-    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": false
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
   },
   "S0_open": 0,
   "S1_open": [
-    "Interactive Guest disk regenerating (apt download in orphan QEMU)",
-    "G11-G15 guest journeys not re-earned on RC-002 tip",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS OPEN",
-    "G14 DSXL focus_move OPEN",
-    "Handheld/Dock continuity OPEN",
-    "Reboot/update/recovery OPEN",
-    "Four-game accepted-main regression NOT_RUN"
+    "G11/Student: need Ring PASS + shipping path (fixture demotes ok)",
+    "G12/Office: dock observed; full office primary-task S1 not closed",
+    "G13/Teacher: fixture ACL ok but REAL_TEACHER_E6=false keeps token false"
   ],
-  "S2_open": [
-    "REAL_TEACHER_E6=false",
-    "HUMAN_E6",
-    "No GAME-RC-003/AI-003/WP-001"
-  ],
+  "legs": {
+    "G15": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": null,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": null,
+      "app": "libreoffice-draw",
+      "git_ok": null
+    },
+    "REBOOT": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": null,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": null,
+      "app": null,
+      "git_ok": null
+    },
+    "G14": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": null,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": null,
+      "app": null,
+      "git_ok": true
+    },
+    "RING": {
+      "ok": null,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": "guest_browser_state_not_committed",
+      "app": null,
+      "git_ok": null
+    },
+    "FOUR_GAME": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": null,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+      "blocker": null,
+      "app": null,
+      "git_ok": null
+    }
+  },
+  "kept_legs": {
+    "G11_hid_quiz": true,
+    "G11_offline": true,
+    "G12": true,
+    "DOCK": true,
+    "G13": true,
+    "G15": true,
+    "REBOOT": true
+  },
+  "READY_FOR_INDEPENDENT_VERIFIER": true,
   "READY_FOR_EDMUND_MERGE": false,
-  "EDMUND_MERGEABLE_FOR_THIS_PACKET": "NO",
   "cursor_never_merges": true,
-  "prefer_fail_over_false_pass": true,
-  "claim_boundary": "DRAFT #116: host ingest+honesty+pins+25/40GiB gate landed. Guest persona/Ring/four-game legs OPEN until Interactive Guest reprovision sentinel PASS. Tokens false. Cursor does not merge."
+  "prefer_fail_over_false_pass": true
 }

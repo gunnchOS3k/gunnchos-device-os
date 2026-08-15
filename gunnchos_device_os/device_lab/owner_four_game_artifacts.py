@@ -10,42 +10,44 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tarfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.device_lab.four_game_honest import honest_sha_entry
 
-# PRODUCT-USE-RC-002: pin to current accepted mains (refresh at stream start).
+# PRODUCT-USE-RC-002: pin to current accepted mains (refresh after live GitHub wins).
 ACCEPTED_MAINS: dict[str, dict[str, str]] = {
     "anime-aggressors": {
         "owner_repo": "gunnchOS3k/anime-aggressors",
-        "accepted_main_sha": "4c817f820ae8c992b5bac0d20e52c999650ca287",
+        "accepted_main_sha": "9770674fdce94e19270d0f5683e6fcf74b4111f3",
         "sibling": "anime-aggressors",
         "lab_id": "anime-aggressors",
-        "note": "accepted-main after #75 GAME-RC-001; do not reclassify ALPHA as RC",
+        "note": "accepted-main after #76 GAME-RC-003; do not reclassify ALPHA as RC",
     },
     "pedestrian-pursuit": {
         "owner_repo": "gunnchOS3k/pedestrian-pursuit",
-        "accepted_main_sha": "cc965fc5d4d6f3a8cb02c1e6d8dfbbd99d173fe3",
+        "accepted_main_sha": "80ca8ee7e96da0e86184fe24b10831265588c1a3",
         "sibling": "pedestrian-pursuit",
         "lab_id": "foot-racing",
-        "note": "accepted-main after #16 GAME-RC-001",
+        "note": "accepted-main after #17 GAME-RC-003",
     },
     "archive-of-life-artifact-world": {
         "owner_repo": "gunnchOS3k/archive-of-life-artifact-world",
-        "accepted_main_sha": "c2be7a26f56f1d80251cdb3ad7218e57c272635d",
+        "accepted_main_sha": "74f5761cdc47fdb7de34ff93b402fac311bf2e47",
         "sibling": "archive-of-life-artifact-world",
         "lab_id": "earth-species",
-        "note": "accepted-main after #29 GAME-RC-002",
+        "note": "accepted-main after #30 GAME-RC-004",
     },
     "beatlink-party": {
         "owner_repo": "gunnchOS3k/beatlink-party",
-        "accepted_main_sha": "b64ecb9d8223424f5d6e4b686d50f98fb7f73b05",
+        "accepted_main_sha": "4fc8fe017634ba6bdab62c676fde1355db0d36e0",
         "sibling": "beatlink-party",
         "lab_id": "beatlink-party",
-        "note": "accepted-main after #20 GAME-RC-002",
+        "note": "accepted-main after #21 GAME-RC-004",
     },
 }
 
@@ -104,7 +106,40 @@ def _hoist_pnpm_node_modules(node_modules: Path) -> int:
                     _materialize(inner, node_modules / child.name / inner.name)
             else:
                 _materialize(child, node_modules / child.name)
+    # Drop pnpm virtual store after hoist — prevents multi-GB / truncated tars.
+    try:
+        shutil.rmtree(pnpm)
+    except OSError:
+        pass
     return copied
+
+
+def _write_verified_targz(src_dir: Path, dest_tar: Path, arcname: str) -> str:
+    """Write gzip tar and verify it opens + contains expected root."""
+    if dest_tar.exists():
+        dest_tar.unlink()
+    with tarfile.open(dest_tar, "w:gz", compresslevel=6) as tf:
+        tf.add(src_dir, arcname=arcname, filter=_beatlink_tar_filter if arcname == "beatlink-party" else None)
+    # Integrity: must open and enumerate without EOFError.
+    with tarfile.open(dest_tar, "r:gz") as tf:
+        names = tf.getnames()
+        if not names or not any(n.startswith(arcname) for n in names):
+            raise RuntimeError(f"tar_empty_or_missing_root:{dest_tar}")
+    return _sha256_file(dest_tar)
+
+
+def _beatlink_tar_filter(tarinfo: tarfile.TarInfo) -> tarfile.TarInfo | None:
+    """Exclude VCS/tests/maps that bloat guest packages."""
+    name = tarinfo.name.replace("\\", "/")
+    parts = name.split("/")
+    banned = {".git", ".github", ".pnpm", "__pycache__", "test", "tests", ".nyc_output"}
+    if any(p in banned for p in parts):
+        return None
+    if name.endswith((".map", ".ts", ".md")) and "/node_modules/" in f"/{name}/":
+        # Keep package README? Drop maps/ts/md under node_modules only.
+        if name.endswith(".map") or name.endswith(".ts"):
+            return None
+    return tarinfo
 
 
 def _sha256_tree(path: Path) -> str:
@@ -267,33 +302,77 @@ def prepare_owner_guest_staging(repo_root: Path) -> dict[str, Any]:
             shutil.rmtree(bl_dir, ignore_errors=True)
         bl_dir.mkdir(parents=True, exist_ok=True)
         shutil.copytree(bl_web, bl_dir / "web", dirs_exist_ok=True)
-        # Slim server: dist + package.json + node_modules (pnpm deploy)
+        # Slim server: dist + package.json + node_modules (materialized; no dangling symlinks)
         shutil.copytree(
             bl_server,
             bl_dir / "server",
             dirs_exist_ok=True,
-            ignore=shutil.ignore_patterns("tsconfig.json", "*.map"),
+            symlinks=False,
+            ignore_dangling_symlinks=True,
+            ignore=shutil.ignore_patterns(
+                "tsconfig.json",
+                "*.map",
+                ".pnpm",
+                ".git",
+                ".github",
+                "__pycache__",
+            ),
         )
         hoist_n = _hoist_pnpm_node_modules(bl_dir / "server" / "node_modules")
-        node_dir = bl_dir / "node"
-        node_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(node_bin, node_dir / "node")
-        (node_dir / "node").chmod(0o755)
-        with tarfile.open(staging / "beatlink-party.tar.gz", "w:gz") as tf:
-            tf.add(bl_dir, arcname="beatlink-party")
-        manifest["games"]["beatlink-party"] = {
-            **(bl_meta or {}),
-            "guest_package": "beatlink-party.tar.gz",
-            "package_sha256": _sha256_file(staging / "beatlink-party.tar.gz"),
-            "install_path": "/root/owner-games/beatlink-party",
-            "node_binary_sha256": _sha256_file(node_dir / "node"),
-            "pnpm_hoisted_packages": hoist_n,
-            "required_service_topology": [
-                "node /root/owner-games/beatlink-party/server (Express+Socket.IO :3001)",
-                "STATIC_ASSET_SERVER for web dist (labeled, not proof alone)",
-                "Chromium Wayland client",
-            ],
-        }
+        # Hard fail if Express cannot resolve es-errors/type on the host before packaging.
+        side = bl_dir / "server" / "node_modules" / "es-errors" / "type.js"
+        body = bl_dir / "server" / "node_modules" / "body-parser" / "package.json"
+        emitter = (
+            bl_dir / "server" / "node_modules" / "@socket.io" / "component-emitter" / "package.json"
+        )
+        if not side.is_file() or not body.is_file() or not emitter.is_file():
+            manifest["ok"] = False
+            manifest["games"]["beatlink-party"] = {
+                "ok": False,
+                "error": "beatlink_node_modules_incomplete",
+                "es_errors_type": side.is_file(),
+                "body_parser": body.is_file(),
+                "socketio_component_emitter": emitter.is_file(),
+                "pnpm_hoisted_packages": hoist_n,
+            }
+        else:
+            node_dir = bl_dir / "node"
+            node_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(node_bin, node_dir / "node")
+            (node_dir / "node").chmod(0o755)
+            # Owner release catalog (ACHIEVEMENTS.json) required by RoomManager path.
+            release_src = builds / "beatlink-party" / "release"
+            if (release_src / "ACHIEVEMENTS.json").is_file():
+                if (bl_dir / "release").exists():
+                    shutil.rmtree(bl_dir / "release")
+                shutil.copytree(release_src, bl_dir / "release")
+            tar_path = staging / "beatlink-party.tar.gz"
+            pkg_sha = _write_verified_targz(bl_dir, tar_path, "beatlink-party")
+            # Smoke: extract es-errors/type.js from tar
+            with tarfile.open(tar_path, "r:gz") as tf:
+                member = tf.getmember("beatlink-party/server/node_modules/es-errors/type.js")
+                raw = tf.extractfile(member)
+                if raw is None or not raw.read():
+                    raise RuntimeError("beatlink_tar_missing_es_errors_type")
+                try:
+                    tf.getmember("beatlink-party/release/ACHIEVEMENTS.json")
+                except KeyError as exc:
+                    raise RuntimeError("beatlink_tar_missing_release_achievements") from exc
+            manifest["games"]["beatlink-party"] = {
+                **(bl_meta or {}),
+                "guest_package": "beatlink-party.tar.gz",
+                "package_sha256": pkg_sha,
+                "install_path": "/root/owner-games/beatlink-party",
+                "node_binary_sha256": _sha256_file(node_dir / "node"),
+                "pnpm_hoisted_packages": hoist_n,
+                "tar_verified": True,
+                "release_achievements": True,
+                "required_service_topology": [
+                    "node /root/owner-games/beatlink-party/server (Express+Socket.IO :3001)",
+                    "STATIC_ASSET_SERVER for web dist (labeled, not proof alone)",
+                    "Chromium Wayland client",
+                ],
+            }
     else:
         manifest["ok"] = False
         manifest["games"]["beatlink-party"] = {
@@ -506,15 +585,49 @@ if __name__ == "__main__":
     return manifest
 
 
-def start_host_artifact_httpd(staging: Path, *, port: int = 8766) -> subprocess.Popen[str]:
+def start_host_artifact_httpd(
+    staging: Path, *, port: int = 8766, log_path: Path | None = None
+) -> subprocess.Popen[str]:
     """Serve owner packages to guest via 10.0.2.2 (QEMU usernet).
 
     Port 8766 avoids colliding with the Godot binary cache server on :8765.
     """
+    logf = None
+    if log_path is not None:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        logf = open(log_path, "w", encoding="utf-8")
     return subprocess.Popen(
-        ["python3", "-m", "http.server", str(port), "--bind", "127.0.0.1", "--directory", str(staging)],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        [
+            sys.executable,
+            "-m",
+            "http.server",
+            str(port),
+            "--bind",
+            "127.0.0.1",
+            "--directory",
+            str(staging),
+        ],
+        stdout=logf or subprocess.DEVNULL,
+        stderr=logf or subprocess.DEVNULL,
         text=True,
         start_new_session=True,
     )
+
+
+def wait_host_artifact_httpd(
+    port: int, *, proc: subprocess.Popen[str], attempts: int = 20, delay_s: float = 0.25
+) -> tuple[bool, str | None]:
+    """Poll until http.server accepts on 127.0.0.1:port (or process exits)."""
+    import socket as _sock
+
+    last_err: str | None = None
+    for _ in range(max(1, attempts)):
+        if proc.poll() is not None:
+            return False, f"httpd_exited_rc_{proc.returncode}"
+        try:
+            with _sock.create_connection(("127.0.0.1", port), timeout=1.0):
+                return True, None
+        except OSError as exc:
+            last_err = str(exc)
+        time.sleep(delay_s)
+    return False, last_err or "listen_timeout"

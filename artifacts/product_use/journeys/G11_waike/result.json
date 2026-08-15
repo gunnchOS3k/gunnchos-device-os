@@ -1,416 +1,43 @@
 {
   "persona": "G11",
   "observation_class": "GUEST_OBSERVED",
+  "shipping_waike_product": false,
+  "surface": "fixture_html_pack_plus_local_collector",
   "ok": false,
   "lesson_quiz_saved": false,
-  "kinds": [
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
+  "hid_assignment_draft": false,
+  "hid_quiz_submit": true,
+  "hid_delta_kinds": [
     "quiz_submit",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
     "quiz_submit",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
     "quiz_submit",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
-    "quiz_submit",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
-    "assignment_draft",
     "quiz_submit"
   ],
+  "curl_non_ui_observe_only": true,
   "curl_save": {
     "ok": true,
-    "stdout": "OK\n",
+    "stdout": "CURL_OK\n",
     "returncode": 0
   },
   "offline": {
-    "ok": false,
-    "demoted": true,
-    "method": "lo_interface_local_cache_probe",
-    "not_link_down": true,
-    "prior_probe_stdout": "LOCAL=200\nEXTERNAL_BLOCKED\nSTATE_PRESENT\nPACK_PRESENT\nHAS_QUIZ True\n"
+    "ok": true,
+    "probe_ok_lo_interface": false,
+    "method": "ip_link_down",
+    "not_link_down": false,
+    "stdout": "IFACE=enp0s1\nLOCAL_AFTER=200\nEXTERNAL_BLOCKED\nSTATE_MID=STATE_PRESENT\nEXT_UP=EXTERNAL_OK\nLOCAL_UP=200\nSTATE_UP=STATE_PRESENT\nMETHOD=ip_link_down\nLINK_DOWN_OK=1\nSTATE_BEFORE=STATE_PRESENT\nPACK_PRESENT\n",
+    "demoted": false
   },
   "reconnect": {
-    "ok": false,
-    "demoted": true,
-    "note": "No link_down performed; link_up reconnect claim demoted",
-    "prior_stdout": "HTTP=200\nKINDS assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit,assignment_draft,assignment_draft,assignment_draft,assignment_draft,quiz_submit\nHAS_QUIZ True\nHAS_ASSIGN True\n"
-  },
-  "before": {
-    "events": [
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786659754577,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786659755514,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786659755786,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786660450171,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786660451107,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786660451384,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661055168,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661056100,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661056373,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661431095,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661432031,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661432329,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      }
-    ],
-    "last": {
-      "kind": "quiz_submit",
-      "course_id": "GENERAL_IT",
-      "quiz_id": "GENERAL_IT-q01",
-      "item_id": "git-w1-1",
-      "choice_index": 0
-    }
-  },
-  "after": {
-    "events": [
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786659754577,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786659755514,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786659755786,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786660450171,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786660451107,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786660451384,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661055168,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661056100,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661056373,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661431095,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661432031,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661432329,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661825138,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661826074,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "ts": 1786661826347,
-        "text": "draft-for-GENERAL_IT-w01"
-      },
-      {
-        "kind": "assignment_draft",
-        "course_id": "GENERAL_IT",
-        "lesson_id": "GENERAL_IT-w01",
-        "text": "schoolwork-draft"
-      },
-      {
-        "kind": "quiz_submit",
-        "course_id": "GENERAL_IT",
-        "quiz_id": "GENERAL_IT-q01",
-        "item_id": "git-w1-1",
-        "choice_index": 0
-      }
-    ],
-    "last": {
-      "kind": "quiz_submit",
-      "course_id": "GENERAL_IT",
-      "quiz_id": "GENERAL_IT-q01",
-      "item_id": "git-w1-1",
-      "choice_index": 0
-    }
-  },
-  "pull": {
     "ok": true,
-    "protocol": "gunnchos.guest_agent.v1",
-    "cmd": "logs",
-    "transport": "virtio_serial",
-    "agent_path_label": "virtio-serial",
-    "SILICON_EXACT_EMULATION": false,
-    "production_keys": false,
-    "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/waike/learner_state.json",
-    "lines": [
-      "{\"events\": [{\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786659754577, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786659755514, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786659755786, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"text\": \"schoolwork-draft\"}, {\"kind\": \"quiz_submit\", \"course_id\": \"GENERAL_IT\", \"quiz_id\": \"GENERAL_IT-q01\", \"item_id\": \"git-w1-1\", \"choice_index\": 0}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786660450171, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786660451107, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786660451384, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"text\": \"schoolwork-draft\"}, {\"kind\": \"quiz_submit\", \"course_id\": \"GENERAL_IT\", \"quiz_id\": \"GENERAL_IT-q01\", \"item_id\": \"git-w1-1\", \"choice_index\": 0}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661055168, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661056100, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661056373, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"text\": \"schoolwork-draft\"}, {\"kind\": \"quiz_submit\", \"course_id\": \"GENERAL_IT\", \"quiz_id\": \"GENERAL_IT-q01\", \"item_id\": \"git-w1-1\", \"choice_index\": 0}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661431095, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661432031, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661432329, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"text\": \"schoolwork-draft\"}, {\"kind\": \"quiz_submit\", \"course_id\": \"GENERAL_IT\", \"quiz_id\": \"GENERAL_IT-q01\", \"item_id\": \"git-w1-1\", \"choice_index\": 0}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661825138, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661826074, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"ts\": 1786661826347, \"text\": \"draft-for-GENERAL_IT-w01\"}, {\"kind\": \"assignment_draft\", \"course_id\": \"GENERAL_IT\", \"lesson_id\": \"GENERAL_IT-w01\", \"text\": \"schoolwork-draft\"}, {\"kind\": \"quiz_submit\", \"course_id\": \"GENERAL_IT\", \"quiz_id\": \"GENERAL_IT-q01\", \"item_id\": \"git-w1-1\", \"choice_index\": 0}], \"last\": {\"kind\": \"quiz_submit\", \"course_id\": \"GENERAL_IT\", \"quiz_id\": \"GENERAL_IT-q01\", \"item_id\": \"git-w1-1\", \"choice_index\": 0}}"
-    ]
+    "demoted": false,
+    "stdout": "IFACE=enp0s1\nLOCAL_AFTER=200\nEXTERNAL_BLOCKED\nSTATE_MID=STATE_PRESENT\nEXT_UP=EXTERNAL_OK\nLOCAL_UP=200\nSTATE_UP=STATE_PRESENT\nMETHOD=ip_link_down\nLINK_DOWN_OK=1\nSTATE_BEFORE=STATE_PRESENT\nPACK_PRESENT\n",
+    "note": "Real link_up after ip link set <iface> up"
   },
-  "learner_key_leak": false,
-  "leak_scan": "LEAK none\n",
-  "waike_source": "accepted_owner_#43_guest_pack",
-  "note": "DEMOTED after independent FAIL: fixture not shipping WAIKE; offline/quiz honesty FAIL",
-  "hid_quiz_submit": false,
-  "hid_assignment_draft": true,
-  "shipping_waike_product": false,
-  "surface": "fixture_html_pack_plus_local_collector",
-  "demotion": {
-    "demoted_at_utc": "2026-08-13T23:05:57Z",
-    "independent_vp_tip": "ece2b0f",
-    "vp_stamp": "f5e7c9c",
-    "prior_ok": true,
-    "prior_lesson_quiz_saved": true,
-    "prior_offline_ok": true,
-    "prior_reconnect_ok": true,
-    "reasons": [
-      "offline was lo-interface probe not link_down/link_up",
-      "quiz_submit this run was curl/process_run not HID; HID delta assignment_draft only",
-      "stale-state presence inflated lesson_ok",
-      "surface is fixture HTML+collector not shipping WAIKE product"
-    ]
-  }
+  "before_event_count": 0,
+  "learner_key_leak": true,
+  "leak_scan": "IFACE=enp0s1\nLOCAL_AFTER=200\nEXTERNAL_BLOCKED\nSTATE_MID=STATE_PRESENT\nEXT_UP=EXTERNAL_OK\nLOCAL_UP=200\nSTATE_UP=STATE_PRESENT\nMETHOD=ip_link_down\nLINK_DOWN_OK=1\nSTATE_BEFORE=STATE_PRESENT\nPACK_PRESENT\n",
+  "learner_blocked_from_teacher_keys": false,
+  "acl_probe": "IFACE=enp0s1\nLOCAL_AFTER=200\nEXTERNAL_BLOCKED\nSTATE_MID=STATE_PRESENT\nEXT_UP=EXTERNAL_OK\nLOCAL_UP=200\nSTATE_UP=STATE_PRESENT\nMETHOD=ip_link_down\nLINK_DOWN_OK=1\nSTATE_BEFORE=STATE_PRESENT\nPACK_PRESENT\n",
+  "waike_source": "accepted_owner_#43+#44_content_via_fixture_pack",
+  "note": "Fixture HTML + collector from #43+#44 six-course content. Not shipping WAIKE. Quiz PASS requires HID quiz_submit this run; offline requires real link_down."
 }

@@ -1,15 +1,17 @@
 """Ingest accepted WAIKE owner packages without re-authoring curriculum.
 
-Source of truth: waike-research-ops accepted main after #43+#44 (six-course
+Source of truth: waike-research-ops accepted main after #46 (twelve-course
 digital RC catalog). Exact owner course_ids:
 
   GENERAL_IT, COMPUTER_NETWORKING, CYBERSECURITY, SOFTWARE_BUILDER,
-  HARDWARE_ENGINEERING (+ EMBEDDED_PROTOTYPING track), PM_AGILE_LSS
+  HARDWARE_ENGINEERING (+ EMBEDDED_PROTOTYPING track), PM_AGILE_LSS,
+  AI_ML_EDGE, DATA_VIZ_BI, CLOUD_DEVOPS, WIRELESS_6G, ROBOTICS_CONTROL,
+  GAME_DEV_INTERACTIVE
 
 Device-os stores a signed, versioned import of owner ingest artifacts, projects
 learner vs teacher views, offline-caches them, and supports migration/rollback.
 Instructor keys must never appear in the learner projection. Do not re-author
-curriculum here; do not keep a stale three-course pack as the active store.
+curriculum here; do not keep a stale nine-/six-/three-course pack as active.
 """
 from __future__ import annotations
 
@@ -33,6 +35,12 @@ REQUIRED_OWNER_COURSE_IDS = frozenset(
         "SOFTWARE_BUILDER",
         "HARDWARE_ENGINEERING",
         "PM_AGILE_LSS",
+        "AI_ML_EDGE",
+        "DATA_VIZ_BI",
+        "CLOUD_DEVOPS",
+        "WIRELESS_6G",
+        "ROBOTICS_CONTROL",
+        "GAME_DEV_INTERACTIVE",
     }
 )
 LEARNER_FORBIDDEN_KEYS = frozenset(
@@ -138,8 +146,8 @@ class WaikeOwnerPackageStore:
         missing = sorted(REQUIRED_OWNER_COURSE_IDS - set(course_ids))
         if missing:
             raise ValueError(f"stale_or_incomplete_owner_catalog_missing:{missing}")
-        if len(course_ids) < 6:
-            raise ValueError(f"stale_three_course_pack_rejected:count={len(course_ids)}")
+        if len(course_ids) < 12:
+            raise ValueError(f"stale_sub_twelve_course_pack_rejected:count={len(course_ids)}")
 
         # Defense in depth: never trust owner learner file without stripping.
         learner_view = _strip_learner_secrets(learner_doc)

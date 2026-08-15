@@ -1,8 +1,10 @@
 {
   "AI_USER_READY_002_DIGITAL_PASS": true,
+  "AI_USER_READY_003_DIGITAL_PASS": true,
   "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
   "NANO_FALLBACK_ONLY": true,
-  "claim_boundary": "Consumed from gunnchAI3k accepted main after #34. Not AI-003 work. Not frontier parity. Cursor does not merge.",
+  "accepted_main_pr": 37,
+  "claim_boundary": "Consumed from gunnchAI3k accepted main tip (#37 mastery + #35 honesty matrix). Unmerged #36 refused. Not frontier parity. Cursor does not merge.",
   "complete_ids": [
     "AI-UR-001",
     "AI-UR-002",
@@ -10,15 +12,18 @@
     "AI-UR-004",
     "AI-UR-005",
     "AI-UR-006",
+    "AI-UR-007",
+    "AI-UR-013",
     "AI-UR-016"
   ],
   "counts": {
-    "COMPLETE": 7,
+    "COMPLETE": 9,
     "OPEN": 6,
-    "PARTIAL": 3
+    "PARTIAL": 1
   },
-  "honesty_rule": "Product UI must not claim COMPLETE for PARTIAL/OPEN. Personas may use Local Fast, Projects/memory, source-grounded, Socratic, tool permission, artifacts \u2014 all COMPLETE-class.",
-  "matrix_matches_7_3_6": true,
+  "honesty_rule": "Product UI must not claim COMPLETE for PARTIAL/OPEN. Personas may use Local Fast, Projects/memory, source-grounded, Socratic, tool permission, artifacts, deep research, coding DRAFT PR \u2014 COMPLETE-class after #35. Vision/OCR remains PARTIAL. Tutor/mastery entry consumes #37 sidecar only; never unmerged #36.",
+  "matrix_matches_7_3_6": false,
+  "matrix_matches_9_1_6": true,
   "model_tiers": {
     "allOpenExceptNano": false,
     "localFast": {
@@ -35,12 +40,12 @@
     },
     "localPro": {
       "bytes": null,
-      "candidate": "Qwen/Qwen2-1.5B-Instruct",
+      "candidate": "Qwen/Qwen2.5-1.5B-Instruct",
       "ggufFile": null,
-      "id": "local-pro-qwen2-1_5b",
+      "id": "local-pro-qwen2_5-1_5b",
       "isNanoFallbackOnly": false,
       "license": "Apache-2.0",
-      "notes": "Local Pro OPEN: no pinned hashed GGUF this packet. Fast landing does not imply Pro.",
+      "notes": "Local Pro OPEN until hashed GGUF verifies. Fast landing does not imply Pro.",
       "role": "LOCAL_PRO",
       "sha256": null,
       "weightsStatus": "OPEN"
@@ -67,19 +72,25 @@
     "AI-UR-014",
     "AI-UR-015"
   ],
-  "owner_commit": "b646ac050cceff297fdf1a25ac270bd7f44636f3",
-  "owner_result_path": "artifacts/user-ready/AI_USER_READY_002_RESULT.json",
+  "owner_commit": "f78c940b38a0712c02c8a5571d2e507a26184918",
+  "owner_result_path": "artifacts/user-ready/AI_USER_READY_003_RESULT.json",
   "owner_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k",
-  "packet": "AI-USER-READY-002",
+  "packet": "AI-USER-READY-003",
   "partial_ids": [
-    "AI-UR-007",
-    "AI-UR-011",
-    "AI-UR-013"
+    "AI-UR-011"
   ],
   "persona_safe_capabilities": {
     "artifacts": {
       "status": "COMPLETE",
       "task_id": "AI-UR-003"
+    },
+    "coding_agent_draft_pr": {
+      "status": "COMPLETE",
+      "task_id": "AI-UR-013"
+    },
+    "deep_research": {
+      "status": "COMPLETE",
+      "task_id": "AI-UR-007"
     },
     "local_fast": {
       "status": "COMPLETE",
@@ -102,6 +113,7 @@
       "task_id": "AI-UR-005"
     }
   },
+  "refused_unmerged_pr": 36,
   "schema": "gunnchos.product_use.gunnchai_honesty_consume.v1",
   "ui_claims": {
     "AI-UR-001": "COMPLETE",
@@ -110,15 +122,58 @@
     "AI-UR-004": "COMPLETE",
     "AI-UR-005": "COMPLETE",
     "AI-UR-006": "COMPLETE",
-    "AI-UR-007": "PARTIAL",
+    "AI-UR-007": "COMPLETE",
     "AI-UR-008": "OPEN",
     "AI-UR-009": "OPEN",
     "AI-UR-010": "OPEN",
     "AI-UR-011": "PARTIAL",
     "AI-UR-012": "OPEN",
-    "AI-UR-013": "PARTIAL",
+    "AI-UR-013": "COMPLETE",
     "AI-UR-014": "OPEN",
     "AI-UR-015": "OPEN",
     "AI-UR-016": "COMPLETE"
+  },
+  "waike_mastery": {
+    "AI_WAIKE_MASTERY_INFRA_SMOKE_PASS": true,
+    "WAIKE_AI_DIGITAL_MASTERY_PASS": false,
+    "children": {
+      "DIAGNOSIS_REMEDIATION": {
+        "detail": "PRACTICE_IN_PROGRESS->CERTAINLY_FILLED",
+        "pass": true
+      },
+      "EDUCATOR_COPILOT": {
+        "detail": "HITL grading assist",
+        "pass": true
+      },
+      "KEY_LEAK_CANARY": {
+        "detail": "no-leak-refused-feed",
+        "pass": true
+      },
+      "LEARNING_CONTRACT_DISCOVERY": {
+        "detail": "courses=9",
+        "pass": true
+      },
+      "MODE_SEPARATION": {
+        "detail": "ok",
+        "pass": true
+      },
+      "TOOL_USE_NOT_OVERCLAIMED": {
+        "detail": "status=PARTIAL",
+        "pass": true
+      },
+      "WAIKE_INFRA_SMOKE": {
+        "detail": "waike_infra=true",
+        "pass": true
+      },
+      "WAIKE_MASTERY_HONESTLY_FALSE_OR_EARNED": {
+        "detail": "waike_mastery_pass=false overall=0.6442307692307693",
+        "pass": true
+      }
+    },
+    "note": "Mastery sidecar from accepted #37. Does not invent COMPLETE for #36 OPEN surfaces.",
+    "ok": true,
+    "open": true,
+    "path": "artifacts/waike-mastery/AI_WAIKE_MASTERY_EVAL.json",
+    "present": true
   }
 }

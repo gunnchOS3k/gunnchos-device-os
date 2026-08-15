@@ -1,0 +1,72 @@
+{
+  "schema": "gunnchos.product_use.remaining.v1",
+  "work_item": "PRODUCT-USE-RC-002",
+  "pr": 116,
+  "tip": "a68fb94592a7118170de7a20172cdab1a4d228ea",
+  "at_utc": "2026-08-15T19:16:58Z",
+  "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
+  "cow_refresh": {
+    "waike": "12-course owner-e4dd4df67f95",
+    "gunnchai": "#37 (refused #36/#38)",
+    "field_kit": "#79",
+    "sealed_base_rebuilt": false
+  },
+  "S0_open": 0,
+  "S1_open": [
+    "G11/Student: need Ring PASS + shipping path (fixture demotes ok)",
+    "G12/Office: dock observed; full office primary-task S1 not closed",
+    "G13/Teacher: fixture ACL ok but REAL_TEACHER_E6=false keeps token false"
+  ],
+  "S0_count": 0,
+  "S1_count": 3,
+  "closed_this_wave": [
+    "G14.builder"
+  ],
+  "G14_status": "CLOSED",
+  "failures": [
+    {
+      "id": "RING.browser_mutation",
+      "journey": "RING/G11",
+      "step": "guest_dispatch\u2192app_receipt",
+      "component": "RingMemo",
+      "expected": "marker in RingMemo.txt after Ring-authorized KeyboardEvent overlay",
+      "observed": {
+        "blocker": "guest_browser_state_not_committed",
+        "boundary": "guest_dispatch_to_app_receipt",
+        "waterfall": [
+          "event_source_ready",
+          "browser_http_ready",
+          "browser_before_snapshot",
+          "ring_inject_browser",
+          "identity_auth_transport_ok",
+          "guest_dispatch_clicks",
+          "gunnchos_input_text",
+          "qemu_sendkey_marker",
+          "keyboard_event_overlay_armed",
+          "app_receipt_timeout"
+        ],
+        "before": "",
+        "after": ""
+      },
+      "root_cause": "guest_dispatch_to_app_receipt",
+      "logs": [
+        "artifacts/product_use/journeys/G11_ring/_ring_child_result.json"
+      ],
+      "severity": "S1",
+      "fix": "KeyboardEvent overlay after Ring auth",
+      "rerun_status": "RERUNNED"
+    }
+  ],
+  "kept_pass": {
+    "G11_hid_quiz": true,
+    "G11_offline": true,
+    "G12": true,
+    "DOCK": true,
+    "G13": true,
+    "G15": true,
+    "REBOOT": true
+  },
+  "cursor_never_merges": true,
+  "READY_FOR_EDMUND_MERGE": false,
+  "merge_ready_recommendation": "NO"
+}

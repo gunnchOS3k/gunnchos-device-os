@@ -11,11 +11,12 @@
   },
   "claim_boundary": "gunnchOS Device Lab Interactive Development Guest: Debian 12 genericcloud arm64 cloud image, provisioned guest-natively inside QEMU via cloud-init (no Mac foreign-arch chroot/binfmt/Docker). DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. SILICON_EXACT_EMULATION=false. A successful provision run means packages installed and the guest reported readiness over its own serial console \u2014 it does not by itself earn LIVE_GUNNCHOS_VISUAL_PASS, DSXL_DUAL_COMPOSITOR_UX_PASS, or RING_TO_REAL_APP_STATE_MUTATION_PASS; those require a live guest-agent session with real evidence.",
   "disk": {
-    "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
-    "note": "qcow2 with backing_file=base cloud image; base image cached separately, never committed to git",
+    "immutable": true,
     "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/artifacts/interactive-root-aarch64.qcow2",
-    "sha256": "8d9e502a002a96286d0039e10ad07be4500fcc30166dbd1a19d6d211348343d3",
-    "size_bytes": 3842506752
+    "sealed": true,
+    "sha256": "56cd664333c39c8037eb9e383528a51c097139bb4b0f71d1430425772249c493",
+    "size_bytes": 3743547392,
+    "version": "interactive-root-aarch64-56cd664333c3"
   },
   "download": {
     "cached": true,
@@ -29,6 +30,8 @@
     "size_bytes": 341901312
   },
   "dry_run": false,
+  "finalize_path": "rc002_sentinel_finalize_watch",
+  "finished_at_utc": "2026-08-15T16:44:26Z",
   "guest_agent_commands": [
     "ping",
     "boot_status",
@@ -84,5 +87,7 @@
     "libreoffice-gtk3"
   ],
   "schema": "gunnchos.device_lab.interactive_guest_image.manifest.v1",
+  "sealed_at_utc": "2026-08-15T16:47:20Z",
+  "sentinel_seen": true,
   "version": "1.0.0-debian-cloud-init"
 }

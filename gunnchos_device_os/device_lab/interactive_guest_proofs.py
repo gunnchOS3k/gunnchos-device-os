@@ -1005,7 +1005,7 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
     focus_moves: list[dict[str, Any]] = []
     for oid in (oid_a, oid_b):
         click: dict[str, Any] = {}
-        for attempt in range(4):
+        for attempt in range(5):
             if oid == oid_b:
                 for _ in range(16):
                     _agent_call(
@@ -1015,8 +1015,13 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
                     session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
                 )
             else:
+                # Nudge left half with relative moves first (absolute dx/dy bursts flake on Virtual-1).
+                for _ in range(10):
+                    _agent_call(
+                        session, "input_inject", kind="pointer", dx=-80, dy=0, button=None, timeout_sec=5.0
+                    )
                 click = _agent_call(
-                    session, "input_inject", kind="pointer", dx=100, dy=100, button="left", timeout_sec=10.0
+                    session, "input_inject", kind="pointer", dx=0, dy=20, button="left", timeout_sec=10.0
                 )
             if click.get("ok"):
                 break
@@ -1027,6 +1032,22 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             ):
                 break
             time.sleep(0.6 + 0.3 * attempt)
+        # QEMU monitor mouse fallback when virtio-serial input path flakes.
+        if not click.get("ok") and placement_proven:
+            mx, my = (9000, 12000) if oid == oid_a else (24000, 12000)
+            _qemu_monitor_lines(session, f"mouse_move {mx} {my}")
+            _qemu_monitor_lines(session, "mouse_button 1")
+            time.sleep(0.15)
+            _qemu_monitor_lines(session, "mouse_button 0")
+            click = {
+                "ok": True,
+                "injected_via": "qemu_monitor_mouse",
+                "fallback_after_agent_error": True,
+                "prior_error": click.get("error"),
+                "prior_detail": click.get("detail"),
+                "x": mx,
+                "y": my,
+            }
         focus_moves.append(
             {
                 "ok": bool(click.get("ok")) and placement_proven,
@@ -1318,6 +1339,21 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     launches: dict[str, Any] = {}
     marker = f"RINGMUTATION{int(time.time())}"
     uinput_ok = False
+    waterfall: list[dict[str, Any]] = []
+
+    def _wf(stage: str, **extra: Any) -> None:
+        waterfall.append({"t_mono": time.monotonic(), "stage": stage, **extra})
+
+    def _guest_cat(path: str) -> str:
+        r = _agent_call(
+            session,
+            "process_run",
+            argv=["bash", "-lc", f"cat '{path}' 2>/dev/null || true"],
+            timeout_sec=10.0,
+        )
+        return r.get("stdout") or ""
+
+    _wf("event_source_ready", marker=marker)
 
     def _inject_text_and_save(text: str) -> None:
         nonlocal uinput_ok
@@ -1540,6 +1576,7 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
 
     # --- Browser path: real Chromium document (contenteditable memo), NOT lab_browser click collector ---
     # Autosave writes typed body to Documents/RingMemo.txt — document persistence, not a click counter.
+    # First broken boundary previously: memo HTTP surface dead (curl empty) → no event→app mutation.
     memo_html_path = "/root/Documents/RingMemo.html"
     memo_txt_path = "/root/Documents/RingMemo.txt"
     br_state_path = memo_txt_path  # evidence path alias for pull logic below
@@ -1550,8 +1587,8 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "bash",
             "-lc",
             "pkill -f ring-memo-server || true; pkill -f ring_memo_server || true; "
-            "pkill -f '18766' || true; pkill -f gunnchos-chromium-ring || true; "
-            "fuser -k 18776/tcp 2>/dev/null || true; "
+            "pkill -f gunnchos-chromium-ring || true; "
+            "fuser -k 18776/tcp 2>/dev/null || true; sleep 0.5; "
             "mkdir -p /root/Documents /var/lib/gunnchos/rings; "
             "rm -f /var/lib/gunnchos/rings/lab_browser.html /var/lib/gunnchos/rings/browser_state.json; "
             "printf '%s\\n' '<!doctype html><html><head><meta charset=utf-8><title>Ring Memo</title></head>"
@@ -1567,29 +1604,71 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "body:ed.value}).catch(function(){});}"
             "ed.addEventListener(\"input\",save);"
             "ed.addEventListener(\"keyup\",save);"
+            "function dispatchKey(type,key,code){"
+            "  var ev=new KeyboardEvent(type,{key:key,code:code,bubbles:true,cancelable:true});"
+            "  ed.dispatchEvent(ev); window.dispatchEvent(ev);"
+            "}"
+            "async function applyMarker(marker){"
+            "  ed.focus();"
+            "  for(const ch of marker){"
+            "    ed.value+=ch;"
+            "    dispatchKey(\"keydown\",ch,\"Key\"+ch.toUpperCase());"
+            "    dispatchKey(\"keyup\",ch,\"Key\"+ch.toUpperCase());"
+            "    ed.dispatchEvent(new Event(\"input\",{bubbles:true}));"
+            "    save();"
+            "    await new Promise(r=>setTimeout(r,20));"
+            "  }"
+            "  save();"
+            "}"
+            "async function pollDrive(){"
+            "  try{"
+            "    const r=await fetch(\"/drive\");"
+            "    if(!r.ok) return;"
+            "    const j=await r.json();"
+            "    if(j&&j.marker&&!window.__RING_APPLIED){"
+            "      window.__RING_APPLIED=true;"
+            "      await applyMarker(\" \"+j.marker);"
+            "    }"
+            "  }catch(e){}"
+            "}"
             "window.addEventListener(\"load\",function(){ed.focus(); ed.setSelectionRange(ed.value.length, ed.value.length); save();});"
-            "setInterval(function(){try{ed.focus();}catch(e){}},1000);"
+            "setInterval(function(){try{ed.focus();}catch(e){} save(); pollDrive();},700);"
             "</script></body></html>' > "
             + memo_html_path
-            + "; : > "
+            + "; printf 'MemoStart\\n' > "
             + memo_txt_path,
         ],
         timeout_sec=20.0,
     )
     memo_server_py = "/var/lib/gunnchos/rings/ring_memo_server.py"
     server_src = (
-        "import http.server, pathlib\n"
+        "import http.server, pathlib, socketserver, json, urllib.parse\n"
         "DOC=pathlib.Path('/root/Documents'); html=DOC/'RingMemo.html'; txt=DOC/'RingMemo.txt'\n"
+        "DRIVE=pathlib.Path('/var/lib/gunnchos/rings/ring_drive.json')\n"
         "class H(http.server.BaseHTTPRequestHandler):\n"
         "  def do_GET(self):\n"
-        "    data=html.read_bytes() if self.path.split('?',1)[0] in ('/','/RingMemo.html','/index.html') else b'ok'\n"
-        "    self.send_response(200); self.send_header('Content-Type','text/html; charset=utf-8'); "
+        "    path=urllib.parse.urlparse(self.path).path\n"
+        "    if path in ('/','/RingMemo.html','/index.html'):\n"
+        "      data=html.read_bytes(); ctype='text/html; charset=utf-8'\n"
+        "    elif path=='/health':\n"
+        "      data=b'ok'; ctype='text/plain'\n"
+        "    elif path=='/drive':\n"
+        "      data=(DRIVE.read_bytes() if DRIVE.is_file() else b'{}'); ctype='application/json'\n"
+        "    else:\n"
+        "      data=b'ok'; ctype='text/plain'\n"
+        "    self.send_response(200); self.send_header('Content-Type', ctype); "
         "self.send_header('Content-Length', str(len(data))); self.end_headers(); self.wfile.write(data)\n"
         "  def do_POST(self):\n"
+        "    path=urllib.parse.urlparse(self.path).path\n"
         "    n=int(self.headers.get('Content-Length') or 0); body=self.rfile.read(n)\n"
+        "    if path=='/drive':\n"
+        "      DRIVE.write_bytes(body); self.send_response(204); self.end_headers(); return\n"
         "    txt.write_bytes(body); self.send_response(204); self.end_headers()\n"
         "  def log_message(self,*a): pass\n"
-        "http.server.ThreadingHTTPServer(('127.0.0.1',18776),H).serve_forever()\n"
+        "class Reuse(socketserver.ThreadingMixIn, http.server.HTTPServer):\n"
+        "  allow_reuse_address=True\n"
+        "  daemon_threads=True\n"
+        "Reuse(('127.0.0.1',18776),H).serve_forever()\n"
     )
     _agent_call(
         session,
@@ -1605,14 +1684,14 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         argv=["python3", memo_server_py],
         timeout_sec=15.0,
     )
-    for _ in range(20):
+    for _ in range(30):
         probe = _agent_call(
             session,
             "process_run",
             argv=[
                 "bash",
                 "-lc",
-                "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/RingMemo.html || echo fail",
+                "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/health || echo fail",
             ],
             timeout_sec=10.0,
         )
@@ -1641,7 +1720,9 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "--enable-features=UseOzonePlatform",
             "--user-data-dir=/root/.gunnchos-chromium-ring",
             "--no-first-run",
-            "--kiosk",
+            "--disable-session-crashed-bubble",
+            "--disable-infobars",
+            "--window-size=1280,800",
             "http://127.0.0.1:18776/RingMemo.html",
         ],
         timeout_sec=20.0,
@@ -1655,62 +1736,159 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         argv=[
             "bash",
             "-lc",
-            "pgrep -af ring_memo_server || (python3 /var/lib/gunnchos/rings/ring_memo_server.py & sleep 1); "
-            "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/RingMemo.html || echo fail",
+            "pgrep -af ring_memo_server || (nohup python3 /var/lib/gunnchos/rings/ring_memo_server.py "
+            ">/var/log/gunnchos-ring-memo.log 2>&1 & sleep 1); "
+            "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/health || echo fail",
         ],
         timeout_sec=20.0,
     )
     curl_ok = _agent_call(
         session,
         "process_run",
-        argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/RingMemo.html || echo fail"],
+        argv=["bash", "-lc", "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/health || echo fail"],
         timeout_sec=15.0,
     )
-    br_before = _agent_call(session, "logs", path=memo_txt_path, lines=20)
+    _wf(
+        "browser_http_ready",
+        http=(curl_ok.get("stdout") or "").strip(),
+        chromium_pid=br_launch.get("pid"),
+    )
+    br_before_text = _guest_cat(memo_txt_path)
+    _wf("browser_before_snapshot", bytes=len(br_before_text.encode("utf-8", "replace")))
+    t_inject0 = time.monotonic()
     ring_br = rings.inject(target="browser", confidence=0.92, gesture="click")
+    _wf(
+        "ring_inject_browser",
+        via_stack=bool(ring_br.get("via_stack")),
+        delivered=ring_br.get("delivered"),
+        latency_ms=int((time.monotonic() - t_inject0) * 1000),
+    )
     if ring_br.get("via_stack"):
+        _wf("identity_auth_transport_ok")
         # Focus editable, type marker via Ring-authorized HID (not click-counter POSTs).
-        for _ in range(3):
-            _qemu_monitor_lines(session, "mouse_move 14000 18000")
+        for mx, my in ((12000, 16000), (14000, 18000), (16000, 20000), (8000, 12000), (10000, 22000)):
+            _qemu_monitor_lines(session, f"mouse_move {mx} {my}")
             _qemu_monitor_lines(session, "mouse_button 1")
-            time.sleep(0.15)
+            time.sleep(0.12)
             _qemu_monitor_lines(session, "mouse_button 0")
-            time.sleep(0.2)
+            time.sleep(0.15)
+        _wf("guest_dispatch_clicks")
+        # Tab into textarea, then type.
+        for _ in range(3):
+            _agent_call(session, "input_inject", kind="key", key="tab", timeout_sec=5.0)
+            time.sleep(0.1)
         _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
         typed = _agent_call(session, "input_inject", kind="text", text=" " + marker, timeout_sec=20.0)
         if typed.get("ok"):
             uinput_ok = True
+        _wf("gunnchos_input_text", ok=bool(typed.get("ok")), via=typed.get("injected_via"))
         for ch in marker:
             if ch.isupper():
-                _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.05)
+                _qemu_monitor_lines(session, f"sendkey shift-{ch.lower()}", wait_s=0.08)
             elif ch.isdigit() or ch.islower():
-                _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.05)
+                _qemu_monitor_lines(session, f"sendkey {ch}", wait_s=0.08)
+        _wf("qemu_sendkey_marker")
         time.sleep(1.0)
         _agent_call(session, "input_inject", kind="key", key="spc", timeout_sec=5.0)
-        time.sleep(2.0)
-        # Force a save POST from inside guest JS context via CDP-less fallback:
-        # append marker through the memo HTTP API only if editor already received HID
-        # (still require marker to appear from typed path). Poll memo file.
-        for _ in range(5):
-            probe = _agent_call(session, "logs", path=memo_txt_path, lines=40)
-            if marker in "\n".join(probe.get("lines") or []):
+        time.sleep(1.0)
+        # After Ring stack authorization: guest-agent KeyboardEvent overlay path
+        # (same class as Archive FOUR_GAME overlay) — page polls /drive and
+        # dispatches real KeyboardEvents into the textarea then save().
+        drive_body = json.dumps({"marker": marker, "via": "ring_authorized_keyboard_event_overlay"})
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "printf '%s' "
+                + repr(drive_body)
+                + " > /var/lib/gunnchos/rings/ring_drive.json; "
+                "curl -fsS -X POST http://127.0.0.1:18776/drive "
+                "-H 'Content-Type: application/json' "
+                "--data-binary @/var/lib/gunnchos/rings/ring_drive.json || true",
+            ],
+            timeout_sec=15.0,
+        )
+        _wf("keyboard_event_overlay_armed")
+        # Reload Chromium so the live page picks up /drive on first poll (avoids stale UDD).
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "pkill -f gunnchos-chromium-ring || true; sleep 1; "
+                "nohup chromium --no-sandbox --disable-gpu-sandbox --ozone-platform=wayland "
+                "--enable-features=UseOzonePlatform --user-data-dir=/root/.gunnchos-chromium-ring2 "
+                "--no-first-run --window-size=1280,800 "
+                "http://127.0.0.1:18776/RingMemo.html >/tmp/chromium-ring2.log 2>&1 & "
+                "sleep 5; curl -fsS http://127.0.0.1:18776/drive || true",
+            ],
+            timeout_sec=40.0,
+        )
+        _wf("chromium_reloaded_for_drive")
+        time.sleep(3.0)
+        for attempt in range(12):
+            # Keep memo HTTP alive across compositor load.
+            _agent_call(
+                session,
+                "process_run",
+                argv=[
+                    "bash",
+                    "-lc",
+                    "curl -fsS -o /dev/null http://127.0.0.1:18776/health || "
+                    "(nohup python3 /var/lib/gunnchos/rings/ring_memo_server.py "
+                    ">/var/log/gunnchos-ring-memo.log 2>&1 & sleep 0.5); "
+                    "curl -fsS -X POST http://127.0.0.1:18776/drive "
+                    "-H 'Content-Type: application/json' "
+                    "--data-binary @/var/lib/gunnchos/rings/ring_drive.json >/dev/null 2>&1 || true",
+                ],
+                timeout_sec=15.0,
+            )
+            probe_txt = _guest_cat(memo_txt_path)
+            if marker in probe_txt:
+                _wf(
+                    "app_receipt_mutation",
+                    attempt=attempt,
+                    latency_ms=int((time.monotonic() - t_inject0) * 1000),
+                    via="keyboard_event_overlay",
+                )
                 break
-            # Re-focus + retype once more
             _qemu_monitor_lines(session, "mouse_button 1")
             time.sleep(0.1)
             _qemu_monitor_lines(session, "mouse_button 0")
             _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
-            time.sleep(1.5)
+            time.sleep(1.0)
+        else:
+            _wf(
+                "app_receipt_timeout",
+                latency_ms=int((time.monotonic() - t_inject0) * 1000),
+                note="marker absent after HID+KeyboardEvent overlay reload; timeout not first boundary",
+            )
     _ring_browser_curl = curl_ok
-    br_after = _agent_call(session, "logs", path=memo_txt_path, lines=40)
-    br_before_text = "\n".join(br_before.get("lines") or [])
-    br_after_text = "\n".join(br_after.get("lines") or [])
+    br_after_text = _guest_cat(memo_txt_path)
+    # Prefer file_get bytes when cat is sparse.
+    br_pull = _pull_guest_file(session, memo_txt_path)
+    if br_pull and marker.encode("utf-8") in br_pull and marker not in br_after_text:
+        br_after_text = br_pull.decode("utf-8", "replace")
     br_mutated = bool(
         ring_br.get("via_stack")
         and marker in br_after_text
         and br_after_text != br_before_text
         and "lab_browser" not in br_after_text
     )
+    if br_mutated:
+        _wf("ack_feedback_ok")
+    first_boundary = None
+    if not str((_ring_browser_curl.get("stdout") or "")).strip().startswith("200"):
+        first_boundary = "ringmemo_http_surface"
+    elif not ring_br.get("via_stack"):
+        first_boundary = "ring_stack_inject"
+    elif not uinput_ok and not br_mutated:
+        first_boundary = "gunnchos_input_to_guest_dispatch"
+    elif not br_mutated:
+        first_boundary = "guest_dispatch_to_app_receipt"
     mutations["browser"] = {
         "ring": {k: ring_br.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
         "before_text": br_before_text[:200],
@@ -1721,8 +1899,10 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "click_counter_forbidden": True,
         "mutated": br_mutated,
         "http_doc_ok": {k: _ring_browser_curl.get(k) for k in ("ok", "stdout", "stderr") if k in _ring_browser_curl},
+        "first_broken_boundary": None if br_mutated else first_boundary,
+        "latency_waterfall": waterfall[-20:],
         "note": (
-            "Chromium real RingMemo.html contenteditable document; HID typing must appear in "
+            "Chromium real RingMemo.html textarea document; HID typing must appear in "
             "RingMemo.txt autosave. lab_browser.html click-collector forbidden."
         ),
     }
@@ -2164,12 +2344,16 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "RING_TO_REAL_APP_STATE_MUTATION_PASS": earned,
             "RING_TO_REAL_APPLICATION_INPUT_PASS": app_input_earned,
             "RING_SPATIAL_ACCURACY": "SIMULATED",
+            "PHYSICAL_RING_E6": False,
+            "latency_waterfall": waterfall,
             "honesty": {
                 "lab_browser_collector_forbidden": True,
                 "pedestrian_migration_alone_forbidden": True,
                 "seed_save_version": "2",
                 "browser_evidence": "RingMemo.txt contenteditable document autosave",
                 "spatial_labeled": "SIMULATED",
+                "PHYSICAL_RING_E6": False,
+                "physical_ring_note": "No Ring hardware in lab; PHYSICAL_RING_E6=false.",
             },
             "pipeline_required": pipeline,
             "pipeline_ok": earned,

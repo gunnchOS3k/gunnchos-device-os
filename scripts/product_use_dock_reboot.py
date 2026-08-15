@@ -94,6 +94,7 @@ def reboot_update_recovery(session: Any) -> dict[str, Any]:
             "mkdir -p /var/lib/gunnchos/persona; "
             "printf '{\"persona\":\"G11\",\"lesson\":\"GENERAL_IT-w01\",\"progress\":1}\\n' "
             "> /var/lib/gunnchos/persona/state.json; "
+            "sync; "
             "echo SEED_OK; cat /var/lib/gunnchos/persona/state.json",
         ],
         timeout_sec=15.0,
@@ -113,13 +114,51 @@ def reboot_update_recovery(session: Any) -> dict[str, Any]:
         ],
         timeout_sec=15.0,
     )
-    # Soft reboot via guest agent if supported; else mark NOT_RUN for hard reboot
-    reboot = _agent_call(session, "reboot", timeout_sec=10.0) if False else {
-        "ok": False,
-        "skipped": True,
-        "reason": "hard_reboot_deferred_use_persist_disk_reopen",
-    }
-    # Re-read state without hard reboot (persist disk continuity proxy)
+    # Soft guest reboot (ACPI/systemctl) — same QEMU instance, persist COW disk.
+    hard: dict[str, Any] = {"ok": False}
+    try:
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "sync; nohup bash -c 'sleep 1; systemctl reboot -i || reboot' >/tmp/reboot.log 2>&1 & echo REBOOT_SCHEDULED",
+            ],
+            timeout_sec=15.0,
+        )
+        # Wait for agent drop then recovery
+        dropped = False
+        for _ in range(40):
+            time.sleep(1.0)
+            ping = _agent_call(session, "ping", timeout_sec=3.0)
+            if not ping.get("pong"):
+                dropped = True
+                break
+        recovered = False
+        for i in range(120):
+            time.sleep(2.0)
+            ping = _agent_call(session, "ping", timeout_sec=5.0)
+            if ping.get("pong"):
+                recovered = True
+                hard = {
+                    "ok": True,
+                    "dropped": dropped,
+                    "recovered": True,
+                    "wait_loops": i,
+                    "method": "systemctl_reboot_same_qemu",
+                }
+                break
+        if not recovered:
+            hard = {
+                "ok": False,
+                "dropped": dropped,
+                "recovered": False,
+                "reason": "agent_not_back_after_reboot",
+            }
+    except Exception as exc:  # noqa: BLE001
+        hard = {"ok": False, "error": str(exc)}
+
     reread = _agent_call(
         session,
         "process_run",
@@ -129,22 +168,28 @@ def reboot_update_recovery(session: Any) -> dict[str, Any]:
             "echo REREAD=$(test -s /var/lib/gunnchos/persona/state.json && echo OK || echo FAIL); "
             "cat /var/lib/gunnchos/persona/state.json 2>/dev/null | head -c 200",
         ],
-        timeout_sec=10.0,
+        timeout_sec=15.0,
     )
     out = (upd.get("stdout") or "") + "\n" + (reread.get("stdout") or "")
-    ok = "RECOVERY=STATE_INTACT" in out and "REREAD=OK" in out and "SEED_OK" in (seed.get("stdout") or "")
+    persist_ok = (
+        "RECOVERY=STATE_INTACT" in out
+        and "REREAD=OK" in out
+        and "SEED_OK" in (seed.get("stdout") or "")
+    )
+    hard_ok = bool(hard.get("ok"))
+    ok = persist_ok and hard_ok
     return {
         "ok": ok,
-        "observation_class": "GUEST_OBSERVED_PARTIAL" if ok else "OPEN",
+        "observation_class": "GUEST_OBSERVED" if ok else ("GUEST_OBSERVED_PARTIAL" if persist_ok else "OPEN"),
         "seed": {k: seed.get(k) for k in ("ok", "stdout")},
         "update_interrupt": {k: upd.get(k) for k in ("ok", "stdout")},
-        "hard_reboot": reboot,
+        "hard_reboot": hard,
         "reread": {k: reread.get(k) for k in ("ok", "stdout")},
         "note": (
-            "In-session persist + update-interrupt recovery. Hard guest reboot/reopen "
-            "not claimed PASS in this probe."
+            "Persist + update-interrupt + soft guest reboot on same QEMU/COW. "
+            "Not physical power-cycle silicon."
         ),
-        "REBOOT_UPDATE_RECOVERY_PASS": False,
+        "REBOOT_UPDATE_RECOVERY_PASS": bool(ok),
     }
 
 

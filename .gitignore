@@ -104,6 +104,11 @@ os_build/device_lab_interactive_guest/artifacts/*.qcow2
 os_build/device_lab_interactive_guest/cache/*.qcow2
 os_build/device_lab_interactive_guest/cache/*.iso
 os_build/device_lab_interactive_guest/work/
+# Sealed base + COW overlays (multi-GB; hashes/manifests stay in Git)
+os_build/device_lab_interactive_guest/pipeline/overlays/
+!os_build/device_lab_interactive_guest/pipeline/sealed/SEAL_MANIFEST.json
+!os_build/device_lab_interactive_guest/pipeline/CHECKPOINT.json
+!os_build/device_lab_interactive_guest/artifacts/*.qcow2.sha256
 
 # Product-use Interactive Guest runtime (regenerable; large)
 artifacts/product_use/interactive_guest_session/

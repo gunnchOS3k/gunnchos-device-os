@@ -35,6 +35,12 @@ def test_import_owner_signed_learner_teacher_and_rollback(store: WaikeOwnerPacka
         "SOFTWARE_BUILDER",
         "HARDWARE_ENGINEERING",
         "PM_AGILE_LSS",
+        "AI_ML_EDGE",
+        "DATA_VIZ_BI",
+        "CLOUD_DEVOPS",
+        "WIRELESS_6G",
+        "ROBOTICS_CONTROL",
+        "GAME_DEV_INTERACTIVE",
     }
     assert set(first["course_ids"]) == expected
     # HARDWARE_ENGINEERING owner title includes Embedded Prototyping track.
@@ -74,6 +80,9 @@ def test_import_does_not_copy_owner_tree_into_module_source(store: WaikeOwnerPac
         "SOFTWARE_BUILDER",
         "HARDWARE_ENGINEERING",
         "PM_AGILE_LSS",
+        "AI_ML_EDGE",
+        "DATA_VIZ_BI",
+        "CLOUD_DEVOPS",
         "lesson.md",
     ):
         assert not any(product_use.rglob(name)), f"unexpected curriculum path {name}"

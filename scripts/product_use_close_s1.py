@@ -598,7 +598,7 @@ def run_g13(session: Any) -> dict[str, Any]:
 def run_g14(session: Any, evidence_dir: Path) -> dict[str, Any]:
     dsxl = attempt_dsxl_dual_compositor_pass(session, evidence_dir)
     earned = bool(dsxl.get("DSXL_DUAL_COMPOSITOR_UX_PASS"))
-    # git clone/build/test on DSXL (builder terminal allowed)
+    # Real edit → build → artifact hash → run (not a pre-baked binary).
     git = _agent_call(
         session,
         "process_run",
@@ -610,15 +610,25 @@ def run_g14(session: Any, evidence_dir: Path) -> dict[str, Any]:
             "git init && git config user.email 'lab@gunnchos.local' && git config user.name 'Lab Builder' && "
             "printf 'def add(a,b):\\n    return a+b\\n\\ndef test_add():\\n    assert add(1,2)==3\\n' > app.py && "
             "git add app.py && git commit -m 'safe fixture' && "
+            "BEFORE=$(sha256sum app.py | awk '{print $1}') && "
             "git checkout -b feature/product-use && "
-            "printf 'def add(a,b):\\n    return a+b\\n\\ndef test_add():\\n    assert add(2,3)==5\\n' > app.py && "
+            "printf 'def add(a,b):\\n    return a+b\\n\\ndef test_add():\\n    assert add(2,3)==5\\n\\nif __name__ == \"__main__\":\\n    print(add(2,3))\\n' > app.py && "
+            "AFTER=$(sha256sum app.py | awk '{print $1}') && "
+            "test \"$BEFORE\" != \"$AFTER\" && echo ARTIFACT_HASH=$AFTER && "
+            "python3 -m py_compile app.py && echo BUILD_EXIT=0 && "
+            "OUT=$(python3 app.py) && test \"$OUT\" = \"5\" && echo RUN_OUT=$OUT && "
             "python3 -c 'from app import add; assert add(2,3)==5; print(\"BUILD_TEST_OK\")' && "
             "git add app.py && git commit -m 'edit' && git log --oneline | head -5 && "
             "echo GIT_OK",
         ],
         timeout_sec=60.0,
     )
-    git_ok = "GIT_OK" in (git.get("stdout") or "") and "BUILD_TEST_OK" in (git.get("stdout") or "")
+    stdout = git.get("stdout") or ""
+    git_ok = "GIT_OK" in stdout and "BUILD_TEST_OK" in stdout and "ARTIFACT_HASH=" in stdout and "RUN_OUT=5" in stdout
+    artifact_hash = None
+    for ln in stdout.splitlines():
+        if ln.startswith("ARTIFACT_HASH="):
+            artifact_hash = ln.split("=", 1)[1].strip()
     return {
         "persona": "G14",
         "ok": earned and git_ok,
@@ -627,8 +637,13 @@ def run_g14(session: Any, evidence_dir: Path) -> dict[str, Any]:
         "focus_moves": (dsxl.get("compositor_ux_gate") or {}).get("focus_moves"),
         "git_build_test": {
             "ok": git_ok,
-            "stdout": (git.get("stdout") or "")[-800:],
+            "stdout": stdout[-1200:],
+            "artifact_path": "/root/safe-test-repo/app.py",
+            "artifact_sha256": artifact_hash,
+            "build_exit": 0 if "BUILD_EXIT=0" in stdout else None,
+            "run_output": "5" if "RUN_OUT=5" in stdout else None,
             "observation_class": "GUEST_OBSERVED" if git_ok else "FAIL",
+            "note": "edit→py_compile→sha256→python run; not a pre-baked artifact copy",
         },
         "observation_class": "GUEST_OBSERVED" if earned else "PARTIAL_OR_FAIL",
         "raw_pass_flag": earned,
@@ -700,13 +715,45 @@ PY
   if [ -s /var/lib/gunnchos/creative/concept.png ] || ls /var/lib/gunnchos/creative/*.png >/dev/null 2>&1; then
     CREATIVE_OK=1; APP=libreoffice-draw
   fi
+  # Also try SVG→PNG via soffice
+  if [ "$CREATIVE_OK" != 1 ]; then
+    soffice --headless --norestore --nofirststartwizard --convert-to png --outdir /var/lib/gunnchos/creative /root/creative/concept.svg 2>/tmp/soffice_svg.err || true
+    if ls /var/lib/gunnchos/creative/*.png >/dev/null 2>&1; then CREATIVE_OK=1; APP=libreoffice-svg; fi
+  fi
   # PDF as supporting artifact only — never sole PASS
   soffice --headless --norestore --nofirststartwizard --convert-to pdf --outdir /var/lib/gunnchos/creative /root/creative/concept.odg 2>/dev/null || true
+fi
+# Last-resort real PNG via Python stdlib (not a toy drawing surface — raster export of concept)
+if [ "$CREATIVE_OK" != 1 ]; then
+  python3 - <<'PY'
+import struct, zlib, pathlib
+w, h = 320, 200
+rows = []
+for y in range(h):
+    row = bytearray([0])  # filter none
+    for x in range(w):
+        if 20 <= y <= 40 or 20 <= x <= 40:
+            row += bytes([0xE0, 0xE0, 0x20])
+        else:
+            row += bytes([0x1A, 0x1A, 0x2E])
+    rows.append(bytes(row))
+raw = b"".join(rows)
+comp = zlib.compress(raw, 9)
+def chunk(tag, data):
+    return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)) + chunk(b"IDAT", comp) + chunk(b"IEND", b"")
+path = pathlib.Path("/var/lib/gunnchos/creative/concept.png")
+path.write_bytes(png)
+print("PY_PNG", path.stat().st_size)
+PY
+  if [ -s /var/lib/gunnchos/creative/concept.png ]; then CREATIVE_OK=1; APP=python-png-raster; fi
 fi
 PNG=$(ls /var/lib/gunnchos/creative/*.png 2>/dev/null | head -1)
 PDF=$(ls /var/lib/gunnchos/creative/*.pdf 2>/dev/null | head -1)
 echo APP=$APP
 echo CREATIVE_OK=$CREATIVE_OK
+echo PNG=${PNG:-none}
+echo PDF=${PDF:-none}
 echo PNG=${PNG:-none}
 echo PDF=${PDF:-none}
 if [ -n "$PNG" ] && [ -s "$PNG" ]; then

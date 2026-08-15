@@ -8,7 +8,8 @@
 	full-product-ix cont-ix-evidence \
 	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate \
 	device-lab-test device-lab-profile-verify device-lab-wp011 device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08 \
-	wp007-red-team wp007-test
+	wp007-red-team wp007-test \
+	safe-halt-guest base-image-status base-image-seal base-image-overlay base-image-safe-resume
 
 PY := PYTHONPATH=src:.
 
@@ -280,3 +281,20 @@ wp007-test:
 		tests/test_sandbox_policy.py \
 		tests/phase_xiv/test_phase_xiv.py \
 		tests/stage2/test_security.py
+
+# GUNNCHDEVICE_BASE_IMAGE_PIPELINE — operator leave-now + seal/COW (see docs/)
+safe-halt-guest:
+	$(PY) python3 scripts/gunnchdevice_base_image_pipeline.py safe-halt --reason operator_leaving_now
+	@echo "SAFE_HALT written. Do NOT kill -9 QEMU. Do NOT delete sealed qcow2. Resume with: make base-image-safe-resume"
+
+base-image-status:
+	$(PY) python3 scripts/gunnchdevice_base_image_pipeline.py status
+
+base-image-seal:
+	$(PY) python3 scripts/gunnchdevice_base_image_pipeline.py seal
+
+base-image-overlay:
+	$(PY) python3 scripts/gunnchdevice_base_image_pipeline.py overlay --persona $${PERSONA:-session}
+
+base-image-safe-resume:
+	$(PY) python3 scripts/gunnchdevice_base_image_pipeline.py safe-resume

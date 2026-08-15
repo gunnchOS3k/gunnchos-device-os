@@ -109,7 +109,11 @@ def ingest_waike() -> dict[str, Any]:
         "teacher_has_answer_keys": "answer_keys" in json.dumps(teacher.get("doc") or {}),
         "course_ids": result.get("course_ids"),
         "required_course_ids": sorted(REQUIRED_OWNER_COURSE_IDS),
-        "six_course_ok": set(result.get("course_ids") or []) == REQUIRED_OWNER_COURSE_IDS,
+        "twelve_course_ok": set(result.get("course_ids") or []) == REQUIRED_OWNER_COURSE_IDS,
+        "nine_course_ok": False,  # superseded by twelve-course #46 catalog
+        "six_course_ok": False,
+        "stale_nine_course_active": False,
+        "stale_six_course_active": False,
         "stale_three_course_active": False,
         "prior_version_retained_for_rollback": prior,
         "rollback_tested": rollback_ok if prior else False,
@@ -281,10 +285,10 @@ def main() -> int:
     ]
     if not (four.get("ok") or four.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")):
         s1_open.append("FOUR_GAME accepted-main regression not PASS")
-    if not waike.get("six_course_ok"):
-        s1_open.append("WAIKE six-course ingest incomplete")
-    if not ai.get("matrix_matches_7_3_6"):
-        s1_open.append("gunnchAI honesty matrix not 7/3/6")
+    if not waike.get("nine_course_ok"):
+        s1_open.append("WAIKE nine-course ingest incomplete")
+    if not ai.get("matrix_matches_9_1_6"):
+        s1_open.append("gunnchAI honesty matrix not 9/1/6 (#35)")
     for row in table.get("rows") or []:
         if int(row.get("S1") or 0) > 0:
             s1_open.append(f"{row.get('persona')} S1 open: {row.get('primary_task') or row.get('WAIKE')}")
@@ -330,8 +334,8 @@ def main() -> int:
         "cursor_never_merges": True,
         "prefer_fail_over_false_pass": True,
         "claim_boundary": (
-            "PRODUCT-USE-RC-002 bounded DRAFT. Six-course WAIKE owner ingest + gunnchAI #34 "
-            "honesty consume + accepted-main four-game attempt + persona closer. "
+            "PRODUCT-USE-RC-002 bounded DRAFT. Nine-course WAIKE owner ingest (#45) + gunnchAI #35 "
+            "honesty consume (9/1/6) + accepted-main four-game attempt + persona closer. "
             "Persona tokens false unless independently earned with S1=0. Cursor does not merge."
         ),
     }
