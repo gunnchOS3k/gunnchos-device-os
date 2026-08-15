@@ -28,7 +28,24 @@ def test_import_owner_signed_learner_teacher_and_rollback(store: WaikeOwnerPacka
     assert first["ok"] is True
     assert first["signature_ok"] is True
     assert first["reauthored_in_device_os"] is False
-    assert set(first["course_ids"]) == {"GENERAL_IT", "COMPUTER_NETWORKING", "CYBERSECURITY"}
+    expected = {
+        "GENERAL_IT",
+        "COMPUTER_NETWORKING",
+        "CYBERSECURITY",
+        "SOFTWARE_BUILDER",
+        "HARDWARE_ENGINEERING",
+        "PM_AGILE_LSS",
+        "AI_ML_EDGE",
+        "DATA_VIZ_BI",
+        "CLOUD_DEVOPS",
+        "WIRELESS_6G",
+        "ROBOTICS_CONTROL",
+        "GAME_DEV_INTERACTIVE",
+    }
+    assert set(first["course_ids"]) == expected
+    # HARDWARE_ENGINEERING owner title includes Embedded Prototyping track.
+    hw = next(c for c in store.view("learner")["doc"]["courses"] if c["course_id"] == "HARDWARE_ENGINEERING")
+    assert "EMBEDDED_PROTOTYPING" in (hw.get("track_ids") or [])
 
     learner = store.view("learner")
     teacher = store.view("teacher")
@@ -56,5 +73,16 @@ def test_import_does_not_copy_owner_tree_into_module_source(store: WaikeOwnerPac
     store.import_owner(OWNER, package_version="v-nocopy")
     # Curriculum modules must remain absent from product_use source.
     product_use = REPO / "gunnchos_device_os" / "product_use"
-    for name in ("GENERAL_IT", "COMPUTER_NETWORKING", "CYBERSECURITY", "lesson.md"):
+    for name in (
+        "GENERAL_IT",
+        "COMPUTER_NETWORKING",
+        "CYBERSECURITY",
+        "SOFTWARE_BUILDER",
+        "HARDWARE_ENGINEERING",
+        "PM_AGILE_LSS",
+        "AI_ML_EDGE",
+        "DATA_VIZ_BI",
+        "CLOUD_DEVOPS",
+        "lesson.md",
+    ):
         assert not any(product_use.rglob(name)), f"unexpected curriculum path {name}"

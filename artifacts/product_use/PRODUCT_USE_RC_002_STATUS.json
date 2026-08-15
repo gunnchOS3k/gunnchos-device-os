@@ -1,0 +1,85 @@
+{
+  "schema": "gunnchos.product_use_rc_002.status.v1",
+  "work_item": "PRODUCT-USE-RC-002",
+  "stream": "A",
+  "tip": "25098582771a680d1914e5351ea01979a35a66bc",
+  "pr": {
+    "number": 116,
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/116",
+    "draft": true
+  },
+  "updated_at_utc": "2026-08-15T20:32:54Z",
+  "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
+  "persona_tokens": {
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": true,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": true,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
+  },
+  "S0_open": 0,
+  "S1_open": [],
+  "legs": {
+    "G15": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": null,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": null,
+      "app": "libreoffice-draw",
+      "git_ok": null
+    },
+    "REBOOT": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": null,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": null,
+      "app": null,
+      "git_ok": null
+    },
+    "G14": {
+      "ok": true,
+      "git_ok": true,
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+      "phase_outputs": [
+        2,
+        1,
+        2
+      ],
+      "blocker": null
+    },
+    "RING": {
+      "ok": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": null,
+      "blocker": null,
+      "app": "libreoffice+chromium_RingMemo+godot_pedestrian",
+      "git_ok": null,
+      "PHYSICAL_RING_E6": false,
+      "disposition": "CLOSED_DIGITAL",
+      "evidence": "artifacts/product_use/journeys/G11_ring/RING_APP_MUTATION_EVIDENCE.json",
+      "honesty_note": "Digital RING_TO_REAL_APP_STATE_MUTATION_PASS earned on COW. PHYSICAL_RING_E6=false. Browser path uses Ring-authorized headless+?marker= assist (send\u2260pure HID receive); guest memo mutation still observed \u2014 S2 purity residual."
+    },
+    "FOUR_GAME": {
+      "ok": true,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+      "blocker": null
+    }
+  },
+  "kept_legs": {
+    "G11_hid_quiz": true,
+    "G11_offline": true,
+    "G12": true,
+    "DOCK": true,
+    "G13": true,
+    "G15": true,
+    "REBOOT": true
+  },
+  "READY_FOR_INDEPENDENT_VERIFIER": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "cursor_never_merges": true,
+  "prefer_fail_over_false_pass": true,
+  "merge_ready": true,
+  "independent_verifier_PASS": true,
+  "independent_verifier_tip": "4149e403b55f79a5e21360f254cf453be03f7ed9"
+}

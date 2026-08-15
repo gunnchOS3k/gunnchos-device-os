@@ -122,6 +122,91 @@ def high_fidelity_dual_gate(
     }
 
 
+def _monitor_tail_failed(tail: str) -> bool:
+    t = (tail or "").lower()
+    if not t.strip():
+        return False
+    markers = (
+        "error:",
+        "not found",
+        "not a valid",
+        "not supported",
+        "failed",
+        "could not",
+    )
+    return any(m in t for m in markers)
+
+
+def disconnect_reconnect_honest(disconnect_reconnect: dict[str, Any]) -> dict[str, Any]:
+    """Reject rubber-stamped disconnect/reconnect flags (monitor errors, no output drop)."""
+    dr = dict(disconnect_reconnect or {})
+    reasons: list[str] = []
+    method = str(dr.get("method") or "")
+    del_tail = str(dr.get("del_tail") or "")
+    add_tail = str(dr.get("add_tail") or "")
+
+    if _monitor_tail_failed(del_tail):
+        reasons.append("qemu_del_monitor_error")
+    if _monitor_tail_failed(add_tail):
+        reasons.append("qemu_add_monitor_error")
+    if dr.get("qemu_del_ok") is False:
+        reasons.append("qemu_del_ok_false")
+    if dr.get("qemu_add_ok") is False:
+        reasons.append("qemu_add_ok_false")
+
+    hotplugish = any(
+        x in method for x in ("device_del", "device_add", "hotplug", "dual_virtio_gpu")
+    )
+    rebootish = "reboot_reconfig" in method or "max_outputs" in method
+
+    if hotplugish and not rebootish:
+        # Hotplug path must show real compositor drop + successful del/add.
+        if dr.get("compositor_output_drop") is False:
+            reasons.append("compositor_output_drop_false")
+        mid_outs = dr.get("mid_compositor_outputs")
+        if mid_outs is not None and int(mid_outs) >= 2:
+            reasons.append("mid_compositor_still_dual")
+        after_outs = dr.get("after_compositor_outputs")
+        if dr.get("reconnect_ok") and after_outs is not None and int(after_outs) < 2:
+            reasons.append("after_compositor_not_dual")
+        if del_tail and _monitor_tail_failed(del_tail):
+            # already recorded; ensure disconnect cannot stay true
+            pass
+        if not del_tail and dr.get("disconnect_ok"):
+            # Prefer explicit qemu_del_ok for hotplug claims.
+            if dr.get("qemu_del_ok") is not True:
+                reasons.append("hotplug_missing_qemu_del_ok")
+
+    if rebootish:
+        mid = dr.get("mid")
+        if isinstance(mid, dict):
+            mid_outs = mid.get("compositor_outputs")
+            if mid_outs is not None and int(mid_outs) >= 2 and not mid.get("disconnect_ok"):
+                reasons.append("reboot_mid_still_dual")
+            if mid.get("disconnect_ok") is False:
+                reasons.append("reboot_mid_disconnect_false")
+
+    disc = bool(dr.get("disconnect_ok")) and not reasons
+    recon = bool(dr.get("reconnect_ok")) and "qemu_add_monitor_error" not in reasons
+    if "qemu_add_ok_false" in reasons:
+        recon = False
+    if hotplugish and not rebootish and "compositor_output_drop_false" in reasons:
+        disc = False
+    if hotplugish and not rebootish and "mid_compositor_still_dual" in reasons:
+        disc = False
+    if any(r.startswith("qemu_del") for r in reasons) or "hotplug_missing_qemu_del_ok" in reasons:
+        disc = False
+
+    restore = bool(dr.get("layout_restored")) and disc and recon
+    return {
+        "disconnect_ok": disc,
+        "reconnect_ok": recon,
+        "layout_restored": restore,
+        "honesty_rejected": reasons,
+        "honesty_ok": not reasons,
+    }
+
+
 def compositor_ux_gate(
     *,
     outputs: list[dict[str, Any]],
@@ -154,13 +239,25 @@ def compositor_ux_gate(
         if f.get("ok")
     }
     focus_cross = len([o for o in focus_outputs if o]) >= 2
-    disc = bool(disconnect_reconnect.get("disconnect_ok"))
-    recon = bool(disconnect_reconnect.get("reconnect_ok"))
+    honesty = disconnect_reconnect_honest(disconnect_reconnect)
+    disc = bool(honesty.get("disconnect_ok"))
+    recon = bool(honesty.get("reconnect_ok"))
     restore = bool(
-        layout_restore.get("ok")
-        or layout_restore.get("layout_restored")
-        or disconnect_reconnect.get("layout_restored")
+        (
+            layout_restore.get("ok")
+            or layout_restore.get("layout_restored")
+            or disconnect_reconnect.get("layout_restored")
+        )
+        and honesty.get("layout_restored")
     )
+    # Reboot-reconfig path may only set layout via layout_restore when honesty cleared.
+    if honesty.get("honesty_ok") and honesty.get("disconnect_ok") and honesty.get("reconnect_ok"):
+        restore = bool(
+            layout_restore.get("ok")
+            or layout_restore.get("layout_restored")
+            or disconnect_reconnect.get("layout_restored")
+            or honesty.get("layout_restored")
+        )
 
     earned = bool(
         two_outputs
@@ -171,6 +268,7 @@ def compositor_ux_gate(
         and disc
         and recon
         and restore
+        and honesty.get("honesty_ok")
     )
     missing: list[str] = []
     if not two_outputs:
@@ -187,6 +285,8 @@ def compositor_ux_gate(
         missing.append("reconnect")
     if not restore:
         missing.append("layout_restore")
+    if not honesty.get("honesty_ok"):
+        missing.extend(f"honesty:{r}" for r in (honesty.get("honesty_rejected") or []))
 
     return {
         "ok": earned,
@@ -201,8 +301,10 @@ def compositor_ux_gate(
             "disconnect": disc,
             "reconnect": recon,
             "layout_restore": restore,
+            "disconnect_reconnect_honesty": bool(honesty.get("honesty_ok")),
         },
         "missing": missing,
+        "honesty": honesty,
         "windows": windows,
         "focus_moves": focus_moves,
         "disconnect_reconnect": disconnect_reconnect,

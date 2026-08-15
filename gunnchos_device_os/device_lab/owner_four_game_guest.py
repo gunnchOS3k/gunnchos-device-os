@@ -55,6 +55,7 @@ from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
     LAB_TO_OWNER,
     prepare_owner_guest_staging,
     start_host_artifact_httpd,
+    wait_host_artifact_httpd,
     verify_accepted_shas,
 )
 
@@ -318,15 +319,22 @@ cp -a /root/owner-games/archive-of-life-artifact-world/. /root/owner-games/earth
 
 rm -rf /root/owner-games/beatlink-party /root/owner-games/beatlink-server /root/owner-games/beatlink-node
 tar -xzf /mnt/gdlgames/beatlink-party.tar.gz -C /root/owner-games
+# RoomManager resolves ../../../../release/ACHIEVEMENTS.json → /root/release/
+mkdir -p /root/release
+if [ -f /root/owner-games/beatlink-party/release/ACHIEVEMENTS.json ]; then
+  cp -a /root/owner-games/beatlink-party/release/. /root/release/
+fi
 mv /root/owner-games/beatlink-party/server /root/owner-games/beatlink-server
 mv /root/owner-games/beatlink-party/node /root/owner-games/beatlink-node
 chmod +x /root/owner-games/beatlink-node/node
 rm -rf /tmp/beatlink-web-copy
 cp -a /root/owner-games/beatlink-party/web /tmp/beatlink-web-copy
+# keep release for diagnostics before wiping party tree
 rm -rf /root/owner-games/beatlink-party
 mkdir -p /root/owner-games/beatlink-party
 cp -a /tmp/beatlink-web-copy/. /root/owner-games/beatlink-party/
 cp /tmp/lab_observe_only.js /root/owner-games/beatlink-party/lab_observe_only.js
+test -f /root/release/ACHIEVEMENTS.json && echo RELEASE_OK || echo RELEASE_MISSING
 python3 - <<'PY'
 from pathlib import Path
 
@@ -552,6 +560,10 @@ tar -xzf /tmp/beatlink.tar.gz -C /root/owner-games
 test -d /root/owner-games/beatlink-party/server
 test -d /root/owner-games/beatlink-party/web
 test -x /root/owner-games/beatlink-party/node/node
+mkdir -p /root/release
+if [ -f /root/owner-games/beatlink-party/release/ACHIEVEMENTS.json ]; then
+  cp -a /root/owner-games/beatlink-party/release/. /root/release/
+fi
 mv /root/owner-games/beatlink-party/server /root/owner-games/beatlink-server
 mv /root/owner-games/beatlink-party/node /root/owner-games/beatlink-node
 rm -rf /tmp/beatlink-web-copy
@@ -560,6 +572,7 @@ rm -rf /root/owner-games/beatlink-party
 mkdir -p /root/owner-games/beatlink-party
 cp -a /tmp/beatlink-web-copy/. /root/owner-games/beatlink-party/
 cp /tmp/lab_observe_only.js /root/owner-games/beatlink-party/lab_observe_only.js
+test -f /root/release/ACHIEVEMENTS.json && echo RELEASE_OK || echo RELEASE_MISSING
 python3 - <<'PY'
 from pathlib import Path
 import os, shutil
@@ -1790,31 +1803,41 @@ def attempt_owner_four_game_in_guest_pass(
         return result
 
     staging = Path(bundle["staging"])
-    httpd_port = 8766
-    httpd = start_host_artifact_httpd(staging, port=httpd_port)
-    time.sleep(0.6)
-    # Confirm host listener before guest curl.
-    import socket as _sock
-
-    host_listen_ok = False
-    try:
-        with _sock.create_connection(("127.0.0.1", httpd_port), timeout=2.0):
-            host_listen_ok = True
-    except OSError as exc:
-        result["host_artifact_httpd"] = {
-            "port": httpd_port,
-            "pid": httpd.pid,
-            "listen_ok": False,
-            "error": str(exc),
-        }
+    httpd_port = int(os.environ.get("GUNNCH_OWNER_ARTIFACT_HTTPD_PORT", "8766"))
+    httpd_log = evidence_dir / "host_artifact_httpd.log"
+    httpd = start_host_artifact_httpd(staging, port=httpd_port, log_path=httpd_log)
+    host_listen_ok, listen_err = wait_host_artifact_httpd(httpd_port, proc=httpd)
+    if not host_listen_ok:
+        # One fallback port if 8766 is wedged / raced under load.
         try:
             httpd.terminate()
         except Exception:
             pass
-        result["blocker"] = "host_artifact_httpd_listen_failed"
-        (evidence_dir / "four_games_in_guest.json").write_text(json.dumps(result, indent=2) + "\n")
-        return result
-    result["host_artifact_httpd"] = {"port": httpd_port, "pid": httpd.pid, "listen_ok": host_listen_ok}
+        fallback = httpd_port + 1
+        httpd = start_host_artifact_httpd(staging, port=fallback, log_path=httpd_log)
+        host_listen_ok, listen_err = wait_host_artifact_httpd(fallback, proc=httpd)
+        if host_listen_ok:
+            httpd_port = fallback
+        else:
+            result["host_artifact_httpd"] = {
+                "port": httpd_port,
+                "pid": httpd.pid,
+                "listen_ok": False,
+                "error": listen_err,
+                "log": str(httpd_log),
+            }
+            try:
+                httpd.terminate()
+            except Exception:
+                pass
+            result["blocker"] = "host_artifact_httpd_listen_failed"
+            (evidence_dir / "four_games_in_guest.json").write_text(json.dumps(result, indent=2) + "\n")
+            return result
+    result["host_artifact_httpd"] = {
+        "port": httpd_port,
+        "pid": httpd.pid,
+        "listen_ok": host_listen_ok,
+    }
     try:
         # Ensure Godot 4.5+ — prefer already installed via 9p deploy; else try HTTP.
         godot = _ensure_godot4_in_guest(session, repo_root)

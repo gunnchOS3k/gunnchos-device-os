@@ -215,8 +215,11 @@ def test_verify_accepted_shas_uses_honest_entry(tmp_path, monkeypatch):
     out = verify_accepted_shas(tmp_path)
     assert out["ok"] is True
     archive = out["games"]["archive-of-life-artifact-world"]
-    assert archive["observed_sha"] == "64fcf3a73d9a0db4e13523f762cf3fd651d7ddaa"
+    assert archive["observed_sha"] == art.ACCEPTED_MAINS["archive-of-life-artifact-world"][
+        "accepted_main_sha"
+    ]
     assert archive["sibling_head"] == "858e8e8fa7e103989e519180fb8da5444ca17594"
+    assert archive["successor_draft_not_accepted_main"] is True
     beat = out["games"]["beatlink-party"]
-    assert beat["observed_sha"] == "4b3970c9bc327ba7a1cec43ff7a905d91cd3070b"
+    assert beat["observed_sha"] == art.ACCEPTED_MAINS["beatlink-party"]["accepted_main_sha"]
     assert beat["successor_draft_not_accepted_main"] is True

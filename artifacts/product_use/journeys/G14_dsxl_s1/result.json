@@ -1,56 +1,384 @@
 {
   "persona": "G14",
-  "ok": false,
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-  "dsxl_missing": [
-    "window_placement_on_both_outputs",
-    "focus_move"
-  ],
+  "ok": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "dsxl_missing": [],
   "focus_moves": [
     {
-      "ok": false,
-      "output_id": "",
+      "ok": true,
+      "output_id": "wl_output-0",
       "click": {
-        "ok": true,
-        "protocol": "gunnchos.guest_agent.v1",
-        "cmd": "input_inject",
-        "transport": "virtio_serial",
-        "agent_path_label": "virtio-serial",
-        "SILICON_EXACT_EMULATION": false,
-        "production_keys": false,
-        "measurement_class": "GUEST_OBSERVED",
-        "kind": "pointer",
-        "dx": 100,
-        "dy": 100,
-        "button": "left",
-        "injected_via": "uinput"
+        "ok": true
       }
     },
     {
-      "ok": false,
-      "output_id": "",
+      "ok": true,
+      "output_id": "wl_output-1",
       "click": {
-        "ok": true,
-        "protocol": "gunnchos.guest_agent.v1",
-        "cmd": "input_inject",
-        "transport": "virtio_serial",
-        "agent_path_label": "virtio-serial",
-        "SILICON_EXACT_EMULATION": false,
-        "production_keys": false,
-        "measurement_class": "GUEST_OBSERVED",
-        "kind": "pointer",
-        "dx": 0,
-        "dy": 20,
-        "button": "left",
-        "injected_via": "uinput"
+        "ok": true
       }
     }
   ],
   "git_build_test": {
-    "ok": false,
-    "stdout": "",
-    "observation_class": "FAIL"
+    "ok": true,
+    "stdout": "Initialized empty Git repository in /root/safe-test-repo/.git/\n[master (root-commit) 7b536d1] safe fixture\n 1 file changed, 5 insertions(+)\n create mode 100644 app.py\nARTIFACT_HASH=6edb13eac8c0082b1cbdf6780d5fff48c2655313339e632853b9093f0a8ae866\nBUILD_EXIT=0\nRUN_OUT=5\nBUILD_TEST_OK\n[feature/product-use a2972c1] edit\n 1 file changed, 4 insertions(+), 1 deletion(-)\na2972c1 edit\n7b536d1 safe fixture\nGIT_OK\n",
+    "artifact_path": "/root/safe-test-repo/app.py",
+    "artifact_sha256": "6edb13eac8c0082b1cbdf6780d5fff48c2655313339e632853b9093f0a8ae866",
+    "build_exit": 0,
+    "run_output": "5",
+    "observation_class": "GUEST_OBSERVED",
+    "note": "edit\u2192py_compile\u2192sha256\u2192python run; not a pre-baked artifact copy"
   },
-  "observation_class": "PARTIAL_OR_FAIL",
-  "raw_pass_flag": false
+  "observation_class": "GUEST_OBSERVED",
+  "raw_pass_flag": true,
+  "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+  "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+  "prefer_fail_over_false_pass": true,
+  "dsxl": {
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "architecture": "virtio_gpu_max_outputs2_reboot_reconfig",
+    "hotplug_note": "QEMU 11 virtio-gpu-pci does not support hotplugging; device_del rejected",
+    "prefer_fail_over_false_pass": true,
+    "stale_qemu": {
+      "killed": []
+    },
+    "boot_dual": {
+      "ok": true
+    },
+    "enable_dual": {
+      "ok": true,
+      "weston": {
+        "compositor": "weston",
+        "outputs": 2,
+        "available": true
+      },
+      "via": "weston"
+    },
+    "phase_a": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        },
+        {
+          "id": "card0-Virtual-2",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 2,
+      "compositor": "weston",
+      "compositor_outputs": 2,
+      "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+      "dual_ok": true,
+      "drm_connected": 2
+    },
+    "boot_single": {
+      "ok": true
+    },
+    "phase_b_disconnect": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 1,
+      "compositor_outputs": 1,
+      "cards": "/sys/class/drm/card0-Virtual-1\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width",
+      "disconnect_ok": true,
+      "connected_to_disconnected": true
+    },
+    "boot_restore": {
+      "ok": true
+    },
+    "enable_dual_restore": {
+      "ok": true,
+      "weston": {
+        "compositor": "weston",
+        "outputs": 2,
+        "available": true
+      },
+      "via": "weston"
+    },
+    "phase_c_reconnect": {
+      "displays": [
+        {
+          "id": "card0-Virtual-1",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        },
+        {
+          "id": "card0-Virtual-2",
+          "connected": true,
+          "source": "guest_drm",
+          "class": "guest_drm"
+        }
+      ],
+      "connected_count": 2,
+      "compositor": "weston",
+      "compositor_outputs": 2,
+      "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+      "reconnect_ok": true,
+      "layout_restored": true
+    },
+    "phase_c_ux": {
+      "placement_proven": true,
+      "focus_ok": true,
+      "fb_both": true,
+      "windows_launched": {
+        "foot": {
+          "ok": true,
+          "pid": 634
+        },
+        "mousepad": {
+          "ok": true,
+          "pid": 644
+        }
+      },
+      "guest_shots": {
+        "ok": true,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_screendump": {
+        "exists": true,
+        "bytes": 3072016
+      },
+      "grim_per_output": {
+        "ok": true,
+        "stdout": "",
+        "stderr": ""
+      },
+      "placement_halves": {
+        "ok": true,
+        "filter_aware": true,
+        "width": 2560,
+        "height": 800,
+        "left_sha256": "3653e7ae48fbb9cd0c7897d51c8a8adc1f9a5b9e2c99740e04eb119e6d4c8a6c",
+        "right_sha256": "8fb0550f02660978c6576736516513f7c62c9b0aceed2d24f5cecccc5c648e44",
+        "halves_differ": true,
+        "left_nonzero": true,
+        "right_nonzero": true,
+        "left_mean": 159.49454915364583,
+        "right_mean": 130.10647688802084,
+        "filters_used": [
+          1,
+          2,
+          4
+        ],
+        "means_plausible": true,
+        "left_mean_committed": 159.49454915364583,
+        "right_mean_committed": 130.10647688802084,
+        "means_match_placement_crops": true,
+        "left_png": "dsxl_left.png",
+        "right_png": "dsxl_right.png",
+        "committed_png_halves": true,
+        "fb_method": "filter_aware_composite_crop"
+      },
+      "fb_method": "filter_aware_composite_crop",
+      "this_run_shot_hashes": [],
+      "grim_both_stale_rejected": true,
+      "invented_halves_rejected": true,
+      "windows": [
+        {
+          "app_id": "foot",
+          "output_id": "wl_output-0",
+          "ok": true,
+          "half": "left",
+          "half_png": "dsxl_left.png"
+        },
+        {
+          "app_id": "mousepad",
+          "output_id": "wl_output-1",
+          "ok": true,
+          "half": "right",
+          "half_png": "dsxl_right.png"
+        }
+      ],
+      "focus_moves": [
+        {
+          "ok": true,
+          "output_id": "wl_output-0",
+          "click": {
+            "ok": true
+          }
+        },
+        {
+          "ok": true,
+          "output_id": "wl_output-1",
+          "click": {
+            "ok": true
+          }
+        }
+      ]
+    },
+    "compositor_ux_gate": {
+      "ok": true,
+      "gate": "PASS_DSXL_COMPOSITOR_UX",
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
+      "checks": {
+        "two_outputs": true,
+        "two_compositor_surfaces": true,
+        "window_placement": true,
+        "focus_move": true,
+        "disconnect": true,
+        "reconnect": true,
+        "layout_restore": true,
+        "disconnect_reconnect_honesty": true
+      },
+      "missing": [],
+      "honesty": {
+        "disconnect_ok": true,
+        "reconnect_ok": true,
+        "layout_restored": true,
+        "honesty_rejected": [],
+        "honesty_ok": true
+      },
+      "windows": [
+        {
+          "app_id": "foot",
+          "output_id": "wl_output-0",
+          "ok": true,
+          "half": "left",
+          "half_png": "dsxl_left.png"
+        },
+        {
+          "app_id": "mousepad",
+          "output_id": "wl_output-1",
+          "ok": true,
+          "half": "right",
+          "half_png": "dsxl_right.png"
+        }
+      ],
+      "focus_moves": [
+        {
+          "ok": true,
+          "output_id": "wl_output-0",
+          "click": {
+            "ok": true
+          }
+        },
+        {
+          "ok": true,
+          "output_id": "wl_output-1",
+          "click": {
+            "ok": true
+          }
+        }
+      ],
+      "disconnect_reconnect": {
+        "disconnect_ok": true,
+        "reconnect_ok": true,
+        "layout_restored": true,
+        "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+        "before": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            },
+            {
+              "id": "card0-Virtual-2",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 2,
+          "compositor": "weston",
+          "compositor_outputs": 2,
+          "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+          "dual_ok": true,
+          "drm_connected": 2
+        },
+        "mid": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 1,
+          "compositor_outputs": 1,
+          "cards": "/sys/class/drm/card0-Virtual-1\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width",
+          "disconnect_ok": true,
+          "connected_to_disconnected": true
+        },
+        "after": {
+          "displays": [
+            {
+              "id": "card0-Virtual-1",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            },
+            {
+              "id": "card0-Virtual-2",
+              "connected": true,
+              "source": "guest_drm",
+              "class": "guest_drm"
+            }
+          ],
+          "connected_count": 2,
+          "compositor": "weston",
+          "compositor_outputs": 2,
+          "cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n---\n/sys/class/drm/card0-Virtual-1/status=connected\n/sys/class/drm/card0-Virtual-2/status=connected\n---WI---\ninterface: 'wl_compositor',                              version:  4, name:  1\ninterface: 'wl_subcompositor',                           version:  1, name:  2\ninterface: 'wp_viewporter',                              version:  1, name:  3\ninterface: 'zxdg_output_manager_v1',                     version:  2, name:  4\n\txdg_output_v1\n\t\toutput: 16\n\t\tname: 'Virtual-2'\n\t\tlogical_x: 1280, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\n\txdg_output_v1\n\t\toutput: 15\n\t\tname: 'Virtual-1'\n\t\tlogical_x: 0, logical_y: 0\n\t\tlogical_width: 1280, logical_height: 800\ninterface: 'wp_presentation',                            version:  1, ",
+          "reconnect_ok": true,
+          "layout_restored": true
+        }
+      },
+      "layout_restore": {
+        "ok": true,
+        "layout_restored": true,
+        "outputs_after": 2
+      },
+      "connected": 2,
+      "guest_connected": 2,
+      "logical_connected": 0,
+      "compositor_surfaces": 2,
+      "sources": [
+        "WaylandSession"
+      ],
+      "outputs": [
+        {
+          "id": "wl_output-0",
+          "connected": true,
+          "source": "WaylandSession",
+          "class": "compositor_wl_output",
+          "compositor_surface": true
+        },
+        {
+          "id": "wl_output-1",
+          "connected": true,
+          "source": "WaylandSession",
+          "class": "compositor_wl_output",
+          "compositor_surface": true
+        }
+      ],
+      "SILICON_EXACT_EMULATION": false,
+      "PHYSICAL_DUAL_PANEL": "PENDING",
+      "note": "DSXL UX PASS earned"
+    },
+    "GUEST_DUAL_OUTPUT_PASS_retained": true,
+    "note": "DSXL earned via max_outputs=2 compositor UX + reboot reconfig disconnect/reconnect"
+  },
+  "earned_at_utc": "2026-08-15T20:19:16Z",
+  "SAFE_HALT": {
+    "reason": "g14_dsxl_reboot_complete",
+    "qemu_stopped": true
+  },
+  "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/pipeline/overlays/rc002-aarch64.qcow2",
+  "claim_boundary": "DSXL earned only via reboot reconfig with compositor drop 2\u21921\u21922; hotplug device_del gpu1 path remains FAIL-honest."
 }

@@ -161,10 +161,50 @@ def test_dsxl_compositor_ux_gate_earns_with_full_evidence():
             "disconnect_ok": True,
             "reconnect_ok": True,
             "layout_restored": True,
+            "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+            "mid": {"compositor_outputs": 1, "disconnect_ok": True},
         },
         layout_restore={"ok": True, "layout_restored": True},
     )
     assert ux.get("DSXL_DUAL_COMPOSITOR_UX_PASS") is True
+
+
+def test_dsxl_compositor_ux_gate_rejects_hotplug_monitor_error_rubber_stamp():
+    """Independent FAIL: device_del Error + outputs stayed 2 must not earn PASS."""
+    outputs = [
+        {"id": "a", "connected": True, "source": "WaylandSession", "compositor_surface": True},
+        {"id": "b", "connected": True, "source": "WaylandSession", "compositor_surface": True},
+    ]
+    windows = [
+        {"app_id": "foot", "output_id": "a"},
+        {"app_id": "mousepad", "output_id": "b"},
+    ]
+    focus_moves = [
+        {"ok": True, "output_id": "a"},
+        {"ok": True, "output_id": "b"},
+    ]
+    ux = compositor_ux_gate(
+        outputs=outputs,
+        windows=windows,
+        focus_moves=focus_moves,
+        disconnect_reconnect={
+            "disconnect_ok": True,  # rubber-stamped
+            "reconnect_ok": True,
+            "layout_restored": True,
+            "method": "dual_virtio_gpu_device_del_add",
+            "del_tail": "Error: Device 'gpu1' not found\r\n(qemu) ",
+            "add_tail": "'{\"driver\":\"virtio-gpu-pci\"' is not a valid device model name",
+            "compositor_output_drop": False,
+            "mid_compositor_outputs": 2,
+            "after_compositor_outputs": 2,
+        },
+        layout_restore={"ok": True, "layout_restored": True},
+    )
+    assert ux.get("DSXL_DUAL_COMPOSITOR_UX_PASS") is False
+    assert ux.get("ok") is False
+    assert "disconnect" in (ux.get("missing") or []) or any(
+        str(m).startswith("honesty:") for m in (ux.get("missing") or [])
+    )
 
 
 def test_live_visual_pass_false_without_guest_captures(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):

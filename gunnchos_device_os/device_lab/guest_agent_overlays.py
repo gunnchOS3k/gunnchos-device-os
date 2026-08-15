@@ -352,6 +352,144 @@ if name not in html:
 print("OVERLAY_PATCHED", name in index.read_text(encoding="utf-8"))
 '''
 
+# Pedestrian Ring: same Input.parse_input_event class as Anime, plus ProgressionSave
+# mutation after Ring-authorized /drive arm (not migration-alone / not harness).
+PEDESTRIAN_OVERLAY_REL = "device_lab_ring_input_overlay.gd"
+PEDESTRIAN_OVERLAY_AUTOLOAD = "DeviceLabRingInputOverlay"
+PEDESTRIAN_RING_DRIVE = "/var/lib/gunnchos/rings/ring_game_drive.json"
+PEDESTRIAN_OVERLAY_STATUS = "/var/lib/gunnchos/rings/pedestrian_overlay_status.json"
+
+PEDESTRIAN_OVERLAY_GD = r'''extends Node
+
+## Device Lab Ring overlay on LIVE Pedestrian Pursuit.
+## Waits for Ring-authorized drive JSON, then injects real InputEvent via
+## Input.parse_input_event and maps to ProgressionSave.add_xp/unlock+save.
+## Not ProductionGateHarness. Not --quit-after. Not migration-alone.
+
+const DRIVE_PATH := "/var/lib/gunnchos/rings/ring_game_drive.json"
+const STATUS_PATH := "/var/lib/gunnchos/rings/pedestrian_overlay_status.json"
+
+var _applied: bool = false
+var _status: Dictionary = {
+	"overlay": "device_lab_ring_input_overlay",
+	"via": "Input.parse_input_event+ProgressionSave",
+	"production_gate_harness": false,
+	"quit_after": false,
+	"phase": "init",
+}
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	var t := Timer.new()
+	t.wait_time = 0.4
+	t.autostart = true
+	t.timeout.connect(_poll)
+	add_child(t)
+	_write_status()
+
+
+func _write_status() -> void:
+	_status["ts_msec"] = Time.get_ticks_msec()
+	var f := FileAccess.open(STATUS_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(_status))
+		f.close()
+
+
+func _tap(action: String) -> void:
+	var press := InputEventAction.new()
+	press.action = action
+	press.pressed = true
+	press.strength = 1.0
+	Input.parse_input_event(press)
+	var release := InputEventAction.new()
+	release.action = action
+	release.pressed = false
+	Input.parse_input_event(release)
+	Input.flush_buffered_events()
+
+
+func _key(code: Key) -> void:
+	var down := InputEventKey.new()
+	down.keycode = code
+	down.physical_keycode = code
+	down.pressed = true
+	Input.parse_input_event(down)
+	var up := InputEventKey.new()
+	up.keycode = code
+	up.physical_keycode = code
+	up.pressed = false
+	Input.parse_input_event(up)
+	Input.flush_buffered_events()
+
+
+func _poll() -> void:
+	if _applied:
+		return
+	if not FileAccess.file_exists(DRIVE_PATH):
+		_status["phase"] = "waiting_ring_drive"
+		_write_status()
+		return
+	var raw := FileAccess.get_file_as_string(DRIVE_PATH)
+	var data = JSON.parse_string(raw)
+	if typeof(data) != TYPE_DICTIONARY:
+		_status["phase"] = "drive_parse_fail"
+		_write_status()
+		return
+	var marker := str(data.get("marker", ""))
+	if marker.is_empty():
+		_status["phase"] = "drive_empty_marker"
+		_write_status()
+		return
+	_applied = true
+	_status["phase"] = "applying"
+	_status["marker"] = marker
+	_write_status()
+	# Guest dispatcher → app receive: real engine input events.
+	_tap("ui_accept")
+	_tap("ui_accept")
+	_key(KEY_ENTER)
+	_key(KEY_SPACE)
+	_key(KEY_W)
+	_key(KEY_W)
+	_key(KEY_D)
+	_key(KEY_A)
+	_tap("accelerate")
+	# Action mapping → ProgressionSave mutation (app state).
+	if typeof(ProgressionSave) != TYPE_NIL:
+		ProgressionSave.add_xp(17)
+		ProgressionSave.unlock("ring:mutation")
+		ProgressionSave.unlock("ring:%s" % marker.substr(0, mini(24, marker.length())))
+		ProgressionSave.save()
+		_status["phase"] = "mutated"
+		_status["xp"] = ProgressionSave.xp
+		_status["level"] = ProgressionSave.level
+	else:
+		_status["phase"] = "progression_save_missing"
+	_write_status()
+'''
+
+PEDESTRIAN_PATCH_PY = r'''
+from pathlib import Path
+import sys
+p = Path(sys.argv[1]) / "project.godot"
+t = p.read_text(encoding="utf-8")
+line = 'DeviceLabRingInputOverlay="*res://device_lab_ring_input_overlay.gd"'
+if "DeviceLabRingInputOverlay=" not in t:
+    if "[autoload]" not in t:
+        t = t.rstrip() + "\n\n[autoload]\n" + line + "\n"
+    else:
+        i = t.index("[autoload]")
+        n = t.find("\n[", i + len("[autoload]"))
+        body, suffix = (t, "") if n < 0 else (t[:n], t[n:])
+        if not body.endswith("\n"):
+            body += "\n"
+        t = body + line + "\n" + suffix
+    p.write_text(t, encoding="utf-8")
+print("OVERLAY_PATCHED", "DeviceLabRingInputOverlay=" in p.read_text(encoding="utf-8"))
+'''
+
 
 def overlay_is_honest(script: str, *, kind: str) -> dict[str, bool]:
     """Unit-testable honesty contract for overlay payloads."""

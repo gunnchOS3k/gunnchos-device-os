@@ -1,0 +1,31 @@
+{
+  "pipeline_version": "1.0.0",
+  "schema": "gunnchos.device_lab.base_image_pipeline.v1",
+  "stage": "cow_overlays",
+  "stage_evidence": {
+    "cow_overlays": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/pipeline/overlays/rc002-aarch64.qcow2",
+      "persona": "rc002"
+    },
+    "seal": {
+      "sha256": "56cd664333c39c8037eb9e383528a51c097139bb4b0f71d1430425772249c493",
+      "version": "interactive-root-aarch64-56cd664333c3"
+    },
+    "version_sha256": {
+      "sha256": "56cd664333c39c8037eb9e383528a51c097139bb4b0f71d1430425772249c493",
+      "version": "interactive-root-aarch64-56cd664333c3"
+    }
+  },
+  "stages_completed": [
+    "canonical_engineering_image",
+    "provision_once",
+    "gunnchos_tooling",
+    "guest_agent",
+    "validate_sentinel",
+    "clean_shutdown",
+    "seal",
+    "version_sha256",
+    "cow_overlays"
+  ],
+  "updated_at_utc": "2026-08-15T16:47:20Z"
+}

@@ -1,0 +1,114 @@
+{
+  "schema": "gunnchos.product_use.host_storage_preflight.v1",
+  "before": {
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os",
+    "free_gib": 71.07,
+    "total_gib": 460.43,
+    "used_gib": 389.36,
+    "HOST_FREE_SPACE_REQUIRED_GIB": 25.0,
+    "HOST_FREE_SPACE_PREFERRED_GIB": 40.0,
+    "required_ok": true,
+    "preferred_ok": true,
+    "HOST_RESOURCE_BLOCKED": false
+  },
+  "after": {
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os",
+    "free_gib": 71.07,
+    "total_gib": 460.43,
+    "used_gib": 389.36,
+    "HOST_FREE_SPACE_REQUIRED_GIB": 25.0,
+    "HOST_FREE_SPACE_PREFERRED_GIB": 40.0,
+    "required_ok": true,
+    "preferred_ok": true,
+    "HOST_RESOURCE_BLOCKED": false
+  },
+  "actions": [],
+  "cleanup": null,
+  "largest_candidates": [
+    {
+      "path": "os_build/device_lab_interactive_guest",
+      "bytes": 4264210233,
+      "gib": 3.971,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/wp011r",
+      "bytes": 155288471,
+      "gib": 0.145,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "os_build/bootable_reference",
+      "bytes": 48450314,
+      "gib": 0.045,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "os_build/realm_images",
+      "bytes": 27579394,
+      "gib": 0.026,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/phase_xv",
+      "bytes": 16761667,
+      "gib": 0.016,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "os_build/device_lab_guest",
+      "bytes": 14144571,
+      "gib": 0.013,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/device_lab",
+      "bytes": 11416049,
+      "gib": 0.011,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/product_use",
+      "bytes": 9765549,
+      "gib": 0.009,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "os_build/installable_image",
+      "bytes": 6924732,
+      "gib": 0.006,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/phase_xii",
+      "bytes": 2167399,
+      "gib": 0.002,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/wp007",
+      "bytes": 153849,
+      "gib": 0.0,
+      "safety": "REVIEW_BEFORE_DELETE"
+    },
+    {
+      "path": "artifacts/wp013",
+      "bytes": 105172,
+      "gib": 0.0,
+      "safety": "REVIEW_BEFORE_DELETE"
+    }
+  ],
+  "never_delete_class": [
+    "Cursor state.vscdb / IDE state",
+    "user Downloads / docs outside regenerable roots",
+    "repos/.git",
+    "canonical evidence JSON under artifacts/product_use/VP_*",
+    "model weights / GGUF",
+    "CAD / EDA",
+    "source media",
+    "unknown files outside regenerable allowlist"
+  ],
+  "HOST_RESOURCE_BLOCKED": false,
+  "qemu_persona_runs_allowed": true,
+  "claim_boundary": "Host free-space gate only. Does not invent guest PASS. Cursor does not merge."
+}

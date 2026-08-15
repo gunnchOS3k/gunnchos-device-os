@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "observation_class": "GUEST_OBSERVED",
+  "seed": {
+    "ok": true,
+    "stdout": "SEED_OK\n{\"persona\":\"G11\",\"lesson\":\"GENERAL_IT-w01\",\"progress\":1}\n"
+  },
+  "update_interrupt": {
+    "ok": true,
+    "stdout": "INTERRUPTED_CLEAN\nRECOVERY=STATE_INTACT\n"
+  },
+  "hard_reboot": {
+    "ok": true,
+    "dropped": true,
+    "recovered": true,
+    "wait_loops": 1,
+    "method": "systemctl_reboot_same_qemu"
+  },
+  "reread": {
+    "ok": true,
+    "stdout": "REREAD=OK\n{\"persona\":\"G11\",\"lesson\":\"GENERAL_IT-w01\",\"progress\":1}\n"
+  },
+  "note": "Persist + update-interrupt + soft guest reboot on same QEMU/COW. Not physical power-cycle silicon.",
+  "REBOOT_UPDATE_RECOVERY_PASS": true
+}

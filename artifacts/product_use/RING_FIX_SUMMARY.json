@@ -1,0 +1,136 @@
+{
+  "at_utc": "2026-08-15T19:55:17Z",
+  "pass": true,
+  "blocker": null,
+  "PHYSICAL_RING_E6": false,
+  "browser_mutated": true,
+  "browser_boundary": null,
+  "before_text": "MemoStart RINGMUTATION1786823397",
+  "after_text": "MemoStart RINGMUTATION1786823566",
+  "libreoffice": true,
+  "game": true,
+  "game_note": "Godot Pedestrian input-driven save change beyond post-load baseline; seed already save_version=2",
+  "waterfall": [
+    {
+      "t_mono": 34016.765590125,
+      "stage": "event_source_ready",
+      "marker": "RINGMUTATION1786823566"
+    },
+    {
+      "t_mono": 34077.389047583,
+      "stage": "browser_http_ready",
+      "http": "200",
+      "chromium_pid": 12363
+    },
+    {
+      "t_mono": 34077.722457791,
+      "stage": "browser_before_snapshot",
+      "bytes": 32,
+      "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1786823397\n"
+    },
+    {
+      "t_mono": 34080.484874166,
+      "stage": "ring_inject_browser",
+      "via_stack": true,
+      "delivered": true,
+      "latency_ms": 2762
+    },
+    {
+      "t_mono": 34080.484877,
+      "stage": "identity_auth_transport_ok"
+    },
+    {
+      "t_mono": 34095.438596166,
+      "stage": "guest_dispatch_clicks"
+    },
+    {
+      "t_mono": 34097.312204833,
+      "stage": "gunnchos_input_text",
+      "ok": true,
+      "via": "uinput"
+    },
+    {
+      "t_mono": 34110.168195208,
+      "stage": "qemu_sendkey_marker"
+    },
+    {
+      "t_mono": 34112.594665083,
+      "stage": "keyboard_event_overlay_armed"
+    },
+    {
+      "t_mono": 34114.070520833,
+      "stage": "chromium_headless_marker_receipt",
+      "ok": true,
+      "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1786823566\nHL_OK\n",
+      "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1786823566'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
+    },
+    {
+      "t_mono": 34114.9931555,
+      "stage": "chromium_reloaded_for_drive",
+      "url_has_marker": true
+    },
+    {
+      "t_mono": 34117.368211875,
+      "stage": "app_receipt_mutation",
+      "attempt": 0,
+      "latency_ms": 39645,
+      "via": "keyboard_event_overlay"
+    },
+    {
+      "t_mono": 34117.700133666,
+      "stage": "ack_feedback_ok"
+    },
+    {
+      "t_mono": 34145.0986775,
+      "stage": "game_overlay_installed",
+      "ok": true,
+      "probe": "OVERLAY_PATCHED True\n"
+    },
+    {
+      "t_mono": 34156.035981666,
+      "stage": "ring_inject_game",
+      "via_stack": true,
+      "delivered": true,
+      "latency_ms": 2087
+    },
+    {
+      "t_mono": 34156.035982791,
+      "stage": "game_identity_auth_transport_ok"
+    },
+    {
+      "t_mono": 34162.939917958,
+      "stage": "game_guest_dispatch_hid"
+    },
+    {
+      "t_mono": 34163.111168541,
+      "stage": "game_keyboard_event_overlay_armed"
+    },
+    {
+      "t_mono": 34164.299741666,
+      "stage": "game_app_receipt_mutation",
+      "attempt": 0,
+      "latency_ms": 10351,
+      "via": "parse_input_event_overlay"
+    }
+  ],
+  "guest_artifacts": {
+    "ok": true,
+    "odt_path_guest": "/root/gunnchos-lab-document.odt",
+    "odt_bytes": 9308,
+    "odt_marker": "RINGMUTATION1786823566",
+    "browser_memo": "browser/RingMemo.txt",
+    "browser_bytes": 32,
+    "browser_marker": "RINGMUTATION1786823566",
+    "browser_state": "browser/RingMemo.txt",
+    "browser_html": "browser/RingMemo.html",
+    "lab_browser_collector_forbidden": true,
+    "game_save": "game/pp_progression.cfg",
+    "game_bytes": 400,
+    "game_save_guest_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+    "godot_process_alive": true,
+    "committed_odt": "document/ring_editor_buffer.odt",
+    "lab_ringring_rejected": true,
+    "lab_document_state_forbidden": true,
+    "document_state_present": false
+  }
+}

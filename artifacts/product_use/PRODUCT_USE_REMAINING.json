@@ -1,0 +1,118 @@
+{
+  "schema": "gunnchos.product_use.remaining.v1",
+  "work_item": "PRODUCT-USE-RC-002",
+  "pr": 116,
+  "tip": "25098582771a680d1914e5351ea01979a35a66bc",
+  "at_utc": "2026-08-15T20:32:54Z",
+  "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
+  "RING_PASS": true,
+  "G14_PASS": true,
+  "FOUR_GAME_PASS": true,
+  "PHYSICAL_RING_E6": false,
+  "REAL_TEACHER_E6": false,
+  "HANDHELD_DOCK_CONTINUITY_PASS": false,
+  "S0_open": 0,
+  "S0_count": 0,
+  "S1_open": [],
+  "S1_count": 0,
+  "S2_open": [
+    "G11 shipping WAIKE product UI not claimed (fixture demotion; digital token may still earn; G11.ok=false vs STUDENT digital token documented)",
+    "G12 HANDHELD_DOCK_CONTINUITY physical silicon not earned",
+    "G13 REAL_TEACHER_E6=false (physical/human teacher path BLOCKED residual; digital token may still earn)",
+    "Ring browser path: headless Chromium + ?marker= URL is Ring-authorized lab assist \u2014 send\u2260pure HID receive\u2260mutation purity residual (mutation still guest-file proven)"
+  ],
+  "S2_count": 4,
+  "S1_dispositions": {
+    "G11_Student": {
+      "status": "CLOSED_DIGITAL",
+      "root_cause_was": "Ring FAIL blocked token; shipping WAIKE fixture demotion",
+      "closed_by": "Ring PASS + HID quiz_submit + ip_link_down offline",
+      "shipping_waike_product": false,
+      "PHYSICAL_RING_E6": false
+    },
+    "G12_Office": {
+      "status": "CLOSED_DIGITAL",
+      "root_cause_was": "office primary-task (LibreOffice edit/save) not evidenced; dock FS alone insufficient",
+      "closed_by": "tip-current LibreOffice ODT mutation + dock FS continuity + reboot recovery",
+      "HANDHELD_DOCK_CONTINUITY_PASS": false
+    },
+    "G13_Teacher": {
+      "status": "CLOSED_DIGITAL",
+      "root_cause_was": "token held false solely for REAL_TEACHER_E6 while digital ACL already ok",
+      "closed_by": "digital fixture assign/grade + role ACL + FS hygiene; REAL_TEACHER_E6 remains false",
+      "REAL_TEACHER_E6": false,
+      "residual": "BLOCKED_PHYSICAL_TEACHER_E6 (S2)"
+    },
+    "G14_Builder": {
+      "status": "CLOSED_DIGITAL",
+      "closed_by": "reboot_reconfig_max_outputs_2_1_2 compositor drop+restore + git_build_test",
+      "prior_fail": "hotplug device_del gpu1 rubber-stamp demoted",
+      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true
+    }
+  },
+  "tokens": {
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": true,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": true,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
+  },
+  "journeys": {
+    "G11": {
+      "ok_digital": true,
+      "hid_quiz_submit": true,
+      "offline": true,
+      "Ring": true,
+      "ok": false,
+      "note": "G11 result.ok=false reflects shipping_waike_product=false fixture demotion; digital STUDENT token remains true when HID+offline+Ring digital legs hold"
+    },
+    "G12": {
+      "ok_digital": true,
+      "dock": true,
+      "reboot": true,
+      "office_primary": true
+    },
+    "G13": {
+      "ok_digital": true,
+      "role_acl_ok": true,
+      "fs_hygiene_ok": true,
+      "REAL_TEACHER_E6": false
+    },
+    "G14": {
+      "ok": true,
+      "DSXL": true,
+      "git_build_test": true,
+      "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+      "phase_outputs": [
+        2,
+        1,
+        2
+      ]
+    },
+    "G15": {
+      "ok": true
+    },
+    "RING": {
+      "PASS": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+      "PHYSICAL_RING_E6": false,
+      "disposition": "CLOSED_DIGITAL",
+      "evidence": "artifacts/product_use/journeys/G11_ring"
+    },
+    "FOUR_GAME": {
+      "PASS": true
+    }
+  },
+  "cursor_never_merges": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "independent_verifier_ready": true,
+  "merge_ready_recommendation": "YES \u2014 independent verifier PASS on digital Product-Use (S0=0 S1=0); S2 residuals (shipping WAIKE UI, dock silicon, REAL_TEACHER_E6, Ring browser purity) documented; PHYSICAL_RING_E6=false. Cursor never merges \u2014 Edmund merge decision.",
+  "SAFE_HALT": {
+    "qemu": "stopped",
+    "note": "guest poweroff after G14 DSXL reboot-reconfig earn; sealed base+COW preserved",
+    "at_utc": "2026-08-15T20:19:34Z"
+  },
+  "prefer_fail_over_false_pass": true,
+  "independent_verifier_PASS": true,
+  "independent_verifier_tip": "4149e403b55f79a5e21360f254cf453be03f7ed9"
+}

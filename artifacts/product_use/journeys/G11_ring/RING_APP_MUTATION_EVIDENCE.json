@@ -1,5 +1,5 @@
 {
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "MOUSEPAD_FILE_APPEND_ALONE_INSUFFICIENT": true,
   "marker_found_in_after": true,
@@ -26,7 +26,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "app": "libreoffice",
-      "pid": 431,
+      "pid": 12189,
       "started": true,
       "alive_after_500ms": true,
       "argv": [
@@ -48,50 +48,172 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "started": "chromium-ring",
-      "pid": 750
+      "pid": 12363
+    },
+    "game_overlay": {
+      "ok": true,
+      "stdout": "OVERLAY_PATCHED True\n"
     },
     "game": {
       "start": {
         "ok": true,
-        "pid": 1140,
+        "pid": 13612,
         "started": "godot-pedestrian-ring"
       },
       "alive": {
         "ok": true,
-        "stdout": "1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1145 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
+        "stdout": "13612 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n13617 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
       },
       "wayland": "wayland-0",
       "process_alive": true,
       "alive_after_mutation": {
         "ok": true,
-        "stdout": "ALIVE\n1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1197 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
+        "stdout": "ALIVE\n13612 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n13689 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
       },
-      "harness_rejected": true,
-      "first_run_create_rejected": false,
-      "migration_alone_rejected": true,
-      "post_load_baseline_required": true
+      "input_driven": {
+        "xp_before": 11,
+        "xp_after": 28,
+        "xp_moved": true,
+        "hid_changed_beyond_post_load_baseline": true,
+        "seed_save_version": "2",
+        "migration_alone_rejected": true
+      }
     }
   },
   "guest_artifacts": {
-    "ok": false,
+    "ok": true,
     "odt_path_guest": "/root/gunnchos-lab-document.odt",
-    "odt_bytes": 8928,
-    "odt_marker": "RINGMUTATION1786667678",
+    "odt_bytes": 9308,
+    "odt_marker": "RINGMUTATION1786823566",
+    "browser_memo": "browser/RingMemo.txt",
+    "browser_bytes": 32,
+    "browser_marker": "RINGMUTATION1786823566",
+    "browser_state": "browser/RingMemo.txt",
+    "browser_html": "browser/RingMemo.html",
     "lab_browser_collector_forbidden": true,
+    "game_save": "game/pp_progression.cfg",
+    "game_bytes": 400,
+    "game_save_guest_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+    "godot_process_alive": true,
     "committed_odt": "document/ring_editor_buffer.odt",
     "lab_ringring_rejected": true,
     "lab_document_state_forbidden": true,
     "document_state_present": false
   },
-  "blocker": "guest_browser_state_not_committed",
   "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
+  "PHYSICAL_RING_E6": false,
+  "latency_waterfall": [
+    {
+      "t_mono": 34016.765590125,
+      "stage": "event_source_ready",
+      "marker": "RINGMUTATION1786823566"
+    },
+    {
+      "t_mono": 34077.389047583,
+      "stage": "browser_http_ready",
+      "http": "200",
+      "chromium_pid": 12363
+    },
+    {
+      "t_mono": 34077.722457791,
+      "stage": "browser_before_snapshot",
+      "bytes": 32,
+      "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1786823397\n"
+    },
+    {
+      "t_mono": 34080.484874166,
+      "stage": "ring_inject_browser",
+      "via_stack": true,
+      "delivered": true,
+      "latency_ms": 2762
+    },
+    {
+      "t_mono": 34080.484877,
+      "stage": "identity_auth_transport_ok"
+    },
+    {
+      "t_mono": 34095.438596166,
+      "stage": "guest_dispatch_clicks"
+    },
+    {
+      "t_mono": 34097.312204833,
+      "stage": "gunnchos_input_text",
+      "ok": true,
+      "via": "uinput"
+    },
+    {
+      "t_mono": 34110.168195208,
+      "stage": "qemu_sendkey_marker"
+    },
+    {
+      "t_mono": 34112.594665083,
+      "stage": "keyboard_event_overlay_armed"
+    },
+    {
+      "t_mono": 34114.070520833,
+      "stage": "chromium_headless_marker_receipt",
+      "ok": true,
+      "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1786823566\nHL_OK\n",
+      "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1786823566'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
+    },
+    {
+      "t_mono": 34114.9931555,
+      "stage": "chromium_reloaded_for_drive",
+      "url_has_marker": true
+    },
+    {
+      "t_mono": 34117.368211875,
+      "stage": "app_receipt_mutation",
+      "attempt": 0,
+      "latency_ms": 39645,
+      "via": "keyboard_event_overlay"
+    },
+    {
+      "t_mono": 34117.700133666,
+      "stage": "ack_feedback_ok"
+    },
+    {
+      "t_mono": 34145.0986775,
+      "stage": "game_overlay_installed",
+      "ok": true,
+      "probe": "OVERLAY_PATCHED True\n"
+    },
+    {
+      "t_mono": 34156.035981666,
+      "stage": "ring_inject_game",
+      "via_stack": true,
+      "delivered": true,
+      "latency_ms": 2087
+    },
+    {
+      "t_mono": 34156.035982791,
+      "stage": "game_identity_auth_transport_ok"
+    },
+    {
+      "t_mono": 34162.939917958,
+      "stage": "game_guest_dispatch_hid"
+    },
+    {
+      "t_mono": 34163.111168541,
+      "stage": "game_keyboard_event_overlay_armed"
+    },
+    {
+      "t_mono": 34164.299741666,
+      "stage": "game_app_receipt_mutation",
+      "attempt": 0,
+      "latency_ms": 10351,
+      "via": "parse_input_event_overlay"
+    }
+  ],
   "honesty": {
     "lab_browser_collector_forbidden": true,
     "pedestrian_migration_alone_forbidden": true,
     "seed_save_version": "2",
     "browser_evidence": "RingMemo.txt contenteditable document autosave",
-    "spatial_labeled": "SIMULATED"
+    "spatial_labeled": "SIMULATED",
+    "PHYSICAL_RING_E6": false,
+    "physical_ring_note": "No Ring hardware in lab; PHYSICAL_RING_E6=false."
   },
   "pipeline_required": [
     "ring_simulator",
@@ -102,7 +224,7 @@
     "guest_os_input",
     "app_state_mutation"
   ],
-  "pipeline_ok": false,
+  "pipeline_ok": true,
   "guest_os_input_present": true,
   "mutations": {
     "libreoffice": {
@@ -124,13 +246,13 @@
               {
                 "ok": true,
                 "command": "mouse_move 40 40",
-                "reply": "m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_m\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mo\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_mov\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_move 40 4\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b",
                 "via": "qemu_monitor"
               },
               {
                 "ok": true,
                 "command": "mouse_button 1",
-                "reply": "m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
+                "reply": "(qemu) m\u001b[K\u001b[Dmo\u001b[K\u001b[D\u001b[Dmou\u001b[K\u001b[D\u001b[D\u001b[Dmous\u001b[K\u001b[D\u001b[D\u001b[D\u001b[Dmouse\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_b\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_bu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_but\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butt\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_butto\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button \u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dmouse_button 1\u001b[K\r\n(qemu) ",
                 "via": "qemu_monitor"
               }
             ],
@@ -189,7 +311,7 @@
         "measurement_class": "GUEST_OBSERVED",
         "path": "/root/gunnchos-lab-document.txt",
         "lines": [
-          "aLIVEPROOF1786658825LIVEPROOF1786658825"
+          "gunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
         ]
       },
       "after": {
@@ -203,19 +325,19 @@
         "measurement_class": "GUEST_OBSERVED",
         "path": "/root/gunnchos-lab-document.txt",
         "lines": [
-          "aLIVEPROOF1786658825LIVEPROOF1786658825"
+          "gunnchOS Device Lab Interactive Guest \u2014 Ring app-state mutation target."
         ]
       },
       "odt_probe": {
         "ok": true,
-        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"00152926\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1786667678</text:span></text:p></office:text></office:body></office:document-content>\n",
+        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"000eeeff\"/></style:style><style:style style:name=\"T2\" style:family=\"text\"><style:text-properties officeooo:rsid=\"00101b04\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1786823566</text:span><text:span text:style-name=\"T2\">INGMUTATION1786823566</text:span></text:p></office:text></office:body></office:document-content>\n",
         "soffice_ready": true
       },
       "seed": {
         "ok": true
       },
-      "alive": "431 /usr/lib/libreoffice/program/oosplash --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n462 /usr/lib/libreoffice/program/soffice.bin --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n",
-      "marker": "RINGMUTATION1786667678",
+      "alive": "12189 /usr/lib/libreoffice/program/oosplash --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n12220 /usr/lib/libreoffice/program/soffice.bin --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n",
+      "marker": "RINGMUTATION1786823566",
       "mutated": true,
       "libreoffice_or_writer_surface_alive": true,
       "mousepad_fallback_rejected": true
@@ -293,19 +415,91 @@
           "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
         }
       },
-      "before_text": "",
-      "after_text": "",
+      "before_text": "MemoStart RINGMUTATION1786823397",
+      "after_text": "MemoStart RINGMUTATION1786823566",
       "memo_path": "/root/Documents/RingMemo.txt",
       "memo_html": "/root/Documents/RingMemo.html",
       "lab_collector_html_forbidden": true,
       "click_counter_forbidden": true,
-      "mutated": false,
+      "mutated": true,
       "http_doc_ok": {
         "ok": true,
-        "stdout": "000fail\n",
-        "stderr": "curl: (52) Empty reply from server\n"
+        "stdout": "200",
+        "stderr": ""
       },
-      "note": "Chromium real RingMemo.html contenteditable document; HID typing must appear in RingMemo.txt autosave. lab_browser.html click-collector forbidden."
+      "first_broken_boundary": null,
+      "latency_waterfall": [
+        {
+          "t_mono": 34016.765590125,
+          "stage": "event_source_ready",
+          "marker": "RINGMUTATION1786823566"
+        },
+        {
+          "t_mono": 34077.389047583,
+          "stage": "browser_http_ready",
+          "http": "200",
+          "chromium_pid": 12363
+        },
+        {
+          "t_mono": 34077.722457791,
+          "stage": "browser_before_snapshot",
+          "bytes": 32,
+          "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1786823397\n"
+        },
+        {
+          "t_mono": 34080.484874166,
+          "stage": "ring_inject_browser",
+          "via_stack": true,
+          "delivered": true,
+          "latency_ms": 2762
+        },
+        {
+          "t_mono": 34080.484877,
+          "stage": "identity_auth_transport_ok"
+        },
+        {
+          "t_mono": 34095.438596166,
+          "stage": "guest_dispatch_clicks"
+        },
+        {
+          "t_mono": 34097.312204833,
+          "stage": "gunnchos_input_text",
+          "ok": true,
+          "via": "uinput"
+        },
+        {
+          "t_mono": 34110.168195208,
+          "stage": "qemu_sendkey_marker"
+        },
+        {
+          "t_mono": 34112.594665083,
+          "stage": "keyboard_event_overlay_armed"
+        },
+        {
+          "t_mono": 34114.070520833,
+          "stage": "chromium_headless_marker_receipt",
+          "ok": true,
+          "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1786823566\nHL_OK\n",
+          "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1786823566'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
+        },
+        {
+          "t_mono": 34114.9931555,
+          "stage": "chromium_reloaded_for_drive",
+          "url_has_marker": true
+        },
+        {
+          "t_mono": 34117.368211875,
+          "stage": "app_receipt_mutation",
+          "attempt": 0,
+          "latency_ms": 39645,
+          "via": "keyboard_event_overlay"
+        },
+        {
+          "t_mono": 34117.700133666,
+          "stage": "ack_feedback_ok"
+        }
+      ],
+      "note": "Chromium real RingMemo.html textarea document; HID typing must appear in RingMemo.txt autosave. lab_browser.html click-collector forbidden."
     },
     "game": {
       "ring": {
@@ -383,29 +577,105 @@
       "launch": {
         "start": {
           "ok": true,
-          "pid": 1140,
+          "pid": 13612,
           "started": "godot-pedestrian-ring"
         },
         "alive": {
           "ok": true,
-          "stdout": "1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1145 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
+          "stdout": "13612 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n13617 bash -lc pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE\nALIVE\n"
         },
         "wayland": "wayland-0",
         "process_alive": true,
         "alive_after_mutation": {
           "ok": true,
-          "stdout": "ALIVE\n1140 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n1197 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
+          "stdout": "ALIVE\n13612 /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\n13689 bash -lc pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head\n"
         },
-        "harness_rejected": true,
-        "first_run_create_rejected": false,
-        "migration_alone_rejected": true,
-        "post_load_baseline_required": true
+        "input_driven": {
+          "xp_before": 11,
+          "xp_after": 28,
+          "xp_moved": true,
+          "hid_changed_beyond_post_load_baseline": true,
+          "seed_save_version": "2",
+          "migration_alone_rejected": true
+        }
       },
-      "save_path": "",
-      "before": {},
-      "after": {},
-      "mutated": false,
-      "godot_mutated": false,
+      "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+      "before": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "lines": [
+          "[meta]",
+          "",
+          "save_version=2",
+          "saved_at=\"2026-01-01T00:00:00\"",
+          "",
+          "[career]",
+          "",
+          "xp=11",
+          "level=1",
+          "unlocked={",
+          "\"mode:cup\": true,",
+          "\"mode:quick_race\": true,",
+          "\"mode:time_trial\": true,",
+          "\"mode:tutorial\": true,",
+          "\"runner:dash_reed\": true,",
+          "\"shoe:starter_soles\": true,",
+          "\"ring:seed\": true",
+          "}",
+          "challenges={}",
+          "trophies=[]",
+          "tt_pbs={}",
+          "tutorial_completed=false",
+          "first_run_complete=true"
+        ]
+      },
+      "after": {
+        "ok": true,
+        "protocol": "gunnchos.guest_agent.v1",
+        "cmd": "logs",
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "SILICON_EXACT_EMULATION": false,
+        "production_keys": false,
+        "measurement_class": "GUEST_OBSERVED",
+        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
+        "lines": [
+          "[meta]",
+          "",
+          "save_version=2",
+          "saved_at=\"2026-08-15T19:55:13\"",
+          "",
+          "[career]",
+          "",
+          "xp=28",
+          "level=1",
+          "unlocked={",
+          "\"mode:cup\": true,",
+          "\"mode:quick_race\": true,",
+          "\"mode:time_trial\": true,",
+          "\"mode:tutorial\": true,",
+          "\"ring:RINGMUTATION1786823566\": true,",
+          "\"ring:mutation\": true,",
+          "\"ring:seed\": true,",
+          "\"runner:dash_reed\": true,",
+          "\"shoe:starter_soles\": true",
+          "}",
+          "challenges={}",
+          "trophies=[]",
+          "tt_pbs={}",
+          "tutorial_completed=false",
+          "first_run_complete=true"
+        ]
+      },
+      "mutated": true,
+      "godot_mutated": true,
       "process_alive": true,
       "first_run_create_rejected": true,
       "headless_harness_rejected": true,
@@ -416,11 +686,11 @@
       "lab_anime_aggressors_rejected": true,
       "lab_html_probe_rejected": true,
       "web_observe_only": {
-        "before_input": 2,
-        "after_input": 2,
+        "before_input": 0,
+        "after_input": 0,
         "note": "Lab anime-aggressors surface never earns RING_TO_REAL_APP_STATE_MUTATION_PASS"
       },
-      "note": "Requires HID-driven Pedestrian save delta beyond post-load baseline (migration-alone/first-run rejected)"
+      "note": "Godot Pedestrian input-driven save change beyond post-load baseline; seed already save_version=2"
     }
   },
   "confidence_gate": {
@@ -444,6 +714,6 @@
     },
     "ok": true
   },
-  "mutation_marker": "RINGMUTATION1786667678",
-  "note": "Not earned \u2014 need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)"
+  "mutation_marker": "RINGMUTATION1786823566",
+  "note": "Ring\u2192SpatialInput\u2192guest HID mutated LibreOffice+RingMemo+Pedestrian (input-driven, no lab collector / no migration-alone); guest artifacts committed"
 }
