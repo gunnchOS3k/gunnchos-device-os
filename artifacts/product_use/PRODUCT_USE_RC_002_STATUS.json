@@ -2,25 +2,23 @@
   "schema": "gunnchos.product_use_rc_002.status.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "stream": "A",
-  "tip": "31de3e1c78e62d913ee7391ea24665fd91941941",
+  "tip": "TIP_PENDING_COMMIT",
   "pr": {
     "number": 116,
     "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/116",
     "draft": true
   },
-  "updated_at_utc": "2026-08-15T20:10:06Z",
+  "updated_at_utc": "2026-08-15T20:19:34Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
   "persona_tokens": {
     "STUDENT_DIGITAL_PICKUP_AND_USE_READY": true,
     "OFFICE_DIGITAL_PICKUP_AND_USE_READY": true,
     "TEACHER_DIGITAL_PICKUP_AND_USE_READY": true,
-    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
     "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
   },
   "S0_open": 0,
-  "S1_open": [
-    "G14/Builder: DSXL disconnect/reconnect rubber-stamp demoted; need reboot reconfig earn"
-  ],
+  "S1_open": [],
   "legs": {
     "G15": {
       "ok": true,
@@ -39,10 +37,16 @@
       "git_ok": null
     },
     "G14": {
-      "ok": false,
+      "ok": true,
       "git_ok": true,
-      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
-      "blocker": "qemu_device_del_gpu1_not_found_compositor_outputs_stayed_2"
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+      "phase_outputs": [
+        2,
+        1,
+        2
+      ],
+      "blocker": null
     },
     "RING": {
       "ok": null,

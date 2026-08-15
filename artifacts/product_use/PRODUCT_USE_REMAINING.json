@@ -2,21 +2,19 @@
   "schema": "gunnchos.product_use.remaining.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "pr": 116,
-  "tip": "31de3e1c78e62d913ee7391ea24665fd91941941",
-  "at_utc": "2026-08-15T20:10:06Z",
+  "tip": "TIP_PENDING_COMMIT",
+  "at_utc": "2026-08-15T20:19:34Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
   "RING_PASS": true,
-  "G14_PASS": false,
+  "G14_PASS": true,
   "FOUR_GAME_PASS": true,
   "PHYSICAL_RING_E6": false,
   "REAL_TEACHER_E6": false,
   "HANDHELD_DOCK_CONTINUITY_PASS": false,
   "S0_open": 0,
   "S0_count": 0,
-  "S1_open": [
-    "G14/Builder: DSXL_DUAL_COMPOSITOR_UX_PASS demoted \u2014 qemu device_del gpu1 Error / no compositor drop (hidden S1; prefer reboot reconfig)"
-  ],
-  "S1_count": 1,
+  "S1_open": [],
+  "S1_count": 0,
   "S2_open": [
     "G11 shipping WAIKE product UI not claimed (fixture demotion; digital token may still earn; G11.ok=false vs STUDENT digital token documented)",
     "G12 HANDHELD_DOCK_CONTINUITY physical silicon not earned",
@@ -46,17 +44,17 @@
       "residual": "BLOCKED_PHYSICAL_TEACHER_E6 (S2)"
     },
     "G14_Builder": {
-      "status": "REOPENED_S1",
-      "root_cause": "rubber_stamped_DSXL_disconnect_on_qemu_monitor_Error",
-      "required": "reboot_reconfig_max_outputs_2_1_2 with compositor drop + layout restore",
-      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false
+      "status": "CLOSED_DIGITAL",
+      "closed_by": "reboot_reconfig_max_outputs_2_1_2 compositor drop+restore + git_build_test",
+      "prior_fail": "hotplug device_del gpu1 rubber-stamp demoted",
+      "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true
     }
   },
   "tokens": {
     "STUDENT_DIGITAL_PICKUP_AND_USE_READY": true,
     "OFFICE_DIGITAL_PICKUP_AND_USE_READY": true,
     "TEACHER_DIGITAL_PICKUP_AND_USE_READY": true,
-    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
     "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
   },
   "journeys": {
@@ -81,10 +79,15 @@
       "REAL_TEACHER_E6": false
     },
     "G14": {
-      "ok": false,
-      "DSXL": false,
+      "ok": true,
+      "DSXL": true,
       "git_build_test": true,
-      "demotion": "hotplug_rubber_stamp_cleared"
+      "method": "qemu_reboot_reconfig_max_outputs_2_1_2",
+      "phase_outputs": [
+        2,
+        1,
+        2
+      ]
     },
     "G15": {
       "ok": true
@@ -99,10 +102,11 @@
   "cursor_never_merges": true,
   "READY_FOR_EDMUND_MERGE": false,
   "independent_verifier_ready": true,
-  "merge_ready_recommendation": "NO \u2014 G14 DSXL S1 reopened after independent FAIL; rebuild tip for re-verify",
+  "merge_ready_recommendation": "NO \u2014 digital S0=0 S1=0 after G14 reboot-reconfig earn; await independent re-verify",
   "SAFE_HALT": {
     "qemu": "stopped",
-    "note": "guest poweroff after evidence sealed; sealed base+COW preserved"
+    "note": "guest poweroff after G14 DSXL reboot-reconfig earn; sealed base+COW preserved",
+    "at_utc": "2026-08-15T20:19:34Z"
   },
   "prefer_fail_over_false_pass": true
 }

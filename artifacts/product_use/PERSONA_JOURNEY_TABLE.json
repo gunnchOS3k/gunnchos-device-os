@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.product_use.persona_journey_table.v1",
   "generated_at_utc": "2026-08-13T22:15:43Z",
-  "note": "G14 DSXL demoted after independent FAIL (gpu1 not found / no compositor drop). BUILDER token false. Ring browser headless+marker noted as purity residual (S2). G11.ok=false is shipping demotion; STUDENT digital token may remain true.",
-  "tokens_earned": false,
+  "note": "G14 DSXL earned via reboot reconfig max_outputs 2\u21921\u21922 (not hotplug). BUILDER true. Ring browser headless+marker remains S2 purity residual. G11.ok=false shipping demotion vs STUDENT digital token documented.",
+  "tokens_earned": true,
   "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
   "handheld_dock_continuity": "OPEN_NOT_PHYSICAL_SILICON",
   "ring_mutation": "EARNED",
@@ -119,13 +119,13 @@
       "launcher": "NOT_RUN",
       "apps": "GUEST_OBSERVED:foot+mousepad_dual_focus_move",
       "network": "NOT_RUN",
-      "primary_task": "OPEN:DSXL_DUAL_COMPOSITOR_UX_PASS_hotplug_FAIL_need_reboot_reconfig",
-      "artifact": "GUEST_OBSERVED:safe-test-repo_git_build_test_retained",
+      "primary_task": "GUEST_OBSERVED:DSXL_DUAL_COMPOSITOR_UX_PASS_reboot_reconfig",
+      "artifact": "GUEST_OBSERVED:safe-test-repo_git_build_test",
       "save": "NOT_RUN",
       "reboot": "NOT_RUN",
       "resume": "NOT_RUN",
-      "offline": "NOT_RUN",
-      "reconnect": "FAIL:device_del_gpu1_not_found_outputs_stayed_2",
+      "offline": "GUEST_OBSERVED:max_outputs_2_to_1_compositor_drop",
+      "reconnect": "GUEST_OBSERVED:max_outputs_1_to_2_layout_restore",
       "AI": "NOT_RUN",
       "WAIKE": "N/A",
       "dock": "N/A",
@@ -134,14 +134,14 @@
       "developer_intervention": "AUTOMATED_GUEST_AGENT",
       "terminal": "GUEST_OBSERVED:git_init_branch_edit_test",
       "S0": 0,
-      "S1": 1,
+      "S1": 0,
       "S2": 1,
       "evidence": "artifacts/product_use/journeys/G14_dsxl_s1",
-      "token_earned": false,
+      "token_earned": true,
       "token_id": "BUILDER_DIGITAL_PICKUP_AND_USE_READY",
       "VISUAL_MODEL_REVIEW": "AVAILABLE_CAPTURES",
       "REAL_TEACHER_E6": null,
-      "DSXL_DUAL_COMPOSITOR_UX_PASS": false
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true
     },
     {
       "persona": "G15",
@@ -176,11 +176,11 @@
     }
   ],
   "run_summary": "artifacts/product_use/journeys/RUN_SUMMARY.json",
-  "updated_at_utc": "2026-08-15T20:10:06Z",
-  "independent_vp": "FAIL_REMEDIATION_IN_PROGRESS",
+  "updated_at_utc": "2026-08-15T20:19:34Z",
+  "independent_vp": "PENDING_REVERIFY_AFTER_G14_EARN",
   "HONESTY_OF_STATED_CLAIMS": "DEMOTED_APPLIED",
   "independent_vp_tip": "ece2b0f4843add817db6f9eefb978b135a4f2826",
   "READY_FOR_EDMUND_MERGE": false,
   "independent_note": "VP FAIL: G11 offline labels claim link_down/link_up but probe is --interface lo only; quiz this run curl-backed.",
-  "tip": "31de3e1c78e62d913ee7391ea24665fd91941941"
+  "tip": "TIP_PENDING_COMMIT"
 }
