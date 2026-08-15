@@ -3,7 +3,7 @@
   "work_item": "PRODUCT-USE-RC-002",
   "pr": 116,
   "tip": "25098582771a680d1914e5351ea01979a35a66bc",
-  "at_utc": "2026-08-15T20:28:58Z",
+  "at_utc": "2026-08-15T20:32:54Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
   "RING_PASS": true,
   "G14_PASS": true,
@@ -104,13 +104,15 @@
     }
   },
   "cursor_never_merges": true,
-  "READY_FOR_EDMUND_MERGE": false,
+  "READY_FOR_EDMUND_MERGE": true,
   "independent_verifier_ready": true,
-  "merge_ready_recommendation": "NO \u2014 digital S0=0 S1=0; census tip+RING STATUS coherent; await independent re-verify",
+  "merge_ready_recommendation": "YES \u2014 independent verifier PASS on digital Product-Use (S0=0 S1=0); S2 residuals (shipping WAIKE UI, dock silicon, REAL_TEACHER_E6, Ring browser purity) documented; PHYSICAL_RING_E6=false. Cursor never merges \u2014 Edmund merge decision.",
   "SAFE_HALT": {
     "qemu": "stopped",
     "note": "guest poweroff after G14 DSXL reboot-reconfig earn; sealed base+COW preserved",
     "at_utc": "2026-08-15T20:19:34Z"
   },
-  "prefer_fail_over_false_pass": true
+  "prefer_fail_over_false_pass": true,
+  "independent_verifier_PASS": true,
+  "independent_verifier_tip": "4149e403b55f79a5e21360f254cf453be03f7ed9"
 }
