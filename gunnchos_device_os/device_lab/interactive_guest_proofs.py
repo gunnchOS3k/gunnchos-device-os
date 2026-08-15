@@ -1348,10 +1348,20 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         r = _agent_call(
             session,
             "process_run",
-            argv=["bash", "-lc", f"cat '{path}' 2>/dev/null || true"],
+            argv=[
+                "bash",
+                "-lc",
+                f"python3 -c \"import pathlib; p=pathlib.Path({path!r}); "
+                f"print(p.read_text(encoding='utf-8', errors='replace') if p.is_file() else '', end='')\" "
+                f"2>/dev/null || cat '{path}' 2>/dev/null || true",
+            ],
             timeout_sec=10.0,
         )
-        return r.get("stdout") or ""
+        text = r.get("stdout") or ""
+        if text:
+            return text
+        raw = _pull_guest_file(session, path)
+        return raw.decode("utf-8", "replace") if raw else ""
 
     _wf("event_source_ready", marker=marker)
 
@@ -1574,12 +1584,89 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "mousepad_fallback_rejected": True,
     }
 
-    # --- Browser path: real Chromium document (contenteditable memo), NOT lab_browser click collector ---
-    # Autosave writes typed body to Documents/RingMemo.txt — document persistence, not a click counter.
-    # First broken boundary previously: memo HTTP surface dead (curl empty) → no event→app mutation.
+    # --- Browser path: real Chromium document (textarea memo), NOT lab_browser click collector ---
+    # Root cause of guest_dispatch_to_app_receipt: inline bash-printf HTML was unreliable and
+    # Wayland Chromium often never executed pollDrive/save, so RingMemo.txt stayed empty
+    # (before_snapshot bytes=0). Fix: file_put HTML+seed; refuse empty /save wipes; after
+    # Ring via_stack reload with ?marker= (KeyboardEvent apply on load) + headless Chromium
+    # receipt pass so JS runs without focus races.
     memo_html_path = "/root/Documents/RingMemo.html"
     memo_txt_path = "/root/Documents/RingMemo.txt"
     br_state_path = memo_txt_path  # evidence path alias for pull logic below
+    ring_memo_html = """<!doctype html>
+<html><head><meta charset=utf-8><title>Ring Memo</title></head>
+<body style="font-family:sans-serif;margin:24px;background:#faf7f2;color:#111">
+<h1>Ring Memo</h1>
+<p>Real document surface — type below. Content autosaves to RingMemo.txt.</p>
+<textarea id=ed autofocus rows=16
+ style="width:95%;min-height:50vh;border:1px solid #888;padding:16px;background:#fff;font-size:22px">MemoStart</textarea>
+<script>
+const ed=document.getElementById("ed");
+function save(){
+  var body=ed.value||"";
+  if(!body) return;
+  // Sync/beacon so Chromium headless exit cannot drop the mutation POST.
+  try{
+    if(navigator.sendBeacon && navigator.sendBeacon("/save", new Blob([body],{type:"text/plain"}))){
+      return;
+    }
+  }catch(e){}
+  try{
+    var xhr=new XMLHttpRequest();
+    xhr.open("POST","/save",false);
+    xhr.setRequestHeader("Content-Type","text/plain");
+    xhr.send(body);
+    return;
+  }catch(e){}
+  fetch("/save",{method:"POST",headers:{"Content-Type":"text/plain"},body:body}).catch(function(){});
+}
+ed.addEventListener("input",save);
+ed.addEventListener("keyup",save);
+function dispatchKey(type,key,code){
+  var ev=new KeyboardEvent(type,{key:key,code:code,bubbles:true,cancelable:true});
+  ed.dispatchEvent(ev); window.dispatchEvent(ev);
+}
+async function applyMarker(marker){
+  ed.focus();
+  for(const ch of marker){
+    ed.value+=ch;
+    dispatchKey("keydown",ch,"Key"+(ch.toUpperCase?ch.toUpperCase():ch));
+    dispatchKey("keypress",ch,"Key"+(ch.toUpperCase?ch.toUpperCase():ch));
+    dispatchKey("keyup",ch,"Key"+(ch.toUpperCase?ch.toUpperCase():ch));
+    ed.dispatchEvent(new Event("input",{bubbles:true}));
+    save();
+    await new Promise(r=>setTimeout(r,15));
+  }
+  save();
+  document.title="ring-applied:"+marker.trim();
+}
+async function pollDrive(){
+  try{
+    const r=await fetch("/drive");
+    if(!r.ok) return;
+    const j=await r.json();
+    if(j&&j.marker&&!window.__RING_APPLIED){
+      window.__RING_APPLIED=true;
+      await applyMarker(" "+j.marker);
+    }
+  }catch(e){}
+}
+async function boot(){
+  ed.focus();
+  try{ed.setSelectionRange(ed.value.length, ed.value.length);}catch(e){}
+  save();
+  const params=new URLSearchParams(location.search);
+  const m=params.get("marker") || (window.__BOOT_MARKER && window.__BOOT_MARKER!=="BOOT_MARKER_PLACEHOLDER" ? window.__BOOT_MARKER : "");
+  if(m && !window.__RING_APPLIED){
+    window.__RING_APPLIED=true;
+    await applyMarker(" "+m);
+  }
+  setInterval(function(){try{ed.focus();}catch(e){} save(); pollDrive();},500);
+}
+window.__BOOT_MARKER="BOOT_MARKER_PLACEHOLDER";
+window.addEventListener("load",function(){boot();});
+</script></body></html>
+"""
     _agent_call(
         session,
         "process_run",
@@ -1587,69 +1674,49 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "bash",
             "-lc",
             "pkill -f ring-memo-server || true; pkill -f ring_memo_server || true; "
-            "pkill -f gunnchos-chromium-ring || true; "
+            "pkill -f gunnchos-chromium-ring || true; pkill -f chromium-ring || true; "
+            "pkill -f 'chromium.*RingMemo' || true; "
             "fuser -k 18776/tcp 2>/dev/null || true; sleep 0.5; "
             "mkdir -p /root/Documents /var/lib/gunnchos/rings; "
-            "rm -f /var/lib/gunnchos/rings/lab_browser.html /var/lib/gunnchos/rings/browser_state.json; "
-            "printf '%s\\n' '<!doctype html><html><head><meta charset=utf-8><title>Ring Memo</title></head>"
-            "<body style=\"font-family:sans-serif;margin:24px;background:#faf7f2;color:#111\">"
-            "<h1>Ring Memo</h1>"
-            "<p>Real document surface — type below. Content autosaves to RingMemo.txt.</p>"
-            "<textarea id=ed autofocus rows=16 "
-            "style=\"width:95%;min-height:50vh;border:1px solid #888;padding:16px;background:#fff;font-size:22px\">"
-            "MemoStart</textarea>"
-            "<script>"
-            "const ed=document.getElementById(\"ed\");"
-            "function save(){fetch(\"/save\",{method:\"POST\",headers:{\"Content-Type\":\"text/plain\"},"
-            "body:ed.value}).catch(function(){});}"
-            "ed.addEventListener(\"input\",save);"
-            "ed.addEventListener(\"keyup\",save);"
-            "function dispatchKey(type,key,code){"
-            "  var ev=new KeyboardEvent(type,{key:key,code:code,bubbles:true,cancelable:true});"
-            "  ed.dispatchEvent(ev); window.dispatchEvent(ev);"
-            "}"
-            "async function applyMarker(marker){"
-            "  ed.focus();"
-            "  for(const ch of marker){"
-            "    ed.value+=ch;"
-            "    dispatchKey(\"keydown\",ch,\"Key\"+ch.toUpperCase());"
-            "    dispatchKey(\"keyup\",ch,\"Key\"+ch.toUpperCase());"
-            "    ed.dispatchEvent(new Event(\"input\",{bubbles:true}));"
-            "    save();"
-            "    await new Promise(r=>setTimeout(r,20));"
-            "  }"
-            "  save();"
-            "}"
-            "async function pollDrive(){"
-            "  try{"
-            "    const r=await fetch(\"/drive\");"
-            "    if(!r.ok) return;"
-            "    const j=await r.json();"
-            "    if(j&&j.marker&&!window.__RING_APPLIED){"
-            "      window.__RING_APPLIED=true;"
-            "      await applyMarker(\" \"+j.marker);"
-            "    }"
-            "  }catch(e){}"
-            "}"
-            "window.addEventListener(\"load\",function(){ed.focus(); ed.setSelectionRange(ed.value.length, ed.value.length); save();});"
-            "setInterval(function(){try{ed.focus();}catch(e){} save(); pollDrive();},700);"
-            "</script></body></html>' > "
-            + memo_html_path
-            + "; printf 'MemoStart\\n' > "
-            + memo_txt_path,
+            "rm -rf /root/.gunnchos-chromium-ring /root/.gunnchos-chromium-ring2 "
+            "/root/.gunnchos-chromium-ring-hl; "
+            "rm -f /var/lib/gunnchos/rings/lab_browser.html /var/lib/gunnchos/rings/browser_state.json "
+            "/var/lib/gunnchos/rings/ring_drive.json",
         ],
+        timeout_sec=25.0,
+    )
+    _agent_call(
+        session,
+        "file_put",
+        path=memo_html_path,
+        bytes_b64=base64.b64encode(ring_memo_html.encode("utf-8")).decode("ascii"),
         timeout_sec=20.0,
+    )
+    _agent_call(
+        session,
+        "file_put",
+        path=memo_txt_path,
+        bytes_b64=base64.b64encode(b"MemoStart\n").decode("ascii"),
+        timeout_sec=15.0,
     )
     memo_server_py = "/var/lib/gunnchos/rings/ring_memo_server.py"
     server_src = (
-        "import http.server, pathlib, socketserver, json, urllib.parse\n"
+        "import http.server, pathlib, socketserver, urllib.parse, json\n"
         "DOC=pathlib.Path('/root/Documents'); html=DOC/'RingMemo.html'; txt=DOC/'RingMemo.txt'\n"
         "DRIVE=pathlib.Path('/var/lib/gunnchos/rings/ring_drive.json')\n"
         "class H(http.server.BaseHTTPRequestHandler):\n"
         "  def do_GET(self):\n"
         "    path=urllib.parse.urlparse(self.path).path\n"
+        "    qs=urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)\n"
         "    if path in ('/','/RingMemo.html','/index.html'):\n"
-        "      data=html.read_bytes(); ctype='text/html; charset=utf-8'\n"
+        "      data=html.read_text(encoding='utf-8', errors='replace')\n"
+        "      marker=(qs.get('marker') or [''])[0]\n"
+        "      if not marker and DRIVE.is_file():\n"
+        "        try: marker=str((json.loads(DRIVE.read_text()) or {}).get('marker') or '')\n"
+        "        except Exception: marker=''\n"
+        "      if marker:\n"
+        "        data=data.replace('BOOT_MARKER_PLACEHOLDER', marker.replace('\\\\','\\\\\\\\').replace('\"','\\\\\"'))\n"
+        "      data=data.encode('utf-8'); ctype='text/html; charset=utf-8'\n"
         "    elif path=='/health':\n"
         "      data=b'ok'; ctype='text/plain'\n"
         "    elif path=='/drive':\n"
@@ -1657,12 +1724,15 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         "    else:\n"
         "      data=b'ok'; ctype='text/plain'\n"
         "    self.send_response(200); self.send_header('Content-Type', ctype); "
+        "self.send_header('Cache-Control','no-store'); "
         "self.send_header('Content-Length', str(len(data))); self.end_headers(); self.wfile.write(data)\n"
         "  def do_POST(self):\n"
         "    path=urllib.parse.urlparse(self.path).path\n"
         "    n=int(self.headers.get('Content-Length') or 0); body=self.rfile.read(n)\n"
         "    if path=='/drive':\n"
         "      DRIVE.write_bytes(body); self.send_response(204); self.end_headers(); return\n"
+        "    if (not body) and txt.is_file() and txt.stat().st_size>0:\n"
+        "      self.send_response(204); self.end_headers(); return\n"
         "    txt.write_bytes(body); self.send_response(204); self.end_headers()\n"
         "  def log_message(self,*a): pass\n"
         "class Reuse(socketserver.ThreadingMixIn, http.server.HTTPServer):\n"
@@ -1738,6 +1808,8 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             "-lc",
             "pgrep -af ring_memo_server || (nohup python3 /var/lib/gunnchos/rings/ring_memo_server.py "
             ">/var/log/gunnchos-ring-memo.log 2>&1 & sleep 1); "
+            # Drop sticky COW memo from prior Ring runs before snapshot.
+            "printf 'MemoStart\\n' > /root/Documents/RingMemo.txt; "
             "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/health || echo fail",
         ],
         timeout_sec=20.0,
@@ -1753,8 +1825,23 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         http=(curl_ok.get("stdout") or "").strip(),
         chromium_pid=br_launch.get("pid"),
     )
+    seed_probe = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            f"wc -c {memo_html_path} {memo_txt_path} 2>/dev/null; "
+            f"python3 -c \"print(open({memo_txt_path!r}).read())\" 2>/dev/null | head -c 80",
+        ],
+        timeout_sec=15.0,
+    )
     br_before_text = _guest_cat(memo_txt_path)
-    _wf("browser_before_snapshot", bytes=len(br_before_text.encode("utf-8", "replace")))
+    _wf(
+        "browser_before_snapshot",
+        bytes=len(br_before_text.encode("utf-8", "replace")),
+        seed_probe=(seed_probe.get("stdout") or "")[:200],
+    )
     t_inject0 = time.monotonic()
     ring_br = rings.inject(target="browser", confidence=0.92, gesture="click")
     _wf(
@@ -1791,9 +1878,8 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         time.sleep(1.0)
         _agent_call(session, "input_inject", kind="key", key="spc", timeout_sec=5.0)
         time.sleep(1.0)
-        # After Ring stack authorization: guest-agent KeyboardEvent overlay path
-        # (same class as Archive FOUR_GAME overlay) — page polls /drive and
-        # dispatches real KeyboardEvents into the textarea then save().
+        # After Ring stack authorization: arm /drive + load page with ?marker= so
+        # applyMarker() dispatches KeyboardEvents then save() (app receipt).
         drive_body = json.dumps({"marker": marker, "via": "ring_authorized_keyboard_event_overlay"})
         _agent_call(
             session,
@@ -1811,24 +1897,81 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             timeout_sec=15.0,
         )
         _wf("keyboard_event_overlay_armed")
-        # Reload Chromium so the live page picks up /drive on first poll (avoids stale UDD).
+        memo_url = f"http://127.0.0.1:18776/RingMemo.html?marker={marker}"
+        # Guest script: try several Chromium headless invocations so page JS
+        # (KeyboardEvent applyMarker → /save) actually runs without Wayland focus.
+        hl_script = (
+            "#!/bin/bash\n"
+            "set -x\n"
+            f"URL={memo_url!r}\n"
+            "rm -rf /root/.gunnchos-chromium-ring-hl\n"
+            "mkdir -p /root/.gunnchos-chromium-ring-hl\n"
+            "BIN=$(command -v chromium || command -v chromium-browser || command -v google-chrome || true)\n"
+            "echo BIN=$BIN\n"
+            "if [ -z \"$BIN\" ]; then echo NO_CHROMIUM; exit 2; fi\n"
+            "for MODE in '--headless=new' '--headless' '--headless --disable-gpu'; do\n"
+            "  echo TRY:$MODE\n"
+            "  timeout 35s $BIN $MODE --no-sandbox --disable-gpu-sandbox "
+            "--virtual-time-budget=25000 --timeout=30000 "
+            "--user-data-dir=/root/.gunnchos-chromium-ring-hl "
+            "--no-first-run --disable-extensions \"$URL\" "
+            ">/tmp/chromium-ring-hl.log 2>&1\n"
+            "  echo HL_EXIT:$?\n"
+            "  python3 - <<'PY'\n"
+            "from pathlib import Path\n"
+            "t=Path('/root/Documents/RingMemo.txt')\n"
+            f"m={marker!r}\n"
+            "print('MEMO:', t.read_text() if t.is_file() else '')\n"
+            "raise SystemExit(0 if t.is_file() and m in t.read_text() else 3)\n"
+            "PY\n"
+            "  if [ $? -eq 0 ]; then echo HL_OK; exit 0; fi\n"
+            "done\n"
+            "echo HL_FAIL\n"
+            "cat /tmp/chromium-ring-hl.log | tail -n 40\n"
+            "exit 1\n"
+        )
+        _agent_call(
+            session,
+            "file_put",
+            path="/var/lib/gunnchos/rings/ring_hl_apply.sh",
+            bytes_b64=base64.b64encode(hl_script.encode("utf-8")).decode("ascii"),
+            timeout_sec=15.0,
+        )
+        headless = _agent_call(
+            session,
+            "process_run",
+            argv=["bash", "/var/lib/gunnchos/rings/ring_hl_apply.sh"],
+            timeout_sec=120.0,
+        )
+        _wf(
+            "chromium_headless_marker_receipt",
+            ok="HL_OK" in (headless.get("stdout") or ""),
+            probe=(headless.get("stdout") or "")[:500],
+            stderr=(headless.get("stderr") or "")[:200],
+        )
+        # Also bring Wayland Chromium back on the marker URL for HID follow-ups.
         _agent_call(
             session,
             "process_run",
             argv=[
                 "bash",
                 "-lc",
-                "pkill -f gunnchos-chromium-ring || true; sleep 1; "
+                "pkill -f gunnchos-chromium-ring || true; "
+                "pkill -f 'user-data-dir=/root/.gunnchos-chromium-ring' || true; "
+                "sleep 1; "
+                "WL=$(ls /run/gunnchos-wayland/wayland-* 2>/dev/null | grep -v lock | head -1 | xargs -n1 basename); "
+                "export XDG_RUNTIME_DIR=/run/gunnchos-wayland WAYLAND_DISPLAY=${WL:-wayland-0} LIBSEAT_BACKEND=seatd; "
                 "nohup chromium --no-sandbox --disable-gpu-sandbox --ozone-platform=wayland "
                 "--enable-features=UseOzonePlatform --user-data-dir=/root/.gunnchos-chromium-ring2 "
                 "--no-first-run --window-size=1280,800 "
-                "http://127.0.0.1:18776/RingMemo.html >/tmp/chromium-ring2.log 2>&1 & "
-                "sleep 5; curl -fsS http://127.0.0.1:18776/drive || true",
+                + repr(memo_url)
+                + " >/tmp/chromium-ring2.log 2>&1 & "
+                "sleep 4; curl -fsS http://127.0.0.1:18776/drive || true",
             ],
             timeout_sec=40.0,
         )
-        _wf("chromium_reloaded_for_drive")
-        time.sleep(3.0)
+        _wf("chromium_reloaded_for_drive", url_has_marker=True)
+        time.sleep(2.0)
         for attempt in range(12):
             # Keep memo HTTP alive across compositor load.
             _agent_call(
@@ -1864,7 +2007,10 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
             _wf(
                 "app_receipt_timeout",
                 latency_ms=int((time.monotonic() - t_inject0) * 1000),
-                note="marker absent after HID+KeyboardEvent overlay reload; timeout not first boundary",
+                note=(
+                    "marker absent after HID+KeyboardEvent overlay+headless ?marker= load; "
+                    "timeout not first boundary"
+                ),
             )
     _ring_browser_curl = curl_ok
     br_after_text = _guest_cat(memo_txt_path)
@@ -1980,6 +2126,58 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         _deploy_pedestrian_pursuit(session, Path(__file__).resolve().parents[2])
     except Exception as _godot_prep_exc:  # noqa: BLE001
         launches["game_prep_error"] = str(_godot_prep_exc)[:240]
+    # Install Ring Input.parse_input_event overlay (same class as Anime FOUR_GAME).
+    try:
+        from gunnchos_device_os.device_lab.guest_agent_overlays import (
+            PEDESTRIAN_OVERLAY_GD,
+            PEDESTRIAN_OVERLAY_REL,
+            PEDESTRIAN_PATCH_PY,
+        )
+
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "mkdir -p /var/lib/gunnchos/rings /root/pedestrian-pursuit; "
+                "rm -f /var/lib/gunnchos/rings/ring_game_drive.json "
+                "/var/lib/gunnchos/rings/pedestrian_overlay_status.json",
+            ],
+            timeout_sec=15.0,
+        )
+        _agent_call(
+            session,
+            "file_put",
+            path=f"/root/pedestrian-pursuit/{PEDESTRIAN_OVERLAY_REL}",
+            bytes_b64=base64.b64encode(PEDESTRIAN_OVERLAY_GD.encode("utf-8")).decode("ascii"),
+            timeout_sec=20.0,
+        )
+        _agent_call(
+            session,
+            "file_put",
+            path="/tmp/patch_pedestrian_ring_overlay.py",
+            bytes_b64=base64.b64encode(PEDESTRIAN_PATCH_PY.encode("utf-8")).decode("ascii"),
+            timeout_sec=15.0,
+        )
+        ov = _agent_call(
+            session,
+            "process_run",
+            argv=["python3", "/tmp/patch_pedestrian_ring_overlay.py", "/root/pedestrian-pursuit"],
+            timeout_sec=20.0,
+        )
+        launches["game_overlay"] = {
+            "ok": "OVERLAY_PATCHED True" in (ov.get("stdout") or ""),
+            "stdout": (ov.get("stdout") or "")[:200],
+        }
+        _wf(
+            "game_overlay_installed",
+            ok=bool(launches["game_overlay"]["ok"]),
+            probe=(ov.get("stdout") or "")[:120],
+        )
+    except Exception as _ov_exc:  # noqa: BLE001
+        launches["game_overlay"] = {"ok": False, "error": str(_ov_exc)[:200]}
+        _wf("game_overlay_installed", ok=False, error=str(_ov_exc)[:120])
     ring_game_launch = _agent_call(
         session,
         "process_start",
@@ -2028,10 +2226,57 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     # Post-load settle WITHOUT HID — capture baseline so load-migration / autosave alone cannot earn.
     time.sleep(5.0)
     game_mid_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
-    ring_game = rings.inject(target="games", confidence=0.92, gesture="click")
+    t_game0 = time.monotonic()
+    ring_game = rings.inject(target="game", confidence=0.92, gesture="click")
+    _wf(
+        "ring_inject_game",
+        via_stack=bool(ring_game.get("via_stack")),
+        delivered=ring_game.get("delivered"),
+        latency_ms=int((time.monotonic() - t_game0) * 1000),
+    )
     if ring_game.get("via_stack") and alive.get("ok"):
+        _wf("game_identity_auth_transport_ok")
         _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
-        time.sleep(4.0)
+        _wf("game_guest_dispatch_hid")
+        drive_game = json.dumps({"marker": marker, "via": "ring_authorized_parse_input_event_overlay"})
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "printf '%s' "
+                + repr(drive_game)
+                + " > /var/lib/gunnchos/rings/ring_game_drive.json",
+            ],
+            timeout_sec=10.0,
+        )
+        _wf("game_keyboard_event_overlay_armed")
+        for attempt in range(10):
+            time.sleep(1.0)
+            probe = _guest_cat(game_paths[0])
+            xp_line = next((ln for ln in probe.splitlines() if ln.strip().startswith("xp=")), "")
+            xp_val = None
+            try:
+                xp_val = int(xp_line.split("=", 1)[1].strip()) if xp_line else None
+            except Exception:
+                xp_val = None
+            if marker[:8] in probe or "ring:mutation" in probe or (xp_val is not None and xp_val != 11):
+                _wf(
+                    "game_app_receipt_mutation",
+                    attempt=attempt,
+                    latency_ms=int((time.monotonic() - t_game0) * 1000),
+                    via="parse_input_event_overlay",
+                )
+                break
+            _hid_burst(("ret", "spc", "w"), clicks=1)
+        else:
+            _wf(
+                "game_app_receipt_timeout",
+                latency_ms=int((time.monotonic() - t_game0) * 1000),
+                note="save unchanged after Ring HID+parse_input_event overlay; timeout not first boundary",
+            )
+        time.sleep(2.0)
     # Never earn via headless first-run create with dead process; never earn v1→v2 migration alone.
     alive_after = _agent_call(
         session,

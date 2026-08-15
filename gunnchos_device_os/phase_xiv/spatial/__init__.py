@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
-TARGETS = ("libreoffice", "browser", "games")
+TARGETS = ("libreoffice", "browser", "games", "game")  # game alias for Ring/surfaces
 
 
 @dataclass
@@ -58,7 +58,8 @@ class SpatialInputService:
     def set_target(self, target: str) -> None:
         if target not in TARGETS:
             raise ValueError(target)
-        self.active_target = target
+        # Normalize Ring/surfaces "game" alias to canonical "games".
+        self.active_target = "games" if target == "game" else target
 
     def fuse(self) -> list[OsPointerEvent]:
         if not self.fusion_state["calibrated"]:

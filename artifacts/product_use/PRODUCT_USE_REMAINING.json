@@ -2,93 +2,39 @@
   "schema": "gunnchos.product_use.remaining.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "pr": 116,
-  "tip": "584add52d575e38a43c38ea88b928dac3c71da3d",
-  "at_utc": "2026-08-15T19:18:43Z",
+  "tip": "967f388fb52a56cd7f4dbec6f46a183f7ee62b3f",
+  "at_utc": "2026-08-15T19:56:45Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
-  "cow_refresh": {
-    "waike": "12-course owner-e4dd4df67f95 (from 9-course owner-72a6fa0f6b5b)",
-    "gunnchai": "#37 f78c940 (refused #36/#38)",
-    "field_kit": "#79 0b60c60",
-    "sealed_base_rebuilt": false
-  },
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "PHYSICAL_RING_E6": false,
   "S0_open": 0,
   "S0_count": 0,
   "S1_open": [
-    "G11/Student: need Ring PASS + shipping path (fixture demotes ok)",
-    "G12/Office: dock observed; full office primary-task S1 not closed",
-    "G13/Teacher: fixture ACL ok but REAL_TEACHER_E6=false keeps token false"
+    "G11/Student: Ring PASS earned; shipping-path / STUDENT token still false until persona journey re-earn",
+    "G12/Office: dock observed; full office primary-task S1 not closed \u2014 independent of Ring",
+    "G13/Teacher: REAL_TEACHER_E6=false keeps token false \u2014 independent of Ring"
   ],
   "S1_count": 3,
+  "S1_derivative_analysis": {
+    "ring_root_cause_closed": "guest_dispatch_to_app_receipt + godot_alive_mutation_not_committed",
+    "produces_multiple_derivative_failures": false,
+    "notes": [
+      "G11/Student was partially derivative of Ring FAIL; Ring PASS clears Ring half only.",
+      "G12/Office is NOT derivative of Ring browser/game receipt.",
+      "G13/Teacher is NOT derivative of Ring (REAL_TEACHER_E6)."
+    ]
+  },
   "closed_this_wave": [
-    "G14.builder (edit\u2192build\u2192artifact_hash\u2192run + DSXL)",
-    "FOUR_GAME.beatlink-party (+ aggregate 4/4)"
+    "RING browser guest_dispatch_to_app_receipt",
+    "RING game godot_alive_mutation_not_committed",
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS"
   ],
-  "failures": [
-    {
-      "id": "RING.browser_mutation",
-      "journey": "RING/G11",
-      "step": "guest_dispatch\u2192app_receipt\u2192mutation",
-      "component": "RingMemo Chromium textarea",
-      "expected": "Ring-authorized KeyboardEvent overlay lands marker in RingMemo.txt",
-      "observed": {
-        "PASS": false,
-        "blocker": "guest_browser_state_not_committed",
-        "first_broken_boundary": "guest_dispatch_to_app_receipt",
-        "PHYSICAL_RING_E6": false,
-        "waterfall": [
-          "event_source_ready",
-          "browser_http_ready",
-          "browser_before_snapshot",
-          "ring_inject_browser",
-          "identity_auth_transport_ok",
-          "guest_dispatch_clicks",
-          "gunnchos_input_text",
-          "qemu_sendkey_marker",
-          "keyboard_event_overlay_armed",
-          "app_receipt_timeout"
-        ],
-        "http": "200",
-        "libreoffice_ok": true,
-        "game_ok": false
-      },
-      "root_cause": "Not timeout. Pipeline reaches keyboard_event_overlay_armed; app_receipt never sees marker (Chromium DOM save empty). Reload-after-drive patch staged locally post-push.",
-      "logs": [
-        "artifacts/product_use/journeys/G11_ring/_ring_child_result.json"
-      ],
-      "severity": "S1",
-      "fix": "Chromium reload after /drive arm + KeyboardEvent overlay (code on tip+local follow-up)",
-      "rerun_status": "OPEN"
-    },
-    {
-      "id": "G12.office_primary_task",
-      "journey": "G12",
-      "step": "office primary-task S1",
-      "component": "office persona",
-      "expected": "full office primary-task S1 closed",
-      "observed": "dock observed; primary-task not closed",
-      "root_cause": "S1 token gate (dock alone insufficient)",
-      "logs": [
-        "artifacts/product_use/journeys/G12_office/result.json"
-      ],
-      "severity": "S1",
-      "fix": "close office primary-task evidence",
-      "rerun_status": "OPEN"
-    },
-    {
-      "id": "G13.teacher_e6",
-      "journey": "G13",
-      "step": "REAL_TEACHER_E6",
-      "component": "teacher ACL",
-      "expected": "teacher token with REAL_TEACHER_E6 or honest demotion",
-      "observed": "fixture ACL ok; REAL_TEACHER_E6=false keeps token false",
-      "root_cause": "physical/human teacher path not earned",
-      "logs": [
-        "artifacts/product_use/journeys/G13_teacher/result.json"
-      ],
-      "severity": "S1",
-      "fix": "keep token false until E6 or independent demotion rule",
-      "rerun_status": "OPEN"
-    }
+  "kept_closed": [
+    "G14.builder",
+    "FOUR_GAME 4/4",
+    "12-course WAIKE",
+    "gunnchAI #37",
+    "field-kit #79"
   ],
   "tokens": {
     "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
@@ -99,7 +45,8 @@
   },
   "FOUR_GAME_PASS": true,
   "G14_PASS": true,
+  "RING_PASS": true,
   "cursor_never_merges": true,
   "READY_FOR_EDMUND_MERGE": false,
-  "merge_ready_recommendation": "NO \u2014 S1=3 (Ring + Office + Teacher)"
+  "merge_ready_recommendation": "NO \u2014 S1=3 remain; Ring closed but persona tokens false"
 }

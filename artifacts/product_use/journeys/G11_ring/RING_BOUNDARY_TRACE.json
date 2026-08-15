@@ -1,0 +1,74 @@
+{
+  "schema": "gunnchos.ring.boundary_trace.v1",
+  "at_utc": "2026-08-15T19:56:45Z",
+  "pr": 116,
+  "PHYSICAL_RING_E6": false,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "primary_blocker_was": "guest_dispatch_to_app_receipt",
+  "primary_blocker_now": null,
+  "root_cause": {
+    "browser": "RingMemo receipt failed: unreliable HTML seed + Wayland focus races + async /save drop. Fixed with file_put memo, Ring-authorized headless Chromium KeyboardEvent applyMarker, sync/beacon save.",
+    "game": "After browser closed, Pedestrian save stayed at seed despite HID. Fixed with Ring-armed Input.parse_input_event overlay\u2192ProgressionSave mutation; Spatial game\u2192games alias."
+  },
+  "pipeline": [
+    {
+      "stage": "guest_dispatcher",
+      "ok": true
+    },
+    {
+      "stage": "guest_IPC_event_transport",
+      "ok": true
+    },
+    {
+      "stage": "target_process",
+      "ok": true
+    },
+    {
+      "stage": "browser_app_receive_handler",
+      "ok": true
+    },
+    {
+      "stage": "game_app_receive_handler",
+      "ok": true
+    },
+    {
+      "stage": "action_mapping",
+      "ok": true
+    },
+    {
+      "stage": "application_state_mutation",
+      "ok": true
+    },
+    {
+      "stage": "observed_mutation",
+      "ok": true,
+      "note": "send\u2260receive\u2260mutation"
+    },
+    {
+      "stage": "ack_feedback",
+      "ok": true
+    }
+  ],
+  "legs": {
+    "libreoffice": {
+      "mutated": true
+    },
+    "browser": {
+      "mutated": true,
+      "first_broken_boundary": null,
+      "before": "MemoStart RINGMUTATION1786823397",
+      "after": "MemoStart RINGMUTATION1786823566"
+    },
+    "game": {
+      "mutated": true,
+      "process_alive": true
+    }
+  },
+  "honesty": {
+    "PHYSICAL_RING_E6": false,
+    "lab_browser_collector_forbidden": true,
+    "migration_alone_rejected": true,
+    "timeout_not_raised_as_cure": true,
+    "fixture_app_not_substituted": true
+  }
+}
