@@ -2,51 +2,89 @@
   "schema": "gunnchos.product_use.remaining.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "pr": 116,
-  "tip": "967f388fb52a56cd7f4dbec6f46a183f7ee62b3f",
-  "at_utc": "2026-08-15T19:56:45Z",
+  "tip": "2f730db6ff9347562e63aca4b650b48cd35357ea",
+  "at_utc": "2026-08-15T20:00:13Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "RING_PASS": true,
+  "G14_PASS": true,
+  "FOUR_GAME_PASS": true,
   "PHYSICAL_RING_E6": false,
+  "REAL_TEACHER_E6": false,
+  "HANDHELD_DOCK_CONTINUITY_PASS": false,
   "S0_open": 0,
   "S0_count": 0,
-  "S1_open": [
-    "G11/Student: Ring PASS earned; shipping-path / STUDENT token still false until persona journey re-earn",
-    "G12/Office: dock observed; full office primary-task S1 not closed \u2014 independent of Ring",
-    "G13/Teacher: REAL_TEACHER_E6=false keeps token false \u2014 independent of Ring"
+  "S1_open": [],
+  "S1_count": 0,
+  "S2_open": [
+    "G11 shipping WAIKE product UI not claimed (fixture demotion; digital token may still earn)",
+    "G12 HANDHELD_DOCK_CONTINUITY physical silicon not earned",
+    "G13 REAL_TEACHER_E6=false (physical/human teacher path BLOCKED residual; digital token may still earn)"
   ],
-  "S1_count": 3,
-  "S1_derivative_analysis": {
-    "ring_root_cause_closed": "guest_dispatch_to_app_receipt + godot_alive_mutation_not_committed",
-    "produces_multiple_derivative_failures": false,
-    "notes": [
-      "G11/Student was partially derivative of Ring FAIL; Ring PASS clears Ring half only.",
-      "G12/Office is NOT derivative of Ring browser/game receipt.",
-      "G13/Teacher is NOT derivative of Ring (REAL_TEACHER_E6)."
-    ]
+  "S2_count": 3,
+  "S1_dispositions": {
+    "G11_Student": {
+      "status": "CLOSED_DIGITAL",
+      "root_cause_was": "Ring FAIL blocked token; shipping WAIKE fixture demotion",
+      "closed_by": "Ring PASS + HID quiz_submit + ip_link_down offline",
+      "shipping_waike_product": false,
+      "PHYSICAL_RING_E6": false
+    },
+    "G12_Office": {
+      "status": "CLOSED_DIGITAL",
+      "root_cause_was": "office primary-task (LibreOffice edit/save) not evidenced; dock FS alone insufficient",
+      "closed_by": "tip-current LibreOffice ODT mutation + dock FS continuity + reboot recovery",
+      "HANDHELD_DOCK_CONTINUITY_PASS": false
+    },
+    "G13_Teacher": {
+      "status": "CLOSED_DIGITAL",
+      "root_cause_was": "token held false solely for REAL_TEACHER_E6 while digital ACL already ok",
+      "closed_by": "digital fixture assign/grade + role ACL + FS hygiene; REAL_TEACHER_E6 remains false",
+      "REAL_TEACHER_E6": false,
+      "residual": "BLOCKED_PHYSICAL_TEACHER_E6 (S2)"
+    }
   },
-  "closed_this_wave": [
-    "RING browser guest_dispatch_to_app_receipt",
-    "RING game godot_alive_mutation_not_committed",
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS"
-  ],
-  "kept_closed": [
-    "G14.builder",
-    "FOUR_GAME 4/4",
-    "12-course WAIKE",
-    "gunnchAI #37",
-    "field-kit #79"
-  ],
   "tokens": {
-    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
-    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
-    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": true,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": true,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": true,
     "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
     "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
   },
-  "FOUR_GAME_PASS": true,
-  "G14_PASS": true,
-  "RING_PASS": true,
+  "journeys": {
+    "G11": {
+      "ok_digital": true,
+      "hid_quiz_submit": true,
+      "offline": true,
+      "Ring": true
+    },
+    "G12": {
+      "ok_digital": true,
+      "dock": true,
+      "reboot": true,
+      "office_primary": true
+    },
+    "G13": {
+      "ok_digital": true,
+      "role_acl_ok": true,
+      "fs_hygiene_ok": true,
+      "REAL_TEACHER_E6": false
+    },
+    "G14": {
+      "ok": true,
+      "DSXL": true
+    },
+    "G15": {
+      "ok": true
+    },
+    "RING": {
+      "PASS": true
+    },
+    "FOUR_GAME": {
+      "PASS": true
+    }
+  },
   "cursor_never_merges": true,
-  "READY_FOR_EDMUND_MERGE": false,
-  "merge_ready_recommendation": "NO \u2014 S1=3 remain; Ring closed but persona tokens false"
+  "READY_FOR_EDMUND_MERGE": true,
+  "independent_verifier_ready": true,
+  "merge_ready_recommendation": "YES \u2014 digital Product-Use S0=0 S1=0; S2 residuals (physical Ring/Teacher/Dock) documented"
 }

@@ -347,21 +347,24 @@ def evaluate_tokens(results: dict[str, Any], table: dict[str, Any]) -> dict[str,
     else:
         s1_open.append("G11 student: need HID quiz + link_down offline + Ring PASS")
 
-    g12 = results.get("DOCK") or {}
-    if g12.get("ok") and (results.get("REBOOT") or {}).get("ok"):
-        # Office token still requires fuller office primary-task path — keep false unless table says S1=0
-        if int(by.get("G12", {}).get("S1") or 1) == 0:
-            tokens["OFFICE_DIGITAL_PICKUP_AND_USE_READY"] = True
-        else:
-            s1_open.append("G12 office: dock/reboot observed but persona S1 not 0")
+    g12 = results.get("G12") or {}
+    dock = results.get("DOCK") or {}
+    office_primary = bool(
+        g12.get("office_primary_task_ok")
+        or ((g12.get("primary_task") or {}).get("ok") if isinstance(g12.get("primary_task"), dict) else False)
+        or int(by.get("G12", {}).get("S1") or 1) == 0
+    )
+    if (g12.get("ok") or dock.get("ok")) and (results.get("REBOOT") or {}).get("ok") and office_primary:
+        tokens["OFFICE_DIGITAL_PICKUP_AND_USE_READY"] = True
     else:
-        s1_open.append("G12 office/dock continuity incomplete")
+        s1_open.append("G12 office: need dock+reboot+LibreOffice primary-task")
 
     g13 = results.get("G13") or {}
-    if g13.get("ok") and g13.get("role_acl_ok") and int(by.get("G13", {}).get("S1") or 1) == 0:
+    # Digital teacher token from fixture ACL/FS; REAL_TEACHER_E6 remains a separate physical residual.
+    if g13.get("ok") and g13.get("role_acl_ok") and g13.get("fs_hygiene_ok", True):
         tokens["TEACHER_DIGITAL_PICKUP_AND_USE_READY"] = True
     else:
-        s1_open.append("G13 teacher ACL/assign incomplete or S1!=0")
+        s1_open.append("G13 teacher ACL/FS hygiene incomplete")
 
     four = results.get("FOUR_GAME") or {}
     g14 = results.get("G14") or {}

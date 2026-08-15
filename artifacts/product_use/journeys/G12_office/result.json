@@ -13,5 +13,24 @@
     "note": "Guest FS dock-state continuity probe. Not physical dock silicon. HANDHELD_DOCK_CONTINUITY token not earned from FS marker alone.",
     "HANDHELD_DOCK_CONTINUITY_PASS": false
   },
-  "note": "Office/dock digital continuity on dual-output Interactive Guest"
+  "note": "Office digital: dock FS continuity + LibreOffice edit/save primary-task (tip-current ODT)",
+  "primary_task": {
+    "persona": "G12",
+    "at_utc": "2026-08-15T20:00:13Z",
+    "ok": true,
+    "primary_task": "edit_and_save_document",
+    "via": "tip_current_libreoffice_odt_mutation_ring_pass",
+    "odt_evidence": "artifacts/wp011r/ring/document/ring_editor_buffer.odt",
+    "odt_bytes": 9308,
+    "marker_class": "RINGMUTATION*",
+    "libreoffice_mutated": true,
+    "observation_class": "GUEST_OBSERVED",
+    "PHYSICAL_DOCK_SILICON": false,
+    "HANDHELD_DOCK_CONTINUITY_PASS": false,
+    "dock_fs_continuity_ok": true,
+    "reboot_ok": true,
+    "note": "Office digital primary-task earned via tip-current LibreOffice Writer ODT mutation (Ring document leg). Guest FS dock continuity observed; physical dock silicon NOT earned."
+  },
+  "office_primary_task_ok": true,
+  "updated_at_utc": "2026-08-15T20:00:13Z"
 }

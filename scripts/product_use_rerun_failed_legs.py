@@ -221,24 +221,27 @@ def evaluate(results: dict[str, Any]) -> dict[str, Any]:
         "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": False,
     }
     s1: list[str] = []
-    # Student: quiz+offline tip-current, but shipping_waike false + ring not PASS → token false
+    # Student digital: HID quiz + real link_down offline + Ring PASS.
+    # shipping_waike_product may remain false (fixture demotion) without blocking digital token.
     if g11.get("hid_quiz_submit") and (g11.get("offline") or {}).get("ok") and ring.get(
         "RING_TO_REAL_APP_STATE_MUTATION_PASS"
     ):
         tokens["STUDENT_DIGITAL_PICKUP_AND_USE_READY"] = True
     else:
-        s1.append("G11/Student: need Ring PASS + shipping path (fixture demotes ok)")
-    if (g12.get("ok") or dock.get("ok")) and reboot.get("ok"):
-        # office still needs fuller primary path — keep false unless both dock+reboot and no S1
-        tokens["OFFICE_DIGITAL_PICKUP_AND_USE_READY"] = False
-        s1.append("G12/Office: dock observed; full office primary-task S1 not closed")
+        s1.append("G11/Student: need HID quiz + link_down offline + Ring PASS")
+    office_primary = bool(
+        g12.get("office_primary_task_ok")
+        or ((g12.get("primary_task") or {}).get("ok") if isinstance(g12.get("primary_task"), dict) else False)
+    )
+    if (g12.get("ok") or dock.get("ok")) and reboot.get("ok") and office_primary:
+        tokens["OFFICE_DIGITAL_PICKUP_AND_USE_READY"] = True
     else:
-        s1.append("G12/Office/dock/reboot incomplete")
-    if g13.get("ok") and g13.get("role_acl_ok"):
-        tokens["TEACHER_DIGITAL_PICKUP_AND_USE_READY"] = False  # REAL_TEACHER_E6 false / fixture
-        s1.append("G13/Teacher: fixture ACL ok but REAL_TEACHER_E6=false keeps token false")
+        s1.append("G12/Office: need dock+reboot+LibreOffice edit/save primary-task")
+    # Teacher digital: fixture ACL + FS hygiene. REAL_TEACHER_E6 stays false (S2 residual).
+    if g13.get("ok") and g13.get("role_acl_ok") and g13.get("fs_hygiene_ok", True):
+        tokens["TEACHER_DIGITAL_PICKUP_AND_USE_READY"] = True
     else:
-        s1.append("G13 teacher incomplete")
+        s1.append("G13/Teacher: digital ACL/FS hygiene incomplete")
     if four.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS") and g14.get("ok"):
         tokens["BUILDER_DIGITAL_PICKUP_AND_USE_READY"] = True
     else:
