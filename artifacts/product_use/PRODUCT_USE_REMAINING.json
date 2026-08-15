@@ -2,37 +2,39 @@
   "schema": "gunnchos.product_use.remaining.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "pr": 116,
-  "tip": "a68fb94592a7118170de7a20172cdab1a4d228ea",
-  "at_utc": "2026-08-15T19:16:58Z",
+  "tip": "584add52d575e38a43c38ea88b928dac3c71da3d",
+  "at_utc": "2026-08-15T19:18:43Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
   "cow_refresh": {
-    "waike": "12-course owner-e4dd4df67f95",
-    "gunnchai": "#37 (refused #36/#38)",
-    "field_kit": "#79",
+    "waike": "12-course owner-e4dd4df67f95 (from 9-course owner-72a6fa0f6b5b)",
+    "gunnchai": "#37 f78c940 (refused #36/#38)",
+    "field_kit": "#79 0b60c60",
     "sealed_base_rebuilt": false
   },
   "S0_open": 0,
+  "S0_count": 0,
   "S1_open": [
     "G11/Student: need Ring PASS + shipping path (fixture demotes ok)",
     "G12/Office: dock observed; full office primary-task S1 not closed",
     "G13/Teacher: fixture ACL ok but REAL_TEACHER_E6=false keeps token false"
   ],
-  "S0_count": 0,
   "S1_count": 3,
   "closed_this_wave": [
-    "G14.builder"
+    "G14.builder (edit\u2192build\u2192artifact_hash\u2192run + DSXL)",
+    "FOUR_GAME.beatlink-party (+ aggregate 4/4)"
   ],
-  "G14_status": "CLOSED",
   "failures": [
     {
       "id": "RING.browser_mutation",
       "journey": "RING/G11",
-      "step": "guest_dispatch\u2192app_receipt",
-      "component": "RingMemo",
-      "expected": "marker in RingMemo.txt after Ring-authorized KeyboardEvent overlay",
+      "step": "guest_dispatch\u2192app_receipt\u2192mutation",
+      "component": "RingMemo Chromium textarea",
+      "expected": "Ring-authorized KeyboardEvent overlay lands marker in RingMemo.txt",
       "observed": {
+        "PASS": false,
         "blocker": "guest_browser_state_not_committed",
-        "boundary": "guest_dispatch_to_app_receipt",
+        "first_broken_boundary": "guest_dispatch_to_app_receipt",
+        "PHYSICAL_RING_E6": false,
         "waterfall": [
           "event_source_ready",
           "browser_http_ready",
@@ -45,28 +47,59 @@
           "keyboard_event_overlay_armed",
           "app_receipt_timeout"
         ],
-        "before": "",
-        "after": ""
+        "http": "200",
+        "libreoffice_ok": true,
+        "game_ok": false
       },
-      "root_cause": "guest_dispatch_to_app_receipt",
+      "root_cause": "Not timeout. Pipeline reaches keyboard_event_overlay_armed; app_receipt never sees marker (Chromium DOM save empty). Reload-after-drive patch staged locally post-push.",
       "logs": [
         "artifacts/product_use/journeys/G11_ring/_ring_child_result.json"
       ],
       "severity": "S1",
-      "fix": "KeyboardEvent overlay after Ring auth",
-      "rerun_status": "RERUNNED"
+      "fix": "Chromium reload after /drive arm + KeyboardEvent overlay (code on tip+local follow-up)",
+      "rerun_status": "OPEN"
+    },
+    {
+      "id": "G12.office_primary_task",
+      "journey": "G12",
+      "step": "office primary-task S1",
+      "component": "office persona",
+      "expected": "full office primary-task S1 closed",
+      "observed": "dock observed; primary-task not closed",
+      "root_cause": "S1 token gate (dock alone insufficient)",
+      "logs": [
+        "artifacts/product_use/journeys/G12_office/result.json"
+      ],
+      "severity": "S1",
+      "fix": "close office primary-task evidence",
+      "rerun_status": "OPEN"
+    },
+    {
+      "id": "G13.teacher_e6",
+      "journey": "G13",
+      "step": "REAL_TEACHER_E6",
+      "component": "teacher ACL",
+      "expected": "teacher token with REAL_TEACHER_E6 or honest demotion",
+      "observed": "fixture ACL ok; REAL_TEACHER_E6=false keeps token false",
+      "root_cause": "physical/human teacher path not earned",
+      "logs": [
+        "artifacts/product_use/journeys/G13_teacher/result.json"
+      ],
+      "severity": "S1",
+      "fix": "keep token false until E6 or independent demotion rule",
+      "rerun_status": "OPEN"
     }
   ],
-  "kept_pass": {
-    "G11_hid_quiz": true,
-    "G11_offline": true,
-    "G12": true,
-    "DOCK": true,
-    "G13": true,
-    "G15": true,
-    "REBOOT": true
+  "tokens": {
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
   },
+  "FOUR_GAME_PASS": true,
+  "G14_PASS": true,
   "cursor_never_merges": true,
   "READY_FOR_EDMUND_MERGE": false,
-  "merge_ready_recommendation": "NO"
+  "merge_ready_recommendation": "NO \u2014 S1=3 (Ring + Office + Teacher)"
 }
