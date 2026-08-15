@@ -1059,13 +1059,13 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
 
     def _drm_status(conn_suffix: str = "Virtual-2") -> dict[str, Any]:
         # Dual-GPU topology: secondary may be card1-Virtual-1 (not card0-Virtual-2).
+        # Never treat empty CARD / garbage stdout as "disconnected" (prior rubber-stamp).
         script = (
             "CARD=''; "
             "for c in /sys/class/drm/card*-"
             + conn_suffix
             + " /sys/class/drm/card1-Virtual-1 /sys/class/drm/card0-Virtual-2; do "
             "  [ -e \"$c/status\" ] || continue; "
-            "  # Prefer non-primary card* that is not card0-Virtual-1 "
             "  case \"$c\" in *card0-Virtual-1) continue;; esac; "
             "  CARD=$c; break; "
             "done; "
@@ -1073,17 +1073,34 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             "  CARD=$(ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null | grep -v 'card0-Virtual-1$' | head -1); "
             "fi; "
             "echo CARD=$CARD; "
-            'if [ -n "$CARD" ] && [ -e "$CARD/status" ]; then cat $CARD/status; '
-            'elif [ -z "$CARD" ]; then echo disconnected; else echo missing; fi'
+            'if [ -n "$CARD" ] && [ -e "$CARD/status" ]; then cat "$CARD/status"; '
+            'elif [ -z "$CARD" ]; then echo missing; else echo missing; fi'
         )
         r = _agent_call(session, "process_run", argv=["bash", "-lc", script], timeout_sec=15.0)
         lines = [ln.strip() for ln in (r.get("stdout") or "").splitlines() if ln.strip()]
-        status = lines[-1] if lines else "unknown"
         card = ""
         for ln in lines:
             if ln.startswith("CARD="):
-                card = ln.split("=", 1)[1]
-        return {"card": card, "status": status, "raw": {k: r.get(k) for k in ("ok", "returncode", "stdout", "stderr") if k in r}}
+                card = ln.split("=", 1)[1].strip()
+        status_raw = ""
+        for ln in lines:
+            if ln.startswith("CARD="):
+                continue
+            status_raw = ln.lower()
+        valid = {"connected", "disconnected", "missing", "unknown"}
+        status = status_raw if status_raw in valid else "unknown"
+        return {
+            "card": card,
+            "status": status,
+            "raw": {k: r.get(k) for k in ("ok", "returncode", "stdout", "stderr") if k in r},
+        }
+
+    def _qemu_monitor_cmd_ok(tail: str) -> bool:
+        t = (tail or "").lower()
+        if not (tail or "").strip():
+            return False
+        bad = ("error:", "not found", "not a valid", "not supported", "failed", "could not")
+        return not any(b in t for b in bad)
 
     before_st = _drm_status()
     before_cards = _agent_call(
@@ -1102,13 +1119,17 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
         "reconnect_ok": False,
         "layout_restored": False,
         "method": "dual_virtio_gpu_device_del_add",
+        "architecture_note": (
+            "QEMU virtio-gpu-pci hotplug usually rejected; prefer reboot reconfig "
+            "(max_outputs 2→1→2). Never rubber-stamp disconnect_ok on monitor Error."
+        ),
     }
 
-    # Primary path: device_del gpu1 (secondary virtio-gpu) → DRM/compositor drop → device_add.
-    # QEMU 11 rejects qom-set outputs[] after realize; dual-device architecture is required.
+    # Probe hotplug once for evidence. PASS only if monitor accepts del/add AND
+    # compositor outputs actually drop then restore. Empty-card / PID garbage ≠ disconnect.
     del_tail = _qemu_monitor_lines(session, "device_del gpu1", wait_s=1.0)
+    qemu_del_ok = _qemu_monitor_cmd_ok(del_tail)
     time.sleep(2.5)
-    # Nudge DRM/compositor to observe connector loss.
     _agent_call(
         session,
         "process_run",
@@ -1131,33 +1152,36 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
         argv=["bash", "-lc", "ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null || echo NONE"],
         timeout_sec=15.0,
     )
-    mid_disc = str(mid_st.get("status") or "").lower() == "disconnected" or not (
-        mid_st.get("card") or ""
-    ).strip()
+    mid_disc = str(mid_st.get("status") or "").lower() == "disconnected"
     mid_card_drop = "NONE" in (mid_cards.get("stdout") or "") or (
         (mid_cards.get("stdout") or "").count("Virtual") < 2
     )
     mid_comp_drop = int(mid_comp.get("outputs") or 99) < 2
+    # Require successful device_del AND real compositor output drop — never mid_disc alone.
+    disconnect_earned = bool(qemu_del_ok and mid_comp_drop)
     disc_attempts.append(
         {
             "method": "device_del_gpu1",
             "del_tail": del_tail[-240:],
+            "qemu_del_ok": qemu_del_ok,
             "mid_drm": mid_st,
             "mid_cards": (mid_cards.get("stdout") or "")[:400],
             "mid_compositor_outputs": mid_comp.get("outputs"),
             "mid_disc": mid_disc,
             "mid_card_drop": mid_card_drop,
             "mid_comp_drop": mid_comp_drop,
+            "disconnect_earned": disconnect_earned,
         }
     )
 
-    if mid_disc or mid_card_drop or mid_comp_drop:
+    if disconnect_earned:
         add_tail = _qemu_monitor_lines(
             session,
             'device_add {"driver":"virtio-gpu-pci","id":"gpu1","max_outputs":1,'
             '"outputs":[{"name":"ilab1","xres":1280,"yres":800}]}',
             wait_s=1.2,
         )
+        qemu_add_ok = _qemu_monitor_cmd_ok(add_tail)
         time.sleep(2.0)
         _agent_call(
             session,
@@ -1180,37 +1204,36 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             argv=["bash", "-lc", "ls -d /sys/class/drm/card*-Virtual-* 2>/dev/null || echo NONE"],
             timeout_sec=15.0,
         )
-        recon_ok = (
-            str(after_st.get("status") or "").lower() == "connected"
-            or (after_cards.get("stdout") or "").count("Virtual") >= 2
-            or int(after_comp.get("outputs") or 0) >= 2
+        recon_ok = bool(
+            qemu_add_ok
+            and int(after_comp.get("outputs") or 0) >= 2
+            and (after_cards.get("stdout") or "").count("Virtual") >= 2
         )
         disconnect_reconnect.update(
             {
                 "connector": mid_st.get("card") or before_st.get("card") or "gpu1",
                 "before": before_st.get("status"),
-                "mid": (
-                    mid_st.get("status")
-                    if mid_disc
-                    else f"cards={(mid_cards.get('stdout') or '').strip()[:80]} outputs={mid_comp.get('outputs')}"
-                ),
+                "mid": mid_st.get("status"),
                 "after": after_st.get("status"),
                 "disconnect_ok": True,
-                "reconnect_ok": bool(recon_ok),
+                "reconnect_ok": recon_ok,
                 "layout_restored": bool(recon_ok and after_comp.get("available")),
                 "method": "dual_virtio_gpu_device_del_add",
                 "del_tail": del_tail[-200:],
                 "add_tail": add_tail[-200:],
+                "qemu_del_ok": True,
+                "qemu_add_ok": qemu_add_ok,
                 "mid_compositor_outputs": mid_comp.get("outputs"),
                 "after_compositor_outputs": after_comp.get("outputs"),
                 "after_cards": (after_cards.get("stdout") or "")[:300],
                 "drm_disconnected": mid_disc or mid_card_drop,
-                "compositor_output_drop": mid_comp_drop,
+                "compositor_output_drop": True,
             }
         )
         result["compositor_info_after_reconnect"] = after_comp
     else:
-        # Fallback: legacy qom-set (expected to fail on QEMU 11) — record honest FAIL.
+        # Honest FAIL: hotplug unsupported / gpu1 missing / no compositor drop.
+        # Working architecture is reboot reconfig (max_outputs 2→1→2), not device_del.
         qom_paths = ["/machine/peripheral/gpu0", "/machine/peripheral/gpu1"]
         tree = _qemu_monitor_lines(session, "info qom-tree", wait_s=0.6)
         result["qom_tree_snip"] = "\n".join(
@@ -1221,7 +1244,7 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             if part.startswith("/") and ("gpu" in part.lower() or "virtio-gpu" in ln.lower()):
                 if part not in qom_paths:
                     qom_paths.insert(0, part)
-        for path in qom_paths:
+        for path in qom_paths[:2]:
             off1 = _qemu_monitor_lines(session, f"qom-set {path} outputs[0].xres 0", wait_s=0.3)
             off2 = _qemu_monitor_lines(session, f"qom-set {path} outputs[0].yres 0", wait_s=0.5)
             disc_attempts.append(
@@ -1238,11 +1261,17 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
                 "reconnect_ok": False,
                 "layout_restored": False,
                 "method": "dual_virtio_gpu_device_del_add",
-                "noop_rejected": True,
+                "qemu_del_ok": qemu_del_ok,
                 "del_tail": del_tail[-200:],
+                "mid_compositor_outputs": mid_comp.get("outputs"),
+                "compositor_output_drop": mid_comp_drop,
+                "mid_cards": (mid_cards.get("stdout") or "")[:300],
+                "prefer_fail_over_false_pass": True,
                 "note": (
-                    "device_del gpu1 did not drop secondary DRM/compositor output; "
-                    "qom-set after realize remains rejected — DSXL disconnect not earned"
+                    "device_del gpu1 did not earn disconnect "
+                    f"(qemu_del_ok={qemu_del_ok}, compositor_drop={mid_comp_drop}, "
+                    f"mid_outputs={mid_comp.get('outputs')}); "
+                    "virtio-gpu hotplug unsupported — use reboot reconfig max_outputs 2→1→2"
                 ),
             }
         )
@@ -1290,7 +1319,7 @@ def attempt_dsxl_dual_compositor_pass(session: Any, evidence_dir: Path) -> dict[
             "compositor_output_count": outputs,
             "compositor_surfaces": ux.get("compositor_surfaces"),
             "note": ux.get("note"),
-            "architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add",
+            "architecture": "hotplug_probe_or_reboot_reconfig_required",
         }
     )
     (evidence_dir / "DSXL_COMPOSITOR_UX_EVIDENCE.json").write_text(

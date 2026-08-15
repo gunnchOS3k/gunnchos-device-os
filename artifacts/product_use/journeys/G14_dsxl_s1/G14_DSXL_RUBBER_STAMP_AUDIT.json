@@ -1,0 +1,15 @@
+{
+  "schema": "gunnchos.product_use.g14_dsxl_independent_fail_demotion.v1",
+  "at_utc": "2026-08-15T20:08:56Z",
+  "failed_tip": "ed6f82ffe66094ecabd1937bba7b07cc6ea23a1a",
+  "reason": "independent_verifier_FAIL_hidden_S1_rubber_stamped_disconnect",
+  "qemu_evidence": {
+    "del_tail_snip": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'gpu1' not found\r\n(qemu) ",
+    "mid_comp_drop": false,
+    "mid_compositor_outputs": 2,
+    "compositor_output_drop": false,
+    "add_tail_snip": "device_add {\"driver\":\"virtio-gpu-pci\",\"id\":\"gpu1\",\"max_outputs\":1,\"outputs\":[{\"name\":\"ilab1\",\"xres\":1280,\"yres\":800}]}\u001b[K\r\nError: '{\"driver\":\"virtio-gpu-pci\"' is not a valid device model name\r\n(qemu) ",
+    "outputs_after": 2
+  },
+  "prior_DSXL_DUAL_COMPOSITOR_UX_PASS": true
+}

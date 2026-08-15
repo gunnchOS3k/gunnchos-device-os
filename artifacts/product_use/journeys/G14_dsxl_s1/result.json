@@ -1,8 +1,17 @@
 {
   "persona": "G14",
-  "ok": true,
-  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-  "dsxl_missing": [],
+  "ok": false,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+  "dsxl_missing": [
+    "disconnect",
+    "reconnect",
+    "layout_restore",
+    "honesty:qemu_del_monitor_error",
+    "honesty:qemu_add_monitor_error",
+    "honesty:qemu_del_ok_false",
+    "honesty:compositor_output_drop_false",
+    "honesty:mid_compositor_still_dual"
+  ],
   "focus_moves": [
     {
       "ok": true,
@@ -53,10 +62,10 @@
     "observation_class": "GUEST_OBSERVED",
     "note": "edit\u2192py_compile\u2192sha256\u2192python run; not a pre-baked artifact copy"
   },
-  "observation_class": "GUEST_OBSERVED",
-  "raw_pass_flag": true,
+  "observation_class": "FAIL_HONEST_DEMOTION",
+  "raw_pass_flag": false,
   "dsxl": {
-    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
     "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
     "display_info": {
       "ok": true,
@@ -263,20 +272,43 @@
       }
     ],
     "compositor_ux_gate": {
-      "ok": true,
-      "gate": "PASS_DSXL_COMPOSITOR_UX",
-      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "ok": false,
+      "gate": "FAIL_DSXL_COMPOSITOR_UX",
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
       "GUEST_DUAL_OUTPUT_PASS_insufficient_alone": true,
       "checks": {
         "two_outputs": true,
         "two_compositor_surfaces": true,
         "window_placement": true,
         "focus_move": true,
-        "disconnect": true,
-        "reconnect": true,
-        "layout_restore": true
+        "disconnect": false,
+        "reconnect": false,
+        "layout_restore": false,
+        "disconnect_reconnect_honesty": false
       },
-      "missing": [],
+      "missing": [
+        "disconnect",
+        "reconnect",
+        "layout_restore",
+        "honesty:qemu_del_monitor_error",
+        "honesty:qemu_add_monitor_error",
+        "honesty:qemu_del_ok_false",
+        "honesty:compositor_output_drop_false",
+        "honesty:mid_compositor_still_dual"
+      ],
+      "honesty": {
+        "disconnect_ok": false,
+        "reconnect_ok": false,
+        "layout_restored": false,
+        "honesty_rejected": [
+          "qemu_del_monitor_error",
+          "qemu_add_monitor_error",
+          "qemu_del_ok_false",
+          "compositor_output_drop_false",
+          "mid_compositor_still_dual"
+        ],
+        "honesty_ok": false
+      },
       "windows": [
         {
           "app_id": "foot",
@@ -352,7 +384,8 @@
         "after_compositor_outputs": 2,
         "after_cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n",
         "drm_disconnected": true,
-        "compositor_output_drop": false
+        "compositor_output_drop": false,
+        "qemu_del_ok": false
       },
       "layout_restore": {
         "ok": true,
@@ -368,14 +401,14 @@
       ],
       "outputs": [
         {
-          "id": "card0-Virtual-1",
+          "id": "wl_output-0",
           "connected": true,
           "source": "WaylandSession",
           "class": "compositor_wl_output",
           "compositor_surface": true
         },
         {
-          "id": "card0-Virtual-2",
+          "id": "wl_output-1",
           "connected": true,
           "source": "WaylandSession",
           "class": "compositor_wl_output",
@@ -384,11 +417,34 @@
       ],
       "SILICON_EXACT_EMULATION": false,
       "PHYSICAL_DUAL_PANEL": "PENDING",
-      "note": "DSXL UX PASS earned"
+      "note": "DRM enum / dual connected alone insufficient; missing: disconnect,reconnect,layout_restore,honesty:qemu_del_monitor_error,honesty:qemu_add_monitor_error,honesty:qemu_del_ok_false,honesty:compositor_output_drop_false,honesty:mid_compositor_still_dual"
     },
     "compositor_output_count": 2,
     "compositor_surfaces": 2,
-    "note": "DSXL UX PASS earned",
-    "architecture": "dual_virtio_gpu_pci_gpu0_gpu1_device_del_add"
-  }
+    "note": "Rubber-stamped disconnect_ok while qemu device_del gpu1 Error, invalid device_add, compositor_output_drop=false, outputs stayed 2. Hotplug unsupported; earn only via reboot reconfig max_outputs 2\u21921\u21922.",
+    "architecture": "dual_virtio_gpu_hotplug_FAIL_prefer_reboot_reconfig",
+    "prefer_fail_over_false_pass": true,
+    "independent_verifier_FAIL": true,
+    "demoted_at_utc": "2026-08-15T20:08:56Z",
+    "demotion_reason": "Rubber-stamped disconnect_ok while qemu device_del gpu1 Error, invalid device_add, compositor_output_drop=false, outputs stayed 2. Hotplug unsupported; earn only via reboot reconfig max_outputs 2\u21921\u21922.",
+    "disconnect_reconnect": {
+      "disconnect_ok": false,
+      "reconnect_ok": false,
+      "layout_restored": false,
+      "method": "dual_virtio_gpu_device_del_add",
+      "connector": "gpu1",
+      "before": "unknown",
+      "mid": "948",
+      "after": "1050",
+      "del_tail": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gp\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu\u001b[K\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ddevice_del gpu1\u001b[K\r\nError: Device 'gpu1' not found\r\n(qemu) ",
+      "add_tail": "device_add {\"driver\":\"virtio-gpu-pci\",\"id\":\"gpu1\",\"max_outputs\":1,\"outputs\":[{\"name\":\"ilab1\",\"xres\":1280,\"yres\":800}]}\u001b[K\r\nError: '{\"driver\":\"virtio-gpu-pci\"' is not a valid device model name\r\n(qemu) ",
+      "mid_compositor_outputs": 2,
+      "after_compositor_outputs": 2,
+      "after_cards": "/sys/class/drm/card0-Virtual-1\n/sys/class/drm/card0-Virtual-2\n",
+      "drm_disconnected": true,
+      "compositor_output_drop": false,
+      "qemu_del_ok": false
+    }
+  },
+  "demoted_at_utc": "2026-08-15T20:08:56Z"
 }

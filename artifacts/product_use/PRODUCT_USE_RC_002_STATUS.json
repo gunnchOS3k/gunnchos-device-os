@@ -2,26 +2,24 @@
   "schema": "gunnchos.product_use_rc_002.status.v1",
   "work_item": "PRODUCT-USE-RC-002",
   "stream": "A",
-  "tip": "584add52d575e38a43c38ea88b928dac3c71da3d",
+  "tip": "TIP_PENDING_COMMIT",
   "pr": {
     "number": 116,
     "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/116",
     "draft": true
   },
-  "updated_at_utc": "2026-08-15T19:18:28Z",
+  "updated_at_utc": "2026-08-15T20:08:56Z",
   "SAFE_RESUME_DECISION": "SEALED_READY_USE_COW",
   "persona_tokens": {
-    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": false,
-    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": false,
-    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": false,
-    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "STUDENT_DIGITAL_PICKUP_AND_USE_READY": true,
+    "OFFICE_DIGITAL_PICKUP_AND_USE_READY": true,
+    "TEACHER_DIGITAL_PICKUP_AND_USE_READY": true,
+    "BUILDER_DIGITAL_PICKUP_AND_USE_READY": false,
     "CREATIVE_DIGITAL_PICKUP_AND_USE_READY": true
   },
   "S0_open": 0,
   "S1_open": [
-    "G11/Student: need Ring PASS + shipping path (fixture demotes ok)",
-    "G12/Office: dock observed; full office primary-task S1 not closed",
-    "G13/Teacher: fixture ACL ok but REAL_TEACHER_E6=false keeps token false"
+    "G14/Builder: DSXL disconnect/reconnect rubber-stamp demoted; need reboot reconfig earn"
   ],
   "legs": {
     "G15": {
@@ -41,9 +39,10 @@
       "git_ok": null
     },
     "G14": {
-      "ok": true,
+      "ok": false,
       "git_ok": true,
-      "blocker": null
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+      "blocker": "qemu_device_del_gpu1_not_found_compositor_outputs_stayed_2"
     },
     "RING": {
       "ok": null,
@@ -71,5 +70,6 @@
   "READY_FOR_INDEPENDENT_VERIFIER": true,
   "READY_FOR_EDMUND_MERGE": false,
   "cursor_never_merges": true,
-  "prefer_fail_over_false_pass": true
+  "prefer_fail_over_false_pass": true,
+  "merge_ready": false
 }
