@@ -367,7 +367,7 @@ def cmd_diagnostics(ns: argparse.Namespace) -> int:
     if getattr(ns, "diagnostics_cmd", None) == "collect":
         result = collect_diagnostics(repo, device_profile=getattr(ns, "device", None) or "student_14_5")
         return _out(result)
-    return _out({"ok": False, "error": f"unknown_diagnostics_cmd:{getattr(ns, "diagnostics_cmd", None)}"})
+    return _out({"ok": False, "error": f"unknown_diagnostics_cmd:{getattr(ns, 'diagnostics_cmd', None)}"})
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="gunnchctl", description="gunnchDevice Lab CLI")
