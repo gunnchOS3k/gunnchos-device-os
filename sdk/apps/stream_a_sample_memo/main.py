@@ -51,6 +51,8 @@ def cmd_edit(title: str, body: str) -> dict:
     memo["body"] = body
     memo["updated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     memo["revisions"] = int(memo.get("revisions") or 1) + 1
+    if os.environ.get("GUNNCHOS_APP_VERSION"):
+        memo["app_version"] = os.environ.get("GUNNCHOS_APP_VERSION")
     path.write_text(json.dumps(memo, indent=2) + "\n", encoding="utf-8")
     return {"ok": True, "action": "edit", "path": str(path), "memo": memo}
 

@@ -1,0 +1,415 @@
+{
+  "schema": "gunnchos.creation_enablement.guest_e2e_host.v1",
+  "packet": "STREAM-A-PKT-002",
+  "base_sha_expected": "e290cdf2bf39453442022e471bbbd4fafd97abf2",
+  "persona": "creator_pkt002",
+  "sealed_cow": true,
+  "ninep_share": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-002/artifacts/stream_a_pkt_002/ninep_share",
+  "boot": {
+    "ok": true,
+    "qemu_alive": true,
+    "state": {
+      "backend": "QEMU_HVF",
+      "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+      "qemu_version": "QEMU emulator version 11.0.3",
+      "arch": "aarch64",
+      "accel": {
+        "accel": "hvf",
+        "cpu": "host",
+        "note": "macOS Hypervisor.framework"
+      },
+      "pid": 97605,
+      "boot_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-002/artifacts/stream_a_pkt_002/interactive_guest_session/qemu_boot.log",
+      "persist_disk": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-002/os_build/device_lab_interactive_guest/pipeline/overlays/creator_pkt002-aarch64.qcow2",
+      "display_transport": {
+        "kind": "none_headless",
+        "note": "Interactive Guest headless by default; VNC not wired for this boot path yet",
+        "fake_screenshot_only": false,
+        "guest_outputs": []
+      },
+      "guest_agent": {
+        "ready": true,
+        "transport": "virtio_serial",
+        "agent_path_label": "virtio-serial",
+        "measurement_class": "HOST_OBSERVED",
+        "response": {
+          "ok": true,
+          "ready": true,
+          "response": {
+            "ok": true,
+            "protocol": "gunnchos.guest_agent.v1",
+            "cmd": "ping",
+            "transport": "virtio_serial",
+            "agent_path_label": "virtio-serial",
+            "SILICON_EXACT_EMULATION": false,
+            "production_keys": false,
+            "measurement_class": "GUEST_OBSERVED",
+            "pong": true,
+            "boot_complete": true
+          }
+        }
+      },
+      "monitor_sock": "/tmp/gdli-97523-2f3422/mon.sock",
+      "virtio_serial_sock": "/tmp/gdli-97523-2f3422/ga.sock",
+      "guest_outputs": [],
+      "interactive_guest": {
+        "enabled": true,
+        "boot_path": "uefi_primary_disk",
+        "disk_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-002/os_build/device_lab_interactive_guest/pipeline/overlays/creator_pkt002-aarch64.qcow2",
+        "dual_gpu_requested": false,
+        "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+        "SHIPPING_IMAGE": false
+      },
+      "SILICON_EXACT_EMULATION": false,
+      "claim_boundary": "QEMU virt machine \u2260 transistor-level SoC. SILICON_EXACT_EMULATION=false. VF4/VF5/VF6 PHYSICAL_PENDING. Measurement classes: HOST_OBSERVED for host process liveness; VIRTUAL_CONSTRAINED for guest RAM/disk caps.",
+      "measurement_class_process": "HOST_OBSERVED"
+    },
+    "boot_complete": true,
+    "SILICON_EXACT_EMULATION": false,
+    "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+    "environment": {
+      "ok": true,
+      "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+      "arch": "aarch64",
+      "accel": {
+        "accel": "hvf",
+        "cpu": "host",
+        "note": "macOS Hypervisor.framework"
+      },
+      "version": "QEMU emulator version 11.0.3",
+      "image_arch": "aarch64",
+      "SKIPPED_ENVIRONMENT": false
+    }
+  },
+  "started_at_utc": "2026-08-16T17:13:50Z",
+  "SILICON_EXACT_EMULATION": false,
+  "host_side_counting": false,
+  "tokens": {
+    "CREATOR_GUEST_BUILD_PASS": true,
+    "CREATOR_GUEST_INSTALL_PASS": true,
+    "CREATOR_GUEST_RUN_PASS": true,
+    "CREATOR_GUEST_UPDATE_PASS": true,
+    "CREATOR_GUEST_ROLLBACK_PASS": true,
+    "CREATOR_END_TO_END_DIGITAL_PASS": true
+  },
+  "ok_guest_chain": true,
+  "guest_result": {
+    "schema": "gunnchos.creation_enablement.guest_e2e.v1",
+    "packet": "STREAM-A-PKT-002",
+    "app_id": "gunnchos.stream_a_sample_memo",
+    "executed_in_guest": true,
+    "host_side_counting": false,
+    "package_neq_ran": true,
+    "SILICON_EXACT_EMULATION": false,
+    "ok_guest_chain": true,
+    "tokens": {
+      "CREATOR_GUEST_BUILD_PASS": true,
+      "CREATOR_GUEST_INSTALL_PASS": true,
+      "CREATOR_GUEST_RUN_PASS": true,
+      "CREATOR_GUEST_UPDATE_PASS": true,
+      "CREATOR_GUEST_ROLLBACK_PASS": true,
+      "CREATOR_END_TO_END_DIGITAL_PASS": true
+    },
+    "steps": {
+      "template_edit": {
+        "ok": true,
+        "app_dir": "/var/lib/gunnchos/creator_work/app",
+        "version": "0.1.0",
+        "executed_in_guest": true,
+        "host_hostname": "gunnchos-interactive-guest"
+      },
+      "tests_v1": {
+        "ok": true,
+        "compile_ok": true,
+        "compile_err": "",
+        "create_rc": 0,
+        "edit_rc": 0,
+        "create_stdout": "{\"ok\": true, \"action\": \"create\", \"path\": \"/tmp/tmpvwr6ghp0/unit_probe.memo.json\", \"memo\": {\"title\": \"unit_probe\", \"body\": \"\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"test\", \"revisions\": 1}}\n",
+        "edit_stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/tmp/tmpvwr6ghp0/unit_probe.memo.json\", \"memo\": {\"title\": \"unit_probe\", \"body\": \"unit body\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"test\", \"revisions\": 2}}\n"
+      },
+      "build_package_v1": {
+        "ok": true,
+        "package_path": "/var/lib/gunnchos/creator_work/packages/gunnchos.stream_a_sample_memo-0.1.0.gunnchpkg",
+        "app_id": "gunnchos.stream_a_sample_memo",
+        "version": "0.1.0",
+        "package_digest": "62f85336e0779903c112a46d4e678b9e716fa99dd7bb0fe25aa9aa902efb1acd",
+        "signed": false,
+        "file_count": 1,
+        "schema": "gunnchos.sdk.app_manifest.v1",
+        "executed_in_guest": true
+      },
+      "install_v1": {
+        "ok": true,
+        "app_id": "gunnchos.stream_a_sample_memo",
+        "version": "0.1.0",
+        "action": "installed",
+        "previous_version": null,
+        "gate_warnings": [],
+        "executed_in_guest": true
+      },
+      "run_v1": {
+        "create": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "runtime": "python",
+          "run_id": "run-1786900431740",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.02507805824279785,
+          "stdout": "{\"ok\": true, \"action\": \"create\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 1}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431740.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+            "create",
+            "creator_guest_hello"
+          ]
+        },
+        "edit": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "runtime": "python",
+          "run_id": "run-1786900431765",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.025168180465698242,
+          "stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"Guest dogfood body v1 \\u2014 STREAM-A-PKT-002\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 2}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431765.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+            "edit",
+            "creator_guest_hello",
+            "Guest dogfood body v1 \u2014 STREAM-A-PKT-002"
+          ]
+        },
+        "show": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "runtime": "python",
+          "run_id": "run-1786900431790",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.02653360366821289,
+          "stdout": "{\"ok\": true, \"action\": \"show\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"Guest dogfood body v1 \\u2014 STREAM-A-PKT-002\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 2}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431790.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+            "show",
+            "creator_guest_hello"
+          ]
+        },
+        "observed_memo": {
+          "title": "creator_guest_hello",
+          "body": "Guest dogfood body v1 \u2014 STREAM-A-PKT-002",
+          "created_utc": "2026-08-16T17:13:51Z",
+          "updated_utc": "2026-08-16T17:13:51Z",
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "app_version": "0.1.0",
+          "revisions": 2
+        },
+        "executed_in_guest": true
+      },
+      "tests_v2": {
+        "ok": true,
+        "compile_ok": true,
+        "compile_err": "",
+        "create_rc": 0,
+        "edit_rc": 0,
+        "create_stdout": "{\"ok\": true, \"action\": \"create\", \"path\": \"/tmp/tmpaqx_b0gl/unit_probe.memo.json\", \"memo\": {\"title\": \"unit_probe\", \"body\": \"\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"test\", \"revisions\": 1}}\n",
+        "edit_stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/tmp/tmpaqx_b0gl/unit_probe.memo.json\", \"memo\": {\"title\": \"unit_probe\", \"body\": \"unit body\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"test\", \"revisions\": 2}}\n"
+      },
+      "build_package_v2": {
+        "ok": true,
+        "package_path": "/var/lib/gunnchos/creator_work/packages/gunnchos.stream_a_sample_memo-0.2.0.gunnchpkg",
+        "app_id": "gunnchos.stream_a_sample_memo",
+        "version": "0.2.0",
+        "package_digest": "b58d70897a29a55591d0d080350c2b43b73fa84f717f53ec028a85bd4637f36a",
+        "signed": false,
+        "file_count": 1,
+        "schema": "gunnchos.sdk.app_manifest.v1",
+        "executed_in_guest": true
+      },
+      "update_v2": {
+        "ok": true,
+        "app_id": "gunnchos.stream_a_sample_memo",
+        "version": "0.2.0",
+        "action": "updated",
+        "previous_version": "0.1.0",
+        "gate_warnings": [],
+        "executed_in_guest": true
+      },
+      "observe_after_update": {
+        "edit": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.2.0",
+          "runtime": "python",
+          "run_id": "run-1786900431869",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.03096318244934082,
+          "stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"Guest dogfood body v2 after update \\u2014 STREAM-A-PKT-002\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.2.0\", \"revisions\": 3}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431869.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.2.0/main.py",
+            "edit",
+            "creator_guest_hello",
+            "Guest dogfood body v2 after update \u2014 STREAM-A-PKT-002"
+          ]
+        },
+        "show": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.2.0",
+          "runtime": "python",
+          "run_id": "run-1786900431900",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.03635001182556152,
+          "stdout": "{\"ok\": true, \"action\": \"show\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"Guest dogfood body v2 after update \\u2014 STREAM-A-PKT-002\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.2.0\", \"revisions\": 3}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431900.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.2.0/main.py",
+            "show",
+            "creator_guest_hello"
+          ]
+        },
+        "observed_memo": {
+          "title": "creator_guest_hello",
+          "body": "Guest dogfood body v2 after update \u2014 STREAM-A-PKT-002",
+          "created_utc": "2026-08-16T17:13:51Z",
+          "updated_utc": "2026-08-16T17:13:51Z",
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "app_version": "0.2.0",
+          "revisions": 3
+        },
+        "registry_version": "0.2.0",
+        "executed_in_guest": true
+      },
+      "rollback_v1": {
+        "ok": true,
+        "app_id": "gunnchos.stream_a_sample_memo",
+        "version": "0.1.0",
+        "action": "updated",
+        "previous_version": "0.2.0",
+        "gate_warnings": [],
+        "executed_in_guest": true,
+        "method": "reinstall_previous_package"
+      },
+      "observe_after_rollback": {
+        "edit": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "runtime": "python",
+          "run_id": "run-1786900431938",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.04373431205749512,
+          "stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"Guest dogfood body v1 restored after rollback \\u2014 STREAM-A-PKT-002\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 4}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431938.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+            "edit",
+            "creator_guest_hello",
+            "Guest dogfood body v1 restored after rollback \u2014 STREAM-A-PKT-002"
+          ]
+        },
+        "show": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "runtime": "python",
+          "run_id": "run-1786900431982",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.028882265090942383,
+          "stdout": "{\"ok\": true, \"action\": \"show\", \"path\": \"/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/creator_guest_hello.memo.json\", \"memo\": {\"title\": \"creator_guest_hello\", \"body\": \"Guest dogfood body v1 restored after rollback \\u2014 STREAM-A-PKT-002\", \"created_utc\": \"2026-08-16T17:13:51Z\", \"updated_utc\": \"2026-08-16T17:13:51Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 4}}\n",
+          "stderr": "",
+          "log_path": "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786900431982.log",
+          "crash_report_path": null,
+          "command": [
+            "/usr/bin/python3",
+            "/var/lib/gunnchos/creator_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+            "show",
+            "creator_guest_hello"
+          ]
+        },
+        "observed_memo": {
+          "title": "creator_guest_hello",
+          "body": "Guest dogfood body v1 restored after rollback \u2014 STREAM-A-PKT-002",
+          "created_utc": "2026-08-16T17:13:51Z",
+          "updated_utc": "2026-08-16T17:13:51Z",
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "app_version": "0.1.0",
+          "revisions": 4
+        },
+        "registry_version": "0.1.0",
+        "executed_in_guest": true
+      }
+    },
+    "error": null,
+    "duration_ms": 592,
+    "completed_at_utc": "2026-08-16T17:13:52Z",
+    "claim_boundary": "Guest-native create/edit/build/test/package/install/run/update/rollback. CREATOR_END_TO_END_DIGITAL_PASS requires all five CREATOR_GUEST_* tokens. Unsigned DEV lab packages. SILICON_EXACT_EMULATION=false."
+  },
+  "error": null,
+  "agent_ping": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "ping",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "pong": true,
+    "boot_complete": true
+  },
+  "ninep_mount": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "process_run",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "argv": [
+      "bash",
+      "-lc",
+      "set -e; mkdir -p /mnt/gdlgames; modprobe 9p 9pnet 9pnet_virtio 2>/dev/null || true; mountpoint -q /mnt/gdlgames || mount -t 9p -o trans=virtio,version=9p2000.L,ro gdlgames /mnt/gdlgames; test -f /mnt/gdlgames/CREATOR_PAYLOAD_MANIFEST.json; ls /mnt/gdlgames | head; hostname; uname -a"
+    ],
+    "returncode": 0,
+    "stdout": "CREATOR_PAYLOAD_MANIFEST.json\napps\npython_root\nrun_creator_e2e.py\ngunnchos-interactive-guest\nLinux gunnchos-interactive-guest 6.1.0-52-arm64 #1 SMP Debian 6.1.180-1 (2026-08-03) aarch64 GNU/Linux\n",
+    "stderr": ""
+  },
+  "dogfood_process": {
+    "ok": true,
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"tokens\": {\"CREATOR_GUEST_BUILD_PASS\": true, \"CREATOR_GUEST_INSTALL_PASS\": true, \"CREATOR_GUEST_RUN_PASS\": true, \"CREATOR_GUEST_UPDATE_PASS\": true, \"CREATOR_GUEST_ROLLBACK_PASS\": true, \"CREATOR_END_TO_END_DIGITAL_PASS\": true}}\n",
+    "stderr": ""
+  },
+  "duration_ms": 17362,
+  "completed_at_utc": "2026-08-16T17:13:51Z"
+}

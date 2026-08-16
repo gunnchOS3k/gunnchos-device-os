@@ -1,0 +1,308 @@
+{
+  "schema": "gunnchos.middleware.fault_injection_result.v1",
+  "packet": "STREAM-A-PKT-002",
+  "results": [
+    {
+      "fault": "ai_unavailable",
+      "contract_id": "MW-AI-INTERFACE",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-AI-INTERFACE",
+        "fault": "ai_unavailable",
+        "ok": false,
+        "error": {
+          "code": "AI_UNAVAILABLE",
+          "detail": "Local AI backend unreachable; refuse cloud fallback without consent",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "request_id": "ai-req-0001",
+        "mode": "local_offline"
+      }
+    },
+    {
+      "fault": "ring_disconnect",
+      "contract_id": "MW-RING-INPUT",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-RING-INPUT",
+        "fault": "ring_disconnect",
+        "ok": false,
+        "error": {
+          "code": "RING_DISCONNECT",
+          "detail": "Ring input channel disconnected (digital lab path)",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "PHYSICAL_RING_E6": false
+      }
+    },
+    {
+      "fault": "permission_denied",
+      "contract_id": "MW-IDENTITY",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-IDENTITY",
+        "fault": "permission_denied",
+        "ok": false,
+        "error": {
+          "code": "PERMISSION_DENIED",
+          "detail": "Caller lacks capability for requested middleware action",
+          "recoverable": false
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "required_capability": "package.install"
+      }
+    },
+    {
+      "fault": "storage_full",
+      "contract_id": "MW-PACKAGE",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-PACKAGE",
+        "fault": "storage_full",
+        "ok": false,
+        "error": {
+          "code": "STORAGE_FULL",
+          "detail": "Install root cannot accept package payload",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "bytes_free": 0
+      }
+    },
+    {
+      "fault": "network_outage",
+      "contract_id": "MW-SESSION-CONTINUITY",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-SESSION-CONTINUITY",
+        "fault": "network_outage",
+        "ok": false,
+        "error": {
+          "code": "NETWORK_OUTAGE",
+          "detail": "Offline continuity path engaged; remote sync deferred",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "offline_first": true
+      }
+    },
+    {
+      "fault": "update_interrupted",
+      "contract_id": "MW-PACKAGE",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-PACKAGE",
+        "fault": "update_interrupted",
+        "ok": false,
+        "error": {
+          "code": "UPDATE_INTERRUPTED",
+          "detail": "Package update aborted mid-write; prior version retained",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "rollback_candidate": true
+      }
+    },
+    {
+      "fault": "service_crash",
+      "contract_id": "MW-GAME-LAUNCH",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-GAME-LAUNCH",
+        "fault": "service_crash",
+        "ok": false,
+        "error": {
+          "code": "SERVICE_CRASH",
+          "detail": "Launch helper exited non-zero before runtime receipt",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z"
+      }
+    },
+    {
+      "fault": "display_topology",
+      "contract_id": "MW-SESSION-CONTINUITY",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-SESSION-CONTINUITY",
+        "fault": "display_topology",
+        "ok": false,
+        "error": {
+          "code": "DISPLAY_TOPOLOGY_CHANGED",
+          "detail": "Guest DRM connector count changed; session continuity remapped",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "outputs_before": 2,
+        "outputs_after": 1
+      }
+    },
+    {
+      "fault": "malformed_ipc",
+      "contract_id": "MW-RING-INPUT",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true,
+        "malformed_rejected_by_schema": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-RING-INPUT",
+        "fault": "malformed_ipc",
+        "ok": false,
+        "error": {
+          "code": "MALFORMED_IPC",
+          "detail": "Ring IPC frame failed schema validation; event dropped",
+          "recoverable": true
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "dropped": true,
+        "PHYSICAL_RING_E6": false
+      }
+    },
+    {
+      "fault": "stale_protocol_version",
+      "contract_id": "MW-IDENTITY",
+      "pass": true,
+      "checks": {
+        "response_ok_false": true,
+        "degraded": true,
+        "silicon_exact_false": true,
+        "has_error_code": true,
+        "healthy_example_still_valid": true,
+        "contract_mapped": true,
+        "recoverable_false": true
+      },
+      "response": {
+        "schema": "gunnchos.middleware.fault_response.v1",
+        "packet": "STREAM-A-PKT-002",
+        "contract_id": "MW-IDENTITY",
+        "fault": "stale_protocol_version",
+        "ok": false,
+        "error": {
+          "code": "STALE_PROTOCOL_VERSION",
+          "detail": "Client protocol older than accepted identity contract",
+          "recoverable": false
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "degraded": true,
+        "observed_at_utc": "2026-08-16T17:13:34Z",
+        "client_protocol": "0.9.0",
+        "server_protocol": "1.0.0"
+      }
+    }
+  ],
+  "pass_count": 10,
+  "fail_count": 0,
+  "ok": true,
+  "SILICON_EXACT_EMULATION": false,
+  "duration_ms": 1,
+  "completed_at_utc": "2026-08-16T17:13:34Z",
+  "claim_boundary": "Digital fault injection over PKT-001 contracts. Degraded envelopes only \u2014 does not claim production middleware hardening complete."
+}
