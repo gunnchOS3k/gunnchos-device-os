@@ -1,0 +1,25 @@
+{
+  "schema": "gunnchos.sdk.app_manifest.v1",
+  "app_id": "gunnchos.stream_a_pkt003_research",
+  "name": "PKT003 Research Experiment",
+  "version": "0.1.0",
+  "api_version": "1.0.0",
+  "min_os_version": "0.1.0",
+  "max_os_version": null,
+  "arch_targets": ["aarch64", "x86_64"],
+  "entrypoint": "main.py",
+  "permissions": ["storage_read", "storage_write"],
+  "capabilities_required": ["storage.read"],
+  "dependencies": [],
+  "sandbox_profile": {
+    "network_policy": "deny_all",
+    "filesystem_scope": "/data/apps/gunnchos.stream_a_pkt003_research",
+    "allow_ipc": false
+  },
+  "runtime": "research_pipeline",
+  "stub_content": false,
+  "source": "sdk/apps/stream_a_pkt003_research",
+  "stream_packet": "STREAM-A-PKT-003",
+  "template_kind": "research_experiment",
+  "build_system": "research_pipeline_v1"
+}

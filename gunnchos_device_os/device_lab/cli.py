@@ -360,6 +360,15 @@ def cmd_uninstall(ns: argparse.Namespace) -> int:
     return _out(_impl(ns, _repo_root()))
 
 
+
+def cmd_diagnostics(ns: argparse.Namespace) -> int:
+    from gunnchos_device_os.a_pkt003.diagnostics_collect import collect_diagnostics
+    repo = _repo_root()
+    if getattr(ns, "diagnostics_cmd", None) == "collect":
+        result = collect_diagnostics(repo, device_profile=getattr(ns, "device", None) or "student_14_5")
+        return _out(result)
+    return _out({"ok": False, "error": f"unknown_diagnostics_cmd:{getattr(ns, 'diagnostics_cmd', None)}"})
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="gunnchctl", description="gunnchDevice Lab CLI")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -529,6 +538,12 @@ def build_parser() -> argparse.ArgumentParser:
     uninst.add_argument("--install-root")
     uninst.add_argument("--keep-logs", action="store_true")
     uninst.set_defaults(func=cmd_uninstall)
+
+    sd = sub.add_parser("diagnostics")
+    sd_sub = sd.add_subparsers(dest="diagnostics_cmd", required=True)
+    col = sd_sub.add_parser("collect")
+    col.add_argument("--device", default="student_14_5")
+    col.set_defaults(func=cmd_diagnostics)
 
     return p
 
