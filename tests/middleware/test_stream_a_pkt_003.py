@@ -54,3 +54,38 @@ def test_middleware_ten_fault_preserved():
     assert report["ok"] is True
     assert report["pass_count"] == len(FAULTS) == 10
     assert report["SILICON_EXACT_EMULATION"] is False
+
+
+def test_rings_inject_anti_replay_and_stale():
+    from gunnchos_device_os.device_lab.hw_backends.rings import RingsBackend
+
+    rings = RingsBackend()
+    rings.start(evidence_dir=REPO_ROOT / "artifacts" / "a_pkt003" / "_ring_test", repo_root=REPO_ROOT)
+    first = rings.inject(target="browser", confidence=0.95, gesture="click", nonce="pkt003-n1")
+    assert first["delivered"] is True
+    replay = rings.inject(target="browser", confidence=0.95, gesture="click", nonce="pkt003-n1")
+    assert replay["delivered"] is False
+    assert replay["reject"]["reason"] == "replay"
+    stale = rings.inject(target="browser", confidence=0.95, gesture="click", stale=True, nonce="pkt003-stale")
+    assert stale["delivered"] is False
+    assert stale["reject"]["reason"] == "stale"
+    wrong = rings.inject(wrong_target=True, confidence=0.95, target="browser")
+    assert wrong["delivered"] is False
+    assert wrong["reject"]["reason"] == "wrong_target"
+
+
+def test_evidence_scrub_redacts_host_paths():
+    from gunnchos_device_os.a_pkt003.evidence_scrub import scrub_obj
+
+    sample = {
+        "bundle_dir": str(REPO_ROOT / "artifacts/a_pkt003/continuity/x"),
+        "playwright_error": "Executable doesn't exist at /var/folders/dp/abc/T/playwright/chrome",
+        "host": "Edmunds-MacBook-Pro.local",
+        "nested": {"dest": "/Users/gunnchos/Downloads/foo/artifacts/a_pkt003/y.json"},
+    }
+    cleaned = scrub_obj(sample, REPO_ROOT)
+    blob = str(cleaned)
+    assert "/Users/gunnchos" not in blob
+    assert "/var/folders/" not in blob
+    assert cleaned["host"] == "<lab-host>"
+    assert "Edmunds-MacBook" not in blob

@@ -7,6 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 
 @dataclass
@@ -18,6 +19,9 @@ class RingsBackend:
     repo_root: Path | None = None
     actions: list[dict[str, Any]] = field(default_factory=list)
     last_reject: dict[str, Any] | None = None
+    # Nonce ledger for digital anti-replay / stale reject (Lab sim only).
+    seen_nonces: set[str] = field(default_factory=set)
+    _nonce_seq: int = 0
     # Optional live guest injection path (QEMU monitor / guest agent)
     guest_monitor_sock: Path | None = None
     guest_agent: Any = None
@@ -68,6 +72,9 @@ class RingsBackend:
         confidence: float = 0.9,
         gesture: str = "click",
         wrong_target: bool = False,
+        stale: bool = False,
+        replay: bool = False,
+        nonce: str | None = None,
         ax: float = 0.1,
         ay: float = 0.0,
     ) -> dict[str, Any]:
@@ -79,13 +86,34 @@ class RingsBackend:
         assert self.spatial is not None
         assert self.router is not None
 
-        # Safety: low confidence / wrong target reject
+        if nonce is None:
+            self._nonce_seq += 1
+            nonce = f"ring-nonce-{self._nonce_seq}-{uuid4().hex[:8]}"
+
+        # Safety: low confidence / wrong target / stale / replay reject
         if confidence < 0.5:
-            self.last_reject = {"reason": "low_confidence", "confidence": confidence}
+            self.last_reject = {"reason": "low_confidence", "confidence": confidence, "nonce": nonce}
             self.actions.append({"kind": "reject", **self.last_reject})
             return {"ok": True, "delivered": False, "reject": self.last_reject, "via_stack": True}
         if wrong_target:
-            self.last_reject = {"reason": "wrong_target", "requested": target}
+            self.last_reject = {"reason": "wrong_target", "requested": target, "nonce": nonce}
+            self.actions.append({"kind": "reject", **self.last_reject})
+            return {"ok": True, "delivered": False, "reject": self.last_reject, "via_stack": True}
+        if stale:
+            self.last_reject = {
+                "reason": "stale",
+                "nonce": nonce,
+                "detail": "packet past freshness window",
+            }
+            self.actions.append({"kind": "reject", **self.last_reject})
+            return {"ok": True, "delivered": False, "reject": self.last_reject, "via_stack": True}
+        if replay or nonce in self.seen_nonces:
+            self.last_reject = {
+                "reason": "replay",
+                "nonce": nonce,
+                "detail": "nonce already consumed or explicit replay",
+                "seen_before": nonce in self.seen_nonces,
+            }
             self.actions.append({"kind": "reject", **self.last_reject})
             return {"ok": True, "delivered": False, "reject": self.last_reject, "via_stack": True}
 
@@ -112,6 +140,7 @@ class RingsBackend:
             "confidence": confidence,
             "gesture": gesture,
             "target": target,
+            "nonce": nonce,
             "ring_service": "gunnchos.ring.service.v1",
         }
         self.spatial.ingest_edge_sim(sample)
@@ -157,6 +186,9 @@ class RingsBackend:
         mutated = bool(delivery.get("app_state_changed")) and before != after
         # delivered is honest: only True when app state actually changed via stack
         delivered = mutated and bool(delivery.get("delivered", 0) > 0)
+        if delivered:
+            # Consume nonce only on successful delivery (anti-replay ledger).
+            self.seen_nonces.add(nonce)
 
         # Optional: also push through OS input path into live guest / hybrid process.
         guest_or_hybrid: dict[str, Any] = {"attempted": False}
@@ -186,6 +218,7 @@ class RingsBackend:
             "before": before,
             "after": after,
             "os_input_path": guest_or_hybrid,
+            "nonce": nonce,
         }
 
     def _inject_os_input_path(self, *, target: str, gesture: str) -> dict[str, Any]:

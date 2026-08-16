@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.stream_a_pkt_003.status.v1",
   "packet": "STREAM-A-PKT-003",
-  "updated_at_utc": "2026-08-16T19:56:26Z",
+  "updated_at_utc": "2026-08-16T20:27:05Z",
   "base_sha": "626dca297698ac3126c6445d2e9c05a946955787",
-  "tip_sha": "19fe70ab008dec42a72c7eca5f2377a8fd701d75",
+  "tip_sha": "4086ec55444c5844835aa7dc31f1b15523863052",
   "cursor_never_merges": true,
   "tokens": {
     "CREATOR_END_TO_END_DIGITAL_PASS": true,
@@ -53,7 +53,7 @@
     "artifacts/a_pkt003/STREAM_A_PKT_003_STATUS.json"
   ],
   "merge_ready": true,
-  "duration_ms": 18553,
+  "duration_ms": 2391,
   "sections": {
     "recovery_ok": true,
     "continuity_ok": true,
@@ -61,7 +61,7 @@
     "diagnostics_ok": true,
     "performance_ok": true
   },
-  "claim_boundary": "Tokens only if evidenced. PHYSICAL_RING=false. SILICON_EXACT_EMULATION=false. Preserve CREATOR_END_TO_END + 10-fault. Cursor never merges.",
+  "claim_boundary": "Tokens only if evidenced. PHYSICAL_RING=false. SILICON_EXACT_EMULATION=false. Preserve CREATOR_END_TO_END + 10-fault. Cursor never merges. A-PKT-003R: RING anti-replay requires nonce replay + stale paths.",
   "PKT003_PROPOSED_COMPLETION_DELTA": {
     "stream": "A",
     "notes": [
@@ -69,8 +69,10 @@
       "Multi-device continuity tokens earned only with Lab evidence",
       "Creation-depth guest token only if Interactive Guest dogfood PASS",
       "OBSERVABILITY_DIAGNOSTIC_DIGITAL_PASS if diagnostics collect redacts probes",
-      "Performance baseline host/emulated only \u2014 no physical FPS/RF"
+      "Performance baseline host/emulated only \u2014 no physical FPS/RF",
+      "RING anti-replay requires rings.inject nonce replay + stale (not wrong_target alone)"
     ]
   },
-  "status_note": "tip_sha pins CLI-fix tip for exact-tip verifier; evidence commit is ancestor"
+  "status_note": "A-PKT-003R honesty remediation; tip_sha restamped after commit",
+  "remediation": "A-PKT-003R"
 }
