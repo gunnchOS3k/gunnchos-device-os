@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.middleware.ai_interface.v1",
+  "title": "gunnchOS AI Interface Invoke Envelope",
+  "type": "object",
+  "required": [
+    "schema",
+    "request_id",
+    "mode",
+    "prompt",
+    "privacy_policy",
+    "ts_utc",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": { "const": "gunnchos.middleware.ai_interface.v1" },
+    "request_id": { "type": "string", "minLength": 4 },
+    "mode": {
+      "type": "string",
+      "enum": ["local_offline", "local_nano", "cloud_denied", "tutor", "companion"]
+    },
+    "prompt": { "type": "string" },
+    "model_hint": { "type": ["string", "null"] },
+    "privacy_policy": {
+      "type": "string",
+      "enum": ["local_only", "redacted_cloud", "deny_cloud"]
+    },
+    "response_text": { "type": ["string", "null"] },
+    "ok": { "type": "boolean" },
+    "ts_utc": { "type": "string", "minLength": 10 },
+    "claim_boundary": { "type": "string", "minLength": 16 }
+  },
+  "additionalProperties": false
+}

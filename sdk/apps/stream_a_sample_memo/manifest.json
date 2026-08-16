@@ -1,0 +1,24 @@
+{
+  "schema": "gunnchos.sdk.app_manifest.v1",
+  "app_id": "gunnchos.stream_a_sample_memo",
+  "name": "Stream A Sample Memo",
+  "version": "0.1.0",
+  "api_version": "1.0.0",
+  "min_os_version": "0.1.0",
+  "max_os_version": null,
+  "arch_targets": ["aarch64", "x86_64"],
+  "entrypoint": "main.py",
+  "permissions": ["storage_read", "storage_write"],
+  "capabilities_required": ["storage.read", "storage.write"],
+  "dependencies": [],
+  "sandbox_profile": {
+    "network_policy": "deny_all",
+    "filesystem_scope": "/data/apps/gunnchos.stream_a_sample_memo",
+    "allow_ipc": false
+  },
+  "runtime": "python",
+  "stub_content": false,
+  "source": "sdk/apps/stream_a_sample_memo",
+  "platform001": true,
+  "stream_packet": "STREAM-A-PKT-001"
+}

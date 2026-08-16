@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.middleware.session_continuity.v1",
+  "title": "gunnchOS Session Continuity Bundle Manifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "identity",
+    "content_sha256",
+    "exported_at",
+    "project_rel",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": { "const": "gunnchos.middleware.session_continuity.v1" },
+    "identity": {
+      "type": "object",
+      "required": ["user", "device_from"],
+      "properties": {
+        "user": { "type": "string" },
+        "device_from": { "type": "string" },
+        "eco_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "exported_at": { "type": "number" },
+    "source_path": { "type": "string" },
+    "project_rel": { "type": "string" },
+    "claim_boundary": { "type": "string", "minLength": 16 }
+  },
+  "additionalProperties": false
+}

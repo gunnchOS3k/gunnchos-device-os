@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.middleware.game_launch.v1",
+  "title": "gunnchOS Game Launch Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "game_id",
+    "owner_sha",
+    "runtime",
+    "ok",
+    "depth",
+    "SILICON_EXACT_EMULATION",
+    "ts_utc",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": { "const": "gunnchos.middleware.game_launch.v1" },
+    "game_id": {
+      "type": "string",
+      "enum": [
+        "anime-aggressors",
+        "pedestrian-pursuit",
+        "archive-of-life-artifact-world",
+        "beatlink-party"
+      ]
+    },
+    "owner_sha": { "type": "string", "minLength": 7 },
+    "runtime": {
+      "type": "string",
+      "enum": ["godot", "web", "native", "lab_guest"]
+    },
+    "ok": { "type": "boolean" },
+    "pid": { "type": ["integer", "null"] },
+    "depth": {
+      "type": "string",
+      "enum": [
+        "host_process",
+        "lab_guest_agent",
+        "packaged_sdk_run",
+        "fixture_only"
+      ]
+    },
+    "SILICON_EXACT_EMULATION": { "const": false },
+    "ts_utc": { "type": "string", "minLength": 10 },
+    "claim_boundary": { "type": "string", "minLength": 16 }
+  },
+  "additionalProperties": false
+}
