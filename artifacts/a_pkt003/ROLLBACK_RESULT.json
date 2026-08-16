@@ -1,0 +1,112 @@
+{
+  "schema": "gunnchos.a_pkt003.rollback_result.v1",
+  "packet": "STREAM-A-PKT-003",
+  "ok": true,
+  "package_rollback": {
+    "ok": true,
+    "app_id": "gunnchos.stream_a_sample_memo",
+    "restored_version": "0.1.0",
+    "cleared_incomplete": true,
+    "active_tree_sha256": "b5c89891a6d53ed1740710bcaf90450015b5e51bb8933ac5943092c3a81591e0",
+    "half_installed_success": false
+  },
+  "os_digital_ab_rollback": {
+    "scenario": "rollback_after_bad_health",
+    "ok": true,
+    "status": {
+      "state": "rolled_back",
+      "active_slot": "a",
+      "slots": {
+        "a": {
+          "slot": "a",
+          "version": "0.1.0",
+          "bootable": true,
+          "successful": true,
+          "security_version": 1
+        },
+        "b": {
+          "slot": "b",
+          "version": "0.3.0",
+          "bootable": true,
+          "successful": false,
+          "security_version": 1
+        }
+      },
+      "pending": null,
+      "faults": [],
+      "last_error": "rolled_back",
+      "history": [
+        {
+          "from_state": "idle",
+          "to_state": "checking",
+          "reason": "check_started",
+          "fault": null
+        },
+        {
+          "from_state": "checking",
+          "to_state": "download_pending",
+          "reason": "update_available",
+          "fault": null
+        },
+        {
+          "from_state": "download_pending",
+          "to_state": "downloading",
+          "reason": "download_started",
+          "fault": null
+        },
+        {
+          "from_state": "downloading",
+          "to_state": "verifying",
+          "reason": "download_complete",
+          "fault": null
+        },
+        {
+          "from_state": "verifying",
+          "to_state": "staging",
+          "reason": "verified",
+          "fault": null
+        },
+        {
+          "from_state": "staging",
+          "to_state": "applying",
+          "reason": "staged",
+          "fault": null
+        },
+        {
+          "from_state": "applying",
+          "to_state": "reboot_pending",
+          "reason": "applied_to_inactive_slot",
+          "fault": null
+        },
+        {
+          "from_state": "reboot_pending",
+          "to_state": "health_check",
+          "reason": "rebooted_into_new_slot",
+          "fault": null
+        },
+        {
+          "from_state": "health_check",
+          "to_state": "rolling_back",
+          "reason": "health_check_failed",
+          "fault": "health_check_fail"
+        },
+        {
+          "from_state": "rolling_back",
+          "to_state": "rolled_back",
+          "reason": "rollback_complete",
+          "fault": null
+        }
+      ],
+      "mock": false,
+      "claim_boundary": "Simulated OTA/rollback state machine only. No live update channel, no fleet delivery, no production signing claim."
+    }
+  },
+  "hashes": {
+    "slot_a_version_sha256": "6ad9613a455798d6d92e5f5f390ab4baa70596bc869ed6b17f5cdd2b28635f06",
+    "slot_b_version_sha256": "f059eb1ce0bf00fab74ea63198a85886252bb74c2cf68192f05f9977a9000db4",
+    "n_version": "0.1.0"
+  },
+  "bootable_ab_firmware": false,
+  "fake_ab_boot": false,
+  "SILICON_EXACT_EMULATION": false
+}

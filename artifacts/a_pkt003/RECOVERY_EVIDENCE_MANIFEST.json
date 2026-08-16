@@ -1,0 +1,42 @@
+{
+  "schema": "gunnchos.a_pkt003.recovery_evidence_manifest.v1",
+  "packet": "STREAM-A-PKT-003",
+  "generated_at_utc": "2026-08-16T19:56:32Z",
+  "journeys": [
+    {
+      "id": "J-R1",
+      "ok": true,
+      "layer": "package_installer_guest_capable",
+      "guest_evidence": false
+    },
+    {
+      "id": "J-R2",
+      "ok": true,
+      "layer": "digital_ab_state_machine",
+      "guest_evidence": false
+    },
+    {
+      "id": "J-R3",
+      "ok": true,
+      "layer": "Disk pressure",
+      "guest_evidence": false
+    },
+    {
+      "id": "J-R4",
+      "ok": true,
+      "layer": "Service crash",
+      "guest_evidence": false
+    },
+    {
+      "id": "J-R5",
+      "ok": true,
+      "layer": "Network loss during work",
+      "guest_evidence": false
+    }
+  ],
+  "artifacts": [
+    "RECOVERY_JOURNEYS.json",
+    "ROLLBACK_RESULT.json",
+    "STATE_INTEGRITY_RESULT.json"
+  ]
+}

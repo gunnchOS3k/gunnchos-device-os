@@ -1,0 +1,299 @@
+{
+  "schema": "gunnchos.a_pkt003.gap_audit.v1",
+  "packet": "STREAM-A-PKT-003",
+  "base_sha": "626dca297698ac3126c6445d2e9c05a946955787",
+  "generated_at_utc": "2026-08-16T19:56:32Z",
+  "preservation": {
+    "CREATOR_END_TO_END_DIGITAL_PASS": true,
+    "middleware_10_fault": true,
+    "SILICON_EXACT_EMULATION": false,
+    "pkt002_evidence_present": {
+      "CREATOR_END_TO_END_DIGITAL_PASS": true,
+      "MIDDLEWARE_RESILIENCE_PASS": true,
+      "TEMPLATE_SUITE_PASS": true
+    }
+  },
+  "capabilities": [
+    {
+      "capability": "secure_measured_boot",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "boot/attestation modules present; no silicon-exact measured boot claim",
+      "missing_verifier": "verifier_for_secure_measured_boot",
+      "remaining_digital_work": "DIGITAL_OPEN",
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "boot/attestation modules present; no silicon-exact measured boot claim"
+    },
+    {
+      "capability": "attestation",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "attestation.py digital path; production keys false",
+      "missing_verifier": "verifier_for_attestation",
+      "remaining_digital_work": "DIGITAL_OPEN",
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "attestation.py digital path; production keys false"
+    },
+    {
+      "capability": "ab_update",
+      "accepted_evidence": {},
+      "status": "SIMULATED",
+      "missing_behavior": "UpdateRecoverySuite A/B slots \u2014 not bootable firmware A/B",
+      "missing_verifier": null,
+      "remaining_digital_work": "DIGITAL_OPEN",
+      "physical_external_dependency": "PHYSICAL_PENDING for real A/B",
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "UpdateRecoverySuite A/B slots \u2014 not bootable firmware A/B"
+    },
+    {
+      "capability": "recovery",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "update_recovery_completeness + package rollback paths"
+    },
+    {
+      "capability": "package_signing",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "dev_keys + PackageBuilder SIGNATURE.json (PKT-002)"
+    },
+    {
+      "capability": "crash_recovery",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "service restart digital path; needs J-R4 evidence",
+      "missing_verifier": "verifier_for_crash_recovery",
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "service restart digital path; needs J-R4 evidence"
+    },
+    {
+      "capability": "session_continuity",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "MW-SESSION-CONTINUITY + Lab continuity export/import",
+      "missing_verifier": "verifier_for_session_continuity",
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "MW-SESSION-CONTINUITY + Lab continuity export/import"
+    },
+    {
+      "capability": "offline_sync",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "offline_sync.py vector-clock/LWW engine present"
+    },
+    {
+      "capability": "fleet_health",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "device_health/fleet_ops scaffolding",
+      "missing_verifier": "verifier_for_fleet_health",
+      "remaining_digital_work": "DIGITAL_OPEN",
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "device_health/fleet_ops scaffolding"
+    },
+    {
+      "capability": "diagnostics",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "serviceability export_diagnostic_bundle; A5 collect path pending",
+      "missing_verifier": "verifier_for_diagnostics",
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "serviceability export_diagnostic_bundle; A5 collect path pending"
+    },
+    {
+      "capability": "logs_tracing",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "diagnostics_log redaction + OTel hooks",
+      "missing_verifier": "verifier_for_logs_tracing",
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "diagnostics_log redaction + OTel hooks"
+    },
+    {
+      "capability": "storage_pressure",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "middleware storage_full fault; J-R3 guest evidence pending",
+      "missing_verifier": "verifier_for_storage_pressure",
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "middleware storage_full fault; J-R3 guest evidence pending"
+    },
+    {
+      "capability": "backup_restore",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "serviceability backup/restore virtual device_root"
+    },
+    {
+      "capability": "user_profiles",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "profile_manager + Device Lab profiles"
+    },
+    {
+      "capability": "ai_memory",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "local AI continuity ECO-004; PHYSICAL/HUMAN pending",
+      "missing_verifier": "verifier_for_ai_memory",
+      "remaining_digital_work": "HUMAN_PENDING",
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "local AI continuity ECO-004; PHYSICAL/HUMAN pending"
+    },
+    {
+      "capability": "waike_state",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "WAIKE ingest paths; REAL_STUDENT_E6 false",
+      "missing_verifier": "verifier_for_waike_state",
+      "remaining_digital_work": "HUMAN_PENDING",
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "WAIKE ingest paths; REAL_STUDENT_E6 false"
+    },
+    {
+      "capability": "ring_state",
+      "accepted_evidence": {},
+      "status": "PARTIAL",
+      "missing_behavior": "virtual ring inject; PHYSICAL_RING false",
+      "missing_verifier": "verifier_for_ring_state",
+      "remaining_digital_work": "PHYSICAL_PENDING",
+      "physical_external_dependency": null,
+      "selection_reason": "selected_for_A_PKT_003",
+      "note": "virtual ring inject; PHYSICAL_RING false"
+    },
+    {
+      "capability": "dock_display_state",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "ECO-002 handheld\u2194dock digital path"
+    },
+    {
+      "capability": "developer_tools",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "gunnchctl sdk/package/install + creation enablement"
+    },
+    {
+      "capability": "creation_templates",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "PKT-002 8 templates + guest memo E2E"
+    },
+    {
+      "capability": "device_profiles",
+      "accepted_evidence": {
+        "CREATOR_END_TO_END_DIGITAL_PASS": true,
+        "MIDDLEWARE_RESILIENCE_PASS": true,
+        "TEMPLATE_SUITE_PASS": true
+      },
+      "status": "PASS",
+      "missing_behavior": null,
+      "missing_verifier": null,
+      "remaining_digital_work": null,
+      "physical_external_dependency": null,
+      "selection_reason": "preserve_accepted",
+      "note": "student_14_5/handheld/dsxl/dock/rings profiles"
+    }
+  ],
+  "selected_focus": [
+    "recovery_journeys_J-R1_to_J-R5",
+    "multi_device_continuity",
+    "creation_depth_three_workflows",
+    "diagnostics_collect",
+    "digital_performance_baseline"
+  ],
+  "out_of_scope": [
+    "device-os#103",
+    "Unity",
+    "PHYSICAL_RING_E6",
+    "SILICON_EXACT_EMULATION"
+  ],
+  "claim_boundary": "Audit only; tokens earned only by A2\u2013A6 evidence."
+}

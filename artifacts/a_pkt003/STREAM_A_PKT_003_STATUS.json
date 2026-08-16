@@ -1,0 +1,75 @@
+{
+  "schema": "gunnchos.stream_a_pkt_003.status.v1",
+  "packet": "STREAM-A-PKT-003",
+  "updated_at_utc": "2026-08-16T19:56:26Z",
+  "base_sha": "626dca297698ac3126c6445d2e9c05a946955787",
+  "tip_sha": "626dca297698ac3126c6445d2e9c05a946955787",
+  "cursor_never_merges": true,
+  "tokens": {
+    "CREATOR_END_TO_END_DIGITAL_PASS": true,
+    "CREATOR_GUEST_BUILD_PASS": true,
+    "CREATOR_GUEST_INSTALL_PASS": true,
+    "CREATOR_GUEST_RUN_PASS": true,
+    "CREATOR_GUEST_UPDATE_PASS": true,
+    "CREATOR_GUEST_ROLLBACK_PASS": true,
+    "MIDDLEWARE_RESILIENCE_PASS": true,
+    "RECOVERY_JOURNEYS_DIGITAL_PASS": true,
+    "MULTI_DEVICE_SESSION_CONTINUITY_DIGITAL_PASS": true,
+    "CREATOR_CROSS_DEVICE_CONTINUITY_DIGITAL_PASS": true,
+    "RING_TARGET_SWITCH_DIGITAL_PASS": true,
+    "CREATOR_MULTI_TEMPLATE_GUEST_PASS": true,
+    "OBSERVABILITY_DIAGNOSTIC_DIGITAL_PASS": true,
+    "DIGITAL_PERFORMANCE_BASELINE_RECORDED": true,
+    "PHYSICAL_RING": false,
+    "SILICON_EXACT_EMULATION": false
+  },
+  "OPEN": [
+    {
+      "id": "PHYSICAL_RING_E6",
+      "blocker_class": "PHYSICAL_PENDING",
+      "detail": "Ring physical remains false"
+    },
+    {
+      "id": "DA-DEVICE-103",
+      "blocker_class": "OWNER_DISPOSITION",
+      "detail": "device-os #103 conflicting \u2014 do not merge/reopen without Edmund"
+    },
+    {
+      "id": "BOOTABLE_AB_FIRMWARE",
+      "blocker_class": "DIGITAL_OPEN",
+      "detail": "True bootable A/B not implemented; J-R2 closed at digital state-machine layer"
+    }
+  ],
+  "evidence": [
+    "artifacts/a_pkt003/A_PKT003_GAP_AUDIT.json",
+    "artifacts/a_pkt003/RECOVERY_JOURNEYS.json",
+    "artifacts/a_pkt003/RECOVERY_EVIDENCE_MANIFEST.json",
+    "artifacts/a_pkt003/ROLLBACK_RESULT.json",
+    "artifacts/a_pkt003/STATE_INTEGRITY_RESULT.json",
+    "artifacts/a_pkt003/MULTI_DEVICE_CONTINUITY_RESULT.json",
+    "artifacts/a_pkt003/CREATOR_MULTI_TEMPLATE_GUEST_RESULT.json",
+    "artifacts/a_pkt003/DIAGNOSTICS_COLLECT_RESULT.json",
+    "artifacts/a_pkt003/DIGITAL_PERFORMANCE_BASELINE_PKT003.json",
+    "artifacts/a_pkt003/STREAM_A_PKT_003_STATUS.json"
+  ],
+  "merge_ready": true,
+  "duration_ms": 18553,
+  "sections": {
+    "recovery_ok": true,
+    "continuity_ok": true,
+    "creation_ok": true,
+    "diagnostics_ok": true,
+    "performance_ok": true
+  },
+  "claim_boundary": "Tokens only if evidenced. PHYSICAL_RING=false. SILICON_EXACT_EMULATION=false. Preserve CREATOR_END_TO_END + 10-fault. Cursor never merges.",
+  "PKT003_PROPOSED_COMPLETION_DELTA": {
+    "stream": "A",
+    "notes": [
+      "Recovery J-R1..J-R5 digital PASS; bootable A/B remains OPEN (honest)",
+      "Multi-device continuity tokens earned only with Lab evidence",
+      "Creation-depth guest token only if Interactive Guest dogfood PASS",
+      "OBSERVABILITY_DIAGNOSTIC_DIGITAL_PASS if diagnostics collect redacts probes",
+      "Performance baseline host/emulated only \u2014 no physical FPS/RF"
+    ]
+  }
+}

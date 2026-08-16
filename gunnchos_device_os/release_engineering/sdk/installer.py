@@ -151,6 +151,137 @@ class PackageInstaller:
         finally:
             zf.close()
 
+
+    def install_interrupted(
+        self,
+        package_path: Path,
+        *,
+        interrupt_after_files: int = 1,
+        os_version: str = compat.CURRENT_OS_VERSION,
+    ) -> dict[str, Any]:
+        """Begin an install and stop mid-extract — leaves INCOMPLETE, never success.
+
+        Used by A-PKT-003 J-R1. Caller must recover via detect_incomplete / rollback.
+        """
+        package_path = Path(package_path)
+        manifest, package_manifest, signature, zf = self._open_and_verify(package_path)
+        try:
+            gate = compat.check_compatibility(manifest, os_version=os_version)
+            if not gate["ok"]:
+                return {"ok": False, "error": "api_compatibility_gate_rejected", "gate": gate}
+            reg = self._read_registry()
+            app_id = manifest["app_id"]
+            existing = reg["apps"].get(app_id)
+            previous_version = existing["version"] if existing else None
+            app_root = self.install_root / "apps" / app_id
+            staging = app_root / ".staging" / manifest["version"]
+            if staging.exists():
+                shutil.rmtree(staging)
+            staging.mkdir(parents=True, exist_ok=True)
+            written = 0
+            for entry in package_manifest["files"]:
+                if written >= max(0, interrupt_after_files):
+                    break
+                dest = staging / entry["path"]
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(zf.read(f"payload/{entry['path']}"))
+                written += 1
+            marker = {
+                "schema": "gunnchos.sdk.install_incomplete.v1",
+                "app_id": app_id,
+                "target_version": manifest["version"],
+                "previous_version": previous_version,
+                "files_written": written,
+                "files_total": len(package_manifest["files"]),
+                "status": "INCOMPLETE",
+                "package_digest": package_manifest["package_digest"],
+                "interrupted_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            }
+            (app_root / "INCOMPLETE_INSTALL.json").write_text(
+                json.dumps(marker, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+            # Registry must NOT claim installed success for the target version.
+            if existing:
+                existing["status"] = "installed"
+                existing["update_pending_incomplete"] = True
+                reg["apps"][app_id] = existing
+            self._write_registry(reg)
+            return {
+                "ok": False,
+                "interrupted": True,
+                "half_installed_success": False,
+                "app_id": app_id,
+                "target_version": manifest["version"],
+                "previous_version": previous_version,
+                "files_written": written,
+                "incomplete_marker": marker,
+                "working_version_usable": previous_version is not None,
+            }
+        finally:
+            zf.close()
+
+    def detect_incomplete(self, app_id: str) -> dict[str, Any]:
+        marker = self.install_root / "apps" / app_id / "INCOMPLETE_INSTALL.json"
+        if not marker.exists():
+            return {"ok": True, "incomplete": False, "app_id": app_id}
+        data = json.loads(marker.read_text(encoding="utf-8"))
+        return {"ok": True, "incomplete": True, "app_id": app_id, "marker": data}
+
+    def rollback_app(self, app_id: str) -> dict[str, Any]:
+        """Discard incomplete staging and keep/restore the prior installed version."""
+        app_root = self.install_root / "apps" / app_id
+        marker_path = app_root / "INCOMPLETE_INSTALL.json"
+        staging = app_root / ".staging"
+        reg = self._read_registry()
+        entry = reg["apps"].get(app_id)
+        if staging.exists():
+            shutil.rmtree(staging)
+        incomplete = None
+        if marker_path.exists():
+            incomplete = json.loads(marker_path.read_text(encoding="utf-8"))
+            marker_path.unlink()
+        if entry is None:
+            return {
+                "ok": False,
+                "error": "not_installed",
+                "app_id": app_id,
+                "cleared_incomplete": incomplete is not None,
+            }
+        entry.pop("update_pending_incomplete", None)
+        entry["status"] = "installed"
+        prior = entry.get("previous_version") or entry.get("version")
+        # Prefer previous_version tree if present after a failed update attempt.
+        if incomplete and incomplete.get("previous_version"):
+            prior = incomplete["previous_version"]
+            prior_dir = app_root / prior
+            if prior_dir.exists():
+                entry["version"] = prior
+                entry["installed_path"] = str(prior_dir.relative_to(self.install_root))
+        # Remove any half-written target version dir that is not the active one.
+        if incomplete and incomplete.get("target_version"):
+            bad = app_root / incomplete["target_version"]
+            if bad.exists() and incomplete["target_version"] != entry.get("version"):
+                shutil.rmtree(bad)
+        reg["apps"][app_id] = entry
+        self._write_registry(reg)
+        active_path = self.install_root / entry["installed_path"]
+        digest = None
+        if active_path.exists():
+            h = hashlib.sha256()
+            for f in sorted(active_path.rglob("*")):
+                if f.is_file():
+                    h.update(f.read_bytes())
+            digest = h.hexdigest()
+        return {
+            "ok": True,
+            "app_id": app_id,
+            "restored_version": entry.get("version"),
+            "cleared_incomplete": incomplete is not None,
+            "active_tree_sha256": digest,
+            "half_installed_success": False,
+        }
+
+
     def update(self, package_path: Path, **kwargs: Any) -> dict[str, Any]:
         kwargs["force"] = True
         result = self.install(package_path, **kwargs)

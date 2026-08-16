@@ -1,0 +1,1012 @@
+{
+  "schema": "gunnchos.a_pkt003.creator_multi_template_guest.v1",
+  "packet": "STREAM-A-PKT-003",
+  "base_sha": "626dca297698ac3126c6445d2e9c05a946955787",
+  "generated_at_utc": "2026-08-16T19:56:22Z",
+  "ok": true,
+  "workflows": [
+    {
+      "workflow": "first_party_application",
+      "build_system": "gunnchsdk_package_builder_v1",
+      "ok": true,
+      "steps": {
+        "create_edit": true,
+        "build": {
+          "ok": true,
+          "package_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/pkgs/gunnchos.stream_a_sample_memo-0.1.0.gunnchpkg",
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "package_digest": "8f5aad845d9afef10890f3ca2f3c990fa1cd7a68fc10be4c8a1de3d575ae6a5d",
+          "signed": true,
+          "file_count": 1,
+          "schema": "gunnchos.sdk.app_manifest.v1"
+        },
+        "test": {
+          "ok": true,
+          "note": "create/edit execute acts as functional test"
+        },
+        "package": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/pkgs/gunnchos.stream_a_sample_memo-0.1.0.gunnchpkg",
+        "execute": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.0",
+          "runtime": "python",
+          "run_id": "run-1786910168415",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.031110048294067383,
+          "stdout": "{\"ok\": true, \"action\": \"create\", \"path\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/pkt003_memo.memo.json\", \"memo\": {\"title\": \"pkt003_memo\", \"body\": \"\", \"created_utc\": \"2026-08-16T19:56:08Z\", \"updated_utc\": \"2026-08-16T19:56:08Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 1}}\n",
+          "stderr": "",
+          "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786910168415.log",
+          "crash_report_path": null,
+          "command": [
+            "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+            "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+            "create",
+            "pkt003_memo"
+          ]
+        },
+        "modify": true,
+        "execute_updated": {
+          "ok": true,
+          "app_id": "gunnchos.stream_a_sample_memo",
+          "version": "0.1.1",
+          "runtime": "python",
+          "run_id": "run-1786910168449",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_s": 0.030054807662963867,
+          "stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/pkt003_memo.memo.json\", \"memo\": {\"title\": \"pkt003_memo\", \"body\": \"updated body\", \"created_utc\": \"2026-08-16T19:56:08Z\", \"updated_utc\": \"2026-08-16T19:56:08Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.1\", \"revisions\": 2}}\n",
+          "stderr": "",
+          "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786910168449.log",
+          "crash_report_path": null,
+          "command": [
+            "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+            "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/app/install/apps/gunnchos.stream_a_sample_memo/0.1.1/main.py",
+            "edit",
+            "pkt003_memo",
+            "updated body"
+          ]
+        }
+      },
+      "duration_ms": 77
+    },
+    {
+      "workflow": "godot_game",
+      "build_system": "godot_pack_v1",
+      "ok": true,
+      "steps": {
+        "create_edit": true,
+        "build": {
+          "schema": "gunnchos.godot_pack.v1",
+          "build_system": "godot_pack_v1",
+          "project_name": "PKT003 Microgame",
+          "files": {
+            "project.godot": "e394577e42d1c1ae5f4e15730934aa04b2173b33cdf21442f894b7f10931d0ab",
+            "main.tscn": "078362ba5abcde32199aa7a9eb6dd78c9b351014fc25d09ed997988819e62674"
+          },
+          "pack_sha256": "4130f718e9bf1aba17f1e9821ec99fcbc80c3327e618a81e19a170f33704ac09",
+          "built_at_utc": "2026-08-16T19:56:08Z",
+          "godot_export_pack": false,
+          "SILICON_EXACT_EMULATION": false,
+          "godot_bin": "/opt/homebrew/bin/godot",
+          "godot_probe_rc": 0,
+          "godot_probe_ok": true,
+          "ok": true,
+          "artifact_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/godot/godot_out/microgame.pck.json"
+        },
+        "test": {
+          "ok": true,
+          "stdout": "{\"schema\": \"gunnchos.godot_pack.v1\", \"build_system\": \"godot_pack_v1\", \"project_name\": \"PKT003 Microgame\", \"files\": {\"project.godot\": \"e394577e42d1c1ae5f4e15730934aa04b2173b33cdf21442f894b7f10931d0ab\", \"main.tscn\": \"078362ba5abcde32199aa7a9eb6dd78c9b351014fc25d09ed997988819e62674\"}, \"pack_sha256\": \"4130f718e9bf1aba17f1e9821ec99fcbc80c3327e618a81e19a170f33704ac09\", \"built_at_utc\": \"2026-08-16T19:56:"
+        },
+        "package": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/godot/godot_out/microgame.pck.json",
+        "execute": {
+          "rc": 0
+        },
+        "modify": true,
+        "execute_updated": {
+          "rc": 0,
+          "pack_sha256": "19f308467c2ca87237ab8def4a1b3bf1921dcd69c9405897feb1c290557aef05"
+        }
+      },
+      "duration_ms": 1054
+    },
+    {
+      "workflow": "research_experiment",
+      "build_system": "research_pipeline_v1",
+      "ok": true,
+      "steps": {
+        "create_edit": true,
+        "build": {
+          "ok": true,
+          "sha": "a8f59f9f7355c122ec9e626d18c2594735ff26ad5cd0cc68dabc04f7d29f6ef5"
+        },
+        "test": {
+          "ok": true,
+          "mean": 0.46996097359106903
+        },
+        "package": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/creation_depth_work/research/research_out/RESULT.json",
+        "execute": {
+          "sha": "a8f59f9f7355c122ec9e626d18c2594735ff26ad5cd0cc68dabc04f7d29f6ef5"
+        },
+        "modify": true,
+        "execute_updated": {
+          "sha": "7f36a62aa23c8d85dca67284645489877d26f67a2717cc3fa56bd5335786e0a3"
+        }
+      },
+      "duration_ms": 4
+    }
+  ],
+  "distinct_build_systems": true,
+  "build_systems": [
+    "godot_pack_v1",
+    "gunnchsdk_package_builder_v1",
+    "research_pipeline_v1"
+  ],
+  "host_substitute": false,
+  "guest": {
+    "executed_in_guest": true,
+    "ok": true,
+    "boot": {
+      "ok": true,
+      "qemu_alive": true,
+      "state": {
+        "backend": "QEMU_HVF",
+        "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+        "qemu_version": "QEMU emulator version 11.0.3",
+        "arch": "aarch64",
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host",
+          "note": "macOS Hypervisor.framework"
+        },
+        "pid": 12833,
+        "boot_log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/interactive_guest_session/qemu_boot.log",
+        "persist_disk": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/os_build/device_lab_interactive_guest/pipeline/overlays/creator_pkt003-aarch64.qcow2",
+        "display_transport": {
+          "kind": "none_headless",
+          "note": "Interactive Guest headless by default; VNC not wired for this boot path yet",
+          "fake_screenshot_only": false,
+          "guest_outputs": []
+        },
+        "guest_agent": {
+          "ready": true,
+          "transport": "virtio_serial",
+          "agent_path_label": "virtio-serial",
+          "measurement_class": "HOST_OBSERVED",
+          "response": {
+            "ok": true,
+            "ready": true,
+            "response": {
+              "ok": true,
+              "protocol": "gunnchos.guest_agent.v1",
+              "cmd": "ping",
+              "transport": "virtio_serial",
+              "agent_path_label": "virtio-serial",
+              "SILICON_EXACT_EMULATION": false,
+              "production_keys": false,
+              "measurement_class": "GUEST_OBSERVED",
+              "pong": true,
+              "boot_complete": true
+            }
+          }
+        },
+        "monitor_sock": "/tmp/gdli-12821-19ef8d/mon.sock",
+        "virtio_serial_sock": "/tmp/gdli-12821-19ef8d/ga.sock",
+        "guest_outputs": [],
+        "interactive_guest": {
+          "enabled": true,
+          "boot_path": "uefi_primary_disk",
+          "disk_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/os_build/device_lab_interactive_guest/pipeline/overlays/creator_pkt003-aarch64.qcow2",
+          "dual_gpu_requested": false,
+          "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+          "SHIPPING_IMAGE": false
+        },
+        "SILICON_EXACT_EMULATION": false,
+        "claim_boundary": "QEMU virt machine \u2260 transistor-level SoC. SILICON_EXACT_EMULATION=false. VF4/VF5/VF6 PHYSICAL_PENDING. Measurement classes: HOST_OBSERVED for host process liveness; VIRTUAL_CONSTRAINED for guest RAM/disk caps.",
+        "measurement_class_process": "HOST_OBSERVED"
+      },
+      "boot_complete": true,
+      "SILICON_EXACT_EMULATION": false,
+      "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+      "environment": {
+        "ok": true,
+        "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+        "arch": "aarch64",
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host",
+          "note": "macOS Hypervisor.framework"
+        },
+        "version": "QEMU emulator version 11.0.3",
+        "image_arch": "aarch64",
+        "SKIPPED_ENVIRONMENT": false
+      }
+    },
+    "SILICON_EXACT_EMULATION": false,
+    "agent_ping": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "ping",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "pong": true,
+      "boot_complete": true
+    },
+    "ninep_mount": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "dogfood_process": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "{\"ok\": true, \"evidence\": \"/var/lib/gunnchos/a_pkt003/RESULT.json\"}\n",
+      "stderr": ""
+    },
+    "guest_result": {
+      "schema": "gunnchos.a_pkt003.guest_dogfood.v1",
+      "executed_in_guest": true,
+      "hostname_probe": "gunnchos-interactive-guest",
+      "ok": true,
+      "recovery": {
+        "ok": true,
+        "journeys": {
+          "J-R1": {
+            "journey_id": "J-R1",
+            "title": "Interrupted application update",
+            "ok": true,
+            "layer": "package_installer_guest_capable",
+            "bootable_ab_firmware": false,
+            "installed": {
+              "ok": true,
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "version": "0.1.0",
+              "action": "installed",
+              "previous_version": null,
+              "gate_warnings": []
+            },
+            "interrupted": {
+              "ok": false,
+              "interrupted": true,
+              "half_installed_success": false,
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "target_version": "0.2.0",
+              "previous_version": "0.1.0",
+              "files_written": 1,
+              "incomplete_marker": {
+                "schema": "gunnchos.sdk.install_incomplete.v1",
+                "app_id": "gunnchos.stream_a_sample_memo",
+                "target_version": "0.2.0",
+                "previous_version": "0.1.0",
+                "files_written": 1,
+                "files_total": 2,
+                "status": "INCOMPLETE",
+                "package_digest": "b32d590902b7b9c32a290dc8a55709353f853372b1832ee8825913222d8861cf",
+                "interrupted_utc": "2026-08-16T19:56:21Z"
+              },
+              "working_version_usable": true
+            },
+            "detected": {
+              "ok": true,
+              "incomplete": true,
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "marker": {
+                "app_id": "gunnchos.stream_a_sample_memo",
+                "files_total": 2,
+                "files_written": 1,
+                "interrupted_utc": "2026-08-16T19:56:21Z",
+                "package_digest": "b32d590902b7b9c32a290dc8a55709353f853372b1832ee8825913222d8861cf",
+                "previous_version": "0.1.0",
+                "schema": "gunnchos.sdk.install_incomplete.v1",
+                "status": "INCOMPLETE",
+                "target_version": "0.2.0"
+              }
+            },
+            "working_version_usable": true,
+            "before_tree_sha256": "b5c89891a6d53ed1740710bcaf90450015b5e51bb8933ac5943092c3a81591e0",
+            "rollback": {
+              "ok": true,
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "restored_version": "0.1.0",
+              "cleared_incomplete": true,
+              "active_tree_sha256": "b5c89891a6d53ed1740710bcaf90450015b5e51bb8933ac5943092c3a81591e0",
+              "half_installed_success": false
+            },
+            "after_incomplete": {
+              "ok": true,
+              "incomplete": false,
+              "app_id": "gunnchos.stream_a_sample_memo"
+            },
+            "duration_ms": 26,
+            "SILICON_EXACT_EMULATION": false
+          },
+          "J-R2": {
+            "journey_id": "J-R2",
+            "title": "OS/update rollback",
+            "ok": true,
+            "layer": "digital_ab_state_machine",
+            "bootable_ab_firmware": false,
+            "fake_ab_boot": false,
+            "note": "True bootable A/B firmware not implemented; deepest real layer is UpdateRecoverySuite simulated slots with health rejection + rollback hashes.",
+            "rollback": {
+              "scenario": "rollback_after_bad_health",
+              "ok": true,
+              "status": {
+                "state": "rolled_back",
+                "active_slot": "a",
+                "slots": {
+                  "a": {
+                    "slot": "a",
+                    "version": "0.1.0",
+                    "bootable": true,
+                    "successful": true,
+                    "security_version": 1
+                  },
+                  "b": {
+                    "slot": "b",
+                    "version": "0.3.0",
+                    "bootable": true,
+                    "successful": false,
+                    "security_version": 1
+                  }
+                },
+                "pending": null,
+                "faults": [],
+                "last_error": "rolled_back",
+                "history": [
+                  {
+                    "from_state": "idle",
+                    "to_state": "checking",
+                    "reason": "check_started",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "checking",
+                    "to_state": "download_pending",
+                    "reason": "update_available",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "download_pending",
+                    "to_state": "downloading",
+                    "reason": "download_started",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "downloading",
+                    "to_state": "verifying",
+                    "reason": "download_complete",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "verifying",
+                    "to_state": "staging",
+                    "reason": "verified",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "staging",
+                    "to_state": "applying",
+                    "reason": "staged",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "applying",
+                    "to_state": "reboot_pending",
+                    "reason": "applied_to_inactive_slot",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "reboot_pending",
+                    "to_state": "health_check",
+                    "reason": "rebooted_into_new_slot",
+                    "fault": null
+                  },
+                  {
+                    "from_state": "health_check",
+                    "to_state": "rolling_back",
+                    "reason": "health_check_failed",
+                    "fault": "health_check_fail"
+                  },
+                  {
+                    "from_state": "rolling_back",
+                    "to_state": "rolled_back",
+                    "reason": "rollback_complete",
+                    "fault": null
+                  }
+                ],
+                "mock": false,
+                "claim_boundary": "Simulated OTA/rollback state machine only. No live update channel, no fleet delivery, no production signing claim."
+              }
+            },
+            "interrupted_apply": {
+              "scenario": "interrupted_during_apply",
+              "ok": true,
+              "active_slot": "a",
+              "last_error": null,
+              "recovery": "reset_to_idle",
+              "recovered_state": "idle"
+            },
+            "slots": {
+              "a": {
+                "slot": "a",
+                "version": "0.1.0",
+                "bootable": true,
+                "successful": true,
+                "security_version": 1
+              },
+              "b": {
+                "slot": "b",
+                "version": "0.0.9",
+                "bootable": true,
+                "successful": true,
+                "security_version": 1
+              }
+            },
+            "hashes": {
+              "slot_a_version_sha256": "6ad9613a455798d6d92e5f5f390ab4baa70596bc869ed6b17f5cdd2b28635f06",
+              "slot_b_version_sha256": "f059eb1ce0bf00fab74ea63198a85886252bb74c2cf68192f05f9977a9000db4",
+              "n_version": "0.1.0"
+            },
+            "duration_ms": 0,
+            "SILICON_EXACT_EMULATION": false,
+            "claim_boundary": "Digital A/B completeness only. No live OTA channel, no production signing, no physical recovery claim."
+          },
+          "J-R3": {
+            "journey_id": "J-R3",
+            "title": "Disk pressure",
+            "ok": true,
+            "low_disk_detected": true,
+            "safe_refusal_cleanup": true,
+            "persistent_state_integrity": true,
+            "state_sha256": "2099a0c335432814f7d900983f68507dbb63b75ea980ea95acffeef07d32c7e5",
+            "diagnostic": {
+              "code": "STORAGE_PRESSURE",
+              "used_bytes": 2097184,
+              "quota_bytes": 524288,
+              "action": "refuse_new_write_cleanup_temp",
+              "recoverable": true
+            },
+            "host_free_bytes_observed": 12132642816,
+            "duration_ms": 1,
+            "SILICON_EXACT_EMULATION": false
+          },
+          "J-R4": {
+            "journey_id": "J-R4",
+            "title": "Service crash",
+            "ok": true,
+            "service": "ai_stub_service",
+            "detected_running": true,
+            "crash_detected": true,
+            "restart_fallback": true,
+            "state_preserved": true,
+            "state_sha256": "c419be35d52f743e9cfbe5b1760c336c7b6c0e625f63f5c72a2657e4a2c87c04",
+            "diagnostic": {
+              "service": "ai_stub_service",
+              "crash_reason": "SIGKILL_injected",
+              "recovery_action": "restart_fallback",
+              "state_preserved": true
+            },
+            "duration_ms": 508,
+            "SILICON_EXACT_EMULATION": false
+          },
+          "J-R5": {
+            "journey_id": "J-R5",
+            "title": "Network loss during work",
+            "ok": true,
+            "offline_behavior": true,
+            "queued_synchronization": [
+              {
+                "key": "lesson.progress",
+                "value": {
+                  "chapter": 1,
+                  "offline": true
+                },
+                "replica_id": "device-a",
+                "wall_time_ms": 1786910182315,
+                "vector": {
+                  "device-a": 1
+                },
+                "version": 1,
+                "tombstone": false
+              }
+            ],
+            "cloud_status_during_loss": {
+              "reachable": false,
+              "mode": "offline",
+              "queued": true
+            },
+            "cloud_status_after_reconnect": {
+              "reachable": true,
+              "mode": "online",
+              "queued": false
+            },
+            "sync_result": {
+              "replica_id": "cloud",
+              "policy": "vector_clock",
+              "results": [
+                {
+                  "status": "synced",
+                  "key": "lesson.progress",
+                  "applied": "remote",
+                  "mock": false
+                }
+              ],
+              "store_size": 1,
+              "conflicts": [],
+              "mock": false
+            },
+            "cloud_record": {
+              "chapter": 1,
+              "offline": true
+            },
+            "duration_ms": 0,
+            "SILICON_EXACT_EMULATION": false
+          }
+        },
+        "executed_in_guest": true
+      },
+      "workflows": {
+        "ok": true,
+        "workflows": {
+          "app": {
+            "ok": true,
+            "build_system": "gunnchsdk_package_builder_v1",
+            "run": {
+              "ok": true,
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "version": "0.1.0",
+              "runtime": "python",
+              "run_id": "run-1786910182336",
+              "exit_code": 0,
+              "timed_out": false,
+              "duration_s": 0.012919425964355469,
+              "stdout": "{\"ok\": true, \"action\": \"create\", \"path\": \"/var/lib/gunnchos/a_pkt003_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/guest_memo_1786910182.memo.json\", \"memo\": {\"title\": \"guest_memo_1786910182\", \"body\": \"\", \"created_utc\": \"2026-08-16T19:56:22Z\", \"updated_utc\": \"2026-08-16T19:56:22Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 1}}\n",
+              "stderr": "",
+              "log_path": "/var/lib/gunnchos/a_pkt003_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786910182336.log",
+              "crash_report_path": null,
+              "command": [
+                "/usr/bin/python3",
+                "/var/lib/gunnchos/a_pkt003_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+                "create",
+                "guest_memo_1786910182"
+              ]
+            }
+          },
+          "godot": {
+            "schema": "gunnchos.godot_pack.v1",
+            "build_system": "godot_pack_v1",
+            "project_name": "PKT003 Microgame",
+            "files": {
+              "project.godot": "e394577e42d1c1ae5f4e15730934aa04b2173b33cdf21442f894b7f10931d0ab",
+              "main.tscn": "520393c244d929fd1a7c13b9dda4d79e65da6bfda96b89b19cefc1359ee7d382"
+            },
+            "pack_sha256": "19f308467c2ca87237ab8def4a1b3bf1921dcd69c9405897feb1c290557aef05",
+            "built_at_utc": "2026-08-16T19:56:22Z",
+            "godot_export_pack": false,
+            "SILICON_EXACT_EMULATION": false,
+            "ok": true,
+            "artifact_path": "/var/lib/gunnchos/a_pkt003_work/godot_out/microgame.pck.json",
+            "launch_rc": 0
+          },
+          "research": {
+            "schema": "gunnchos.research_artifact.v1",
+            "build_system": "research_pipeline_v1",
+            "experiment": {
+              "id": "pkt003-research-seed",
+              "hypothesis": "Deterministic hash chain over seeded samples is reproducible | mutate=guest",
+              "seed": 42,
+              "samples": 16,
+              "EXTERNAL_REPRODUCTION": false
+            },
+            "mean": 0.46996097359106903,
+            "n": 16,
+            "EXTERNAL_REPRODUCTION": false,
+            "SILICON_EXACT_EMULATION": false,
+            "built_at_utc": "2026-08-16T19:56:22Z",
+            "artifact_sha256": "ec59615689c604339b4b537e1a3e7374ffe02b6bf97c387e3c28166caee59cd5",
+            "ok": true,
+            "artifact_path": "/var/lib/gunnchos/a_pkt003_work/research_out/RESULT.json"
+          }
+        },
+        "distinct_build_systems": [
+          "godot_pack_v1",
+          "gunnchsdk_package_builder_v1",
+          "research_pipeline_v1"
+        ],
+        "executed_in_guest": true
+      },
+      "recovery_error": null,
+      "workflows_error": null,
+      "duration_ms": 1032,
+      "SILICON_EXACT_EMULATION": false,
+      "completed_at_utc": "2026-08-16T19:56:22Z"
+    },
+    "recovery_guest": {
+      "ok": true,
+      "journeys": {
+        "J-R1": {
+          "journey_id": "J-R1",
+          "title": "Interrupted application update",
+          "ok": true,
+          "layer": "package_installer_guest_capable",
+          "bootable_ab_firmware": false,
+          "installed": {
+            "ok": true,
+            "app_id": "gunnchos.stream_a_sample_memo",
+            "version": "0.1.0",
+            "action": "installed",
+            "previous_version": null,
+            "gate_warnings": []
+          },
+          "interrupted": {
+            "ok": false,
+            "interrupted": true,
+            "half_installed_success": false,
+            "app_id": "gunnchos.stream_a_sample_memo",
+            "target_version": "0.2.0",
+            "previous_version": "0.1.0",
+            "files_written": 1,
+            "incomplete_marker": {
+              "schema": "gunnchos.sdk.install_incomplete.v1",
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "target_version": "0.2.0",
+              "previous_version": "0.1.0",
+              "files_written": 1,
+              "files_total": 2,
+              "status": "INCOMPLETE",
+              "package_digest": "b32d590902b7b9c32a290dc8a55709353f853372b1832ee8825913222d8861cf",
+              "interrupted_utc": "2026-08-16T19:56:21Z"
+            },
+            "working_version_usable": true
+          },
+          "detected": {
+            "ok": true,
+            "incomplete": true,
+            "app_id": "gunnchos.stream_a_sample_memo",
+            "marker": {
+              "app_id": "gunnchos.stream_a_sample_memo",
+              "files_total": 2,
+              "files_written": 1,
+              "interrupted_utc": "2026-08-16T19:56:21Z",
+              "package_digest": "b32d590902b7b9c32a290dc8a55709353f853372b1832ee8825913222d8861cf",
+              "previous_version": "0.1.0",
+              "schema": "gunnchos.sdk.install_incomplete.v1",
+              "status": "INCOMPLETE",
+              "target_version": "0.2.0"
+            }
+          },
+          "working_version_usable": true,
+          "before_tree_sha256": "b5c89891a6d53ed1740710bcaf90450015b5e51bb8933ac5943092c3a81591e0",
+          "rollback": {
+            "ok": true,
+            "app_id": "gunnchos.stream_a_sample_memo",
+            "restored_version": "0.1.0",
+            "cleared_incomplete": true,
+            "active_tree_sha256": "b5c89891a6d53ed1740710bcaf90450015b5e51bb8933ac5943092c3a81591e0",
+            "half_installed_success": false
+          },
+          "after_incomplete": {
+            "ok": true,
+            "incomplete": false,
+            "app_id": "gunnchos.stream_a_sample_memo"
+          },
+          "duration_ms": 26,
+          "SILICON_EXACT_EMULATION": false
+        },
+        "J-R2": {
+          "journey_id": "J-R2",
+          "title": "OS/update rollback",
+          "ok": true,
+          "layer": "digital_ab_state_machine",
+          "bootable_ab_firmware": false,
+          "fake_ab_boot": false,
+          "note": "True bootable A/B firmware not implemented; deepest real layer is UpdateRecoverySuite simulated slots with health rejection + rollback hashes.",
+          "rollback": {
+            "scenario": "rollback_after_bad_health",
+            "ok": true,
+            "status": {
+              "state": "rolled_back",
+              "active_slot": "a",
+              "slots": {
+                "a": {
+                  "slot": "a",
+                  "version": "0.1.0",
+                  "bootable": true,
+                  "successful": true,
+                  "security_version": 1
+                },
+                "b": {
+                  "slot": "b",
+                  "version": "0.3.0",
+                  "bootable": true,
+                  "successful": false,
+                  "security_version": 1
+                }
+              },
+              "pending": null,
+              "faults": [],
+              "last_error": "rolled_back",
+              "history": [
+                {
+                  "from_state": "idle",
+                  "to_state": "checking",
+                  "reason": "check_started",
+                  "fault": null
+                },
+                {
+                  "from_state": "checking",
+                  "to_state": "download_pending",
+                  "reason": "update_available",
+                  "fault": null
+                },
+                {
+                  "from_state": "download_pending",
+                  "to_state": "downloading",
+                  "reason": "download_started",
+                  "fault": null
+                },
+                {
+                  "from_state": "downloading",
+                  "to_state": "verifying",
+                  "reason": "download_complete",
+                  "fault": null
+                },
+                {
+                  "from_state": "verifying",
+                  "to_state": "staging",
+                  "reason": "verified",
+                  "fault": null
+                },
+                {
+                  "from_state": "staging",
+                  "to_state": "applying",
+                  "reason": "staged",
+                  "fault": null
+                },
+                {
+                  "from_state": "applying",
+                  "to_state": "reboot_pending",
+                  "reason": "applied_to_inactive_slot",
+                  "fault": null
+                },
+                {
+                  "from_state": "reboot_pending",
+                  "to_state": "health_check",
+                  "reason": "rebooted_into_new_slot",
+                  "fault": null
+                },
+                {
+                  "from_state": "health_check",
+                  "to_state": "rolling_back",
+                  "reason": "health_check_failed",
+                  "fault": "health_check_fail"
+                },
+                {
+                  "from_state": "rolling_back",
+                  "to_state": "rolled_back",
+                  "reason": "rollback_complete",
+                  "fault": null
+                }
+              ],
+              "mock": false,
+              "claim_boundary": "Simulated OTA/rollback state machine only. No live update channel, no fleet delivery, no production signing claim."
+            }
+          },
+          "interrupted_apply": {
+            "scenario": "interrupted_during_apply",
+            "ok": true,
+            "active_slot": "a",
+            "last_error": null,
+            "recovery": "reset_to_idle",
+            "recovered_state": "idle"
+          },
+          "slots": {
+            "a": {
+              "slot": "a",
+              "version": "0.1.0",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            },
+            "b": {
+              "slot": "b",
+              "version": "0.0.9",
+              "bootable": true,
+              "successful": true,
+              "security_version": 1
+            }
+          },
+          "hashes": {
+            "slot_a_version_sha256": "6ad9613a455798d6d92e5f5f390ab4baa70596bc869ed6b17f5cdd2b28635f06",
+            "slot_b_version_sha256": "f059eb1ce0bf00fab74ea63198a85886252bb74c2cf68192f05f9977a9000db4",
+            "n_version": "0.1.0"
+          },
+          "duration_ms": 0,
+          "SILICON_EXACT_EMULATION": false,
+          "claim_boundary": "Digital A/B completeness only. No live OTA channel, no production signing, no physical recovery claim."
+        },
+        "J-R3": {
+          "journey_id": "J-R3",
+          "title": "Disk pressure",
+          "ok": true,
+          "low_disk_detected": true,
+          "safe_refusal_cleanup": true,
+          "persistent_state_integrity": true,
+          "state_sha256": "2099a0c335432814f7d900983f68507dbb63b75ea980ea95acffeef07d32c7e5",
+          "diagnostic": {
+            "code": "STORAGE_PRESSURE",
+            "used_bytes": 2097184,
+            "quota_bytes": 524288,
+            "action": "refuse_new_write_cleanup_temp",
+            "recoverable": true
+          },
+          "host_free_bytes_observed": 12132642816,
+          "duration_ms": 1,
+          "SILICON_EXACT_EMULATION": false
+        },
+        "J-R4": {
+          "journey_id": "J-R4",
+          "title": "Service crash",
+          "ok": true,
+          "service": "ai_stub_service",
+          "detected_running": true,
+          "crash_detected": true,
+          "restart_fallback": true,
+          "state_preserved": true,
+          "state_sha256": "c419be35d52f743e9cfbe5b1760c336c7b6c0e625f63f5c72a2657e4a2c87c04",
+          "diagnostic": {
+            "service": "ai_stub_service",
+            "crash_reason": "SIGKILL_injected",
+            "recovery_action": "restart_fallback",
+            "state_preserved": true
+          },
+          "duration_ms": 508,
+          "SILICON_EXACT_EMULATION": false
+        },
+        "J-R5": {
+          "journey_id": "J-R5",
+          "title": "Network loss during work",
+          "ok": true,
+          "offline_behavior": true,
+          "queued_synchronization": [
+            {
+              "key": "lesson.progress",
+              "value": {
+                "chapter": 1,
+                "offline": true
+              },
+              "replica_id": "device-a",
+              "wall_time_ms": 1786910182315,
+              "vector": {
+                "device-a": 1
+              },
+              "version": 1,
+              "tombstone": false
+            }
+          ],
+          "cloud_status_during_loss": {
+            "reachable": false,
+            "mode": "offline",
+            "queued": true
+          },
+          "cloud_status_after_reconnect": {
+            "reachable": true,
+            "mode": "online",
+            "queued": false
+          },
+          "sync_result": {
+            "replica_id": "cloud",
+            "policy": "vector_clock",
+            "results": [
+              {
+                "status": "synced",
+                "key": "lesson.progress",
+                "applied": "remote",
+                "mock": false
+              }
+            ],
+            "store_size": 1,
+            "conflicts": [],
+            "mock": false
+          },
+          "cloud_record": {
+            "chapter": 1,
+            "offline": true
+          },
+          "duration_ms": 0,
+          "SILICON_EXACT_EMULATION": false
+        }
+      },
+      "executed_in_guest": true
+    },
+    "workflows_guest": {
+      "ok": true,
+      "workflows": {
+        "app": {
+          "ok": true,
+          "build_system": "gunnchsdk_package_builder_v1",
+          "run": {
+            "ok": true,
+            "app_id": "gunnchos.stream_a_sample_memo",
+            "version": "0.1.0",
+            "runtime": "python",
+            "run_id": "run-1786910182336",
+            "exit_code": 0,
+            "timed_out": false,
+            "duration_s": 0.012919425964355469,
+            "stdout": "{\"ok\": true, \"action\": \"create\", \"path\": \"/var/lib/gunnchos/a_pkt003_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/guest_memo_1786910182.memo.json\", \"memo\": {\"title\": \"guest_memo_1786910182\", \"body\": \"\", \"created_utc\": \"2026-08-16T19:56:22Z\", \"updated_utc\": \"2026-08-16T19:56:22Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 1}}\n",
+            "stderr": "",
+            "log_path": "/var/lib/gunnchos/a_pkt003_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786910182336.log",
+            "crash_report_path": null,
+            "command": [
+              "/usr/bin/python3",
+              "/var/lib/gunnchos/a_pkt003_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+              "create",
+              "guest_memo_1786910182"
+            ]
+          }
+        },
+        "godot": {
+          "schema": "gunnchos.godot_pack.v1",
+          "build_system": "godot_pack_v1",
+          "project_name": "PKT003 Microgame",
+          "files": {
+            "project.godot": "e394577e42d1c1ae5f4e15730934aa04b2173b33cdf21442f894b7f10931d0ab",
+            "main.tscn": "520393c244d929fd1a7c13b9dda4d79e65da6bfda96b89b19cefc1359ee7d382"
+          },
+          "pack_sha256": "19f308467c2ca87237ab8def4a1b3bf1921dcd69c9405897feb1c290557aef05",
+          "built_at_utc": "2026-08-16T19:56:22Z",
+          "godot_export_pack": false,
+          "SILICON_EXACT_EMULATION": false,
+          "ok": true,
+          "artifact_path": "/var/lib/gunnchos/a_pkt003_work/godot_out/microgame.pck.json",
+          "launch_rc": 0
+        },
+        "research": {
+          "schema": "gunnchos.research_artifact.v1",
+          "build_system": "research_pipeline_v1",
+          "experiment": {
+            "id": "pkt003-research-seed",
+            "hypothesis": "Deterministic hash chain over seeded samples is reproducible | mutate=guest",
+            "seed": 42,
+            "samples": 16,
+            "EXTERNAL_REPRODUCTION": false
+          },
+          "mean": 0.46996097359106903,
+          "n": 16,
+          "EXTERNAL_REPRODUCTION": false,
+          "SILICON_EXACT_EMULATION": false,
+          "built_at_utc": "2026-08-16T19:56:22Z",
+          "artifact_sha256": "ec59615689c604339b4b537e1a3e7374ffe02b6bf97c387e3c28166caee59cd5",
+          "ok": true,
+          "artifact_path": "/var/lib/gunnchos/a_pkt003_work/research_out/RESULT.json"
+        }
+      },
+      "distinct_build_systems": [
+        "godot_pack_v1",
+        "gunnchsdk_package_builder_v1",
+        "research_pipeline_v1"
+      ],
+      "executed_in_guest": true
+    }
+  },
+  "guest_error": null,
+  "tokens": {
+    "CREATOR_MULTI_TEMPLATE_GUEST_PASS": true,
+    "host_logic_ok": true,
+    "distinct_build_systems": [
+      "godot_pack_v1",
+      "gunnchsdk_package_builder_v1",
+      "research_pipeline_v1"
+    ]
+  },
+  "duration_ms": 14244,
+  "SILICON_EXACT_EMULATION": false,
+  "claim_boundary": "CREATOR_MULTI_TEMPLATE_GUEST_PASS only if three workflows execute in guest with distinct build systems. Host logic self-check is not a substitute."
+}

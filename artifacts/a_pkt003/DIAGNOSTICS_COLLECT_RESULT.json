@@ -1,0 +1,137 @@
+{
+  "schema": "gunnchos.a_pkt003.diagnostics_collect.v1",
+  "packet": "STREAM-A-PKT-003",
+  "base_sha": "626dca297698ac3126c6445d2e9c05a946955787",
+  "command": "gunnch diagnostics collect",
+  "generated_at_utc": "2026-08-16T19:56:33Z",
+  "request_id": "4bcfd5ab-9ae6-4d6d-95f4-d7f456b148cd",
+  "trace_id": "f2699dbb1c6a44848386c3eb89f8552a",
+  "structured_logs": [
+    {
+      "details": {
+        "api_key": "[REDACTED]",
+        "email": "[REDACTED]",
+        "request_id": "488141c3-bf58-4564-a7d0-68233de25c22",
+        "token": "[REDACTED]"
+      },
+      "event_type": "diagnostics_collect_start",
+      "id": "evt-94aff8155196",
+      "level": "info",
+      "mock": false,
+      "persistent": true,
+      "trace_id": "bc45beba1d014a209391a1e2e73620ff",
+      "ts_ms": 1786910007122
+    },
+    {
+      "details": {
+        "crash_reason": "simulated_service_fault",
+        "recovery_action": "restart_fallback",
+        "request_id": "488141c3-bf58-4564-a7d0-68233de25c22",
+        "student_name": "[REDACTED]"
+      },
+      "event_type": "sample_crash",
+      "id": "evt-dd4556184750",
+      "level": "error",
+      "mock": false,
+      "persistent": true,
+      "trace_id": "bc45beba1d014a209391a1e2e73620ff",
+      "ts_ms": 1786910007122
+    },
+    {
+      "details": {
+        "api_key": "[REDACTED]",
+        "email": "[REDACTED]",
+        "request_id": "e598b871-95da-4a82-b839-1c3c50ee2ac7",
+        "token": "[REDACTED]"
+      },
+      "event_type": "diagnostics_collect_start",
+      "id": "evt-d424d1da7861",
+      "level": "info",
+      "mock": false,
+      "persistent": true,
+      "trace_id": "0348bc8a315247ac9d922a6b8c37dc4f",
+      "ts_ms": 1786910186809
+    },
+    {
+      "details": {
+        "crash_reason": "simulated_service_fault",
+        "recovery_action": "restart_fallback",
+        "request_id": "e598b871-95da-4a82-b839-1c3c50ee2ac7",
+        "student_name": "[REDACTED]"
+      },
+      "event_type": "sample_crash",
+      "id": "evt-270ca699c29a",
+      "level": "error",
+      "mock": false,
+      "persistent": true,
+      "trace_id": "0348bc8a315247ac9d922a6b8c37dc4f",
+      "ts_ms": 1786910186809
+    },
+    {
+      "details": {
+        "api_key": "[REDACTED]",
+        "email": "[REDACTED]",
+        "request_id": "4bcfd5ab-9ae6-4d6d-95f4-d7f456b148cd",
+        "token": "[REDACTED]"
+      },
+      "event_type": "diagnostics_collect_start",
+      "id": "evt-468fa5bb7e8e",
+      "level": "info",
+      "mock": false,
+      "persistent": true,
+      "trace_id": "f2699dbb1c6a44848386c3eb89f8552a",
+      "ts_ms": 1786910193988
+    },
+    {
+      "details": {
+        "crash_reason": "simulated_service_fault",
+        "recovery_action": "restart_fallback",
+        "request_id": "4bcfd5ab-9ae6-4d6d-95f4-d7f456b148cd",
+        "student_name": "[REDACTED]"
+      },
+      "event_type": "sample_crash",
+      "id": "evt-90fe3d8fdffc",
+      "level": "error",
+      "mock": false,
+      "persistent": true,
+      "trace_id": "f2699dbb1c6a44848386c3eb89f8552a",
+      "ts_ms": 1786910193988
+    }
+  ],
+  "service_health": {
+    "guest_agent": "unknown",
+    "package_runtime": "ok",
+    "ai_local": "degraded_or_offline",
+    "waike": "digital_only",
+    "ring": "virtual_only"
+  },
+  "package_app_versions": {},
+  "device_profile": {
+    "profile_id": "student_14_5",
+    "product": "Student 14.5",
+    "SILICON_EXACT_EMULATION": false
+  },
+  "error_taxonomy": {
+    "STORAGE_PRESSURE": "resource",
+    "UPDATE_INTERRUPTED": "lifecycle",
+    "SERVICE_CRASH": "runtime",
+    "NETWORK_OUTAGE": "connectivity",
+    "PERMISSION_DENIED": "security",
+    "AI_UNAVAILABLE": "ai"
+  },
+  "redaction": {
+    "applied": true,
+    "leaks_found": []
+  },
+  "crash_reason": "simulated_service_fault",
+  "recovery_action": "restart_fallback",
+  "provenance": {
+    "bundle_sha256": "9d2109ab92762bcaae7cc1a9761e34bf1d61887f74747b260021f53b3685cedf",
+    "bundle_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-003/artifacts/a_pkt003/diagnostics/diagnostic_bundle.tar.gz",
+    "host": "Edmunds-MacBook-Pro.local",
+    "platform": "macOS-26.6.1-arm64-arm-64bit"
+  },
+  "ok": true,
+  "SILICON_EXACT_EMULATION": false,
+  "claim_boundary": "Diagnostic collect for support/creators/research/CI. No learner-private data or secrets in export."
+}
