@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gunnchos.middleware.identity.v1",
+  "title": "gunnchOS Middleware Identity Envelope",
+  "type": "object",
+  "required": [
+    "schema",
+    "account_id",
+    "session_id",
+    "device_id",
+    "issued_at_utc",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": { "const": "gunnchos.middleware.identity.v1" },
+    "account_id": { "type": "string", "minLength": 4 },
+    "session_id": { "type": "string", "minLength": 4 },
+    "device_id": { "type": "string", "minLength": 4 },
+    "roles": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "binding_state": {
+      "type": "string",
+      "enum": ["bound", "unbound", "revoked"]
+    },
+    "issued_at_utc": { "type": "string", "minLength": 10 },
+    "expires_at_utc": { "type": ["string", "null"] },
+    "claim_boundary": { "type": "string", "minLength": 16 }
+  },
+  "additionalProperties": false
+}

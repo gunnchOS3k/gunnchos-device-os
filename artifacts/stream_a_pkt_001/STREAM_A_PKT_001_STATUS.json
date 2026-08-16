@@ -1,0 +1,56 @@
+{
+  "schema": "gunnchos.stream_a_pkt_001.status.v1",
+  "packet": "STREAM-A-PKT-001",
+  "updated_at_utc": "2026-08-16T16:22:12Z",
+  "base_sha": "a1e11efcb502ce053d755a2539c26d252e216226",
+  "cursor_never_merges": true,
+  "closed_digitally": [
+    "A2 middleware contract inventory + schemas + example validation tests (6 contracts)",
+    "A3 reusable Device Lab emulation pack index (SILICON_EXACT_EMULATION=false)",
+    "A4 host create\u2192edit\u2192build\u2192package\u2192install\u2192run for gunnchos.stream_a_sample_memo",
+    "Targeted SHA delta vs BASELINE_V1 (no full Product-Use guest campaign)"
+  ],
+  "OPEN": [
+    {
+      "id": "FULL_PRODUCT_USE_GUEST_RERUN",
+      "blocker_class": "DIGITAL_OPEN",
+      "detail": "WAIKE #48 + gunnchAI tip advanced past RC-002 pins; guest persona legs need re-earn at new SHAs"
+    },
+    {
+      "id": "CREATOR_END_TO_END_DIGITAL_PASS",
+      "blocker_class": "DIGITAL_OPEN",
+      "detail": "Host chain PASS; guest install+run not yet proven"
+    },
+    {
+      "id": "DA-DEVICE-103",
+      "blocker_class": "OWNER_DISPOSITION",
+      "detail": "device-os #103 conflicting \u2014 do not merge/reopen without Edmund"
+    },
+    {
+      "id": "PHYSICAL_RING_E6",
+      "blocker_class": "PHYSICAL_PENDING",
+      "detail": "Ring physical remains false"
+    }
+  ],
+  "tokens": {
+    "MIDDLEWARE_CONTRACT_INVENTORY_STARTED": true,
+    "EMULATION_REUSABLE_PACK_INDEXED": true,
+    "CREATION_HOST_CHAIN_PASS": true,
+    "CREATOR_END_TO_END_DIGITAL_PASS": false,
+    "SILICON_EXACT_EMULATION": false,
+    "FULL_PRODUCT_USE_CAMPAIGN_RERUN_EXECUTED": false,
+    "OWNER_SHA_PINS_ALIGNED_TO_BASELINE_V1": true
+  },
+  "evidence": [
+    "shared_contracts/middleware/INVENTORY.json",
+    "artifacts/stream_a_pkt_001/TARGETED_DELTA_VALIDATION.json",
+    "artifacts/stream_a_pkt_001/CREATION_HOST_CHAIN_EVIDENCE.json",
+    "artifacts/stream_a_pkt_001/EMULATION_PACK_VALIDATION.json"
+  ],
+  "FULL_PRODUCT_USE_CAMPAIGN_RERUN": {
+    "required": true,
+    "executed": false,
+    "reason": "Historical RC-002 guest evidence bound to older WAIKE/gunnchAI pins. Pins refreshed to BASELINE_V1 accepted mains in this packet; guest persona/WAIKE ingest legs remain DIGITAL_OPEN for re-earn. Four-game SHAs unchanged \u2014 no forced game relaunch.",
+    "blocker_class": "DIGITAL_OPEN"
+  }
+}

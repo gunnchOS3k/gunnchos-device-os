@@ -1,0 +1,115 @@
+{
+  "schema": "gunnchos.middleware.contract_inventory.v1",
+  "packet": "STREAM-A-PKT-001",
+  "status": "INVENTORY_HARDENING_STARTED",
+  "generated_at_utc": "2026-08-16T16:30:00Z",
+  "base_sha": "a1e11efcb502ce053d755a2539c26d252e216226",
+  "claim_boundary": "Contract schemas + producer/consumer map + schema tests. Not a claim that runtime services are production-hardened or that CREATOR_END_TO_END_DIGITAL_PASS is earned.",
+  "priority_order": [
+    "MW-IDENTITY",
+    "MW-PACKAGE",
+    "MW-RING-INPUT",
+    "MW-AI-INTERFACE",
+    "MW-GAME-LAUNCH",
+    "MW-SESSION-CONTINUITY"
+  ],
+  "contracts": [
+    {
+      "id": "MW-IDENTITY",
+      "schema_id": "gunnchos.middleware.identity.v1",
+      "schema_path": "shared_contracts/middleware/schemas/identity.v1.schema.json",
+      "version": "1.0.0",
+      "producer": "gunnchos-device-os/gunnchos_device_os/unified_identity.py",
+      "consumers": [
+        "gunnchos-device-os/device_lab/ecosystem/continuity.py",
+        "gunnchos-device-os/sdk package sandbox env"
+      ],
+      "tests": [
+        "tests/middleware/test_middleware_contracts_a2.py::test_identity_example_validates"
+      ],
+      "stability": "hardening",
+      "notes": "Software account/session/device binding only; not IdP/SSO/hardware credentials."
+    },
+    {
+      "id": "MW-PACKAGE",
+      "schema_id": "gunnchos.sdk.app_manifest.v1",
+      "schema_path": "shared_contracts/middleware/schemas/package_manifest.v1.schema.json",
+      "version": "1.0.0",
+      "producer": "gunnchos-device-os/release_engineering/sdk/packager.py",
+      "consumers": [
+        "gunnchos-device-os/release_engineering/sdk/installer.py",
+        "gunnchos-device-os/release_engineering/sdk/runner.py"
+      ],
+      "tests": [
+        "tests/wp013/test_sdk_pipeline.py",
+        "tests/middleware/test_middleware_contracts_a2.py::test_package_example_validates"
+      ],
+      "stability": "rc",
+      "notes": "Aligns with existing gunnchos.sdk.app_manifest.v1 validator."
+    },
+    {
+      "id": "MW-RING-INPUT",
+      "schema_id": "gunnchos.middleware.ring_input.v1",
+      "schema_path": "shared_contracts/middleware/schemas/ring_input.v1.schema.json",
+      "version": "1.0.0",
+      "producer": "edge-io-measurement-node + device-os ring_input / guest_agent overlays",
+      "consumers": [
+        "gunnchos-device-os/device_lab interactive guest proofs",
+        "first-party + game surfaces receiving Ring events"
+      ],
+      "tests": [
+        "tests/middleware/test_middleware_contracts_a2.py::test_ring_input_example_validates"
+      ],
+      "stability": "digital_pass_physical_pending",
+      "notes": "SILICON_EXACT_EMULATION=false; PHYSICAL_RING_E6 remains false."
+    },
+    {
+      "id": "MW-AI-INTERFACE",
+      "schema_id": "gunnchos.middleware.ai_interface.v1",
+      "schema_path": "shared_contracts/middleware/schemas/ai_interface.v1.schema.json",
+      "version": "1.0.0",
+      "producer": "gunnchAI3k",
+      "consumers": [
+        "gunnchos-device-os AI permission surfaces",
+        "sdk apps requesting ai_interface"
+      ],
+      "tests": [
+        "tests/middleware/test_middleware_contracts_a2.py::test_ai_interface_example_validates"
+      ],
+      "stability": "partial",
+      "notes": "Local/offline-first invoke envelope; not a claim of mastery PASS."
+    },
+    {
+      "id": "MW-GAME-LAUNCH",
+      "schema_id": "gunnchos.middleware.game_launch.v1",
+      "schema_path": "shared_contracts/middleware/schemas/game_launch.v1.schema.json",
+      "version": "1.0.0",
+      "producer": "game owner repos (anime/pedestrian/archive/beatlink) + device-lab games launcher",
+      "consumers": [
+        "gunnchos-device-os/device_lab/ecosystem/games.py",
+        "Product-Use FOUR_GAME leg"
+      ],
+      "tests": [
+        "tests/middleware/test_middleware_contracts_a2.py::test_game_launch_example_validates"
+      ],
+      "stability": "rc",
+      "notes": "Launch manifest + runtime receipt; host/guest depth declared explicitly."
+    },
+    {
+      "id": "MW-SESSION-CONTINUITY",
+      "schema_id": "gunnchos.middleware.session_continuity.v1",
+      "schema_path": "shared_contracts/middleware/schemas/session_continuity.v1.schema.json",
+      "version": "1.0.0",
+      "producer": "gunnchos-device-os/device_lab/ecosystem/continuity.py",
+      "consumers": [
+        "ECO-001/ECO-004/ECO-009 journeys",
+        "dock continuity paths"
+      ],
+      "tests": [
+        "tests/middleware/test_middleware_contracts_a2.py::test_session_continuity_example_validates"
+      ],
+      "stability": "hardening",
+      "notes": "Lab work-tree export/import + checksum identity; not cloud sync."
+    }
+  ]
+}

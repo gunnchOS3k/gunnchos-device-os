@@ -1,0 +1,95 @@
+{
+  "schema": "gunnchos.creation_enablement.chain.v1",
+  "packet": "STREAM-A-PKT-001",
+  "app_id": "gunnchos.stream_a_sample_memo",
+  "ok_host_chain": true,
+  "ok_guest_install_run": false,
+  "CREATOR_END_TO_END_DIGITAL_PASS": false,
+  "guest_chain_executed": false,
+  "steps": {
+    "create_edit_sources_present": {
+      "ok": true,
+      "app_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/sdk/apps/stream_a_sample_memo"
+    },
+    "build_package": {
+      "ok": true,
+      "package_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/packages/gunnchos.stream_a_sample_memo-0.1.0.gunnchpkg",
+      "app_id": "gunnchos.stream_a_sample_memo",
+      "version": "0.1.0",
+      "package_digest": "ffdb31b84e3c7983f02d8340b5f881cfdc488a88f429d36a7727a4a89eac5c12",
+      "signed": true,
+      "file_count": 1,
+      "schema": "gunnchos.sdk.app_manifest.v1"
+    },
+    "install": {
+      "ok": true,
+      "app_id": "gunnchos.stream_a_sample_memo",
+      "version": "0.1.0",
+      "action": "installed",
+      "previous_version": null,
+      "gate_warnings": []
+    },
+    "run_create_edit": {
+      "ok": true,
+      "app_id": "gunnchos.stream_a_sample_memo",
+      "version": "0.1.0",
+      "runtime": "python",
+      "run_id": "run-1786897312168",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_s": 0.06774401664733887,
+      "stdout": "{\"ok\": true, \"steps\": [{\"ok\": true, \"action\": \"create\", \"path\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/stream_a_hello.memo.json\", \"memo\": {\"title\": \"stream_a_hello\", \"body\": \"\", \"created_utc\": \"2026-08-16T16:21:52Z\", \"updated_utc\": \"2026-08-16T16:21:52Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 1}}, {\"ok\": true, \"action\": \"edit\", \"path\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/stream_a_hello.memo.json\", \"memo\": {\"title\": \"stream_a_hello\", \"body\": \"Created via STREAM-A-PKT-001 dogfood path.\", \"created_utc\": \"2026-08-16T16:21:52Z\", \"updated_utc\": \"2026-08-16T16:21:52Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 2}}]}\n",
+      "stderr": "",
+      "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786897312168.log",
+      "crash_report_path": null,
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py"
+      ]
+    },
+    "run_edit": {
+      "ok": true,
+      "app_id": "gunnchos.stream_a_sample_memo",
+      "version": "0.1.0",
+      "runtime": "python",
+      "run_id": "run-1786897312236",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_s": 0.03613400459289551,
+      "stdout": "{\"ok\": true, \"action\": \"edit\", \"path\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/stream_a_hello.memo.json\", \"memo\": {\"title\": \"stream_a_hello\", \"body\": \"Second edit via harness.\", \"created_utc\": \"2026-08-16T16:21:52Z\", \"updated_utc\": \"2026-08-16T16:21:52Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 3}}\n",
+      "stderr": "",
+      "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786897312236.log",
+      "crash_report_path": null,
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+        "edit",
+        "stream_a_hello",
+        "Second edit via harness."
+      ]
+    },
+    "run_show": {
+      "ok": true,
+      "app_id": "gunnchos.stream_a_sample_memo",
+      "version": "0.1.0",
+      "runtime": "python",
+      "run_id": "run-1786897312273",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_s": 0.029339075088500977,
+      "stdout": "{\"ok\": true, \"action\": \"show\", \"path\": \"/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/data/stream_a_hello.memo.json\", \"memo\": {\"title\": \"stream_a_hello\", \"body\": \"Second edit via harness.\", \"created_utc\": \"2026-08-16T16:21:52Z\", \"updated_utc\": \"2026-08-16T16:21:52Z\", \"app_id\": \"gunnchos.stream_a_sample_memo\", \"app_version\": \"0.1.0\", \"revisions\": 3}}\n",
+      "stderr": "",
+      "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/sandbox/logs/run-1786897312273.log",
+      "crash_report_path": null,
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os-stream-a-pkt-001/artifacts/stream_a_pkt_001/creation_work/install/apps/gunnchos.stream_a_sample_memo/0.1.0/main.py",
+        "show",
+        "stream_a_hello"
+      ]
+    }
+  },
+  "duration_ms": 155,
+  "claim_boundary": "Host SDK create/edit/build/package/install/run dogfood only. CREATOR_END_TO_END_DIGITAL_PASS remains false until guest install+run also proven. SILICON_EXACT_EMULATION=false.",
+  "SILICON_EXACT_EMULATION": false
+}
