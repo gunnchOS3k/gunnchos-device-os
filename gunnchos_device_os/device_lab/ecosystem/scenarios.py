@@ -206,15 +206,37 @@ def run_eco003(*, repo_root: Path, eco: EcosystemRuntime | None = None) -> dict[
             rings.rings.start(evidence_dir=evid / "rings", repo_root=repo_root)
         # Authorized Lab surface targets (browser≈Student, libreoffice≈DS-XL).
         authorized = ["browser", "libreoffice", "games"]
-        # Inject into Student-facing surface
-        ok_student = rings.rings.inject(confidence=0.9, gesture="click", target="browser")
+        # Inject into Student-facing surface (nonce consumed on success)
+        student_nonce = "eco003-student-browser-1"
+        ok_student = rings.rings.inject(
+            confidence=0.9, gesture="click", target="browser", nonce=student_nonce
+        )
         # Switch to DS-XL-facing surface
-        ok_dsxl = rings.rings.inject(confidence=0.9, gesture="click", target="libreoffice")
-        # Reject wrong/stale + low confidence
+        ok_dsxl = rings.rings.inject(
+            confidence=0.9, gesture="click", target="libreoffice", nonce="eco003-dsxl-lo-1"
+        )
+        # Reject wrong target + low confidence (authorization / confidence gates)
         bad = rings.rings.inject(wrong_target=True, confidence=0.9, target="browser")
         low = rings.rings.inject(confidence=0.1, target="browser")
+        # Real anti-replay: re-use consumed student nonce
+        replay = rings.rings.inject(
+            confidence=0.9, gesture="click", target="browser", nonce=student_nonce
+        )
+        # Real stale reject path (distinct from wrong_target)
+        stale = rings.rings.inject(
+            confidence=0.9, gesture="click", target="browser", stale=True, nonce="eco003-stale-1"
+        )
         rejected = (bad.get("delivered") is False) or bool(bad.get("reject"))
         low_rejected = low.get("delivered") is False
+        replay_rejected = (
+            replay.get("delivered") is False
+            and (replay.get("reject") or {}).get("reason") == "replay"
+        )
+        stale_rejected = (
+            stale.get("delivered") is False
+            and (stale.get("reject") or {}).get("reason") == "stale"
+        )
+        anti_replay_stale_reject = bool(replay_rejected and stale_rejected)
         ok = bool(
             ok_student.get("ok")
             and (ok_student.get("delivered") is True)
@@ -222,6 +244,7 @@ def run_eco003(*, repo_root: Path, eco: EcosystemRuntime | None = None) -> dict[
             and (ok_dsxl.get("delivered") is True)
             and rejected
             and low_rejected
+            and anti_replay_stale_reject
         )
         status = "PASS" if ok else "PARTIAL"
         result = {
@@ -234,12 +257,16 @@ def run_eco003(*, repo_root: Path, eco: EcosystemRuntime | None = None) -> dict[
             "dsxl_inject": ok_dsxl,
             "wrong_target": bad,
             "low_confidence": low,
+            "replay_reject": replay,
+            "stale_reject": stale,
+            "anti_replay_stale_reject": anti_replay_stale_reject,
             "RING_SPATIAL_ACCURACY": "SIMULATED",
             "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": False,
             "duration_ms": int((time.time() - started) * 1000),
             "claim_boundary": CLAIM,
             "note": (
                 "Ring Lab inject across authorized surfaces (browser/libreoffice); "
+                "wrong_target + low_confidence + nonce replay + stale reject proven; "
                 "spatial accuracy SIMULATED; physical ring SI PENDING."
             ),
         }

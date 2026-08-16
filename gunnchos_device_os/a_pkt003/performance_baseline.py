@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.a_pkt003 import ARTIFACT_REL, BASE_SHA, PACKET
+from gunnchos_device_os.a_pkt003.evidence_scrub import write_scrubbed_json
 from gunnchos_device_os.device_lab.ecosystem import continuity as cont
 from gunnchos_device_os.device_lab.session import get_session, start_session, stop_session
 from gunnchos_device_os.release_engineering.sdk.installer import PackageInstaller
@@ -112,8 +113,8 @@ def run_performance_baseline(repo_root: Path) -> dict[str, Any]:
         "base_sha": BASE_SHA,
         "generated_at_utc": _utc(),
         "environment": {
-            "host": platform.node(),
-            "platform": platform.platform(),
+            "host": "<lab-host>",
+            "platform": platform.system(),
             "python": platform.python_version(),
             "measurement_class": "HOST_OBSERVED",
             "emulated_or_host_only": True,
@@ -132,6 +133,6 @@ def run_performance_baseline(repo_root: Path) -> dict[str, Any]:
         ),
     }
     path = out / "DIGITAL_PERFORMANCE_BASELINE_PKT003.json"
-    path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
-    doc["path"] = str(path)
-    return doc
+    cleaned = write_scrubbed_json(path, doc, repo_root)
+    cleaned["path"] = "artifacts/a_pkt003/DIGITAL_PERFORMANCE_BASELINE_PKT003.json"
+    return cleaned

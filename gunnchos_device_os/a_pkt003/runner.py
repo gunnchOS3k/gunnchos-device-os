@@ -10,6 +10,7 @@ from typing import Any
 from gunnchos_device_os.a_pkt003 import ARTIFACT_REL, BASE_SHA, PACKET
 from gunnchos_device_os.a_pkt003.continuity import run_multi_device_continuity
 from gunnchos_device_os.a_pkt003.diagnostics_collect import collect_diagnostics
+from gunnchos_device_os.a_pkt003.evidence_scrub import scrub_artifact_tree, write_scrubbed_json
 from gunnchos_device_os.a_pkt003.gap_audit import run_gap_audit
 from gunnchos_device_os.a_pkt003.multi_template_guest import run_multi_template_suite
 from gunnchos_device_os.a_pkt003.performance_baseline import run_performance_baseline
@@ -160,8 +161,11 @@ def run_packet(repo_root: Path, *, skip_guest: bool = False) -> dict[str, Any]:
                 "Creation-depth guest token only if Interactive Guest dogfood PASS",
                 "OBSERVABILITY_DIAGNOSTIC_DIGITAL_PASS if diagnostics collect redacts probes",
                 "Performance baseline host/emulated only — no physical FPS/RF",
+                "RING anti-replay requires rings.inject nonce replay + stale (not wrong_target alone)",
             ],
         },
     }
-    (out / "STREAM_A_PKT_003_STATUS.json").write_text(json.dumps(status, indent=2) + "\n", encoding="utf-8")
+    # Scrub any host absolute paths / machine hostname leaked into a_pkt003 JSON.
+    scrub_artifact_tree(out, repo_root)
+    write_scrubbed_json(out / "STREAM_A_PKT_003_STATUS.json", status, repo_root)
     return status

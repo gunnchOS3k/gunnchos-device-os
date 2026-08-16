@@ -8,8 +8,9 @@ from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.a_pkt003 import ARTIFACT_REL, BASE_SHA, PACKET
+from gunnchos_device_os.a_pkt003.evidence_scrub import write_scrubbed_json
 from gunnchos_device_os.device_lab.ecosystem import continuity as cont
-from gunnchos_device_os.device_lab.ecosystem.scenarios import run_eco001, run_eco002, run_eco003
+from gunnchos_device_os.device_lab.ecosystem.scenarios import run_eco002, run_eco003
 from gunnchos_device_os.device_lab.session import get_session, start_session, stop_session
 
 
@@ -153,17 +154,18 @@ def run_multi_device_continuity(repo_root: Path) -> dict[str, Any]:
         "profiles": ["handheld_hybrid", "dock"],
     }
     creator_dsxl = creator_student_to_dsxl(repo_root, evid)
-    # Ring target switching via ECO-003
+    # Ring target switching via ECO-003 (wrong_target ≠ anti-replay; require both)
     eco003 = run_eco003(repo_root=repo_root)
+    wrong = eco003.get("wrong_target") or {}
+    wrong_target_reject = bool(wrong.get("delivered") is False or wrong.get("reject"))
+    anti_replay_stale_reject = bool(eco003.get("anti_replay_stale_reject"))
     ring = {
         "leg": "Ring target switching",
         "ok": bool(eco003.get("ok")),
         "explicit_target_change": True,
         "authorization": True,
-        "anti_replay_stale_reject": bool(
-            (eco003.get("wrong_target") or {}).get("delivered") is False
-            or (eco003.get("wrong_target") or {}).get("reject")
-        ),
+        "wrong_target_reject": wrong_target_reject,
+        "anti_replay_stale_reject": anti_replay_stale_reject,
         "PHYSICAL_RING": False,
         "RING_SPATIAL_ACCURACY": "SIMULATED",
         "eco003": {
@@ -172,6 +174,9 @@ def run_multi_device_continuity(repo_root: Path) -> dict[str, Any]:
             "student_inject": eco003.get("student_inject"),
             "dsxl_inject": eco003.get("dsxl_inject"),
             "wrong_target": eco003.get("wrong_target"),
+            "replay_reject": eco003.get("replay_reject"),
+            "stale_reject": eco003.get("stale_reject"),
+            "anti_replay_stale_reject": anti_replay_stale_reject,
         },
         "profiles": ["edge_io_rings", "student_14_5", "dsxl_coder"],
     }
@@ -181,7 +186,10 @@ def run_multi_device_continuity(repo_root: Path) -> dict[str, Any]:
             student_hh.get("ok") and handheld_dock.get("ok")
         ),
         "CREATOR_CROSS_DEVICE_CONTINUITY_DIGITAL_PASS": bool(creator_dsxl.get("ok")),
-        "RING_TARGET_SWITCH_DIGITAL_PASS": bool(ring.get("ok") and ring.get("anti_replay_stale_reject")),
+        # Earn only when ECO-003 proves target switch + wrong_target + nonce replay + stale.
+        "RING_TARGET_SWITCH_DIGITAL_PASS": bool(
+            ring.get("ok") and wrong_target_reject and anti_replay_stale_reject
+        ),
         "PHYSICAL_RING": False,
         "SILICON_EXACT_EMULATION": False,
     }
@@ -207,10 +215,12 @@ def run_multi_device_continuity(repo_root: Path) -> dict[str, Any]:
         "duration_ms": int((time.time() - started) * 1000),
         "claim_boundary": (
             "Device Lab digital continuity. SILICON_EXACT_EMULATION=false. "
-            "PHYSICAL_RING=false. No TB5 claim."
+            "PHYSICAL_RING=false. No TB5 claim. "
+            "anti_replay_stale_reject requires rings.inject nonce replay + stale paths "
+            "(not wrong_target alone)."
         ),
     }
     path = out / "MULTI_DEVICE_CONTINUITY_RESULT.json"
-    path.write_text(json.dumps(doc, indent=2, default=str) + "\n", encoding="utf-8")
-    doc["path"] = str(path)
-    return doc
+    cleaned = write_scrubbed_json(path, doc, repo_root)
+    cleaned["path"] = "artifacts/a_pkt003/MULTI_DEVICE_CONTINUITY_RESULT.json"
+    return cleaned

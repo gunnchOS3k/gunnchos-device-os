@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.a_pkt003 import ARTIFACT_REL, BASE_SHA, PACKET
+from gunnchos_device_os.a_pkt003.evidence_scrub import write_scrubbed_json
 from gunnchos_device_os.creation_enablement.guest_chain import (
     _guest_bash,
     _pull_guest_file,
@@ -306,9 +307,9 @@ def run_multi_template_suite(repo_root: Path, *, prefer_guest: bool = True) -> d
         ),
     }
     path = out / "CREATOR_MULTI_TEMPLATE_GUEST_RESULT.json"
-    path.write_text(json.dumps(doc, indent=2, default=str) + "\n", encoding="utf-8")
-    doc["path"] = str(path)
-    return doc
+    cleaned = write_scrubbed_json(path, doc, repo_root)
+    cleaned["path"] = "artifacts/a_pkt003/CREATOR_MULTI_TEMPLATE_GUEST_RESULT.json"
+    return cleaned
 
 
 def run_guest_multi_template(repo_root: Path) -> dict[str, Any]:

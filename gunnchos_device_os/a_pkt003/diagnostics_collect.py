@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from gunnchos_device_os.a_pkt003 import ARTIFACT_REL, BASE_SHA, PACKET
+from gunnchos_device_os.a_pkt003.evidence_scrub import write_scrubbed_json
 from gunnchos_device_os.diagnostics_log import DiagnosticsLog, redact
 from gunnchos_device_os.release_engineering.serviceability import export_diagnostic_bundle, redact_text
 
@@ -130,9 +131,9 @@ def collect_diagnostics(
         "recovery_action": "restart_fallback",
         "provenance": {
             "bundle_sha256": bundle.get("sha256"),
-            "bundle_path": str(bundle_path),
-            "host": platform.node(),
-            "platform": platform.platform(),
+            "bundle_path": "artifacts/a_pkt003/diagnostics/diagnostic_bundle.tar.gz",
+            "host": "<lab-host>",
+            "platform": platform.system(),
         },
         "ok": bundle.get("ok") is True and not leaks,
         "SILICON_EXACT_EMULATION": False,
@@ -142,7 +143,7 @@ def collect_diagnostics(
         ),
     }
     path = repo_root / ARTIFACT_REL / "DIAGNOSTICS_COLLECT_RESULT.json"
-    path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
-    doc["path"] = str(path)
-    doc["token_OBSERVABILITY_DIAGNOSTIC_DIGITAL_PASS"] = bool(doc["ok"])
-    return doc
+    cleaned = write_scrubbed_json(path, doc, repo_root)
+    cleaned["path"] = "artifacts/a_pkt003/DIAGNOSTICS_COLLECT_RESULT.json"
+    cleaned["token_OBSERVABILITY_DIAGNOSTIC_DIGITAL_PASS"] = bool(cleaned["ok"])
+    return cleaned
