@@ -1,0 +1,32 @@
+{
+  "schema": "gunnchos.sdk.app_manifest.v1",
+  "app_id": "gunnchos.template.web",
+  "name": "Template web",
+  "version": "0.1.0",
+  "api_version": "1.0.0",
+  "min_os_version": "0.1.0",
+  "max_os_version": null,
+  "arch_targets": [
+    "aarch64",
+    "x86_64"
+  ],
+  "entrypoint": "main.py",
+  "permissions": [
+    "storage_read",
+    "network"
+  ],
+  "capabilities_required": [
+    "storage.read"
+  ],
+  "dependencies": [],
+  "sandbox_profile": {
+    "network_policy": "allowlist",
+    "filesystem_scope": "/data/apps/gunnchos.template.web",
+    "allow_ipc": false
+  },
+  "runtime": "python",
+  "stub_content": false,
+  "source": "sdk/templates/web",
+  "stream_packet": "STREAM-A-PKT-002",
+  "template_kind": "web"
+}

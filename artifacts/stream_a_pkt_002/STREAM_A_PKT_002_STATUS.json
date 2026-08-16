@@ -1,0 +1,42 @@
+{
+  "schema": "gunnchos.stream_a_pkt_002.status.v1",
+  "packet": "STREAM-A-PKT-002",
+  "updated_at_utc": "2026-08-16T17:13:51Z",
+  "base_sha": "e290cdf2bf39453442022e471bbbd4fafd97abf2",
+  "tip_sha": "f99bea8a0f95b3889cbbdd5691720e2db49ee149",
+  "cursor_never_merges": true,
+  "tokens": {
+    "CREATOR_GUEST_BUILD_PASS": true,
+    "CREATOR_GUEST_INSTALL_PASS": true,
+    "CREATOR_GUEST_RUN_PASS": true,
+    "CREATOR_GUEST_UPDATE_PASS": true,
+    "CREATOR_GUEST_ROLLBACK_PASS": true,
+    "CREATOR_END_TO_END_DIGITAL_PASS": true,
+    "TEMPLATE_SUITE_PASS": true,
+    "MIDDLEWARE_RESILIENCE_PASS": true,
+    "SILICON_EXACT_EMULATION": false
+  },
+  "OPEN": [
+    {
+      "id": "PHYSICAL_RING_E6",
+      "blocker_class": "PHYSICAL_PENDING",
+      "detail": "Ring physical remains false"
+    },
+    {
+      "id": "DA-DEVICE-103",
+      "blocker_class": "OWNER_DISPOSITION",
+      "detail": "device-os #103 conflicting \u2014 do not merge/reopen without Edmund"
+    }
+  ],
+  "evidence": [
+    "artifacts/stream_a_pkt_002/CREATOR_GUEST_E2E_RESULT.json",
+    "artifacts/stream_a_pkt_002/MIDDLEWARE_RESILIENCE_MATRIX.json",
+    "artifacts/stream_a_pkt_002/MIDDLEWARE_FAULT_INJECTION_RESULT.json",
+    "artifacts/stream_a_pkt_002/TEMPLATE_SUITE_RESULT.json"
+  ],
+  "merge_ready": true,
+  "duration_ms": 17407,
+  "guest_error": null,
+  "claim_boundary": "CREATOR_END_TO_END_DIGITAL_PASS only if all five CREATOR_GUEST_* tokens are evidenced from guest RESULT.json. Cursor never merges.",
+  "status_note": "tip_sha pins evidence commit; branch tip includes status chore commits"
+}

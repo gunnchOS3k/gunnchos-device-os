@@ -1,0 +1,78 @@
+{
+  "schema": "gunnchos.middleware.resilience_matrix.v1",
+  "packet": "STREAM-A-PKT-002",
+  "faults": [
+    {
+      "fault": "ai_unavailable",
+      "contract_id": "MW-AI-INTERFACE",
+      "pkt001_contract": true,
+      "expected_code": "AI_UNAVAILABLE",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "ring_disconnect",
+      "contract_id": "MW-RING-INPUT",
+      "pkt001_contract": true,
+      "expected_code": "RING_DISCONNECT",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "permission_denied",
+      "contract_id": "MW-IDENTITY",
+      "pkt001_contract": true,
+      "expected_code": "PERMISSION_DENIED",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "storage_full",
+      "contract_id": "MW-PACKAGE",
+      "pkt001_contract": true,
+      "expected_code": "STORAGE_FULL",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "network_outage",
+      "contract_id": "MW-SESSION-CONTINUITY",
+      "pkt001_contract": true,
+      "expected_code": "NETWORK_OUTAGE",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "update_interrupted",
+      "contract_id": "MW-PACKAGE",
+      "pkt001_contract": true,
+      "expected_code": "UPDATE_INTERRUPTED",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "service_crash",
+      "contract_id": "MW-GAME-LAUNCH",
+      "pkt001_contract": true,
+      "expected_code": "SERVICE_CRASH",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "display_topology",
+      "contract_id": "MW-SESSION-CONTINUITY",
+      "pkt001_contract": true,
+      "expected_code": "DISPLAY_TOPOLOGY_CHANGED",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "malformed_ipc",
+      "contract_id": "MW-RING-INPUT",
+      "pkt001_contract": true,
+      "expected_code": "MALFORMED_IPC",
+      "must_keep_silicon_exact_false": true
+    },
+    {
+      "fault": "stale_protocol_version",
+      "contract_id": "MW-IDENTITY",
+      "pkt001_contract": true,
+      "expected_code": "STALE_PROTOCOL_VERSION",
+      "must_keep_silicon_exact_false": true
+    }
+  ],
+  "count": 10,
+  "claim_boundary": "Digital fault-injection matrix over PKT-001 middleware contracts. Not a production SLA claim. SILICON_EXACT_EMULATION=false."
+}
