@@ -1,0 +1,1534 @@
+{
+  "STANDARDIZED_6G": false,
+  "bridges": {
+    "device_class_ids": [
+      "student_14_5",
+      "handheld_hybrid",
+      "ds_xl_coder",
+      "wearables_arena_set"
+    ],
+    "edge_io": {
+      "claim_boundary": "Digital contract + session gates; not physical Edge-IO accuracy.",
+      "local_only_default": true,
+      "metrics": [
+        "timestamp",
+        "device_profile",
+        "network_type",
+        "signal_metadata_placeholder",
+        "latency_ms_placeholder",
+        "packet_loss_aggregate_placeholder",
+        "device_temperature_placeholder",
+        "battery_level_placeholder",
+        "location_optional_off_by_default",
+        "notes"
+      ],
+      "module": "gunnchos_device_os.edge_io_contract"
+    },
+    "first_party_runtime_catalog": [
+      "waike",
+      "creator_studio",
+      "device_dashboard",
+      "anime-aggressors-web",
+      "earth-species-web",
+      "foot-racing-web",
+      "beatlink-party-web"
+    ],
+    "gunnchai": {
+      "claim_boundary": "Digital tutor safety gates + local reply templates. Not production LLM deployment, not frontier model quality.",
+      "module": "gunnchos_device_os.gunnchai_integration"
+    },
+    "ota_states": [
+      "idle",
+      "checking",
+      "download_pending",
+      "downloading",
+      "verifying",
+      "staging",
+      "applying",
+      "reboot_pending",
+      "health_check",
+      "committed",
+      "rolling_back",
+      "rolled_back",
+      "failed"
+    ],
+    "ota_transition_count": 26,
+    "runtime_profile_ids": [
+      "student_14_5",
+      "ds_xl_coder",
+      "handheld_hybrid",
+      "dock"
+    ],
+    "waike": {
+      "claim_boundary": "Digital WAIKE learning runtime using repo lesson packs and 18-course seeds. Not a full LMS, not production cloud sync, not curriculum-complete.",
+      "module": "gunnchos_device_os.waike_integration",
+      "offline_packs": [
+        "waike_gary_upnow_intro",
+        "wireless_basics_101",
+        "python_starter_pack",
+        "DIGITAL_CONFIDENCE",
+        "IT_SUPPORT_HARDWARE",
+        "SOFTWARE_BUILDER",
+        "NETWORKING_INFRA",
+        "CYBER_SOC",
+        "DATA_DASHBOARDS",
+        "AI_ML_EDGE",
+        "EMBEDDED_PROTOTYPING",
+        "WIRELESS_6G",
+        "PM_AGILE_LSS",
+        "GAME_DEV_INTERACTIVE",
+        "SEVEN_GC_APPRENTICESHIP",
+        "CLOUD_DEVOPS",
+        "COMM_PD_ETHICS",
+        "ROBOTICS_CONTROL",
+        "GUNNCHOS_PRODUCT_LAB",
+        "HARDWARE_ENGINEERING",
+        "DATA_VIZ_BI"
+      ]
+    }
+  },
+  "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+  "content_digest_sha256": "ef5323a1607bf88031fb209375325e3935049651346fcc138f022b1aba9c0083",
+  "continuity_levels": [
+    "target",
+    "degraded",
+    "min_useful",
+    "failed"
+  ],
+  "physical_boot": false,
+  "profiles": {
+    "desk": {
+      "benchmark_scenarios": [
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "student_14_5",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "wifi_nominal",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "ethernet",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "student_14_5",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "ethernet",
+              "score": 124.10000000000001
+            },
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "dock_ethernet",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "student_14_5",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 94.93333333333334
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "degraded_wifi",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "student_14_5",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "jam_wifi_offline_fallback",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "student_14_5",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "force_offline",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        }
+      ],
+      "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+      "continuity_levels_observed": [
+        "min_useful",
+        "target"
+      ],
+      "device_class": {
+        "accessibility_defaults": {
+          "high_contrast": false,
+          "large_text": false,
+          "screen_reader_labels": true
+        },
+        "battery_class": "school_day",
+        "deploy_role": "target",
+        "display_name": "Student 14.5",
+        "dock_support": true,
+        "hardware_contract_assumptions": [
+          "wifi_6e",
+          "usb_c_dock",
+          "tpm2_target"
+        ],
+        "id": "student_14_5",
+        "offline_capabilities": [
+          "offline_lessons",
+          "offline_writing",
+          "offline_coding"
+        ],
+        "performance_class": "balanced",
+        "ram_target_gb": 8,
+        "source": "config/device_classes.yaml",
+        "storage_class": "nvme_256gb",
+        "supported_app_packs": [
+          "learn_pack",
+          "write_pack",
+          "cs_student_pack",
+          "offline_essentials_pack"
+        ],
+        "supported_modes": [
+          "School",
+          "Developer",
+          "Play",
+          "Media",
+          "Studio",
+          "Guardian",
+          "Library",
+          "Offline",
+          "Admin"
+        ],
+        "thermal_class": "passive_fanless"
+      },
+      "mapping": {
+        "device_class_id": "student_14_5",
+        "docked_runtime_profile_id": "dock",
+        "hardware_profile_id": "student_14_5",
+        "runtime_profile_id": "student_14_5"
+      },
+      "modes": [
+        {
+          "allowed_apps": [
+            "browser",
+            "waike_offline",
+            "gunnchai3k",
+            "scaly_wings_edu"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "vscode",
+            "terminal"
+          ],
+          "mode": "School",
+          "network": "filtered",
+          "offline_lessons": true,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "vscode",
+            "terminal",
+            "wsl_ubuntu",
+            "browser",
+            "gunnchai3k",
+            "git_placeholder"
+          ],
+          "blocked_apps": [
+            "steam"
+          ],
+          "mode": "Developer",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "steam",
+            "scaly_wings",
+            "edgegesture",
+            "browser"
+          ],
+          "blocked_apps": [],
+          "mode": "Play",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "youtube",
+            "netflix",
+            "hulu",
+            "local_media",
+            "lecture_video",
+            "music_audio"
+          ],
+          "blocked_apps": [
+            "steam",
+            "vscode"
+          ],
+          "mode": "Media",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "write_placeholder",
+            "sketch_placeholder",
+            "music_notes_placeholder",
+            "browser"
+          ],
+          "blocked_apps": [
+            "steam",
+            "terminal"
+          ],
+          "mode": "Studio",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "waike_offline",
+            "gunnchai3k",
+            "scaly_wings_edu"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "vscode",
+            "terminal"
+          ],
+          "mode": "Guardian",
+          "network": "filtered",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "waike_offline",
+            "gunnchai3k",
+            "lecture_video"
+          ],
+          "blocked_apps": [
+            "steam",
+            "vscode",
+            "terminal",
+            "netflix",
+            "hulu"
+          ],
+          "mode": "Library",
+          "network": "filtered",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "waike_offline",
+            "write_placeholder",
+            "sketch_placeholder",
+            "scaly_wings_edu",
+            "local_media",
+            "lecture_video"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "youtube",
+            "music_audio",
+            "future_streaming_service"
+          ],
+          "mode": "Offline",
+          "network": "offline_only",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "terminal",
+            "vscode",
+            "steam"
+          ],
+          "blocked_apps": [],
+          "mode": "Admin",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        }
+      ],
+      "radio": {
+        "bluetooth": true,
+        "cellular_class": "simulated_generic",
+        "ethernet_dock": true,
+        "ntn_class": "none",
+        "offline_capable": true,
+        "source": "hardware_compat/device_profiles + radio_capability.py",
+        "supported_bearers": [
+          "wifi",
+          "bluetooth",
+          "ethernet",
+          "cellular",
+          "offline"
+        ],
+        "wifi_class": "wifi_6e"
+      },
+      "research_class": "desk",
+      "runtime_docked": {
+        "ai_allow_cloud": true,
+        "ai_max_tokens_per_min": 20000,
+        "ai_tier": "edge_cloud",
+        "battery_saver": false,
+        "cpu_cap_percent": 100,
+        "display_surface": "dock",
+        "governor": "docked_performance",
+        "gpu_cap_percent": 100,
+        "profile_id": "dock",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": true
+      },
+      "runtime_undocked": {
+        "ai_allow_cloud": false,
+        "ai_max_tokens_per_min": 2000,
+        "ai_tier": "local",
+        "battery_saver": false,
+        "cpu_cap_percent": 70,
+        "display_surface": "student_14_5",
+        "governor": "school",
+        "gpu_cap_percent": 50,
+        "profile_id": "student_14_5",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": false
+      },
+      "workload_offline_coverage": {
+        "coding": true,
+        "games": false,
+        "lessons": true,
+        "research": false,
+        "writing": true
+      }
+    },
+    "local-creation": {
+      "benchmark_scenarios": [
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "ds_xl_coder",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "wifi_nominal",
+          "supported_bearers": [
+            "bluetooth",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_coding"
+        },
+        {
+          "active_bearer": "ethernet",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "ds_xl_coder",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "ethernet",
+              "score": 124.10000000000001
+            },
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "dock_ethernet",
+          "supported_bearers": [
+            "bluetooth",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_coding"
+        },
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "ds_xl_coder",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 94.93333333333334
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "degraded_wifi",
+          "supported_bearers": [
+            "bluetooth",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_coding"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "ds_xl_coder",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "jam_wifi_offline_fallback",
+          "supported_bearers": [
+            "bluetooth",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_coding"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "ds_xl_coder",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "force_offline",
+          "supported_bearers": [
+            "bluetooth",
+            "ethernet",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_coding"
+        }
+      ],
+      "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+      "continuity_levels_observed": [
+        "min_useful",
+        "target"
+      ],
+      "device_class": {
+        "accessibility_defaults": {
+          "focus_mode": true,
+          "keyboard_navigation": true
+        },
+        "battery_class": "workstation_portable",
+        "deploy_role": "source_and_target",
+        "display_name": "DS-XL Coder",
+        "dock_support": true,
+        "hardware_contract_assumptions": [
+          "wifi_6e",
+          "usb_c_host",
+          "wsl_capable_host"
+        ],
+        "id": "ds_xl_coder",
+        "offline_capabilities": [
+          "offline_coding",
+          "offline_research_notebooks"
+        ],
+        "performance_class": "developer",
+        "ram_target_gb": 16,
+        "source": "config/device_classes.yaml",
+        "storage_class": "nvme_1tb",
+        "supported_app_packs": [
+          "cs_student_pack",
+          "game_dev_pack",
+          "research_pack",
+          "stem_lab_pack"
+        ],
+        "supported_modes": [
+          "Developer",
+          "Coder",
+          "Workshop",
+          "Laboratory",
+          "Research Measurement",
+          "Admin"
+        ],
+        "thermal_class": "active_cooling"
+      },
+      "mapping": {
+        "device_class_id": "ds_xl_coder",
+        "docked_runtime_profile_id": "dock",
+        "hardware_profile_id": "ds_xl_coder",
+        "runtime_profile_id": "ds_xl_coder"
+      },
+      "modes": [
+        {
+          "allowed_apps": [
+            "vscode",
+            "terminal",
+            "wsl_ubuntu",
+            "browser",
+            "gunnchai3k",
+            "git_placeholder"
+          ],
+          "blocked_apps": [
+            "steam"
+          ],
+          "mode": "Developer",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "vscode",
+            "terminal",
+            "browser",
+            "waike_offline",
+            "gunnchai3k"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu"
+          ],
+          "mode": "Coder",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "vscode",
+            "terminal",
+            "hardware_lab_placeholder",
+            "browser"
+          ],
+          "blocked_apps": [
+            "netflix",
+            "hulu"
+          ],
+          "mode": "Workshop",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "field_measurement",
+            "edge_io",
+            "research_notebook_placeholder",
+            "browser"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix"
+          ],
+          "mode": "Laboratory",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "field_measurement",
+            "edge_io",
+            "browser"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix"
+          ],
+          "mode": "Research Measurement",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "terminal",
+            "vscode",
+            "steam"
+          ],
+          "blocked_apps": [],
+          "mode": "Admin",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        }
+      ],
+      "radio": {
+        "bluetooth": true,
+        "cellular_class": "none",
+        "ethernet_dock": true,
+        "ntn_class": "none",
+        "offline_capable": true,
+        "source": "hardware_compat/device_profiles + radio_capability.py",
+        "supported_bearers": [
+          "wifi",
+          "bluetooth",
+          "ethernet",
+          "offline"
+        ],
+        "wifi_class": "wifi_6e"
+      },
+      "research_class": "local-creation",
+      "runtime_docked": {
+        "ai_allow_cloud": true,
+        "ai_max_tokens_per_min": 20000,
+        "ai_tier": "edge_cloud",
+        "battery_saver": false,
+        "cpu_cap_percent": 100,
+        "display_surface": "dock",
+        "governor": "docked_performance",
+        "gpu_cap_percent": 100,
+        "profile_id": "dock",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": true
+      },
+      "runtime_undocked": {
+        "ai_allow_cloud": false,
+        "ai_max_tokens_per_min": 8000,
+        "ai_tier": "local_plus",
+        "battery_saver": false,
+        "cpu_cap_percent": 100,
+        "display_surface": "ds_xl_coder",
+        "governor": "balanced",
+        "gpu_cap_percent": 85,
+        "profile_id": "ds_xl_coder",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": true
+      },
+      "workload_offline_coverage": {
+        "coding": true,
+        "games": false,
+        "lessons": false,
+        "research": true,
+        "writing": false
+      }
+    },
+    "mobile-docked": {
+      "benchmark_scenarios": [
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "handheld_hybrid",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "wifi_nominal",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "ntn_simulated",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "ethernet",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "handheld_hybrid",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "ethernet",
+              "score": 124.10000000000001
+            },
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "dock_ethernet",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "ntn_simulated",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "handheld_hybrid",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 94.93333333333334
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "degraded_wifi",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "ntn_simulated",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "handheld_hybrid",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "jam_wifi_offline_fallback",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "ntn_simulated",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "handheld_hybrid",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "force_offline",
+          "supported_bearers": [
+            "bluetooth",
+            "cellular",
+            "ethernet",
+            "ntn_simulated",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        }
+      ],
+      "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+      "continuity_levels_observed": [
+        "min_useful",
+        "target"
+      ],
+      "device_class": {
+        "accessibility_defaults": {
+          "controller_navigation": true,
+          "large_text": false,
+          "touch_navigation": true
+        },
+        "battery_class": "portable_extended",
+        "deploy_role": "target",
+        "display_name": "Handheld Hybrid",
+        "dock_support": true,
+        "hardware_contract_assumptions": [
+          "wifi_6e",
+          "usb_c",
+          "gamepad_hid"
+        ],
+        "id": "handheld_hybrid",
+        "offline_capabilities": [
+          "offline_lessons",
+          "offline_games",
+          "offline_coding"
+        ],
+        "performance_class": "gaming_balanced",
+        "ram_target_gb": 12,
+        "source": "config/device_classes.yaml",
+        "storage_class": "nvme_512gb",
+        "supported_app_packs": [
+          "learn_pack",
+          "game_pack",
+          "cs_student_pack",
+          "offline_essentials_pack"
+        ],
+        "supported_modes": [
+          "School",
+          "Play",
+          "Developer",
+          "Media",
+          "Workshop",
+          "Offline",
+          "Admin"
+        ],
+        "thermal_class": "active_cooling"
+      },
+      "mapping": {
+        "device_class_id": "handheld_hybrid",
+        "docked_runtime_profile_id": "dock",
+        "hardware_profile_id": "handheld_hybrid",
+        "runtime_profile_id": "handheld_hybrid"
+      },
+      "modes": [
+        {
+          "allowed_apps": [
+            "browser",
+            "waike_offline",
+            "gunnchai3k",
+            "scaly_wings_edu"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "vscode",
+            "terminal"
+          ],
+          "mode": "School",
+          "network": "filtered",
+          "offline_lessons": true,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "steam",
+            "scaly_wings",
+            "edgegesture",
+            "browser"
+          ],
+          "blocked_apps": [],
+          "mode": "Play",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "vscode",
+            "terminal",
+            "wsl_ubuntu",
+            "browser",
+            "gunnchai3k",
+            "git_placeholder"
+          ],
+          "blocked_apps": [
+            "steam"
+          ],
+          "mode": "Developer",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "youtube",
+            "netflix",
+            "hulu",
+            "local_media",
+            "lecture_video",
+            "music_audio"
+          ],
+          "blocked_apps": [
+            "steam",
+            "vscode"
+          ],
+          "mode": "Media",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "vscode",
+            "terminal",
+            "hardware_lab_placeholder",
+            "browser"
+          ],
+          "blocked_apps": [
+            "netflix",
+            "hulu"
+          ],
+          "mode": "Workshop",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "waike_offline",
+            "write_placeholder",
+            "sketch_placeholder",
+            "scaly_wings_edu",
+            "local_media",
+            "lecture_video"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "youtube",
+            "music_audio",
+            "future_streaming_service"
+          ],
+          "mode": "Offline",
+          "network": "offline_only",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "terminal",
+            "vscode",
+            "steam"
+          ],
+          "blocked_apps": [],
+          "mode": "Admin",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        }
+      ],
+      "radio": {
+        "bluetooth": true,
+        "cellular_class": "simulated_generic",
+        "ethernet_dock": true,
+        "ntn_class": "simulated",
+        "offline_capable": true,
+        "source": "hardware_compat/device_profiles + radio_capability.py",
+        "supported_bearers": [
+          "wifi",
+          "bluetooth",
+          "ethernet",
+          "cellular",
+          "ntn_simulated",
+          "offline"
+        ],
+        "wifi_class": "wifi_6e"
+      },
+      "research_class": "mobile-docked",
+      "runtime_docked": {
+        "ai_allow_cloud": true,
+        "ai_max_tokens_per_min": 20000,
+        "ai_tier": "edge_cloud",
+        "battery_saver": false,
+        "cpu_cap_percent": 100,
+        "display_surface": "dock",
+        "governor": "docked_performance",
+        "gpu_cap_percent": 100,
+        "profile_id": "dock",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": true
+      },
+      "runtime_undocked": {
+        "ai_allow_cloud": false,
+        "ai_max_tokens_per_min": 500,
+        "ai_tier": "tiny_local",
+        "battery_saver": true,
+        "cpu_cap_percent": 50,
+        "display_surface": "handheld_hybrid",
+        "governor": "battery_saver",
+        "gpu_cap_percent": 40,
+        "profile_id": "handheld_hybrid",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": false
+      },
+      "workload_offline_coverage": {
+        "coding": true,
+        "games": true,
+        "lessons": true,
+        "research": false,
+        "writing": false
+      }
+    },
+    "wearable": {
+      "benchmark_scenarios": [
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "wearables_arena_set",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "wifi_nominal",
+          "supported_bearers": [
+            "bluetooth",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "wearables_arena_set",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 122.64000000000001
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "dock_ethernet",
+          "supported_bearers": [
+            "bluetooth",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "wifi",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "target",
+          "device_id": "wearables_arena_set",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "connected",
+          "ranked_finite_scores": [
+            {
+              "bearer": "wifi",
+              "score": 94.93333333333334
+            },
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "degraded_wifi",
+          "supported_bearers": [
+            "bluetooth",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "wearables_arena_set",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "jam_wifi_offline_fallback",
+          "supported_bearers": [
+            "bluetooth",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "min_useful",
+          "device_id": "wearables_arena_set",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": true,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "force_offline",
+          "supported_bearers": [
+            "bluetooth",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_lessons"
+        },
+        {
+          "active_bearer": "offline",
+          "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+          "continuity_level": "failed",
+          "device_id": "wearables_arena_set",
+          "metric_source": "tests/test_connectivity_orchestrator.py injected corpus",
+          "offline_covers_workload": false,
+          "orchestrator_state": "offline",
+          "ranked_finite_scores": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            }
+          ],
+          "scenario_id": "force_offline_coding_unsupported",
+          "supported_bearers": [
+            "bluetooth",
+            "offline",
+            "wifi"
+          ],
+          "workload": "offline_coding"
+        }
+      ],
+      "claim_boundary": "Digital service-continuity profile model. Metrics are exported from existing device class YAML, runtime profiles, radio capability, and orchestrator scores on labeled injected scenarios. Not live RF, not carrier attach, not a shipping OS, not physical boot evidence.",
+      "continuity_levels_observed": [
+        "failed",
+        "min_useful",
+        "target"
+      ],
+      "device_class": {
+        "accessibility_defaults": {
+          "audio_cues": true,
+          "haptic_cues": true,
+          "simplified_language": true
+        },
+        "battery_class": "wearable_short_cycle",
+        "deploy_role": "future_target_placeholder",
+        "display_name": "Wearables / Arena Set",
+        "dock_support": false,
+        "hardware_contract_assumptions": [
+          "bluetooth_le",
+          "low_power_wifi"
+        ],
+        "id": "wearables_arena_set",
+        "offline_capabilities": [
+          "offline_lessons",
+          "offline_games"
+        ],
+        "performance_class": "edge_light",
+        "ram_target_gb": 4,
+        "source": "config/device_classes.yaml",
+        "storage_class": "emmc_64gb",
+        "supported_app_packs": [
+          "learn_pack",
+          "game_pack",
+          "accessibility_essentials_pack"
+        ],
+        "supported_modes": [
+          "Play",
+          "School",
+          "Offline",
+          "Library"
+        ],
+        "thermal_class": "strict_throttle"
+      },
+      "mapping": {
+        "device_class_id": "wearables_arena_set",
+        "docked_runtime_profile_id": null,
+        "hardware_profile_id": "wearables_arena_set",
+        "nearest_runtime_profile_id": "handheld_hybrid",
+        "runtime_gap": "runtime_profiles.PROFILE_SPECS has student/ds_xl/handheld/dock only; wearable uses handheld_hybrid as nearest executable profile.",
+        "runtime_profile_id": null
+      },
+      "modes": [
+        {
+          "allowed_apps": [
+            "steam",
+            "scaly_wings",
+            "edgegesture",
+            "browser"
+          ],
+          "blocked_apps": [],
+          "mode": "Play",
+          "network": "standard",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "waike_offline",
+            "gunnchai3k",
+            "scaly_wings_edu"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "vscode",
+            "terminal"
+          ],
+          "mode": "School",
+          "network": "filtered",
+          "offline_lessons": true,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "waike_offline",
+            "write_placeholder",
+            "sketch_placeholder",
+            "scaly_wings_edu",
+            "local_media",
+            "lecture_video"
+          ],
+          "blocked_apps": [
+            "steam",
+            "netflix",
+            "hulu",
+            "youtube",
+            "music_audio",
+            "future_streaming_service"
+          ],
+          "mode": "Offline",
+          "network": "offline_only",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        },
+        {
+          "allowed_apps": [
+            "browser",
+            "waike_offline",
+            "gunnchai3k",
+            "lecture_video"
+          ],
+          "blocked_apps": [
+            "steam",
+            "vscode",
+            "terminal",
+            "netflix",
+            "hulu"
+          ],
+          "mode": "Library",
+          "network": "filtered",
+          "offline_lessons": false,
+          "source": "config/modes.yaml"
+        }
+      ],
+      "radio": {
+        "bluetooth": true,
+        "cellular_class": "none",
+        "ethernet_dock": false,
+        "ntn_class": "none",
+        "offline_capable": true,
+        "source": "hardware_compat/device_profiles + radio_capability.py",
+        "supported_bearers": [
+          "wifi",
+          "bluetooth",
+          "offline"
+        ],
+        "wifi_class": "wifi_6"
+      },
+      "research_class": "wearable",
+      "runtime_docked": null,
+      "runtime_undocked": {
+        "ai_allow_cloud": false,
+        "ai_max_tokens_per_min": 500,
+        "ai_tier": "tiny_local",
+        "battery_saver": true,
+        "cpu_cap_percent": 50,
+        "display_surface": "handheld_hybrid",
+        "governor": "battery_saver",
+        "gpu_cap_percent": 40,
+        "profile_id": "handheld_hybrid",
+        "source": "gunnchos_device_os.runtime_profiles.PROFILE_SPECS",
+        "tdp_boost": false
+      },
+      "workload_offline_coverage": {
+        "coding": false,
+        "games": true,
+        "lessons": true,
+        "research": false,
+        "writing": false
+      }
+    }
+  },
+  "research_classes": [
+    "desk",
+    "mobile-docked",
+    "local-creation",
+    "wearable"
+  ],
+  "rq": "RQ1",
+  "schema": "gunnchos.service_continuity_profile.v1",
+  "shipping_os": false,
+  "sources": [
+    "config/device_classes.yaml",
+    "gunnchos_device_os/runtime_profiles.py",
+    "gunnchos_device_os/radio_capability.py",
+    "gunnchos_device_os/connectivity_orchestrator.py",
+    "tests/test_connectivity_orchestrator.py",
+    "config/modes.yaml",
+    "hardware_compat/device_profiles/*.yaml"
+  ],
+  "thesis": "Resilience-Aware Service Continuity in Heterogeneous 6G Networks"
+}
