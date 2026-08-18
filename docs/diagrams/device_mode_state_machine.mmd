@@ -1,3 +1,12 @@
+%% Authoritative copy: docs/uml/current/state_mode.md
+%% Source: gunnchos_device_os/mode_manager.py + config/modes.yaml
 stateDiagram-v2
-  [*] --> school
-  school --> play
+  [*] --> School
+  School --> Play
+  School --> Media
+  School --> Offline
+  School --> Developer
+  Developer --> Coder
+  Play --> Media
+  Offline --> School
+  ResearchMeasurement --> Developer

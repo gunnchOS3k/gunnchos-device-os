@@ -1,4 +1,5 @@
 .PHONY: test validate-configs generate-device-states generate-sbom \
+	reproduce uml supervisor-ready \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
 	runtime-services system-image full-product-iii \
@@ -298,3 +299,27 @@ base-image-overlay:
 
 base-image-safe-resume:
 	$(PY) python3 scripts/gunnchdevice_base_image_pipeline.py safe-resume
+
+# Supervisor-ready digital path (not a shipping OS, not physical boot)
+uml:
+	@test -f docs/uml/current/use_case.md
+	@test -f docs/uml/traceability_matrix.md
+	@echo "Mermaid UML in docs/uml/current/; optional: ./docs/uml/render_plantuml.sh"
+
+supervisor-ready:
+	$(PY) python3 scripts/generate_service_continuity_profiles.py
+	$(PY) python3 scripts/checksum_digital_container_vm.py
+	$(PY) python3 scripts/inventory_supervisor_ready.py
+	$(PY) python3 -m pytest -q \
+		tests/test_service_continuity_profiles.py \
+		tests/test_supervisor_ready_uml.py \
+		tests/test_device_classes.py \
+		tests/test_runtime_profiles.py \
+		tests/test_launcher.py \
+		tests/test_connectivity_orchestrator.py
+
+reproduce: uml supervisor-ready
+	@test -f artifacts/supervisor_ready/SERVICE_CONTINUITY_PROFILES.json
+	@test -f artifacts/supervisor_ready/DIGITAL_CONTAINER_VM_CHECKSUMS.json
+	@test -f artifacts/supervisor_ready/PHYSICAL_PENDING_INVENTORY.json
+	@echo "reproduce complete (digital path only; PHYSICAL_PENDING unchanged)"

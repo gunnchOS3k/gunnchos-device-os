@@ -1,3 +1,9 @@
-stateDiagram-v2
-  [*] --> school
-  school --> play
+%% Authoritative copy: docs/uml/current/component.md
+flowchart TB
+  LM[apps/launcher_mock]
+  PY[gunnchos_device_os]
+  CFG[config]
+  SC[service_continuity]
+  LM --> CFG
+  PY --> CFG
+  SC --> PY

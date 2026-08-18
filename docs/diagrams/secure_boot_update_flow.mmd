@@ -1,3 +1,15 @@
+%% Authoritative copy: docs/uml/current/activity_update_recovery.md
+%% Source: gunnchos_device_os/ota_state_machine.py (simulation, not live OTA)
 stateDiagram-v2
-  [*] --> school
-  school --> play
+  [*] --> idle
+  idle --> checking
+  checking --> download_pending
+  download_pending --> downloading
+  downloading --> verifying
+  verifying --> staging
+  staging --> applying
+  applying --> reboot_pending
+  reboot_pending --> health_check
+  health_check --> committed
+  health_check --> rolling_back
+  rolling_back --> rolled_back

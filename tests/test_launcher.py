@@ -11,3 +11,10 @@ def test_launch_allowed_play_steam():
 def test_list_launchable():
     apps = list_launchable("student", "School")
     assert len(apps) > 0
+
+
+def test_waike_offline_uses_first_party_runtime():
+    r = launch_app("student", "School", "waike_offline")
+    assert r["launched"] is True
+    assert r["mock"] is False
+    assert r["runtime_id"] == "waike"

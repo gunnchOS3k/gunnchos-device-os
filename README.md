@@ -49,6 +49,9 @@ A user-focused operating system alpha and launcher/customization framework for g
 
 ## Start here
 
+- [docs/uml/README.md](docs/uml/README.md) — supervisor-facing UML (current / future / legacy)
+- [docs/SERVICE_CONTINUITY_PROFILE_MODEL.md](docs/SERVICE_CONTINUITY_PROFILE_MODEL.md) — RQ1 desk / mobile-docked / local-creation / wearable
+- [REPRODUCIBILITY.md](REPRODUCIBILITY.md) — `make reproduce`
 - [docs/USER_FOCUSED_OS_ARCHITECTURE.md](docs/USER_FOCUSED_OS_ARCHITECTURE.md)
 - [docs/DEVICE_CLASSES.md](docs/DEVICE_CLASSES.md)
 - [docs/MODES_OVERVIEW.md](docs/MODES_OVERVIEW.md)

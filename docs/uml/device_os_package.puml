@@ -1,0 +1,15 @@
+@startuml device_os_package
+!pragma layout smetana
+title gunnchos-device-os current package view
+package "gunnchos_device_os" as py
+package "apps/launcher_mock" as lm
+package "config" as cfg
+package "os_build" as osb
+package "docs/uml" as uml
+package "service_continuity" as sc
+py --> cfg
+lm --> cfg
+sc --> py
+uml --> py
+osb --> py
+@enduml
