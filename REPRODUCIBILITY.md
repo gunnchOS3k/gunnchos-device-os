@@ -1,48 +1,64 @@
-        # Reproducibility — gunnchos Device OS
+# Reproducibility — gunnchos Device OS
 
-        ## Clone / setup / run
+Paper I infrastructure for *Resilience-Aware Service Continuity in Heterogeneous 6G Networks*.
+Not a shipping OS. Not physical boot.
 
-        ```bash
-        git clone https://github.com/gunnchOS3k/{name}.git
+## Clone / setup / run
+
+```bash
+git clone https://github.com/gunnchOS3k/gunnchos-device-os.git
 cd gunnchos-device-os
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m pytest -q
-# Expected: CI smoke pass; tests pass or documented skip
-        ```
+python3 -m pip install pytest pyyaml
+python3 -m pip install -r requirements.txt
+make reproduce
+```
 
-        ## Expected outputs
+Canonical independent path is **`make reproduce`**. Full `pytest -q` is the CI suite
+(longer; requires the jobs in `.github/workflows/ci.yml`).
 
-        - Required documentation files present (`python3 scripts/check_required_files.py`)
-        - Tests pass **or** documented smoke-only path for docs-only repos
-        - No claim of field deployment from synthetic outputs alone
+Launcher UI prototype (optional):
 
-        ## Tool versions
+```bash
+cd apps/launcher_mock && npm ci && npm test
+```
 
-        | Tool | Version guidance |
-        |------|------------------|
-        | Python | 3.10+ where `requirements.txt` exists |
-        | Node | 18+ LTS where `package.json` exists |
-        | Make | GNU Make where `Makefile` exists |
+## Expected outputs
 
-        Record exact versions in PR / release notes when publishing.
+- `artifacts/supervisor_ready/SERVICE_CONTINUITY_PROFILES.json` (four research classes)
+- `artifacts/supervisor_ready/DIGITAL_CONTAINER_VM_CHECKSUMS.json`
+- `artifacts/supervisor_ready/PHYSICAL_PENDING_INVENTORY.json`
+- UML pack present under `docs/uml/current/`
+- Tests in `tests/test_service_continuity_profiles.py` and `tests/test_supervisor_ready_uml.py` pass
 
-        ## Fresh machine checklist
+## Tool versions
 
-        - [ ] Clone repo
-        - [ ] Create clean venv / `npm ci`
-        - [ ] Run `scripts/check_required_files.py`
-        - [ ] Run test command from README
-        - [ ] Compare outputs to `results/` or CI logs
-        - [ ] Log environment in `reproducibility/FRESH_MACHINE_LOG.md` (optional)
+| Tool | Version guidance |
+|------|------------------|
+| Python | 3.10+ (CI uses 3.11) |
+| Node | 20 LTS for `apps/launcher_mock` |
+| Make | GNU Make |
+| Docker | Optional; `os_build/linux_desktop` prototype only |
 
-        ## Evidence discipline
+Pinned notes: `REPRODUCIBILITY_MANIFEST.yaml`.
 
-        **Real today:** Launcher mock, mode manager, tests, architecture docs
+## Fresh machine checklist
 
-        **Synthetic / demo-only:** Telemetry stubs, fleet POC mocks
+- [ ] Clone repo and checkout the frozen SHA
+- [ ] Create clean venv
+- [ ] Run `make reproduce`
+- [ ] Compare generated JSON hashes
+- [ ] Log environment (optional `reproducibility/FRESH_MACHINE_LOG.md`)
+- [ ] File independent evidence per `docs/packets/EXTERNAL_REPRODUCTION_PACKET.md`
 
-        **Planned:** Installable image, secure update channel
+## Evidence discipline
 
-        **Not claimed:** Shipping OS image, certified hardware integration
+**Real today:** Launcher mock, mode manager, device classes, runtime profiles,
+connectivity orchestrator (injected metrics), software boot probe, digital image bundle.
+
+**Synthetic / demo-only:** Injected bearer metrics, OTA state machine, fleet stubs.
+
+**Planned:** Installable image, secure update channel, EVT physical boot.
+
+**Not claimed:** Shipping OS image, certified hardware integration, physical boot.

@@ -1,0 +1,50 @@
+{
+  "schema": "gunnchos.digital_container_vm_checksums.v1",
+  "shipping_os": false,
+  "physical_boot": false,
+  "note": "Hashes of prototype container/devcontainer/digital-bundle sources. Docker :8080 serves launcher_mock. QEMU bootable-reference is DEV/VM evidence only (make bootable-reference).",
+  "files": [
+    {
+      "path": "os_build/linux_desktop/Dockerfile",
+      "present": true,
+      "sha256": "4c98c00c6a4f2ad2bbcf0c917cfdb92c1db57e4e6634ec8d1b3b84f2eed723fc",
+      "bytes": 870
+    },
+    {
+      "path": "os_build/linux_desktop/docker-compose.yml",
+      "present": true,
+      "sha256": "c3abe5cd6a786932b4354c1c95d5338b4e6e484c1077282cec5dfa0beb21000c",
+      "bytes": 169
+    },
+    {
+      "path": "os_build/linux_desktop/entrypoint.sh",
+      "present": true,
+      "sha256": "678a5ea49fcb51ad96dc74215c7874a1c31992fd0c005c93e493ccd4be7d3199",
+      "bytes": 183
+    },
+    {
+      "path": "os_build/linux_desktop/nginx.conf",
+      "present": true,
+      "sha256": "6aabafb995d81503139256068e093dd0c0ea263867aafec9311c91edcd061117",
+      "bytes": 295
+    },
+    {
+      "path": ".devcontainer/devcontainer.json",
+      "present": true,
+      "sha256": "0943b50b43c22aa29ce5fb53354b19cdc5babf7dbe381d893ad0296bace0eb21",
+      "bytes": 547
+    },
+    {
+      "path": "os_build/reproducible_system_image/artifacts/CHECKSUMS.json",
+      "present": true,
+      "sha256": "182628e280647d8bb87200f3f97c9a4c9afb1952e2424306ca4d0141a1551325",
+      "bytes": 888
+    },
+    {
+      "path": "os_build/reproducible_system_image/notes/VM_EMULATION.md",
+      "present": true,
+      "sha256": "138aa62410894d5bb4b7c3e3a3054136de812e4e884ac582d4b2da8d313d9059",
+      "bytes": 293
+    }
+  ]
+}
