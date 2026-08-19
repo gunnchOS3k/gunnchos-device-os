@@ -1,0 +1,1811 @@
+{
+  "schema": "gunnchos.engineering_wave002.v1",
+  "wave": "002",
+  "primary_repo": "gunnchos-device-os",
+  "branch": "eng/wave002-shell-continuity",
+  "requirement_classification": {
+    "SYS-MISSION-006": {
+      "status": "PARTIAL",
+      "note": "Runtime probes for gunnchAI/WAIKE/shell; not full cross-app UI parity"
+    },
+    "OS-PLATFORM-001": {
+      "status": "PASS",
+      "note": "Local-first identity store with persistence + tests"
+    },
+    "OS-PLATFORM-002": {
+      "status": "PASS",
+      "note": "HAL registry with provenance enum"
+    },
+    "OS-PLATFORM-003": {
+      "status": "PASS",
+      "note": "Six form-factor shell profiles wired to stage2 shell + display manager"
+    },
+    "OS-PLATFORM-004": {
+      "status": "PARTIAL",
+      "note": "Ring service integrates authenticated adapter; PHYSICAL_RING_E6=false"
+    },
+    "OS-PLATFORM-005": {
+      "status": "PASS",
+      "note": "Normalized routing touch/controller/kbm/ring with remap persistence"
+    },
+    "OS-PLATFORM-006": {
+      "status": "PARTIAL",
+      "note": "Display/dock manager + DS-XL evidence link; dual compositor UX pass false"
+    },
+    "OS-PLATFORM-007": {
+      "status": "PASS",
+      "note": "Continuity checkpoint/restore/revoke/conflict"
+    },
+    "OS-CONTINUITY-002": {
+      "status": "PASS",
+      "note": "Disclosure: what is synchronized"
+    },
+    "OS-CONTINUITY-003": {
+      "status": "PASS",
+      "note": "Disclosure: storage location"
+    },
+    "OS-CONTINUITY-004": {
+      "status": "PASS",
+      "note": "Disclosure: authorized devices"
+    },
+    "OS-CONTINUITY-005": {
+      "status": "PASS",
+      "note": "Disclosure: local-only fields"
+    },
+    "OS-CONTINUITY-006": {
+      "status": "PASS",
+      "note": "Disclosure + revoke API"
+    },
+    "OS-CONTINUITY-007": {
+      "status": "PASS",
+      "note": "Export/delete API"
+    }
+  },
+  "pass_count": 11,
+  "partial_count": 3,
+  "fail_count": 0,
+  "target_requirements": 14,
+  "vertical_slices": {
+    "handheld": {
+      "bootstrap": {
+        "identity": {
+          "user_id": "user-6f70a733bfd7",
+          "profile_id": "profile-handheld",
+          "device_id": "dev-handheld",
+          "session_id": "sess-7b6c7eb85a5e4b8d",
+          "account_id": "acct-6f70a733bfd7",
+          "binding_id": "bind-7e528cb92b4368f6",
+          "authorized_devices": [
+            {
+              "binding_id": "bind-7e528cb92b4368f6",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-handheld",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            }
+          ],
+          "local_only": true,
+          "storage_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/identity/identity_store.json"
+        },
+        "profile": {
+          "form_factor": "handheld",
+          "adaptive_profile": "HANDHELD_GAMEPAD",
+          "display_surface": "handheld_hybrid",
+          "input_modality": [
+            "gamepad",
+            "touch"
+          ],
+          "display_topology": [
+            {
+              "id": "internal",
+              "role": "primary"
+            }
+          ],
+          "display_event": {
+            "kind": "apply_surface",
+            "surface": "handheld_hybrid",
+            "backend": "simulated",
+            "profile": {
+              "name": "handheld_hybrid",
+              "primary": "internal-handheld",
+              "displays": [
+                "internal-handheld"
+              ],
+              "resolution": {
+                "w": 1280,
+                "h": 800
+              },
+              "dpi": 220,
+              "scale": 1.5,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 12,
+                "bottom": 24,
+                "left": 8,
+                "right": 8
+              },
+              "chrome": "handheld"
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "handheld_hybrid",
+                "primary": "internal-handheld",
+                "displays": [
+                  "internal-handheld"
+                ],
+                "resolution": {
+                  "w": 1280,
+                  "h": 800
+                },
+                "dpi": 220,
+                "scale": 1.5,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 12,
+                  "bottom": 24,
+                  "left": 8,
+                  "right": 8
+                },
+                "chrome": "handheld"
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          "session": {
+            "compositor": "weston",
+            "profile": "HANDHELD_GAMEPAD",
+            "chrome": "handheld"
+          }
+        }
+      },
+      "input_touch": {
+        "normalized": {
+          "source": "touch",
+          "raw_kind": "tap",
+          "mapped_action": "select",
+          "form_factor": "handheld",
+          "payload": {
+            "kind": "tap",
+            "confidence": 0.9
+          }
+        },
+        "delivery": {
+          "ok": false,
+          "delivered": false,
+          "mutated": false,
+          "target": "browser",
+          "via": "input_router_hid_wayland",
+          "virtual_hid": true,
+          "wayland_injection": true,
+          "direct_file_write": false,
+          "app_result": {
+            "ok": false,
+            "mutated": false,
+            "via": "input_router_hid_wayland",
+            "direct_file_write": false,
+            "before": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "after": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "event": {
+              "kind": "select",
+              "x": null,
+              "y": null,
+              "gesture": null,
+              "target": "browser"
+            }
+          },
+          "app_snapshot": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 0,
+            "focused_element": null,
+            "page_state": {
+              "counter": 0,
+              "last_action": null
+            }
+          }
+        }
+      },
+      "checkpoint": {
+        "checkpoint_id": "cp-fc46a0a54e7ad4b2",
+        "session_id": "sess-7b6c7eb85a5e4b8d",
+        "account_id": "acct-6f70a733bfd7",
+        "device_id": "dev-handheld",
+        "content_sha256": "fc46a0a54e7ad4b2e95c696dac813d40c2998c3f0f9916a07c8c9c97cdd1595a",
+        "created_at": "2026-08-19T23:08:46Z",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-fc46a0a54e7ad4b2.json",
+        "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+      },
+      "restore": {
+        "ok": true,
+        "checkpoint_id": "cp-fc46a0a54e7ad4b2",
+        "payload": {
+          "form_factor": "handheld",
+          "app": "shell_demo",
+          "progress": 1
+        },
+        "meta": {
+          "checkpoint_id": "cp-fc46a0a54e7ad4b2",
+          "session_id": "sess-7b6c7eb85a5e4b8d",
+          "account_id": "acct-6f70a733bfd7",
+          "device_id": "dev-handheld",
+          "content_sha256": "fc46a0a54e7ad4b2e95c696dac813d40c2998c3f0f9916a07c8c9c97cdd1595a",
+          "created_at": "2026-08-19T23:08:46Z",
+          "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-fc46a0a54e7ad4b2.json",
+          "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+        }
+      },
+      "disclosure_keys": [
+        "OS-CONTINUITY-002",
+        "OS-CONTINUITY-003",
+        "OS-CONTINUITY-004",
+        "OS-CONTINUITY-005",
+        "OS-CONTINUITY-006",
+        "OS-CONTINUITY-007"
+      ],
+      "parity": {
+        "SYS-MISSION-006": {
+          "form_factor": "handheld",
+          "gunnchai": {
+            "app": "gunnchAI",
+            "probe": "tutor_session_start + tutor_prompt_guard",
+            "session_started": true,
+            "prompt_allowed": true,
+            "runtime": "local_template",
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "waike": {
+            "app": "WAIKE",
+            "probe": "list_offline_lessons + deploy_lesson",
+            "lesson_count": 21,
+            "deployed": true,
+            "pack_sources": null,
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "shell": {
+            "app": "gunnchOS_shell",
+            "probe": "shell_contract_snapshot",
+            "has_session": true,
+            "has_display_topology": true,
+            "input_modality_count": 2,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "portal_in_scope": false,
+          "portal_reason": "Portal is research index; not end-user shell app for Wave 002"
+        }
+      },
+      "dsxl_path": null,
+      "hal_status": {
+        "total": 9,
+        "by_provenance": {
+          "MODELED": 4,
+          "EMULATED": 2,
+          "HOST_OBSERVED": 2,
+          "UNAVAILABLE": 1
+        },
+        "dock_classes": 2,
+        "claim_boundary": "Software HAL registry with explicit provenance. Not firmware drivers, not silicon-verified hardware abstraction."
+      },
+      "claim_flags": {
+        "HUMAN_E6": false,
+        "PHYSICAL_VALIDATION": false,
+        "PHYSICAL_RING_E6": false,
+        "PHYSICAL_DUAL_PANEL": false,
+        "SILICON_EXACT_EMULATION": false
+      }
+    },
+    "student_14_5": {
+      "bootstrap": {
+        "identity": {
+          "user_id": "user-6f70a733bfd7",
+          "profile_id": "profile-student_14_5",
+          "device_id": "dev-student_14_5",
+          "session_id": "sess-38433d93dfcd4d88",
+          "account_id": "acct-6f70a733bfd7",
+          "binding_id": "bind-02a4a4ce59e8fa41",
+          "authorized_devices": [
+            {
+              "binding_id": "bind-7e528cb92b4368f6",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-handheld",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            },
+            {
+              "binding_id": "bind-02a4a4ce59e8fa41",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-student_14_5",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            }
+          ],
+          "local_only": true,
+          "storage_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/identity/identity_store.json"
+        },
+        "profile": {
+          "form_factor": "student_14_5",
+          "adaptive_profile": "STUDENT_DESKTOP",
+          "display_surface": "student_14_5",
+          "input_modality": [
+            "keyboard",
+            "mouse"
+          ],
+          "display_topology": [
+            {
+              "id": "internal",
+              "role": "primary"
+            }
+          ],
+          "display_event": {
+            "kind": "apply_surface",
+            "surface": "student_14_5",
+            "backend": "simulated",
+            "profile": {
+              "name": "student_14_5",
+              "primary": "internal-14.5",
+              "displays": [
+                "internal-14.5"
+              ],
+              "resolution": {
+                "w": 1920,
+                "h": 1200
+              },
+              "dpi": 160,
+              "scale": 1.25,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "laptop"
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "student_14_5",
+                "primary": "internal-14.5",
+                "displays": [
+                  "internal-14.5"
+                ],
+                "resolution": {
+                  "w": 1920,
+                  "h": 1200
+                },
+                "dpi": 160,
+                "scale": 1.25,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "laptop"
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          "session": {
+            "compositor": "weston",
+            "profile": "STUDENT_DESKTOP",
+            "chrome": "desktop"
+          }
+        }
+      },
+      "input_touch": {
+        "normalized": {
+          "source": "touch",
+          "raw_kind": "tap",
+          "mapped_action": "tap",
+          "form_factor": "student_14_5",
+          "payload": {
+            "kind": "tap",
+            "confidence": 0.9
+          }
+        },
+        "delivery": {
+          "ok": false,
+          "delivered": false,
+          "mutated": false,
+          "target": "browser",
+          "via": "input_router_hid_wayland",
+          "virtual_hid": true,
+          "wayland_injection": true,
+          "direct_file_write": false,
+          "app_result": {
+            "ok": false,
+            "mutated": false,
+            "via": "input_router_hid_wayland",
+            "direct_file_write": false,
+            "before": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "after": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "event": {
+              "kind": "tap",
+              "x": null,
+              "y": null,
+              "gesture": null,
+              "target": "browser"
+            }
+          },
+          "app_snapshot": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 0,
+            "focused_element": null,
+            "page_state": {
+              "counter": 0,
+              "last_action": null
+            }
+          }
+        }
+      },
+      "checkpoint": {
+        "checkpoint_id": "cp-3ae21f55854f6ef7",
+        "session_id": "sess-38433d93dfcd4d88",
+        "account_id": "acct-6f70a733bfd7",
+        "device_id": "dev-student_14_5",
+        "content_sha256": "3ae21f55854f6ef7a54acb033a64f2b55ba7a47f401d8341030d3697a6af9022",
+        "created_at": "2026-08-19T23:08:46Z",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-3ae21f55854f6ef7.json",
+        "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+      },
+      "restore": {
+        "ok": true,
+        "checkpoint_id": "cp-3ae21f55854f6ef7",
+        "payload": {
+          "form_factor": "student_14_5",
+          "app": "shell_demo",
+          "progress": 1
+        },
+        "meta": {
+          "checkpoint_id": "cp-3ae21f55854f6ef7",
+          "session_id": "sess-38433d93dfcd4d88",
+          "account_id": "acct-6f70a733bfd7",
+          "device_id": "dev-student_14_5",
+          "content_sha256": "3ae21f55854f6ef7a54acb033a64f2b55ba7a47f401d8341030d3697a6af9022",
+          "created_at": "2026-08-19T23:08:46Z",
+          "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-3ae21f55854f6ef7.json",
+          "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+        }
+      },
+      "disclosure_keys": [
+        "OS-CONTINUITY-002",
+        "OS-CONTINUITY-003",
+        "OS-CONTINUITY-004",
+        "OS-CONTINUITY-005",
+        "OS-CONTINUITY-006",
+        "OS-CONTINUITY-007"
+      ],
+      "parity": {
+        "SYS-MISSION-006": {
+          "form_factor": "student_14_5",
+          "gunnchai": {
+            "app": "gunnchAI",
+            "probe": "tutor_session_start + tutor_prompt_guard",
+            "session_started": true,
+            "prompt_allowed": true,
+            "runtime": "local_template",
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "waike": {
+            "app": "WAIKE",
+            "probe": "list_offline_lessons + deploy_lesson",
+            "lesson_count": 21,
+            "deployed": true,
+            "pack_sources": null,
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "shell": {
+            "app": "gunnchOS_shell",
+            "probe": "shell_contract_snapshot",
+            "has_session": true,
+            "has_display_topology": true,
+            "input_modality_count": 2,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "portal_in_scope": false,
+          "portal_reason": "Portal is research index; not end-user shell app for Wave 002"
+        }
+      },
+      "dsxl_path": null,
+      "hal_status": {
+        "total": 9,
+        "by_provenance": {
+          "MODELED": 4,
+          "EMULATED": 2,
+          "HOST_OBSERVED": 2,
+          "UNAVAILABLE": 1
+        },
+        "dock_classes": 2,
+        "claim_boundary": "Software HAL registry with explicit provenance. Not firmware drivers, not silicon-verified hardware abstraction."
+      },
+      "claim_flags": {
+        "HUMAN_E6": false,
+        "PHYSICAL_VALIDATION": false,
+        "PHYSICAL_RING_E6": false,
+        "PHYSICAL_DUAL_PANEL": false,
+        "SILICON_EXACT_EMULATION": false
+      }
+    },
+    "ds_xl": {
+      "bootstrap": {
+        "identity": {
+          "user_id": "user-6f70a733bfd7",
+          "profile_id": "profile-ds_xl",
+          "device_id": "dev-ds_xl_coder",
+          "session_id": "sess-2f096b1718f54ef2",
+          "account_id": "acct-6f70a733bfd7",
+          "binding_id": "bind-5933dec8107d66f6",
+          "authorized_devices": [
+            {
+              "binding_id": "bind-7e528cb92b4368f6",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-handheld",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            },
+            {
+              "binding_id": "bind-02a4a4ce59e8fa41",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-student_14_5",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            },
+            {
+              "binding_id": "bind-5933dec8107d66f6",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-ds_xl_coder",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            }
+          ],
+          "local_only": true,
+          "storage_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/identity/identity_store.json"
+        },
+        "profile": {
+          "form_factor": "ds_xl",
+          "adaptive_profile": "DSXL_DUAL_SCREEN",
+          "display_surface": "ds_xl_coder",
+          "input_modality": [
+            "keyboard",
+            "touch",
+            "stylus"
+          ],
+          "display_topology": [
+            {
+              "id": "internal",
+              "role": "primary"
+            }
+          ],
+          "display_event": {
+            "kind": "apply_surface",
+            "surface": "ds_xl_coder",
+            "backend": "simulated",
+            "profile": {
+              "name": "ds_xl_coder",
+              "primary": "internal-coder",
+              "displays": [
+                "internal-coder"
+              ],
+              "resolution": {
+                "w": 2560,
+                "h": 1600
+              },
+              "dpi": 180,
+              "scale": 1.0,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "desktop-coder"
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "ds_xl_coder",
+                "primary": "internal-coder",
+                "displays": [
+                  "internal-coder"
+                ],
+                "resolution": {
+                  "w": 2560,
+                  "h": 1600
+                },
+                "dpi": 180,
+                "scale": 1.0,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "desktop-coder"
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          "session": {
+            "compositor": "weston",
+            "profile": "DSXL_DUAL_SCREEN",
+            "chrome": "dual"
+          }
+        }
+      },
+      "input_touch": {
+        "normalized": {
+          "source": "touch",
+          "raw_kind": "tap",
+          "mapped_action": "tap",
+          "form_factor": "ds_xl",
+          "payload": {
+            "kind": "tap",
+            "confidence": 0.9
+          }
+        },
+        "delivery": {
+          "ok": false,
+          "delivered": false,
+          "mutated": false,
+          "target": "browser",
+          "via": "input_router_hid_wayland",
+          "virtual_hid": true,
+          "wayland_injection": true,
+          "direct_file_write": false,
+          "app_result": {
+            "ok": false,
+            "mutated": false,
+            "via": "input_router_hid_wayland",
+            "direct_file_write": false,
+            "before": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "after": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "event": {
+              "kind": "tap",
+              "x": null,
+              "y": null,
+              "gesture": null,
+              "target": "browser"
+            }
+          },
+          "app_snapshot": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 0,
+            "focused_element": null,
+            "page_state": {
+              "counter": 0,
+              "last_action": null
+            }
+          }
+        }
+      },
+      "checkpoint": {
+        "checkpoint_id": "cp-c79251183c1f1791",
+        "session_id": "sess-2f096b1718f54ef2",
+        "account_id": "acct-6f70a733bfd7",
+        "device_id": "dev-ds_xl_coder",
+        "content_sha256": "c79251183c1f17911ab3de623063a000f1e258432aef66f57cc658c7b1a7ba7f",
+        "created_at": "2026-08-19T23:08:46Z",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-c79251183c1f1791.json",
+        "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+      },
+      "restore": {
+        "ok": true,
+        "checkpoint_id": "cp-c79251183c1f1791",
+        "payload": {
+          "form_factor": "ds_xl",
+          "app": "shell_demo",
+          "progress": 1
+        },
+        "meta": {
+          "checkpoint_id": "cp-c79251183c1f1791",
+          "session_id": "sess-2f096b1718f54ef2",
+          "account_id": "acct-6f70a733bfd7",
+          "device_id": "dev-ds_xl_coder",
+          "content_sha256": "c79251183c1f17911ab3de623063a000f1e258432aef66f57cc658c7b1a7ba7f",
+          "created_at": "2026-08-19T23:08:46Z",
+          "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-c79251183c1f1791.json",
+          "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+        }
+      },
+      "disclosure_keys": [
+        "OS-CONTINUITY-002",
+        "OS-CONTINUITY-003",
+        "OS-CONTINUITY-004",
+        "OS-CONTINUITY-005",
+        "OS-CONTINUITY-006",
+        "OS-CONTINUITY-007"
+      ],
+      "parity": {
+        "SYS-MISSION-006": {
+          "form_factor": "ds_xl",
+          "gunnchai": {
+            "app": "gunnchAI",
+            "probe": "tutor_session_start + tutor_prompt_guard",
+            "session_started": true,
+            "prompt_allowed": true,
+            "runtime": "local_template",
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "waike": {
+            "app": "WAIKE",
+            "probe": "list_offline_lessons + deploy_lesson",
+            "lesson_count": 21,
+            "deployed": true,
+            "pack_sources": null,
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "shell": {
+            "app": "gunnchOS_shell",
+            "probe": "shell_contract_snapshot",
+            "has_session": true,
+            "has_display_topology": true,
+            "input_modality_count": 3,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "portal_in_scope": false,
+          "portal_reason": "Portal is research index; not end-user shell app for Wave 002"
+        }
+      },
+      "dsxl_path": {
+        "display_event": {
+          "kind": "apply_surface",
+          "surface": "ds_xl_coder",
+          "backend": "simulated",
+          "profile": {
+            "name": "ds_xl_coder",
+            "primary": "internal-coder",
+            "displays": [
+              "internal-coder"
+            ],
+            "resolution": {
+              "w": 2560,
+              "h": 1600
+            },
+            "dpi": 180,
+            "scale": 1.0,
+            "orientation": "landscape",
+            "safe_insets": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0
+            },
+            "chrome": "desktop-coder"
+          },
+          "applied": {
+            "backend": "simulated",
+            "profile": {
+              "name": "ds_xl_coder",
+              "primary": "internal-coder",
+              "displays": [
+                "internal-coder"
+              ],
+              "resolution": {
+                "w": 2560,
+                "h": 1600
+              },
+              "dpi": 180,
+              "scale": 1.0,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "desktop-coder"
+            },
+            "active": true
+          },
+          "mock": false,
+          "claim_boundary": "Simulated display backend only; not a compositor."
+        },
+        "dsxl_evidence": {
+          "present": true,
+          "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/product_use/journeys/G14_dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+          "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "outputs": 2,
+          "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it."
+        },
+        "dual_screen_modeled": true,
+        "PHYSICAL_DUAL_PANEL": false
+      },
+      "hal_status": {
+        "total": 9,
+        "by_provenance": {
+          "MODELED": 4,
+          "EMULATED": 2,
+          "HOST_OBSERVED": 2,
+          "UNAVAILABLE": 1
+        },
+        "dock_classes": 2,
+        "claim_boundary": "Software HAL registry with explicit provenance. Not firmware drivers, not silicon-verified hardware abstraction."
+      },
+      "claim_flags": {
+        "HUMAN_E6": false,
+        "PHYSICAL_VALIDATION": false,
+        "PHYSICAL_RING_E6": false,
+        "PHYSICAL_DUAL_PANEL": false,
+        "SILICON_EXACT_EMULATION": false
+      }
+    },
+    "docked": {
+      "bootstrap": {
+        "identity": {
+          "user_id": "user-6f70a733bfd7",
+          "profile_id": "profile-docked",
+          "device_id": "dev-handheld_hybrid",
+          "session_id": "sess-b86b2b91b672473e",
+          "account_id": "acct-6f70a733bfd7",
+          "binding_id": "bind-c4911a5cdcc73ec0",
+          "authorized_devices": [
+            {
+              "binding_id": "bind-7e528cb92b4368f6",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-handheld",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            },
+            {
+              "binding_id": "bind-02a4a4ce59e8fa41",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-student_14_5",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            },
+            {
+              "binding_id": "bind-5933dec8107d66f6",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-ds_xl_coder",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            },
+            {
+              "binding_id": "bind-c4911a5cdcc73ec0",
+              "account_id": "acct-6f70a733bfd7",
+              "device_id": "dev-handheld_hybrid",
+              "state": "bound",
+              "bound_at": "2026-08-19T23:08:46Z",
+              "trust_level": "local"
+            }
+          ],
+          "local_only": true,
+          "storage_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/identity/identity_store.json"
+        },
+        "profile": {
+          "form_factor": "docked",
+          "adaptive_profile": "HANDHELD_DOCKED",
+          "display_surface": "dock",
+          "input_modality": [
+            "keyboard",
+            "mouse",
+            "gamepad"
+          ],
+          "display_topology": [
+            {
+              "id": "internal",
+              "role": "primary"
+            }
+          ],
+          "display_event": {
+            "kind": "apply_surface",
+            "surface": "dock",
+            "backend": "simulated",
+            "profile": {
+              "name": "dock",
+              "primary": "external-dock",
+              "displays": [
+                "internal-handheld",
+                "external-dock"
+              ],
+              "resolution": {
+                "w": 3840,
+                "h": 2160
+              },
+              "dpi": 140,
+              "scale": 1.0,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "docked-extend",
+              "mirror": false
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "dock",
+                "primary": "external-dock",
+                "displays": [
+                  "internal-handheld",
+                  "external-dock"
+                ],
+                "resolution": {
+                  "w": 3840,
+                  "h": 2160
+                },
+                "dpi": 140,
+                "scale": 1.0,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "docked-extend",
+                "mirror": false
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          "session": {
+            "compositor": "weston",
+            "profile": "HANDHELD_DOCKED",
+            "chrome": "desktop"
+          }
+        }
+      },
+      "input_touch": {
+        "normalized": {
+          "source": "touch",
+          "raw_kind": "tap",
+          "mapped_action": "tap",
+          "form_factor": "docked",
+          "payload": {
+            "kind": "tap",
+            "confidence": 0.9
+          }
+        },
+        "delivery": {
+          "ok": false,
+          "delivered": false,
+          "mutated": false,
+          "target": "browser",
+          "via": "input_router_hid_wayland",
+          "virtual_hid": true,
+          "wayland_injection": true,
+          "direct_file_write": false,
+          "app_result": {
+            "ok": false,
+            "mutated": false,
+            "via": "input_router_hid_wayland",
+            "direct_file_write": false,
+            "before": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "after": {
+              "app_id": "browser",
+              "url": "lab://browser/home",
+              "scroll_y": 0.0,
+              "click_count": 0,
+              "focused_element": null,
+              "page_state": {
+                "counter": 0,
+                "last_action": null
+              }
+            },
+            "event": {
+              "kind": "tap",
+              "x": null,
+              "y": null,
+              "gesture": null,
+              "target": "browser"
+            }
+          },
+          "app_snapshot": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 0,
+            "focused_element": null,
+            "page_state": {
+              "counter": 0,
+              "last_action": null
+            }
+          }
+        }
+      },
+      "checkpoint": {
+        "checkpoint_id": "cp-cf90d0c21963c4ed",
+        "session_id": "sess-b86b2b91b672473e",
+        "account_id": "acct-6f70a733bfd7",
+        "device_id": "dev-handheld_hybrid",
+        "content_sha256": "cf90d0c21963c4ed2210bec734734d7123ee95d2f59d09f42f5b5b8d0d31acdf",
+        "created_at": "2026-08-19T23:08:46Z",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-cf90d0c21963c4ed.json",
+        "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+      },
+      "restore": {
+        "ok": true,
+        "checkpoint_id": "cp-cf90d0c21963c4ed",
+        "payload": {
+          "form_factor": "docked",
+          "app": "shell_demo",
+          "progress": 1
+        },
+        "meta": {
+          "checkpoint_id": "cp-cf90d0c21963c4ed",
+          "session_id": "sess-b86b2b91b672473e",
+          "account_id": "acct-6f70a733bfd7",
+          "device_id": "dev-handheld_hybrid",
+          "content_sha256": "cf90d0c21963c4ed2210bec734734d7123ee95d2f59d09f42f5b5b8d0d31acdf",
+          "created_at": "2026-08-19T23:08:46Z",
+          "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/engineering_wave002/runtime_work/continuity/cp-cf90d0c21963c4ed.json",
+          "claim_boundary": "Local-first session checkpoint store. Not cloud sync, not cross-vendor handoff, not physical device replacement."
+        }
+      },
+      "disclosure_keys": [
+        "OS-CONTINUITY-002",
+        "OS-CONTINUITY-003",
+        "OS-CONTINUITY-004",
+        "OS-CONTINUITY-005",
+        "OS-CONTINUITY-006",
+        "OS-CONTINUITY-007"
+      ],
+      "parity": {
+        "SYS-MISSION-006": {
+          "form_factor": "docked",
+          "gunnchai": {
+            "app": "gunnchAI",
+            "probe": "tutor_session_start + tutor_prompt_guard",
+            "session_started": true,
+            "prompt_allowed": true,
+            "runtime": "local_template",
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "waike": {
+            "app": "WAIKE",
+            "probe": "list_offline_lessons + deploy_lesson",
+            "lesson_count": 21,
+            "deployed": true,
+            "pack_sources": null,
+            "mock": false,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "shell": {
+            "app": "gunnchOS_shell",
+            "probe": "shell_contract_snapshot",
+            "has_session": true,
+            "has_display_topology": true,
+            "input_modality_count": 3,
+            "claim_boundary": "Runtime probes against in-repo gunnchAI/WAIKE integration modules. Not full product parity, not portal snapshot refresh."
+          },
+          "portal_in_scope": false,
+          "portal_reason": "Portal is research index; not end-user shell app for Wave 002"
+        }
+      },
+      "dsxl_path": null,
+      "hal_status": {
+        "total": 9,
+        "by_provenance": {
+          "MODELED": 4,
+          "EMULATED": 2,
+          "HOST_OBSERVED": 2,
+          "UNAVAILABLE": 1
+        },
+        "dock_classes": 2,
+        "claim_boundary": "Software HAL registry with explicit provenance. Not firmware drivers, not silicon-verified hardware abstraction."
+      },
+      "claim_flags": {
+        "HUMAN_E6": false,
+        "PHYSICAL_VALIDATION": false,
+        "PHYSICAL_RING_E6": false,
+        "PHYSICAL_DUAL_PANEL": false,
+        "SILICON_EXACT_EMULATION": false
+      }
+    }
+  },
+  "coordinator_status": {
+    "identity": {
+      "accounts": 1,
+      "devices": 4,
+      "bindings": 4,
+      "active_sessions": 4,
+      "mock": false,
+      "claim_boundary": "Software account/session/device binding model only. Not an identity provider, not SSO, not hardware-backed credentials."
+    },
+    "hal": {
+      "total": 9,
+      "by_provenance": {
+        "MODELED": 4,
+        "EMULATED": 2,
+        "HOST_OBSERVED": 2,
+        "UNAVAILABLE": 1
+      },
+      "dock_classes": 2,
+      "claim_boundary": "Software HAL registry with explicit provenance. Not firmware drivers, not silicon-verified hardware abstraction."
+    },
+    "profiles": {
+      "active_form_factor": "docked",
+      "profiles": [
+        "student_14_5",
+        "handheld",
+        "docked",
+        "ds_xl",
+        "phone",
+        "desktop"
+      ],
+      "display": {
+        "active_surface": "dock",
+        "backend": {
+          "kind": "simulated",
+          "applied": {
+            "backend": "simulated",
+            "profile": {
+              "name": "dock",
+              "primary": "external-dock",
+              "displays": [
+                "internal-handheld",
+                "external-dock"
+              ],
+              "resolution": {
+                "w": 3840,
+                "h": 2160
+              },
+              "dpi": 140,
+              "scale": 1.0,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "docked-extend",
+              "mirror": false
+            },
+            "active": true
+          },
+          "history": [
+            {
+              "backend": "simulated",
+              "profile": {
+                "name": "handheld_hybrid",
+                "primary": "internal-handheld",
+                "displays": [
+                  "internal-handheld"
+                ],
+                "resolution": {
+                  "w": 1280,
+                  "h": 800
+                },
+                "dpi": 220,
+                "scale": 1.5,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 12,
+                  "bottom": 24,
+                  "left": 8,
+                  "right": 8
+                },
+                "chrome": "handheld"
+              },
+              "active": true
+            },
+            {
+              "backend": "simulated",
+              "profile": {
+                "name": "student_14_5",
+                "primary": "internal-14.5",
+                "displays": [
+                  "internal-14.5"
+                ],
+                "resolution": {
+                  "w": 1920,
+                  "h": 1200
+                },
+                "dpi": 160,
+                "scale": 1.25,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "laptop"
+              },
+              "active": true
+            },
+            {
+              "backend": "simulated",
+              "profile": {
+                "name": "ds_xl_coder",
+                "primary": "internal-coder",
+                "displays": [
+                  "internal-coder"
+                ],
+                "resolution": {
+                  "w": 2560,
+                  "h": 1600
+                },
+                "dpi": 180,
+                "scale": 1.0,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "desktop-coder"
+              },
+              "active": true
+            },
+            {
+              "backend": "simulated",
+              "profile": {
+                "name": "dock",
+                "primary": "external-dock",
+                "displays": [
+                  "internal-handheld",
+                  "external-dock"
+                ],
+                "resolution": {
+                  "w": 3840,
+                  "h": 2160
+                },
+                "dpi": 140,
+                "scale": 1.0,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "docked-extend",
+                "mirror": false
+              },
+              "active": true
+            }
+          ]
+        },
+        "current": {
+          "backend": "simulated",
+          "profile": {
+            "name": "dock",
+            "primary": "external-dock",
+            "displays": [
+              "internal-handheld",
+              "external-dock"
+            ],
+            "resolution": {
+              "w": 3840,
+              "h": 2160
+            },
+            "dpi": 140,
+            "scale": 1.0,
+            "orientation": "landscape",
+            "safe_insets": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0
+            },
+            "chrome": "docked-extend",
+            "mirror": false
+          },
+          "active": true
+        },
+        "profiles": [
+          "dock",
+          "ds_xl_coder",
+          "handheld_hybrid",
+          "student_14_5"
+        ],
+        "events": [
+          {
+            "kind": "apply_surface",
+            "surface": "handheld_hybrid",
+            "backend": "simulated",
+            "profile": {
+              "name": "handheld_hybrid",
+              "primary": "internal-handheld",
+              "displays": [
+                "internal-handheld"
+              ],
+              "resolution": {
+                "w": 1280,
+                "h": 800
+              },
+              "dpi": 220,
+              "scale": 1.5,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 12,
+                "bottom": 24,
+                "left": 8,
+                "right": 8
+              },
+              "chrome": "handheld"
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "handheld_hybrid",
+                "primary": "internal-handheld",
+                "displays": [
+                  "internal-handheld"
+                ],
+                "resolution": {
+                  "w": 1280,
+                  "h": 800
+                },
+                "dpi": 220,
+                "scale": 1.5,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 12,
+                  "bottom": 24,
+                  "left": 8,
+                  "right": 8
+                },
+                "chrome": "handheld"
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          {
+            "kind": "apply_surface",
+            "surface": "student_14_5",
+            "backend": "simulated",
+            "profile": {
+              "name": "student_14_5",
+              "primary": "internal-14.5",
+              "displays": [
+                "internal-14.5"
+              ],
+              "resolution": {
+                "w": 1920,
+                "h": 1200
+              },
+              "dpi": 160,
+              "scale": 1.25,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "laptop"
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "student_14_5",
+                "primary": "internal-14.5",
+                "displays": [
+                  "internal-14.5"
+                ],
+                "resolution": {
+                  "w": 1920,
+                  "h": 1200
+                },
+                "dpi": 160,
+                "scale": 1.25,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "laptop"
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          {
+            "kind": "apply_surface",
+            "surface": "ds_xl_coder",
+            "backend": "simulated",
+            "profile": {
+              "name": "ds_xl_coder",
+              "primary": "internal-coder",
+              "displays": [
+                "internal-coder"
+              ],
+              "resolution": {
+                "w": 2560,
+                "h": 1600
+              },
+              "dpi": 180,
+              "scale": 1.0,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "desktop-coder"
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "ds_xl_coder",
+                "primary": "internal-coder",
+                "displays": [
+                  "internal-coder"
+                ],
+                "resolution": {
+                  "w": 2560,
+                  "h": 1600
+                },
+                "dpi": 180,
+                "scale": 1.0,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "desktop-coder"
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          },
+          {
+            "kind": "apply_surface",
+            "surface": "dock",
+            "backend": "simulated",
+            "profile": {
+              "name": "dock",
+              "primary": "external-dock",
+              "displays": [
+                "internal-handheld",
+                "external-dock"
+              ],
+              "resolution": {
+                "w": 3840,
+                "h": 2160
+              },
+              "dpi": 140,
+              "scale": 1.0,
+              "orientation": "landscape",
+              "safe_insets": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "chrome": "docked-extend",
+              "mirror": false
+            },
+            "applied": {
+              "backend": "simulated",
+              "profile": {
+                "name": "dock",
+                "primary": "external-dock",
+                "displays": [
+                  "internal-handheld",
+                  "external-dock"
+                ],
+                "resolution": {
+                  "w": 3840,
+                  "h": 2160
+                },
+                "dpi": 140,
+                "scale": 1.0,
+                "orientation": "landscape",
+                "safe_insets": {
+                  "top": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "right": 0
+                },
+                "chrome": "docked-extend",
+                "mirror": false
+              },
+              "active": true
+            },
+            "mock": false,
+            "claim_boundary": "Simulated display backend only; not a compositor."
+          }
+        ],
+        "mock": false
+      },
+      "shell_snapshot": {
+        "compositor": "weston",
+        "profile": "HANDHELD_DOCKED",
+        "api": {
+          "launcher": {
+            "density": "comfortable",
+            "open": false
+          },
+          "window_management": {
+            "mode": "floating"
+          },
+          "quick_settings": {
+            "wifi": true,
+            "bluetooth": true,
+            "brightness": 80
+          },
+          "notifications": [],
+          "media": {
+            "playing": false,
+            "title": null
+          },
+          "search": {
+            "query": "",
+            "results": []
+          },
+          "file_share": {
+            "pending": []
+          },
+          "session": {
+            "compositor": "weston",
+            "profile": "HANDHELD_DOCKED",
+            "chrome": "desktop"
+          },
+          "display_topology": [
+            {
+              "id": "internal",
+              "role": "primary"
+            }
+          ],
+          "input_modality": [
+            "keyboard",
+            "mouse",
+            "gamepad"
+          ],
+          "dock_state": {
+            "connected": true
+          },
+          "device_role": "handheld",
+          "accessibility": {
+            "screen_reader": false,
+            "high_contrast": false,
+            "reduce_motion": false
+          }
+        }
+      }
+    },
+    "ring": {
+      "adapter": "gunnchos-device-os/ring_input",
+      "physical_ring_claimed": false,
+      "statuses": {
+        "AUTHENTICATED_INPUT_PROTOCOL_PASS": true,
+        "RING_PHYSICAL_PROTOTYPE_PENDING": true
+      },
+      "fallback": {
+        "active": false,
+        "available": true,
+        "reason": ""
+      },
+      "accepted_actions": 0,
+      "evidence_class": "SOFTWARE_SIMULATED",
+      "service": "gunnchos_device_os.shell.ring_service",
+      "routed_events": 0,
+      "PHYSICAL_RING_CLAIMED": false
+    },
+    "input": {
+      "sources": [
+        "touch",
+        "controller",
+        "keyboard_mouse",
+        "ring"
+      ],
+      "form_factors": [
+        "docked",
+        "ds_xl",
+        "handheld"
+      ],
+      "events": 4,
+      "router_summary": {
+        "injected": 4,
+        "delivered": 0,
+        "mutated": 0,
+        "focus": "browser",
+        "snapshots": {
+          "libreoffice": {
+            "app_id": "libreoffice",
+            "content": "",
+            "cursor": 0,
+            "focused": false,
+            "len": 0,
+            "checksum": 0
+          },
+          "browser": {
+            "app_id": "browser",
+            "url": "lab://browser/home",
+            "scroll_y": 0.0,
+            "click_count": 0,
+            "focused_element": null,
+            "page_state": {
+              "counter": 0,
+              "last_action": null
+            }
+          },
+          "games": {
+            "app_id": "games",
+            "game_id": "anime-aggressors",
+            "health": {
+              "p1": 100,
+              "p2": 100
+            },
+            "position": {
+              "x": 120.0,
+              "y": 380.0
+            },
+            "input_events": 0,
+            "started": false,
+            "last_action": null
+          },
+          "focus": "browser",
+          "ts": 1787180926.448725
+        }
+      },
+      "persisted": false
+    },
+    "display_dock": {
+      "topology": {
+        "active_surface": "ds_xl_coder",
+        "displays": [
+          "internal-coder"
+        ],
+        "primary": "internal-coder",
+        "docked": false,
+        "layout_profile": "handheld",
+        "dsxl_evidence": {
+          "present": true,
+          "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave002-shell-continuity/artifacts/product_use/journeys/G14_dsxl/DSXL_COMPOSITOR_UX_EVIDENCE.json",
+          "DSXL_DUAL_COMPOSITOR_UX_PASS": false,
+          "measurement_class": "GUEST_OBSERVED",
+          "outputs": 2,
+          "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it."
+        }
+      },
+      "hotplug_events": 0,
+      "dock_session": "sess-a03c53af7e9549dd"
+    },
+    "continuity_checkpoints": 4,
+    "observability": {
+      "total_events": 4,
+      "by_component": {
+        "bootstrap": 4
+      }
+    },
+    "device_lab_labels": {
+      "student_14_5": "MODELED",
+      "handheld": "HOST_OBSERVED",
+      "docked": "EMULATED",
+      "ds_xl": "EMULATED",
+      "phone": "MODELED",
+      "desktop": "HOST_OBSERVED",
+      "pixel_client": "TARGET_DEVICE_OBSERVED",
+      "ds_xl_guest_agent": "EMULATED"
+    },
+    "claim_flags": {
+      "HUMAN_E6": false,
+      "PHYSICAL_VALIDATION": false,
+      "PHYSICAL_RING_E6": false,
+      "PHYSICAL_DUAL_PANEL": false,
+      "SILICON_EXACT_EMULATION": false
+    }
+  },
+  "claim_flags": {
+    "HUMAN_E6": false,
+    "PHYSICAL_VALIDATION": false,
+    "PHYSICAL_RING_E6": false,
+    "PHYSICAL_DUAL_PANEL": false,
+    "SILICON_EXACT_EMULATION": false
+  },
+  "impl_open_baseline_post_field_kit_92": 123,
+  "DO_NOT_UPDATE_BASELINE_COUNTS": true
+}
