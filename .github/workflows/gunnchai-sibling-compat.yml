@@ -1,0 +1,36 @@
+name: gunnchai-sibling-compat
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sibling-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: device-os
+      - uses: actions/checkout@v4
+        with:
+          repository: gunnchOS3k/gunnchAI3k
+          ref: d357846810b952ed49a2c168c05720143b32796b
+          path: gunnchAI3k
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        working-directory: device-os
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest jsonschema pyyaml
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Validate contract + sibling artifacts
+        working-directory: device-os
+        run: |
+          PYTHONPATH=. pytest tests/test_gunnchai_compat_contract.py -q
+          PYTHONPATH=. python3 scripts/verify_gunnchai_sibling_contract.py \
+            --gunnchai-repo ../gunnchAI3k

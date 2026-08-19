@@ -1,0 +1,68 @@
+{
+  "schema": "gunnchos.gunnchai_compat_contract.v1",
+  "contract_version": "2026-08-19",
+  "evidence_class": "ACCEPTED_MAIN",
+  "claim_boundary": "Versioned digital pairing between gunnchos-device-os and gunnchAI3k accepted mains. Documents API surface and honesty tokens device-os may assume. Not frontier parity, not GUNNCHAI_APP_PRODUCT_COMPLETE, not physical boot.",
+  "device_os": {
+    "repo": "gunnchOS3k/gunnchos-device-os",
+    "accepted_main_sha": "d5c2d179ae21efe5191b7d35a2080878112f18e4",
+    "merged_pr": 121,
+    "integration_module": "gunnchos_device_os.gunnchai_integration",
+    "first_party_entry": "gunnchos_device_os.first_party_apps.gunnchai_tutor.run_gunnchai_tutor",
+    "local_fallback": "gunnchai_integration.tutor_local_reply"
+  },
+  "gunnchai": {
+    "repo": "gunnchOS3k/gunnchAI3k",
+    "accepted_main_sha": "d357846810b952ed49a2c168c05720143b32796b",
+    "merged_pr": 43,
+    "owner_artifacts": [
+      "artifacts/product_completion/PRODUCT_COMPLETION_RESULT.json",
+      "artifacts/stage2/OS_CALLER_CONTRACT.md",
+      "artifacts/user-ready/AI_USER_READY_003_RESULT.json",
+      "artifacts/waike-mastery/AI_WAIKE_MASTERY_EVAL.json"
+    ],
+    "capability_http_base": "http://127.0.0.1:8792",
+    "stage2_module": "src/stage2"
+  },
+  "api_surface": {
+    "stage2_capability_http": {
+      "health": "GET /health",
+      "capabilities": "GET /v1/capabilities",
+      "invoke": "POST /v1/capability/{summarize|translate|tutor|code|search|reason|diagnose|classify}",
+      "request_body": {
+        "user_id": "string",
+        "input": "string",
+        "cloudConsent": "boolean",
+        "grant": ["network", "device", "memory"]
+      }
+    },
+    "os_ai_interface_optional": {
+      "discover": "GET /v1/os/discover",
+      "model_status": "GET /v1/os/model-status",
+      "tutoring": "POST /v1/assist/tutoring",
+      "note": "Continuance VI client in gunnchAI3k/integrations/gunnchos/ai_interface_client.py — host-forwarded; not required for device-os CI."
+    },
+    "device_os_sdk_capabilities": [
+      "ai_interface.query",
+      "storage.read",
+      "storage.write"
+    ]
+  },
+  "device_os_assumptions": {
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+    "GUNNCHAI_FRONTIER_PRODUCT_PARITY": false,
+    "GUNNCHAI_DIGITAL_PRODUCT_CAPABILITY_PASS": true,
+    "HUMAN_E6": false,
+    "NANO_FALLBACK_ONLY": true,
+    "honesty_matrix_source": "AI_USER_READY_003_RESULT + PRODUCT_COMPLETION_RESULT at pinned gunnchAI SHA",
+    "ui_must_not_promote_partial_open_to_complete": true,
+    "sibling_unavailable_uses_local_template": true,
+    "cloud_sync_complete": false
+  },
+  "coupling_policy": {
+    "explicit_pin_file": "cross_repo_gunnchai_bridge/GUNNCHAI_COMPAT_CONTRACT.json",
+    "blocks_device_os_ci": false,
+    "sibling_verify_script": "scripts/verify_gunnchai_sibling_contract.py",
+    "optional_workflow": ".github/workflows/gunnchai-sibling-compat.yml"
+  }
+}
