@@ -1,0 +1,122 @@
+{
+  "keystore": {
+    "schema": "gunnchos.platform.encrypted_storage.v1",
+    "claim_boundary": "Software keystore with Fernet-at-rest. Not TPM, Secure Enclave, hardware-backed keys, or FIPS-validated module.",
+    "software_keystore": true,
+    "tpm_backed": false,
+    "blob_count": 3,
+    "seed_present": true
+  },
+  "permissions_role": "guest",
+  "sandbox_profiles": 2,
+  "offline_sync_size": 2,
+  "connectivity_active": "offline",
+  "diagnostics_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-platform-security/artifacts/engineering_wave004/runtime_work/diagnostics.jsonl",
+  "role_policy": {
+    "schema": "gunnchos.platform.role_policy.v1",
+    "profile_types": [
+      "student",
+      "educator",
+      "guardian",
+      "admin",
+      "child",
+      "minor",
+      "guest"
+    ],
+    "assigned_users": 5,
+    "profiles": {
+      "student-1": "student",
+      "stu-1": "student",
+      "edu-1": "educator",
+      "guest-1": "guest",
+      "_probe": "educator"
+    }
+  },
+  "recovery": {
+    "ok": true,
+    "active_slot": "A",
+    "slots": {
+      "A": {
+        "version": "1.0.0",
+        "verified": false,
+        "corrupt": true
+      },
+      "B": {
+        "version": null,
+        "verified": false,
+        "corrupt": false
+      }
+    },
+    "userspace_only": true,
+    "claim_boundary": "Userspace recovery orchestration only. Not physical recovery partition, not verified boot chain, not factory RMA hardware path."
+  },
+  "ota_active_slot": "B",
+  "local_ai": {
+    "schema": "gunnchos.local_ai.intelligence_inventory.v1",
+    "nano": {
+      "present": false,
+      "model_id": null,
+      "tier": null,
+      "role": null,
+      "display_label": "Nano/fallback",
+      "is_nano_fallback_only": true,
+      "context_tokens": 512,
+      "quant": "Q4_K_M",
+      "parameters": "135M",
+      "filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+    },
+    "fast": {
+      "present": false,
+      "model_id": null,
+      "open": true,
+      "reason": "Local Fast GGUF (360M-class) not on disk \u2014 registry slot only"
+    },
+    "pro": {
+      "present": false,
+      "model_id": null,
+      "open": true,
+      "reason": "Local Pro GGUF (1.5B-class) not on disk \u2014 registry slot only"
+    },
+    "preferred": "micro-deterministic-v1",
+    "preferred_daily_tier": "micro",
+    "smollm2_is_full_intelligence_layer": false,
+    "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+    "HUMAN_E6": false,
+    "claim_boundary": "SmolLM2-135M Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro, not app-product-complete intelligence."
+  },
+  "accessibility": {
+    "settings": {
+      "keyboard_navigation": true,
+      "controller_navigation": true,
+      "touch_navigation": true,
+      "screen_reader_labels": true,
+      "captions_preference": "auto",
+      "reduced_motion": true,
+      "high_contrast": false,
+      "large_text": true,
+      "simplified_language": false,
+      "focus_mode": false,
+      "color_safe_mode": false,
+      "audio_cues": true,
+      "haptic_cues": true,
+      "one_hand_mode": false,
+      "switch_access": false,
+      "voice_input": true
+    },
+    "missing_features": [],
+    "wcag_validated": false,
+    "human_accessibility_review": false
+  },
+  "claim_flags": {
+    "HUMAN_E6": false,
+    "WCAG_VALIDATED": false,
+    "GENERAL_VLM": false,
+    "GENERAL_ASR": false,
+    "GENERAL_MT": false,
+    "CARRIER_ACCEPTED": false,
+    "STANDARDIZED_6G": false,
+    "PRODUCTION_SIGNING": false,
+    "TPM_KEYSTORE": false,
+    "KERNEL_SANDBOX": false
+  }
+}

@@ -1,0 +1,19 @@
+@startuml wave004_ota_ab_state
+title State machine — A/B OTA slots
+state "Slot A active" as A
+state "Slot B active" as B
+state "Recovery mode" as R
+
+[*] --> A
+A --> B : stage + boot success
+B --> A : rollback / manual rollback
+A --> R : both slots unbootable
+B --> R : both slots unbootable
+R --> A : repair_metadata + verified slot
+
+note right of R
+  userspace recovery only
+  not hardware recovery partition
+end note
+
+@enduml

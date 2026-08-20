@@ -1,0 +1,19 @@
+@startuml wave004_connectivity_state
+title State machine — Connectivity orchestrator
+[*] --> IDLE
+IDLE --> EVALUATING : metrics update
+EVALUATING --> CONNECTED : bearer available
+EVALUATING --> OFFLINE : no bearer
+EVALUATING --> DEGRADED : low score
+CONNECTED --> TRANSITIONING : better bearer + hysteresis
+TRANSITIONING --> CONNECTED : switch complete
+CONNECTED --> OFFLINE : drop_active fault
+DEGRADED --> CONNECTED : metrics improve
+OFFLINE --> EVALUATING : bearer restored
+
+note right of OFFLINE
+  CARRIER_ACCEPTED=false
+  STANDARDIZED_6G=false
+end note
+
+@enduml

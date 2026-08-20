@@ -1,0 +1,49 @@
+@startuml wave004_platform_component
+title Wave 004 Platform Security Component Diagram
+skinparam componentStyle rectangle
+
+package "gunnchOS Platform (Wave 004)" {
+  [Wave004PlatformCoordinator] as Coord
+  [SecurePackaging] as Pkg
+  [PermissionsManager] as Perm
+  [SandboxPolicyEngine] as Sandbox
+  [SoftwareKeystore] as Store
+  [LocalAiRuntime] as AI
+  [ConnectivityOrchestrator] as Net
+  [OfflineSyncEngine] as Sync
+  [DiagnosticsLog] as Log
+  [ABUpdateManager] as OTA
+  [UserspaceRecoveryEnv] as Rec
+  [AccessibilityManager] as A11y
+  [RolePolicyService] as Role
+}
+
+Pkg --> Perm : signed install
+Perm --> Sandbox : capability gate
+Sandbox --> Store : encrypted blobs
+AI --> Perm : local inference gate
+Net --> Sync : online flush
+Coord --> Pkg
+Coord --> Perm
+Coord --> Sandbox
+Coord --> Store
+Coord --> AI
+Coord --> Net
+Coord --> Sync
+Coord --> Log
+Coord --> OTA
+Coord --> Rec
+Coord --> A11y
+Coord --> Role
+
+note right of Pkg
+  DEV Ed25519 trust root
+  production_keys_used=false
+end note
+
+note right of Store
+  Software Fernet keystore
+  TPM_KEYSTORE=false
+end note
+
+@enduml

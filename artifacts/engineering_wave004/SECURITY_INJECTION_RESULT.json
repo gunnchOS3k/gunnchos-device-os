@@ -1,0 +1,204 @@
+{
+  "schema": "gunnchos.engineering_wave004.security_injection.v1",
+  "total": 12,
+  "blocked": 12,
+  "leaked": 0,
+  "ok": true,
+  "cases": [
+    {
+      "case": "tampered_package_signature",
+      "blocked": true,
+      "verify": false
+    },
+    {
+      "case": "revoked_signing_key",
+      "blocked": true,
+      "error": "signing_key_revoked"
+    },
+    {
+      "case": "permission_escalation",
+      "blocked": true,
+      "result": {
+        "app_id": "malware",
+        "permission": "screen_capture",
+        "decision": "deny",
+        "role": "guest",
+        "reason": "outside_role_allowlist",
+        "granted_at_ms": 1787191782375,
+        "expires_at_ms": null,
+        "mock": false
+      }
+    },
+    {
+      "case": "sandbox_escape_attempt",
+      "blocked": true,
+      "attempt": {
+        "app_id": "evil",
+        "capability": "system_service",
+        "decision": "deny",
+        "reason": "capability_dropped",
+        "isolation": "strict",
+        "mock": false,
+        "claim_boundary": "Software sandbox policy only. Does not claim kernel namespaces, seccomp, AppArmor/SELinux, or hardware isolation."
+      }
+    },
+    {
+      "case": "keystore_ciphertext_tamper",
+      "blocked": true,
+      "error": "decrypt_failed_tampered"
+    },
+    {
+      "case": "offline_sync_conflict_storm",
+      "blocked": true,
+      "merge": {
+        "status": "conflict",
+        "key": "k1",
+        "conflict": {
+          "key": "k1",
+          "local": {
+            "key": "k1",
+            "value": {
+              "v": 1
+            },
+            "replica_id": "replica-5e00a1a3",
+            "wall_time_ms": 1787191782375,
+            "vector": {
+              "replica-5e00a1a3": 1
+            },
+            "version": 1,
+            "tombstone": false
+          },
+          "remote": {
+            "key": "k1",
+            "value": {
+              "v": 2
+            },
+            "replica_id": "remote-replica",
+            "wall_time_ms": 1787191782375,
+            "vector": {
+              "remote-replica": 1
+            },
+            "version": 1,
+            "tombstone": false
+          },
+          "policy": "vector_clock",
+          "winner": "merged_lww_fallback",
+          "reason": "concurrent_then_tie_break_replica_id"
+        },
+        "resolved_value": {
+          "v": 1
+        },
+        "mock": false
+      }
+    },
+    {
+      "case": "ota_anti_rollback_attack",
+      "blocked": true,
+      "error": "signing_key_revoked"
+    },
+    {
+      "case": "ota_interrupted_update",
+      "blocked": true,
+      "stage": {
+        "ok": false,
+        "error": "signing_key_revoked"
+      },
+      "recover": {
+        "ok": true,
+        "recovered_slots": [],
+        "active_slot": "B"
+      }
+    },
+    {
+      "case": "recovery_unverified_slot_select",
+      "blocked": true,
+      "result": {
+        "ok": false,
+        "error": "no_verified_slot",
+        "selected_verified": false
+      }
+    },
+    {
+      "case": "diagnostics_log_injection",
+      "blocked": true,
+      "event": {
+        "id": "evt-58b26a2f7bf4",
+        "redacted": true,
+        "ts_ms": 1787191782377,
+        "level": "info",
+        "event_type": "injection_test",
+        "details": {
+          "message": "<script>alert(1)</script>",
+          "password": "[REDACTED]"
+        },
+        "trace_id": "a5d6a39167d34dcb9601d0481c7bfc31",
+        "mock": false,
+        "persistent": true
+      }
+    },
+    {
+      "case": "role_policy_guest_sensitive_grant",
+      "blocked": true,
+      "result": {
+        "ok": true,
+        "profile_type": "guest",
+        "app_id": "spy",
+        "permission": "screen_capture",
+        "decision": "deny",
+        "role": "guest",
+        "reason": "outside_role_allowlist",
+        "granted_at_ms": 1787191782377,
+        "expires_at_ms": null,
+        "mock": false
+      }
+    },
+    {
+      "case": "connectivity_bearer_spoof",
+      "blocked": true,
+      "decision": {
+        "active_bearer": "offline",
+        "state": "offline",
+        "degraded": false,
+        "evaluation": {
+          "state": "offline",
+          "ranked": [
+            {
+              "bearer": "offline",
+              "score": -998.5
+            },
+            {
+              "bearer": "ethernet",
+              "score": -Infinity
+            },
+            {
+              "bearer": "wifi",
+              "score": -Infinity
+            },
+            {
+              "bearer": "bluetooth",
+              "score": -Infinity
+            },
+            {
+              "bearer": "cellular",
+              "score": -Infinity
+            },
+            {
+              "bearer": "ntn_simulated",
+              "score": -Infinity
+            }
+          ],
+          "active": "offline",
+          "candidate": "offline",
+          "should_switch": true,
+          "reason": "active_unavailable",
+          "claim_boundary": "Software orchestrator only. No carrier attach, no SIM/eSIM control, no radio certification claim. Cellular/NTN are generic or simulated bearer classes from device radio capability profiles \u2014 not named modems. RM520N-GL is 5G NR Sub-6 + LTE only (not NTN, not 6G). Dock is TB4 not TB5. STANDARDIZED_6G=false. CARRIER_ACCEPTED=false. Bluetooth is PAN/local.",
+          "STANDARDIZED_6G": false,
+          "CARRIER_ACCEPTED": false,
+          "RM520N_GL_NTN": false,
+          "DOCK_TB5": false,
+          "mock": false
+        }
+      }
+    }
+  ]
+}
