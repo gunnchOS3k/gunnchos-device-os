@@ -198,6 +198,8 @@ class SandboxExecutor:
 
     def _build_bwrap_cmd(self, work: str, launcher: Path, script_path: Path, py: str) -> list[str]:
         assert self.bwrap
+        real_py = str(Path(py).resolve())
+        prefix = str(Path(sys.prefix).resolve())
         cmd = [
             self.bwrap,
             "--unshare-all",
@@ -210,20 +212,20 @@ class SandboxExecutor:
             "/tmp",
             "--dir",
             "/etc",
-            "--ro-bind",
+            "--dir",
             "/usr",
-            "/usr",
+            "--dir",
+            "/bin",
         ]
-        for p in ("/lib", "/lib64", "/lib32"):
-            if Path(p).exists():
-                cmd.extend(["--ro-bind", p, p])
-        real_py = str(Path(py).resolve())
-        cmd.extend(["--ro-bind", real_py, real_py])
-        # Bind interpreter prefix so pip-installed seccomp (and stdlib) resolve inside the sandbox.
-        prefix = str(Path(sys.prefix).resolve())
+        # Bind interpreter tree + shared libs, but NOT /usr/bin or /bin executables
+        # so child-spawn probes (/bin/sh, /usr/bin/id) fail without relying on seccomp wheels.
         if Path(prefix).exists():
             cmd.extend(["--ro-bind", prefix, prefix])
-        for bind in ("/etc/ld.so.cache", "/etc/alternatives"):
+        cmd.extend(["--ro-bind", real_py, real_py])
+        for p in ("/lib", "/lib64", "/lib32", "/usr/lib", "/usr/lib64"):
+            if Path(p).exists():
+                cmd.extend(["--ro-bind", p, p])
+        for bind in ("/etc/ld.so.cache", "/etc/alternatives", "/etc/ssl"):
             if Path(bind).exists():
                 cmd.extend(["--ro-bind", bind, bind])
         cmd.extend(
@@ -236,7 +238,7 @@ class SandboxExecutor:
                 "--clearenv",
                 "--setenv",
                 "PATH",
-                "/usr/bin:/bin",
+                work,
                 "--setenv",
                 "HOME",
                 work,

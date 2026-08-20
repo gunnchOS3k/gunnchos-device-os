@@ -23,17 +23,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Provision bubblewrap + seccomp
+      - name: Provision bubblewrap
         run: |
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y bubblewrap
           command -v bwrap
           bwrap --version
-          # Distro python3-seccomp targets system Python; install for the CI interpreter.
-          python -m pip install --upgrade pip
-          python -m pip install seccomp
-          python -c 'import seccomp; print("seccomp ok", seccomp.__file__)'
       - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
