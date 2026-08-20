@@ -1,0 +1,93 @@
+name: Wave004 Final Integrity Security
+
+on:
+  push:
+    branches: [main, 'eng/wave004-*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wave004-final-integrity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wave004-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Provision bubblewrap + seccomp
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap python3-seccomp
+          command -v bwrap
+          bwrap --version
+          python3 -c 'import seccomp; print("seccomp ok")'
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pyyaml cryptography
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Wave004 platform security tests (require sandbox validated)
+        env:
+          WAVE004_REQUIRE_SANDBOX_VALIDATED: '1'
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          pytest -q tests/test_wave004_platform_security.py
+      - name: Generate Wave004 final integrity evidence
+        env:
+          PYTHONPATH: '.:src'
+          WAVE004_REQUIRE_SANDBOX_VALIDATED: '1'
+        run: |
+          set -euo pipefail
+          python3 scripts/engineering_wave004/run_wave004_evidence.py
+      - name: Enforce final integrity gates
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("artifacts/engineering_wave004")
+          final = json.loads((root / "FINAL_INTEGRITY_RESULT.json").read_text())
+          sandbox = json.loads((root / "SANDBOX_ENFORCEMENT_RESULT.json").read_text())
+          matrix = json.loads((root / "REQUIREMENT_EVALUATOR_MATRIX.json").read_text())
+          pkg = json.loads((root / "PACKAGE_FULL_LIFECYCLE_RESULT.json").read_text())
+          abc = json.loads((root / "OFFLINE_SYNC_A_B_C_RESTART_RESULT.json").read_text())
+
+          assert sandbox.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False
+          assert sandbox.get("SANDBOX_BACKEND") != "subprocess_broker", sandbox
+          assert sandbox.get("SANDBOX_EXECUTION_VALIDATED") is True, sandbox
+          for key in (
+              "HOST_PRIVATE_READ_BLOCKED",
+              "OUTSIDE_WRITE_BLOCKED",
+              "NETWORK_DENIED",
+              "NETWORK_CONTROL_REACHABLE",
+              "CHILD_SPAWN_DENIED",
+              "CROSS_APP_READ_BLOCKED",
+              "PRIVILEGED_CAPABILITY_DENIED",
+          ):
+              assert sandbox.get(key) is True, (key, sandbox)
+
+          assert matrix.get("validated_count") == 12, matrix
+          assert matrix.get("unconditional_true_classifiers") == 0
+          assert pkg.get("ok") is True, pkg
+          assert abc.get("ok") is True, abc
+          assert final.get("WAVE004_FINAL_INTEGRITY_CLOSURE") == "COMPLETE", final
+          print("wave004 final integrity CI gates PASS")
+          PY
+      - name: Upload Wave004 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wave004-final-integrity-evidence
+          path: artifacts/engineering_wave004/

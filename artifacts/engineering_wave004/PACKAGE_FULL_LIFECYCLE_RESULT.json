@@ -1,0 +1,279 @@
+{
+  "schema": "gunnchos.engineering_wave004.package_full_lifecycle.v1",
+  "ok": true,
+  "lifecycle": {
+    "ok": true,
+    "package_id": "evidence-pkg",
+    "steps": {
+      "inspect": {
+        "ok": true,
+        "schema_version": 1,
+        "installed_count": 7,
+        "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/registry.json",
+        "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization.",
+        "production_signing": false
+      },
+      "verify_v1": {
+        "ok": true,
+        "package_id": "evidence-pkg",
+        "version": "1.0.0"
+      },
+      "install_v1": {
+        "ok": true,
+        "op": "install",
+        "package_id": "evidence-pkg",
+        "version": "1.0.0",
+        "entrypoint": "main.py",
+        "publisher": "gunnchos-dev",
+        "signer": "1a4d56b366e5039d",
+        "requested_permissions": [
+          "files_read"
+        ],
+        "manifest_digest": "09a0236bbae91849b262511ab2234243459a96e6d28fa8d5e4a054cecd806198",
+        "installed_at_ms": 1787240903142,
+        "signature_valid": true,
+        "trust_root": "local_dev",
+        "production_signing": false,
+        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg/signed_manifest.json",
+        "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg"
+      },
+      "restart_after_install": {
+        "ok": true,
+        "package_id": "evidence-pkg",
+        "record": {
+          "package_id": "evidence-pkg",
+          "version": "1.0.0",
+          "entrypoint": "main.py",
+          "publisher": "gunnchos-dev",
+          "signer": "1a4d56b366e5039d",
+          "requested_permissions": [
+            "files_read"
+          ],
+          "manifest_digest": "09a0236bbae91849b262511ab2234243459a96e6d28fa8d5e4a054cecd806198",
+          "installed_at_ms": 1787240903142,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "production_signing": false,
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg/signed_manifest.json",
+          "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg"
+        },
+        "signature_valid": true,
+        "verify": {
+          "ok": true,
+          "package_id": "evidence-pkg",
+          "version": "1.0.0"
+        }
+      },
+      "upgrade_v2": {
+        "ok": true,
+        "op": "upgrade",
+        "package_id": "evidence-pkg",
+        "version": "2.0.0",
+        "entrypoint": "main.py",
+        "publisher": "gunnchos-dev",
+        "signer": "1a4d56b366e5039d",
+        "requested_permissions": [
+          "files_read"
+        ],
+        "manifest_digest": "78328a0fd6aeebb548c5047140765e5cd7afa0038c070c0c538387d8653841ec",
+        "installed_at_ms": 1787240903144,
+        "signature_valid": true,
+        "trust_root": "local_dev",
+        "production_signing": false,
+        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg/signed_manifest.json",
+        "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg",
+        "previous_version": "1.0.0"
+      },
+      "restart_after_upgrade": {
+        "ok": true,
+        "package_id": "evidence-pkg",
+        "record": {
+          "package_id": "evidence-pkg",
+          "version": "2.0.0",
+          "entrypoint": "main.py",
+          "publisher": "gunnchos-dev",
+          "signer": "1a4d56b366e5039d",
+          "requested_permissions": [
+            "files_read"
+          ],
+          "manifest_digest": "78328a0fd6aeebb548c5047140765e5cd7afa0038c070c0c538387d8653841ec",
+          "installed_at_ms": 1787240903144,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "production_signing": false,
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg/signed_manifest.json",
+          "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg"
+        },
+        "signature_valid": true,
+        "verify": {
+          "ok": true,
+          "package_id": "evidence-pkg",
+          "version": "2.0.0"
+        }
+      },
+      "downgrade_attempt": {
+        "ok": false,
+        "error": "downgrade_rejected",
+        "package_id": "evidence-pkg",
+        "installed_version": "2.0.0",
+        "attempted_version": "1.5.0"
+      },
+      "uninstall": {
+        "ok": true,
+        "package_id": "evidence-pkg",
+        "removed": {
+          "package_id": "evidence-pkg",
+          "version": "2.0.0",
+          "entrypoint": "main.py",
+          "publisher": "gunnchos-dev",
+          "signer": "1a4d56b366e5039d",
+          "requested_permissions": [
+            "files_read"
+          ],
+          "manifest_digest": "78328a0fd6aeebb548c5047140765e5cd7afa0038c070c0c538387d8653841ec",
+          "installed_at_ms": 1787240903144,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "production_signing": false,
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg/signed_manifest.json",
+          "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/evidence-pkg"
+        },
+        "registry_absent": true,
+        "content_absent": true,
+        "removed_content": true,
+        "cleanup_hook": "cleanup:evidence-pkg:1787240903146"
+      },
+      "restart_after_uninstall": {
+        "ok": false,
+        "error": "not_installed",
+        "package_id": "evidence-pkg"
+      },
+      "content_absent": true
+    },
+    "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization."
+  },
+  "negatives": {
+    "ok": true,
+    "cases": {
+      "package_id_traversal": {
+        "ok": false,
+        "error": "unsafe_package_id",
+        "package_id": "../evil"
+      },
+      "package_id_slash": {
+        "ok": false,
+        "error": "unsafe_package_id",
+        "package_id": "slash/evil"
+      },
+      "package_id_backslash": {
+        "ok": false,
+        "error": "unsafe_package_id",
+        "package_id": "back\\evil"
+      },
+      "entrypoint_traversal": {
+        "ok": false,
+        "error": "unsafe_entrypoint"
+      },
+      "entrypoint_absolute": {
+        "ok": false,
+        "error": "unsafe_entrypoint"
+      },
+      "payload_traversal": {
+        "ok": false,
+        "error": "unsafe_payload_path"
+      },
+      "duplicate_payload": {
+        "ok": false,
+        "error": "duplicate_payload_path"
+      },
+      "missing_metadata": {
+        "ok": false,
+        "error": "missing_required_metadata",
+        "missing": [
+          "schema_version",
+          "version",
+          "entrypoint",
+          "publisher",
+          "signer",
+          "requested_permissions",
+          "payload",
+          "content_hashes",
+          "manifest_digest",
+          "signature"
+        ]
+      },
+      "tampered_manifest": {
+        "ok": false,
+        "error": "tampered_signature"
+      },
+      "tampered_content_hash": {
+        "ok": false,
+        "error": "tampered_content_hash"
+      },
+      "tampered_signature": {
+        "ok": false,
+        "error": "tampered_signature"
+      },
+      "untrusted_signer": {
+        "ok": false,
+        "error": "tampered_signature"
+      },
+      "downgrade_attempt": {
+        "ok": false,
+        "error": "downgrade_rejected",
+        "package_id": "policy-app",
+        "installed_version": "2.0.0",
+        "attempted_version": "1.0.0"
+      },
+      "invalid_version": {
+        "ok": false,
+        "error": "invalid_version",
+        "package_id": "badver"
+      },
+      "same_version_without_policy": {
+        "ok": false,
+        "error": "same_version_requires_explicit_policy",
+        "package_id": "policy-app",
+        "version": "2.0.0"
+      },
+      "same_version_explicit": {
+        "ok": true,
+        "op": "reinstall",
+        "package_id": "policy-app",
+        "version": "2.0.0",
+        "entrypoint": "main.py",
+        "publisher": "gunnchos-dev",
+        "signer": "1a4d56b366e5039d",
+        "requested_permissions": [
+          "files_read"
+        ],
+        "manifest_digest": "d8902371f7188194d8e6fd9c4ef2348ed0838bd9fbc67c086b83f82595f5b343",
+        "installed_at_ms": 1787240903151,
+        "signature_valid": true,
+        "trust_root": "local_dev",
+        "production_signing": false,
+        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/policy-app/signed_manifest.json",
+        "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/installed/policy-app"
+      }
+    },
+    "blocked": {
+      "package_id_traversal": true,
+      "package_id_slash": true,
+      "package_id_backslash": true,
+      "entrypoint_traversal": true,
+      "entrypoint_absolute": true,
+      "payload_traversal": true,
+      "duplicate_payload": true,
+      "missing_metadata": true,
+      "tampered_manifest": true,
+      "tampered_content_hash": true,
+      "tampered_signature": true,
+      "untrusted_signer": true,
+      "downgrade_attempt": true,
+      "invalid_version": true,
+      "same_version_without_policy": true,
+      "same_version_explicit": true
+    }
+  },
+  "PRODUCTION_SIGNING": false
+}

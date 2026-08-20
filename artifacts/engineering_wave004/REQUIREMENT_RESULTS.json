@@ -2,7 +2,7 @@
   "requirements": {
     "OS-PLATFORM-008": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Persistent package lifecycle with DEV signing; not production signing",
+      "note": "Secure persistent package lifecycle with DEV signing; not production signing",
       "evaluator": "evaluate_os_platform_008",
       "ok": true
     },
@@ -26,7 +26,7 @@
     },
     "OS-PLATFORM-012": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge",
+      "note": "Persistent OfflineSyncEngine A\u2192B\u2192C restart apply-once; corruption safe-fails",
       "evaluator": "evaluate_os_platform_012",
       "ok": true
     },
@@ -49,10 +49,10 @@
       "ok": true
     },
     "OS-PLATFORM-020": {
-      "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False",
+      "classification": "BLOCKED_ENVIRONMENT",
+      "note": "LOCAL_SANDBOX_VALIDATION=BLOCKED_ENVIRONMENT; backend=sandbox_exec_unavailable; PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false",
       "evaluator": "evaluate_os_platform_020",
-      "ok": true
+      "ok": false
     },
     "OS-PLATFORM-021": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
@@ -74,10 +74,10 @@
     }
   },
   "summary": {
-    "validated": 12,
+    "validated": 11,
     "implemented_validation_open": 0,
     "implementation_open": 0,
-    "blocked_environment": 0,
+    "blocked_environment": 1,
     "blocked_external": 0,
     "total": 12
   }

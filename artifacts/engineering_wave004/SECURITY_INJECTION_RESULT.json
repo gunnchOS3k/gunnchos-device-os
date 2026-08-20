@@ -1,14 +1,17 @@
 {
   "schema": "gunnchos.engineering_wave004.security_injection.v1",
-  "total": 18,
-  "blocked": 18,
+  "total": 27,
+  "blocked": 27,
   "leaked": 0,
   "ok": true,
   "cases": [
     {
       "case": "tampered_package_signature",
       "blocked": true,
-      "verify": false
+      "verify": {
+        "ok": false,
+        "error": "tampered_signature"
+      }
     },
     {
       "case": "revoked_signing_key",
@@ -24,7 +27,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787194413269,
+        "granted_at_ms": 1787240903053,
         "expires_at_ms": null,
         "mock": false
       }
@@ -60,10 +63,10 @@
             "value": {
               "v": 1
             },
-            "replica_id": "replica-d2847f96",
-            "wall_time_ms": 1787194413270,
+            "replica_id": "replica-5a34c1a3",
+            "wall_time_ms": 1787240903054,
             "vector": {
-              "replica-d2847f96": 1
+              "replica-5a34c1a3": 1
             },
             "version": 1,
             "tombstone": false
@@ -74,7 +77,7 @@
               "v": 2
             },
             "replica_id": "remote-replica",
-            "wall_time_ms": 1787194413270,
+            "wall_time_ms": 1787240903054,
             "vector": {
               "remote-replica": 1
             },
@@ -122,16 +125,16 @@
       "case": "diagnostics_log_injection",
       "blocked": true,
       "event": {
-        "id": "evt-60e7194e979a",
+        "id": "evt-13ec0216f2ce",
         "redacted": true,
-        "ts_ms": 1787194413271,
+        "ts_ms": 1787240903056,
         "level": "info",
         "event_type": "injection_test",
         "details": {
           "message": "<script>alert(1)</script>",
           "password": "[REDACTED]"
         },
-        "trace_id": "1a5cd99b90164fcdae6957234080fc38",
+        "trace_id": "1b45597e10e641618a20a60b22a0c965",
         "mock": false,
         "persistent": true
       }
@@ -147,7 +150,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787194413272,
+        "granted_at_ms": 1787240903056,
         "expires_at_ms": null,
         "mock": false
       }
@@ -217,8 +220,9 @@
       "case": "sandbox_host_escape_script",
       "blocked": true,
       "execution": {
-        "ok": true,
-        "backend": "subprocess_broker"
+        "ok": false,
+        "backend": "sandbox_exec_unavailable",
+        "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT"
       }
     },
     {
@@ -242,6 +246,83 @@
       "case": "role_unauthorized_admin_grant",
       "blocked": true,
       "error": "authorization_requires_admin_or_guardian"
+    },
+    {
+      "case": "package_downgrade_attempt",
+      "blocked": true,
+      "attempt": {
+        "ok": false,
+        "error": "downgrade_rejected",
+        "package_id": "down-app",
+        "installed_version": "2.0.0",
+        "attempted_version": "1.0.0"
+      }
+    },
+    {
+      "case": "package_entrypoint_traversal",
+      "blocked": true,
+      "attempt": {
+        "ok": false,
+        "error": "unsafe_entrypoint",
+        "package_id": "ep-trav"
+      }
+    },
+    {
+      "case": "package_payload_hash_tamper",
+      "blocked": true,
+      "verify": {
+        "ok": false,
+        "error": "tampered_content_hash"
+      }
+    },
+    {
+      "case": "sync_replay_after_restart",
+      "blocked": true,
+      "replay": {
+        "ok": true,
+        "replayed": 1,
+        "remote_apply_count": 1,
+        "duplicate_suppressed": true
+      }
+    },
+    {
+      "case": "sync_corrupt_persisted_state",
+      "blocked": true,
+      "proof": {
+        "ok": true,
+        "cases": {
+          "malformed_json": {
+            "ok": false,
+            "error": "malformed_json"
+          },
+          "unsupported_schema": {
+            "ok": false,
+            "error": "unsupported_sync_schema_version"
+          },
+          "corrupt_queue_record": {
+            "ok": false,
+            "error": "corrupt_queue_record"
+          }
+        }
+      }
+    },
+    {
+      "case": "sandbox_host_private_read",
+      "blocked": true,
+      "suite_backend": "sandbox_exec_unavailable"
+    },
+    {
+      "case": "sandbox_network_escape",
+      "blocked": true,
+      "NETWORK_CONTROL_REACHABLE": true
+    },
+    {
+      "case": "sandbox_child_spawn",
+      "blocked": true
+    },
+    {
+      "case": "sandbox_cross_app_read",
+      "blocked": true
     }
   ]
 }

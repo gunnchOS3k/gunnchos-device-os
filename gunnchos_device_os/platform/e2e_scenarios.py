@@ -141,13 +141,16 @@ def scenario_h_sync_restart_persistence(coord: "Wave004PlatformCoordinator") -> 
 
 
 def scenario_i_sandbox_execution(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
-    """I: Execute untrusted fixture under execution-enforced sandbox."""
-    result = coord.sandbox_executor.execute_untrusted("untrusted-fixture", app_class="untrusted")
+    """I: Execute untrusted fixture under execution-enforced sandbox (legacy)."""
+    result = coord.sandbox_executor.run_enforcement_suite("untrusted-fixture")
+    # Must not pass on plain subprocess.
+    ok = result.get("SANDBOX_EXECUTION_VALIDATED") is True and result.get("SANDBOX_BACKEND") != "subprocess_broker"
     return {
         "scenario": "I",
         "name": "sandbox_execution",
-        "ok": result.get("ok") is True,
+        "ok": ok,
         "execution": result,
+        "note": result.get("LOCAL_SANDBOX_VALIDATION"),
     }
 
 
@@ -181,6 +184,47 @@ def scenario_k_role_auth_persist(coord: "Wave004PlatformCoordinator") -> dict[st
     }
 
 
+def scenario_l_package_full_lifecycle(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """L: package install→upgrade→uninstall across fresh managers."""
+    proof = coord.package_lifecycle.run_full_lifecycle_proof("e2e-lifecycle-l")
+    return {
+        "scenario": "L",
+        "name": "package_full_lifecycle",
+        "ok": proof.get("ok") is True,
+        "proof": proof,
+    }
+
+
+def scenario_m_sync_a_b_c(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """M: sync A→B→C restart apply-once."""
+    from gunnchos_device_os.platform.persistent_sync import run_a_b_c_restart_proof
+
+    assert coord.offline_sync.storage_path is not None
+    proof = run_a_b_c_restart_proof(coord.offline_sync.storage_path / "e2e_m_abc")
+    return {
+        "scenario": "M",
+        "name": "sync_a_b_c_restart",
+        "ok": proof.get("ok") is True,
+        "proof": proof,
+    }
+
+
+def scenario_n_sandbox_enforcement(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """N: actual sandbox enforcement suite — cannot pass on plain subprocess."""
+    suite = coord.sandbox_executor.run_enforcement_suite("e2e-sandbox-n")
+    ok = (
+        suite.get("SANDBOX_EXECUTION_VALIDATED") is True
+        and suite.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False
+        and suite.get("SANDBOX_BACKEND") != "subprocess_broker"
+    )
+    return {
+        "scenario": "N",
+        "name": "sandbox_enforcement_suite",
+        "ok": ok,
+        "suite": suite,
+    }
+
+
 def run_all_scenarios(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
     results = [
         scenario_a_signed_install_flow(coord),
@@ -194,13 +238,25 @@ def run_all_scenarios(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
         scenario_i_sandbox_execution(coord),
         scenario_j_accessibility_persist(coord),
         scenario_k_role_auth_persist(coord),
+        scenario_l_package_full_lifecycle(coord),
+        scenario_m_sync_a_b_c(coord),
+        scenario_n_sandbox_enforcement(coord),
     ]
     passed = sum(1 for r in results if r.get("ok"))
+    # Scenarios I/N may be environment-blocked locally; do not treat env-unavailable as pass.
+    sandbox_blocked = any(
+        r.get("scenario") in {"I", "N"}
+        and (r.get("suite") or r.get("execution") or {}).get("LOCAL_SANDBOX_VALIDATION") == "BLOCKED_ENVIRONMENT"
+        for r in results
+    )
+    required_ok = all(r.get("ok") for r in results if r.get("scenario") not in {"I", "N"})
+    sandbox_ok = all(r.get("ok") for r in results if r.get("scenario") in {"I", "N"})
     return {
         "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
         "total": len(results),
         "passed": passed,
         "failed": len(results) - passed,
-        "ok": passed == len(results),
+        "ok": required_ok and sandbox_ok,
+        "sandbox_environment_blocked": sandbox_blocked,
         "scenarios": results,
     }

@@ -1,0 +1,18 @@
+{
+  "schema": "gunnchos.engineering_wave004.sandbox_enforcement.v1",
+  "SANDBOX_BACKEND": "sandbox_exec_unavailable",
+  "KERNEL_SANDBOX": false,
+  "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
+  "HOST_PRIVATE_READ_BLOCKED": true,
+  "OUTSIDE_WRITE_BLOCKED": true,
+  "NETWORK_DENIED": true,
+  "NETWORK_CONTROL_REACHABLE": true,
+  "CHILD_SPAWN_DENIED": true,
+  "CROSS_APP_READ_BLOCKED": true,
+  "PRIVILEGED_CAPABILITY_DENIED": true,
+  "SANDBOX_EXECUTION_VALIDATED": false,
+  "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT",
+  "ok": false,
+  "fixture_result": {},
+  "claim_boundary": "KERNEL_SANDBOX=true only when bubblewrap namespaces prove mandatory probes. sandbox-exec counts only when the same probes pass. PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false always."
+}

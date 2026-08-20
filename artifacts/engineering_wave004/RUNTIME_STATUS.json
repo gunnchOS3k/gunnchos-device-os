@@ -8,23 +8,26 @@
     "seed_present": true
   },
   "permissions_role": "student",
-  "sandbox_profiles": 5,
+  "sandbox_profiles": 10,
   "sandbox_executor": {
     "backend_available": "sandbox_exec",
+    "genuine_backend_available": true,
     "kernel_sandbox": false,
-    "audit_len": 3,
-    "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
+    "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
+    "audit_len": 8,
+    "claim_boundary": "KERNEL_SANDBOX=true only when bubblewrap namespaces prove mandatory probes. sandbox-exec counts only when the same probes pass. PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false always."
   },
-  "offline_sync_size": 5,
+  "offline_sync_size": 4,
   "package_lifecycle": {
     "ok": true,
     "schema_version": 1,
-    "installed_count": 4,
-    "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/registry.json",
-    "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization."
+    "installed_count": 7,
+    "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/packages/registry.json",
+    "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization.",
+    "production_signing": false
   },
   "connectivity_active": "wifi",
-  "diagnostics_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/diagnostics.jsonl",
+  "diagnostics_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-czqtqipr/runtime_work/diagnostics.jsonl",
   "role_policy": {
     "schema": "gunnchos.platform.role_policy.v1",
     "profile_types": [
