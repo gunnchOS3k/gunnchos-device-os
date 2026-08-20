@@ -1,0 +1,68 @@
+{
+  "adapters": [
+    {
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "note": "NTN paths remain simulated; no real modem",
+      "provenance": "SIMULATED",
+      "repo": "ntn-resilience-sim",
+      "repo_relative_path": "ntn-resilience-sim",
+      "source_available": true,
+      "usage": "contract_discovery_only",
+      "used_for": "contract_discovery_only"
+    },
+    {
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "note": "contract discovery only",
+      "provenance": "DIGITAL_TWIN",
+      "repo": "7gc-digital-twin",
+      "repo_relative_path": "7gc-digital-twin",
+      "source_available": true,
+      "usage": "contract_discovery_only",
+      "used_for": "contract_discovery_only"
+    },
+    {
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "note": "availability probe only; no Wave006 field claim",
+      "provenance": "DEVICE_OBSERVED",
+      "repo": "edge-io-measurement-node",
+      "repo_relative_path": "edge-io-measurement-node",
+      "source_available": true,
+      "usage": "contract_discovery_only",
+      "used_for": "contract_discovery_only"
+    },
+    {
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "note": "no STANDARDIZED_6G claim",
+      "provenance": "CONFIGURED_TARGET",
+      "repo": "spectrumx-ai-ran-gary",
+      "repo_relative_path": "spectrumx-ai-ran-gary",
+      "source_available": true,
+      "usage": "contract_discovery_only",
+      "used_for": "contract_discovery_only"
+    }
+  ],
+  "claim_boundaries": {
+    "CARRIER_ACCEPTED": false,
+    "FIELD_MEASURED_PERFORMANCE": false,
+    "HUMAN_E6": false,
+    "KERNEL_MPTCP_VALIDATED": false,
+    "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+    "PHYSICAL_VALIDATION": false,
+    "PRODUCTION_APP_PRIORITY_SIGNING": false,
+    "PRODUCTION_NETWORK_OPTIMALITY": false,
+    "REAL_MPTCP": false,
+    "REAL_NTN_MODEM_VALIDATED": false,
+    "STANDARDIZED_6G": false,
+    "UNIVERSAL_OPTIMALITY": false
+  },
+  "schema": "gunnchos.engineering_wave006.research_adapters.v1",
+  "supporting_pr_required": false
+}

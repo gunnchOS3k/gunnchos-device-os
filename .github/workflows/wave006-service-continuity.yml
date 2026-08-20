@@ -1,0 +1,93 @@
+name: Wave006 Service Continuity Execution
+
+on:
+  push:
+    branches: [main, 'eng/wave006-*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wave006-service-continuity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wave006-continuity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pytest pyyaml cryptography
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Wave006 tests
+        env:
+          PYTHONPATH: '.:src'
+        run: pytest -q tests/test_wave006_service_continuity.py
+      - name: Broken evaluator must fail gate
+        env:
+          PYTHONPATH: '.:src'
+          WAVE006_BROKEN_EVALUATOR: NET-ORCH-028
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from gunnchos_device_os.service_continuity_execution.completion_gate import evaluate_completion_gate
+          from gunnchos_device_os.service_continuity_execution.evaluators import run_all_evaluators
+          bundle = run_all_evaluators()
+          gate = evaluate_completion_gate(bundle["classification"], integrity=bundle["integrity"])
+          assert gate["complete"] is False, gate
+          print("broken evaluator correctly rejected")
+          PY
+      - name: Generate Wave006 evidence
+        env:
+          PYTHONPATH: '.:src'
+        run: python scripts/engineering_wave006/run_wave006_evidence.py
+      - name: Enforce Wave006 integrity gates
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+          root = Path("artifacts/engineering_wave006")
+          result = json.loads((root / "WAVE006_RESULT.json").read_text())
+          claims = json.loads((root / "CLAIM_BOUNDARIES.json").read_text())
+          matrix = json.loads((root / "REQUIREMENT_EVALUATOR_MATRIX.json").read_text())
+          integrity = json.loads((root / "EVALUATOR_INTEGRITY_RESULT.json").read_text())
+          neg = json.loads((root / "COMPLETION_GATE_NEGATIVE_CONTROL_RESULT.json").read_text())
+          e2e = json.loads((root / "E2E_SCENARIOS_A_J_RESULT.json").read_text())
+          assert result["wave006_ok"] is True
+          assert result["summary"]["validated"] == 10
+          assert result["summary"]["total"] == 10
+          assert result["UNCONDITIONAL_TRUE_CLASSIFIERS"] == 0
+          assert result["UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED"] is True
+          assert result["COMPLETE_GATE_REQUIRES_10_OF_10"] is True
+          assert matrix["unconditional_true_classifiers"] == 0
+          assert integrity["UNCONDITIONAL_TRUE_CLASSIFIERS"] == 0
+          assert integrity["ok"] is True
+          assert neg["BROKEN_EVALUATOR_GATE_RESULT"] == "REJECTED"
+          assert neg["ok"] is True
+          assert e2e["ok"] is True and e2e["passed"] == 10
+          for k, v in claims.items():
+              assert v is False, k
+          assert result["OS_PLATFORM_020_UNTOUCHED"] is True
+          assert result["BASELINE_COUNTS_UPDATED"] is False
+          abs_re = re.compile(r"(/Users/|/home/|/mnt/|/tmp/|[A-Za-z]:\\\\)")
+          for path in root.glob("*.json"):
+              blob = path.read_text(encoding="utf-8")
+              assert not abs_re.search(blob), path.name
+          print("wave006 integrity CI gates PASS")
+          PY
+      - name: Upload Wave006 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wave006-service-continuity-evidence
+          path: artifacts/engineering_wave006/

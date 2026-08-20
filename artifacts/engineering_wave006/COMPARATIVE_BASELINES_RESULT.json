@@ -1,0 +1,30 @@
+{
+  "PRODUCTION_NETWORK_OPTIMALITY": false,
+  "UNIVERSAL_OPTIMALITY": false,
+  "baselines": [
+    {
+      "continuity_score_digital": 0.88,
+      "description": "Decision + transition/resume/multipath/adapt/cache/sync/report",
+      "multipath": true,
+      "name": "wave006_continuity_controller",
+      "resume_capable": true
+    },
+    {
+      "continuity_score_digital": 0.7,
+      "description": "Wave005 path selection without continuity execution actions",
+      "multipath": false,
+      "name": "wave005_decision_only",
+      "resume_capable": false
+    },
+    {
+      "continuity_score_digital": 0.55,
+      "description": "Stay on wifi until unavailable; then offline",
+      "multipath": false,
+      "name": "single_path_wifi_only",
+      "resume_capable": false
+    }
+  ],
+  "note": "Scores are digital/synthetic comparative labels for research, not field-measured optimality",
+  "ok": true,
+  "schema": "gunnchos.engineering_wave006.comparative_baselines.v1"
+}

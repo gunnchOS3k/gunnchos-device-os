@@ -1,0 +1,42 @@
+{
+  "cases": {
+    "all_paths_down": {
+      "ok": true,
+      "result": {
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "continuity_state": "OFFLINE",
+        "from_bearer": "wifi",
+        "note": "no admissible live path; digital offline fallback only",
+        "seamless_digital": false,
+        "selected_candidate": "offline-fallback",
+        "to_bearer": "offline-fallback"
+      }
+    },
+    "empty_candidates": {
+      "ok": true,
+      "result": {
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "continuity_state": "OFFLINE",
+        "from_bearer": "wifi",
+        "note": "no admissible live path; digital offline fallback only",
+        "seamless_digital": false,
+        "selected_candidate": "offline-fallback",
+        "to_bearer": "offline-fallback"
+      }
+    },
+    "untrusted_not_selected_over_trusted": {
+      "ok": true,
+      "result": {
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "continuity_state": "TRANSITIONING",
+        "from_bearer": "offline",
+        "note": "software path reassignment only; not 3GPP/carrier handover",
+        "seamless_digital": true,
+        "selected_candidate": "wifi-safe",
+        "to_bearer": "wifi-safe"
+      }
+    }
+  },
+  "ok": true,
+  "schema": "gunnchos.engineering_wave006.failure_injection.v1"
+}

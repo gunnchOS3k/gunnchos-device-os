@@ -1,0 +1,23 @@
+{
+  "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+  "no_candidates": {
+    "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+    "continuity_state": "OFFLINE",
+    "from_bearer": "wifi",
+    "note": "no admissible live path; digital offline fallback only",
+    "seamless_digital": false,
+    "selected_candidate": "offline-fallback",
+    "to_bearer": "offline-fallback"
+  },
+  "proof_ok": true,
+  "schema": "gunnchos.engineering_wave006.bearer_transition.v1",
+  "wifi_to_cellular": {
+    "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+    "continuity_state": "TRANSITIONING",
+    "from_bearer": "wifi",
+    "note": "software path reassignment only; not 3GPP/carrier handover",
+    "seamless_digital": true,
+    "selected_candidate": "cell",
+    "to_bearer": "cell"
+  }
+}
