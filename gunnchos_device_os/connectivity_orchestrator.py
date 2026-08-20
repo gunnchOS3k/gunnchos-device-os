@@ -326,6 +326,38 @@ class ConnectivityOrchestrator:
             "mock": False,
         }
 
+    def apply_decision_bearer(self, bearer_name: str, *, reason: str = "wave005_decision") -> TransitionRecord:
+        """Apply an AnywhereNetworkDecisionEngine selection into this orchestrator.
+
+        Extends Wave004 connectivity runtime — does not create a parallel toy state machine.
+        """
+        mapping = {
+            "ethernet": BearerKind.ETHERNET,
+            "wifi": BearerKind.WIFI,
+            "peer_local": BearerKind.BLUETOOTH,
+            "bluetooth": BearerKind.BLUETOOTH,
+            "cellular_generic": BearerKind.CELLULAR,
+            "cellular": BearerKind.CELLULAR,
+            "ntn_simulated": BearerKind.NTN_SIMULATED,
+            "offline": BearerKind.OFFLINE,
+        }
+        target = mapping.get(bearer_name, BearerKind.OFFLINE)
+        if self.active_bearer != target:
+            return self.transition_to(target, reason=reason)
+        if target == BearerKind.OFFLINE:
+            self.state = OrchestratorState.OFFLINE
+        else:
+            self.state = OrchestratorState.CONNECTED
+        return TransitionRecord(
+            from_bearer=target.value,
+            to_bearer=target.value,
+            reason=reason + "_hold",
+            from_score=self.score(target),
+            to_score=self.score(target),
+            state_before=self.state.value,
+            state_after=self.state.value,
+        )
+
     def snapshot(self) -> dict[str, Any]:
         return {
             "state": self.state.value,

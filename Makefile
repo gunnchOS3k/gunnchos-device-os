@@ -9,7 +9,7 @@
 	full-product-ix cont-ix-evidence \
 	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate \
 	device-lab-test device-lab-profile-verify device-lab-wp011 device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08 \
-	wp007-red-team wp007-test wave004 \
+	wp007-red-team wp007-test wave004 wave005 \
 	safe-halt-guest base-image-status base-image-seal base-image-overlay base-image-safe-resume
 
 PY := PYTHONPATH=src:.
@@ -339,3 +339,15 @@ wave004:
 	@test -f artifacts/engineering_wave004/CLAIM_BOUNDARIES.json
 	@test -f artifacts/engineering_wave004/PIXEL_CLIENT_PROBE.json
 	@`head -1 $$(which pytest) | sed 's/#!//' | tr -d ' '` -c "import json; r=json.load(open('artifacts/engineering_wave004/WAVE004_RESULT.json')); assert r['summary']['validated']==12, r['summary']; assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS', 1)==0"
+
+wave005:
+	PYTHONPATH=.:src pytest -q tests/test_wave005_network_decision.py
+	PYTHONPATH=.:src pytest -q --collect-only tests/test_wave005_network_decision.py >/dev/null
+	PYTHONPATH=.:src python3 scripts/engineering_wave005/run_wave005_evidence.py
+	@test -f artifacts/engineering_wave005/WAVE005_RESULT.json
+	@test -f artifacts/engineering_wave005/REQUIREMENT_RESULTS.json
+	@test -f artifacts/engineering_wave005/CLAIM_BOUNDARIES.json
+	@test -f artifacts/engineering_wave005/SERVICE_CONTINUITY_SCENARIOS_RESULT.json
+	@test -f artifacts/engineering_wave005/INVALID_TELEMETRY_RESULT.json
+	@test -f artifacts/engineering_wave005/PROPERTY_INVARIANTS_RESULT.json
+	@python3 -c "import json; r=json.load(open('artifacts/engineering_wave005/WAVE005_RESULT.json')); assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS',1)==0; assert r['claim_flags']['STANDARDIZED_6G'] is False; assert r['wave005_ok'] is True; assert r['summary']['total']==12"

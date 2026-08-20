@@ -1,0 +1,29 @@
+# wave005_decision_sequence
+
+```plantuml
+@startuml wave005_decision_sequence
+title Wave005 — decision sequence
+actor App
+participant Engine
+participant HardGate
+participant Utility
+participant Orchestrator
+participant Diagnostics
+
+App -> Engine : decide(candidates, objective)
+Engine -> Engine : sanitize + dedupe
+loop each candidate
+  Engine -> HardGate : hard admissibility
+  alt rejected
+    HardGate --> Engine : reasons
+  else admissible
+    Engine -> Utility : normalized metric scores
+    Utility --> Engine : utility
+  end
+end
+Engine -> Engine : deterministic tie-break
+Engine -> Orchestrator : sync active bearer
+Engine -> Diagnostics : redacted decision log
+Engine --> App : DecisionExplanation
+@enduml
+```
