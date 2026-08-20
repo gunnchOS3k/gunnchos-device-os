@@ -24,7 +24,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787194370395,
+        "granted_at_ms": 1787194381130,
         "expires_at_ms": null,
         "mock": false
       }
@@ -51,43 +51,9 @@
       "case": "offline_sync_conflict_storm",
       "blocked": true,
       "merge": {
-        "status": "conflict",
+        "status": "synced",
         "key": "k1",
-        "conflict": {
-          "key": "k1",
-          "local": {
-            "key": "k1",
-            "value": {
-              "v": 1
-            },
-            "replica_id": "replica-9e04779d",
-            "wall_time_ms": 1787194370396,
-            "vector": {
-              "replica-9e04779d": 1
-            },
-            "version": 1,
-            "tombstone": false
-          },
-          "remote": {
-            "key": "k1",
-            "value": {
-              "v": 2
-            },
-            "replica_id": "remote-replica",
-            "wall_time_ms": 1787194370396,
-            "vector": {
-              "remote-replica": 1
-            },
-            "version": 1,
-            "tombstone": false
-          },
-          "policy": "vector_clock",
-          "winner": "merged_lww_fallback",
-          "reason": "concurrent_then_tie_break_replica_id"
-        },
-        "resolved_value": {
-          "v": 1
-        },
+        "applied": "causal",
         "mock": false
       }
     },
@@ -122,16 +88,16 @@
       "case": "diagnostics_log_injection",
       "blocked": true,
       "event": {
-        "id": "evt-00c4171c71c8",
+        "id": "evt-f15fc305dd1f",
         "redacted": true,
-        "ts_ms": 1787194370398,
+        "ts_ms": 1787194381133,
         "level": "info",
         "event_type": "injection_test",
         "details": {
           "message": "<script>alert(1)</script>",
           "password": "[REDACTED]"
         },
-        "trace_id": "22ac9c1419e540adac9fd3af6f00f09c",
+        "trace_id": "ebf8949b24c04816a9df5ddc719a1621",
         "mock": false,
         "persistent": true
       }
@@ -147,7 +113,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787194370398,
+        "granted_at_ms": 1787194381133,
         "expires_at_ms": null,
         "mock": false
       }

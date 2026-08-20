@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
   "total": 11,
-  "passed": 11,
-  "failed": 0,
-  "ok": true,
+  "passed": 10,
+  "failed": 1,
+  "ok": false,
   "scenarios": [
     {
       "scenario": "A",
@@ -43,7 +43,7 @@
           "app_id": "demo-app",
           "app_class": "first_party",
           "version": "1.0.0",
-          "installed_at_ms": 1787194370344,
+          "installed_at_ms": 1787194381078,
           "signature_valid": true,
           "trust_root": "local_dev",
           "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/demo-app/signed_manifest.json"
@@ -56,7 +56,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787194370345,
+        "granted_at_ms": 1787194381079,
         "expires_at_ms": null,
         "mock": false
       }
@@ -73,7 +73,7 @@
       },
       "connectivity": "wifi",
       "sync": {
-        "flushed": 1,
+        "flushed": 5,
         "ok": true,
         "result": {
           "replica_id": "replica-9e04779d",
@@ -81,13 +81,70 @@
           "results": [
             {
               "status": "synced",
+              "key": "persist-key",
+              "applied": "causal",
+              "mock": false
+            },
+            {
+              "status": "synced",
+              "key": "k1",
+              "applied": "causal",
+              "mock": false
+            },
+            {
+              "status": "synced",
+              "key": "replay-key",
+              "applied": "causal",
+              "mock": false
+            },
+            {
+              "status": "synced",
+              "key": "sync-eval",
+              "applied": "causal",
+              "mock": false
+            },
+            {
+              "status": "synced",
               "key": "notes",
               "applied": "causal",
               "mock": false
             }
           ],
-          "store_size": 1,
-          "conflicts": [],
+          "store_size": 5,
+          "conflicts": [
+            {
+              "key": "k1",
+              "local": {
+                "key": "k1",
+                "value": {
+                  "v": 1
+                },
+                "replica_id": "replica-9e04779d",
+                "wall_time_ms": 1787194370396,
+                "vector": {
+                  "replica-9e04779d": 1
+                },
+                "version": 1,
+                "tombstone": false
+              },
+              "remote": {
+                "key": "k1",
+                "value": {
+                  "v": 2
+                },
+                "replica_id": "remote-replica",
+                "wall_time_ms": 1787194370396,
+                "vector": {
+                  "remote-replica": 1
+                },
+                "version": 1,
+                "tombstone": false
+              },
+              "policy": "vector_clock",
+              "winner": "merged_lww_fallback",
+              "reason": "concurrent_then_tie_break_replica_id"
+            }
+          ],
           "mock": false
         }
       }
@@ -102,7 +159,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787194370346,
+        "granted_at_ms": 1787194381081,
         "expires_at_ms": null,
         "mock": false
       },
@@ -124,18 +181,12 @@
     {
       "scenario": "D",
       "name": "ota_recovery",
-      "ok": true,
+      "ok": false,
       "ota": {
-        "applied": true,
+        "applied": false,
         "stage": {
-          "ok": true,
-          "target_slot": "B",
-          "status": "staged_complete"
-        },
-        "boot": {
-          "ok": true,
-          "active_slot": "B",
-          "boot_attempts": 1
+          "ok": false,
+          "error": "signing_key_revoked"
         }
       },
       "recovery": {
@@ -161,8 +212,8 @@
       "scenario": "E",
       "name": "diagnostics_redaction",
       "ok": true,
-      "event_id": "evt-95e30ae07068",
-      "export_count": 1
+      "event_id": "evt-032cd67a99d5",
+      "export_count": 4
     },
     {
       "scenario": "F",
@@ -181,7 +232,7 @@
         "app_id": "restart-app",
         "app_class": "first_party",
         "version": "2.0.0",
-        "installed_at_ms": 1787194370351,
+        "installed_at_ms": 1787194381085,
         "signature_valid": true,
         "trust_root": "local_dev",
         "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/restart-app/signed_manifest.json"
@@ -193,7 +244,7 @@
           "app_id": "restart-app",
           "app_class": "first_party",
           "version": "2.0.0",
-          "installed_at_ms": 1787194370351,
+          "installed_at_ms": 1787194381085,
           "signature_valid": true,
           "trust_root": "local_dev",
           "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/restart-app/signed_manifest.json"
