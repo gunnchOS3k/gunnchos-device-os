@@ -35,6 +35,26 @@ jobs:
           .venv-wave004/bin/python -m pip install --upgrade pip
           .venv-wave004/bin/pip install pytest pyyaml cryptography
           if [ -f requirements.txt ]; then .venv-wave004/bin/pip install -r requirements.txt; fi
+      - name: Dump sandbox suite diagnostics
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave004/bin/python - <<'PY'
+          import json, shutil, tempfile
+          from pathlib import Path
+          from gunnchos_device_os.sandbox_policy import SandboxPolicyEngine
+          from gunnchos_device_os.platform.sandbox_executor import SandboxExecutor
+          root = Path(tempfile.mkdtemp(prefix="sbx-diag-"))
+          ex = SandboxExecutor(root, SandboxPolicyEngine())
+          result = ex.run_enforcement_suite("ci-diag")
+          out = Path("artifacts/engineering_wave004")
+          out.mkdir(parents=True, exist_ok=True)
+          path = out / "SANDBOX_CI_DIAG.json"
+          path.write_text(json.dumps(result, indent=2, default=str) + "\n")
+          print(path.read_text()[:12000])
+          print("bwrap", shutil.which("bwrap"))
+          PY
       - name: Wave004 platform security tests (require sandbox validated)
         env:
           WAVE004_REQUIRE_SANDBOX_VALIDATED: '1'
