@@ -1,7 +1,10 @@
 {
+  "NEVER_BEST_CASE_MISSING_INVALID": true,
+  "NEVER_BEST_CASE_MISSING_INVALID_COMPUTED": true,
   "cases": [
     {
       "case": "NaN_latency",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -18,6 +21,7 @@
     },
     {
       "case": "Infinity_latency",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -34,6 +38,7 @@
     },
     {
       "case": "negative_latency",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -50,6 +55,7 @@
     },
     {
       "case": "packet_loss_gt_1",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -68,6 +74,7 @@
     },
     {
       "case": "signal_out_of_range",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -84,6 +91,7 @@
     },
     {
       "case": "stale_timestamp",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -98,6 +106,7 @@
     },
     {
       "case": "future_timestamp",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -114,29 +123,35 @@
     },
     {
       "case": "missing_metric_latency",
+      "never_best_case": true,
       "ok": true,
       "rejected": [],
       "selected": "good"
     },
     {
       "case": "unknown_cost",
+      "never_best_case": true,
       "ok": true,
       "rejected": [],
       "selected": "good"
     },
     {
       "case": "unknown_energy",
+      "never_best_case": true,
       "ok": true,
       "rejected": [],
       "selected": "good"
     },
     {
       "case": "unknown_security",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
           "candidate_id": "bad",
-          "flags": [],
+          "flags": [
+            "unknown_security"
+          ],
           "reasons": [
             "security_below_required_trust",
             "security_below_minimum_useful"
@@ -147,6 +162,7 @@
     },
     {
       "case": "contradictory_availability",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -164,6 +180,7 @@
     },
     {
       "case": "duplicate_candidate_ids",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -177,6 +194,7 @@
     },
     {
       "case": "spoofed_high_quality_untrusted",
+      "never_best_case": true,
       "ok": true,
       "rejected": [
         {
@@ -189,11 +207,126 @@
         }
       ],
       "selected": "good"
+    },
+    {
+      "case": "invalid_jitter",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "negative_jitter",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "invalid_cost_nan",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "invalid_cost_inf",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "invalid_energy_nan",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "invalid_energy_inf",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "negative_energy",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "invalid_confidence",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "invalid_timestamp",
+      "never_best_case": true,
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "invalid_timestamp"
+          ],
+          "reasons": [
+            "telemetry_timestamp_missing"
+          ]
+        }
+      ],
+      "selected": "good"
     }
   ],
   "never_best_case_missing_invalid": true,
   "ok": true,
-  "passed": 14,
+  "passed": 23,
   "schema": "gunnchos.engineering_wave005.invalid_telemetry.v1",
-  "total": 14
+  "total": 23,
+  "twin_proofs": {
+    "ok": true,
+    "proofs": {
+      "missing_latency": {
+        "meta": {
+          "direction": "lower_better",
+          "floor": 200.0,
+          "ideal": 50.0,
+          "missing_as": "worst",
+          "units": "ms"
+        },
+        "ok": true,
+        "score_known": 1.0,
+        "score_missing": 0.0,
+        "selected": "known-lat"
+      },
+      "unknown_cost": {
+        "meta": {
+          "direction": "lower_cost_better",
+          "missing_as": "neutral_low_not_best",
+          "units": "policy_abstract"
+        },
+        "ok": true,
+        "score_known_unmetered": 1.0,
+        "score_unknown": 0.35,
+        "selected": "known-free"
+      },
+      "unknown_energy": {
+        "ok": true,
+        "score_known_low": 0.925,
+        "score_unknown": 0.35,
+        "selected": "known-low-e"
+      },
+      "unknown_security": {
+        "flags": [
+          "unknown_security"
+        ],
+        "ok": true,
+        "trust": "UNTRUSTED"
+      }
+    }
+  }
 }

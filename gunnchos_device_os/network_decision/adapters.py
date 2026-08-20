@@ -33,18 +33,22 @@ def load_digital_twin_hint() -> dict[str, Any]:
     root = _repos_root()
     # Prefer small machine-readable contracts if present; never claim field RF.
     candidates = [
-        root / "7gc-digital-twin" / "contracts" / "network_path.schema.json",
-        root / "7gc-digital-twin" / "README.md",
+        ("contracts/network_path.schema.json", root / "7gc-digital-twin" / "contracts" / "network_path.schema.json"),
+        ("README.md", root / "7gc-digital-twin" / "README.md"),
     ]
-    found = None
-    for c in candidates:
+    found_rel = None
+    available = False
+    for rel, c in candidates:
         if c.exists():
-            found = str(c)
+            found_rel = rel
+            available = True
             break
     return {
         "repo": "7gc-digital-twin",
+        "repo_relative_path": found_rel,
+        "source_available": available,
         "provenance": TelemetryProvenance.DIGITAL_TWIN.value,
-        "path_found": found,
+        "usage": "contract_discovery_only",
         "used_for": "contract_discovery_only",
         "FIELD_MEASURED_PERFORMANCE": False,
     }

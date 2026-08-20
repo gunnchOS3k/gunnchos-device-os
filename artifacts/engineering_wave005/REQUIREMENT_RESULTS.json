@@ -20,6 +20,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -51,6 +52,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "CRITICAL",
+            "issuer": "gunnchos.system_policy.emergency",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "SYSTEM_POLICY",
+            "trusted": true
+          },
           "service_class": "EMERGENCY",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -212,13 +223,18 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_023",
       "evidence": {
+        "authority_ok": true,
+        "boundary_ok": true,
+        "boundary_selected_a": "sip-path",
+        "boundary_selected_b": "fast-path",
         "scores": [
           0.35,
           1.0
         ],
-        "selected": "safe"
+        "selected": "safe",
+        "self_asserted_effective": "NORMAL"
       },
-      "note": "Application priority soft influence only; no NET-ORCH-032 claim",
+      "note": "Application priority with PriorityAuthority; soft influence; self-asserted CRITICAL blocked",
       "ok": true,
       "requirement_id": "NET-ORCH-023"
     },
@@ -226,6 +242,7 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_024",
       "evidence": {
+        "hard_selected": "wifi",
         "persistence": {
           "TPM_KEYSTORE": false,
           "loaded": "prefer_battery",
@@ -233,10 +250,21 @@
           "software_keystore": true,
           "stored": "prefer_battery"
         },
+        "policy_cases": {
+          "hard_avoid_cellular_rejects_cellular": true,
+          "hard_avoid_metered_rejects_metered": true,
+          "hard_policy_restart_persistence": true,
+          "invalid_preference_fails_safe": true,
+          "profile_isolation": true,
+          "security_remains_mandatory": true,
+          "soft_avoid_cellular_allows_cell_when_wifi_unusable": true,
+          "soft_avoid_cellular_prefers_wifi": true
+        },
+        "policy_ok": true,
         "pref": "avoid_cellular",
         "selected": "wifi"
       },
-      "note": "User preference persisted via encrypted store; soft unless hard prohibition",
+      "note": "User preference SOFT|HARD policy persisted; hard avoid enforced; security remains mandatory",
       "ok": true,
       "requirement_id": "NET-ORCH-024"
     }

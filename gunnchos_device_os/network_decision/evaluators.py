@@ -24,13 +24,22 @@ from gunnchos_device_os.network_decision.models import (
     AnywhereServiceObjective,
     ApplicationPriority,
     CostClass,
+    EnforcementMode,
+    NetworkPreferencePolicy,
+    PriorityAuthority,
+    PrioritySource,
     ServiceClass,
     ServiceFloor,
     TrustLevel,
     UserPreferenceProfile,
     default_objective_for,
 )
-from gunnchos_device_os.network_decision.preferences import UserPreferenceStore
+from gunnchos_device_os.network_decision.preferences import UserPreferenceStore, prove_user_preference_policy
+from gunnchos_device_os.network_decision.priority_authority import (
+    prove_priority_only_boundary,
+    prove_self_asserted_critical_blocked,
+    resolve_priority_authority,
+)
 from gunnchos_device_os.network_decision.scenarios import run_all_scenarios
 
 TARGET_REQUIREMENTS = (
@@ -224,6 +233,9 @@ def evaluate_net_orch_023(_ctx: Any = None) -> dict[str, Any]:
     eng = AnywhereNetworkDecisionEngine(now_fn=lambda: NOW)
     obj_bg = default_objective_for(ServiceClass.BACKGROUND_SYNC)
     obj_bg.application_priority = ApplicationPriority.BACKGROUND
+    obj_bg.priority_authority = PriorityAuthority(
+        source=PrioritySource.SYSTEM_POLICY, trusted=True, asserted_priority=ApplicationPriority.BACKGROUND
+    )
     obj_crit = default_objective_for(ServiceClass.EMERGENCY)
     obj_crit.application_priority = ApplicationPriority.CRITICAL
     obj_crit.constraints.min_trust = TrustLevel.TRUSTED
@@ -234,28 +246,85 @@ def evaluate_net_orch_023(_ctx: Any = None) -> dict[str, Any]:
     ], obj_crit)
     s_c, m = score_application_priority(_wifi(), obj_crit)
     s_b, _ = score_application_priority(_wifi(), obj_bg)
-    ok = d.selected_candidate == "safe" and s_c > s_b and m.get("priority") == "CRITICAL"
-    return _result("NET-ORCH-023", ok, "Application priority soft influence only; no NET-ORCH-032 claim", evidence={"selected": d.selected_candidate, "scores": [s_b, s_c]})
+    authority = prove_self_asserted_critical_blocked()
+    boundary = prove_priority_only_boundary()
+    self_res = resolve_priority_authority(
+        ApplicationPriority.CRITICAL,
+        PriorityAuthority(source=PrioritySource.APP_SELF_ASSERTED, trusted=False, asserted_priority=ApplicationPriority.CRITICAL),
+    )
+    ok = (
+        d.selected_candidate == "safe"
+        and s_c > s_b
+        and m.get("priority") == "CRITICAL"
+        and authority.get("ok") is True
+        and boundary.get("ok") is True
+        and self_res["effective"] != "CRITICAL"
+        and boundary.get("selection_changed") is True
+    )
+    return _result(
+        "NET-ORCH-023",
+        ok,
+        "Application priority with PriorityAuthority; soft influence; self-asserted CRITICAL blocked",
+        evidence={
+            "selected": d.selected_candidate,
+            "scores": [s_b, s_c],
+            "self_asserted_effective": self_res["effective"],
+            "boundary_selected_a": boundary.get("selected_a"),
+            "boundary_selected_b": boundary.get("selected_b"),
+            "authority_ok": authority.get("ok"),
+            "boundary_ok": boundary.get("ok"),
+        },
+    )
 
 
 def evaluate_net_orch_024(_ctx: Any = None) -> dict[str, Any]:
     import tempfile
     from pathlib import Path
     with tempfile.TemporaryDirectory() as tmp:
-        store = UserPreferenceStore(Path(tmp), profile_id="student")
+        store = UserPreferenceStore(Path(tmp) / "soft", profile_id="student")
         proof = store.prove_persistence_across_restart()
         store.set_preference(UserPreferenceProfile.AVOID_CELLULAR)
         eng = AnywhereNetworkDecisionEngine(preference_store=store, now_fn=lambda: NOW)
         obj = default_objective_for(ServiceClass.PRODUCTIVITY)
-        # preference soft — security still wins
         obj.constraints.min_trust = TrustLevel.TRUSTED
         d = eng.decide([
             _wifi(candidate_id="wifi"),
             _wifi(candidate_id="cell", bearer_class="cellular_generic", cost_class=CostClass.METERED, monetary_cost=0.02, energy_cost=200, data_metered=True, data_unlimited=False, data_remaining_fraction=0.7),
         ], obj)
-        s_pref, meta = score_user_preference(_wifi(bearer_class="cellular_generic"), obj)
-        ok = proof.get("ok") is True and d.user_preference == "avoid_cellular" and d.selected_candidate == "wifi"
-    return _result("NET-ORCH-024", ok, "User preference persisted via encrypted store; soft unless hard prohibition", evidence={"persistence": proof, "selected": d.selected_candidate, "pref": d.user_preference})
+        policy_proof = prove_user_preference_policy(Path(tmp) / "policy")
+        hard_store = UserPreferenceStore(Path(tmp) / "hard", profile_id="student-hard")
+        hard_store.set_policy(NetworkPreferencePolicy(
+            preference=UserPreferenceProfile.AVOID_CELLULAR,
+            enforcement_mode=EnforcementMode.HARD,
+            hard_avoid_bearers={"cellular_generic"},
+            profile_id="student-hard",
+        ))
+        eng_h = AnywhereNetworkDecisionEngine(preference_store=hard_store, now_fn=lambda: NOW)
+        d_hard = eng_h.decide([
+            _wifi(candidate_id="wifi", latency_ms=200.0),
+            _wifi(candidate_id="cell", bearer_class="cellular_generic", latency_ms=5.0, cost_class=CostClass.METERED, monetary_cost=0.02, data_metered=True, data_unlimited=False, data_remaining_fraction=0.7),
+        ], obj)
+        ok = (
+            proof.get("ok") is True
+            and d.user_preference == "avoid_cellular"
+            and d.selected_candidate == "wifi"
+            and policy_proof.get("ok") is True
+            and d_hard.selected_candidate == "wifi"
+            and "cell" in [r["candidate_id"] for r in d_hard.rejected_candidates]
+        )
+    return _result(
+        "NET-ORCH-024",
+        ok,
+        "User preference SOFT|HARD policy persisted; hard avoid enforced; security remains mandatory",
+        evidence={
+            "persistence": proof,
+            "selected": d.selected_candidate,
+            "pref": d.user_preference,
+            "hard_selected": d_hard.selected_candidate,
+            "policy_ok": policy_proof.get("ok"),
+            "policy_cases": policy_proof.get("cases"),
+        },
+    )
 
 
 EVALUATORS: dict[str, Callable[..., dict[str, Any]]] = {
@@ -275,11 +344,30 @@ EVALUATORS: dict[str, Callable[..., dict[str, Any]]] = {
 
 
 def run_all_evaluators() -> dict[str, Any]:
+    import os
+    from gunnchos_device_os.network_decision.evaluator_integrity import inspect_evaluators
+
+    active = dict(EVALUATORS)
+    broken_env = os.environ.get("WAVE005_BROKEN_EVALUATOR")
+    if broken_env and broken_env in active:
+        def _injected_broken(_ctx: Any = None, _req: str = broken_env) -> dict[str, Any]:
+            return {
+                "requirement_id": _req,
+                "classification": "IMPLEMENTED_AND_VALIDATED",
+                "ok": True,
+                "note": "broken_evaluator_env_injection",
+                "evaluator": "_injected_broken",
+                "evidence": {},
+            }
+        active[broken_env] = _injected_broken
+
     classification = {}
     for req_id in TARGET_REQUIREMENTS:
-        classification[req_id] = EVALUATORS[req_id]()
-    # Broken evaluator gate: ensure mapping is complete and no literal True classifiers
-    unconditional = 0
+        classification[req_id] = active[req_id]()
+
+    integrity = inspect_evaluators(active)
+    unconditional = int(integrity["UNCONDITIONAL_TRUE_CLASSIFIERS"])
+
     summary = {
         "validated": sum(1 for v in classification.values() if v["classification"] == "IMPLEMENTED_AND_VALIDATED"),
         "implemented_validation_open": sum(1 for v in classification.values() if v["classification"] == "IMPLEMENTED_VALIDATION_OPEN"),
@@ -293,20 +381,17 @@ def run_all_evaluators() -> dict[str, Any]:
         "target_requirements": list(TARGET_REQUIREMENTS),
         "evaluators": {k: v["evaluator"] for k, v in classification.items()},
         "unconditional_true_classifiers": unconditional,
+        "UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED": True,
         "validated_count": summary["validated"],
         "broken_evaluator_fails_gate": True,
+        "broken_evaluator_used_as_classifier": bool(broken_env),
+        "evaluator_integrity_ok": integrity.get("ok") is True,
     }
-    # Deliberate broken-evaluator self-check: a forced-True without evidence must be rejected by gate logic
-    def _broken():
-        return True  # noqa: intentional — must not be used as classifier
-    if _broken() is True:
-        # prove we do not use it
-        matrix["broken_evaluator_probe_present"] = True
-        matrix["broken_evaluator_used_as_classifier"] = False
     return {
         "classification": classification,
         "summary": summary,
         "matrix": matrix,
+        "integrity": integrity,
         "scenarios": run_all_scenarios(),
         "invariants": run_invariants(),
         "invalid_telemetry": run_invalid_telemetry(),

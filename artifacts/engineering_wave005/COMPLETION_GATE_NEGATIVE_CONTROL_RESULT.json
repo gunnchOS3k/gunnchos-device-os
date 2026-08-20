@@ -1,0 +1,56 @@
+{
+  "BROKEN_EVALUATOR_GATE_RESULT": "REJECTED",
+  "cases": {
+    "broken_evaluator": {
+      "gate_complete": false,
+      "injected": "NET-ORCH-001",
+      "reasons": [
+        "empty_evidence:NET-ORCH-001",
+        "unconditional_true_classifiers:1",
+        "evaluator_integrity_failed"
+      ],
+      "rejected": true
+    },
+    "empty_evidence": {
+      "gate_complete": false,
+      "injected": "NET-ORCH-016",
+      "reasons": [
+        "empty_evidence:NET-ORCH-016"
+      ],
+      "rejected": true
+    },
+    "missing_evaluator": {
+      "gate_complete": false,
+      "injected": "NET-ORCH-014",
+      "reasons": [
+        "evaluator_map_count_not_12",
+        "result_count_not_12",
+        "missing_ids:['NET-ORCH-014']",
+        "missing_row:NET-ORCH-014",
+        "unconditional_true_classifiers:1",
+        "evaluator_integrity_failed"
+      ],
+      "rejected": true
+    },
+    "ok_false": {
+      "gate_complete": false,
+      "injected": "NET-ORCH-015",
+      "reasons": [
+        "ok_false:NET-ORCH-015",
+        "not_validated:NET-ORCH-015:IMPLEMENTATION_OPEN"
+      ],
+      "rejected": true
+    },
+    "unexpected_evaluator_id": {
+      "gate_complete": false,
+      "reasons": [
+        "result_count_not_12",
+        "unexpected_ids:['NET-ORCH-999']"
+      ],
+      "rejected": true
+    }
+  },
+  "env_injection": null,
+  "ok": true,
+  "schema": "gunnchos.engineering_wave005.completion_gate_negative_control.v1"
+}
