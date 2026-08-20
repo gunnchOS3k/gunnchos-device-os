@@ -1,14 +1,16 @@
 {
   "schema": "gunnchos.engineering_wave004.requirement_evaluator_matrix.v1",
   "target_requirements": 12,
-  "validated_count": 12,
+  "validated_count": 11,
+  "blocked_environment_count": 1,
   "unconditional_true_classifiers": 0,
+  "COMPLETE_GATE_REQUIRES_12_OF_12": true,
   "evaluators": {
     "OS-PLATFORM-008": {
       "evaluator": "evaluate_os_platform_008",
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "ok": true,
-      "note": "Persistent package lifecycle with DEV signing; not production signing"
+      "note": "Secure persistent package lifecycle with DEV signing; not production signing"
     },
     "OS-PLATFORM-009": {
       "evaluator": "evaluate_os_platform_009",
@@ -32,7 +34,7 @@
       "evaluator": "evaluate_os_platform_012",
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "ok": true,
-      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge"
+      "note": "Persistent OfflineSyncEngine A\u2192B\u2192C restart apply-once; corruption safe-fails"
     },
     "OS-PLATFORM-013": {
       "evaluator": "evaluate_os_platform_013",
@@ -54,9 +56,9 @@
     },
     "OS-PLATFORM-020": {
       "evaluator": "evaluate_os_platform_020",
-      "classification": "IMPLEMENTED_AND_VALIDATED",
-      "ok": true,
-      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False"
+      "classification": "BLOCKED_ENVIRONMENT",
+      "ok": false,
+      "note": "LOCAL_SANDBOX_VALIDATION=BLOCKED_ENVIRONMENT; backend=sandbox_exec_unavailable; PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false"
     },
     "OS-PLATFORM-021": {
       "evaluator": "evaluate_os_platform_021",
@@ -82,39 +84,178 @@
       "requirement_id": "OS-PLATFORM-008",
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "ok": true,
-      "note": "Persistent package lifecycle with DEV signing; not production signing",
+      "note": "Secure persistent package lifecycle with DEV signing; not production signing",
       "evaluator": "evaluate_os_platform_008",
       "evidence": {
-        "inspect": {
+        "lifecycle": {
           "ok": true,
-          "schema_version": 1,
-          "installed_count": 3,
-          "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/registry.json",
+          "package_id": "eval-app-008",
+          "steps": {
+            "inspect": {
+              "ok": true,
+              "schema_version": 1,
+              "installed_count": 5,
+              "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/registry.json",
+              "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization.",
+              "production_signing": false
+            },
+            "verify_v1": {
+              "ok": true,
+              "package_id": "eval-app-008",
+              "version": "1.0.0"
+            },
+            "install_v1": {
+              "ok": true,
+              "op": "install",
+              "package_id": "eval-app-008",
+              "version": "1.0.0",
+              "entrypoint": "main.py",
+              "publisher": "gunnchos-dev",
+              "signer": "1a4d56b366e5039d",
+              "requested_permissions": [
+                "files_read"
+              ],
+              "manifest_digest": "7afcabce2069229aae30fd512bfbf35bd5a7617bf6f45ba42069ecae20ae024b",
+              "installed_at_ms": 1787243668454,
+              "signature_valid": true,
+              "trust_root": "local_dev",
+              "production_signing": false,
+              "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008/signed_manifest.json",
+              "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008"
+            },
+            "restart_after_install": {
+              "ok": true,
+              "package_id": "eval-app-008",
+              "record": {
+                "package_id": "eval-app-008",
+                "version": "1.0.0",
+                "entrypoint": "main.py",
+                "publisher": "gunnchos-dev",
+                "signer": "1a4d56b366e5039d",
+                "requested_permissions": [
+                  "files_read"
+                ],
+                "manifest_digest": "7afcabce2069229aae30fd512bfbf35bd5a7617bf6f45ba42069ecae20ae024b",
+                "installed_at_ms": 1787243668454,
+                "signature_valid": true,
+                "trust_root": "local_dev",
+                "production_signing": false,
+                "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008/signed_manifest.json",
+                "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008"
+              },
+              "signature_valid": true,
+              "verify": {
+                "ok": true,
+                "package_id": "eval-app-008",
+                "version": "1.0.0"
+              }
+            },
+            "upgrade_v2": {
+              "ok": true,
+              "op": "upgrade",
+              "package_id": "eval-app-008",
+              "version": "2.0.0",
+              "entrypoint": "main.py",
+              "publisher": "gunnchos-dev",
+              "signer": "1a4d56b366e5039d",
+              "requested_permissions": [
+                "files_read"
+              ],
+              "manifest_digest": "85cd70f9b618fe7a497980655b3dc022142505ed21dd820314e0173cfb33eb68",
+              "installed_at_ms": 1787243668458,
+              "signature_valid": true,
+              "trust_root": "local_dev",
+              "production_signing": false,
+              "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008/signed_manifest.json",
+              "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008",
+              "previous_version": "1.0.0"
+            },
+            "restart_after_upgrade": {
+              "ok": true,
+              "package_id": "eval-app-008",
+              "record": {
+                "package_id": "eval-app-008",
+                "version": "2.0.0",
+                "entrypoint": "main.py",
+                "publisher": "gunnchos-dev",
+                "signer": "1a4d56b366e5039d",
+                "requested_permissions": [
+                  "files_read"
+                ],
+                "manifest_digest": "85cd70f9b618fe7a497980655b3dc022142505ed21dd820314e0173cfb33eb68",
+                "installed_at_ms": 1787243668458,
+                "signature_valid": true,
+                "trust_root": "local_dev",
+                "production_signing": false,
+                "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008/signed_manifest.json",
+                "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008"
+              },
+              "signature_valid": true,
+              "verify": {
+                "ok": true,
+                "package_id": "eval-app-008",
+                "version": "2.0.0"
+              }
+            },
+            "downgrade_attempt": {
+              "ok": false,
+              "error": "downgrade_rejected",
+              "package_id": "eval-app-008",
+              "installed_version": "2.0.0",
+              "attempted_version": "1.5.0"
+            },
+            "uninstall": {
+              "ok": true,
+              "package_id": "eval-app-008",
+              "removed": {
+                "package_id": "eval-app-008",
+                "version": "2.0.0",
+                "entrypoint": "main.py",
+                "publisher": "gunnchos-dev",
+                "signer": "1a4d56b366e5039d",
+                "requested_permissions": [
+                  "files_read"
+                ],
+                "manifest_digest": "85cd70f9b618fe7a497980655b3dc022142505ed21dd820314e0173cfb33eb68",
+                "installed_at_ms": 1787243668458,
+                "signature_valid": true,
+                "trust_root": "local_dev",
+                "production_signing": false,
+                "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008/signed_manifest.json",
+                "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/eval-app-008"
+              },
+              "registry_absent": true,
+              "content_absent": true,
+              "removed_content": true,
+              "cleanup_hook": "cleanup:eval-app-008:1787243668459"
+            },
+            "restart_after_uninstall": {
+              "ok": false,
+              "error": "not_installed",
+              "package_id": "eval-app-008"
+            },
+            "content_absent": true
+          },
           "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization."
         },
-        "install": {
-          "ok": true,
-          "app_id": "eval-app-008",
-          "app_class": "first_party",
-          "version": "1.0.0",
-          "installed_at_ms": 1787194413313,
-          "signature_valid": true,
-          "trust_root": "local_dev",
-          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/eval-app-008/signed_manifest.json"
-        },
-        "reload_get": {
-          "ok": true,
-          "app_id": "eval-app-008",
-          "record": {
-            "app_id": "eval-app-008",
-            "app_class": "first_party",
-            "version": "1.0.0",
-            "installed_at_ms": 1787194413313,
-            "signature_valid": true,
-            "trust_root": "local_dev",
-            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/eval-app-008/signed_manifest.json"
-          },
-          "signature_valid": true
+        "negatives_ok": true,
+        "blocked": {
+          "package_id_traversal": true,
+          "package_id_slash": true,
+          "package_id_backslash": true,
+          "entrypoint_traversal": true,
+          "entrypoint_absolute": true,
+          "payload_traversal": true,
+          "duplicate_payload": true,
+          "missing_metadata": true,
+          "tampered_manifest": true,
+          "tampered_content_hash": true,
+          "tampered_signature": true,
+          "untrusted_signer": true,
+          "downgrade_attempt": true,
+          "invalid_version": true,
+          "same_version_without_policy": true,
+          "same_version_explicit": true
         }
       }
     },
@@ -131,7 +272,7 @@
           "decision": "deny",
           "role": "guest",
           "reason": "outside_role_allowlist",
-          "granted_at_ms": 1787194413313,
+          "granted_at_ms": 1787243668465,
           "expires_at_ms": null,
           "mock": false
         },
@@ -141,7 +282,7 @@
           "decision": "allow",
           "role": "student",
           "reason": "least_privilege_allow",
-          "granted_at_ms": 1787194413313,
+          "granted_at_ms": 1787243668465,
           "expires_at_ms": null,
           "mock": false
         }
@@ -250,13 +391,28 @@
       "requirement_id": "OS-PLATFORM-012",
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "ok": true,
-      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge",
+      "note": "Persistent OfflineSyncEngine A\u2192B\u2192C restart apply-once; corruption safe-fails",
       "evaluator": "evaluate_os_platform_012",
       "evidence": {
-        "pending_len": 4,
-        "reloaded_value": {
-          "v": 1
-        }
+        "abc": {
+          "schema": "gunnchos.engineering_wave004.offline_sync_a_b_c_restart.v1",
+          "process_a_pending": 1,
+          "process_b_loaded_pending": 1,
+          "process_b_remote_apply_count": 1,
+          "process_b_pending_after_flush": 0,
+          "process_c_pending": 0,
+          "process_c_replay_remote_apply_count": 1,
+          "duplicate_suppressed": true,
+          "replica_restored": true,
+          "state_hashes": {
+            "after_a": "90762a561231196fb452d72aad642e493ed573be5fabd1f59eb45fd0d87603e2",
+            "after_b": "34b1bd68f077c27d89cbbb733ca97f27283be0987ee61322f1e5b720d63110f3",
+            "after_c": "34b1bd68f077c27d89cbbb733ca97f27283be0987ee61322f1e5b720d63110f3"
+          },
+          "result": "PASS",
+          "ok": true
+        },
+        "corruption_ok": true
       }
     },
     "OS-PLATFORM-013": {
@@ -312,25 +468,36 @@
     },
     "OS-PLATFORM-020": {
       "requirement_id": "OS-PLATFORM-020",
-      "classification": "IMPLEMENTED_AND_VALIDATED",
-      "ok": true,
-      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False",
+      "classification": "BLOCKED_ENVIRONMENT",
+      "ok": false,
+      "note": "LOCAL_SANDBOX_VALIDATION=BLOCKED_ENVIRONMENT; backend=sandbox_exec_unavailable; PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false",
       "evaluator": "evaluate_os_platform_020",
       "evidence": {
-        "ok": true,
+        "ok": false,
         "app_id": "eval-untrusted-020",
-        "backend": "subprocess_broker",
-        "kernel_sandbox": false,
-        "execution_enforced": true,
-        "exit_code": 0,
-        "fixture_result": {
-          "host_read": true,
-          "escape_write": false,
-          "ok": true
-        },
+        "SANDBOX_BACKEND": "sandbox_exec_unavailable",
+        "KERNEL_SANDBOX": false,
+        "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
+        "HOST_PRIVATE_READ_BLOCKED": true,
+        "OUTSIDE_WRITE_BLOCKED": true,
+        "NETWORK_DENIED": true,
+        "NETWORK_CONTROL_REACHABLE": true,
+        "CHILD_SPAWN_DENIED": true,
+        "CROSS_APP_READ_BLOCKED": true,
+        "PRIVILEGED_CAPABILITY_DENIED": true,
+        "SANDBOX_EXECUTION_VALIDATED": false,
+        "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT",
+        "classification_hint": "BLOCKED_ENVIRONMENT",
+        "execution_enforced": false,
+        "fixture_result": {},
         "parent_escape_detected": false,
-        "stderr_tail": "",
-        "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
+        "stderr_tail": "sandbox-exec: sandbox_apply: Operation not permitted\n",
+        "stdout_tail": "",
+        "exit_code": 71,
+        "fixture_ran": false,
+        "claim_boundary": "KERNEL_SANDBOX=true only when bubblewrap namespaces prove mandatory probes. sandbox-exec counts only when the same probes pass. PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false always.",
+        "backend": "sandbox_exec_unavailable",
+        "kernel_sandbox": false
       }
     },
     "OS-PLATFORM-021": {
@@ -370,15 +537,15 @@
         "authorized": {
           "ok": true,
           "request": {
-            "request_id": "1d4d95f5bab04025bd51ba6deeaa3467",
+            "request_id": "9a1ce725f40c4795a7e5bea62abbaede",
             "user_id": "stu-eval",
             "from_profile": "student",
             "target_profile": "educator",
             "requested_by": "stu-eval",
             "status": "authorized",
-            "requested_at_ms": 1787194413348,
+            "requested_at_ms": 1787243668479,
             "authorized_by": "admin-1",
-            "authorized_at_ms": 1787194413348
+            "authorized_at_ms": 1787243668480
           },
           "assignment": {
             "ok": true,

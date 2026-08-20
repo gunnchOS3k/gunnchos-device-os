@@ -82,7 +82,8 @@ class Wave004PlatformCoordinator:
         self._registry = ModelRegistry(work / "local_ai")
         self.local_ai = LocalAiRuntime(self._registry)
         self.local_ai.ensure_default_models(self.repo_root)
-        CLAIM_FLAGS["KERNEL_SANDBOX"] = self.sandbox_executor.kernel_sandbox
+        # KERNEL_SANDBOX claim only after genuine probe proof (see OS-PLATFORM-020 evaluator).
+        CLAIM_FLAGS["KERNEL_SANDBOX"] = False
 
     # -- connectivity helpers ------------------------------------------------
     def set_bearer_available(self, bearer: str, available: bool) -> None:
@@ -130,7 +131,7 @@ class Wave004PlatformCoordinator:
         return verify_signed_manifest(self.repo_root, signed)
 
     def install_signed_package(self, app_id: str, *, app_class: str = "first_party") -> dict[str, Any]:
-        install = self.package_lifecycle.install(app_id, app_class=app_class)
+        install = self.package_lifecycle.install(app_id, version="1.0.0")
         profile = self.sandbox.create_profile(app_id, app_class)
         return {
             "ok": install.get("ok") and profile.app_id == app_id,

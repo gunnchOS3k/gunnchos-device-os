@@ -1,0 +1,114 @@
+name: Wave004 Final Integrity Security
+
+on:
+  push:
+    branches: [main, 'eng/wave004-*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wave004-final-integrity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wave004-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Provision bubblewrap + system seccomp
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap python3-seccomp python3-venv
+          command -v bwrap
+          bwrap --version
+          /usr/bin/python3 -m venv --system-site-packages .venv-wave004
+          .venv-wave004/bin/python -c 'import seccomp; print("seccomp ok", seccomp.__file__)'
+          .venv-wave004/bin/python -m pip install --upgrade pip
+          .venv-wave004/bin/pip install pytest pyyaml cryptography
+          if [ -f requirements.txt ]; then .venv-wave004/bin/pip install -r requirements.txt; fi
+      - name: Dump sandbox suite diagnostics
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave004/bin/python - <<'PY'
+          import json, shutil, tempfile
+          from pathlib import Path
+          from gunnchos_device_os.sandbox_policy import SandboxPolicyEngine
+          from gunnchos_device_os.platform.sandbox_executor import SandboxExecutor
+          root = Path(tempfile.mkdtemp(prefix="sbx-diag-"))
+          ex = SandboxExecutor(root, SandboxPolicyEngine())
+          result = ex.run_enforcement_suite("ci-diag")
+          out = Path("artifacts/engineering_wave004")
+          out.mkdir(parents=True, exist_ok=True)
+          path = out / "SANDBOX_CI_DIAG.json"
+          path.write_text(json.dumps(result, indent=2, default=str) + "\n")
+          print(path.read_text()[:12000])
+          print("bwrap", shutil.which("bwrap"))
+          PY
+      - name: Wave004 platform security tests (require sandbox validated)
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave004/bin/python -m pytest -q tests/test_wave004_platform_security.py
+      - name: Generate Wave004 final integrity evidence
+        env:
+          PYTHONPATH: '.:src'
+          WAVE004_REQUIRE_SANDBOX_VALIDATED: '1'
+        run: |
+          set -euo pipefail
+          .venv-wave004/bin/python scripts/engineering_wave004/run_wave004_evidence.py
+      - name: Enforce final integrity gates
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave004/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("artifacts/engineering_wave004")
+          final = json.loads((root / "FINAL_INTEGRITY_RESULT.json").read_text())
+          sandbox = json.loads((root / "SANDBOX_ENFORCEMENT_RESULT.json").read_text())
+          matrix = json.loads((root / "REQUIREMENT_EVALUATOR_MATRIX.json").read_text())
+          pkg = json.loads((root / "PACKAGE_FULL_LIFECYCLE_RESULT.json").read_text())
+          abc = json.loads((root / "OFFLINE_SYNC_A_B_C_RESTART_RESULT.json").read_text())
+          results = json.loads((root / "REQUIREMENT_RESULTS.json").read_text())
+
+          # Never allow plain-subprocess false-positive sandbox validation.
+          assert sandbox.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False
+          assert results["requirements"]["OS-PLATFORM-020"]["classification"] != "IMPLEMENTED_AND_VALIDATED" or (
+              sandbox.get("SANDBOX_EXECUTION_VALIDATED") is True
+              and sandbox.get("SANDBOX_BACKEND") not in {"subprocess_broker", "sandbox_exec_unavailable", "none"}
+          )
+
+          assert results["requirements"]["OS-PLATFORM-008"]["ok"] is True
+          assert results["requirements"]["OS-PLATFORM-012"]["ok"] is True
+          assert pkg.get("ok") is True, pkg
+          assert abc.get("ok") is True, abc
+          assert matrix.get("unconditional_true_classifiers") == 0
+          assert matrix.get("validated_count") >= 11
+          closure = final.get("WAVE004_FINAL_INTEGRITY_CLOSURE")
+          assert closure in {"COMPLETE", "PARTIAL"}, closure
+          if sandbox.get("SANDBOX_EXECUTION_VALIDATED") is True:
+              assert closure == "COMPLETE"
+              assert matrix.get("validated_count") == 12
+              print("wave004 final integrity CI gates PASS (COMPLETE)")
+          else:
+              assert closure == "PARTIAL"
+              print("wave004 final integrity CI gates PASS (honest PARTIAL; sandbox env blocked)")
+          PY
+      - name: Upload Wave004 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wave004-final-integrity-evidence
+          path: artifacts/engineering_wave004/

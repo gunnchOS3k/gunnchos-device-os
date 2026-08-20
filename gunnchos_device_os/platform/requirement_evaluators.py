@@ -38,26 +38,14 @@ def _result(req_id: str, ok: bool, note: str, *, evidence: dict[str, Any] | None
 
 
 def evaluate_os_platform_008(coord: Wave004PlatformCoordinator) -> dict[str, Any]:
-    inspect = coord.package_lifecycle.inspect()
-    install = coord.package_lifecycle.install("eval-app-008", version="1.0.0")
-    listed = coord.package_lifecycle.list_installed()
-    got = coord.package_lifecycle.get("eval-app-008")
-    reloaded = coord.package_lifecycle.from_storage(
-        coord.package_lifecycle.root, coord.repo_root
-    )
-    reload_get = reloaded.get("eval-app-008")
-    ok = (
-        inspect.get("ok")
-        and install.get("ok")
-        and "eval-app-008" in listed.get("packages", {})
-        and got.get("ok")
-        and reload_get.get("ok")
-    )
+    lifecycle = coord.package_lifecycle.run_full_lifecycle_proof("eval-app-008")
+    negatives = coord.package_lifecycle.run_negative_proofs()
+    ok = lifecycle.get("ok") is True and negatives.get("ok") is True
     return _result(
         "OS-PLATFORM-008",
         ok,
-        "Persistent package lifecycle with DEV signing; not production signing",
-        evidence={"inspect": inspect, "install": install, "reload_get": reload_get},
+        "Secure persistent package lifecycle with DEV signing; not production signing",
+        evidence={"lifecycle": lifecycle, "negatives_ok": negatives.get("ok"), "blocked": negatives.get("blocked")},
     )
 
 
@@ -102,15 +90,18 @@ def evaluate_os_platform_011(coord: Wave004PlatformCoordinator) -> dict[str, Any
 
 
 def evaluate_os_platform_012(coord: Wave004PlatformCoordinator) -> dict[str, Any]:
-    coord.offline_sync.put("sync-eval", {"v": 1}, idempotency_key="eval-key-1")
-    pending = coord.offline_sync.pending()
-    reloaded = coord.offline_sync.from_storage(coord.offline_sync.storage_path)
-    ok = len(pending) >= 1 and reloaded.get("sync-eval") == {"v": 1}
+    from gunnchos_device_os.platform.persistent_sync import prove_corruption_failures, run_a_b_c_restart_proof
+
+    storage = coord.offline_sync.storage_path
+    assert storage is not None
+    abc = run_a_b_c_restart_proof(storage / "abc_proof")
+    corruption = prove_corruption_failures(storage / "corruption_proof")
+    ok = abc.get("ok") is True and corruption.get("ok") is True
     return _result(
         "OS-PLATFORM-012",
         ok,
-        "Persistent OfflineSyncEngine vector-clock/LWW merge",
-        evidence={"pending_len": len(pending), "reloaded_value": reloaded.get("sync-eval")},
+        "Persistent OfflineSyncEngine A→B→C restart apply-once; corruption safe-fails",
+        evidence={"abc": abc, "corruption_ok": corruption.get("ok")},
     )
 
 
@@ -149,13 +140,39 @@ def evaluate_os_platform_018(coord: Wave004PlatformCoordinator) -> dict[str, Any
 
 
 def evaluate_os_platform_020(coord: Wave004PlatformCoordinator) -> dict[str, Any]:
-    exec_result = coord.sandbox_executor.execute_untrusted("eval-untrusted-020")
-    ok = exec_result.get("ok") is True
-    note = (
-        "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX="
-        f"{exec_result.get('kernel_sandbox', False)}"
+    from gunnchos_device_os.platform.coordinator import CLAIM_FLAGS
+
+    suite = coord.sandbox_executor.run_enforcement_suite("eval-untrusted-020")
+    # Plain subprocess never validates. BLOCKED_ENVIRONMENT when no genuine backend.
+    if suite.get("LOCAL_SANDBOX_VALIDATION") == "BLOCKED_ENVIRONMENT":
+        return {
+            "requirement_id": "OS-PLATFORM-020",
+            "classification": "BLOCKED_ENVIRONMENT",
+            "ok": False,
+            "note": (
+                "LOCAL_SANDBOX_VALIDATION=BLOCKED_ENVIRONMENT; "
+                f"backend={suite.get('SANDBOX_BACKEND')}; "
+                "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false"
+            ),
+            "evaluator": "evaluate_os_platform_020",
+            "evidence": suite,
+        }
+    ok = suite.get("SANDBOX_EXECUTION_VALIDATED") is True and suite.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False
+    # Regression guard: host read success must fail
+    fixture = suite.get("fixture_result") or {}
+    if fixture.get("host_private_read") and suite.get("OUTSIDE_WRITE_BLOCKED"):
+        ok = False
+    if suite.get("KERNEL_SANDBOX"):
+        CLAIM_FLAGS["KERNEL_SANDBOX"] = True
+    return _result(
+        "OS-PLATFORM-020",
+        ok,
+        (
+            f"Enforced sandbox backend={suite.get('SANDBOX_BACKEND')}; "
+            f"KERNEL_SANDBOX={suite.get('KERNEL_SANDBOX')}"
+        ),
+        evidence=suite,
     )
-    return _result("OS-PLATFORM-020", ok, note, evidence=exec_result)
 
 
 def evaluate_os_platform_021(coord: Wave004PlatformCoordinator) -> dict[str, Any]:
@@ -234,11 +251,14 @@ def run_all_evaluators(coord: Wave004PlatformCoordinator) -> dict[str, dict[str,
 def build_evaluator_matrix(coord: Wave004PlatformCoordinator) -> dict[str, Any]:
     results = run_all_evaluators(coord)
     validated = sum(1 for r in results.values() if r["classification"] == "IMPLEMENTED_AND_VALIDATED")
+    blocked_env = sum(1 for r in results.values() if r["classification"] == "BLOCKED_ENVIRONMENT")
     return {
         "schema": "gunnchos.engineering_wave004.requirement_evaluator_matrix.v1",
         "target_requirements": 12,
         "validated_count": validated,
+        "blocked_environment_count": blocked_env,
         "unconditional_true_classifiers": 0,
+        "COMPLETE_GATE_REQUIRES_12_OF_12": True,
         "evaluators": {
             req_id: {
                 "evaluator": r["evaluator"],

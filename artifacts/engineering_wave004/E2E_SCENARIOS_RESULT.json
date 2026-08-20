@@ -1,9 +1,10 @@
 {
   "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
-  "total": 11,
-  "passed": 11,
-  "failed": 0,
-  "ok": true,
+  "total": 14,
+  "passed": 12,
+  "failed": 2,
+  "ok": false,
+  "sandbox_environment_blocked": true,
   "scenarios": [
     {
       "scenario": "A",
@@ -40,13 +41,22 @@
         },
         "lifecycle": {
           "ok": true,
-          "app_id": "demo-app",
-          "app_class": "first_party",
+          "op": "install",
+          "package_id": "demo-app",
           "version": "1.0.0",
-          "installed_at_ms": 1787194413219,
+          "entrypoint": "main.py",
+          "publisher": "gunnchos-dev",
+          "signer": "1a4d56b366e5039d",
+          "requested_permissions": [
+            "files_read"
+          ],
+          "manifest_digest": "390fb48dc3ab2b0640fd7006dd9b082f941aee1d48a632257f6eb0058a1e632d",
+          "installed_at_ms": 1787243668328,
           "signature_valid": true,
           "trust_root": "local_dev",
-          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/demo-app/signed_manifest.json"
+          "production_signing": false,
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/demo-app/signed_manifest.json",
+          "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/demo-app"
         }
       },
       "sandbox_isolation": "app",
@@ -56,7 +66,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787194413219,
+        "granted_at_ms": 1787243668329,
         "expires_at_ms": null,
         "mock": false
       }
@@ -76,7 +86,7 @@
         "flushed": 1,
         "ok": true,
         "result": {
-          "replica_id": "replica-d2847f96",
+          "replica_id": "replica-cdb0676c",
           "policy": "vector_clock",
           "results": [
             {
@@ -102,7 +112,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787194413220,
+        "granted_at_ms": 1787243668330,
         "expires_at_ms": null,
         "mock": false
       },
@@ -161,7 +171,7 @@
       "scenario": "E",
       "name": "diagnostics_redaction",
       "ok": true,
-      "event_id": "evt-4f9acbdd5319",
+      "event_id": "evt-6bed59177406",
       "export_count": 1
     },
     {
@@ -178,27 +188,49 @@
       "ok": true,
       "install": {
         "ok": true,
-        "app_id": "restart-app",
-        "app_class": "first_party",
+        "op": "install",
+        "package_id": "restart-app",
         "version": "2.0.0",
-        "installed_at_ms": 1787194413225,
+        "entrypoint": "main.py",
+        "publisher": "gunnchos-dev",
+        "signer": "1a4d56b366e5039d",
+        "requested_permissions": [
+          "files_read"
+        ],
+        "manifest_digest": "b4fc19b64f3c7ef2068085a99902e220d6657289087893b0f05ffd8d59e7173d",
+        "installed_at_ms": 1787243668333,
         "signature_valid": true,
         "trust_root": "local_dev",
-        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
+        "production_signing": false,
+        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/restart-app/signed_manifest.json",
+        "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/restart-app"
       },
       "reload": {
         "ok": true,
-        "app_id": "restart-app",
+        "package_id": "restart-app",
         "record": {
-          "app_id": "restart-app",
-          "app_class": "first_party",
+          "package_id": "restart-app",
           "version": "2.0.0",
-          "installed_at_ms": 1787194413225,
+          "entrypoint": "main.py",
+          "publisher": "gunnchos-dev",
+          "signer": "1a4d56b366e5039d",
+          "requested_permissions": [
+            "files_read"
+          ],
+          "manifest_digest": "b4fc19b64f3c7ef2068085a99902e220d6657289087893b0f05ffd8d59e7173d",
+          "installed_at_ms": 1787243668333,
           "signature_valid": true,
           "trust_root": "local_dev",
-          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
+          "production_signing": false,
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/restart-app/signed_manifest.json",
+          "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/restart-app"
         },
-        "signature_valid": true
+        "signature_valid": true,
+        "verify": {
+          "ok": true,
+          "package_id": "restart-app",
+          "version": "2.0.0"
+        }
       }
     },
     {
@@ -212,23 +244,35 @@
     {
       "scenario": "I",
       "name": "sandbox_execution",
-      "ok": true,
+      "ok": false,
       "execution": {
-        "ok": true,
+        "ok": false,
         "app_id": "untrusted-fixture",
-        "backend": "subprocess_broker",
-        "kernel_sandbox": false,
-        "execution_enforced": true,
-        "exit_code": 0,
-        "fixture_result": {
-          "host_read": true,
-          "escape_write": false,
-          "ok": true
-        },
+        "SANDBOX_BACKEND": "sandbox_exec_unavailable",
+        "KERNEL_SANDBOX": false,
+        "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
+        "HOST_PRIVATE_READ_BLOCKED": true,
+        "OUTSIDE_WRITE_BLOCKED": true,
+        "NETWORK_DENIED": true,
+        "NETWORK_CONTROL_REACHABLE": true,
+        "CHILD_SPAWN_DENIED": true,
+        "CROSS_APP_READ_BLOCKED": true,
+        "PRIVILEGED_CAPABILITY_DENIED": true,
+        "SANDBOX_EXECUTION_VALIDATED": false,
+        "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT",
+        "classification_hint": "BLOCKED_ENVIRONMENT",
+        "execution_enforced": false,
+        "fixture_result": {},
         "parent_escape_detected": false,
-        "stderr_tail": "",
-        "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
-      }
+        "stderr_tail": "sandbox-exec: sandbox_apply: Operation not permitted\n",
+        "stdout_tail": "",
+        "exit_code": 71,
+        "fixture_ran": false,
+        "claim_boundary": "KERNEL_SANDBOX=true only when bubblewrap namespaces prove mandatory probes. sandbox-exec counts only when the same probes pass. PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false always.",
+        "backend": "sandbox_exec_unavailable",
+        "kernel_sandbox": false
+      },
+      "note": "BLOCKED_ENVIRONMENT"
     },
     {
       "scenario": "J",
@@ -258,6 +302,217 @@
       "name": "role_auth_persist",
       "ok": true,
       "profile": "educator"
+    },
+    {
+      "scenario": "L",
+      "name": "package_full_lifecycle",
+      "ok": true,
+      "proof": {
+        "ok": true,
+        "package_id": "e2e-lifecycle-l",
+        "steps": {
+          "inspect": {
+            "ok": true,
+            "schema_version": 1,
+            "installed_count": 2,
+            "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/registry.json",
+            "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization.",
+            "production_signing": false
+          },
+          "verify_v1": {
+            "ok": true,
+            "package_id": "e2e-lifecycle-l",
+            "version": "1.0.0"
+          },
+          "install_v1": {
+            "ok": true,
+            "op": "install",
+            "package_id": "e2e-lifecycle-l",
+            "version": "1.0.0",
+            "entrypoint": "main.py",
+            "publisher": "gunnchos-dev",
+            "signer": "1a4d56b366e5039d",
+            "requested_permissions": [
+              "files_read"
+            ],
+            "manifest_digest": "893e4d18eccbf84cdfde25351c7937a90a5db20dde9bbdd3973d462a7139f30b",
+            "installed_at_ms": 1787243668360,
+            "signature_valid": true,
+            "trust_root": "local_dev",
+            "production_signing": false,
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l/signed_manifest.json",
+            "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l"
+          },
+          "restart_after_install": {
+            "ok": true,
+            "package_id": "e2e-lifecycle-l",
+            "record": {
+              "package_id": "e2e-lifecycle-l",
+              "version": "1.0.0",
+              "entrypoint": "main.py",
+              "publisher": "gunnchos-dev",
+              "signer": "1a4d56b366e5039d",
+              "requested_permissions": [
+                "files_read"
+              ],
+              "manifest_digest": "893e4d18eccbf84cdfde25351c7937a90a5db20dde9bbdd3973d462a7139f30b",
+              "installed_at_ms": 1787243668360,
+              "signature_valid": true,
+              "trust_root": "local_dev",
+              "production_signing": false,
+              "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l/signed_manifest.json",
+              "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l"
+            },
+            "signature_valid": true,
+            "verify": {
+              "ok": true,
+              "package_id": "e2e-lifecycle-l",
+              "version": "1.0.0"
+            }
+          },
+          "upgrade_v2": {
+            "ok": true,
+            "op": "upgrade",
+            "package_id": "e2e-lifecycle-l",
+            "version": "2.0.0",
+            "entrypoint": "main.py",
+            "publisher": "gunnchos-dev",
+            "signer": "1a4d56b366e5039d",
+            "requested_permissions": [
+              "files_read"
+            ],
+            "manifest_digest": "f67f4d98d9b7582fc4908cfcd273ea5a0c7e98f0f080b22be352a8d12db82b1a",
+            "installed_at_ms": 1787243668362,
+            "signature_valid": true,
+            "trust_root": "local_dev",
+            "production_signing": false,
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l/signed_manifest.json",
+            "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l",
+            "previous_version": "1.0.0"
+          },
+          "restart_after_upgrade": {
+            "ok": true,
+            "package_id": "e2e-lifecycle-l",
+            "record": {
+              "package_id": "e2e-lifecycle-l",
+              "version": "2.0.0",
+              "entrypoint": "main.py",
+              "publisher": "gunnchos-dev",
+              "signer": "1a4d56b366e5039d",
+              "requested_permissions": [
+                "files_read"
+              ],
+              "manifest_digest": "f67f4d98d9b7582fc4908cfcd273ea5a0c7e98f0f080b22be352a8d12db82b1a",
+              "installed_at_ms": 1787243668362,
+              "signature_valid": true,
+              "trust_root": "local_dev",
+              "production_signing": false,
+              "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l/signed_manifest.json",
+              "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l"
+            },
+            "signature_valid": true,
+            "verify": {
+              "ok": true,
+              "package_id": "e2e-lifecycle-l",
+              "version": "2.0.0"
+            }
+          },
+          "downgrade_attempt": {
+            "ok": false,
+            "error": "downgrade_rejected",
+            "package_id": "e2e-lifecycle-l",
+            "installed_version": "2.0.0",
+            "attempted_version": "1.5.0"
+          },
+          "uninstall": {
+            "ok": true,
+            "package_id": "e2e-lifecycle-l",
+            "removed": {
+              "package_id": "e2e-lifecycle-l",
+              "version": "2.0.0",
+              "entrypoint": "main.py",
+              "publisher": "gunnchos-dev",
+              "signer": "1a4d56b366e5039d",
+              "requested_permissions": [
+                "files_read"
+              ],
+              "manifest_digest": "f67f4d98d9b7582fc4908cfcd273ea5a0c7e98f0f080b22be352a8d12db82b1a",
+              "installed_at_ms": 1787243668362,
+              "signature_valid": true,
+              "trust_root": "local_dev",
+              "production_signing": false,
+              "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l/signed_manifest.json",
+              "install_dir": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-k32cd3et/runtime_work/packages/installed/e2e-lifecycle-l"
+            },
+            "registry_absent": true,
+            "content_absent": true,
+            "removed_content": true,
+            "cleanup_hook": "cleanup:e2e-lifecycle-l:1787243668365"
+          },
+          "restart_after_uninstall": {
+            "ok": false,
+            "error": "not_installed",
+            "package_id": "e2e-lifecycle-l"
+          },
+          "content_absent": true
+        },
+        "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization."
+      }
+    },
+    {
+      "scenario": "M",
+      "name": "sync_a_b_c_restart",
+      "ok": true,
+      "proof": {
+        "schema": "gunnchos.engineering_wave004.offline_sync_a_b_c_restart.v1",
+        "process_a_pending": 1,
+        "process_b_loaded_pending": 1,
+        "process_b_remote_apply_count": 1,
+        "process_b_pending_after_flush": 0,
+        "process_c_pending": 0,
+        "process_c_replay_remote_apply_count": 1,
+        "duplicate_suppressed": true,
+        "replica_restored": true,
+        "state_hashes": {
+          "after_a": "c9d87cb33c2cc274d31b4d2507bfe27470f2e43624cf78187309dff8fc0400a2",
+          "after_b": "0e30863f22ded8024d6b0ef23e1968616159d938425c29929beed92e0ef7b6c2",
+          "after_c": "0e30863f22ded8024d6b0ef23e1968616159d938425c29929beed92e0ef7b6c2"
+        },
+        "result": "PASS",
+        "ok": true
+      }
+    },
+    {
+      "scenario": "N",
+      "name": "sandbox_enforcement_suite",
+      "ok": false,
+      "suite": {
+        "ok": false,
+        "app_id": "e2e-sandbox-n",
+        "SANDBOX_BACKEND": "sandbox_exec_unavailable",
+        "KERNEL_SANDBOX": false,
+        "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
+        "HOST_PRIVATE_READ_BLOCKED": true,
+        "OUTSIDE_WRITE_BLOCKED": true,
+        "NETWORK_DENIED": true,
+        "NETWORK_CONTROL_REACHABLE": true,
+        "CHILD_SPAWN_DENIED": true,
+        "CROSS_APP_READ_BLOCKED": true,
+        "PRIVILEGED_CAPABILITY_DENIED": true,
+        "SANDBOX_EXECUTION_VALIDATED": false,
+        "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT",
+        "classification_hint": "BLOCKED_ENVIRONMENT",
+        "execution_enforced": false,
+        "fixture_result": {},
+        "parent_escape_detected": false,
+        "stderr_tail": "sandbox-exec: sandbox_apply: Operation not permitted\n",
+        "stdout_tail": "",
+        "exit_code": 71,
+        "fixture_ran": false,
+        "claim_boundary": "KERNEL_SANDBOX=true only when bubblewrap namespaces prove mandatory probes. sandbox-exec counts only when the same probes pass. PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX=false always.",
+        "backend": "sandbox_exec_unavailable",
+        "kernel_sandbox": false
+      }
     }
   ]
 }

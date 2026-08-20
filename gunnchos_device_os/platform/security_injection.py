@@ -28,6 +28,15 @@ INJECTION_CASES = (
     "accessibility_profile_corruption",
     "role_self_escalation_attempt",
     "role_unauthorized_admin_grant",
+    "package_downgrade_attempt",
+    "package_entrypoint_traversal",
+    "package_payload_hash_tamper",
+    "sync_replay_after_restart",
+    "sync_corrupt_persisted_state",
+    "sandbox_host_private_read",
+    "sandbox_network_escape",
+    "sandbox_child_spawn",
+    "sandbox_cross_app_read",
 )
 
 
@@ -51,6 +60,15 @@ def run_security_injections(coord: "Wave004PlatformCoordinator") -> dict[str, An
     cases.append(_accessibility_profile_corruption(coord))
     cases.append(_role_self_escalation_attempt(coord))
     cases.append(_role_unauthorized_admin_grant(coord))
+    cases.append(_package_downgrade_attempt(coord))
+    cases.append(_package_entrypoint_traversal(coord))
+    cases.append(_package_payload_hash_tamper(coord))
+    cases.append(_sync_replay_after_restart(coord))
+    cases.append(_sync_corrupt_persisted_state(coord))
+    cases.append(_sandbox_host_private_read(coord))
+    cases.append(_sandbox_network_escape(coord))
+    cases.append(_sandbox_child_spawn(coord))
+    cases.append(_sandbox_cross_app_read(coord))
     blocked = sum(1 for c in cases if c.get("blocked") is True)
     return {
         "schema": "gunnchos.engineering_wave004.security_injection.v1",
@@ -63,11 +81,13 @@ def run_security_injections(coord: "Wave004PlatformCoordinator") -> dict[str, An
 
 
 def _tampered_package_signature(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
-    signed = coord.build_signed_package()
-    tampered = copy.deepcopy(signed["signed_apps"])
-    tampered["digest_sha256"] = "0" * 64
-    verify = coord.verify_signed_package(tampered)
-    return {"case": "tampered_package_signature", "blocked": verify is False, "verify": verify}
+    from gunnchos_device_os.platform.package_lifecycle import build_signed_package
+
+    signed = build_signed_package(coord.repo_root, package_id="inj-tamper", version="1.0.0")
+    tampered = copy.deepcopy(signed)
+    tampered["manifest_digest"] = "0" * 64
+    verify = coord.package_lifecycle.verify(tampered)
+    return {"case": "tampered_package_signature", "blocked": verify.get("ok") is False, "verify": verify}
 
 
 def _revoked_signing_key(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
@@ -187,11 +207,11 @@ def _connectivity_bearer_spoof(coord: "Wave004PlatformCoordinator") -> dict[str,
 
 
 def _package_tamper_after_install(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
-    install = coord.package_lifecycle.install("tamper-target")
+    install = coord.package_lifecycle.install("tamper-target", version="1.0.0")
     manifest_path = coord.package_lifecycle.installs_dir / "tamper-target" / "signed_manifest.json"
     if manifest_path.exists():
         data = json.loads(manifest_path.read_text(encoding="utf-8"))
-        data["digest_sha256"] = "deadbeef"
+        data["manifest_digest"] = "deadbeef"
         manifest_path.write_text(json.dumps(data), encoding="utf-8")
     verify = coord.package_lifecycle.get("tamper-target")
     return {
@@ -208,12 +228,23 @@ def _sync_queue_replay_idempotency(coord: "Wave004PlatformCoordinator") -> dict[
     return {"case": "sync_queue_replay_idempotency", "blocked": blocked, "versions": (first.version, second.version)}
 
 
+def _sandbox_fail_closed(suite: dict[str, Any], field: str) -> bool:
+    """Genuine probe blocked, or fail-closed when no backend (never treat subprocess as pass)."""
+    if suite.get("LOCAL_SANDBOX_VALIDATION") == "BLOCKED_ENVIRONMENT":
+        return suite.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False and suite.get("ok") is False
+    return suite.get(field) is True and suite.get("SANDBOX_EXECUTION_VALIDATED") is True
+
+
 def _sandbox_host_escape_script(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
-    result = coord.sandbox_executor.execute_untrusted("escape-tester", app_class="untrusted")
+    result = coord.sandbox_executor.run_enforcement_suite("escape-tester")
     return {
         "case": "sandbox_host_escape_script",
-        "blocked": result.get("ok") is True,
-        "execution": {"ok": result.get("ok"), "backend": result.get("backend")},
+        "blocked": _sandbox_fail_closed(result, "OUTSIDE_WRITE_BLOCKED"),
+        "execution": {
+            "ok": result.get("ok"),
+            "backend": result.get("SANDBOX_BACKEND"),
+            "LOCAL_SANDBOX_VALIDATION": result.get("LOCAL_SANDBOX_VALIDATION"),
+        },
     }
 
 
@@ -246,4 +277,99 @@ def _role_unauthorized_admin_grant(coord: "Wave004PlatformCoordinator") -> dict[
         "case": "role_unauthorized_admin_grant",
         "blocked": denied.get("ok") is False,
         "error": denied.get("error"),
+    }
+
+
+def _package_downgrade_attempt(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    coord.package_lifecycle.install("down-app", version="2.0.0")
+    attempt = coord.package_lifecycle.install("down-app", version="1.0.0")
+    return {
+        "case": "package_downgrade_attempt",
+        "blocked": attempt.get("ok") is False and attempt.get("error") == "downgrade_rejected",
+        "attempt": attempt,
+    }
+
+
+def _package_entrypoint_traversal(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    attempt = coord.package_lifecycle.install("ep-trav", version="1.0.0", entrypoint="../outside")
+    return {
+        "case": "package_entrypoint_traversal",
+        "blocked": attempt.get("ok") is False,
+        "attempt": attempt,
+    }
+
+
+def _package_payload_hash_tamper(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    from gunnchos_device_os.platform.package_lifecycle import build_signed_package
+
+    signed = build_signed_package(coord.repo_root, package_id="hash-tamper", version="1.0.0")
+    signed = copy.deepcopy(signed)
+    signed["content_hashes"] = dict(signed["content_hashes"])
+    signed["content_hashes"]["main.py"] = "0" * 64
+    verify = coord.package_lifecycle.verify(signed)
+    return {
+        "case": "package_payload_hash_tamper",
+        "blocked": verify.get("ok") is False,
+        "verify": verify,
+    }
+
+
+def _sync_replay_after_restart(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    from gunnchos_device_os.platform.persistent_sync import DeterministicPeerFixture, PersistentOfflineSyncEngine
+
+    path = coord.offline_sync.storage_path
+    assert path is not None
+    peer = DeterministicPeerFixture()
+    eng = PersistentOfflineSyncEngine(storage_path=path / "inj_replay", replica_id="inj-replay")
+    eng.put("k", {"v": 1}, idempotency_key="OP-REPLAY")
+    eng.flush_to_peer(peer)
+    reloaded = PersistentOfflineSyncEngine.from_storage(path / "inj_replay")
+    replay = reloaded.replay_pending_to_peer(peer)
+    return {
+        "case": "sync_replay_after_restart",
+        "blocked": replay.get("duplicate_suppressed") is True and peer.remote_apply_count == 1,
+        "replay": replay,
+    }
+
+
+def _sync_corrupt_persisted_state(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    from gunnchos_device_os.platform.persistent_sync import PersistentOfflineSyncEngine, prove_corruption_failures
+
+    path = coord.offline_sync.storage_path
+    assert path is not None
+    proof = prove_corruption_failures(path / "inj_corrupt")
+    return {"case": "sync_corrupt_persisted_state", "blocked": proof.get("ok") is True, "proof": proof}
+
+
+def _sandbox_host_private_read(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    suite = coord.sandbox_executor.run_enforcement_suite("inj-host-read")
+    return {
+        "case": "sandbox_host_private_read",
+        "blocked": _sandbox_fail_closed(suite, "HOST_PRIVATE_READ_BLOCKED"),
+        "suite_backend": suite.get("SANDBOX_BACKEND"),
+    }
+
+
+def _sandbox_network_escape(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    suite = coord.sandbox_executor.run_enforcement_suite("inj-net")
+    return {
+        "case": "sandbox_network_escape",
+        "blocked": _sandbox_fail_closed(suite, "NETWORK_DENIED"),
+        "NETWORK_CONTROL_REACHABLE": suite.get("NETWORK_CONTROL_REACHABLE"),
+    }
+
+
+def _sandbox_child_spawn(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    suite = coord.sandbox_executor.run_enforcement_suite("inj-child")
+    return {
+        "case": "sandbox_child_spawn",
+        "blocked": _sandbox_fail_closed(suite, "CHILD_SPAWN_DENIED"),
+    }
+
+
+def _sandbox_cross_app_read(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    suite = coord.sandbox_executor.run_enforcement_suite("inj-cross")
+    return {
+        "case": "sandbox_cross_app_read",
+        "blocked": _sandbox_fail_closed(suite, "CROSS_APP_READ_BLOCKED"),
     }
