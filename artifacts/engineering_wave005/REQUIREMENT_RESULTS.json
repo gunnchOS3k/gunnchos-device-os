@@ -1,0 +1,252 @@
+{
+  "requirements": {
+    "NET-ORCH-001": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_001",
+      "evidence": {
+        "floors": [
+          "FULL",
+          "IDEAL",
+          "MINIMUM_USEFUL",
+          "OFFLINE_CAPABLE",
+          "REDUCED",
+          "UNAVAILABLE"
+        ],
+        "objective": {
+          "application_priority": "CRITICAL",
+          "claim_boundaries": {
+            "CARRIER_ACCEPTED": false,
+            "FIELD_MEASURED_PERFORMANCE": false,
+            "HUMAN_E6": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_NETWORK_OPTIMALITY": false,
+            "REAL_NTN_MODEM_VALIDATED": false,
+            "STANDARDIZED_6G": false
+          },
+          "constraints": {
+            "allow_emergency_data_exception": true,
+            "hard_prohibit_bearers": [],
+            "hard_prohibit_metered": false,
+            "min_trust": "LIMITED",
+            "require_unmetered_for_background": false
+          },
+          "continuity": {
+            "allow_offline_fallback": true,
+            "battery_saving": false,
+            "emergency_may_relax_energy": true,
+            "emergency_may_use_metered_hard_limit": true,
+            "max_telemetry_age_s": 30.0,
+            "reject_future_timestamps": true
+          },
+          "ideal_jitter_ms": 10.0,
+          "ideal_latency_ms": 50.0,
+          "ideal_packet_loss": 0.01,
+          "minimum_useful": {
+            "max_jitter_ms": 80.0,
+            "max_latency_ms": 800.0,
+            "max_packet_loss": 0.15,
+            "min_availability": true,
+            "min_security": "LIMITED",
+            "min_signal": 0.15
+          },
+          "notes": "engineering_configuration_thresholds",
+          "service_class": "EMERGENCY",
+          "target_floor": "FULL",
+          "user_preference": "balanced",
+          "weights": {
+            "application_priority": 0.6,
+            "availability": 1.0,
+            "cost": 0.2,
+            "data": 0.9,
+            "energy": 0.2,
+            "jitter": 1.0,
+            "latency": 1.5,
+            "packet_loss": 1.3,
+            "security": 1.0,
+            "signal": 1.0,
+            "uncertainty": 0.5,
+            "user_preference": 0.8
+          }
+        },
+        "service_classes": [
+          "BACKGROUND_SYNC",
+          "COMMUNICATION",
+          "CREATIVE",
+          "DEVELOPMENT",
+          "EMERGENCY",
+          "ENTERTAINMENT",
+          "LEARNING",
+          "PRODUCTIVITY"
+        ]
+      },
+      "note": "AnywhereServiceObjective typed runtime with service classes and floors",
+      "ok": true,
+      "requirement_id": "NET-ORCH-001"
+    },
+    "NET-ORCH-014": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_014",
+      "evidence": {
+        "down_floor": "OFFLINE_CAPABLE",
+        "stale_selected": "fresh",
+        "up": "wifi"
+      },
+      "note": "Availability + freshness/failure/recovery handling",
+      "ok": true,
+      "requirement_id": "NET-ORCH-014"
+    },
+    "NET-ORCH-015": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_015",
+      "evidence": {
+        "hi": 0.9,
+        "lo": 0.2,
+        "meta_hi": {
+          "direction": "higher_better",
+          "source": "signal_quality",
+          "units": "normalized_0_1"
+        },
+        "missing": 0.0
+      },
+      "note": "Signal quality normalization with provenance; unknown!=perfect",
+      "ok": true,
+      "requirement_id": "NET-ORCH-015"
+    },
+    "NET-ORCH-016": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_016",
+      "evidence": {
+        "s20": 1.0,
+        "s200": 0.2,
+        "selected": "ok"
+      },
+      "note": "Latency ms with service-aware thresholds; negatives rejected",
+      "ok": true,
+      "requirement_id": "NET-ORCH-016"
+    },
+    "NET-ORCH-017": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_017",
+      "evidence": {
+        "mono": true,
+        "s_bg": 0.868421052631579,
+        "s_comm": 0.0
+      },
+      "note": "Jitter separate from latency; interactive more sensitive",
+      "ok": true,
+      "requirement_id": "NET-ORCH-017"
+    },
+    "NET-ORCH-018": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_018",
+      "evidence": {
+        "s0": 1.0,
+        "s1": 0.0,
+        "selected": "clean"
+      },
+      "note": "Packet loss ratio 0..1; higher loss never improves score",
+      "ok": true,
+      "requirement_id": "NET-ORCH-018"
+    },
+    "NET-ORCH-019": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_019",
+      "evidence": {
+        "s_roam": 0.1,
+        "s_un": 1.0,
+        "selected": "paid-safe"
+      },
+      "note": "Cost policy abstractions; cannot bypass hard security",
+      "ok": true,
+      "requirement_id": "NET-ORCH-019"
+    },
+    "NET-ORCH-020": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_020",
+      "evidence": {
+        "emergency_notes": [
+          "energy_preference_relaxed_for_emergency"
+        ],
+        "meta": {
+          "battery_saving": true,
+          "direction": "lower_better",
+          "modeled_not_measured": true,
+          "units": "modeled_mw_equiv"
+        },
+        "selected": "sip"
+      },
+      "note": "Modeled energy with battery-saving influence; not measured battery draw",
+      "ok": true,
+      "requirement_id": "NET-ORCH-020"
+    },
+    "NET-ORCH-021": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_021",
+      "evidence": {
+        "selected": "safe",
+        "trust_scores": [
+          0.0,
+          0.6666666666666666
+        ]
+      },
+      "note": "Security hard policy; fast/free hostile rejected",
+      "ok": true,
+      "requirement_id": "NET-ORCH-021"
+    },
+    "NET-ORCH-022": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_022",
+      "evidence": {
+        "data_scores": [
+          0.1,
+          0.9
+        ],
+        "selected": "unmetered"
+      },
+      "note": "Data limits with hard exhaustion reject; background prefers unmetered",
+      "ok": true,
+      "requirement_id": "NET-ORCH-022"
+    },
+    "NET-ORCH-023": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_023",
+      "evidence": {
+        "scores": [
+          0.35,
+          1.0
+        ],
+        "selected": "safe"
+      },
+      "note": "Application priority soft influence only; no NET-ORCH-032 claim",
+      "ok": true,
+      "requirement_id": "NET-ORCH-023"
+    },
+    "NET-ORCH-024": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "evaluator": "evaluate_net_orch_024",
+      "evidence": {
+        "persistence": {
+          "TPM_KEYSTORE": false,
+          "loaded": "prefer_battery",
+          "ok": true,
+          "software_keystore": true,
+          "stored": "prefer_battery"
+        },
+        "pref": "avoid_cellular",
+        "selected": "wifi"
+      },
+      "note": "User preference persisted via encrypted store; soft unless hard prohibition",
+      "ok": true,
+      "requirement_id": "NET-ORCH-024"
+    }
+  },
+  "summary": {
+    "blocked_environment": 0,
+    "blocked_external": 0,
+    "implementation_open": 0,
+    "implemented_validation_open": 0,
+    "total": 12,
+    "validated": 12
+  }
+}

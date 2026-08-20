@@ -1,0 +1,14 @@
+@startuml wave005_state
+title Wave005 — healthy / degraded / offline
+[*] --> EVALUATING
+EVALUATING --> HEALTHY : selected online + utility high
+EVALUATING --> DEGRADED : selected online + reduced floor
+EVALUATING --> OFFLINE : offline fallback / unavailable
+HEALTHY --> EVALUATING : telemetry update
+DEGRADED --> EVALUATING : telemetry update
+OFFLINE --> EVALUATING : candidate restored
+note right of OFFLINE
+  DIGITAL_SYNTHETIC_EVIDENCE
+  no live carrier handover claim
+end note
+@enduml

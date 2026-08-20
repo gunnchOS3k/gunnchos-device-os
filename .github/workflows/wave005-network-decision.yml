@@ -1,0 +1,72 @@
+name: Wave005 Network Decision Engine
+
+on:
+  push:
+    branches: [main, 'eng/wave005-*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wave005-network-decision-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wave005-decision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pytest pyyaml cryptography
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Wave005 tests
+        env:
+          PYTHONPATH: '.:src'
+        run: pytest -q tests/test_wave005_network_decision.py
+      - name: Generate Wave005 evidence
+        env:
+          PYTHONPATH: '.:src'
+        run: python scripts/engineering_wave005/run_wave005_evidence.py
+      - name: Enforce Wave005 gates
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("artifacts/engineering_wave005")
+          result = json.loads((root / "WAVE005_RESULT.json").read_text())
+          hard = json.loads((root / "HARD_CONSTRAINT_RESULT.json").read_text())
+          inv = json.loads((root / "PROPERTY_INVARIANTS_RESULT.json").read_text())
+          invalid = json.loads((root / "INVALID_TELEMETRY_RESULT.json").read_text())
+          scenarios = json.loads((root / "SERVICE_CONTINUITY_SCENARIOS_RESULT.json").read_text())
+          claims = json.loads((root / "CLAIM_BOUNDARIES.json").read_text())
+          matrix = json.loads((root / "REQUIREMENT_EVALUATOR_MATRIX.json").read_text())
+          assert result["wave005_ok"] is True
+          assert result["UNCONDITIONAL_TRUE_CLASSIFIERS"] == 0
+          assert matrix["unconditional_true_classifiers"] == 0
+          assert matrix["broken_evaluator_used_as_classifier"] is False
+          assert hard["ok"] is True and hard["insecure_fast_free_rejected"] is True
+          assert inv["ok"] is True
+          assert invalid["ok"] is True
+          assert scenarios["ok"] is True
+          for k in ("STANDARDIZED_6G","CARRIER_ACCEPTED","REAL_NTN_MODEM_VALIDATED","PHYSICAL_VALIDATION","FIELD_MEASURED_PERFORMANCE"):
+              assert claims[k] is False, k
+          assert result["OS_PLATFORM_020_UNTOUCHED"] is True
+          assert result["BASELINE_COUNTS_UPDATED"] is False
+          print("wave005 CI gates PASS")
+          PY
+      - name: Upload Wave005 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wave005-network-decision-evidence
+          path: artifacts/engineering_wave005/

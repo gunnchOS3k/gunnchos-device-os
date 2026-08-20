@@ -1,0 +1,199 @@
+{
+  "cases": [
+    {
+      "case": "NaN_latency",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "invalid_latency"
+          ],
+          "reasons": [
+            "telemetry_invalid"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "Infinity_latency",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "invalid_latency"
+          ],
+          "reasons": [
+            "telemetry_invalid"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "negative_latency",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "negative_latency"
+          ],
+          "reasons": [
+            "telemetry_invalid"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "packet_loss_gt_1",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "contradictory_availability_total_loss",
+            "packet_loss_out_of_range"
+          ],
+          "reasons": [
+            "unavailable",
+            "telemetry_invalid"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "signal_out_of_range",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "signal_out_of_range"
+          ],
+          "reasons": [
+            "telemetry_invalid"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "stale_timestamp",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [],
+          "reasons": [
+            "telemetry_stale_beyond_policy"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "future_timestamp",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "future_timestamp"
+          ],
+          "reasons": [
+            "future_timestamp_rejected"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "missing_metric_latency",
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "unknown_cost",
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "unknown_energy",
+      "ok": true,
+      "rejected": [],
+      "selected": "good"
+    },
+    {
+      "case": "unknown_security",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [],
+          "reasons": [
+            "security_below_required_trust",
+            "security_below_minimum_useful"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "contradictory_availability",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "bad",
+          "flags": [
+            "contradictory_availability_total_loss"
+          ],
+          "reasons": [
+            "unavailable",
+            "telemetry_invalid"
+          ]
+        }
+      ],
+      "selected": "good"
+    },
+    {
+      "case": "duplicate_candidate_ids",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "dup",
+          "reasons": [
+            "duplicate_candidate_id"
+          ]
+        }
+      ],
+      "selected": "dup"
+    },
+    {
+      "case": "spoofed_high_quality_untrusted",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "spoof",
+          "flags": [],
+          "reasons": [
+            "security_below_required_trust",
+            "security_below_minimum_useful"
+          ]
+        }
+      ],
+      "selected": "good"
+    }
+  ],
+  "never_best_case_missing_invalid": true,
+  "ok": true,
+  "passed": 14,
+  "schema": "gunnchos.engineering_wave005.invalid_telemetry.v1",
+  "total": 14
+}

@@ -1,0 +1,182 @@
+{
+  "contract_keys": [
+    "admissible_candidates",
+    "application_priority",
+    "claim_boundaries",
+    "final_scores",
+    "hard_constraint_reasons",
+    "normalized_metric_scores",
+    "notes",
+    "orchestrator_state",
+    "penalties",
+    "rejected_candidates",
+    "selected_candidate",
+    "service_floor",
+    "service_objective",
+    "telemetry_age",
+    "telemetry_sources",
+    "tie_break_reason",
+    "user_preference",
+    "weights"
+  ],
+  "ok": true,
+  "sample": {
+    "admissible_candidates": [
+      "wifi"
+    ],
+    "application_priority": "NORMAL",
+    "claim_boundaries": {
+      "CARRIER_ACCEPTED": false,
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "HUMAN_E6": false,
+      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+      "PHYSICAL_VALIDATION": false,
+      "PRODUCTION_NETWORK_OPTIMALITY": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false
+    },
+    "final_scores": {
+      "hostile-free": -1e+300,
+      "wifi": 0.851452160493827
+    },
+    "hard_constraint_reasons": {
+      "hostile-free": [
+        "security_below_required_trust",
+        "security_below_minimum_useful"
+      ],
+      "wifi": []
+    },
+    "normalized_metric_scores": {
+      "hostile-free": {
+        "application_priority": 0.7,
+        "availability": 1.0,
+        "cost": 1.0,
+        "data": 1.0,
+        "energy": 0.975,
+        "jitter": 1.0,
+        "latency": 1.0,
+        "packet_loss": 1.0,
+        "security": 0.0,
+        "signal": 1.0,
+        "uncertainty": 0.99,
+        "user_preference": 0.6
+      },
+      "wifi": {
+        "application_priority": 0.7,
+        "availability": 1.0,
+        "cost": 1.0,
+        "data": 1.0,
+        "energy": 0.84,
+        "jitter": 1.0,
+        "latency": 1.0,
+        "packet_loss": 1.0,
+        "security": 0.6666666666666666,
+        "signal": 0.85,
+        "uncertainty": 0.95,
+        "user_preference": 0.6
+      }
+    },
+    "notes": [
+      "rejected_insecure:hostile-free"
+    ],
+    "orchestrator_state": "connected",
+    "penalties": {
+      "hostile-free": 0.010000000000000009,
+      "wifi": 0.050000000000000044
+    },
+    "rejected_candidates": [
+      {
+        "candidate_id": "hostile-free",
+        "flags": [],
+        "reasons": [
+          "security_below_required_trust",
+          "security_below_minimum_useful"
+        ]
+      }
+    ],
+    "selected_candidate": "wifi",
+    "service_floor": "FULL",
+    "service_objective": {
+      "application_priority": "NORMAL",
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "HUMAN_E6": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false
+      },
+      "constraints": {
+        "allow_emergency_data_exception": true,
+        "hard_prohibit_bearers": [],
+        "hard_prohibit_metered": false,
+        "min_trust": "LIMITED",
+        "require_unmetered_for_background": false
+      },
+      "continuity": {
+        "allow_offline_fallback": true,
+        "battery_saving": false,
+        "emergency_may_relax_energy": true,
+        "emergency_may_use_metered_hard_limit": true,
+        "max_telemetry_age_s": 30.0,
+        "reject_future_timestamps": true
+      },
+      "ideal_jitter_ms": 10.0,
+      "ideal_latency_ms": 50.0,
+      "ideal_packet_loss": 0.01,
+      "minimum_useful": {
+        "max_jitter_ms": 80.0,
+        "max_latency_ms": 500.0,
+        "max_packet_loss": 0.15,
+        "min_availability": true,
+        "min_security": "LIMITED",
+        "min_signal": 0.15
+      },
+      "notes": "engineering_configuration_thresholds",
+      "service_class": "PRODUCTIVITY",
+      "target_floor": "FULL",
+      "user_preference": "balanced",
+      "weights": {
+        "application_priority": 0.6,
+        "availability": 1.0,
+        "cost": 0.8,
+        "data": 0.9,
+        "energy": 0.7,
+        "jitter": 1.0,
+        "latency": 1.2,
+        "packet_loss": 1.3,
+        "security": 1.0,
+        "signal": 1.0,
+        "uncertainty": 0.5,
+        "user_preference": 0.8
+      }
+    },
+    "telemetry_age": {
+      "hostile-free": 1.0,
+      "wifi": 1.0
+    },
+    "telemetry_sources": {
+      "hostile-free": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "wifi": "DIGITAL_SYNTHETIC_EVIDENCE"
+    },
+    "tie_break_reason": null,
+    "user_preference": "balanced",
+    "weights": {
+      "application_priority": 0.6,
+      "availability": 1.0,
+      "cost": 0.8,
+      "data": 0.9,
+      "energy": 0.7,
+      "jitter": 1.0,
+      "latency": 1.2,
+      "packet_loss": 1.3,
+      "security": 1.0,
+      "signal": 1.0,
+      "uncertainty": 0.5,
+      "user_preference": 0.8
+    }
+  },
+  "schema": "gunnchos.engineering_wave005.explainability.v1"
+}

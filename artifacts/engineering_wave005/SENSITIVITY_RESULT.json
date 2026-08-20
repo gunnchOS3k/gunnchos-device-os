@@ -1,0 +1,43 @@
+{
+  "base_selected": "wifi",
+  "boundary_changes": [
+    "security_minimum_managed"
+  ],
+  "label": "DIGITAL_SYNTHETIC_EVIDENCE",
+  "ok": true,
+  "schema": "gunnchos.engineering_wave005.sensitivity.v1",
+  "stable_decisions": 4,
+  "universal_optimality_claimed": false,
+  "variants": [
+    {
+      "changed_from_base": false,
+      "score_margin": 0.09402636757182214,
+      "selected": "wifi",
+      "variant": "latency_weight"
+    },
+    {
+      "changed_from_base": false,
+      "score_margin": 0.10335071806500373,
+      "selected": "wifi",
+      "variant": "energy_weight"
+    },
+    {
+      "changed_from_base": false,
+      "score_margin": 0.10240952380952362,
+      "selected": "wifi",
+      "variant": "cost_weight"
+    },
+    {
+      "changed_from_base": true,
+      "score_margin": 1e+300,
+      "selected": "offline-fallback",
+      "variant": "security_minimum_managed"
+    },
+    {
+      "changed_from_base": false,
+      "score_margin": 0.14317051820728266,
+      "selected": "wifi",
+      "variant": "data_preference_unmetered_weight"
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "evaluator": {
+    "classification": "IMPLEMENTED_AND_VALIDATED",
+    "evaluator": "evaluate_net_orch_001",
+    "evidence": {
+      "floors": [
+        "FULL",
+        "IDEAL",
+        "MINIMUM_USEFUL",
+        "OFFLINE_CAPABLE",
+        "REDUCED",
+        "UNAVAILABLE"
+      ],
+      "objective": {
+        "application_priority": "CRITICAL",
+        "claim_boundaries": {
+          "CARRIER_ACCEPTED": false,
+          "FIELD_MEASURED_PERFORMANCE": false,
+          "HUMAN_E6": false,
+          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+          "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_NETWORK_OPTIMALITY": false,
+          "REAL_NTN_MODEM_VALIDATED": false,
+          "STANDARDIZED_6G": false
+        },
+        "constraints": {
+          "allow_emergency_data_exception": true,
+          "hard_prohibit_bearers": [],
+          "hard_prohibit_metered": false,
+          "min_trust": "LIMITED",
+          "require_unmetered_for_background": false
+        },
+        "continuity": {
+          "allow_offline_fallback": true,
+          "battery_saving": false,
+          "emergency_may_relax_energy": true,
+          "emergency_may_use_metered_hard_limit": true,
+          "max_telemetry_age_s": 30.0,
+          "reject_future_timestamps": true
+        },
+        "ideal_jitter_ms": 10.0,
+        "ideal_latency_ms": 50.0,
+        "ideal_packet_loss": 0.01,
+        "minimum_useful": {
+          "max_jitter_ms": 80.0,
+          "max_latency_ms": 800.0,
+          "max_packet_loss": 0.15,
+          "min_availability": true,
+          "min_security": "LIMITED",
+          "min_signal": 0.15
+        },
+        "notes": "engineering_configuration_thresholds",
+        "service_class": "EMERGENCY",
+        "target_floor": "FULL",
+        "user_preference": "balanced",
+        "weights": {
+          "application_priority": 0.6,
+          "availability": 1.0,
+          "cost": 0.2,
+          "data": 0.9,
+          "energy": 0.2,
+          "jitter": 1.0,
+          "latency": 1.5,
+          "packet_loss": 1.3,
+          "security": 1.0,
+          "signal": 1.0,
+          "uncertainty": 0.5,
+          "user_preference": 0.8
+        }
+      },
+      "service_classes": [
+        "BACKGROUND_SYNC",
+        "COMMUNICATION",
+        "CREATIVE",
+        "DEVELOPMENT",
+        "EMERGENCY",
+        "ENTERTAINMENT",
+        "LEARNING",
+        "PRODUCTIVITY"
+      ]
+    },
+    "note": "AnywhereServiceObjective typed runtime with service classes and floors",
+    "ok": true,
+    "requirement_id": "NET-ORCH-001"
+  },
+  "objective_sample": {
+    "application_priority": "HIGH",
+    "claim_boundaries": {
+      "CARRIER_ACCEPTED": false,
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "HUMAN_E6": false,
+      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+      "PHYSICAL_VALIDATION": false,
+      "PRODUCTION_NETWORK_OPTIMALITY": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false
+    },
+    "constraints": {
+      "allow_emergency_data_exception": true,
+      "hard_prohibit_bearers": [],
+      "hard_prohibit_metered": false,
+      "min_trust": "LIMITED",
+      "require_unmetered_for_background": false
+    },
+    "continuity": {
+      "allow_offline_fallback": true,
+      "battery_saving": false,
+      "emergency_may_relax_energy": true,
+      "emergency_may_use_metered_hard_limit": true,
+      "max_telemetry_age_s": 30.0,
+      "reject_future_timestamps": true
+    },
+    "ideal_jitter_ms": 10.0,
+    "ideal_latency_ms": 50.0,
+    "ideal_packet_loss": 0.01,
+    "minimum_useful": {
+      "max_jitter_ms": 40.0,
+      "max_latency_ms": 200.0,
+      "max_packet_loss": 0.15,
+      "min_availability": true,
+      "min_security": "LIMITED",
+      "min_signal": 0.15
+    },
+    "notes": "engineering_configuration_thresholds",
+    "service_class": "COMMUNICATION",
+    "target_floor": "FULL",
+    "user_preference": "balanced",
+    "weights": {
+      "application_priority": 0.6,
+      "availability": 1.0,
+      "cost": 0.8,
+      "data": 0.9,
+      "energy": 0.7,
+      "jitter": 1.6,
+      "latency": 1.5,
+      "packet_loss": 1.3,
+      "security": 1.0,
+      "signal": 1.0,
+      "uncertainty": 0.5,
+      "user_preference": 0.8
+    }
+  },
+  "ok": true,
+  "schema": "gunnchos.engineering_wave005.anywhere_objective.v1"
+}
