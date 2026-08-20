@@ -456,11 +456,21 @@ class SandboxExecutor:
         genuine = backend in {"bubblewrap", "sandbox_exec"}
         # Regression: host read success + outside write fail MUST fail validation
         regression_fail = host_private_read and outside_blocked
+        bwrap_env_blocked = backend == "bubblewrap" and (
+            "uid map" in (run.get("stderr_tail") or "").lower()
+            or "rtm_newaddr" in (run.get("stderr_tail") or "").lower()
+            or "operation not permitted" in (run.get("stderr_tail") or "").lower()
+        ) and not fixture_ran
 
         if backend == "subprocess_broker" or not genuine:
             validated = False
             local_status = "BLOCKED_ENVIRONMENT"
             classification_hint = "BLOCKED_ENVIRONMENT"
+        elif bwrap_env_blocked:
+            validated = False
+            local_status = "BLOCKED_ENVIRONMENT"
+            classification_hint = "BLOCKED_ENVIRONMENT"
+            backend = "bubblewrap_environment_blocked"
         elif regression_fail or not probes_pass or not network_control_reachable:
             validated = False
             local_status = "PROBE_FAILURE"

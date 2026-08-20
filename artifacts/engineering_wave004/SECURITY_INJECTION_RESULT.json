@@ -27,7 +27,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787240903053,
+        "granted_at_ms": 1787243668379,
         "expires_at_ms": null,
         "mock": false
       }
@@ -63,10 +63,10 @@
             "value": {
               "v": 1
             },
-            "replica_id": "replica-5a34c1a3",
-            "wall_time_ms": 1787240903054,
+            "replica_id": "replica-cdb0676c",
+            "wall_time_ms": 1787243668379,
             "vector": {
-              "replica-5a34c1a3": 1
+              "replica-cdb0676c": 1
             },
             "version": 1,
             "tombstone": false
@@ -77,7 +77,7 @@
               "v": 2
             },
             "replica_id": "remote-replica",
-            "wall_time_ms": 1787240903054,
+            "wall_time_ms": 1787243668380,
             "vector": {
               "remote-replica": 1
             },
@@ -86,10 +86,10 @@
           },
           "policy": "vector_clock",
           "winner": "merged_lww_fallback",
-          "reason": "concurrent_then_tie_break_replica_id"
+          "reason": "concurrent_then_remote_newer_wall_time"
         },
         "resolved_value": {
-          "v": 1
+          "v": 2
         },
         "mock": false
       }
@@ -125,16 +125,16 @@
       "case": "diagnostics_log_injection",
       "blocked": true,
       "event": {
-        "id": "evt-13ec0216f2ce",
+        "id": "evt-18fb0344da9d",
         "redacted": true,
-        "ts_ms": 1787240903056,
+        "ts_ms": 1787243668381,
         "level": "info",
         "event_type": "injection_test",
         "details": {
           "message": "<script>alert(1)</script>",
           "password": "[REDACTED]"
         },
-        "trace_id": "1b45597e10e641618a20a60b22a0c965",
+        "trace_id": "f7cf3d56c9314ff0b3668b32dd98c28c",
         "mock": false,
         "persistent": true
       }
@@ -150,7 +150,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787240903056,
+        "granted_at_ms": 1787243668382,
         "expires_at_ms": null,
         "mock": false
       }
