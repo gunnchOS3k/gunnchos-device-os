@@ -123,31 +123,29 @@ def test_wave004_package_lifecycle_restart(tmp_path: Path) -> None:
 def test_wave004_ci_gate_requires_twelve_of_twelve(coord: Wave004PlatformCoordinator) -> None:
     report = coord.run_full_validation()
     # On Ubuntu+bwrap CI this must be 12/12; locally sandbox may be BLOCKED_ENVIRONMENT.
-    if os.environ.get("WAVE004_REQUIRE_SANDBOX_VALIDATED") == "1":
-        suite = coord.sandbox_executor.run_enforcement_suite("ci-gate-probe")
-        assert report["validated_count"] == report["target_requirements"], {
-            "validated_count": report["validated_count"],
-            "classification_020": report["requirement_classification"].get("OS-PLATFORM-020"),
-            "sandbox_suite": {
-                k: suite.get(k)
-                for k in (
-                    "SANDBOX_BACKEND",
-                    "LOCAL_SANDBOX_VALIDATION",
-                    "SANDBOX_EXECUTION_VALIDATED",
-                    "HOST_PRIVATE_READ_BLOCKED",
-                    "OUTSIDE_WRITE_BLOCKED",
-                    "NETWORK_DENIED",
-                    "NETWORK_CONTROL_REACHABLE",
-                    "CHILD_SPAWN_DENIED",
-                    "CROSS_APP_READ_BLOCKED",
-                    "PRIVILEGED_CAPABILITY_DENIED",
-                    "stderr_tail",
-                    "exit_code",
-                    "fixture_result",
-                )
-            },
-        }
-        assert report["ok"] is True
+        if os.environ.get("WAVE004_REQUIRE_SANDBOX_VALIDATED") == "1":
+            suite = coord.sandbox_executor.run_enforcement_suite("ci-gate-probe")
+            probe_flags = {
+                "HOST_PRIVATE_READ_BLOCKED": suite.get("HOST_PRIVATE_READ_BLOCKED"),
+                "OUTSIDE_WRITE_BLOCKED": suite.get("OUTSIDE_WRITE_BLOCKED"),
+                "NETWORK_DENIED": suite.get("NETWORK_DENIED"),
+                "NETWORK_CONTROL_REACHABLE": suite.get("NETWORK_CONTROL_REACHABLE"),
+                "CHILD_SPAWN_DENIED": suite.get("CHILD_SPAWN_DENIED"),
+                "CROSS_APP_READ_BLOCKED": suite.get("CROSS_APP_READ_BLOCKED"),
+                "PRIVILEGED_CAPABILITY_DENIED": suite.get("PRIVILEGED_CAPABILITY_DENIED"),
+            }
+            assert report["validated_count"] == report["target_requirements"], {
+                "validated_count": report["validated_count"],
+                "classification_020": report["requirement_classification"].get("OS-PLATFORM-020"),
+                "probe_flags": probe_flags,
+                "failed_probes": [k for k, v in probe_flags.items() if v is not True],
+                "SANDBOX_BACKEND": suite.get("SANDBOX_BACKEND"),
+                "LOCAL_SANDBOX_VALIDATION": suite.get("LOCAL_SANDBOX_VALIDATION"),
+                "exit_code": suite.get("exit_code"),
+                "stderr_tail": suite.get("stderr_tail"),
+                "fixture_result": suite.get("fixture_result"),
+            }
+            assert report["ok"] is True
     else:
         assert report["validated_count"] >= 11
         assert report["requirement_classification"]["OS-PLATFORM-008"]["ok"] is True
