@@ -1,0 +1,19 @@
+@startuml wave004_offline_sync_sequence
+title Sequence B — Offline work and sync
+actor User
+participant Coordinator
+participant Keystore
+participant OfflineSync
+participant Connectivity
+
+User -> Coordinator : put encrypted note
+Coordinator -> Keystore : put(namespace, blob)
+Keystore --> Coordinator : ciphertext stored
+Coordinator -> OfflineSync : put(key, value)
+OfflineSync --> Coordinator : pending queue
+Connectivity -> Coordinator : bearer restored
+Coordinator -> OfflineSync : sync_from_peer(pending)
+OfflineSync --> Coordinator : merged records
+Coordinator --> User : sync complete
+
+@enduml

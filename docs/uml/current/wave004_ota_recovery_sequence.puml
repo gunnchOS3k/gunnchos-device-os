@@ -1,0 +1,18 @@
+@startuml wave004_ota_recovery_sequence
+title Sequence D — OTA stage, boot, userspace recovery
+participant Coordinator
+participant ABUpdateManager
+participant UserspaceRecovery
+
+Coordinator -> ABUpdateManager : stage_update(signed metadata)
+ABUpdateManager --> Coordinator : staged slot
+Coordinator -> ABUpdateManager : commit_boot(slot)
+ABUpdateManager --> Coordinator : active slot switched
+Coordinator -> UserspaceRecovery : inspect()
+UserspaceRecovery --> Coordinator : slot health
+alt corrupt active slot
+  Coordinator -> UserspaceRecovery : select_boot_slot(require_verified)
+  UserspaceRecovery --> Coordinator : verified fallback
+end
+
+@enduml

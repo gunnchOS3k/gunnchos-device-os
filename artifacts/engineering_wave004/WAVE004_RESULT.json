@@ -1,0 +1,451 @@
+{
+  "schema": "gunnchos.engineering_wave004.v1",
+  "wave": "004",
+  "generated_at_utc": "2026-08-20T02:09:42Z",
+  "primary_repo": "gunnchos-device-os",
+  "branch": "eng/wave004-platform-security",
+  "head_sha": "ed3c3c93c7d3b100172eb6cab2de61989ccd7ff5",
+  "target_requirements": 12,
+  "summary": {
+    "validated": 12,
+    "implemented_validation_open": 0,
+    "implementation_open": 0,
+    "blocked_environment": 0,
+    "blocked_external": 0,
+    "total": 12
+  },
+  "requirement_classification": {
+    "OS-PLATFORM-008": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "DEV-signed app/game manifests via dev_keys; not production signing"
+    },
+    "OS-PLATFORM-009": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "PermissionsManager least-privilege with role allowlists"
+    },
+    "OS-PLATFORM-010": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Local AI runtime micro-deterministic + optional nano; no GENERAL_VLM/ASR"
+    },
+    "OS-PLATFORM-011": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "ConnectivityOrchestrator software bearer selection"
+    },
+    "OS-PLATFORM-012": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "OfflineSyncEngine vector-clock/LWW merge"
+    },
+    "OS-PLATFORM-013": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Software Fernet keystore; not TPM"
+    },
+    "OS-PLATFORM-016": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "ABUpdateManager DEV-signed OTA slots"
+    },
+    "OS-PLATFORM-018": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Userspace recovery env; not hardware recovery partition"
+    },
+    "OS-PLATFORM-020": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "SandboxPolicyEngine software isolation profiles"
+    },
+    "OS-PLATFORM-021": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "DiagnosticsLog persistent redacted JSONL"
+    },
+    "OS-PLATFORM-022": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Accessibility settings API; WCAG_VALIDATED=false"
+    },
+    "OS-PLATFORM-023": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Role policy student/educator/guardian/admin profiles"
+    }
+  },
+  "e2e_scenarios": {
+    "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "ok": true,
+    "scenarios": [
+      {
+        "scenario": "A",
+        "name": "signed_install_flow",
+        "ok": true,
+        "package": {
+          "ok": true,
+          "app_id": "demo-app",
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "profile": {
+            "app_id": "demo-app",
+            "app_class": "first_party",
+            "isolation": "app",
+            "granted": [
+              "device_gpu",
+              "fs_home_read",
+              "fs_home_write",
+              "fs_shared_read",
+              "ipc_bus",
+              "net_connect"
+            ],
+            "dropped": [
+              "device_camera",
+              "device_mic",
+              "exec_child",
+              "fs_shared_write",
+              "net_bind",
+              "system_service"
+            ],
+            "fs_root": "/sandbox/demo-app",
+            "net_policy": "filtered",
+            "ipc_peers": []
+          }
+        },
+        "sandbox_isolation": "app",
+        "permission": {
+          "app_id": "demo-app",
+          "permission": "files_read",
+          "decision": "allow",
+          "role": "student",
+          "reason": "least_privilege_allow",
+          "granted_at_ms": 1787191782367,
+          "expires_at_ms": null,
+          "mock": false
+        }
+      },
+      {
+        "scenario": "B",
+        "name": "offline_encrypted_work",
+        "ok": true,
+        "keystore": {
+          "ok": true,
+          "key": "notes",
+          "namespace": "user",
+          "bytes": 13
+        },
+        "connectivity": "wifi",
+        "sync": {
+          "flushed": 1,
+          "ok": true,
+          "result": {
+            "replica_id": "replica-5e00a1a3",
+            "policy": "vector_clock",
+            "results": [
+              {
+                "status": "synced",
+                "key": "notes",
+                "applied": "causal",
+                "mock": false
+              }
+            ],
+            "store_size": 1,
+            "conflicts": [],
+            "mock": false
+          }
+        }
+      },
+      {
+        "scenario": "C",
+        "name": "local_ai_guarded",
+        "ok": true,
+        "permission": {
+          "app_id": "gunnchai-tutor",
+          "permission": "files_read",
+          "decision": "allow",
+          "role": "student",
+          "reason": "least_privilege_allow",
+          "granted_at_ms": 1787191782371,
+          "expires_at_ms": null,
+          "mock": false
+        },
+        "sandbox_gpu": {
+          "app_id": "gunnchai-tutor",
+          "capability": "device_gpu",
+          "decision": "deny",
+          "reason": "no_sandbox_profile",
+          "mock": false,
+          "claim_boundary": "Software sandbox policy only. Does not claim kernel namespaces, seccomp, AppArmor/SELinux, or hardware isolation."
+        },
+        "ai": {
+          "tier": "micro",
+          "role": "MICRO",
+          "general_vlm": false,
+          "general_asr": false
+        }
+      },
+      {
+        "scenario": "D",
+        "name": "ota_recovery",
+        "ok": true,
+        "ota": {
+          "applied": true,
+          "stage": {
+            "ok": true,
+            "target_slot": "B",
+            "status": "staged_complete"
+          },
+          "boot": {
+            "ok": true,
+            "active_slot": "B",
+            "boot_attempts": 1
+          }
+        },
+        "recovery": {
+          "ok": true,
+          "active_slot": "A",
+          "slots": {
+            "A": {
+              "version": "1.0.0",
+              "verified": false,
+              "corrupt": true
+            },
+            "B": {
+              "version": null,
+              "verified": false,
+              "corrupt": false
+            }
+          },
+          "userspace_only": true,
+          "claim_boundary": "Userspace recovery orchestration only. Not physical recovery partition, not verified boot chain, not factory RMA hardware path."
+        }
+      },
+      {
+        "scenario": "E",
+        "name": "diagnostics_redaction",
+        "ok": true,
+        "event_id": "evt-2c3e5c53e286",
+        "export_count": 1
+      },
+      {
+        "scenario": "F",
+        "name": "role_policy_educator",
+        "ok": true,
+        "student_camera": "deny",
+        "educator_camera": "allow",
+        "guardian_override": "allow"
+      }
+    ]
+  },
+  "security_injection": {
+    "schema": "gunnchos.engineering_wave004.security_injection.v1",
+    "total": 12,
+    "blocked": 12,
+    "leaked": 0,
+    "ok": true,
+    "cases": [
+      {
+        "case": "tampered_package_signature",
+        "blocked": true,
+        "verify": false
+      },
+      {
+        "case": "revoked_signing_key",
+        "blocked": true,
+        "error": "signing_key_revoked"
+      },
+      {
+        "case": "permission_escalation",
+        "blocked": true,
+        "result": {
+          "app_id": "malware",
+          "permission": "screen_capture",
+          "decision": "deny",
+          "role": "guest",
+          "reason": "outside_role_allowlist",
+          "granted_at_ms": 1787191782375,
+          "expires_at_ms": null,
+          "mock": false
+        }
+      },
+      {
+        "case": "sandbox_escape_attempt",
+        "blocked": true,
+        "attempt": {
+          "app_id": "evil",
+          "capability": "system_service",
+          "decision": "deny",
+          "reason": "capability_dropped",
+          "isolation": "strict",
+          "mock": false,
+          "claim_boundary": "Software sandbox policy only. Does not claim kernel namespaces, seccomp, AppArmor/SELinux, or hardware isolation."
+        }
+      },
+      {
+        "case": "keystore_ciphertext_tamper",
+        "blocked": true,
+        "error": "decrypt_failed_tampered"
+      },
+      {
+        "case": "offline_sync_conflict_storm",
+        "blocked": true,
+        "merge": {
+          "status": "conflict",
+          "key": "k1",
+          "conflict": {
+            "key": "k1",
+            "local": {
+              "key": "k1",
+              "value": {
+                "v": 1
+              },
+              "replica_id": "replica-5e00a1a3",
+              "wall_time_ms": 1787191782375,
+              "vector": {
+                "replica-5e00a1a3": 1
+              },
+              "version": 1,
+              "tombstone": false
+            },
+            "remote": {
+              "key": "k1",
+              "value": {
+                "v": 2
+              },
+              "replica_id": "remote-replica",
+              "wall_time_ms": 1787191782375,
+              "vector": {
+                "remote-replica": 1
+              },
+              "version": 1,
+              "tombstone": false
+            },
+            "policy": "vector_clock",
+            "winner": "merged_lww_fallback",
+            "reason": "concurrent_then_tie_break_replica_id"
+          },
+          "resolved_value": {
+            "v": 1
+          },
+          "mock": false
+        }
+      },
+      {
+        "case": "ota_anti_rollback_attack",
+        "blocked": true,
+        "error": "signing_key_revoked"
+      },
+      {
+        "case": "ota_interrupted_update",
+        "blocked": true,
+        "stage": {
+          "ok": false,
+          "error": "signing_key_revoked"
+        },
+        "recover": {
+          "ok": true,
+          "recovered_slots": [],
+          "active_slot": "B"
+        }
+      },
+      {
+        "case": "recovery_unverified_slot_select",
+        "blocked": true,
+        "result": {
+          "ok": false,
+          "error": "no_verified_slot",
+          "selected_verified": false
+        }
+      },
+      {
+        "case": "diagnostics_log_injection",
+        "blocked": true,
+        "event": {
+          "id": "evt-58b26a2f7bf4",
+          "redacted": true,
+          "ts_ms": 1787191782377,
+          "level": "info",
+          "event_type": "injection_test",
+          "details": {
+            "message": "<script>alert(1)</script>",
+            "password": "[REDACTED]"
+          },
+          "trace_id": "a5d6a39167d34dcb9601d0481c7bfc31",
+          "mock": false,
+          "persistent": true
+        }
+      },
+      {
+        "case": "role_policy_guest_sensitive_grant",
+        "blocked": true,
+        "result": {
+          "ok": true,
+          "profile_type": "guest",
+          "app_id": "spy",
+          "permission": "screen_capture",
+          "decision": "deny",
+          "role": "guest",
+          "reason": "outside_role_allowlist",
+          "granted_at_ms": 1787191782377,
+          "expires_at_ms": null,
+          "mock": false
+        }
+      },
+      {
+        "case": "connectivity_bearer_spoof",
+        "blocked": true,
+        "decision": {
+          "active_bearer": "offline",
+          "state": "offline",
+          "degraded": false,
+          "evaluation": {
+            "state": "offline",
+            "ranked": [
+              {
+                "bearer": "offline",
+                "score": -998.5
+              },
+              {
+                "bearer": "ethernet",
+                "score": -Infinity
+              },
+              {
+                "bearer": "wifi",
+                "score": -Infinity
+              },
+              {
+                "bearer": "bluetooth",
+                "score": -Infinity
+              },
+              {
+                "bearer": "cellular",
+                "score": -Infinity
+              },
+              {
+                "bearer": "ntn_simulated",
+                "score": -Infinity
+              }
+            ],
+            "active": "offline",
+            "candidate": "offline",
+            "should_switch": true,
+            "reason": "active_unavailable",
+            "claim_boundary": "Software orchestrator only. No carrier attach, no SIM/eSIM control, no radio certification claim. Cellular/NTN are generic or simulated bearer classes from device radio capability profiles \u2014 not named modems. RM520N-GL is 5G NR Sub-6 + LTE only (not NTN, not 6G). Dock is TB4 not TB5. STANDARDIZED_6G=false. CARRIER_ACCEPTED=false. Bluetooth is PAN/local.",
+            "STANDARDIZED_6G": false,
+            "CARRIER_ACCEPTED": false,
+            "RM520N_GL_NTN": false,
+            "DOCK_TB5": false,
+            "mock": false
+          }
+        }
+      }
+    ]
+  },
+  "claim_flags": {
+    "HUMAN_E6": false,
+    "WCAG_VALIDATED": false,
+    "GENERAL_VLM": false,
+    "GENERAL_ASR": false,
+    "GENERAL_MT": false,
+    "CARRIER_ACCEPTED": false,
+    "STANDARDIZED_6G": false,
+    "PRODUCTION_SIGNING": false,
+    "TPM_KEYSTORE": false,
+    "KERNEL_SANDBOX": false
+  },
+  "DO_NOT_UPDATE_BASELINE_COUNTS": true,
+  "wave004_ok": true
+}

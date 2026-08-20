@@ -1,0 +1,166 @@
+{
+  "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "ok": true,
+  "scenarios": [
+    {
+      "scenario": "A",
+      "name": "signed_install_flow",
+      "ok": true,
+      "package": {
+        "ok": true,
+        "app_id": "demo-app",
+        "signature_valid": true,
+        "trust_root": "local_dev",
+        "profile": {
+          "app_id": "demo-app",
+          "app_class": "first_party",
+          "isolation": "app",
+          "granted": [
+            "device_gpu",
+            "fs_home_read",
+            "fs_home_write",
+            "fs_shared_read",
+            "ipc_bus",
+            "net_connect"
+          ],
+          "dropped": [
+            "device_camera",
+            "device_mic",
+            "exec_child",
+            "fs_shared_write",
+            "net_bind",
+            "system_service"
+          ],
+          "fs_root": "/sandbox/demo-app",
+          "net_policy": "filtered",
+          "ipc_peers": []
+        }
+      },
+      "sandbox_isolation": "app",
+      "permission": {
+        "app_id": "demo-app",
+        "permission": "files_read",
+        "decision": "allow",
+        "role": "student",
+        "reason": "least_privilege_allow",
+        "granted_at_ms": 1787191782367,
+        "expires_at_ms": null,
+        "mock": false
+      }
+    },
+    {
+      "scenario": "B",
+      "name": "offline_encrypted_work",
+      "ok": true,
+      "keystore": {
+        "ok": true,
+        "key": "notes",
+        "namespace": "user",
+        "bytes": 13
+      },
+      "connectivity": "wifi",
+      "sync": {
+        "flushed": 1,
+        "ok": true,
+        "result": {
+          "replica_id": "replica-5e00a1a3",
+          "policy": "vector_clock",
+          "results": [
+            {
+              "status": "synced",
+              "key": "notes",
+              "applied": "causal",
+              "mock": false
+            }
+          ],
+          "store_size": 1,
+          "conflicts": [],
+          "mock": false
+        }
+      }
+    },
+    {
+      "scenario": "C",
+      "name": "local_ai_guarded",
+      "ok": true,
+      "permission": {
+        "app_id": "gunnchai-tutor",
+        "permission": "files_read",
+        "decision": "allow",
+        "role": "student",
+        "reason": "least_privilege_allow",
+        "granted_at_ms": 1787191782371,
+        "expires_at_ms": null,
+        "mock": false
+      },
+      "sandbox_gpu": {
+        "app_id": "gunnchai-tutor",
+        "capability": "device_gpu",
+        "decision": "deny",
+        "reason": "no_sandbox_profile",
+        "mock": false,
+        "claim_boundary": "Software sandbox policy only. Does not claim kernel namespaces, seccomp, AppArmor/SELinux, or hardware isolation."
+      },
+      "ai": {
+        "tier": "micro",
+        "role": "MICRO",
+        "general_vlm": false,
+        "general_asr": false
+      }
+    },
+    {
+      "scenario": "D",
+      "name": "ota_recovery",
+      "ok": true,
+      "ota": {
+        "applied": true,
+        "stage": {
+          "ok": true,
+          "target_slot": "B",
+          "status": "staged_complete"
+        },
+        "boot": {
+          "ok": true,
+          "active_slot": "B",
+          "boot_attempts": 1
+        }
+      },
+      "recovery": {
+        "ok": true,
+        "active_slot": "A",
+        "slots": {
+          "A": {
+            "version": "1.0.0",
+            "verified": false,
+            "corrupt": true
+          },
+          "B": {
+            "version": null,
+            "verified": false,
+            "corrupt": false
+          }
+        },
+        "userspace_only": true,
+        "claim_boundary": "Userspace recovery orchestration only. Not physical recovery partition, not verified boot chain, not factory RMA hardware path."
+      }
+    },
+    {
+      "scenario": "E",
+      "name": "diagnostics_redaction",
+      "ok": true,
+      "event_id": "evt-2c3e5c53e286",
+      "export_count": 1
+    },
+    {
+      "scenario": "F",
+      "name": "role_policy_educator",
+      "ok": true,
+      "student_camera": "deny",
+      "educator_camera": "allow",
+      "guardian_override": "allow"
+    }
+  ]
+}

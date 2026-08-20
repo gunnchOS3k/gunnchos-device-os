@@ -1,0 +1,60 @@
+{
+  "requirements": {
+    "OS-PLATFORM-008": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "DEV-signed app/game manifests via dev_keys; not production signing"
+    },
+    "OS-PLATFORM-009": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "PermissionsManager least-privilege with role allowlists"
+    },
+    "OS-PLATFORM-010": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Local AI runtime micro-deterministic + optional nano; no GENERAL_VLM/ASR"
+    },
+    "OS-PLATFORM-011": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "ConnectivityOrchestrator software bearer selection"
+    },
+    "OS-PLATFORM-012": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "OfflineSyncEngine vector-clock/LWW merge"
+    },
+    "OS-PLATFORM-013": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Software Fernet keystore; not TPM"
+    },
+    "OS-PLATFORM-016": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "ABUpdateManager DEV-signed OTA slots"
+    },
+    "OS-PLATFORM-018": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Userspace recovery env; not hardware recovery partition"
+    },
+    "OS-PLATFORM-020": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "SandboxPolicyEngine software isolation profiles"
+    },
+    "OS-PLATFORM-021": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "DiagnosticsLog persistent redacted JSONL"
+    },
+    "OS-PLATFORM-022": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Accessibility settings API; WCAG_VALIDATED=false"
+    },
+    "OS-PLATFORM-023": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Role policy student/educator/guardian/admin profiles"
+    }
+  },
+  "summary": {
+    "validated": 12,
+    "implemented_validation_open": 0,
+    "implementation_open": 0,
+    "blocked_environment": 0,
+    "blocked_external": 0,
+    "total": 12
+  }
+}

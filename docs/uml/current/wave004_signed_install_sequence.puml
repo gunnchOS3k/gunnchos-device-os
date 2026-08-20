@@ -1,0 +1,18 @@
+@startuml wave004_signed_install_sequence
+title Sequence A — Signed package install
+actor App
+participant Coordinator
+participant SecurePackaging
+participant Sandbox
+participant Permissions
+
+App -> Coordinator : install_signed_package(app_id)
+Coordinator -> SecurePackaging : build_signed_app_package()
+SecurePackaging --> Coordinator : signed manifest + verify
+Coordinator -> Sandbox : create_profile(app_id)
+Sandbox --> Coordinator : isolation profile
+Coordinator -> Permissions : request(files_read)
+Permissions --> Coordinator : allow/deny
+Coordinator --> App : install result
+
+@enduml

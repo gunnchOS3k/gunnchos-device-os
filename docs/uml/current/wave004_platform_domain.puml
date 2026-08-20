@@ -1,0 +1,73 @@
+@startuml wave004_platform_domain
+title Wave 004 Platform Domain Model
+class Wave004PlatformCoordinator {
+  +run_full_validation()
+  +classify_requirements()
+}
+
+class SoftwareKeystore {
+  +put(key, plaintext)
+  +get(key)
+}
+
+class SecurePackaging {
+  +build_signed_app_package()
+  +verify_signed_manifest()
+}
+
+class PermissionsManager {
+  +request(app, permission)
+  +revoke(app, permission)
+}
+
+class SandboxPolicyEngine {
+  +create_profile(app, class)
+  +check_capability(app, cap)
+}
+
+class LocalAiRuntime {
+  +run_capability(cap, text)
+}
+
+class ConnectivityOrchestrator {
+  +evaluate()
+  +transition_to(bearer)
+}
+
+class OfflineSyncEngine {
+  +put(key, value)
+  +apply_remote(record)
+}
+
+class DiagnosticsLog {
+  +log(event, details)
+}
+
+class ABUpdateManager {
+  +stage_update(metadata)
+  +commit_boot(slot)
+}
+
+class UserspaceRecoveryEnv {
+  +inspect()
+  +select_boot_slot()
+}
+
+class RolePolicyService {
+  +assign_profile(user, type)
+  +guardian_override()
+}
+
+Wave004PlatformCoordinator --> SoftwareKeystore
+Wave004PlatformCoordinator --> SecurePackaging
+Wave004PlatformCoordinator --> PermissionsManager
+Wave004PlatformCoordinator --> SandboxPolicyEngine
+Wave004PlatformCoordinator --> LocalAiRuntime
+Wave004PlatformCoordinator --> ConnectivityOrchestrator
+Wave004PlatformCoordinator --> OfflineSyncEngine
+Wave004PlatformCoordinator --> DiagnosticsLog
+Wave004PlatformCoordinator --> ABUpdateManager
+Wave004PlatformCoordinator --> UserspaceRecoveryEnv
+Wave004PlatformCoordinator --> RolePolicyService
+
+@enduml

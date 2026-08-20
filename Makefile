@@ -9,7 +9,7 @@
 	full-product-ix cont-ix-evidence \
 	golden-journeys-validate golden-journeys-subset golden-journeys-all golden-journeys-merge-gate \
 	device-lab-test device-lab-profile-verify device-lab-wp011 device-lab-g04 device-lab-g06 device-lab-g07 device-lab-g08 \
-	wp007-red-team wp007-test \
+	wp007-red-team wp007-test wave004 \
 	safe-halt-guest base-image-status base-image-seal base-image-overlay base-image-safe-resume
 
 PY := PYTHONPATH=src:.
@@ -323,3 +323,15 @@ reproduce: uml supervisor-ready
 	@test -f artifacts/supervisor_ready/DIGITAL_CONTAINER_VM_CHECKSUMS.json
 	@test -f artifacts/supervisor_ready/PHYSICAL_PENDING_INVENTORY.json
 	@echo "reproduce complete (digital path only; PHYSICAL_PENDING unchanged)"
+
+# Engineering Wave 004 — platform security + reliability + offline operations
+wave004:
+	PYTHONPATH=.:src pytest -q tests/test_wave004_platform_security.py
+	PYTHONPATH=.:src python3 scripts/engineering_wave004/run_wave004_evidence.py
+	PYTHONPATH=.:src python3 scripts/engineering_wave004/pixel_client_probe.py
+	@test -f artifacts/engineering_wave004/WAVE004_RESULT.json
+	@test -f artifacts/engineering_wave004/REQUIREMENT_RESULTS.json
+	@test -f artifacts/engineering_wave004/E2E_SCENARIOS_RESULT.json
+	@test -f artifacts/engineering_wave004/SECURITY_INJECTION_RESULT.json
+	@test -f artifacts/engineering_wave004/CLAIM_BOUNDARIES.json
+	@test -f artifacts/engineering_wave004/PIXEL_CLIENT_PROBE.json
