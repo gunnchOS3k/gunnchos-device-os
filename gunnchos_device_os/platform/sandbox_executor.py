@@ -219,6 +219,10 @@ class SandboxExecutor:
                 cmd.extend(["--ro-bind", p, p])
         real_py = str(Path(py).resolve())
         cmd.extend(["--ro-bind", real_py, real_py])
+        # Bind interpreter prefix so pip-installed seccomp (and stdlib) resolve inside the sandbox.
+        prefix = str(Path(sys.prefix).resolve())
+        if Path(prefix).exists():
+            cmd.extend(["--ro-bind", prefix, prefix])
         for bind in ("/etc/ld.so.cache", "/etc/alternatives"):
             if Path(bind).exists():
                 cmd.extend(["--ro-bind", bind, bind])
@@ -242,6 +246,9 @@ class SandboxExecutor:
                 "--setenv",
                 "LANG",
                 "C",
+                "--setenv",
+                "PYTHONHOME",
+                prefix if Path(prefix).exists() else "",
                 "--",
                 real_py,
                 str(launcher),

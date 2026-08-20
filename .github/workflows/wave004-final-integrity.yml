@@ -27,10 +27,13 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y bubblewrap python3-seccomp
+          sudo apt-get install -y bubblewrap
           command -v bwrap
           bwrap --version
-          python3 -c 'import seccomp; print("seccomp ok")'
+          # Distro python3-seccomp targets system Python; install for the CI interpreter.
+          python -m pip install --upgrade pip
+          python -m pip install seccomp
+          python -c 'import seccomp; print("seccomp ok", seccomp.__file__)'
       - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
