@@ -327,11 +327,15 @@ reproduce: uml supervisor-ready
 # Engineering Wave 004 — platform security + reliability + offline operations
 wave004:
 	PYTHONPATH=.:src pytest -q tests/test_wave004_platform_security.py
-	PYTHONPATH=.:src python3 scripts/engineering_wave004/run_wave004_evidence.py
-	PYTHONPATH=.:src python3 scripts/engineering_wave004/pixel_client_probe.py
+	PYTHONPATH=.:src pytest -q --collect-only tests/test_wave004_platform_security.py >/dev/null
+	PYTHONPATH=.:src `head -1 $$(which pytest) | sed 's/#!//' | tr -d ' '` scripts/engineering_wave004/run_wave004_evidence.py
+	PYTHONPATH=.:src `head -1 $$(which pytest) | sed 's/#!//' | tr -d ' '` scripts/engineering_wave004/pixel_client_probe.py
 	@test -f artifacts/engineering_wave004/WAVE004_RESULT.json
+	@test -f artifacts/engineering_wave004/INTEGRITY_REPAIR_RESULT.json
+	@test -f artifacts/engineering_wave004/REQUIREMENT_EVALUATOR_MATRIX.json
 	@test -f artifacts/engineering_wave004/REQUIREMENT_RESULTS.json
 	@test -f artifacts/engineering_wave004/E2E_SCENARIOS_RESULT.json
 	@test -f artifacts/engineering_wave004/SECURITY_INJECTION_RESULT.json
 	@test -f artifacts/engineering_wave004/CLAIM_BOUNDARIES.json
 	@test -f artifacts/engineering_wave004/PIXEL_CLIENT_PROBE.json
+	@`head -1 $$(which pytest) | sed 's/#!//' | tr -d ' '` -c "import json; r=json.load(open('artifacts/engineering_wave004/WAVE004_RESULT.json')); assert r['summary']['validated']==12, r['summary']; assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS', 1)==0"

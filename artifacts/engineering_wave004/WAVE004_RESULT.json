@@ -1,10 +1,10 @@
 {
   "schema": "gunnchos.engineering_wave004.v1",
   "wave": "004",
-  "generated_at_utc": "2026-08-20T02:09:42Z",
+  "generated_at_utc": "2026-08-20T02:53:33Z",
   "primary_repo": "gunnchos-device-os",
-  "branch": "eng/wave004-platform-security",
-  "head_sha": "ed3c3c93c7d3b100172eb6cab2de61989ccd7ff5",
+  "branch": "eng/wave004-integrity-repair",
+  "head_sha": "45455e7c7caac7f98d4b2f8d693e286c5b4d6c82",
   "target_requirements": 12,
   "summary": {
     "validated": 12,
@@ -17,57 +17,81 @@
   "requirement_classification": {
     "OS-PLATFORM-008": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "DEV-signed app/game manifests via dev_keys; not production signing"
+      "note": "Persistent package lifecycle with DEV signing; not production signing",
+      "evaluator": "evaluate_os_platform_008",
+      "ok": true
     },
     "OS-PLATFORM-009": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "PermissionsManager least-privilege with role allowlists"
+      "note": "PermissionsManager least-privilege with role allowlists",
+      "evaluator": "evaluate_os_platform_009",
+      "ok": true
     },
     "OS-PLATFORM-010": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Local AI runtime micro-deterministic + optional nano; no GENERAL_VLM/ASR"
+      "note": "Local AI runtime micro-deterministic; no GENERAL_VLM/ASR",
+      "evaluator": "evaluate_os_platform_010",
+      "ok": true
     },
     "OS-PLATFORM-011": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "ConnectivityOrchestrator software bearer selection"
+      "note": "ConnectivityOrchestrator software bearer selection",
+      "evaluator": "evaluate_os_platform_011",
+      "ok": true
     },
     "OS-PLATFORM-012": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "OfflineSyncEngine vector-clock/LWW merge"
+      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge",
+      "evaluator": "evaluate_os_platform_012",
+      "ok": true
     },
     "OS-PLATFORM-013": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Software Fernet keystore; not TPM"
+      "note": "Software Fernet keystore; not TPM",
+      "evaluator": "evaluate_os_platform_013",
+      "ok": true
     },
     "OS-PLATFORM-016": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "ABUpdateManager DEV-signed OTA slots"
+      "note": "ABUpdateManager DEV-signed OTA slots",
+      "evaluator": "evaluate_os_platform_016",
+      "ok": true
     },
     "OS-PLATFORM-018": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Userspace recovery env; not hardware recovery partition"
+      "note": "Userspace recovery env; not hardware recovery partition",
+      "evaluator": "evaluate_os_platform_018",
+      "ok": true
     },
     "OS-PLATFORM-020": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "SandboxPolicyEngine software isolation profiles"
+      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False",
+      "evaluator": "evaluate_os_platform_020",
+      "ok": true
     },
     "OS-PLATFORM-021": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "DiagnosticsLog persistent redacted JSONL"
+      "note": "DiagnosticsLog persistent redacted JSONL",
+      "evaluator": "evaluate_os_platform_021",
+      "ok": true
     },
     "OS-PLATFORM-022": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Accessibility settings API; WCAG_VALIDATED=false"
+      "note": "Persisted accessibility per profile; WCAG_VALIDATED=false",
+      "evaluator": "evaluate_os_platform_022",
+      "ok": true
     },
     "OS-PLATFORM-023": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Role policy student/educator/guardian/admin profiles"
+      "note": "Persisted role policy with admin-authorized role change",
+      "evaluator": "evaluate_os_platform_023",
+      "ok": true
     }
   },
   "e2e_scenarios": {
     "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
-    "total": 6,
-    "passed": 6,
+    "total": 11,
+    "passed": 11,
     "failed": 0,
     "ok": true,
     "scenarios": [
@@ -103,6 +127,16 @@
             "fs_root": "/sandbox/demo-app",
             "net_policy": "filtered",
             "ipc_peers": []
+          },
+          "lifecycle": {
+            "ok": true,
+            "app_id": "demo-app",
+            "app_class": "first_party",
+            "version": "1.0.0",
+            "installed_at_ms": 1787194413219,
+            "signature_valid": true,
+            "trust_root": "local_dev",
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/demo-app/signed_manifest.json"
           }
         },
         "sandbox_isolation": "app",
@@ -112,7 +146,7 @@
           "decision": "allow",
           "role": "student",
           "reason": "least_privilege_allow",
-          "granted_at_ms": 1787191782367,
+          "granted_at_ms": 1787194413219,
           "expires_at_ms": null,
           "mock": false
         }
@@ -132,7 +166,7 @@
           "flushed": 1,
           "ok": true,
           "result": {
-            "replica_id": "replica-5e00a1a3",
+            "replica_id": "replica-d2847f96",
             "policy": "vector_clock",
             "results": [
               {
@@ -158,7 +192,7 @@
           "decision": "allow",
           "role": "student",
           "reason": "least_privilege_allow",
-          "granted_at_ms": 1787191782371,
+          "granted_at_ms": 1787194413220,
           "expires_at_ms": null,
           "mock": false
         },
@@ -217,7 +251,7 @@
         "scenario": "E",
         "name": "diagnostics_redaction",
         "ok": true,
-        "event_id": "evt-2c3e5c53e286",
+        "event_id": "evt-4f9acbdd5319",
         "export_count": 1
       },
       {
@@ -227,13 +261,100 @@
         "student_camera": "deny",
         "educator_camera": "allow",
         "guardian_override": "allow"
+      },
+      {
+        "scenario": "G",
+        "name": "package_restart_persistence",
+        "ok": true,
+        "install": {
+          "ok": true,
+          "app_id": "restart-app",
+          "app_class": "first_party",
+          "version": "2.0.0",
+          "installed_at_ms": 1787194413225,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
+        },
+        "reload": {
+          "ok": true,
+          "app_id": "restart-app",
+          "record": {
+            "app_id": "restart-app",
+            "app_class": "first_party",
+            "version": "2.0.0",
+            "installed_at_ms": 1787194413225,
+            "signature_valid": true,
+            "trust_root": "local_dev",
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
+          },
+          "signature_valid": true
+        }
+      },
+      {
+        "scenario": "H",
+        "name": "sync_restart_persistence",
+        "ok": true,
+        "value": {
+          "state": "saved"
+        }
+      },
+      {
+        "scenario": "I",
+        "name": "sandbox_execution",
+        "ok": true,
+        "execution": {
+          "ok": true,
+          "app_id": "untrusted-fixture",
+          "backend": "subprocess_broker",
+          "kernel_sandbox": false,
+          "execution_enforced": true,
+          "exit_code": 0,
+          "fixture_result": {
+            "host_read": true,
+            "escape_write": false,
+            "ok": true
+          },
+          "parent_escape_detected": false,
+          "stderr_tail": "",
+          "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
+        }
+      },
+      {
+        "scenario": "J",
+        "name": "accessibility_persist",
+        "ok": true,
+        "settings": {
+          "keyboard_navigation": true,
+          "controller_navigation": true,
+          "touch_navigation": true,
+          "screen_reader_labels": true,
+          "captions_preference": "auto",
+          "reduced_motion": false,
+          "high_contrast": true,
+          "large_text": true,
+          "simplified_language": false,
+          "focus_mode": false,
+          "color_safe_mode": false,
+          "audio_cues": true,
+          "haptic_cues": true,
+          "one_hand_mode": false,
+          "switch_access": false,
+          "voice_input": true
+        }
+      },
+      {
+        "scenario": "K",
+        "name": "role_auth_persist",
+        "ok": true,
+        "profile": "educator"
       }
     ]
   },
   "security_injection": {
     "schema": "gunnchos.engineering_wave004.security_injection.v1",
-    "total": 12,
-    "blocked": 12,
+    "total": 18,
+    "blocked": 18,
     "leaked": 0,
     "ok": true,
     "cases": [
@@ -256,7 +377,7 @@
           "decision": "deny",
           "role": "guest",
           "reason": "outside_role_allowlist",
-          "granted_at_ms": 1787191782375,
+          "granted_at_ms": 1787194413269,
           "expires_at_ms": null,
           "mock": false
         }
@@ -292,10 +413,10 @@
               "value": {
                 "v": 1
               },
-              "replica_id": "replica-5e00a1a3",
-              "wall_time_ms": 1787191782375,
+              "replica_id": "replica-d2847f96",
+              "wall_time_ms": 1787194413270,
               "vector": {
-                "replica-5e00a1a3": 1
+                "replica-d2847f96": 1
               },
               "version": 1,
               "tombstone": false
@@ -306,7 +427,7 @@
                 "v": 2
               },
               "replica_id": "remote-replica",
-              "wall_time_ms": 1787191782375,
+              "wall_time_ms": 1787194413270,
               "vector": {
                 "remote-replica": 1
               },
@@ -354,16 +475,16 @@
         "case": "diagnostics_log_injection",
         "blocked": true,
         "event": {
-          "id": "evt-58b26a2f7bf4",
+          "id": "evt-60e7194e979a",
           "redacted": true,
-          "ts_ms": 1787191782377,
+          "ts_ms": 1787194413271,
           "level": "info",
           "event_type": "injection_test",
           "details": {
             "message": "<script>alert(1)</script>",
             "password": "[REDACTED]"
           },
-          "trace_id": "a5d6a39167d34dcb9601d0481c7bfc31",
+          "trace_id": "1a5cd99b90164fcdae6957234080fc38",
           "mock": false,
           "persistent": true
         }
@@ -379,7 +500,7 @@
           "decision": "deny",
           "role": "guest",
           "reason": "outside_role_allowlist",
-          "granted_at_ms": 1787191782377,
+          "granted_at_ms": 1787194413272,
           "expires_at_ms": null,
           "mock": false
         }
@@ -431,6 +552,49 @@
             "mock": false
           }
         }
+      },
+      {
+        "case": "package_tamper_after_install",
+        "blocked": true,
+        "install_ok": true
+      },
+      {
+        "case": "sync_queue_replay_idempotency",
+        "blocked": true,
+        "versions": [
+          1,
+          1
+        ]
+      },
+      {
+        "case": "sandbox_host_escape_script",
+        "blocked": true,
+        "execution": {
+          "ok": true,
+          "backend": "subprocess_broker"
+        }
+      },
+      {
+        "case": "accessibility_profile_corruption",
+        "blocked": true,
+        "status": {
+          "ok": false,
+          "profile_id": "corrupt-me",
+          "error": "store_corrupt",
+          "wcag_validated": false,
+          "human_accessibility_review": false,
+          "claim_boundary": "Persisted accessibility preferences per profile. HUMAN_ACCESSIBILITY_VALIDATED=false, WCAG_VALIDATED=false."
+        }
+      },
+      {
+        "case": "role_self_escalation_attempt",
+        "blocked": true,
+        "error": "self_escalation_denied"
+      },
+      {
+        "case": "role_unauthorized_admin_grant",
+        "blocked": true,
+        "error": "authorization_requires_admin_or_guardian"
       }
     ]
   },
@@ -446,6 +610,7 @@
     "TPM_KEYSTORE": false,
     "KERNEL_SANDBOX": false
   },
+  "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
   "DO_NOT_UPDATE_BASELINE_COUNTS": true,
   "wave004_ok": true
 }

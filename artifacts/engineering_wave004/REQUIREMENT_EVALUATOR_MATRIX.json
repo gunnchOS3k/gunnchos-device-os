@@ -1,0 +1,393 @@
+{
+  "schema": "gunnchos.engineering_wave004.requirement_evaluator_matrix.v1",
+  "target_requirements": 12,
+  "validated_count": 12,
+  "unconditional_true_classifiers": 0,
+  "evaluators": {
+    "OS-PLATFORM-008": {
+      "evaluator": "evaluate_os_platform_008",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persistent package lifecycle with DEV signing; not production signing"
+    },
+    "OS-PLATFORM-009": {
+      "evaluator": "evaluate_os_platform_009",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "PermissionsManager least-privilege with role allowlists"
+    },
+    "OS-PLATFORM-010": {
+      "evaluator": "evaluate_os_platform_010",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Local AI runtime micro-deterministic; no GENERAL_VLM/ASR"
+    },
+    "OS-PLATFORM-011": {
+      "evaluator": "evaluate_os_platform_011",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "ConnectivityOrchestrator software bearer selection"
+    },
+    "OS-PLATFORM-012": {
+      "evaluator": "evaluate_os_platform_012",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge"
+    },
+    "OS-PLATFORM-013": {
+      "evaluator": "evaluate_os_platform_013",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Software Fernet keystore; not TPM"
+    },
+    "OS-PLATFORM-016": {
+      "evaluator": "evaluate_os_platform_016",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "ABUpdateManager DEV-signed OTA slots"
+    },
+    "OS-PLATFORM-018": {
+      "evaluator": "evaluate_os_platform_018",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Userspace recovery env; not hardware recovery partition"
+    },
+    "OS-PLATFORM-020": {
+      "evaluator": "evaluate_os_platform_020",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False"
+    },
+    "OS-PLATFORM-021": {
+      "evaluator": "evaluate_os_platform_021",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "DiagnosticsLog persistent redacted JSONL"
+    },
+    "OS-PLATFORM-022": {
+      "evaluator": "evaluate_os_platform_022",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persisted accessibility per profile; WCAG_VALIDATED=false"
+    },
+    "OS-PLATFORM-023": {
+      "evaluator": "evaluate_os_platform_023",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persisted role policy with admin-authorized role change"
+    }
+  },
+  "results": {
+    "OS-PLATFORM-008": {
+      "requirement_id": "OS-PLATFORM-008",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persistent package lifecycle with DEV signing; not production signing",
+      "evaluator": "evaluate_os_platform_008",
+      "evidence": {
+        "inspect": {
+          "ok": true,
+          "schema_version": 1,
+          "installed_count": 3,
+          "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/registry.json",
+          "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization."
+        },
+        "install": {
+          "ok": true,
+          "app_id": "eval-app-008",
+          "app_class": "first_party",
+          "version": "1.0.0",
+          "installed_at_ms": 1787194413313,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/eval-app-008/signed_manifest.json"
+        },
+        "reload_get": {
+          "ok": true,
+          "app_id": "eval-app-008",
+          "record": {
+            "app_id": "eval-app-008",
+            "app_class": "first_party",
+            "version": "1.0.0",
+            "installed_at_ms": 1787194413313,
+            "signature_valid": true,
+            "trust_root": "local_dev",
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/eval-app-008/signed_manifest.json"
+          },
+          "signature_valid": true
+        }
+      }
+    },
+    "OS-PLATFORM-009": {
+      "requirement_id": "OS-PLATFORM-009",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "PermissionsManager least-privilege with role allowlists",
+      "evaluator": "evaluate_os_platform_009",
+      "evidence": {
+        "guest_screen_capture": {
+          "app_id": "malware",
+          "permission": "screen_capture",
+          "decision": "deny",
+          "role": "guest",
+          "reason": "outside_role_allowlist",
+          "granted_at_ms": 1787194413313,
+          "expires_at_ms": null,
+          "mock": false
+        },
+        "student_files_read": {
+          "app_id": "notes-app",
+          "permission": "files_read",
+          "decision": "allow",
+          "role": "student",
+          "reason": "least_privilege_allow",
+          "granted_at_ms": 1787194413313,
+          "expires_at_ms": null,
+          "mock": false
+        }
+      }
+    },
+    "OS-PLATFORM-010": {
+      "requirement_id": "OS-PLATFORM-010",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Local AI runtime micro-deterministic; no GENERAL_VLM/ASR",
+      "evaluator": "evaluate_os_platform_010",
+      "evidence": {
+        "inventory": {
+          "schema": "gunnchos.local_ai.intelligence_inventory.v1",
+          "nano": {
+            "present": false,
+            "model_id": null,
+            "tier": null,
+            "role": null,
+            "display_label": "Nano/fallback",
+            "is_nano_fallback_only": true,
+            "context_tokens": 512,
+            "quant": "Q4_K_M",
+            "parameters": "135M",
+            "filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+          },
+          "fast": {
+            "present": false,
+            "model_id": null,
+            "open": true,
+            "reason": "Local Fast GGUF (360M-class) not on disk \u2014 registry slot only"
+          },
+          "pro": {
+            "present": false,
+            "model_id": null,
+            "open": true,
+            "reason": "Local Pro GGUF (1.5B-class) not on disk \u2014 registry slot only"
+          },
+          "preferred": "micro-deterministic-v1",
+          "preferred_daily_tier": "micro",
+          "smollm2_is_full_intelligence_layer": false,
+          "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+          "HUMAN_E6": false,
+          "claim_boundary": "SmolLM2-135M Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro, not app-product-complete intelligence."
+        },
+        "run": {
+          "ok": true,
+          "tier": "micro"
+        }
+      }
+    },
+    "OS-PLATFORM-011": {
+      "requirement_id": "OS-PLATFORM-011",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "ConnectivityOrchestrator software bearer selection",
+      "evaluator": "evaluate_os_platform_011",
+      "evidence": {
+        "decision": {
+          "active_bearer": "wifi",
+          "state": "connected",
+          "degraded": false,
+          "evaluation": {
+            "state": "connected",
+            "ranked": [
+              {
+                "bearer": "wifi",
+                "score": 86.35
+              },
+              {
+                "bearer": "offline",
+                "score": -998.5
+              },
+              {
+                "bearer": "ethernet",
+                "score": -Infinity
+              },
+              {
+                "bearer": "bluetooth",
+                "score": -Infinity
+              },
+              {
+                "bearer": "cellular",
+                "score": -Infinity
+              },
+              {
+                "bearer": "ntn_simulated",
+                "score": -Infinity
+              }
+            ],
+            "active": "wifi",
+            "candidate": "wifi",
+            "should_switch": true,
+            "reason": "better_score",
+            "claim_boundary": "Software orchestrator only. No carrier attach, no SIM/eSIM control, no radio certification claim. Cellular/NTN are generic or simulated bearer classes from device radio capability profiles \u2014 not named modems. RM520N-GL is 5G NR Sub-6 + LTE only (not NTN, not 6G). Dock is TB4 not TB5. STANDARDIZED_6G=false. CARRIER_ACCEPTED=false. Bluetooth is PAN/local.",
+            "STANDARDIZED_6G": false,
+            "CARRIER_ACCEPTED": false,
+            "RM520N_GL_NTN": false,
+            "DOCK_TB5": false,
+            "mock": false
+          }
+        }
+      }
+    },
+    "OS-PLATFORM-012": {
+      "requirement_id": "OS-PLATFORM-012",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge",
+      "evaluator": "evaluate_os_platform_012",
+      "evidence": {
+        "pending_len": 4,
+        "reloaded_value": {
+          "v": 1
+        }
+      }
+    },
+    "OS-PLATFORM-013": {
+      "requirement_id": "OS-PLATFORM-013",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Software Fernet keystore; not TPM",
+      "evaluator": "evaluate_os_platform_013",
+      "evidence": {
+        "put": {
+          "ok": true,
+          "key": "_probe",
+          "namespace": "validation",
+          "bytes": 1
+        },
+        "get_ok": true
+      }
+    },
+    "OS-PLATFORM-016": {
+      "requirement_id": "OS-PLATFORM-016",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "ABUpdateManager DEV-signed OTA slots",
+      "evaluator": "evaluate_os_platform_016",
+      "evidence": {
+        "active_slot": "B"
+      }
+    },
+    "OS-PLATFORM-018": {
+      "requirement_id": "OS-PLATFORM-018",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Userspace recovery env; not hardware recovery partition",
+      "evaluator": "evaluate_os_platform_018",
+      "evidence": {
+        "ok": true,
+        "active_slot": "A",
+        "slots": {
+          "A": {
+            "version": "1.0.0",
+            "verified": false,
+            "corrupt": true
+          },
+          "B": {
+            "version": null,
+            "verified": false,
+            "corrupt": false
+          }
+        },
+        "userspace_only": true,
+        "claim_boundary": "Userspace recovery orchestration only. Not physical recovery partition, not verified boot chain, not factory RMA hardware path."
+      }
+    },
+    "OS-PLATFORM-020": {
+      "requirement_id": "OS-PLATFORM-020",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False",
+      "evaluator": "evaluate_os_platform_020",
+      "evidence": {
+        "ok": true,
+        "app_id": "eval-untrusted-020",
+        "backend": "subprocess_broker",
+        "kernel_sandbox": false,
+        "execution_enforced": true,
+        "exit_code": 0,
+        "fixture_result": {
+          "host_read": true,
+          "escape_write": false,
+          "ok": true
+        },
+        "parent_escape_detected": false,
+        "stderr_tail": "",
+        "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
+      }
+    },
+    "OS-PLATFORM-021": {
+      "requirement_id": "OS-PLATFORM-021",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "DiagnosticsLog persistent redacted JSONL",
+      "evaluator": "evaluate_os_platform_021",
+      "evidence": {
+        "path_exists": true,
+        "event_count": 3
+      }
+    },
+    "OS-PLATFORM-022": {
+      "requirement_id": "OS-PLATFORM-022",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persisted accessibility per profile; WCAG_VALIDATED=false",
+      "evaluator": "evaluate_os_platform_022",
+      "evidence": {
+        "updated_ok": true,
+        "reload_large_text": true
+      }
+    },
+    "OS-PLATFORM-023": {
+      "requirement_id": "OS-PLATFORM-023",
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "ok": true,
+      "note": "Persisted role policy with admin-authorized role change",
+      "evaluator": "evaluate_os_platform_023",
+      "evidence": {
+        "denied_self": {
+          "ok": false,
+          "error": "self_escalation_denied",
+          "user_id": "stu-eval"
+        },
+        "authorized": {
+          "ok": true,
+          "request": {
+            "request_id": "1d4d95f5bab04025bd51ba6deeaa3467",
+            "user_id": "stu-eval",
+            "from_profile": "student",
+            "target_profile": "educator",
+            "requested_by": "stu-eval",
+            "status": "authorized",
+            "requested_at_ms": 1787194413348,
+            "authorized_by": "admin-1",
+            "authorized_at_ms": 1787194413348
+          },
+          "assignment": {
+            "ok": true,
+            "user_id": "stu-eval",
+            "profile_type": "educator"
+          }
+        },
+        "reloaded_profile": "educator"
+      }
+    }
+  }
+}

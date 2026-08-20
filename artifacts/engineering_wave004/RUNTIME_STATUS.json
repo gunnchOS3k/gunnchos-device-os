@@ -7,11 +7,24 @@
     "blob_count": 3,
     "seed_present": true
   },
-  "permissions_role": "guest",
-  "sandbox_profiles": 2,
-  "offline_sync_size": 2,
-  "connectivity_active": "offline",
-  "diagnostics_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-platform-security/artifacts/engineering_wave004/runtime_work/diagnostics.jsonl",
+  "permissions_role": "student",
+  "sandbox_profiles": 5,
+  "sandbox_executor": {
+    "backend_available": "sandbox_exec",
+    "kernel_sandbox": false,
+    "audit_len": 3,
+    "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
+  },
+  "offline_sync_size": 5,
+  "package_lifecycle": {
+    "ok": true,
+    "schema_version": 1,
+    "installed_count": 4,
+    "registry_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/registry.json",
+    "claim_boundary": "DEV Ed25519 trust root (WP-013 dev_keys). Persistent install registry only; not production signing or app-store notarization."
+  },
+  "connectivity_active": "wifi",
+  "diagnostics_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/diagnostics.jsonl",
   "role_policy": {
     "schema": "gunnchos.platform.role_policy.v1",
     "profile_types": [
@@ -23,14 +36,21 @@
       "minor",
       "guest"
     ],
-    "assigned_users": 5,
+    "assigned_users": 11,
     "profiles": {
       "student-1": "student",
       "stu-1": "student",
       "edu-1": "educator",
+      "admin-k": "admin",
+      "user-k": "educator",
       "guest-1": "guest",
-      "_probe": "educator"
-    }
+      "escalator": "student",
+      "student-x": "student",
+      "student-y": "student",
+      "admin-1": "admin",
+      "stu-eval": "educator"
+    },
+    "pending_requests": 3
   },
   "recovery": {
     "ok": true,
@@ -85,15 +105,17 @@
     "claim_boundary": "SmolLM2-135M Instruct Q4_K_M 512-ctx is Nano/fallback only. Not Local Fast, not Local Pro, not app-product-complete intelligence."
   },
   "accessibility": {
+    "ok": true,
+    "profile_id": "default",
     "settings": {
       "keyboard_navigation": true,
       "controller_navigation": true,
       "touch_navigation": true,
       "screen_reader_labels": true,
       "captions_preference": "auto",
-      "reduced_motion": true,
+      "reduced_motion": false,
       "high_contrast": false,
-      "large_text": true,
+      "large_text": false,
       "simplified_language": false,
       "focus_mode": false,
       "color_safe_mode": false,
@@ -105,7 +127,8 @@
     },
     "missing_features": [],
     "wcag_validated": false,
-    "human_accessibility_review": false
+    "human_accessibility_review": false,
+    "claim_boundary": "Persisted accessibility preferences per profile. HUMAN_ACCESSIBILITY_VALIDATED=false, WCAG_VALIDATED=false."
   },
   "claim_flags": {
     "HUMAN_E6": false,

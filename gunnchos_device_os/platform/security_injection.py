@@ -22,6 +22,12 @@ INJECTION_CASES = (
     "diagnostics_log_injection",
     "role_policy_guest_sensitive_grant",
     "connectivity_bearer_spoof",
+    "package_tamper_after_install",
+    "sync_queue_replay_idempotency",
+    "sandbox_host_escape_script",
+    "accessibility_profile_corruption",
+    "role_self_escalation_attempt",
+    "role_unauthorized_admin_grant",
 )
 
 
@@ -39,6 +45,12 @@ def run_security_injections(coord: "Wave004PlatformCoordinator") -> dict[str, An
     cases.append(_diagnostics_log_injection(coord))
     cases.append(_role_policy_guest_sensitive_grant(coord))
     cases.append(_connectivity_bearer_spoof(coord))
+    cases.append(_package_tamper_after_install(coord))
+    cases.append(_sync_queue_replay_idempotency(coord))
+    cases.append(_sandbox_host_escape_script(coord))
+    cases.append(_accessibility_profile_corruption(coord))
+    cases.append(_role_self_escalation_attempt(coord))
+    cases.append(_role_unauthorized_admin_grant(coord))
     blocked = sum(1 for c in cases if c.get("blocked") is True)
     return {
         "schema": "gunnchos.engineering_wave004.security_injection.v1",
@@ -95,7 +107,7 @@ def _keystore_ciphertext_tamper(coord: "Wave004PlatformCoordinator") -> dict[str
 
 def _offline_sync_conflict_storm(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
     local = coord.offline_sync
-    remote = type(local)(replica_id="remote-replica")
+    remote = type(local)(replica_id="remote-replica", storage_path=None)
     local.put("k1", {"v": 1})
     remote.put("k1", {"v": 2})
     merged = local.apply_remote(remote.pending()[0])
@@ -171,4 +183,67 @@ def _connectivity_bearer_spoof(coord: "Wave004PlatformCoordinator") -> dict[str,
         "case": "connectivity_bearer_spoof",
         "blocked": blocked,
         "decision": decision,
+    }
+
+
+def _package_tamper_after_install(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    install = coord.package_lifecycle.install("tamper-target")
+    manifest_path = coord.package_lifecycle.installs_dir / "tamper-target" / "signed_manifest.json"
+    if manifest_path.exists():
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        data["digest_sha256"] = "deadbeef"
+        manifest_path.write_text(json.dumps(data), encoding="utf-8")
+    verify = coord.package_lifecycle.get("tamper-target")
+    return {
+        "case": "package_tamper_after_install",
+        "blocked": verify.get("ok") is False,
+        "install_ok": install.get("ok"),
+    }
+
+
+def _sync_queue_replay_idempotency(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    first = coord.offline_sync.put("replay-key", {"n": 1}, idempotency_key="replay-001")
+    second = coord.offline_sync.put("replay-key", {"n": 2}, idempotency_key="replay-001")
+    blocked = first.version == second.version and first.value == second.value
+    return {"case": "sync_queue_replay_idempotency", "blocked": blocked, "versions": (first.version, second.version)}
+
+
+def _sandbox_host_escape_script(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    result = coord.sandbox_executor.execute_untrusted("escape-tester", app_class="untrusted")
+    return {
+        "case": "sandbox_host_escape_script",
+        "blocked": result.get("ok") is True,
+        "execution": {"ok": result.get("ok"), "backend": result.get("backend")},
+    }
+
+
+def _accessibility_profile_corruption(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    store_path = coord.accessibility_store._store_path()
+    coord.accessibility_store.update("corrupt-me", {"large_text": True})
+    store_path.write_text("{not-valid-json", encoding="utf-8")
+    reloaded = coord.accessibility_store.from_storage(coord.accessibility_store.root)
+    status = reloaded.load("corrupt-me")
+    blocked = reloaded.corrupt is True and status.get("ok") is False
+    return {"case": "accessibility_profile_corruption", "blocked": blocked, "status": status}
+
+
+def _role_self_escalation_attempt(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    coord.role_policy.assign_profile("escalator", "student")
+    result = coord.role_policy.request_role_change("escalator", "admin", requested_by="escalator")
+    return {
+        "case": "role_self_escalation_attempt",
+        "blocked": result.get("ok") is False,
+        "error": result.get("error"),
+    }
+
+
+def _role_unauthorized_admin_grant(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    coord.role_policy.assign_profile("student-x", "student")
+    coord.role_policy.assign_profile("student-y", "student")
+    req = coord.role_policy.request_role_change("student-x", "educator", requested_by="student-x")
+    denied = coord.role_policy.authorize_role_change(req["request_id"], authorized_by="student-y")
+    return {
+        "case": "role_unauthorized_admin_grant",
+        "blocked": denied.get("ok") is False,
+        "error": denied.get("error"),
     }

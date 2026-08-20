@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
-  "total": 6,
-  "passed": 6,
+  "total": 11,
+  "passed": 11,
   "failed": 0,
   "ok": true,
   "scenarios": [
@@ -37,6 +37,16 @@
           "fs_root": "/sandbox/demo-app",
           "net_policy": "filtered",
           "ipc_peers": []
+        },
+        "lifecycle": {
+          "ok": true,
+          "app_id": "demo-app",
+          "app_class": "first_party",
+          "version": "1.0.0",
+          "installed_at_ms": 1787194413219,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/demo-app/signed_manifest.json"
         }
       },
       "sandbox_isolation": "app",
@@ -46,7 +56,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787191782367,
+        "granted_at_ms": 1787194413219,
         "expires_at_ms": null,
         "mock": false
       }
@@ -66,7 +76,7 @@
         "flushed": 1,
         "ok": true,
         "result": {
-          "replica_id": "replica-5e00a1a3",
+          "replica_id": "replica-d2847f96",
           "policy": "vector_clock",
           "results": [
             {
@@ -92,7 +102,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787191782371,
+        "granted_at_ms": 1787194413220,
         "expires_at_ms": null,
         "mock": false
       },
@@ -151,7 +161,7 @@
       "scenario": "E",
       "name": "diagnostics_redaction",
       "ok": true,
-      "event_id": "evt-2c3e5c53e286",
+      "event_id": "evt-4f9acbdd5319",
       "export_count": 1
     },
     {
@@ -161,6 +171,93 @@
       "student_camera": "deny",
       "educator_camera": "allow",
       "guardian_override": "allow"
+    },
+    {
+      "scenario": "G",
+      "name": "package_restart_persistence",
+      "ok": true,
+      "install": {
+        "ok": true,
+        "app_id": "restart-app",
+        "app_class": "first_party",
+        "version": "2.0.0",
+        "installed_at_ms": 1787194413225,
+        "signature_valid": true,
+        "trust_root": "local_dev",
+        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
+      },
+      "reload": {
+        "ok": true,
+        "app_id": "restart-app",
+        "record": {
+          "app_id": "restart-app",
+          "app_class": "first_party",
+          "version": "2.0.0",
+          "installed_at_ms": 1787194413225,
+          "signature_valid": true,
+          "trust_root": "local_dev",
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
+        },
+        "signature_valid": true
+      }
+    },
+    {
+      "scenario": "H",
+      "name": "sync_restart_persistence",
+      "ok": true,
+      "value": {
+        "state": "saved"
+      }
+    },
+    {
+      "scenario": "I",
+      "name": "sandbox_execution",
+      "ok": true,
+      "execution": {
+        "ok": true,
+        "app_id": "untrusted-fixture",
+        "backend": "subprocess_broker",
+        "kernel_sandbox": false,
+        "execution_enforced": true,
+        "exit_code": 0,
+        "fixture_result": {
+          "host_read": true,
+          "escape_write": false,
+          "ok": true
+        },
+        "parent_escape_detected": false,
+        "stderr_tail": "",
+        "claim_boundary": "Execution-enforced via bubblewrap, macOS sandbox-exec, or subprocess broker with read-only escape probe. KERNEL_SANDBOX=true only when bubblewrap is used."
+      }
+    },
+    {
+      "scenario": "J",
+      "name": "accessibility_persist",
+      "ok": true,
+      "settings": {
+        "keyboard_navigation": true,
+        "controller_navigation": true,
+        "touch_navigation": true,
+        "screen_reader_labels": true,
+        "captions_preference": "auto",
+        "reduced_motion": false,
+        "high_contrast": true,
+        "large_text": true,
+        "simplified_language": false,
+        "focus_mode": false,
+        "color_safe_mode": false,
+        "audio_cues": true,
+        "haptic_cues": true,
+        "one_hand_mode": false,
+        "switch_access": false,
+        "voice_input": true
+      }
+    },
+    {
+      "scenario": "K",
+      "name": "role_auth_persist",
+      "ok": true,
+      "profile": "educator"
     }
   ]
 }

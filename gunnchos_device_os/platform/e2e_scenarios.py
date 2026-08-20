@@ -1,4 +1,4 @@
-"""Cross-service E2E scenarios A–F for Wave 004 platform stack."""
+"""Cross-service E2E scenarios A–K for Wave 004 platform stack."""
 from __future__ import annotations
 
 from typing import Any, TYPE_CHECKING
@@ -112,6 +112,75 @@ def scenario_f_role_policy_educator(coord: "Wave004PlatformCoordinator") -> dict
     }
 
 
+def scenario_g_package_restart_persistence(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """G: Package install survives fresh-process reload."""
+    install = coord.package_lifecycle.install("restart-app", version="2.0.0")
+    reloaded = coord.package_lifecycle.from_storage(coord.package_lifecycle.root, coord.repo_root)
+    got = reloaded.get("restart-app")
+    return {
+        "scenario": "G",
+        "name": "package_restart_persistence",
+        "ok": install.get("ok") and got.get("ok") and got.get("record", {}).get("version") == "2.0.0",
+        "install": install,
+        "reload": got,
+    }
+
+
+def scenario_h_sync_restart_persistence(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """H: Offline sync store/queue survives fresh-process reload."""
+    coord.offline_sync.put("persist-key", {"state": "saved"}, idempotency_key="h-key")
+    path = coord.offline_sync.storage_path
+    reloaded = coord.offline_sync.from_storage(path)
+    value = reloaded.get("persist-key")
+    return {
+        "scenario": "H",
+        "name": "sync_restart_persistence",
+        "ok": value == {"state": "saved"} and len(reloaded.pending()) >= 0,
+        "value": value,
+    }
+
+
+def scenario_i_sandbox_execution(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """I: Execute untrusted fixture under execution-enforced sandbox."""
+    result = coord.sandbox_executor.execute_untrusted("untrusted-fixture", app_class="untrusted")
+    return {
+        "scenario": "I",
+        "name": "sandbox_execution",
+        "ok": result.get("ok") is True,
+        "execution": result,
+    }
+
+
+def scenario_j_accessibility_persist(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """J: Accessibility settings persist per profile across reload."""
+    updated = coord.accessibility_store.update("profile-j", {"large_text": True, "high_contrast": True})
+    reloaded = coord.accessibility_store.from_storage(coord.accessibility_store.root)
+    status = reloaded.load("profile-j")
+    contract = reloaded.shell_contract("profile-j")
+    return {
+        "scenario": "J",
+        "name": "accessibility_persist",
+        "ok": updated.get("ok") and status["settings"].get("large_text") is True and contract.get("wcag_validated") is False,
+        "settings": status["settings"],
+    }
+
+
+def scenario_k_role_auth_persist(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
+    """K: Admin-authorized role change persists across reload."""
+    coord.role_policy.assign_profile("admin-k", "admin")
+    coord.role_policy.assign_profile("user-k", "student")
+    req = coord.role_policy.request_role_change("user-k", "educator", requested_by="user-k")
+    auth = coord.role_policy.authorize_role_change(req["request_id"], authorized_by="admin-k")
+    reloaded = coord.role_policy.from_storage(coord.role_policy.storage_path)
+    profile = reloaded.active_profiles.get("user-k")
+    return {
+        "scenario": "K",
+        "name": "role_auth_persist",
+        "ok": auth.get("ok") and profile == "educator",
+        "profile": profile,
+    }
+
+
 def run_all_scenarios(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
     results = [
         scenario_a_signed_install_flow(coord),
@@ -120,6 +189,11 @@ def run_all_scenarios(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
         scenario_d_ota_recovery(coord),
         scenario_e_diagnostics_redaction(coord),
         scenario_f_role_policy_educator(coord),
+        scenario_g_package_restart_persistence(coord),
+        scenario_h_sync_restart_persistence(coord),
+        scenario_i_sandbox_execution(coord),
+        scenario_j_accessibility_persist(coord),
+        scenario_k_role_auth_persist(coord),
     ]
     passed = sum(1 for r in results if r.get("ok"))
     return {
