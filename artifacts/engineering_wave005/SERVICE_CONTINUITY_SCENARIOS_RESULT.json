@@ -1,12 +1,12 @@
 {
   "FIELD_MEASURED_PERFORMANCE": false,
   "PHYSICAL_VALIDATION": false,
-  "count": 10,
+  "count": 15,
   "failed": [],
-  "generated_at_unix": 1787253860.104535,
+  "generated_at_unix": 1787255786.975178,
   "label": "DIGITAL_SYNTHETIC_EVIDENCE",
   "ok": true,
-  "passed": 10,
+  "passed": 15,
   "scenarios": [
     {
       "expected": "wifi-home",
@@ -22,6 +22,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -81,6 +82,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -112,6 +114,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -173,13 +185,14 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
         },
         "final_scores": {
-          "cell-generic": 0.7506410256410256,
-          "wifi-home": 0.44732549857549847
+          "cell-generic": 0.763279286582894,
+          "wifi-home": 0.41095426293744075
         },
         "hard_constraint_reasons": {
           "cell-generic": [],
@@ -232,6 +245,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -263,6 +277,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "HIGH",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "COMMUNICATION",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -296,9 +320,9 @@
           "availability": 1.0,
           "cost": 0.8,
           "data": 0.9,
-          "energy": 0.7,
-          "jitter": 1.6,
-          "latency": 1.5,
+          "energy": 0.48999999999999994,
+          "jitter": 1.92,
+          "latency": 2.0250000000000004,
           "packet_loss": 1.3,
           "security": 1.0,
           "signal": 1.0,
@@ -323,6 +347,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -396,6 +421,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -427,6 +453,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -488,6 +524,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -547,6 +584,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -578,6 +616,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "prefer_battery",
@@ -638,13 +686,14 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
         },
         "final_scores": {
           "cell-generic": -1e+300,
-          "wifi-home": 0.8749387549511184
+          "wifi-home": 0.8649567868737387
         },
         "hard_constraint_reasons": {
           "cell-generic": [
@@ -707,6 +756,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -738,6 +788,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "BACKGROUND",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "BACKGROUND_SYNC",
           "target_floor": "FULL",
           "user_preference": "prefer_unmetered",
@@ -769,11 +829,11 @@
         "weights": {
           "application_priority": 0.6,
           "availability": 1.0,
-          "cost": 2.535,
-          "data": 2.1839999999999997,
-          "energy": 1.44,
-          "jitter": 1.0,
-          "latency": 1.2,
+          "cost": 2.73,
+          "data": 2.3659999999999997,
+          "energy": 2.64,
+          "jitter": 0.6,
+          "latency": 0.66,
           "packet_loss": 1.3,
           "security": 1.0,
           "signal": 1.0,
@@ -799,13 +859,14 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
         },
         "final_scores": {
-          "cell-generic": 0.7608974358974361,
-          "wifi-home": 0.6259579772080989
+          "cell-generic": 0.7749533846777461,
+          "wifi-home": 0.5844341980814963
         },
         "hard_constraint_reasons": {
           "cell-generic": [],
@@ -858,6 +919,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -889,6 +951,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "HIGH",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "COMMUNICATION",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -922,9 +994,9 @@
           "availability": 1.0,
           "cost": 0.8,
           "data": 0.9,
-          "energy": 0.7,
-          "jitter": 1.6,
-          "latency": 1.5,
+          "energy": 0.48999999999999994,
+          "jitter": 1.92,
+          "latency": 2.0250000000000004,
           "packet_loss": 1.3,
           "security": 1.0,
           "signal": 1.0,
@@ -949,6 +1021,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -1043,6 +1116,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -1074,6 +1148,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -1136,6 +1220,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -1195,6 +1280,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -1226,6 +1312,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "prefer_battery",
@@ -1281,6 +1377,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -1340,6 +1437,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -1371,6 +1469,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "prefer_low_cost",
@@ -1432,6 +1540,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -1529,6 +1638,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -1560,6 +1670,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -1627,6 +1747,7 @@
           "HUMAN_E6": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
           "PHYSICAL_VALIDATION": false,
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
           "PRODUCTION_NETWORK_OPTIMALITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
           "STANDARDIZED_6G": false
@@ -1686,6 +1807,7 @@
             "HUMAN_E6": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false
@@ -1717,6 +1839,16 @@
             "min_signal": 0.15
           },
           "notes": "engineering_configuration_thresholds",
+          "preference_policy": null,
+          "priority_authority": {
+            "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "asserted_priority": "NORMAL",
+            "issuer": "gunnchos.system_policy",
+            "label": "DIGITAL_POLICY_VALIDATION",
+            "policy_version": "wave005.v1",
+            "source": "UNKNOWN",
+            "trusted": false
+          },
           "service_class": "PRODUCTIVITY",
           "target_floor": "FULL",
           "user_preference": "balanced",
@@ -1764,6 +1896,155 @@
       "ok": true,
       "selected": "wifi-a",
       "tie": "utility_tie:0.850529;bearer_order+candidate_id;selected=wifi-a"
+    },
+    {
+      "boundary": {
+        "candidate_inputs_hash": "a30d3a30c0c4e1570e083f41a6f5bef23778891ed21a150223fc4e53d77c00a8",
+        "candidate_inputs_hash_same": true,
+        "label": "DIGITAL_SYNTHETIC_EVIDENCE",
+        "ok": true,
+        "priority_a": "BACKGROUND",
+        "priority_b": "CRITICAL",
+        "schema": "gunnchos.engineering_wave005.application_priority_boundary.v1",
+        "score_breakdown_a": {
+          "final_scores": {
+            "fast-path": 0.727579568940065,
+            "sip-path": 0.7988893669070819
+          },
+          "weights": {
+            "application_priority": 0.6,
+            "availability": 1.0,
+            "cost": 1.1199999999999999,
+            "data": 1.1700000000000002,
+            "energy": 1.54,
+            "jitter": 0.6,
+            "latency": 0.66,
+            "packet_loss": 1.3,
+            "security": 1.0,
+            "signal": 1.0,
+            "uncertainty": 0.5,
+            "user_preference": 0.8
+          }
+        },
+        "score_breakdown_b": {
+          "final_scores": {
+            "fast-path": 0.8355840873186845,
+            "sip-path": 0.8289860446031062
+          },
+          "weights": {
+            "application_priority": 0.6,
+            "availability": 1.3,
+            "cost": 0.4,
+            "data": 0.9,
+            "energy": 0.24499999999999997,
+            "jitter": 1.4,
+            "latency": 2.16,
+            "packet_loss": 1.3,
+            "security": 1.0,
+            "signal": 1.0,
+            "uncertainty": 0.5,
+            "user_preference": 0.8
+          }
+        },
+        "selected_a": "sip-path",
+        "selected_b": "fast-path",
+        "selection_changed": true
+      },
+      "expected": "priority_only_selection_change",
+      "id": "K",
+      "ok": true
+    },
+    {
+      "expected": "downgrade_self_asserted_critical",
+      "id": "L",
+      "ok": true,
+      "resolved": {
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "action": "downgraded",
+        "asserted": "CRITICAL",
+        "authority": {
+          "PRODUCTION_APP_PRIORITY_SIGNING": false,
+          "asserted_priority": "CRITICAL",
+          "issuer": "gunnchos.system_policy",
+          "label": "DIGITAL_POLICY_VALIDATION",
+          "policy_version": "wave005.v1",
+          "source": "APP_SELF_ASSERTED",
+          "trusted": false
+        },
+        "effective": "NORMAL",
+        "reasons": [
+          "APP_SELF_ASSERTED_CRITICAL_OR_HIGH_REJECTED"
+        ],
+        "trusted": false
+      }
+    },
+    {
+      "expected": "hard_avoid_cellular",
+      "id": "M",
+      "ok": true,
+      "rejected": [
+        {
+          "candidate_id": "cell-generic",
+          "flags": [],
+          "reasons": [
+            "user_hard_avoid_bearer"
+          ]
+        }
+      ],
+      "selected": "wifi-home"
+    },
+    {
+      "expected": "hard_avoid_metered",
+      "id": "N",
+      "ok": true,
+      "selected": "wifi-home"
+    },
+    {
+      "expected": "unknown_not_best_case",
+      "id": "O",
+      "ok": true,
+      "proofs": {
+        "ok": true,
+        "proofs": {
+          "missing_latency": {
+            "meta": {
+              "direction": "lower_better",
+              "floor": 200.0,
+              "ideal": 50.0,
+              "missing_as": "worst",
+              "units": "ms"
+            },
+            "ok": true,
+            "score_known": 1.0,
+            "score_missing": 0.0,
+            "selected": "known-lat"
+          },
+          "unknown_cost": {
+            "meta": {
+              "direction": "lower_cost_better",
+              "missing_as": "neutral_low_not_best",
+              "units": "policy_abstract"
+            },
+            "ok": true,
+            "score_known_unmetered": 1.0,
+            "score_unknown": 0.35,
+            "selected": "known-free"
+          },
+          "unknown_energy": {
+            "ok": true,
+            "score_known_low": 0.925,
+            "score_unknown": 0.35,
+            "selected": "known-low-e"
+          },
+          "unknown_security": {
+            "flags": [
+              "unknown_security"
+            ],
+            "ok": true,
+            "trust": "UNTRUSTED"
+          }
+        }
+      }
     }
   ],
   "schema": "gunnchos.engineering_wave005.service_continuity_scenarios.v1"

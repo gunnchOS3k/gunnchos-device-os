@@ -197,7 +197,17 @@ def sanitize_candidate(raw: CandidatePath, *, now_ts: float) -> tuple[CandidateP
             if now_ts - ts > 1e7:  # absurdly old still ok as stale later
                 pass
 
-    if c.security_trust not in TrustLevel:
+    raw_sec = c.extra.get("security_trust_raw", None)
+    if raw_sec is not None:
+        try:
+            c.security_trust = TrustLevel(str(raw_sec))
+        except ValueError:
+            flags.append("unknown_security")
+            c.security_trust = TrustLevel.UNTRUSTED
+    elif not isinstance(c.security_trust, TrustLevel):
+        flags.append("unknown_security")
+        c.security_trust = TrustLevel.UNTRUSTED
+    elif c.security_trust not in TrustLevel:
         flags.append("unknown_security")
         c.security_trust = TrustLevel.UNTRUSTED
 

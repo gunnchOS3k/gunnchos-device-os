@@ -1,0 +1,52 @@
+{
+  "candidate_inputs_hash": "a30d3a30c0c4e1570e083f41a6f5bef23778891ed21a150223fc4e53d77c00a8",
+  "candidate_inputs_hash_same": true,
+  "label": "DIGITAL_SYNTHETIC_EVIDENCE",
+  "ok": true,
+  "priority_a": "BACKGROUND",
+  "priority_b": "CRITICAL",
+  "schema": "gunnchos.engineering_wave005.application_priority_boundary.v1",
+  "score_breakdown_a": {
+    "final_scores": {
+      "fast-path": 0.727579568940065,
+      "sip-path": 0.7988893669070819
+    },
+    "weights": {
+      "application_priority": 0.6,
+      "availability": 1.0,
+      "cost": 1.1199999999999999,
+      "data": 1.1700000000000002,
+      "energy": 1.54,
+      "jitter": 0.6,
+      "latency": 0.66,
+      "packet_loss": 1.3,
+      "security": 1.0,
+      "signal": 1.0,
+      "uncertainty": 0.5,
+      "user_preference": 0.8
+    }
+  },
+  "score_breakdown_b": {
+    "final_scores": {
+      "fast-path": 0.8355840873186845,
+      "sip-path": 0.8289860446031062
+    },
+    "weights": {
+      "application_priority": 0.6,
+      "availability": 1.3,
+      "cost": 0.4,
+      "data": 0.9,
+      "energy": 0.24499999999999997,
+      "jitter": 1.4,
+      "latency": 2.16,
+      "packet_loss": 1.3,
+      "security": 1.0,
+      "signal": 1.0,
+      "uncertainty": 0.5,
+      "user_preference": 0.8
+    }
+  },
+  "selected_a": "sip-path",
+  "selected_b": "fast-path",
+  "selection_changed": true
+}

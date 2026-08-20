@@ -1,0 +1,44 @@
+{
+  "PRODUCTION_APP_PRIORITY_SIGNING": false,
+  "label": "DIGITAL_POLICY_VALIDATION",
+  "ok": true,
+  "schema": "gunnchos.engineering_wave005.application_priority_authority.v1",
+  "self_asserted": {
+    "PRODUCTION_APP_PRIORITY_SIGNING": false,
+    "action": "downgraded",
+    "asserted": "CRITICAL",
+    "authority": {
+      "PRODUCTION_APP_PRIORITY_SIGNING": false,
+      "asserted_priority": "CRITICAL",
+      "issuer": "com.example.self",
+      "label": "DIGITAL_POLICY_VALIDATION",
+      "policy_version": "wave005.v1",
+      "source": "APP_SELF_ASSERTED",
+      "trusted": false
+    },
+    "effective": "NORMAL",
+    "reasons": [
+      "APP_SELF_ASSERTED_CRITICAL_OR_HIGH_REJECTED"
+    ],
+    "trusted": false
+  },
+  "unknown_authority": {
+    "PRODUCTION_APP_PRIORITY_SIGNING": false,
+    "action": "downgraded",
+    "asserted": "CRITICAL",
+    "authority": {
+      "PRODUCTION_APP_PRIORITY_SIGNING": false,
+      "asserted_priority": "CRITICAL",
+      "issuer": "unknown",
+      "label": "DIGITAL_POLICY_VALIDATION",
+      "policy_version": "wave005.v1",
+      "source": "UNKNOWN",
+      "trusted": false
+    },
+    "effective": "NORMAL",
+    "reasons": [
+      "UNTRUSTED_OR_UNKNOWN_AUTHORITY_CANNOT_ELEVATE_CRITICAL"
+    ],
+    "trusted": false
+  }
+}

@@ -15,6 +15,7 @@ CLAIM_BOUNDARIES: dict[str, bool] = {
     "LIVE_CARRIER_HANDOVER_VALIDATED": False,
     "PRODUCTION_NETWORK_OPTIMALITY": False,
     "FIELD_MEASURED_PERFORMANCE": False,
+    "PRODUCTION_APP_PRIORITY_SIGNING": False,
 }
 
 
@@ -70,6 +71,64 @@ class UserPreferenceProfile(str, Enum):
     PREFER_TRUSTED = "prefer_trusted"
     AVOID_CELLULAR = "avoid_cellular"
     AVOID_METERED = "avoid_metered"
+
+
+class PrioritySource(str, Enum):
+    SYSTEM_POLICY = "SYSTEM_POLICY"
+    ADMIN_POLICY = "ADMIN_POLICY"
+    FIRST_PARTY_SIGNED_MANIFEST = "FIRST_PARTY_SIGNED_MANIFEST"
+    USER_REQUEST = "USER_REQUEST"
+    APP_SELF_ASSERTED = "APP_SELF_ASSERTED"
+    UNKNOWN = "UNKNOWN"
+
+
+class EnforcementMode(str, Enum):
+    SOFT = "SOFT"
+    HARD = "HARD"
+
+
+@dataclass
+class PriorityAuthority:
+    """Provenance for application priority — digital policy fixture, not production signing."""
+
+    source: PrioritySource = PrioritySource.SYSTEM_POLICY
+    issuer: str = "gunnchos.system_policy"
+    trusted: bool = True
+    policy_version: str = "wave005.v1"
+    asserted_priority: ApplicationPriority = ApplicationPriority.NORMAL
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "source": self.source.value,
+            "issuer": self.issuer,
+            "trusted": self.trusted,
+            "policy_version": self.policy_version,
+            "asserted_priority": self.asserted_priority.value,
+            "PRODUCTION_APP_PRIORITY_SIGNING": False,
+            "label": "DIGITAL_POLICY_VALIDATION",
+        }
+
+
+@dataclass
+class NetworkPreferencePolicy:
+    """Persisted preference with optional HARD avoid rules (NET-ORCH-024)."""
+
+    preference: UserPreferenceProfile = UserPreferenceProfile.BALANCED
+    enforcement_mode: EnforcementMode = EnforcementMode.SOFT
+    hard_avoid_bearers: set[str] = field(default_factory=set)
+    hard_avoid_metered: bool = False
+    profile_id: str = "default"
+    policy_version: str = "wave005.pref.v1"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "preference": self.preference.value,
+            "enforcement_mode": self.enforcement_mode.value,
+            "hard_avoid_bearers": sorted(self.hard_avoid_bearers),
+            "hard_avoid_metered": self.hard_avoid_metered,
+            "profile_id": self.profile_id,
+            "policy_version": self.policy_version,
+        }
 
 
 class CostClass(str, Enum):
@@ -151,6 +210,8 @@ class AnywhereServiceObjective:
     constraints: DecisionConstraints = field(default_factory=DecisionConstraints)
     weights: DecisionWeights = field(default_factory=DecisionWeights)
     user_preference: UserPreferenceProfile = UserPreferenceProfile.BALANCED
+    preference_policy: NetworkPreferencePolicy | None = None
+    priority_authority: PriorityAuthority | None = None
     ideal_latency_ms: float = 50.0
     ideal_jitter_ms: float = 10.0
     ideal_packet_loss: float = 0.01
@@ -174,6 +235,8 @@ class AnywhereServiceObjective:
             },
             "weights": asdict(self.weights.clamped()),
             "user_preference": self.user_preference.value,
+            "preference_policy": None if self.preference_policy is None else self.preference_policy.to_dict(),
+            "priority_authority": None if self.priority_authority is None else self.priority_authority.to_dict(),
             "ideal_latency_ms": self.ideal_latency_ms,
             "ideal_jitter_ms": self.ideal_jitter_ms,
             "ideal_packet_loss": self.ideal_packet_loss,
@@ -186,6 +249,12 @@ def default_objective_for(service: ServiceClass) -> AnywhereServiceObjective:
     obj = AnywhereServiceObjective(service_class=service)
     if service == ServiceClass.EMERGENCY:
         obj.application_priority = ApplicationPriority.CRITICAL
+        obj.priority_authority = PriorityAuthority(
+            source=PrioritySource.SYSTEM_POLICY,
+            issuer="gunnchos.system_policy.emergency",
+            trusted=True,
+            asserted_priority=ApplicationPriority.CRITICAL,
+        )
         obj.minimum_useful.max_latency_ms = 800.0
         obj.minimum_useful.min_security = TrustLevel.LIMITED
         obj.weights.energy = 0.2

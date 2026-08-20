@@ -1,0 +1,47 @@
+{
+  "TPM_KEYSTORE": false,
+  "cases": {
+    "hard_avoid_cellular_rejects_cellular": true,
+    "hard_avoid_metered_rejects_metered": true,
+    "hard_policy_restart_persistence": true,
+    "invalid_preference_fails_safe": true,
+    "profile_isolation": true,
+    "security_remains_mandatory": true,
+    "soft_avoid_cellular_allows_cell_when_wifi_unusable": true,
+    "soft_avoid_cellular_prefers_wifi": true
+  },
+  "hard_cellular_selected": "wifi",
+  "hard_metered_selected": "wifi",
+  "ok": true,
+  "persistence": {
+    "TPM_KEYSTORE": false,
+    "loaded": {
+      "enforcement_mode": "HARD",
+      "hard_avoid_bearers": [
+        "cellular_generic"
+      ],
+      "hard_avoid_metered": false,
+      "policy_version": "wave005.pref.v1",
+      "preference": "avoid_cellular",
+      "profile_id": "student-a"
+    },
+    "ok": true,
+    "software_keystore": true,
+    "stored": {
+      "enforcement_mode": "HARD",
+      "hard_avoid_bearers": [
+        "cellular_generic"
+      ],
+      "hard_avoid_metered": false,
+      "policy_version": "wave005.pref.v1",
+      "preference": "avoid_cellular",
+      "profile_id": "student-a"
+    }
+  },
+  "profile_a_selected": "wifi",
+  "profile_b_selected": "cell",
+  "schema": "gunnchos.engineering_wave005.user_preference_policy.v1",
+  "security_selected": "safe",
+  "soft_selected_wifi_down": "cell",
+  "soft_selected_wifi_up": "wifi"
+}

@@ -33,15 +33,29 @@ jobs:
         env:
           PYTHONPATH: '.:src'
         run: pytest -q tests/test_wave005_network_decision.py
+      - name: Broken evaluator must fail gate
+        env:
+          PYTHONPATH: '.:src'
+          WAVE005_BROKEN_EVALUATOR: NET-ORCH-014
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from gunnchos_device_os.network_decision.completion_gate import evaluate_completion_gate
+          from gunnchos_device_os.network_decision.evaluators import run_all_evaluators
+          bundle = run_all_evaluators()
+          gate = evaluate_completion_gate(bundle["classification"], integrity=bundle["integrity"])
+          assert gate["complete"] is False, gate
+          print("broken evaluator correctly rejected")
+          PY
       - name: Generate Wave005 evidence
         env:
           PYTHONPATH: '.:src'
         run: python scripts/engineering_wave005/run_wave005_evidence.py
-      - name: Enforce Wave005 gates
+      - name: Enforce Wave005 integrity gates
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
+          import json, re
           from pathlib import Path
           root = Path("artifacts/engineering_wave005")
           result = json.loads((root / "WAVE005_RESULT.json").read_text())
@@ -51,19 +65,43 @@ jobs:
           scenarios = json.loads((root / "SERVICE_CONTINUITY_SCENARIOS_RESULT.json").read_text())
           claims = json.loads((root / "CLAIM_BOUNDARIES.json").read_text())
           matrix = json.loads((root / "REQUIREMENT_EVALUATOR_MATRIX.json").read_text())
+          integrity = json.loads((root / "EVALUATOR_INTEGRITY_RESULT.json").read_text())
+          neg = json.loads((root / "COMPLETION_GATE_NEGATIVE_CONTROL_RESULT.json").read_text())
+          authority = json.loads((root / "APPLICATION_PRIORITY_AUTHORITY_RESULT.json").read_text())
+          boundary = json.loads((root / "APPLICATION_PRIORITY_BOUNDARY_RESULT.json").read_text())
+          policy = json.loads((root / "USER_PREFERENCE_POLICY_RESULT.json").read_text())
+          provenance = json.loads((root / "SOURCE_PROVENANCE_RESULT.json").read_text())
           assert result["wave005_ok"] is True
+          assert result["summary"]["validated"] == 12
+          assert result["summary"]["total"] == 12
           assert result["UNCONDITIONAL_TRUE_CLASSIFIERS"] == 0
+          assert result["UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED"] is True
+          assert result["WAVE005_COMPLETE_GATE_REQUIRES_12_OF_12"] is True
           assert matrix["unconditional_true_classifiers"] == 0
-          assert matrix["broken_evaluator_used_as_classifier"] is False
+          assert matrix["UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED"] is True
+          assert integrity["UNCONDITIONAL_TRUE_CLASSIFIERS"] == 0
+          assert integrity["ok"] is True
+          assert neg["BROKEN_EVALUATOR_GATE_RESULT"] == "REJECTED"
+          assert neg["ok"] is True
           assert hard["ok"] is True and hard["insecure_fast_free_rejected"] is True
           assert inv["ok"] is True
           assert invalid["ok"] is True
+          assert invalid["never_best_case_missing_invalid"] is True
+          assert invalid["NEVER_BEST_CASE_MISSING_INVALID_COMPUTED"] is True
           assert scenarios["ok"] is True
-          for k in ("STANDARDIZED_6G","CARRIER_ACCEPTED","REAL_NTN_MODEM_VALIDATED","PHYSICAL_VALIDATION","FIELD_MEASURED_PERFORMANCE"):
+          assert authority["ok"] is True
+          assert boundary["ok"] is True and boundary["selection_changed"] is True
+          assert policy["ok"] is True
+          assert provenance["evaluated_source_sha"]
+          for k in ("STANDARDIZED_6G","CARRIER_ACCEPTED","REAL_NTN_MODEM_VALIDATED","PHYSICAL_VALIDATION","FIELD_MEASURED_PERFORMANCE","PRODUCTION_APP_PRIORITY_SIGNING"):
               assert claims[k] is False, k
           assert result["OS_PLATFORM_020_UNTOUCHED"] is True
           assert result["BASELINE_COUNTS_UPDATED"] is False
-          print("wave005 CI gates PASS")
+          abs_re = re.compile(r"(/Users/|/home/|/mnt/|/tmp/|[A-Za-z]:\\\\)")
+          for path in root.glob("*.json"):
+              blob = path.read_text(encoding="utf-8")
+              assert not abs_re.search(blob), path.name
+          print("wave005 integrity CI gates PASS")
           PY
       - name: Upload Wave005 evidence
         uses: actions/upload-artifact@v4

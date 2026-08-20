@@ -119,8 +119,21 @@ def _hard_reject(candidate: CandidatePath, obj: AnywhereServiceObjective, *, now
     ):
         reasons.append("background_requires_unmetered")
 
-    # preference as hard prohibition when configured as avoid_* + constraints set
-    # Soft unless hard_prohibit set; avoid_* alone stays soft.
+    # HARD user preference policy (NET-ORCH-024) — subordinate to security/admin already checked
+    pref_policy = obj.preference_policy
+    if pref_policy is not None and pref_policy.enforcement_mode.value == "HARD":
+        if b in pref_policy.hard_avoid_bearers and b != "offline":
+            reasons.append("user_hard_avoid_bearer")
+        if pref_policy.hard_avoid_metered and (
+            candidate.data_metered or candidate.cost_class in {CostClass.METERED, CostClass.ROAMING_HIGH}
+        ):
+            # emergency/admin may still override only when explicitly allowed
+            emergency_override = (
+                obj.service_class == ServiceClass.EMERGENCY
+                and obj.constraints.allow_emergency_data_exception
+            )
+            if not emergency_override:
+                reasons.append("user_hard_avoid_metered")
 
     # telemetry invalid/stale beyond policy
     if "future_timestamp" in flags and obj.continuity.reject_future_timestamps:
@@ -197,12 +210,25 @@ def _apply_preference_weight_tilt(obj: AnywhereServiceObjective) -> dict[str, fl
         w["energy"] *= 0.3
         w["cost"] *= 0.3
     if obj.application_priority == ApplicationPriority.CRITICAL:
-        w["latency"] *= 1.3
-        w["availability"] *= 1.2
+        w["latency"] *= 1.8
+        w["jitter"] *= 1.4
+        w["availability"] *= 1.3
+        w["energy"] *= 0.35
+        w["cost"] *= 0.5
+    elif obj.application_priority == ApplicationPriority.HIGH:
+        w["latency"] *= 1.35
+        w["jitter"] *= 1.2
+        w["energy"] *= 0.7
     elif obj.application_priority == ApplicationPriority.BACKGROUND:
-        w["cost"] *= 1.3
-        w["energy"] *= 1.2
-        w["data"] *= 1.2
+        w["cost"] *= 1.4
+        w["energy"] *= 2.2
+        w["data"] *= 1.3
+        w["latency"] *= 0.55
+        w["jitter"] *= 0.6
+    elif obj.application_priority == ApplicationPriority.LOW:
+        w["energy"] *= 1.3
+        w["cost"] *= 1.2
+        w["latency"] *= 0.8
     return w
 
 
@@ -258,9 +284,22 @@ class AnywhereNetworkDecisionEngine:
     ) -> DecisionExplanation:
         now_ts = float(self.now_fn())
         if self.preference_store is not None:
-            loaded = self.preference_store.get_preference()
-            if loaded is not None:
-                objective.user_preference = loaded
+            loaded_policy = None
+            get_policy = getattr(self.preference_store, "get_policy", None)
+            if callable(get_policy):
+                loaded_policy = get_policy()
+            if loaded_policy is not None:
+                objective.preference_policy = loaded_policy
+                objective.user_preference = loaded_policy.preference
+            else:
+                loaded = self.preference_store.get_preference()
+                if loaded is not None:
+                    objective.user_preference = loaded
+
+        # Priority authority resolution (NET-ORCH-023) — late import avoids cycles
+        from gunnchos_device_os.network_decision.priority_authority import apply_priority_to_objective
+
+        apply_priority_to_objective(objective)
 
         # duplicate IDs
         seen: set[str] = set()

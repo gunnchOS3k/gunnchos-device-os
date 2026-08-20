@@ -210,9 +210,78 @@ def scenario_j() -> dict[str, Any]:
     return {"id": "J", "ok": ok, "expected": "wifi-a", "selected": d1.selected_candidate, "tie": d1.tie_break_reason, "explanation": d1.to_dict()}
 
 
+def scenario_k() -> dict[str, Any]:
+    """Same telemetry, priority-only change → selection boundary."""
+    from gunnchos_device_os.network_decision.priority_authority import prove_priority_only_boundary
+    boundary = prove_priority_only_boundary()
+    return {"id": "K", "ok": boundary.get("ok") is True, "expected": "priority_only_selection_change", "boundary": boundary}
+
+
+def scenario_l() -> dict[str, Any]:
+    """Self-asserted CRITICAL is rejected/downgraded."""
+    from gunnchos_device_os.network_decision.models import PriorityAuthority, PrioritySource
+    from gunnchos_device_os.network_decision.priority_authority import resolve_priority_authority
+    res = resolve_priority_authority(
+        ApplicationPriority.CRITICAL,
+        PriorityAuthority(source=PrioritySource.APP_SELF_ASSERTED, trusted=False, asserted_priority=ApplicationPriority.CRITICAL),
+    )
+    ok = res["effective"] != "CRITICAL" and res["action"] == "downgraded"
+    return {"id": "L", "ok": ok, "expected": "downgrade_self_asserted_critical", "resolved": res}
+
+
+def scenario_m() -> dict[str, Any]:
+    """HARD avoid_cellular prevents cellular selection."""
+    import tempfile
+    from pathlib import Path
+    from gunnchos_device_os.network_decision.models import EnforcementMode, NetworkPreferencePolicy
+    from gunnchos_device_os.network_decision.preferences import UserPreferenceStore
+    with tempfile.TemporaryDirectory() as tmp:
+        store = UserPreferenceStore(Path(tmp), profile_id="m")
+        store.set_policy(NetworkPreferencePolicy(
+            preference=UserPreferenceProfile.AVOID_CELLULAR,
+            enforcement_mode=EnforcementMode.HARD,
+            hard_avoid_bearers={"cellular_generic"},
+            profile_id="m",
+        ))
+        eng = AnywhereNetworkDecisionEngine(preference_store=store, now_fn=lambda: NOW)
+        obj = default_objective_for(ServiceClass.PRODUCTIVITY)
+        d = eng.decide([_base_wifi(latency_ms=250.0), _base_cell(latency_ms=10.0)], obj)
+        ok = d.selected_candidate == "wifi-home" and "cell-generic" in [r["candidate_id"] for r in d.rejected_candidates]
+    return {"id": "M", "ok": ok, "expected": "hard_avoid_cellular", "selected": d.selected_candidate, "rejected": d.rejected_candidates}
+
+
+def scenario_n() -> dict[str, Any]:
+    """HARD avoid_metered prevents metered selection."""
+    import tempfile
+    from pathlib import Path
+    from gunnchos_device_os.network_decision.models import EnforcementMode, NetworkPreferencePolicy
+    from gunnchos_device_os.network_decision.preferences import UserPreferenceStore
+    with tempfile.TemporaryDirectory() as tmp:
+        store = UserPreferenceStore(Path(tmp), profile_id="n")
+        store.set_policy(NetworkPreferencePolicy(
+            preference=UserPreferenceProfile.AVOID_METERED,
+            enforcement_mode=EnforcementMode.HARD,
+            hard_avoid_metered=True,
+            profile_id="n",
+        ))
+        eng = AnywhereNetworkDecisionEngine(preference_store=store, now_fn=lambda: NOW)
+        obj = default_objective_for(ServiceClass.PRODUCTIVITY)
+        d = eng.decide([_base_wifi(), _base_cell(latency_ms=5.0, signal_quality=0.99)], obj)
+        ok = d.selected_candidate == "wifi-home" and "cell-generic" in [r["candidate_id"] for r in d.rejected_candidates]
+    return {"id": "N", "ok": ok, "expected": "hard_avoid_metered", "selected": d.selected_candidate}
+
+
+def scenario_o() -> dict[str, Any]:
+    """Unknown cost/energy/latency never treated best-case."""
+    from gunnchos_device_os.network_decision.invalid_telemetry import _prove_unknown_not_best
+    proofs = _prove_unknown_not_best()
+    return {"id": "O", "ok": proofs.get("ok") is True, "expected": "unknown_not_best_case", "proofs": proofs}
+
+
 SCENARIOS: list[Callable[[], dict[str, Any]]] = [
     scenario_a, scenario_b, scenario_c, scenario_d, scenario_e,
     scenario_f, scenario_g, scenario_h, scenario_i, scenario_j,
+    scenario_k, scenario_l, scenario_m, scenario_n, scenario_o,
 ]
 
 

@@ -113,6 +113,93 @@ def run_invariants() -> dict[str, Any]:
             finite = False
     checks.append({"name": "scores_finite", "ok": finite})
 
+    # integrity-repair invariants
+    from gunnchos_device_os.network_decision.metrics import score_cost
+    from gunnchos_device_os.network_decision.models import (
+        ApplicationPriority,
+        EnforcementMode,
+        NetworkPreferencePolicy,
+        PriorityAuthority,
+        PrioritySource,
+        UserPreferenceProfile,
+    )
+    from gunnchos_device_os.network_decision.priority_authority import resolve_priority_authority
+    from gunnchos_device_os.network_decision.preferences import UserPreferenceStore
+    import tempfile
+    from pathlib import Path
+
+    self_res = resolve_priority_authority(
+        ApplicationPriority.CRITICAL,
+        PriorityAuthority(source=PrioritySource.APP_SELF_ASSERTED, trusted=False, asserted_priority=ApplicationPriority.CRITICAL),
+    )
+    checks.append({"name": "untrusted_priority_cannot_elevate_critical", "ok": self_res["effective"] != "CRITICAL"})
+
+    s_unknown_cost, _ = score_cost(_cand(monetary_cost=None, cost_class=CostClass.UNKNOWN), obj)
+    s_known_free, _ = score_cost(_cand(monetary_cost=0.0, cost_class=CostClass.UNMETERED), obj)
+    checks.append({"name": "unknown_cost_score_le_known_unmetered", "ok": s_unknown_cost <= s_known_free})
+
+    s_unknown_e, _ = score_energy(_cand(energy_cost=None), obj)
+    s_known_e, _ = score_energy(_cand(energy_cost=100.0), obj)
+    checks.append({"name": "unknown_energy_score_le_known_low", "ok": s_unknown_e <= s_known_e})
+
+    s_miss_lat, _ = score_latency(_cand(latency_ms=None), obj)
+    s_good_lat, _ = score_latency(_cand(latency_ms=20.0), obj)
+    checks.append({"name": "missing_latency_score_lt_known_good", "ok": s_miss_lat < s_good_lat})
+
+    with tempfile.TemporaryDirectory() as tmp:
+        store = UserPreferenceStore(Path(tmp), profile_id="inv")
+        store.set_policy(NetworkPreferencePolicy(
+            preference=UserPreferenceProfile.AVOID_CELLULAR,
+            enforcement_mode=EnforcementMode.HARD,
+            hard_avoid_bearers={"cellular_generic"},
+            hard_avoid_metered=True,
+            profile_id="inv",
+        ))
+        eng_h = AnywhereNetworkDecisionEngine(preference_store=store, now_fn=lambda: NOW)
+        d_h = eng_h.decide([
+            _cand(candidate_id="wifi"),
+            _cand(candidate_id="cell", bearer_class="cellular_generic", cost_class=CostClass.METERED, monetary_cost=0.02, data_metered=True, data_unlimited=False, data_remaining_fraction=0.5, latency_ms=5.0),
+        ], obj)
+        checks.append({"name": "hard_avoid_bearer_cannot_be_selected", "ok": d_h.selected_candidate != "cell"})
+        checks.append({"name": "hard_avoid_metered_cannot_select_metered", "ok": d_h.selected_candidate != "cell"})
+
+    from gunnchos_device_os.network_decision.completion_gate import evaluate_completion_gate
+    from gunnchos_device_os.network_decision.evaluators import EVALUATORS, TARGET_REQUIREMENTS
+
+    # Lightweight synthetic rows for gate negative checks — do NOT call run_all_evaluators
+    # (would recurse through invariants).
+    synthetic = {
+        req_id: {
+            "requirement_id": req_id,
+            "classification": "IMPLEMENTED_AND_VALIDATED",
+            "ok": True,
+            "note": "synthetic_gate_probe",
+            "evaluator": getattr(EVALUATORS[req_id], "__name__", req_id),
+            "evidence": {"probe": True},
+        }
+        for req_id in TARGET_REQUIREMENTS
+    }
+    # Skip integrity AST for synthetic probe (pass a stub integrity ok)
+    stub_integrity = {"UNCONDITIONAL_TRUE_CLASSIFIERS": 0, "ok": True}
+    gate_ok = evaluate_completion_gate(synthetic, evaluators=dict(EVALUATORS), integrity=stub_integrity)
+
+    false_class = {k: dict(v) for k, v in synthetic.items()}
+    first = TARGET_REQUIREMENTS[0]
+    false_class[first]["ok"] = False
+    false_class[first]["classification"] = "IMPLEMENTATION_OPEN"
+    gate_false = evaluate_completion_gate(false_class, evaluators=dict(EVALUATORS), integrity=stub_integrity)
+    checks.append({"name": "completion_gate_fails_if_any_evaluator_false", "ok": gate_false["complete"] is False})
+
+    missing_class = {k: v for k, v in synthetic.items() if k != first}
+    gate_missing = evaluate_completion_gate(missing_class, evaluators=dict(EVALUATORS), integrity=stub_integrity)
+    checks.append({"name": "completion_gate_fails_if_any_evaluator_missing", "ok": gate_missing["complete"] is False})
+
+    empty_class = {k: dict(v) for k, v in synthetic.items()}
+    empty_class[first]["evidence"] = {}
+    gate_empty = evaluate_completion_gate(empty_class, evaluators=dict(EVALUATORS), integrity=stub_integrity)
+    checks.append({"name": "completion_gate_fails_if_evaluator_evidence_empty", "ok": gate_empty["complete"] is False})
+    checks.append({"name": "completion_gate_accepts_complete_synthetic", "ok": gate_ok["complete"] is True})
+
     return {
         "schema": "gunnchos.engineering_wave005.property_invariants.v1",
         "ok": all(c["ok"] for c in checks),

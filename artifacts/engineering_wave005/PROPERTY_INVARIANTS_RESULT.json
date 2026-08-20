@@ -35,10 +35,50 @@
     {
       "name": "scores_finite",
       "ok": true
+    },
+    {
+      "name": "untrusted_priority_cannot_elevate_critical",
+      "ok": true
+    },
+    {
+      "name": "unknown_cost_score_le_known_unmetered",
+      "ok": true
+    },
+    {
+      "name": "unknown_energy_score_le_known_low",
+      "ok": true
+    },
+    {
+      "name": "missing_latency_score_lt_known_good",
+      "ok": true
+    },
+    {
+      "name": "hard_avoid_bearer_cannot_be_selected",
+      "ok": true
+    },
+    {
+      "name": "hard_avoid_metered_cannot_select_metered",
+      "ok": true
+    },
+    {
+      "name": "completion_gate_fails_if_any_evaluator_false",
+      "ok": true
+    },
+    {
+      "name": "completion_gate_fails_if_any_evaluator_missing",
+      "ok": true
+    },
+    {
+      "name": "completion_gate_fails_if_evaluator_evidence_empty",
+      "ok": true
+    },
+    {
+      "name": "completion_gate_accepts_complete_synthetic",
+      "ok": true
     }
   ],
   "ok": true,
-  "passed": 9,
+  "passed": 19,
   "schema": "gunnchos.engineering_wave005.property_invariants.v1",
-  "total": 9
+  "total": 19
 }
