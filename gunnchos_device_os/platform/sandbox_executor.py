@@ -35,13 +35,18 @@ import sys
 def _load_seccomp() -> None:
     try:
         import seccomp  # type: ignore
-    except Exception:
-        # Mount isolation may still deny shell binaries; same-interpreter spawn needs seccomp.
+    except Exception as exc:
+        Path = __import__("pathlib").Path
+        Path("seccomp_status.txt").write_text(f"unavailable:{exc}\n", encoding="utf-8")
         return
     filt = seccomp.SyscallFilter(defaction=seccomp.ALLOW)
+    # Deny child exec and network connect (GHA cannot always RTM_NEWADDR for --unshare-net).
     filt.add_rule(seccomp.ERRNO(1), "execve")
     filt.add_rule(seccomp.ERRNO(1), "execveat")
+    filt.add_rule(seccomp.ERRNO(1), "connect")
+    filt.add_rule(seccomp.ERRNO(1), "sendto")
     filt.load()
+    __import__("pathlib").Path("seccomp_status.txt").write_text("loaded\n", encoding="utf-8")
 
 if __name__ == "__main__":
     target = sys.argv[1]
@@ -203,7 +208,13 @@ class SandboxExecutor:
         prefix = str(Path(sys.prefix).resolve())
         cmd = [
             self.bwrap,
-            "--unshare-all",
+            # Avoid --unshare-all/--unshare-net on GitHub-hosted runners: configuring
+            # loopback (RTM_NEWADDR) fails with Operation not permitted and aborts bwrap.
+            # Network denial is enforced via seccomp connect/sendto filters instead.
+            "--unshare-user",
+            "--unshare-pid",
+            "--unshare-ipc",
+            "--unshare-uts",
             "--die-with-parent",
             "--proc",
             "/proc",
