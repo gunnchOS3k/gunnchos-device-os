@@ -23,38 +23,38 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Provision bubblewrap
+      - name: Provision bubblewrap + system seccomp
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y bubblewrap
+          sudo apt-get install -y bubblewrap python3-seccomp python3-venv
           command -v bwrap
           bwrap --version
-      - name: Install Python deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest pyyaml cryptography
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          /usr/bin/python3 -m venv --system-site-packages .venv-wave004
+          .venv-wave004/bin/python -c 'import seccomp; print("seccomp ok", seccomp.__file__)'
+          .venv-wave004/bin/python -m pip install --upgrade pip
+          .venv-wave004/bin/pip install pytest pyyaml cryptography
+          if [ -f requirements.txt ]; then .venv-wave004/bin/pip install -r requirements.txt; fi
       - name: Wave004 platform security tests (require sandbox validated)
         env:
           WAVE004_REQUIRE_SANDBOX_VALIDATED: '1'
           PYTHONPATH: '.:src'
         run: |
           set -euo pipefail
-          pytest -q tests/test_wave004_platform_security.py
+          .venv-wave004/bin/python -m pytest -q tests/test_wave004_platform_security.py
       - name: Generate Wave004 final integrity evidence
         env:
           PYTHONPATH: '.:src'
           WAVE004_REQUIRE_SANDBOX_VALIDATED: '1'
         run: |
           set -euo pipefail
-          python3 scripts/engineering_wave004/run_wave004_evidence.py
+          .venv-wave004/bin/python scripts/engineering_wave004/run_wave004_evidence.py
       - name: Enforce final integrity gates
         env:
           PYTHONPATH: '.:src'
         run: |
           set -euo pipefail
-          python3 - <<'PY'
+          .venv-wave004/bin/python - <<'PY'
           import json
           from pathlib import Path
           root = Path("artifacts/engineering_wave004")
