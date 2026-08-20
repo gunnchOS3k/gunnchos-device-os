@@ -2,51 +2,75 @@
   "requirements": {
     "OS-PLATFORM-008": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "DEV-signed app/game manifests via dev_keys; not production signing"
+      "note": "Persistent package lifecycle with DEV signing; not production signing",
+      "evaluator": "evaluate_os_platform_008",
+      "ok": true
     },
     "OS-PLATFORM-009": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "PermissionsManager least-privilege with role allowlists"
+      "note": "PermissionsManager least-privilege with role allowlists",
+      "evaluator": "evaluate_os_platform_009",
+      "ok": true
     },
     "OS-PLATFORM-010": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Local AI runtime micro-deterministic + optional nano; no GENERAL_VLM/ASR"
+      "note": "Local AI runtime micro-deterministic; no GENERAL_VLM/ASR",
+      "evaluator": "evaluate_os_platform_010",
+      "ok": true
     },
     "OS-PLATFORM-011": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "ConnectivityOrchestrator software bearer selection"
+      "note": "ConnectivityOrchestrator software bearer selection",
+      "evaluator": "evaluate_os_platform_011",
+      "ok": true
     },
     "OS-PLATFORM-012": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "OfflineSyncEngine vector-clock/LWW merge"
+      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge",
+      "evaluator": "evaluate_os_platform_012",
+      "ok": true
     },
     "OS-PLATFORM-013": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Software Fernet keystore; not TPM"
+      "note": "Software Fernet keystore; not TPM",
+      "evaluator": "evaluate_os_platform_013",
+      "ok": true
     },
     "OS-PLATFORM-016": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "ABUpdateManager DEV-signed OTA slots"
+      "note": "ABUpdateManager DEV-signed OTA slots",
+      "evaluator": "evaluate_os_platform_016",
+      "ok": true
     },
     "OS-PLATFORM-018": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Userspace recovery env; not hardware recovery partition"
+      "note": "Userspace recovery env; not hardware recovery partition",
+      "evaluator": "evaluate_os_platform_018",
+      "ok": true
     },
     "OS-PLATFORM-020": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "SandboxPolicyEngine software isolation profiles"
+      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False",
+      "evaluator": "evaluate_os_platform_020",
+      "ok": true
     },
     "OS-PLATFORM-021": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "DiagnosticsLog persistent redacted JSONL"
+      "note": "DiagnosticsLog persistent redacted JSONL",
+      "evaluator": "evaluate_os_platform_021",
+      "ok": true
     },
     "OS-PLATFORM-022": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Accessibility settings API; WCAG_VALIDATED=false"
+      "note": "Persisted accessibility per profile; WCAG_VALIDATED=false",
+      "evaluator": "evaluate_os_platform_022",
+      "ok": true
     },
     "OS-PLATFORM-023": {
       "classification": "IMPLEMENTED_AND_VALIDATED",
-      "note": "Role policy student/educator/guardian/admin profiles"
+      "note": "Persisted role policy with admin-authorized role change",
+      "evaluator": "evaluate_os_platform_023",
+      "ok": true
     }
   },
   "summary": {

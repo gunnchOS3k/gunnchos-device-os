@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.engineering_wave004.security_injection.v1",
-  "total": 12,
-  "blocked": 12,
+  "total": 18,
+  "blocked": 18,
   "leaked": 0,
   "ok": true,
   "cases": [
@@ -24,7 +24,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787191782375,
+        "granted_at_ms": 1787194370395,
         "expires_at_ms": null,
         "mock": false
       }
@@ -60,10 +60,10 @@
             "value": {
               "v": 1
             },
-            "replica_id": "replica-5e00a1a3",
-            "wall_time_ms": 1787191782375,
+            "replica_id": "replica-9e04779d",
+            "wall_time_ms": 1787194370396,
             "vector": {
-              "replica-5e00a1a3": 1
+              "replica-9e04779d": 1
             },
             "version": 1,
             "tombstone": false
@@ -74,7 +74,7 @@
               "v": 2
             },
             "replica_id": "remote-replica",
-            "wall_time_ms": 1787191782375,
+            "wall_time_ms": 1787194370396,
             "vector": {
               "remote-replica": 1
             },
@@ -122,16 +122,16 @@
       "case": "diagnostics_log_injection",
       "blocked": true,
       "event": {
-        "id": "evt-58b26a2f7bf4",
+        "id": "evt-00c4171c71c8",
         "redacted": true,
-        "ts_ms": 1787191782377,
+        "ts_ms": 1787194370398,
         "level": "info",
         "event_type": "injection_test",
         "details": {
           "message": "<script>alert(1)</script>",
           "password": "[REDACTED]"
         },
-        "trace_id": "a5d6a39167d34dcb9601d0481c7bfc31",
+        "trace_id": "22ac9c1419e540adac9fd3af6f00f09c",
         "mock": false,
         "persistent": true
       }
@@ -147,7 +147,7 @@
         "decision": "deny",
         "role": "guest",
         "reason": "outside_role_allowlist",
-        "granted_at_ms": 1787191782377,
+        "granted_at_ms": 1787194370398,
         "expires_at_ms": null,
         "mock": false
       }
@@ -199,6 +199,49 @@
           "mock": false
         }
       }
+    },
+    {
+      "case": "package_tamper_after_install",
+      "blocked": true,
+      "install_ok": true
+    },
+    {
+      "case": "sync_queue_replay_idempotency",
+      "blocked": true,
+      "versions": [
+        1,
+        1
+      ]
+    },
+    {
+      "case": "sandbox_host_escape_script",
+      "blocked": true,
+      "execution": {
+        "ok": true,
+        "backend": "subprocess_broker"
+      }
+    },
+    {
+      "case": "accessibility_profile_corruption",
+      "blocked": true,
+      "status": {
+        "ok": false,
+        "profile_id": "corrupt-me",
+        "error": "store_corrupt",
+        "wcag_validated": false,
+        "human_accessibility_review": false,
+        "claim_boundary": "Persisted accessibility preferences per profile. HUMAN_ACCESSIBILITY_VALIDATED=false, WCAG_VALIDATED=false."
+      }
+    },
+    {
+      "case": "role_self_escalation_attempt",
+      "blocked": true,
+      "error": "self_escalation_denied"
+    },
+    {
+      "case": "role_unauthorized_admin_grant",
+      "blocked": true,
+      "error": "authorization_requires_admin_or_guardian"
     }
   ]
 }

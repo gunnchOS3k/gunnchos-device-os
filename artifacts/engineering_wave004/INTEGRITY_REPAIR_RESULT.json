@@ -1,0 +1,67 @@
+{
+  "schema": "gunnchos.engineering_wave004.integrity_repair.v1",
+  "wave": "004",
+  "generated_at_utc": "2026-08-20T02:52:50Z",
+  "branch": "eng/wave004-integrity-repair",
+  "head_sha": "049914ea6389b55ee37b707241335bb8209ae7e2",
+  "historical_device_os_pr": 124,
+  "historical_field_kit_pr": 97,
+  "PRIMARY_REPAIR_TARGETS": [
+    "OS-PLATFORM-008",
+    "OS-PLATFORM-012",
+    "OS-PLATFORM-020",
+    "OS-PLATFORM-022",
+    "OS-PLATFORM-023"
+  ],
+  "WAVE004_POSTMERGE_INTEGRITY_REPAIR": "COMPLETE",
+  "validated_count": 12,
+  "target_requirements": 12,
+  "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
+  "DO_NOT_UPDATE_BASELINE_COUNTS": true,
+  "DO_NOT_MERGE_UNTIL_WAVE004_INTEGRITY_REPAIR_ACCEPTED": true,
+  "repair_summary": {
+    "OS-PLATFORM-008": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Persistent package lifecycle with DEV signing; not production signing",
+      "evaluator": "evaluate_os_platform_008",
+      "ok": true
+    },
+    "OS-PLATFORM-012": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Persistent OfflineSyncEngine vector-clock/LWW merge",
+      "evaluator": "evaluate_os_platform_012",
+      "ok": true
+    },
+    "OS-PLATFORM-020": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Subprocess/bwrap execution-enforced sandbox; KERNEL_SANDBOX=False",
+      "evaluator": "evaluate_os_platform_020",
+      "ok": true
+    },
+    "OS-PLATFORM-022": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Persisted accessibility per profile; WCAG_VALIDATED=false",
+      "evaluator": "evaluate_os_platform_022",
+      "ok": true
+    },
+    "OS-PLATFORM-023": {
+      "classification": "IMPLEMENTED_AND_VALIDATED",
+      "note": "Persisted role policy with admin-authorized role change",
+      "evaluator": "evaluate_os_platform_023",
+      "ok": true
+    }
+  },
+  "claim_flags": {
+    "HUMAN_E6": false,
+    "WCAG_VALIDATED": false,
+    "GENERAL_VLM": false,
+    "GENERAL_ASR": false,
+    "GENERAL_MT": false,
+    "CARRIER_ACCEPTED": false,
+    "STANDARDIZED_6G": false,
+    "PRODUCTION_SIGNING": false,
+    "TPM_KEYSTORE": false,
+    "KERNEL_SANDBOX": false
+  },
+  "wave004_ok": true
+}

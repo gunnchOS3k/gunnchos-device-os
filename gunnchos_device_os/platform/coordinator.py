@@ -6,15 +6,18 @@ from pathlib import Path
 from typing import Any
 import json
 
-from gunnchos_device_os.accessibility_manager import apply_settings, validate_coverage
 from gunnchos_device_os.connectivity_orchestrator import BearerKind, BearerMetrics, ConnectivityOrchestrator
 from gunnchos_device_os.diagnostics_log import DiagnosticsLog
-from gunnchos_device_os.offline_sync import OfflineSyncEngine
 from gunnchos_device_os.permissions_manager import PermissionsManager
 from gunnchos_device_os.phase_xiv.local_ai import LocalAiRuntime, ModelRegistry
+from gunnchos_device_os.platform.accessibility_store import AccessibilityStore
 from gunnchos_device_os.platform.encrypted_storage import SoftwareKeystore
+from gunnchos_device_os.platform.package_lifecycle import PackageLifecycleManager
+from gunnchos_device_os.platform.persistent_sync import PersistentOfflineSyncEngine
 from gunnchos_device_os.platform.recovery_userspace import UserspaceRecoveryEnv
+from gunnchos_device_os.platform.requirement_evaluators import classify_from_evaluators
 from gunnchos_device_os.platform.role_policy import RolePolicyService
+from gunnchos_device_os.platform.sandbox_executor import SandboxExecutor
 from gunnchos_device_os.platform.secure_packaging import (
     build_signed_app_package,
     verify_signed_manifest,
@@ -44,7 +47,10 @@ class Wave004PlatformCoordinator:
     keystore: SoftwareKeystore = field(init=False)
     permissions: PermissionsManager = field(init=False)
     sandbox: SandboxPolicyEngine = field(init=False)
-    offline_sync: OfflineSyncEngine = field(init=False)
+    sandbox_executor: SandboxExecutor = field(init=False)
+    offline_sync: PersistentOfflineSyncEngine = field(init=False)
+    package_lifecycle: PackageLifecycleManager = field(init=False)
+    accessibility_store: AccessibilityStore = field(init=False)
     connectivity: ConnectivityOrchestrator = field(init=False)
     diagnostics: DiagnosticsLog = field(init=False)
     role_policy: RolePolicyService = field(init=False)
@@ -61,10 +67,13 @@ class Wave004PlatformCoordinator:
         self.keystore = SoftwareKeystore(work / "keystore")
         self.permissions = PermissionsManager(role="student")
         self.sandbox = SandboxPolicyEngine()
-        self.offline_sync = OfflineSyncEngine()
+        self.sandbox_executor = SandboxExecutor(work / "sandbox_exec", self.sandbox)
+        self.offline_sync = PersistentOfflineSyncEngine(storage_path=work / "offline_sync")
+        self.package_lifecycle = PackageLifecycleManager(work / "packages", self.repo_root)
+        self.accessibility_store = AccessibilityStore(work / "accessibility")
         self.connectivity = ConnectivityOrchestrator()
         self.diagnostics = DiagnosticsLog(work / "diagnostics.jsonl")
-        self.role_policy = RolePolicyService()
+        self.role_policy = RolePolicyService(storage_path=work / "role_policy")
         self.recovery_userspace = UserspaceRecoveryEnv(work / "recovery")
         ota_state = work / "ota" / "device_state.json"
         self.ota_manager = ABUpdateManager(self.repo_root, ota_state)
@@ -73,6 +82,7 @@ class Wave004PlatformCoordinator:
         self._registry = ModelRegistry(work / "local_ai")
         self.local_ai = LocalAiRuntime(self._registry)
         self.local_ai.ensure_default_models(self.repo_root)
+        CLAIM_FLAGS["KERNEL_SANDBOX"] = self.sandbox_executor.kernel_sandbox
 
     # -- connectivity helpers ------------------------------------------------
     def set_bearer_available(self, bearer: str, available: bool) -> None:
@@ -120,14 +130,15 @@ class Wave004PlatformCoordinator:
         return verify_signed_manifest(self.repo_root, signed)
 
     def install_signed_package(self, app_id: str, *, app_class: str = "first_party") -> dict[str, Any]:
-        pkg = self.build_signed_package()
+        install = self.package_lifecycle.install(app_id, app_class=app_class)
         profile = self.sandbox.create_profile(app_id, app_class)
         return {
-            "ok": pkg.get("ok") and profile.app_id == app_id,
+            "ok": install.get("ok") and profile.app_id == app_id,
             "app_id": app_id,
-            "signature_valid": pkg.get("apps_signature_valid"),
+            "signature_valid": install.get("signature_valid"),
             "trust_root": "local_dev",
             "profile": profile.to_dict(),
+            "lifecycle": install,
         }
 
     def build_ota_metadata(self, *, to_version: str, anti_rollback_counter: int | None = None) -> dict[str, Any]:
@@ -174,73 +185,22 @@ class Wave004PlatformCoordinator:
     def merge_remote_record(self, remote_dict: dict[str, Any]) -> dict[str, Any]:
         return self.offline_sync.apply_remote(remote_dict)
 
-    def accessibility_status(self) -> dict[str, Any]:
-        settings = apply_settings({"large_text": True, "reduced_motion": True})
-        missing = validate_coverage(settings)
-        return {
-            "settings": settings,
-            "missing_features": missing,
-            "wcag_validated": False,
-            "human_accessibility_review": False,
-        }
+    def accessibility_status(self, profile_id: str = "default") -> dict[str, Any]:
+        return self.accessibility_store.load(profile_id)
 
     # -- classification ------------------------------------------------------
     def classify_requirements(self) -> dict[str, dict[str, Any]]:
-        """Honest Wave 004 requirement classification."""
-        pkg = self.build_signed_package()
-        a11y = self.accessibility_status()
-        ai_inv = self.local_ai.intelligence_inventory()
-        classifications = {
-            "OS-PLATFORM-008": self._classify(
-                pkg.get("ok"),
-                "DEV-signed app/game manifests via dev_keys; not production signing",
-            ),
-            "OS-PLATFORM-009": self._classify(True, "PermissionsManager least-privilege with role allowlists"),
-            "OS-PLATFORM-010": self._classify(
-                "micro-deterministic-v1" in self._registry.models,
-                "Local AI runtime micro-deterministic + optional nano; no GENERAL_VLM/ASR",
-            ),
-            "OS-PLATFORM-011": self._classify(True, "ConnectivityOrchestrator software bearer selection"),
-            "OS-PLATFORM-012": self._classify(True, "OfflineSyncEngine vector-clock/LWW merge"),
-            "OS-PLATFORM-013": self._classify(
-                self.keystore.put("_probe", b"x", namespace="validation").get("ok"),
-                "Software Fernet keystore; not TPM",
-            ),
-            "OS-PLATFORM-016": self._classify(
-                self.ota_manager.status().get("active_slot") in ("A", "B"),
-                "ABUpdateManager DEV-signed OTA slots",
-            ),
-            "OS-PLATFORM-018": self._classify(
-                self.recovery_userspace.inspect().get("ok"),
-                "Userspace recovery env; not hardware recovery partition",
-            ),
-            "OS-PLATFORM-020": self._classify(True, "SandboxPolicyEngine software isolation profiles"),
-            "OS-PLATFORM-021": self._classify(True, "DiagnosticsLog persistent redacted JSONL"),
-            "OS-PLATFORM-022": self._classify(
-                len(a11y.get("missing_features", [])) == 0,
-                "Accessibility settings API; WCAG_VALIDATED=false",
-                partial_if_fail=True,
-            ),
-            "OS-PLATFORM-023": self._classify(
-                self.role_policy.assign_profile("_probe", "educator").get("ok"),
-                "Role policy student/educator/guardian/admin profiles",
-            ),
-        }
-        return classifications
-
-    def _classify(self, ok: bool, note: str, *, partial_if_fail: bool = False) -> dict[str, Any]:
-        if ok:
-            return {"classification": "IMPLEMENTED_AND_VALIDATED", "note": note}
-        if partial_if_fail:
-            return {"classification": "IMPLEMENTED_VALIDATION_OPEN", "note": note}
-        return {"classification": "IMPLEMENTATION_OPEN", "note": note}
+        """Executable evaluator-driven classification — no literal True classifiers."""
+        return classify_from_evaluators(self)
 
     def status(self) -> dict[str, Any]:
         return {
             "keystore": self.keystore.status(),
             "permissions_role": self.permissions.role,
             "sandbox_profiles": len(self.sandbox.profiles),
+            "sandbox_executor": self.sandbox_executor.status(),
             "offline_sync_size": len(self.offline_sync.store),
+            "package_lifecycle": self.package_lifecycle.inspect(),
             "connectivity_active": self.connectivity.active_bearer.value,
             "diagnostics_path": str(self.diagnostics.path),
             "role_policy": self.role_policy.status(),
@@ -253,18 +213,30 @@ class Wave004PlatformCoordinator:
 
     def run_full_validation(self) -> dict[str, Any]:
         from gunnchos_device_os.platform.e2e_scenarios import run_all_scenarios
+        from gunnchos_device_os.platform.requirement_evaluators import build_evaluator_matrix
         from gunnchos_device_os.platform.security_injection import run_security_injections
 
         e2e = run_all_scenarios(self)
         sec = run_security_injections(self)
-        classification = self.classify_requirements()
-        validated = sum(1 for v in classification.values() if v["classification"] == "IMPLEMENTED_AND_VALIDATED")
+        matrix = build_evaluator_matrix(self)
+        classification = {
+            req_id: {
+                "classification": r["classification"],
+                "note": r["note"],
+                "evaluator": r["evaluator"],
+                "ok": r["ok"],
+            }
+            for req_id, r in matrix["results"].items()
+        }
+        validated = matrix["validated_count"]
         return {
             "e2e": e2e,
             "security_injection": sec,
             "requirement_classification": classification,
+            "evaluator_matrix": matrix,
             "validated_count": validated,
             "target_requirements": 12,
-            "ok": e2e.get("ok") and sec.get("ok") and validated >= 10,
+            "unconditional_true_classifiers": 0,
+            "ok": e2e.get("ok") and sec.get("ok") and validated == 12,
             "claim_flags": dict(CLAIM_FLAGS),
         }
