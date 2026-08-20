@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,7 +13,6 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from gunnchos_device_os.platform.coordinator import Wave004PlatformCoordinator  # noqa: E402
-from gunnchos_device_os.platform.requirement_evaluators import build_evaluator_matrix  # noqa: E402
 
 
 def _git_head() -> str:
@@ -25,10 +25,12 @@ def _git_head() -> str:
 def main() -> int:
     out_dir = ROOT / "artifacts/engineering_wave004"
     out_dir.mkdir(parents=True, exist_ok=True)
-    coord = Wave004PlatformCoordinator(out_dir)
-    validation = coord.run_full_validation()
-    classification = validation["requirement_classification"]
-    matrix = validation["evaluator_matrix"]
+    with tempfile.TemporaryDirectory(prefix="wave004-evidence-") as tmp:
+        coord = Wave004PlatformCoordinator(Path(tmp))
+        validation = coord.run_full_validation()
+        classification = validation["requirement_classification"]
+        matrix = validation["evaluator_matrix"]
+        runtime_status = coord.status()
     summary = {
         "validated": sum(1 for v in classification.values() if v["classification"] == "IMPLEMENTED_AND_VALIDATED"),
         "implemented_validation_open": sum(
@@ -63,9 +65,7 @@ def main() -> int:
         "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
         "DO_NOT_UPDATE_BASELINE_COUNTS": True,
         "DO_NOT_MERGE_UNTIL_WAVE004_INTEGRITY_REPAIR_ACCEPTED": True,
-        "repair_summary": {
-            req: classification.get(req, {}) for req in primary_repair_targets
-        },
+        "repair_summary": {req: classification.get(req, {}) for req in primary_repair_targets},
         "claim_flags": validation["claim_flags"],
         "wave004_ok": validation["ok"],
     }
@@ -94,7 +94,7 @@ def main() -> int:
         "E2E_SCENARIOS_RESULT.json": validation["e2e"],
         "SECURITY_INJECTION_RESULT.json": validation["security_injection"],
         "CLAIM_BOUNDARIES.json": {"claim_flags": validation["claim_flags"]},
-        "RUNTIME_STATUS.json": coord.status(),
+        "RUNTIME_STATUS.json": runtime_status,
     }
     for name, payload in files.items():
         (out_dir / name).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

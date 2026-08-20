@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
   "total": 11,
-  "passed": 10,
-  "failed": 1,
-  "ok": false,
+  "passed": 11,
+  "failed": 0,
+  "ok": true,
   "scenarios": [
     {
       "scenario": "A",
@@ -43,10 +43,10 @@
           "app_id": "demo-app",
           "app_class": "first_party",
           "version": "1.0.0",
-          "installed_at_ms": 1787194381078,
+          "installed_at_ms": 1787194413219,
           "signature_valid": true,
           "trust_root": "local_dev",
-          "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/demo-app/signed_manifest.json"
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/demo-app/signed_manifest.json"
         }
       },
       "sandbox_isolation": "app",
@@ -56,7 +56,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787194381079,
+        "granted_at_ms": 1787194413219,
         "expires_at_ms": null,
         "mock": false
       }
@@ -73,36 +73,12 @@
       },
       "connectivity": "wifi",
       "sync": {
-        "flushed": 5,
+        "flushed": 1,
         "ok": true,
         "result": {
-          "replica_id": "replica-9e04779d",
+          "replica_id": "replica-d2847f96",
           "policy": "vector_clock",
           "results": [
-            {
-              "status": "synced",
-              "key": "persist-key",
-              "applied": "causal",
-              "mock": false
-            },
-            {
-              "status": "synced",
-              "key": "k1",
-              "applied": "causal",
-              "mock": false
-            },
-            {
-              "status": "synced",
-              "key": "replay-key",
-              "applied": "causal",
-              "mock": false
-            },
-            {
-              "status": "synced",
-              "key": "sync-eval",
-              "applied": "causal",
-              "mock": false
-            },
             {
               "status": "synced",
               "key": "notes",
@@ -110,41 +86,8 @@
               "mock": false
             }
           ],
-          "store_size": 5,
-          "conflicts": [
-            {
-              "key": "k1",
-              "local": {
-                "key": "k1",
-                "value": {
-                  "v": 1
-                },
-                "replica_id": "replica-9e04779d",
-                "wall_time_ms": 1787194370396,
-                "vector": {
-                  "replica-9e04779d": 1
-                },
-                "version": 1,
-                "tombstone": false
-              },
-              "remote": {
-                "key": "k1",
-                "value": {
-                  "v": 2
-                },
-                "replica_id": "remote-replica",
-                "wall_time_ms": 1787194370396,
-                "vector": {
-                  "remote-replica": 1
-                },
-                "version": 1,
-                "tombstone": false
-              },
-              "policy": "vector_clock",
-              "winner": "merged_lww_fallback",
-              "reason": "concurrent_then_tie_break_replica_id"
-            }
-          ],
+          "store_size": 1,
+          "conflicts": [],
           "mock": false
         }
       }
@@ -159,7 +102,7 @@
         "decision": "allow",
         "role": "student",
         "reason": "least_privilege_allow",
-        "granted_at_ms": 1787194381081,
+        "granted_at_ms": 1787194413220,
         "expires_at_ms": null,
         "mock": false
       },
@@ -181,12 +124,18 @@
     {
       "scenario": "D",
       "name": "ota_recovery",
-      "ok": false,
+      "ok": true,
       "ota": {
-        "applied": false,
+        "applied": true,
         "stage": {
-          "ok": false,
-          "error": "signing_key_revoked"
+          "ok": true,
+          "target_slot": "B",
+          "status": "staged_complete"
+        },
+        "boot": {
+          "ok": true,
+          "active_slot": "B",
+          "boot_attempts": 1
         }
       },
       "recovery": {
@@ -212,8 +161,8 @@
       "scenario": "E",
       "name": "diagnostics_redaction",
       "ok": true,
-      "event_id": "evt-032cd67a99d5",
-      "export_count": 4
+      "event_id": "evt-4f9acbdd5319",
+      "export_count": 1
     },
     {
       "scenario": "F",
@@ -232,10 +181,10 @@
         "app_id": "restart-app",
         "app_class": "first_party",
         "version": "2.0.0",
-        "installed_at_ms": 1787194381085,
+        "installed_at_ms": 1787194413225,
         "signature_valid": true,
         "trust_root": "local_dev",
-        "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/restart-app/signed_manifest.json"
+        "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
       },
       "reload": {
         "ok": true,
@@ -244,10 +193,10 @@
           "app_id": "restart-app",
           "app_class": "first_party",
           "version": "2.0.0",
-          "installed_at_ms": 1787194381085,
+          "installed_at_ms": 1787194413225,
           "signature_valid": true,
           "trust_root": "local_dev",
-          "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/restart-app/signed_manifest.json"
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
         },
         "signature_valid": true
       }

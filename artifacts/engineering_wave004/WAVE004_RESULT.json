@@ -1,10 +1,10 @@
 {
   "schema": "gunnchos.engineering_wave004.v1",
   "wave": "004",
-  "generated_at_utc": "2026-08-20T02:53:01Z",
+  "generated_at_utc": "2026-08-20T02:53:33Z",
   "primary_repo": "gunnchos-device-os",
   "branch": "eng/wave004-integrity-repair",
-  "head_sha": "292a22fbb3f26f087a04baeb55fa997efcb2de70",
+  "head_sha": "45455e7c7caac7f98d4b2f8d693e286c5b4d6c82",
   "target_requirements": 12,
   "summary": {
     "validated": 12,
@@ -91,9 +91,9 @@
   "e2e_scenarios": {
     "schema": "gunnchos.engineering_wave004.e2e_scenarios.v1",
     "total": 11,
-    "passed": 10,
-    "failed": 1,
-    "ok": false,
+    "passed": 11,
+    "failed": 0,
+    "ok": true,
     "scenarios": [
       {
         "scenario": "A",
@@ -133,10 +133,10 @@
             "app_id": "demo-app",
             "app_class": "first_party",
             "version": "1.0.0",
-            "installed_at_ms": 1787194381078,
+            "installed_at_ms": 1787194413219,
             "signature_valid": true,
             "trust_root": "local_dev",
-            "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/demo-app/signed_manifest.json"
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/demo-app/signed_manifest.json"
           }
         },
         "sandbox_isolation": "app",
@@ -146,7 +146,7 @@
           "decision": "allow",
           "role": "student",
           "reason": "least_privilege_allow",
-          "granted_at_ms": 1787194381079,
+          "granted_at_ms": 1787194413219,
           "expires_at_ms": null,
           "mock": false
         }
@@ -163,36 +163,12 @@
         },
         "connectivity": "wifi",
         "sync": {
-          "flushed": 5,
+          "flushed": 1,
           "ok": true,
           "result": {
-            "replica_id": "replica-9e04779d",
+            "replica_id": "replica-d2847f96",
             "policy": "vector_clock",
             "results": [
-              {
-                "status": "synced",
-                "key": "persist-key",
-                "applied": "causal",
-                "mock": false
-              },
-              {
-                "status": "synced",
-                "key": "k1",
-                "applied": "causal",
-                "mock": false
-              },
-              {
-                "status": "synced",
-                "key": "replay-key",
-                "applied": "causal",
-                "mock": false
-              },
-              {
-                "status": "synced",
-                "key": "sync-eval",
-                "applied": "causal",
-                "mock": false
-              },
               {
                 "status": "synced",
                 "key": "notes",
@@ -200,41 +176,8 @@
                 "mock": false
               }
             ],
-            "store_size": 5,
-            "conflicts": [
-              {
-                "key": "k1",
-                "local": {
-                  "key": "k1",
-                  "value": {
-                    "v": 1
-                  },
-                  "replica_id": "replica-9e04779d",
-                  "wall_time_ms": 1787194370396,
-                  "vector": {
-                    "replica-9e04779d": 1
-                  },
-                  "version": 1,
-                  "tombstone": false
-                },
-                "remote": {
-                  "key": "k1",
-                  "value": {
-                    "v": 2
-                  },
-                  "replica_id": "remote-replica",
-                  "wall_time_ms": 1787194370396,
-                  "vector": {
-                    "remote-replica": 1
-                  },
-                  "version": 1,
-                  "tombstone": false
-                },
-                "policy": "vector_clock",
-                "winner": "merged_lww_fallback",
-                "reason": "concurrent_then_tie_break_replica_id"
-              }
-            ],
+            "store_size": 1,
+            "conflicts": [],
             "mock": false
           }
         }
@@ -249,7 +192,7 @@
           "decision": "allow",
           "role": "student",
           "reason": "least_privilege_allow",
-          "granted_at_ms": 1787194381081,
+          "granted_at_ms": 1787194413220,
           "expires_at_ms": null,
           "mock": false
         },
@@ -271,12 +214,18 @@
       {
         "scenario": "D",
         "name": "ota_recovery",
-        "ok": false,
+        "ok": true,
         "ota": {
-          "applied": false,
+          "applied": true,
           "stage": {
-            "ok": false,
-            "error": "signing_key_revoked"
+            "ok": true,
+            "target_slot": "B",
+            "status": "staged_complete"
+          },
+          "boot": {
+            "ok": true,
+            "active_slot": "B",
+            "boot_attempts": 1
           }
         },
         "recovery": {
@@ -302,8 +251,8 @@
         "scenario": "E",
         "name": "diagnostics_redaction",
         "ok": true,
-        "event_id": "evt-032cd67a99d5",
-        "export_count": 4
+        "event_id": "evt-4f9acbdd5319",
+        "export_count": 1
       },
       {
         "scenario": "F",
@@ -322,10 +271,10 @@
           "app_id": "restart-app",
           "app_class": "first_party",
           "version": "2.0.0",
-          "installed_at_ms": 1787194381085,
+          "installed_at_ms": 1787194413225,
           "signature_valid": true,
           "trust_root": "local_dev",
-          "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/restart-app/signed_manifest.json"
+          "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
         },
         "reload": {
           "ok": true,
@@ -334,10 +283,10 @@
             "app_id": "restart-app",
             "app_class": "first_party",
             "version": "2.0.0",
-            "installed_at_ms": 1787194381085,
+            "installed_at_ms": 1787194413225,
             "signature_valid": true,
             "trust_root": "local_dev",
-            "manifest_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/wave004-integrity-repair/artifacts/engineering_wave004/runtime_work/packages/installed/restart-app/signed_manifest.json"
+            "manifest_path": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/wave004-evidence-s7mqh883/runtime_work/packages/installed/restart-app/signed_manifest.json"
           },
           "signature_valid": true
         }
@@ -428,7 +377,7 @@
           "decision": "deny",
           "role": "guest",
           "reason": "outside_role_allowlist",
-          "granted_at_ms": 1787194381130,
+          "granted_at_ms": 1787194413269,
           "expires_at_ms": null,
           "mock": false
         }
@@ -455,9 +404,43 @@
         "case": "offline_sync_conflict_storm",
         "blocked": true,
         "merge": {
-          "status": "synced",
+          "status": "conflict",
           "key": "k1",
-          "applied": "causal",
+          "conflict": {
+            "key": "k1",
+            "local": {
+              "key": "k1",
+              "value": {
+                "v": 1
+              },
+              "replica_id": "replica-d2847f96",
+              "wall_time_ms": 1787194413270,
+              "vector": {
+                "replica-d2847f96": 1
+              },
+              "version": 1,
+              "tombstone": false
+            },
+            "remote": {
+              "key": "k1",
+              "value": {
+                "v": 2
+              },
+              "replica_id": "remote-replica",
+              "wall_time_ms": 1787194413270,
+              "vector": {
+                "remote-replica": 1
+              },
+              "version": 1,
+              "tombstone": false
+            },
+            "policy": "vector_clock",
+            "winner": "merged_lww_fallback",
+            "reason": "concurrent_then_tie_break_replica_id"
+          },
+          "resolved_value": {
+            "v": 1
+          },
           "mock": false
         }
       },
@@ -492,16 +475,16 @@
         "case": "diagnostics_log_injection",
         "blocked": true,
         "event": {
-          "id": "evt-f15fc305dd1f",
+          "id": "evt-60e7194e979a",
           "redacted": true,
-          "ts_ms": 1787194381133,
+          "ts_ms": 1787194413271,
           "level": "info",
           "event_type": "injection_test",
           "details": {
             "message": "<script>alert(1)</script>",
             "password": "[REDACTED]"
           },
-          "trace_id": "ebf8949b24c04816a9df5ddc719a1621",
+          "trace_id": "1a5cd99b90164fcdae6957234080fc38",
           "mock": false,
           "persistent": true
         }
@@ -517,7 +500,7 @@
           "decision": "deny",
           "role": "guest",
           "reason": "outside_role_allowlist",
-          "granted_at_ms": 1787194381133,
+          "granted_at_ms": 1787194413272,
           "expires_at_ms": null,
           "mock": false
         }
@@ -629,5 +612,5 @@
   },
   "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
   "DO_NOT_UPDATE_BASELINE_COUNTS": true,
-  "wave004_ok": false
+  "wave004_ok": true
 }
