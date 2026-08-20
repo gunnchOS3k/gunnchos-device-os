@@ -64,7 +64,8 @@ def test_wave004_e2e_core_scenarios_pass(coord: Wave004PlatformCoordinator) -> N
 
 def test_wave004_security_injection_blocks(coord: Wave004PlatformCoordinator) -> None:
     result = run_security_injections(coord)
-    assert result["leaked"] == 0, result
+    leaked = [c for c in result["cases"] if c.get("blocked") is False]
+    assert result["leaked"] == 0, leaked
 
 
 def test_wave004_requirement_classification_no_false_sandbox(coord: Wave004PlatformCoordinator) -> None:
@@ -123,7 +124,29 @@ def test_wave004_ci_gate_requires_twelve_of_twelve(coord: Wave004PlatformCoordin
     report = coord.run_full_validation()
     # On Ubuntu+bwrap CI this must be 12/12; locally sandbox may be BLOCKED_ENVIRONMENT.
     if os.environ.get("WAVE004_REQUIRE_SANDBOX_VALIDATED") == "1":
-        assert report["validated_count"] == report["target_requirements"]
+        suite = coord.sandbox_executor.run_enforcement_suite("ci-gate-probe")
+        assert report["validated_count"] == report["target_requirements"], {
+            "validated_count": report["validated_count"],
+            "classification_020": report["requirement_classification"].get("OS-PLATFORM-020"),
+            "sandbox_suite": {
+                k: suite.get(k)
+                for k in (
+                    "SANDBOX_BACKEND",
+                    "LOCAL_SANDBOX_VALIDATION",
+                    "SANDBOX_EXECUTION_VALIDATED",
+                    "HOST_PRIVATE_READ_BLOCKED",
+                    "OUTSIDE_WRITE_BLOCKED",
+                    "NETWORK_DENIED",
+                    "NETWORK_CONTROL_REACHABLE",
+                    "CHILD_SPAWN_DENIED",
+                    "CROSS_APP_READ_BLOCKED",
+                    "PRIVILEGED_CAPABILITY_DENIED",
+                    "stderr_tail",
+                    "exit_code",
+                    "fixture_result",
+                )
+            },
+        }
         assert report["ok"] is True
     else:
         assert report["validated_count"] >= 11
