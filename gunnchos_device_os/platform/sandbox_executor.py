@@ -36,6 +36,7 @@ def _load_seccomp() -> None:
     try:
         import seccomp  # type: ignore
     except Exception:
+        # Mount isolation may still deny shell binaries; same-interpreter spawn needs seccomp.
         return
     filt = seccomp.SyscallFilter(defaction=seccomp.ALLOW)
     filt.add_rule(seccomp.ERRNO(1), "execve")
@@ -208,24 +209,26 @@ class SandboxExecutor:
             "/proc",
             "--dev",
             "/dev",
-            "--tmpfs",
-            "/tmp",
-            "--dir",
-            "/etc",
-            "--dir",
+            # Do not tmpfs-mask /tmp: pytest/CI place sandbox roots under /tmp and
+            # masking it before bind can break the writable app root.
+            "--ro-bind",
             "/usr",
-            "--dir",
-            "/bin",
+            "/usr",
         ]
-        # Bind interpreter tree + shared libs, but NOT /usr/bin or /bin executables
-        # so child-spawn probes (/bin/sh, /usr/bin/id) fail without relying on seccomp wheels.
+        for p in ("/lib", "/lib64", "/lib32", "/bin", "/sbin"):
+            if Path(p).exists():
+                cmd.extend(["--ro-bind", p, p])
         if Path(prefix).exists():
             cmd.extend(["--ro-bind", prefix, prefix])
         cmd.extend(["--ro-bind", real_py, real_py])
-        for p in ("/lib", "/lib64", "/lib32", "/usr/lib", "/usr/lib64"):
-            if Path(p).exists():
-                cmd.extend(["--ro-bind", p, p])
-        for bind in ("/etc/ld.so.cache", "/etc/alternatives", "/etc/ssl"):
+        # System site-packages (apt python3-seccomp) when using --system-site-packages venvs.
+        for site in (
+            "/usr/lib/python3/dist-packages",
+            f"/usr/lib/python{sys.version_info.major}.{sys.version_info.minor}/dist-packages",
+        ):
+            if Path(site).exists():
+                cmd.extend(["--ro-bind", site, site])
+        for bind in ("/etc/ld.so.cache", "/etc/alternatives", "/etc/ssl", "/etc/passwd"):
             if Path(bind).exists():
                 cmd.extend(["--ro-bind", bind, bind])
         cmd.extend(
@@ -238,13 +241,13 @@ class SandboxExecutor:
                 "--clearenv",
                 "--setenv",
                 "PATH",
-                work,
+                "/usr/bin:/bin",
                 "--setenv",
                 "HOME",
                 work,
                 "--setenv",
                 "PYTHONPATH",
-                "",
+                "/usr/lib/python3/dist-packages",
                 "--setenv",
                 "LANG",
                 "C",
