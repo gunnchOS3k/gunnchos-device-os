@@ -1,20 +1,120 @@
 {
-  "deferred_while_offline": {
-    "attempted": false,
-    "pending": 1,
-    "reason": "deferred_until_connectivity:OFFLINE",
-    "remote_apply_count": 0
+  "SYNC_EXACTLY_ONCE": true,
+  "SYNC_MAX_BYTES_ENFORCED": true,
+  "SYNC_OPPORTUNITY_PLANNER": true,
+  "checks": {
+    "fresh_process_ok": true,
+    "healthy_broad": true,
+    "local_peer_subset": true,
+    "low_battery_defers_bg": true,
+    "max_bytes_enforced": true,
+    "metered_high_priority_only": true,
+    "ntn_simulated_compact": true,
+    "opportunity_expiry": true,
+    "replay_no_duplicate": true
   },
-  "flushed_when_healthy": {
-    "attempted": true,
-    "pending": 0,
-    "remote_apply_count": 1
-  },
-  "fresh_process_pending_after_flush": 0,
   "proof_ok": true,
-  "schema": "gunnchos.engineering_wave006.opportunistic_sync.v1",
-  "wave004_abc_reuse": {
-    "ok": true,
-    "schema": "gunnchos.engineering_wave004.offline_sync_a_b_c_restart.v1"
-  }
+  "results": {
+    "expired": {
+      "applied": [],
+      "ok": false,
+      "reason": "opportunity_expired",
+      "remaining": [
+        "peer-bg"
+      ]
+    },
+    "fresh_replay": {
+      "ledger": [
+        "idem-fit"
+      ],
+      "r1": {
+        "applied": [],
+        "bytes_used": 0,
+        "ok": true,
+        "opportunity_id": "opp-c9051409f6",
+        "remaining": [
+          "leave"
+        ]
+      },
+      "r2": {
+        "applied": [],
+        "bytes_used": 0,
+        "ok": true,
+        "opportunity_id": "opp-c9051409f6",
+        "remaining": [
+          "leave"
+        ]
+      }
+    },
+    "healthy": {
+      "applied": [
+        "s-emerg",
+        "s-comm",
+        "s-learn",
+        "s-bg"
+      ],
+      "bytes_used": 5700,
+      "ok": true,
+      "opportunity_id": "opp-4bb95ab5bb",
+      "remaining": [
+        "s-big"
+      ]
+    },
+    "low_battery": {
+      "applied": [
+        "lb-comm"
+      ],
+      "bytes_used": 50,
+      "ok": true,
+      "opportunity_id": "opp-2d52079306",
+      "remaining": [
+        "lb-bg"
+      ]
+    },
+    "max_bytes": {
+      "applied": [
+        "fit"
+      ],
+      "bytes_used": 50,
+      "ok": true,
+      "opportunity_id": "opp-fbde0ecbc6",
+      "remaining": [
+        "leave"
+      ]
+    },
+    "metered": {
+      "applied": [
+        "m-comm"
+      ],
+      "bytes_used": 100,
+      "ok": true,
+      "opportunity_id": "opp-985efba31a",
+      "remaining": [
+        "m-bg"
+      ]
+    },
+    "ntn": {
+      "applied": [
+        "ntn-hi"
+      ],
+      "bytes_used": 80,
+      "ok": true,
+      "opportunity_id": "opp-87a8d2da4f",
+      "remaining": [
+        "ntn-lo"
+      ]
+    },
+    "peer": {
+      "applied": [
+        "peer-learn"
+      ],
+      "bytes_used": 40,
+      "ok": true,
+      "opportunity_id": "opp-48bc93d29e",
+      "remaining": [
+        "peer-bg"
+      ]
+    }
+  },
+  "schema": "gunnchos.engineering_wave006.opportunistic_sync.v1"
 }

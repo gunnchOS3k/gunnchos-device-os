@@ -5,13 +5,19 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_026",
       "evidence_keys": [
+        "FIELD_MEASURED_SATELLITE_VISIBILITY",
         "REAL_NTN_MODEM_VALIDATED",
+        "SATELLITE_VISIBILITY_WINDOWS",
         "allowed_provenance",
-        "digital_twin",
-        "missing_inputs",
+        "checks",
+        "expired",
+        "fresh",
+        "future",
         "proof_ok",
         "schema",
-        "simulated"
+        "short_window",
+        "stale",
+        "unknown"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-026"
@@ -20,11 +26,11 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_027",
       "evidence_keys": [
-        "available",
-        "degraded",
+        "LOCAL_INFRA_CAPABILITY_GRAPH",
+        "checks",
         "proof_ok",
-        "schema",
-        "unavailable"
+        "scenarios",
+        "schema"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-027"
@@ -33,11 +39,16 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_028",
       "evidence_keys": [
+        "CARRIER_ACCEPTED",
         "LIVE_CARRIER_HANDOVER_VALIDATED",
-        "no_candidates",
+        "TRANSITION_ROLLBACK_PROOF",
+        "TRANSITION_TRANSACTION_RUNTIME",
+        "checks",
+        "duplicate",
+        "negatives",
         "proof_ok",
         "schema",
-        "wifi_to_cellular"
+        "success"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-028"
@@ -46,15 +57,15 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_029",
       "evidence_keys": [
-        "LIVE_CARRIER_HANDOVER_VALIDATED",
-        "distinct_pids",
-        "fresh_process_required",
-        "pids",
-        "process_b_cursor",
-        "process_b_resumed",
-        "process_c_cursor",
-        "process_c_resumed",
-        "process_c_sequence",
+        "SESSION_DUPLICATE_RESUME_BLOCKED",
+        "SESSION_RESUME_EXACTLY_ONCE",
+        "b_stderr",
+        "c_stderr",
+        "checks",
+        "failures",
+        "process_a",
+        "process_b",
+        "process_c",
         "proof_ok",
         "schema"
       ],
@@ -65,13 +76,19 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_030",
       "evidence_keys": [
-        "KERNEL_MPTCP_VALIDATED",
+        "APPLICATION_MULTIPATH_REAL_TRANSFER",
+        "DUPLICATE_COMMIT_COUNT",
         "MULTIPATH_KIND",
+        "MULTIPATH_PATH_FAILURE_CONTINUES",
+        "MULTIPATH_PAYLOAD_HASH_MATCH",
+        "PRODUCTION_MPTCP_VALIDATED",
         "REAL_MPTCP",
-        "dual_path",
+        "checks",
+        "multipath",
         "proof_ok",
         "schema",
-        "single_path"
+        "single_path",
+        "untrusted"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-030"
@@ -80,9 +97,12 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_031",
       "evidence_keys": [
-        "adapted_full_has_attachments",
-        "adapted_low",
-        "modes",
+        "ADAPTATION_HYSTERESIS",
+        "ADAPTATION_RECOVERY",
+        "checks",
+        "flap_window",
+        "mode_sequence",
+        "parameter_changes",
         "proof_ok",
         "schema"
       ],
@@ -94,10 +114,17 @@
       "evaluator": "evaluate_net_orch_032",
       "evidence_keys": [
         "PRODUCTION_APP_PRIORITY_SIGNING",
-        "ordered",
+        "TRAFFIC_SCHEDULER_RUNTIME",
+        "TRAFFIC_STARVATION_BOUNDED",
+        "bytes_by_class_total",
+        "checks",
+        "completion_by_class",
+        "dispatch_order_head",
+        "epochs",
         "proof_ok",
         "schema",
-        "self_asserted_critical_blocked"
+        "starvation_count",
+        "wait_time_by_class"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-032"
@@ -106,13 +133,12 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_033",
       "evidence_keys": [
-        "distinct_pids",
-        "fresh_process_required",
-        "keys_after_a",
-        "keys_after_b",
-        "keys_after_c",
-        "pids",
-        "process_c_lesson1",
+        "CACHE_INTEGRITY",
+        "CACHE_NAMESPACE_ISOLATION",
+        "CACHE_SIZE_BUDGET",
+        "CACHE_TTL",
+        "checks",
+        "process_b",
         "proof_ok",
         "schema"
       ],
@@ -123,12 +149,13 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_034",
       "evidence_keys": [
-        "deferred_while_offline",
-        "flushed_when_healthy",
-        "fresh_process_pending_after_flush",
+        "SYNC_EXACTLY_ONCE",
+        "SYNC_MAX_BYTES_ENFORCED",
+        "SYNC_OPPORTUNITY_PLANNER",
+        "checks",
         "proof_ok",
-        "schema",
-        "wave004_abc_reuse"
+        "results",
+        "schema"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-034"
@@ -137,11 +164,13 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_035",
       "evidence_keys": [
-        "degraded",
-        "healthy",
-        "offline",
+        "DEGRADED_REPORT_CANONICAL",
+        "DEGRADED_REPORT_RUNTIME_CONSISTENT",
+        "checks",
+        "examples",
         "proof_ok",
-        "schema"
+        "schema",
+        "state_machine"
       ],
       "ok": true,
       "requirement_id": "NET-ORCH-035"

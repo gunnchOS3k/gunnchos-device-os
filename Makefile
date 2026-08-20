@@ -356,11 +356,17 @@ wave006:
 	PYTHONPATH=.:src pytest -q tests/test_wave006_service_continuity.py
 	PYTHONPATH=.:src pytest -q --collect-only tests/test_wave006_service_continuity.py >/dev/null
 	PYTHONPATH=.:src python3 scripts/engineering_wave006/run_wave006_evidence.py
+	@test -f artifacts/engineering_wave006/INTEGRITY_REPAIR_RESULT.json
 	@test -f artifacts/engineering_wave006/WAVE006_RESULT.json
 	@test -f artifacts/engineering_wave006/REQUIREMENT_RESULTS.json
 	@test -f artifacts/engineering_wave006/CLAIM_BOUNDARIES.json
 	@test -f artifacts/engineering_wave006/E2E_SCENARIOS_A_J_RESULT.json
 	@test -f artifacts/engineering_wave006/SESSION_RESUME_A_B_C_RESULT.json
-	@test -f artifacts/engineering_wave006/APPLICATION_MULTIPATH_RESULT.json
-	@python3 -c "import json; r=json.load(open('artifacts/engineering_wave006/WAVE006_RESULT.json')); assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS',1)==0; assert r['COMPLETE_GATE_REQUIRES_10_OF_10'] is True; assert r['claim_flags']['STANDARDIZED_6G'] is False; assert r['wave006_ok'] is True; assert r['summary']['total']==10; assert r['OS_PLATFORM_020_UNTOUCHED'] is True; assert r['BASELINE_COUNTS_UPDATED'] is False"
+	@test -f artifacts/engineering_wave006/APPLICATION_MULTIPATH_TRANSFER_RESULT.json
+	@test -f artifacts/engineering_wave006/BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json
+	@test -f artifacts/engineering_wave006/CONTINUITY_STATE_MACHINE_RESULT.json
+	@test -f artifacts/engineering_wave006/BEARER_TRANSITION_TRANSACTION_RESULT.json
+	@test -f artifacts/engineering_wave006/TRAFFIC_SCHEDULER_STRESS_RESULT.json
+	@test -f artifacts/engineering_wave006/CACHE_POLICY_RESULT.json
+	@python3 -c "import json; r=json.load(open('artifacts/engineering_wave006/WAVE006_RESULT.json')); b=json.load(open('artifacts/engineering_wave006/BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json')); assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS',1)==0; assert r['COMPLETE_GATE_REQUIRES_10_OF_10'] is True; assert r['claim_flags']['STANDARDIZED_6G'] is False; assert r['summary']['total']==10; assert r['OS_PLATFORM_020_UNTOUCHED'] is True; assert r['BASELINE_COUNTS_UPDATED'] is False; assert r.get('MULTIPATH_KIND')=='APPLICATION_LEVEL_MULTIPATH'; assert b.get('BEHAVIORAL_NEGATIVE_CONTROLS_PASS') is True; assert r['wave006_ok'] is True; assert r.get('status')=='PASS'; assert r.get('PARTIAL') is False"
 

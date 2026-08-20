@@ -1,5 +1,5 @@
 @startuml wave006_continuity_controller
-title Wave006 Service-Continuity Execution Plane
+title Wave006 Service-Continuity Execution Plane (Integrity Repair)
 actor Telemetry
 participant "Wave005\nAnywhereNetworkDecisionEngine" as D
 participant "ContinuityController" as C
@@ -7,13 +7,14 @@ database "PersistentCache\nSessionCheckpoint\nSyncQueue" as S
 Telemetry -> C : ingest candidates + sat/infra
 C -> D : decide(candidates, objective)
 D --> C : DecisionExplanation
-C -> C : transition / multipath / adapt
+C -> C : EXECUTE KEEP/TRANSITION/RESUME/MULTIPATH/ADAPT/...
 C -> S : checkpoint / cache / opportunistic sync
-C --> Telemetry : degraded-mode report + shell view
+C --> Telemetry : canonical degraded-mode report + shell projection
 note right of C
   DIGITAL/SYNTHETIC only
   LIVE_CARRIER_HANDOVER_VALIDATED=false
-  REAL_MPTCP=false
+  PRODUCTION_MPTCP_VALIDATED=false
   REAL_NTN_MODEM_VALIDATED=false
+  MULTIPATH_KIND=APPLICATION_LEVEL_MULTIPATH
 end note
 @enduml

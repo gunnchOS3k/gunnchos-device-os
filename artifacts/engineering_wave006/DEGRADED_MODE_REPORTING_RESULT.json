@@ -1,73 +1,533 @@
 {
-  "degraded": {
-    "active_bearer": "cellular",
-    "adaptation_mode": "LOW_BANDWIDTH",
-    "claim_boundaries": {
-      "CARRIER_ACCEPTED": false,
-      "FIELD_MEASURED_PERFORMANCE": false,
-      "HUMAN_E6": false,
-      "KERNEL_MPTCP_VALIDATED": false,
-      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-      "PHYSICAL_VALIDATION": false,
-      "PRODUCTION_APP_PRIORITY_SIGNING": false,
-      "PRODUCTION_NETWORK_OPTIMALITY": false,
-      "REAL_MPTCP": false,
-      "REAL_NTN_MODEM_VALIDATED": false,
-      "STANDARDIZED_6G": false,
-      "UNIVERSAL_OPTIMALITY": false
-    },
-    "continuity_state": "DEGRADED",
-    "limitations": [
-      "metered",
-      "low_bandwidth"
-    ],
-    "transparent": true,
-    "user_visible_message": "Service is degraded; some features are limited."
+  "DEGRADED_REPORT_CANONICAL": true,
+  "DEGRADED_REPORT_RUNTIME_CONSISTENT": true,
+  "checks": {
+    "all_example_states": true,
+    "healthy_no_lost_internet": true,
+    "required_fields": true,
+    "runtime_consistent": true,
+    "shell_projection_present": true
   },
-  "healthy": {
-    "active_bearer": "wifi",
-    "adaptation_mode": "FULL",
-    "claim_boundaries": {
-      "CARRIER_ACCEPTED": false,
-      "FIELD_MEASURED_PERFORMANCE": false,
-      "HUMAN_E6": false,
-      "KERNEL_MPTCP_VALIDATED": false,
-      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-      "PHYSICAL_VALIDATION": false,
-      "PRODUCTION_APP_PRIORITY_SIGNING": false,
-      "PRODUCTION_NETWORK_OPTIMALITY": false,
-      "REAL_MPTCP": false,
-      "REAL_NTN_MODEM_VALIDATED": false,
-      "STANDARDIZED_6G": false,
-      "UNIVERSAL_OPTIMALITY": false
+  "examples": {
+    "FAILED": {
+      "active_bearer": "wifi",
+      "adaptation_mode": "REDUCED",
+      "cache_available": false,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "FAILED",
+      "current_adaptation_profile": "REDUCED",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "manual recover / resume from checkpoint",
+      "limitations": [
+        "sync_deferred:2",
+        "internet_unavailable"
+      ],
+      "lost_capabilities": [
+        "INTERNET_SERVICE",
+        "CLOUD_SYNC"
+      ],
+      "pending_sync_items": 2,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "FAILED"
+      ],
+      "report_id": "rpt-7f20e77813",
+      "retained_capabilities": [
+        "SESSION_RESUME"
+      ],
+      "security_warning": null,
+      "selected_paths": [
+        "wifi"
+      ],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": true,
+      "shell_projection": {
+        "changes_pending_sync": true,
+        "headline": "Service failed \u2014 resume when path returns",
+        "recovery_condition": "manual recover / resume from checkpoint",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "SESSION_RESUME"
+        ],
+        "what_temporarily_unavailable": [
+          "INTERNET_SERVICE",
+          "CLOUD_SYNC"
+        ],
+        "work_safe_locally": false
+      },
+      "state": "FAILED",
+      "sync_deferred": false,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Service failed \u2014 resume when path returns"
     },
-    "continuity_state": "HEALTHY",
-    "limitations": [],
-    "transparent": true,
-    "user_visible_message": "Service is operating normally."
-  },
-  "offline": {
-    "active_bearer": null,
-    "adaptation_mode": "OFFLINE",
-    "claim_boundaries": {
-      "CARRIER_ACCEPTED": false,
-      "FIELD_MEASURED_PERFORMANCE": false,
-      "HUMAN_E6": false,
-      "KERNEL_MPTCP_VALIDATED": false,
-      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-      "PHYSICAL_VALIDATION": false,
-      "PRODUCTION_APP_PRIORITY_SIGNING": false,
-      "PRODUCTION_NETWORK_OPTIMALITY": false,
-      "REAL_MPTCP": false,
-      "REAL_NTN_MODEM_VALIDATED": false,
-      "STANDARDIZED_6G": false,
-      "UNIVERSAL_OPTIMALITY": false
+    "HEALTHY": {
+      "active_bearer": "wifi",
+      "adaptation_mode": "FULL",
+      "cache_available": true,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "HEALTHY",
+      "current_adaptation_profile": "FULL",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "none",
+      "limitations": [],
+      "lost_capabilities": [],
+      "pending_sync_items": 0,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "HEALTHY"
+      ],
+      "report_id": "rpt-51e9f2c8b2",
+      "retained_capabilities": [
+        "INTERNET_SERVICE",
+        "LOCAL_EDGE_OR_CACHE",
+        "LOCAL_CACHE_SERVICE"
+      ],
+      "security_warning": null,
+      "selected_paths": [
+        "wifi"
+      ],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": false,
+      "shell_projection": {
+        "changes_pending_sync": false,
+        "headline": "Service healthy",
+        "recovery_condition": "none",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "INTERNET_SERVICE",
+          "LOCAL_EDGE_OR_CACHE",
+          "LOCAL_CACHE_SERVICE"
+        ],
+        "what_temporarily_unavailable": [],
+        "work_safe_locally": true
+      },
+      "state": "HEALTHY",
+      "sync_deferred": false,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Service healthy"
     },
-    "continuity_state": "OFFLINE",
-    "limitations": [],
-    "transparent": true,
-    "user_visible_message": "Offline mode: using local cache only."
+    "OFFLINE_CAPABLE": {
+      "active_bearer": null,
+      "adaptation_mode": "REDUCED",
+      "cache_available": true,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "OFFLINE_CAPABLE",
+      "current_adaptation_profile": "REDUCED",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "restore path or use local cache/peer",
+      "limitations": [
+        "sync_deferred:2",
+        "internet_unavailable"
+      ],
+      "lost_capabilities": [
+        "INTERNET_SERVICE"
+      ],
+      "pending_sync_items": 2,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "OFFLINE_CAPABLE"
+      ],
+      "report_id": "rpt-fd22039c0a",
+      "retained_capabilities": [
+        "LOCAL_EDGE_OR_CACHE",
+        "LOCAL_CACHE_SERVICE",
+        "SESSION_RESUME"
+      ],
+      "security_warning": null,
+      "selected_paths": [],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": true,
+      "shell_projection": {
+        "changes_pending_sync": true,
+        "headline": "Offline-capable mode \u2014 cached work available",
+        "recovery_condition": "restore path or use local cache/peer",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "LOCAL_EDGE_OR_CACHE",
+          "LOCAL_CACHE_SERVICE",
+          "SESSION_RESUME"
+        ],
+        "what_temporarily_unavailable": [
+          "INTERNET_SERVICE"
+        ],
+        "work_safe_locally": true
+      },
+      "state": "OFFLINE_CAPABLE",
+      "sync_deferred": true,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Offline-capable mode \u2014 cached work available"
+    },
+    "RECOVERING": {
+      "active_bearer": "wifi",
+      "adaptation_mode": "REDUCED",
+      "cache_available": false,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "RECOVERING",
+      "current_adaptation_profile": "REDUCED",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "complete recovery to HEALTHY",
+      "limitations": [
+        "sync_deferred:2"
+      ],
+      "lost_capabilities": [],
+      "pending_sync_items": 2,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "RECOVERING"
+      ],
+      "report_id": "rpt-79aa456e1f",
+      "retained_capabilities": [
+        "INTERNET_SERVICE"
+      ],
+      "security_warning": null,
+      "selected_paths": [
+        "wifi"
+      ],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": false,
+      "shell_projection": {
+        "changes_pending_sync": true,
+        "headline": "Recovering service",
+        "recovery_condition": "complete recovery to HEALTHY",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "INTERNET_SERVICE"
+        ],
+        "what_temporarily_unavailable": [],
+        "work_safe_locally": false
+      },
+      "state": "RECOVERING",
+      "sync_deferred": false,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Recovering service"
+    },
+    "REDUCED_SERVICE": {
+      "active_bearer": "wifi",
+      "adaptation_mode": "REDUCED",
+      "cache_available": true,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "REDUCED_SERVICE",
+      "current_adaptation_profile": "REDUCED",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "restore capacity above recovery threshold",
+      "limitations": [
+        "sync_deferred:2"
+      ],
+      "lost_capabilities": [],
+      "pending_sync_items": 2,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "REDUCED_SERVICE"
+      ],
+      "report_id": "rpt-a5db0ecbdc",
+      "retained_capabilities": [
+        "INTERNET_SERVICE",
+        "LOCAL_EDGE_OR_CACHE",
+        "LOCAL_CACHE_SERVICE"
+      ],
+      "security_warning": null,
+      "selected_paths": [
+        "wifi"
+      ],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": false,
+      "shell_projection": {
+        "changes_pending_sync": true,
+        "headline": "Service reduced \u2014 local work may continue",
+        "recovery_condition": "restore capacity above recovery threshold",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "INTERNET_SERVICE",
+          "LOCAL_EDGE_OR_CACHE",
+          "LOCAL_CACHE_SERVICE"
+        ],
+        "what_temporarily_unavailable": [],
+        "work_safe_locally": true
+      },
+      "state": "REDUCED_SERVICE",
+      "sync_deferred": true,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Service reduced \u2014 local work may continue"
+    },
+    "RESUMING": {
+      "active_bearer": "wifi",
+      "adaptation_mode": "REDUCED",
+      "cache_available": false,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "RESUMING",
+      "current_adaptation_profile": "REDUCED",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "finish resume ledger",
+      "limitations": [
+        "sync_deferred:2"
+      ],
+      "lost_capabilities": [],
+      "pending_sync_items": 2,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "RESUMING"
+      ],
+      "report_id": "rpt-26bef3b52a",
+      "retained_capabilities": [
+        "INTERNET_SERVICE",
+        "SESSION_RESUME"
+      ],
+      "security_warning": null,
+      "selected_paths": [
+        "wifi"
+      ],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": true,
+      "shell_projection": {
+        "changes_pending_sync": true,
+        "headline": "Resuming session",
+        "recovery_condition": "finish resume ledger",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "INTERNET_SERVICE",
+          "SESSION_RESUME"
+        ],
+        "what_temporarily_unavailable": [],
+        "work_safe_locally": false
+      },
+      "state": "RESUMING",
+      "sync_deferred": false,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Resuming session"
+    },
+    "TRANSITIONING": {
+      "active_bearer": "wifi",
+      "adaptation_mode": "REDUCED",
+      "cache_available": false,
+      "claim_boundaries": {
+        "CARRIER_ACCEPTED": false,
+        "FIELD_MEASURED_PERFORMANCE": false,
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+        "HUMAN_E6": false,
+        "KERNEL_MPTCP_VALIDATED": false,
+        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+        "PHYSICAL_VALIDATION": false,
+        "PRODUCTION_APP_PRIORITY_SIGNING": false,
+        "PRODUCTION_MPTCP_VALIDATED": false,
+        "PRODUCTION_NETWORK_OPTIMALITY": false,
+        "REAL_MPTCP": false,
+        "REAL_NTN_MODEM_VALIDATED": false,
+        "STANDARDIZED_6G": false,
+        "UNIVERSAL_OPTIMALITY": false
+      },
+      "continuity_state": "TRANSITIONING",
+      "current_adaptation_profile": "REDUCED",
+      "data_cost_warning": null,
+      "estimated_recovery_condition": "commit digital transition",
+      "limitations": [
+        "sync_deferred:2"
+      ],
+      "lost_capabilities": [],
+      "pending_sync_items": 2,
+      "provenance": "HOST_OBSERVED_DIGITAL",
+      "reason_codes": [
+        "TRANSITIONING"
+      ],
+      "report_id": "rpt-e57f3b89ea",
+      "retained_capabilities": [
+        "INTERNET_SERVICE"
+      ],
+      "security_warning": null,
+      "selected_paths": [
+        "wifi"
+      ],
+      "service_class": "communication",
+      "service_id": "svc-default",
+      "session_resume_available": false,
+      "shell_projection": {
+        "changes_pending_sync": true,
+        "headline": "Transitioning bearers",
+        "recovery_condition": "commit digital transition",
+        "security_or_metered_warning": null,
+        "what_still_works": [
+          "INTERNET_SERVICE"
+        ],
+        "what_temporarily_unavailable": [],
+        "work_safe_locally": false
+      },
+      "state": "TRANSITIONING",
+      "sync_deferred": false,
+      "timestamp": 1700000600.0,
+      "transparent": true,
+      "user_visible_message": "Transitioning bearers"
+    }
   },
   "proof_ok": true,
-  "schema": "gunnchos.engineering_wave006.degraded_mode_reporting.v1"
+  "schema": "gunnchos.engineering_wave006.degraded_mode_reporting.v1",
+  "state_machine": {
+    "canonical_states": [
+      "HEALTHY",
+      "DEGRADING",
+      "TRANSITION_PREP",
+      "TRANSITIONING",
+      "RESUMING",
+      "MULTIPATH",
+      "REDUCED_SERVICE",
+      "OFFLINE_CAPABLE",
+      "RECOVERING",
+      "FAILED"
+    ],
+    "failure_path": {
+      "event": "ContinuityEvent.FAIL",
+      "from": "TRANSITIONING",
+      "ok": true,
+      "to": "FAILED"
+    },
+    "invalid_jump_rejected": {
+      "event": "ContinuityEvent.RESUME_DONE",
+      "from": "HEALTHY",
+      "ok": false,
+      "reason": "illegal transition: HEALTHY + RESUME_DONE",
+      "rejected": true
+    },
+    "legal_path": [
+      {
+        "event": "ContinuityEvent.BEGIN_TRANSITION",
+        "from": "HEALTHY",
+        "ok": true,
+        "to": "TRANSITION_PREP"
+      },
+      {
+        "event": "ContinuityEvent.TRANSITION_PREP_OK",
+        "from": "TRANSITION_PREP",
+        "ok": true,
+        "to": "TRANSITIONING"
+      },
+      {
+        "event": "ContinuityEvent.TRANSITION_COMMIT",
+        "from": "TRANSITIONING",
+        "ok": true,
+        "to": "HEALTHY"
+      }
+    ],
+    "ok": true,
+    "recovery_path": [
+      {
+        "event": "ContinuityEvent.BANDWIDTH_RECOVER",
+        "from": "REDUCED_SERVICE",
+        "ok": true,
+        "to": "RECOVERING"
+      },
+      {
+        "event": "ContinuityEvent.RECOVERY_DONE",
+        "from": "RECOVERING",
+        "ok": true,
+        "to": "HEALTHY"
+      }
+    ],
+    "schema": "gunnchos.engineering_wave006.continuity_state_machine.v1",
+    "transition_rollback_path": {
+      "event": "ContinuityEvent.TRANSITION_ROLLBACK",
+      "from": "TRANSITIONING",
+      "ok": true,
+      "to": "RECOVERING"
+    }
+  }
 }

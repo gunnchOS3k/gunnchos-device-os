@@ -1,31 +1,217 @@
 {
-  "available": {
-    "captive_portal_suspected": false,
-    "dns_resolvable": true,
-    "gateway_reachable": true,
-    "latency_ms": 12.0,
-    "note": "local infra status is software-observed digital evidence",
-    "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-    "status": "AVAILABLE"
-  },
-  "degraded": {
-    "captive_portal_suspected": true,
-    "dns_resolvable": false,
-    "gateway_reachable": true,
-    "latency_ms": 80.0,
-    "note": "local infra status is software-observed digital evidence",
-    "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-    "status": "DEGRADED"
+  "LOCAL_INFRA_CAPABILITY_GRAPH": true,
+  "checks": {
+    "ap_up_gateway_down_no_internet": true,
+    "backhaul_down_no_internet": true,
+    "cache_retained": true,
+    "dns_down_local_ok": true,
+    "edge_retained": true,
+    "full_internet_available": true,
+    "not_collapsed_to_one_bit": true,
+    "peer_retained": true,
+    "stale_unknown": true,
+    "unknown_unknown": true
   },
   "proof_ok": true,
-  "schema": "gunnchos.engineering_wave006.local_infrastructure.v1",
-  "unavailable": {
-    "captive_portal_suspected": false,
-    "dns_resolvable": false,
-    "gateway_reachable": false,
-    "latency_ms": null,
-    "note": "local infra status is software-observed digital evidence",
-    "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-    "status": "UNAVAILABLE"
-  }
+  "scenarios": {
+    "ap_up_gateway_down": {
+      "backhaul_reachable": false,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": true,
+      "edge_service_reachable": false,
+      "gateway_reachable": false,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "UNAVAILABLE"
+    },
+    "dns_down_direct_local": {
+      "backhaul_reachable": false,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": true,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": false,
+      "edge_service_reachable": true,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "DEGRADED"
+    },
+    "full_internet": {
+      "backhaul_reachable": true,
+      "capabilities": {
+        "INTERNET_SERVICE": true,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": true,
+      "edge_service_reachable": false,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "AVAILABLE"
+    },
+    "gateway_up_backhaul_down": {
+      "backhaul_reachable": false,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": true,
+      "edge_service_reachable": false,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "UNAVAILABLE"
+    },
+    "internet_down_cache_up": {
+      "backhaul_reachable": false,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": true,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": false,
+      "edge_service_reachable": false,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": true,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "DEGRADED"
+    },
+    "internet_down_edge_up": {
+      "backhaul_reachable": false,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": true,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": false,
+      "edge_service_reachable": true,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "DEGRADED"
+    },
+    "internet_down_peer_up": {
+      "backhaul_reachable": false,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": true
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": false,
+      "edge_service_reachable": false,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": true,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "DEGRADED"
+    },
+    "stale": {
+      "backhaul_reachable": true,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": true,
+      "edge_service_reachable": false,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1699999930.0,
+      "peer_path_available": false,
+      "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+      "status": "UNKNOWN"
+    },
+    "unknown": {
+      "backhaul_reachable": true,
+      "capabilities": {
+        "INTERNET_SERVICE": false,
+        "LOCAL_CACHE_SERVICE": false,
+        "LOCAL_EDGE_SERVICE": false,
+        "LOCAL_PEER_SERVICE": false
+      },
+      "captive_portal_suspected": false,
+      "dns_resolvable": true,
+      "edge_service_reachable": false,
+      "gateway_reachable": true,
+      "latency_ms": 20.0,
+      "link_or_ap_available": true,
+      "local_cache_available": false,
+      "max_age_s": 30.0,
+      "note": "local infra capability graph (digital synthetic)",
+      "observed_at": 1700000050.0,
+      "peer_path_available": false,
+      "provenance": "UNKNOWN",
+      "status": "UNKNOWN"
+    }
+  },
+  "schema": "gunnchos.engineering_wave006.local_infra.v1"
 }

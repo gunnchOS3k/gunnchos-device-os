@@ -1,0 +1,69 @@
+{
+  "canonical_states": [
+    "HEALTHY",
+    "DEGRADING",
+    "TRANSITION_PREP",
+    "TRANSITIONING",
+    "RESUMING",
+    "MULTIPATH",
+    "REDUCED_SERVICE",
+    "OFFLINE_CAPABLE",
+    "RECOVERING",
+    "FAILED"
+  ],
+  "failure_path": {
+    "event": "ContinuityEvent.FAIL",
+    "from": "TRANSITIONING",
+    "ok": true,
+    "to": "FAILED"
+  },
+  "invalid_jump_rejected": {
+    "event": "ContinuityEvent.RESUME_DONE",
+    "from": "HEALTHY",
+    "ok": false,
+    "reason": "illegal transition: HEALTHY + RESUME_DONE",
+    "rejected": true
+  },
+  "legal_path": [
+    {
+      "event": "ContinuityEvent.BEGIN_TRANSITION",
+      "from": "HEALTHY",
+      "ok": true,
+      "to": "TRANSITION_PREP"
+    },
+    {
+      "event": "ContinuityEvent.TRANSITION_PREP_OK",
+      "from": "TRANSITION_PREP",
+      "ok": true,
+      "to": "TRANSITIONING"
+    },
+    {
+      "event": "ContinuityEvent.TRANSITION_COMMIT",
+      "from": "TRANSITIONING",
+      "ok": true,
+      "to": "HEALTHY"
+    }
+  ],
+  "ok": true,
+  "recovery_path": [
+    {
+      "event": "ContinuityEvent.BANDWIDTH_RECOVER",
+      "from": "REDUCED_SERVICE",
+      "ok": true,
+      "to": "RECOVERING"
+    },
+    {
+      "event": "ContinuityEvent.RECOVERY_DONE",
+      "from": "RECOVERING",
+      "ok": true,
+      "to": "HEALTHY"
+    }
+  ],
+  "schema": "gunnchos.engineering_wave006.continuity_state_machine.v1",
+  "transition_rollback_path": {
+    "event": "ContinuityEvent.TRANSITION_ROLLBACK",
+    "from": "TRANSITIONING",
+    "ok": true,
+    "to": "RECOVERING"
+  }
+}

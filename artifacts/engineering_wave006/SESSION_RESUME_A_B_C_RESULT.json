@@ -1,17 +1,52 @@
 {
-  "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-  "distinct_pids": true,
-  "fresh_process_required": true,
-  "pids": {
-    "A": 97327,
-    "B": 97328,
-    "C": 97329
+  "SESSION_DUPLICATE_RESUME_BLOCKED": true,
+  "SESSION_RESUME_EXACTLY_ONCE": true,
+  "b_stderr": "",
+  "c_stderr": "",
+  "checks": {
+    "duplicate_resume_idempotent": true,
+    "failures": true,
+    "op1_not_replayed": true,
+    "op2_exactly_once": true,
+    "process_b_ok": true,
+    "process_c_ok": true,
+    "progress_preserved": true
   },
-  "process_b_cursor": 42,
-  "process_b_resumed": true,
-  "process_c_cursor": 42,
-  "process_c_resumed": true,
-  "process_c_sequence": 2,
+  "failures": {
+    "committed_operation_replay": true,
+    "expired_resume_token": true,
+    "integrity_mismatch": true,
+    "malformed_json": true,
+    "unsupported_schema": true,
+    "wrong_session_token": true
+  },
+  "process_a": {
+    "committed": [
+      "op-1"
+    ],
+    "pending": [
+      "op-2"
+    ],
+    "progress": 42
+  },
+  "process_b": {
+    "committed": [
+      "op-1",
+      "op-2"
+    ],
+    "mode": "B",
+    "progress": 42,
+    "resume_count": 1
+  },
+  "process_c": {
+    "committed": [
+      "op-1",
+      "op-2"
+    ],
+    "duplicate": true,
+    "mode": "C",
+    "progress": 42
+  },
   "proof_ok": true,
   "schema": "gunnchos.engineering_wave006.session_resume_a_b_c.v1"
 }
