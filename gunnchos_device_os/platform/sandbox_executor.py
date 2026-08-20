@@ -251,9 +251,6 @@ class SandboxExecutor:
                 "--setenv",
                 "LANG",
                 "C",
-                "--setenv",
-                "PYTHONHOME",
-                prefix if Path(prefix).exists() else "",
                 "--",
                 real_py,
                 str(launcher),
@@ -440,10 +437,12 @@ class SandboxExecutor:
         priv_denied = not privileged
         cross_blocked = not cross_app_read
 
-        genuine = backend in {"bubblewrap", "sandbox_exec"}
-        probes_pass = bool(fixture) and all(
+        # Vacuous "blocked" flags when the fixture never ran must not count as probes_pass.
+        fixture_ran = bool(fixture) and "host_private_read" in fixture
+        probes_pass = fixture_ran and all(
             [host_blocked, outside_blocked, network_denied, child_denied, priv_denied, cross_blocked]
         )
+        genuine = backend in {"bubblewrap", "sandbox_exec"}
         # Regression: host read success + outside write fail MUST fail validation
         regression_fail = host_private_read and outside_blocked
 
@@ -482,7 +481,9 @@ class SandboxExecutor:
             "fixture_result": fixture,
             "parent_escape_detected": parent_escape,
             "stderr_tail": run.get("stderr_tail", ""),
+            "stdout_tail": run.get("stdout_tail", ""),
             "exit_code": run.get("exit_code"),
+            "fixture_ran": fixture_ran,
             "claim_boundary": CLAIM_BOUNDARY,
             "backend": backend,
             "kernel_sandbox": kernel,

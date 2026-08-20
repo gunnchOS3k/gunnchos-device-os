@@ -139,11 +139,16 @@ def test_wave004_ci_gate_requires_twelve_of_twelve(coord: Wave004PlatformCoordin
             "classification_020": report["requirement_classification"].get("OS-PLATFORM-020"),
             "probe_flags": probe_flags,
             "failed_probes": [k for k, v in probe_flags.items() if v is not True],
+            "fixture_empty": not bool(suite.get("fixture_result")),
             "SANDBOX_BACKEND": suite.get("SANDBOX_BACKEND"),
             "LOCAL_SANDBOX_VALIDATION": suite.get("LOCAL_SANDBOX_VALIDATION"),
+            "SANDBOX_EXECUTION_VALIDATED": suite.get("SANDBOX_EXECUTION_VALIDATED"),
             "exit_code": suite.get("exit_code"),
-            "stderr_tail": suite.get("stderr_tail"),
-            "fixture_result": suite.get("fixture_result"),
+            "stderr_tail": (suite.get("stderr_tail") or "")[-2000:],
+            "stdout_tail": (suite.get("stdout_tail") or "")[-2000:],
+            "fixture_empty": not bool(suite.get("fixture_result")),
+            "fixture_ran": suite.get("fixture_ran"),
+            "stdout_hint": (suite.get("fixture_result") or {}),
         }
         assert report["ok"] is True
     else:
