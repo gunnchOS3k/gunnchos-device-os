@@ -1,0 +1,73 @@
+{
+  "degraded": {
+    "active_bearer": "cellular",
+    "adaptation_mode": "LOW_BANDWIDTH",
+    "claim_boundaries": {
+      "CARRIER_ACCEPTED": false,
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "HUMAN_E6": false,
+      "KERNEL_MPTCP_VALIDATED": false,
+      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+      "PHYSICAL_VALIDATION": false,
+      "PRODUCTION_APP_PRIORITY_SIGNING": false,
+      "PRODUCTION_NETWORK_OPTIMALITY": false,
+      "REAL_MPTCP": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "UNIVERSAL_OPTIMALITY": false
+    },
+    "continuity_state": "DEGRADED",
+    "limitations": [
+      "metered",
+      "low_bandwidth"
+    ],
+    "transparent": true,
+    "user_visible_message": "Service is degraded; some features are limited."
+  },
+  "healthy": {
+    "active_bearer": "wifi",
+    "adaptation_mode": "FULL",
+    "claim_boundaries": {
+      "CARRIER_ACCEPTED": false,
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "HUMAN_E6": false,
+      "KERNEL_MPTCP_VALIDATED": false,
+      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+      "PHYSICAL_VALIDATION": false,
+      "PRODUCTION_APP_PRIORITY_SIGNING": false,
+      "PRODUCTION_NETWORK_OPTIMALITY": false,
+      "REAL_MPTCP": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "UNIVERSAL_OPTIMALITY": false
+    },
+    "continuity_state": "HEALTHY",
+    "limitations": [],
+    "transparent": true,
+    "user_visible_message": "Service is operating normally."
+  },
+  "offline": {
+    "active_bearer": null,
+    "adaptation_mode": "OFFLINE",
+    "claim_boundaries": {
+      "CARRIER_ACCEPTED": false,
+      "FIELD_MEASURED_PERFORMANCE": false,
+      "HUMAN_E6": false,
+      "KERNEL_MPTCP_VALIDATED": false,
+      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+      "PHYSICAL_VALIDATION": false,
+      "PRODUCTION_APP_PRIORITY_SIGNING": false,
+      "PRODUCTION_NETWORK_OPTIMALITY": false,
+      "REAL_MPTCP": false,
+      "REAL_NTN_MODEM_VALIDATED": false,
+      "STANDARDIZED_6G": false,
+      "UNIVERSAL_OPTIMALITY": false
+    },
+    "continuity_state": "OFFLINE",
+    "limitations": [],
+    "transparent": true,
+    "user_visible_message": "Offline mode: using local cache only."
+  },
+  "proof_ok": true,
+  "schema": "gunnchos.engineering_wave006.degraded_mode_reporting.v1"
+}
