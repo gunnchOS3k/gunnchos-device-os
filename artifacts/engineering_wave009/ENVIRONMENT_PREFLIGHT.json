@@ -1,13 +1,15 @@
 {
   "BWRAP_INVOKED_WITH_SUDO": false,
   "PRE_REPAIR_BWRAP_ERROR": null,
-  "PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
+  "PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS": true,
   "SANDBOX_EXECUTED_AS_ROOT": false,
   "aa_status": {
     "cmd": [
       "aa-status"
     ],
-    "error": "[Errno 2] No such file or directory: 'aa-status'"
+    "returncode": 4,
+    "stderr": "You do not have enough privilege to read the profile set.\n",
+    "stdout": "apparmor module is loaded.\n"
   },
   "apparmor_restrict_unprivileged_userns": {
     "name": "kernel.apparmor_restrict_unprivileged_userns",
@@ -17,35 +19,50 @@
         "-n",
         "kernel.apparmor_restrict_unprivileged_userns"
       ],
-      "returncode": 1,
-      "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
-      "stdout": ""
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "0\n"
     },
-    "value": null
+    "value": "0"
   },
-  "bwrap_path": null,
-  "bwrap_version": null,
-  "euid": 501,
-  "generated_at_utc": "2026-08-21T14:32:29Z",
-  "gid": 20,
+  "bwrap_path": "/usr/bin/bwrap",
+  "bwrap_version": {
+    "cmd": [
+      "/usr/bin/bwrap",
+      "--version"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "bubblewrap 0.9.0\n"
+  },
+  "euid": 1001,
+  "generated_at_utc": "2026-08-21T14:33:18Z",
+  "gid": 1001,
   "id_cmd": {
     "cmd": [
       "id"
     ],
     "returncode": 0,
     "stderr": "",
-    "stdout": "uid=501(gunnchos) gid=20(staff) groups=20(staff),101(access_bpf),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)\n"
+    "stdout": "uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal)\n"
   },
-  "kernel": "25.6.0",
-  "machine": "arm64",
+  "kernel": "6.17.0-1022-azure",
+  "machine": "x86_64",
   "max_user_namespaces": {
     "name": "user.max_user_namespaces",
     "raw": {
-      "proc": null
+      "cmd": [
+        "sysctl",
+        "-n",
+        "user.max_user_namespaces"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "63791\n"
     },
-    "value": null
+    "value": "63791"
   },
-  "os_release": null,
+  "os_release": "PRETTY_NAME=\"Ubuntu 24.04.4 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.4 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo",
   "proc_self_status_caps": {
     "cmd": [
       "bash",
@@ -53,22 +70,58 @@
       "grep -E 'Seccomp|NoNewPrivs|Cap(Inh|Prm|Eff|Bnd|Amb)' /proc/self/status || true"
     ],
     "returncode": 0,
-    "stderr": "grep: /proc/self/status: No such file or directory\n",
-    "stdout": ""
+    "stderr": "",
+    "stdout": "CapInh:\t0000000000000000\nCapPrm:\t0000000000000000\nCapEff:\t0000000000000000\nCapBnd:\t000001ffffffffff\nCapAmb:\t0000000000000000\nNoNewPrivs:\t0\nSeccomp:\t0\nSeccomp_filters:\t0\n"
   },
-  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "python_version": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
   "raw_bwrap_smoke": {
-    "reason": "bwrap_absent",
-    "skipped": true
+    "bare_id": {
+      "cmd": [
+        "/usr/bin/bwrap",
+        "--unshare-user",
+        "--",
+        "/usr/bin/id"
+      ],
+      "returncode": 1,
+      "stderr": "bwrap: execvp /usr/bin/id: No such file or directory\n",
+      "stdout": ""
+    },
+    "bound_true": {
+      "cmd": [
+        "/usr/bin/bwrap",
+        "--unshare-user",
+        "--die-with-parent",
+        "--ro-bind",
+        "/usr",
+        "/usr",
+        "--ro-bind",
+        "/bin",
+        "/bin",
+        "--ro-bind",
+        "/lib",
+        "/lib",
+        "--ro-bind",
+        "/lib64",
+        "/lib64",
+        "--ro-bind",
+        "/lib32",
+        "/lib32",
+        "--",
+        "/bin/true"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    }
   },
-  "runner_os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "schema": "gunnchos.engineering_wave009.environment_preflight.v1",
   "seccomp_python": {
-    "available": false,
-    "error": "No module named 'seccomp'"
+    "available": true,
+    "module_file": "/usr/lib/python3/dist-packages/seccomp.cpython-312-x86_64-linux-gnu.so"
   },
-  "system": "Darwin",
-  "uid": 501,
+  "system": "Linux",
+  "uid": 1001,
   "uname": {
     "cmd": [
       "uname",
@@ -76,7 +129,7 @@
     ],
     "returncode": 0,
     "stderr": "",
-    "stdout": "Darwin Edmunds-MacBook-Pro.local 25.6.0 Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:43 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8112 arm64\n"
+    "stdout": "Linux runnervm76f27 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n"
   },
   "userns_clone": {
     "name": "kernel.unprivileged_userns_clone",
@@ -86,10 +139,10 @@
         "-n",
         "kernel.unprivileged_userns_clone"
       ],
-      "returncode": 1,
-      "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
-      "stdout": ""
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "1\n"
     },
-    "value": null
+    "value": "1"
   }
 }

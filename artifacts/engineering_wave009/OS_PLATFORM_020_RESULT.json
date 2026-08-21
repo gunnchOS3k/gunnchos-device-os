@@ -1,10 +1,10 @@
 {
-  "KERNEL_SANDBOX": false,
-  "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT",
+  "KERNEL_SANDBOX": true,
+  "LOCAL_SANDBOX_VALIDATION": "VALIDATED",
   "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
-  "SANDBOX_BACKEND": "sandbox_exec_unavailable",
-  "SANDBOX_EXECUTION_VALIDATED": false,
-  "classification": "BLOCKED_ENVIRONMENT",
+  "SANDBOX_BACKEND": "bubblewrap",
+  "SANDBOX_EXECUTION_VALIDATED": true,
+  "classification": "IMPLEMENTED_AND_VALIDATED",
   "evidence_keys": [
     "APP_ROOT_READ_ALLOWED",
     "APP_ROOT_WRITE_ALLOWED",
@@ -58,25 +58,15 @@
     "COMPLETE_GATE_REQUIRES_1_OF_1": true,
     "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
     "UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED": true,
-    "complete": false,
-    "ok": false,
+    "complete": true,
+    "ok": true,
     "reasons": [],
     "schema": "gunnchos.engineering_wave009.completion_gate.v1",
     "target_count": 1,
-    "validated_count": 0
+    "validated_count": 1
   },
-  "ok": false,
-  "reasons": [
-    "backend_not_bubblewrap",
-    "fixture_did_not_run",
-    "private_root_rw_fail",
-    "app_root_read_fail",
-    "app_root_write_fail",
-    "seccomp_not_loaded",
-    "execution_not_validated",
-    "kernel_sandbox_false",
-    "local_validation_not_validated"
-  ],
+  "ok": true,
+  "reasons": [],
   "requirement_id": "OS-PLATFORM-020",
   "schema": "gunnchos.engineering_wave009.os_platform_020_result.v1"
 }

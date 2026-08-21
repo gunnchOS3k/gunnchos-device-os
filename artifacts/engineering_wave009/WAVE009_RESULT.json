@@ -1,6 +1,6 @@
 {
-  "APPARMOR_RESTRICT_USERNS_AFTER": null,
-  "APPARMOR_RESTRICT_USERNS_BEFORE": null,
+  "APPARMOR_RESTRICT_USERNS_AFTER": "0",
+  "APPARMOR_RESTRICT_USERNS_BEFORE": "0",
   "BASELINE_COUNTS_UPDATED": false,
   "BEHAVIORAL_NEGATIVE_CONTROLS_PASS": true,
   "BEHAVIORAL_NEGATIVE_CONTROL_COUNT": 12,
@@ -8,35 +8,44 @@
   "COMPLETE_GATE_REQUIRES_1_OF_1": true,
   "CURSOR_MERGED_NOTHING": true,
   "DIGITAL_VALIDATION_QUEUE_UPDATED": false,
-  "ENGINEERING_WAVE_009": "BLOCKED_ENVIRONMENT",
-  "FIXTURE_RAN": false,
-  "KERNEL_SANDBOX": false,
-  "LOCAL_SANDBOX_VALIDATION": "BLOCKED_ENVIRONMENT",
-  "MAX_USER_NAMESPACES": null,
-  "OS_PLATFORM_020": "BLOCKED_ENVIRONMENT",
+  "ENGINEERING_WAVE_009": "PASS",
+  "FIXTURE_RAN": true,
+  "KERNEL_SANDBOX": true,
+  "LOCAL_SANDBOX_VALIDATION": "VALIDATED",
+  "MAX_USER_NAMESPACES": "63791",
+  "OS_PLATFORM_020": "IMPLEMENTED_AND_VALIDATED",
   "PARTIAL": false,
   "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
-  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
+  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": true,
   "PRE_REPAIR_BWRAP_ERROR": null,
-  "PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
-  "SANDBOX_BACKEND": "sandbox_exec_unavailable",
+  "PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS": true,
+  "READY_FOR_OWNER_MERGE_SEQUENCE": true,
+  "SANDBOX_BACKEND": "bubblewrap",
   "SANDBOX_EXECUTED_AS_ROOT": false,
-  "SANDBOX_EXECUTION_VALIDATED": false,
+  "SANDBOX_EXECUTION_VALIDATED": true,
   "TARGET_REQUIREMENTS": 1,
   "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
   "UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED": true,
-  "USERNS_CLONE_AFTER": null,
-  "USERNS_CLONE_BEFORE": null,
+  "USERNS_CLONE_AFTER": "1",
+  "USERNS_CLONE_BEFORE": "1",
+  "authoritative_ci": {
+    "conclusion": "success",
+    "head_sha": "bce7f31cbf9da1bfde18b780b64eede6fdf031d2",
+    "run_id": 32492704583,
+    "synced_at_utc": "2026-08-21T14:42:14Z",
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/actions/runs/32492704583",
+    "workflow": "wave009-os020-sandbox-validation.yml"
+  },
   "claim_boundaries": {
     "APPARMOR_POLICY_CERTIFIED": false,
     "FORMALLY_VERIFIED_SANDBOX": false,
     "HARDWARE_TEE_ISOLATION_VALIDATED": false,
     "HUMAN_E6": false,
-    "KERNEL_SANDBOX": false,
+    "KERNEL_SANDBOX": true,
     "PHYSICAL_VALIDATION": false,
     "PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX": false,
     "PRODUCTION_SECURITY_CERTIFIED": false,
-    "SANDBOX_EXECUTION_VALIDATED": false,
+    "SANDBOX_EXECUTION_VALIDATED": true,
     "SELINUX_POLICY_CERTIFIED": false,
     "THIRD_PARTY_PEN_TESTED": false,
     "schema": "gunnchos.engineering_wave009.claim_boundaries.v1"
@@ -45,12 +54,12 @@
     "COMPLETE_GATE_REQUIRES_1_OF_1": true,
     "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
     "UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED": true,
-    "complete": false,
-    "ok": false,
+    "complete": true,
+    "ok": true,
     "reasons": [],
     "schema": "gunnchos.engineering_wave009.completion_gate.v1",
     "target_count": 1,
-    "validated_count": 0
+    "validated_count": 1
   },
   "completion_gate_negatives": {
     "BROKEN_EVALUATOR_REJECTED": true,
@@ -60,17 +69,17 @@
     "WRONG_EVALUATOR_ID_REJECTED": true,
     "WRONG_SOURCE_HASH_REJECTED": true
   },
-  "generated_at_utc": "2026-08-21T14:32:30Z",
+  "generated_at_utc": "2026-08-21T14:33:18Z",
   "provenance": {
-    "source_sha": "97df7d8085b7d7a53e9d8409958d2f9a8f91f19e",
-    "source_tree": "60a1146f372841184a316ac37e805574405d28ac"
+    "source_sha": "bb72edc98ca30ba7199c9bf32af7de73d4867f35",
+    "source_tree": "f65bf10f74112cc1c30b008c7e0759edd9ca2aa8"
   },
   "schema": "gunnchos.engineering_wave009.result.v1",
   "summary": {
-    "blocked_environment": 1,
+    "blocked_environment": 0,
     "implementation_open": 0,
     "total": 1,
-    "validated": 0
+    "validated": 1
   },
-  "wave009_ok": false
+  "wave009_ok": true
 }

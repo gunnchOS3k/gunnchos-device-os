@@ -1,10 +1,34 @@
 {
   "BWRAP_INVOKED_WITH_SUDO": false,
-  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
+  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": true,
   "SANDBOX_EXECUTED_AS_ROOT": false,
-  "bwrap": null,
-  "euid": 501,
-  "ok": false,
-  "reason": "bwrap_absent_or_root_runner",
+  "bound_true": {
+    "cmd": [
+      "/usr/bin/bwrap",
+      "--unshare-user",
+      "--die-with-parent",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--ro-bind",
+      "/lib32",
+      "/lib32",
+      "--",
+      "/bin/true"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "ok": true,
   "schema": "gunnchos.engineering_wave009.bwrap_smoke.v1"
 }

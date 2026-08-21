@@ -1,20 +1,22 @@
 {
-  "APPARMOR_RESTRICT_USERNS_AFTER": null,
-  "APPARMOR_RESTRICT_USERNS_BEFORE": null,
+  "APPARMOR_RESTRICT_USERNS_AFTER": "0",
+  "APPARMOR_RESTRICT_USERNS_BEFORE": "0",
   "BWRAP_INVOKED_WITH_SUDO": false,
-  "MAX_USER_NAMESPACES": null,
-  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
+  "MAX_USER_NAMESPACES": "63791",
+  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": true,
   "SANDBOX_EXECUTED_AS_ROOT": false,
-  "USERNS_CLONE_AFTER": null,
-  "USERNS_CLONE_BEFORE": null,
+  "USERNS_CLONE_AFTER": "1",
+  "USERNS_CLONE_BEFORE": "1",
   "actions": [
     {
-      "action": "skip_missing_sysctl",
-      "key": "kernel.apparmor_restrict_unprivileged_userns"
+      "action": "already_set",
+      "key": "kernel.apparmor_restrict_unprivileged_userns",
+      "value": "0"
     },
     {
-      "action": "skip_missing_sysctl",
-      "key": "kernel.unprivileged_userns_clone"
+      "action": "already_set",
+      "key": "kernel.unprivileged_userns_clone",
+      "value": "1"
     }
   ],
   "after": {
@@ -26,11 +28,11 @@
           "-n",
           "kernel.apparmor_restrict_unprivileged_userns"
         ],
-        "returncode": 1,
-        "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
-        "stdout": ""
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "0\n"
       },
-      "value": null
+      "value": "0"
     },
     "max_user_namespaces": {
       "name": "user.max_user_namespaces",
@@ -40,11 +42,11 @@
           "-n",
           "user.max_user_namespaces"
         ],
-        "returncode": 1,
-        "stderr": "sysctl: unknown oid 'user.max_user_namespaces': Undefined error: 0\n",
-        "stdout": ""
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "63791\n"
       },
-      "value": null
+      "value": "63791"
     },
     "userns_clone": {
       "name": "kernel.unprivileged_userns_clone",
@@ -54,11 +56,11 @@
           "-n",
           "kernel.unprivileged_userns_clone"
         ],
-        "returncode": 1,
-        "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
-        "stdout": ""
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "1\n"
       },
-      "value": null
+      "value": "1"
     }
   },
   "before": {
@@ -70,11 +72,11 @@
           "-n",
           "kernel.apparmor_restrict_unprivileged_userns"
         ],
-        "returncode": 1,
-        "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
-        "stdout": ""
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "0\n"
       },
-      "value": null
+      "value": "0"
     },
     "max_user_namespaces": {
       "name": "user.max_user_namespaces",
@@ -84,11 +86,11 @@
           "-n",
           "user.max_user_namespaces"
         ],
-        "returncode": 1,
-        "stderr": "sysctl: unknown oid 'user.max_user_namespaces': Undefined error: 0\n",
-        "stdout": ""
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "63791\n"
       },
-      "value": null
+      "value": "63791"
     },
     "userns_clone": {
       "name": "kernel.unprivileged_userns_clone",
@@ -98,17 +100,40 @@
           "-n",
           "kernel.unprivileged_userns_clone"
         ],
-        "returncode": 1,
-        "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
-        "stdout": ""
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "1\n"
       },
-      "value": null
+      "value": "1"
     }
   },
-  "generated_at_utc": "2026-08-21T14:32:29Z",
+  "generated_at_utc": "2026-08-21T14:33:18Z",
   "post_repair_bwrap_smoke": {
-    "reason": "bwrap_absent",
-    "skipped": true
+    "cmd": [
+      "/usr/bin/bwrap",
+      "--unshare-user",
+      "--die-with-parent",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--ro-bind",
+      "/lib32",
+      "/lib32",
+      "--",
+      "/bin/true"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
   },
   "schema": "gunnchos.engineering_wave009.host_userns_configuration.v1"
 }
