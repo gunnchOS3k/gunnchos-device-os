@@ -1,10 +1,15 @@
 {
   "BASELINE_COUNTS_UPDATED": false,
+  "BEHAVIORAL_NEGATIVE_CONTROLS_PASS": true,
   "COMPLETE_GATE_REQUIRES_10_OF_10": true,
   "CURSOR_MERGED_NOTHING": true,
+  "DO_NOT_MERGE_UNTIL_WAVE006_INTEGRITY_REPAIR_ACCEPTED": true,
   "DO_NOT_UPDATE_BASELINE_COUNTS": true,
+  "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
   "OS_PLATFORM_020_UNTOUCHED": true,
-  "READY_FOR_OWNER_MERGE": true,
+  "PARTIAL": false,
+  "READY_FOR_OWNER_MERGE": false,
+  "READY_FOR_OWNER_MERGE_SEQUENCE": true,
   "SUPPORTING_PR": "NONE",
   "TARGET_REQUIREMENTS": [
     "NET-ORCH-026",
@@ -21,6 +26,7 @@
   "UNCONDITIONAL_TRUE_CLASSIFIERS": 0,
   "UNCONDITIONAL_TRUE_CLASSIFIERS_COMPUTED": true,
   "WAVE006_COMPLETE_GATE_REQUIRES_10_OF_10": true,
+  "WAVE006_POSTMERGE_INTEGRITY_REPAIR": "PASS",
   "adapters": {
     "adapters": [
       {
@@ -75,11 +81,13 @@
     "claim_boundaries": {
       "CARRIER_ACCEPTED": false,
       "FIELD_MEASURED_PERFORMANCE": false,
+      "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
       "HUMAN_E6": false,
       "KERNEL_MPTCP_VALIDATED": false,
       "LIVE_CARRIER_HANDOVER_VALIDATED": false,
       "PHYSICAL_VALIDATION": false,
       "PRODUCTION_APP_PRIORITY_SIGNING": false,
+      "PRODUCTION_MPTCP_VALIDATED": false,
       "PRODUCTION_NETWORK_OPTIMALITY": false,
       "REAL_MPTCP": false,
       "REAL_NTN_MODEM_VALIDATED": false,
@@ -90,44 +98,118 @@
     "supporting_pr_required": false
   },
   "baselines": {
-    "PRODUCTION_NETWORK_OPTIMALITY": false,
     "UNIVERSAL_OPTIMALITY": false,
     "baselines": [
       {
-        "continuity_score_digital": 0.88,
-        "description": "Decision + transition/resume/multipath/adapt/cache/sync/report",
-        "multipath": true,
-        "name": "wave006_continuity_controller",
-        "resume_capable": true
+        "bytes_per_path": {},
+        "completion_success": false,
+        "duplicate_commit_count": 0,
+        "interruption_resume_time_ms": null,
+        "minimum_useful_service_retained": false,
+        "name": "BASELINE_FAIL_STOP",
+        "progress_loss": 100
       },
       {
-        "continuity_score_digital": 0.7,
-        "description": "Wave005 path selection without continuity execution actions",
-        "multipath": false,
-        "name": "wave005_decision_only",
-        "resume_capable": false
+        "bytes_per_path": {
+          "single": 33
+        },
+        "completion_success": true,
+        "duplicate_commit_count": 0,
+        "interruption_resume_time_ms": 0.0720000098226592,
+        "minimum_useful_service_retained": true,
+        "name": "BASELINE_SINGLE_PATH_RESUME",
+        "progress_loss": 0
       },
       {
-        "continuity_score_digital": 0.55,
-        "description": "Stay on wifi until unavailable; then offline",
-        "multipath": false,
-        "name": "single_path_wifi_only",
-        "resume_capable": false
+        "bytes_per_path": {
+          "a": 8,
+          "b": 25
+        },
+        "completion_success": true,
+        "controller_elapsed_ms": 0.0738749949960038,
+        "duplicate_commit_count": 0,
+        "interruption_resume_time_ms": 9.000062942504883,
+        "minimum_useful_service_retained": true,
+        "name": "WAVE006_CONTROLLER",
+        "progress_loss": 0
       }
     ],
-    "note": "Scores are digital/synthetic comparative labels for research, not field-measured optimality",
+    "multipath_comparison": {
+      "APPLICATION_LEVEL_MULTIPATH_TRANSFER": {
+        "bytes_per_path": {
+          "a": 8,
+          "b": 25
+        },
+        "duplicate_commit_count": 0,
+        "ok": true,
+        "path_failure_continued": true
+      },
+      "SINGLE_PATH_TRANSFER": {
+        "bytes_per_path": {
+          "a": 33
+        },
+        "completion_time_proxy": 5,
+        "ok": true
+      }
+    },
+    "note": "Results are fixture-measured; Wave006 superiority is not manufactured.",
     "ok": true,
     "schema": "gunnchos.engineering_wave006.comparative_baselines.v1"
   },
-  "branch": "eng/wave006-service-continuity-execution",
+  "behavioral_negative_controls": {
+    "BEHAVIORAL_NEGATIVE_CONTROLS_PASS": true,
+    "cases": [
+      {
+        "evaluator_would_fail": true,
+        "name": "transition_commit_without_activating_target",
+        "sabotage_detected": true
+      },
+      {
+        "evaluator_would_fail": true,
+        "name": "resume_duplicates_an_operation",
+        "sabotage_detected": true
+      },
+      {
+        "evaluator_would_fail": true,
+        "name": "multipath_only_increments_counters",
+        "sabotage_detected": true
+      },
+      {
+        "evaluator_would_fail": true,
+        "name": "cache_ignores_ttl",
+        "sabotage_detected": true
+      },
+      {
+        "evaluator_would_fail": true,
+        "name": "scheduler_starves_background_forever",
+        "sabotage_detected": true
+      },
+      {
+        "evaluator_would_fail": true,
+        "name": "sync_exceeds_max_bytes",
+        "sabotage_detected": true
+      },
+      {
+        "evaluator_would_fail": true,
+        "name": "degraded_report_claims_cache_when_missing",
+        "runtime_consistent": true,
+        "sabotage_detected": true
+      }
+    ],
+    "ok": true,
+    "schema": "gunnchos.engineering_wave006.behavioral_negative_controls.v1"
+  },
+  "branch": "eng/wave006-integrity-repair",
   "claim_flags": {
     "CARRIER_ACCEPTED": false,
     "FIELD_MEASURED_PERFORMANCE": false,
+    "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
     "HUMAN_E6": false,
     "KERNEL_MPTCP_VALIDATED": false,
     "LIVE_CARRIER_HANDOVER_VALIDATED": false,
     "PHYSICAL_VALIDATION": false,
     "PRODUCTION_APP_PRIORITY_SIGNING": false,
+    "PRODUCTION_MPTCP_VALIDATED": false,
     "PRODUCTION_NETWORK_OPTIMALITY": false,
     "REAL_MPTCP": false,
     "REAL_NTN_MODEM_VALIDATED": false,
@@ -151,383 +233,597 @@
   "e2e": {
     "ok": true,
     "passed": 10,
-    "scenarios": {
-      "A_satellite_visibility": {
-        "REAL_NTN_MODEM_VALIDATED": false,
-        "allowed_provenance": [
-          "SIMULATED",
-          "DIGITAL_TWIN",
-          "UNKNOWN"
-        ],
-        "digital_twin": {
-          "REAL_NTN_MODEM_VALIDATED": false,
-          "confidence": 0.8,
-          "elevation_deg": 5.0,
-          "note": "digital/synthetic visibility only; not real NTN modem",
-          "provenance": "DIGITAL_TWIN",
-          "satellites_in_view": 1,
-          "visible": false
+    "scenarios": [
+      {
+        "evidence": {
+          "CARRIER_ACCEPTED": false,
+          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+          "activation_time": 1700001000.005,
+          "commit_time": 1700001000.009,
+          "continuity_state": "HEALTHY",
+          "failure_reason": null,
+          "from_bearer": "wifi-home",
+          "interruption_window_ms": 9.000062942504883,
+          "logical_session_preserved": true,
+          "plan": {
+            "created_at": 1700001000.0,
+            "expires_at": 1700001030.0,
+            "logical_session_id": "e2e-a-sess",
+            "make_before_break_supported": true,
+            "plan_version": 1,
+            "preconditions": [
+              "target_available",
+              "target_trust_ok",
+              "wave005_admissible"
+            ],
+            "security_required": true,
+            "service_id": "svc-continuity",
+            "source_path": "wifi-home",
+            "target_available": true,
+            "target_path": "cellular_generic",
+            "target_trust_ok": true,
+            "transition_id": "txn-3d563e6adc73"
+          },
+          "rollback_time": null,
+          "rollback_used": false,
+          "seamless_digital": true,
+          "selected_candidate": "cellular_generic",
+          "session_id_after": "e2e-a-sess",
+          "session_id_before": "e2e-a-sess",
+          "start_time": 1700001000.0,
+          "state": "COMMITTED",
+          "to_bearer": "cellular_generic",
+          "transition_id": "txn-3d563e6adc73"
         },
-        "missing_inputs": {
-          "REAL_NTN_MODEM_VALIDATED": false,
-          "confidence": 0.4,
-          "elevation_deg": null,
-          "note": "missing/invalid visibility inputs \u2192 not visible (never best-case)",
-          "provenance": "UNKNOWN",
-          "satellites_in_view": 0,
-          "visible": false
-        },
-        "ok": true,
-        "schema": "gunnchos.engineering_wave006.satellite_visibility.v1",
-        "simulated": {
-          "REAL_NTN_MODEM_VALIDATED": false,
-          "confidence": 0.8,
-          "elevation_deg": 35.0,
-          "note": "digital/synthetic visibility only; not real NTN modem",
-          "provenance": "SIMULATED",
-          "satellites_in_view": 4,
-          "visible": true
-        }
+        "id": "A",
+        "name": "wifi_to_cellular_generic_digital_transition",
+        "ok": true
       },
-      "B_local_infra": {
-        "available": {
-          "captive_portal_suspected": false,
-          "dns_resolvable": true,
-          "gateway_reachable": true,
-          "latency_ms": 12.0,
-          "note": "local infra status is software-observed digital evidence",
-          "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-          "status": "AVAILABLE"
+      {
+        "evidence": {
+          "SESSION_RESUME_EXACTLY_ONCE": true,
+          "resume": {
+            "duplicate_resume_idempotent": true,
+            "failures": true,
+            "op1_not_replayed": true,
+            "op2_exactly_once": true,
+            "process_b_ok": true,
+            "process_c_ok": true,
+            "progress_preserved": true
+          }
         },
-        "degraded": {
-          "captive_portal_suspected": true,
+        "id": "B",
+        "name": "transition_impossible_then_resume",
+        "ok": true
+      },
+      {
+        "evidence": {
+          "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+          "PRODUCTION_MPTCP_VALIDATED": false,
+          "REAL_MPTCP": false,
+          "application_commit_count": 1,
+          "bytes_by_path": {
+            "path-a": 8,
+            "path-b": 26
+          },
+          "duplicate_suppressed": 1,
+          "ok": true,
+          "path_failure_continued": true,
+          "payload_match": true,
+          "reassembled_hash": "95d0a94c9045f118d378043fce129aa15054a5d2866420fb2e9170cb7fa0f6bd",
+          "source_hash": "95d0a94c9045f118d378043fce129aa15054a5d2866420fb2e9170cb7fa0f6bd",
+          "transfer": {
+            "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+            "PRODUCTION_MPTCP_VALIDATED": false,
+            "REAL_MPTCP": false,
+            "application_commit_count": 1,
+            "bytes_by_path": {
+              "path-a": 8,
+              "path-b": 26
+            },
+            "chunk_count": 5,
+            "ok": true,
+            "path_ids": [
+              "path-a",
+              "path-b"
+            ],
+            "reassembled_hash": "95d0a94c9045f118d378043fce129aa15054a5d2866420fb2e9170cb7fa0f6bd",
+            "transfer_id": "xfer-dc40b84663"
+          }
+        },
+        "id": "C",
+        "name": "two_path_application_level_multipath",
+        "ok": true
+      },
+      {
+        "evidence": {
+          "sync": {
+            "applied": [
+              "ntn-comm"
+            ],
+            "bytes_used": 40,
+            "ok": true,
+            "opportunity_id": "opp-b943bdcf27",
+            "remaining": [
+              "ntn-bg"
+            ]
+          },
+          "window": {
+            "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+            "REAL_NTN_MODEM_VALIDATED": false,
+            "candidate_id": "ntn-sim",
+            "confidence": 0.8,
+            "elevation_deg": 35,
+            "expected_duration_s": 12.0,
+            "latency_estimate_ms": 250.0,
+            "max_age_s": 30.0,
+            "note": "digital/synthetic visibility only; not real NTN modem",
+            "observed_or_generated_at": 1700001100.0,
+            "provenance": "SIMULATED",
+            "satellites_in_view": 4,
+            "source": "fixtures/satellite_visibility.json",
+            "source_commit": "repo-relative",
+            "source_repo": "gunnchos-device-os",
+            "visible": true,
+            "window_end_utc": 1700001112.0,
+            "window_start_utc": 1700001100.0
+          }
+        },
+        "id": "D",
+        "name": "simulated_ntn_window",
+        "ok": true
+      },
+      {
+        "evidence": {
+          "backhaul_reachable": false,
+          "capabilities": {
+            "INTERNET_SERVICE": false,
+            "LOCAL_CACHE_SERVICE": true,
+            "LOCAL_EDGE_SERVICE": true,
+            "LOCAL_PEER_SERVICE": true
+          },
+          "captive_portal_suspected": false,
           "dns_resolvable": false,
+          "edge_service_reachable": true,
           "gateway_reachable": true,
-          "latency_ms": 80.0,
-          "note": "local infra status is software-observed digital evidence",
+          "latency_ms": 20.0,
+          "link_or_ap_available": true,
+          "local_cache_available": true,
+          "max_age_s": 30.0,
+          "note": "local infra capability graph (digital synthetic)",
+          "observed_at": 1700001200.0,
+          "peer_path_available": true,
           "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
           "status": "DEGRADED"
         },
-        "ok": true,
-        "schema": "gunnchos.engineering_wave006.local_infrastructure.v1",
-        "unavailable": {
-          "captive_portal_suspected": false,
-          "dns_resolvable": false,
-          "gateway_reachable": false,
-          "latency_ms": null,
-          "note": "local infra status is software-observed digital evidence",
-          "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-          "status": "UNAVAILABLE"
-        }
+        "id": "E",
+        "name": "internet_outage_local_infra_useful",
+        "ok": true
       },
-      "C_bearer_transition": {
-        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "no_candidates": {
-          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "OFFLINE",
-          "from_bearer": "wifi",
-          "note": "no admissible live path; digital offline fallback only",
-          "seamless_digital": false,
-          "selected_candidate": "offline-fallback",
-          "to_bearer": "offline-fallback"
-        },
-        "ok": true,
-        "schema": "gunnchos.engineering_wave006.bearer_transition.v1",
-        "wifi_to_cellular": {
-          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "TRANSITIONING",
-          "from_bearer": "wifi",
-          "note": "software path reassignment only; not 3GPP/carrier handover",
-          "seamless_digital": true,
-          "selected_candidate": "cell",
-          "to_bearer": "cell"
-        }
-      },
-      "D_session_resume": {
-        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "distinct_pids": true,
-        "fresh_process_required": true,
-        "ok": true,
-        "pids": {
-          "A": 97345,
-          "B": 97346,
-          "C": 97347
-        },
-        "process_b_cursor": 42,
-        "process_b_resumed": true,
-        "process_c_cursor": 42,
-        "process_c_resumed": true,
-        "process_c_sequence": 2,
-        "schema": "gunnchos.engineering_wave006.session_resume_a_b_c.v1"
-      },
-      "E_multipath": {
-        "KERNEL_MPTCP_VALIDATED": false,
-        "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
-        "REAL_MPTCP": false,
-        "dual_path": {
-          "KERNEL_MPTCP_VALIDATED": false,
-          "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
-          "REAL_MPTCP": false,
-          "bytes_primary": 50,
-          "bytes_secondary": 50,
-          "primary": "wifi",
-          "secondary": "cellular"
-        },
-        "ok": true,
-        "schema": "gunnchos.engineering_wave006.application_multipath.v1",
-        "single_path": {
-          "KERNEL_MPTCP_VALIDATED": false,
-          "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
-          "REAL_MPTCP": false,
-          "bytes_primary": 40,
-          "bytes_secondary": 0,
-          "primary": "wifi",
-          "secondary": null
-        }
-      },
-      "F_low_bandwidth": {
-        "adapted_full_has_attachments": true,
-        "adapted_low": {
-          "quality": "low",
-          "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "modes": {
-          "emergency": "EMERGENCY_MINIMAL",
-          "full": "FULL",
-          "low": "LOW_BANDWIDTH",
-          "offline": "OFFLINE"
-        },
-        "ok": true,
-        "schema": "gunnchos.engineering_wave006.low_bandwidth_adaptation.v1"
-      },
-      "G_prioritization": {
-        "PRODUCTION_APP_PRIORITY_SIGNING": false,
-        "ok": true,
-        "ordered": [
-          {
-            "asserted": "CRITICAL",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "CRITICAL",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "CRITICAL",
-            "traffic_class": "EMERGENCY"
-          },
-          {
-            "asserted": "HIGH",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "HIGH",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "HIGH",
-            "traffic_class": "LEARNING"
-          },
-          {
-            "asserted": "HIGH",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "HIGH",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "HIGH",
-            "traffic_class": "COMMUNICATION"
-          },
-          {
-            "asserted": "BACKGROUND",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "BACKGROUND",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "BACKGROUND",
-            "traffic_class": "BACKGROUND"
+      {
+        "evidence": {
+          "modes": [
+            "FULL",
+            "FULL",
+            "FULL",
+            "REDUCED",
+            "REDUCED",
+            "REDUCED",
+            "MINIMUM_USEFUL",
+            "MINIMUM_USEFUL",
+            "MINIMUM_USEFUL",
+            "MINIMUM_USEFUL",
+            "REDUCED",
+            "REDUCED",
+            "REDUCED",
+            "REDUCED",
+            "REDUCED",
+            "FULL",
+            "FULL",
+            "FULL"
+          ],
+          "params_last": {
+            "background_sync_enabled": true,
+            "cache_preferred": false,
+            "cloud_request_policy": "allow",
+            "max_payload_bytes": 64000,
+            "media_quality": "high",
+            "prefetch_enabled": true,
+            "retry_interval_s": 1.0,
+            "sync_batch_bytes": 32000,
+            "telemetry_interval_s": 5.0
           }
-        ],
-        "schema": "gunnchos.engineering_wave006.traffic_prioritization.v1",
-        "self_asserted_critical_blocked": true
+        },
+        "id": "F",
+        "name": "low_bandwidth_adaptation",
+        "ok": true
       },
-      "H_persistent_cache": {
-        "distinct_pids": true,
-        "fresh_process_required": true,
-        "keys_after_a": [
-          "lesson-1",
-          "lesson-2"
-        ],
-        "keys_after_b": [
-          "lesson-1",
-          "lesson-2",
-          "lesson-3"
-        ],
-        "keys_after_c": [
-          "lesson-1",
-          "lesson-2",
-          "lesson-3"
-        ],
-        "ok": true,
-        "pids": {
-          "A": 97348,
-          "B": 97349,
-          "C": 97350
+      {
+        "evidence": {
+          "bg_done": 20,
+          "order_head": [
+            "em0",
+            "em1",
+            "em2",
+            "comm0",
+            "comm1",
+            "comm2",
+            "comm3",
+            "comm4",
+            "comm5",
+            "comm6",
+            "comm7",
+            "comm8",
+            "comm9",
+            "bg0",
+            "bg1"
+          ]
         },
-        "process_c_lesson1": {
-          "bytes": 1200,
-          "title": "intro"
-        },
-        "schema": "gunnchos.engineering_wave006.persistent_cache_a_b_c.v1"
+        "id": "G",
+        "name": "constrained_mixed_traffic",
+        "ok": true
       },
-      "I_opportunistic_sync": {
-        "deferred_while_offline": {
-          "attempted": false,
-          "pending": 1,
-          "reason": "deferred_until_connectivity:OFFLINE",
-          "remote_apply_count": 0
+      {
+        "evidence": {
+          "cache_hit": {
+            "body": "offline-pack"
+          },
+          "sync": {
+            "applied": [
+              "edit-1"
+            ],
+            "bytes_used": 40,
+            "ok": true,
+            "opportunity_id": "opp-7d3c799040",
+            "remaining": []
+          }
         },
-        "flushed_when_healthy": {
-          "attempted": true,
-          "pending": 0,
-          "remote_apply_count": 1
-        },
-        "fresh_process_pending_after_flush": 0,
-        "ok": true,
-        "schema": "gunnchos.engineering_wave006.opportunistic_sync.v1",
-        "wave004_abc_reuse": {
-          "ok": true,
-          "schema": "gunnchos.engineering_wave004.offline_sync_a_b_c_restart.v1"
-        }
+        "id": "H",
+        "name": "offline_learning_cache",
+        "ok": true
       },
-      "J_unified_controller": {
-        "controller_out_state": "TRANSITIONING",
-        "degraded_reporting_ok": true,
-        "ok": true,
-        "resumed_cursor": 7,
-        "schema": "gunnchos.engineering_wave006.e2e_scenario_j.v1",
-        "shell": {
+      {
+        "evidence": {
           "active_bearer": null,
           "adaptation_mode": "FULL",
+          "cache_available": true,
           "claim_boundaries": {
             "CARRIER_ACCEPTED": false,
             "FIELD_MEASURED_PERFORMANCE": false,
+            "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
             "HUMAN_E6": false,
             "KERNEL_MPTCP_VALIDATED": false,
             "LIVE_CARRIER_HANDOVER_VALIDATED": false,
             "PHYSICAL_VALIDATION": false,
             "PRODUCTION_APP_PRIORITY_SIGNING": false,
+            "PRODUCTION_MPTCP_VALIDATED": false,
             "PRODUCTION_NETWORK_OPTIMALITY": false,
             "REAL_MPTCP": false,
             "REAL_NTN_MODEM_VALIDATED": false,
             "STANDARDIZED_6G": false,
             "UNIVERSAL_OPTIMALITY": false
           },
-          "continuity_state": "RESUMING",
-          "limitations": [],
-          "schema": "gunnchos.engineering_wave006.shell_view.v1",
-          "user_message": "Resuming your session from the last checkpoint."
-        }
+          "continuity_state": "OFFLINE_CAPABLE",
+          "current_adaptation_profile": "FULL",
+          "data_cost_warning": null,
+          "estimated_recovery_condition": "restore path or use local cache/peer",
+          "limitations": [
+            "sync_deferred:3",
+            "internet_unavailable"
+          ],
+          "lost_capabilities": [
+            "INTERNET_SERVICE"
+          ],
+          "pending_sync_items": 3,
+          "provenance": "HOST_OBSERVED_DIGITAL",
+          "reason_codes": [
+            "OFFLINE_CAPABLE"
+          ],
+          "report_id": "rpt-4fb0564bd8",
+          "retained_capabilities": [
+            "LOCAL_EDGE_OR_CACHE",
+            "LOCAL_CACHE_SERVICE",
+            "SESSION_RESUME"
+          ],
+          "security_warning": null,
+          "selected_paths": [],
+          "service_class": "communication",
+          "service_id": "svc-default",
+          "session_resume_available": true,
+          "shell_projection": {
+            "changes_pending_sync": true,
+            "headline": "Offline-capable mode \u2014 cached work available",
+            "recovery_condition": "restore path or use local cache/peer",
+            "security_or_metered_warning": null,
+            "what_still_works": [
+              "LOCAL_EDGE_OR_CACHE",
+              "LOCAL_CACHE_SERVICE",
+              "SESSION_RESUME"
+            ],
+            "what_temporarily_unavailable": [
+              "INTERNET_SERVICE"
+            ],
+            "work_safe_locally": true
+          },
+          "state": "OFFLINE_CAPABLE",
+          "sync_deferred": true,
+          "timestamp": 1700000000.0,
+          "transparent": true,
+          "user_visible_message": "Offline-capable mode \u2014 cached work available"
+        },
+        "id": "I",
+        "name": "degraded_reporting",
+        "ok": true
+      },
+      {
+        "evidence": {
+          "report": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "FULL",
+            "cache_available": true,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "HEALTHY",
+            "current_adaptation_profile": "FULL",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "none",
+            "limitations": [],
+            "lost_capabilities": [],
+            "pending_sync_items": 0,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "HEALTHY"
+            ],
+            "report_id": "rpt-b7f448de91",
+            "retained_capabilities": [
+              "INTERNET_SERVICE",
+              "LOCAL_EDGE_OR_CACHE",
+              "LOCAL_CACHE_SERVICE"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": false,
+            "shell_projection": {
+              "changes_pending_sync": false,
+              "headline": "Service healthy",
+              "recovery_condition": "none",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "INTERNET_SERVICE",
+                "LOCAL_EDGE_OR_CACHE",
+                "LOCAL_CACHE_SERVICE"
+              ],
+              "what_temporarily_unavailable": [],
+              "work_safe_locally": true
+            },
+            "state": "HEALTHY",
+            "sync_deferred": false,
+            "timestamp": 1700000000.0,
+            "transparent": true,
+            "user_visible_message": "Service healthy"
+          },
+          "state": "HEALTHY",
+          "sync": {
+            "plan": {
+              "action": "OPPORTUNISTIC_SYNC",
+              "details": {
+                "applied": [
+                  "j1"
+                ],
+                "bytes_used": 20,
+                "ok": true,
+                "opportunity_id": "opp-cc7a120d94",
+                "remaining": []
+              },
+              "reason": "OPPORTUNISTIC_SYNC"
+            },
+            "result": {
+              "applied": [
+                "j1"
+              ],
+              "bytes_used": 20,
+              "ok": true,
+              "opportunity_id": "opp-cc7a120d94",
+              "remaining": []
+            },
+            "state": "HEALTHY"
+          }
+        },
+        "id": "J",
+        "name": "recovery",
+        "ok": true
       }
-    },
+    ],
     "schema": "gunnchos.engineering_wave006.e2e_scenarios_a_j.v1",
-    "temp_owned": true,
     "total": 10
   },
   "failure_injection": {
+    "case_count": 31,
     "cases": {
-      "all_paths_down": {
+      "cache_budget_exhaustion": {
         "ok": true,
-        "result": {
-          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "OFFLINE",
-          "from_bearer": "wifi",
-          "note": "no admissible live path; digital offline fallback only",
-          "seamless_digital": false,
-          "selected_candidate": "offline-fallback",
-          "to_bearer": "offline-fallback"
-        }
+        "predicate": "eviction"
       },
-      "empty_candidates": {
+      "cache_metadata_corruption": {
         "ok": true,
-        "result": {
-          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "OFFLINE",
-          "from_bearer": "wifi",
-          "note": "no admissible live path; digital offline fallback only",
-          "seamless_digital": false,
-          "selected_candidate": "offline-fallback",
-          "to_bearer": "offline-fallback"
-        }
+        "predicate": "corrupt_safe"
       },
-      "untrusted_not_selected_over_trusted": {
+      "cache_payload_tamper": {
         "ok": true,
-        "result": {
-          "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "TRANSITIONING",
-          "from_bearer": "offline",
-          "note": "software path reassignment only; not 3GPP/carrier handover",
-          "seamless_digital": true,
-          "selected_candidate": "wifi-safe",
-          "to_bearer": "wifi-safe"
-        }
+        "predicate": "tamper_rejected"
+      },
+      "cache_ttl_expiry": {
+        "ok": true,
+        "predicate": "ttl_expired"
+      },
+      "checkpoint_corruption": {
+        "ok": true,
+        "predicate": "malformed_raises"
+      },
+      "checkpoint_schema_unsupported": {
+        "ok": true,
+        "predicate": "unsupported_schema"
+      },
+      "committed_operation_replay": {
+        "ok": true,
+        "predicate": "replay_blocked"
+      },
+      "duplicate_resume": {
+        "ok": true,
+        "predicate": "duplicate_resume"
+      },
+      "empty_or_expired_plan": {
+        "ok": true,
+        "predicate": "expired_plan"
+      },
+      "local_backhaul_failure": {
+        "ok": true,
+        "predicate": "backhaul_down_no_internet"
+      },
+      "local_gateway_failure": {
+        "ok": true,
+        "predicate": "gateway_down_no_internet"
+      },
+      "low_bandwidth_flapping": {
+        "ok": true,
+        "predicate": "no_flap"
+      },
+      "multipath_duplicate_chunk": {
+        "ok": true,
+        "predicate": "dup_suppressed"
+      },
+      "multipath_out_of_order": {
+        "ok": true,
+        "predicate": "ooo_reassembled"
+      },
+      "multipath_path_a_failure": {
+        "ok": true,
+        "predicate": "path_a_fail_ok"
+      },
+      "multipath_path_b_failure": {
+        "ok": true,
+        "predicate": "path_b_fail_ok"
+      },
+      "multipath_untrusted_secondary": {
+        "ok": true,
+        "predicate": "untrusted_rejected"
+      },
+      "resume_token_expired": {
+        "ok": true,
+        "predicate": "expired_token"
+      },
+      "satellite_visibility_stale": {
+        "ok": true,
+        "predicate": "stale_not_visible"
+      },
+      "satellite_window_expires_before_action": {
+        "ok": true,
+        "predicate": "window_too_short"
+      },
+      "sync_data_budget_exceeded": {
+        "ok": true,
+        "predicate": "budget"
+      },
+      "sync_opportunity_expired": {
+        "ok": true,
+        "predicate": "expired"
+      },
+      "sync_replay": {
+        "ok": true,
+        "predicate": "replay"
+      },
+      "target_bearer_disappears": {
+        "ok": true,
+        "predicate": "target_disappeared"
+      },
+      "traffic_queue_overload": {
+        "ok": true,
+        "predicate": "overload_handled"
+      },
+      "transition_activation_failure": {
+        "ok": true,
+        "predicate": "activation_failure"
+      },
+      "transition_commit_failure": {
+        "ok": true,
+        "predicate": "commit_failure"
+      },
+      "transition_rollback_failure": {
+        "ok": true,
+        "predicate": "rollback_failure"
+      },
+      "transition_rollback_success": {
+        "ok": true,
+        "predicate": "rollback_success"
+      },
+      "untrusted_critical_priority": {
+        "ok": true,
+        "predicate": "untrusted_rejected"
+      },
+      "untrusted_path_appears_during_degraded_mode": {
+        "ok": true,
+        "predicate": "untrusted_path_rejected"
       }
     },
+    "failed_cases": [],
     "ok": true,
     "schema": "gunnchos.engineering_wave006.failure_injection.v1"
   },
-  "generated_at_utc": "2026-08-20T21:55:27Z",
-  "head_sha": "08cd89c71932329909f38b5fbeb46213b6786bfb",
+  "generated_at_utc": "2026-08-20T22:19:03Z",
+  "head_sha": "5261da70fdc1a70df13875f9fdf6f10b6e917ad7",
   "label": "DIGITAL_SYNTHETIC_EVIDENCE",
   "metrics": {
-    "FIELD_MEASURED_PERFORMANCE": false,
-    "PRODUCTION_NETWORK_OPTIMALITY": false,
     "UNIVERSAL_OPTIMALITY": false,
-    "claim_boundaries": {
-      "CARRIER_ACCEPTED": false,
-      "FIELD_MEASURED_PERFORMANCE": false,
-      "HUMAN_E6": false,
-      "KERNEL_MPTCP_VALIDATED": false,
-      "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-      "PHYSICAL_VALIDATION": false,
-      "PRODUCTION_APP_PRIORITY_SIGNING": false,
-      "PRODUCTION_NETWORK_OPTIMALITY": false,
-      "REAL_MPTCP": false,
-      "REAL_NTN_MODEM_VALIDATED": false,
-      "STANDARDIZED_6G": false,
-      "UNIVERSAL_OPTIMALITY": false
+    "metrics": {
+      "UNIVERSAL_OPTIMALITY": false,
+      "allowed_sources": [
+        "HOST_OBSERVED_DIGITAL",
+        "DIGITAL_SYNTHETIC_EVIDENCE",
+        "SIMULATED"
+      ],
+      "bytes_transferred_by_path": {
+        "a": 8,
+        "b": 34
+      },
+      "cache_hit_for_continuity": true,
+      "decision_to_action_ms": 0.005291993147693574,
+      "degraded_duration_ms": 0.008999995770864189,
+      "duplicate_commit_count": 0,
+      "logical_session_preserved": true,
+      "minimum_useful_service_retained": true,
+      "multipath_completion_time": 0.029542003176175058,
+      "resume_progress_loss_units": 0,
+      "session_resume_ms": null,
+      "single_path_completion_time": 0.01824999344535172,
+      "source": "HOST_OBSERVED_DIGITAL",
+      "sync_queue_after": 1,
+      "sync_queue_before": 2,
+      "traffic_starvation_count": 0,
+      "traffic_wait_time_by_class": {
+        "BACKGROUND": 3.0,
+        "COMMUNICATION": 1.0
+      },
+      "transition_interruption_ms": 9.000062942504883
     },
-    "label": "DIGITAL_SYNTHETIC_EVIDENCE",
     "ok": true,
-    "per_scenario": {
-      "A_satellite_visibility": true,
-      "B_local_infra": true,
-      "C_bearer_transition": true,
-      "D_session_resume": true,
-      "E_multipath": true,
-      "F_low_bandwidth": true,
-      "G_prioritization": true,
-      "H_persistent_cache": true,
-      "I_opportunistic_sync": true,
-      "J_unified_controller": true
-    },
-    "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-    "scenario_pass_rate": 1.0,
-    "scenarios_passed": 10,
-    "scenarios_total": 10,
     "schema": "gunnchos.engineering_wave006.research_metrics.v1"
   },
   "primary_repo": "gunnchos-device-os",
@@ -536,43 +832,148 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_026",
       "evidence": {
+        "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
         "REAL_NTN_MODEM_VALIDATED": false,
+        "SATELLITE_VISIBILITY_WINDOWS": true,
         "allowed_provenance": [
           "SIMULATED",
           "DIGITAL_TWIN",
+          "CONFIGURED_TARGET",
           "UNKNOWN"
         ],
-        "digital_twin": {
-          "REAL_NTN_MODEM_VALIDATED": false,
-          "confidence": 0.8,
-          "elevation_deg": 5.0,
-          "note": "digital/synthetic visibility only; not real NTN modem",
-          "provenance": "DIGITAL_TWIN",
-          "satellites_in_view": 1,
-          "visible": false
+        "checks": {
+          "expired_ineligible": true,
+          "fresh_visible_eligible": true,
+          "future_not_yet": true,
+          "repo_relative_source": true,
+          "short_window_blocks_long_action": true,
+          "stale_ineligible": true,
+          "unknown_not_best_case": true
         },
-        "missing_inputs": {
+        "expired": {
+          "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
-          "confidence": 0.4,
-          "elevation_deg": null,
-          "note": "missing/invalid visibility inputs \u2192 not visible (never best-case)",
-          "provenance": "UNKNOWN",
-          "satellites_in_view": 0,
-          "visible": false
+          "candidate_id": "ntn-sim-expired",
+          "confidence": 0.8,
+          "elevation_deg": 40.0,
+          "expected_duration_s": 180.0,
+          "latency_estimate_ms": 250.0,
+          "max_age_s": 30.0,
+          "note": "digital/synthetic visibility only; not real NTN modem",
+          "observed_or_generated_at": 1700000095.0,
+          "provenance": "DIGITAL_TWIN",
+          "satellites_in_view": 3,
+          "source": "fixtures/satellite_visibility.json",
+          "source_commit": "repo-relative",
+          "source_repo": "gunnchos-device-os",
+          "visible": true,
+          "window_end_utc": 1700000080.0,
+          "window_start_utc": 1699999900.0
+        },
+        "fresh": {
+          "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+          "REAL_NTN_MODEM_VALIDATED": false,
+          "candidate_id": "ntn-sim-fresh",
+          "confidence": 0.8,
+          "elevation_deg": 35.0,
+          "expected_duration_s": 100.0,
+          "latency_estimate_ms": 250.0,
+          "max_age_s": 30.0,
+          "note": "digital/synthetic visibility only; not real NTN modem",
+          "observed_or_generated_at": 1700000099.0,
+          "provenance": "SIMULATED",
+          "satellites_in_view": 4,
+          "source": "fixtures/satellite_visibility.json",
+          "source_commit": "repo-relative",
+          "source_repo": "gunnchos-device-os",
+          "visible": true,
+          "window_end_utc": 1700000190.0,
+          "window_start_utc": 1700000090.0
+        },
+        "future": {
+          "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+          "REAL_NTN_MODEM_VALIDATED": false,
+          "candidate_id": "ntn-sim-future",
+          "confidence": 0.8,
+          "elevation_deg": 40.0,
+          "expected_duration_s": 120.0,
+          "latency_estimate_ms": 250.0,
+          "max_age_s": 30.0,
+          "note": "digital/synthetic visibility only; not real NTN modem",
+          "observed_or_generated_at": 1700000100.0,
+          "provenance": "SIMULATED",
+          "satellites_in_view": 3,
+          "source": "fixtures/satellite_visibility.json",
+          "source_commit": "repo-relative",
+          "source_repo": "gunnchos-device-os",
+          "visible": true,
+          "window_end_utc": 1700000340.0,
+          "window_start_utc": 1700000220.0
         },
         "proof_ok": true,
         "schema": "gunnchos.engineering_wave006.satellite_visibility.v1",
-        "simulated": {
+        "short_window": {
+          "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
           "REAL_NTN_MODEM_VALIDATED": false,
+          "candidate_id": "ntn-sim-short",
           "confidence": 0.8,
-          "elevation_deg": 35.0,
+          "elevation_deg": 30.0,
+          "expected_duration_s": 6.0,
+          "latency_estimate_ms": 250.0,
+          "max_age_s": 30.0,
           "note": "digital/synthetic visibility only; not real NTN modem",
+          "observed_or_generated_at": 1700000100.0,
           "provenance": "SIMULATED",
-          "satellites_in_view": 4,
-          "visible": true
+          "satellites_in_view": 2,
+          "source": "fixtures/satellite_visibility.json",
+          "source_commit": "repo-relative",
+          "source_repo": "gunnchos-device-os",
+          "visible": true,
+          "window_end_utc": 1700000105.0,
+          "window_start_utc": 1700000099.0
+        },
+        "stale": {
+          "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+          "REAL_NTN_MODEM_VALIDATED": false,
+          "candidate_id": "ntn-sim-stale",
+          "confidence": 0.8,
+          "elevation_deg": 45.0,
+          "expected_duration_s": 100.0,
+          "latency_estimate_ms": 250.0,
+          "max_age_s": 30.0,
+          "note": "digital/synthetic visibility only; not real NTN modem",
+          "observed_or_generated_at": 1699999980.0,
+          "provenance": "SIMULATED",
+          "satellites_in_view": 5,
+          "source": "fixtures/satellite_visibility.json",
+          "source_commit": "repo-relative",
+          "source_repo": "gunnchos-device-os",
+          "visible": true,
+          "window_end_utc": 1700000190.0,
+          "window_start_utc": 1700000090.0
+        },
+        "unknown": {
+          "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+          "REAL_NTN_MODEM_VALIDATED": false,
+          "candidate_id": "ntn-unknown",
+          "confidence": 0.3,
+          "elevation_deg": null,
+          "expected_duration_s": 60.0,
+          "latency_estimate_ms": 250.0,
+          "max_age_s": 30.0,
+          "note": "missing/invalid visibility inputs \u2192 not visible (never best-case)",
+          "observed_or_generated_at": 1700000100.0,
+          "provenance": "UNKNOWN",
+          "satellites_in_view": 0,
+          "source": "fixtures/satellite_visibility.json",
+          "source_commit": "repo-relative",
+          "source_repo": "gunnchos-device-os",
+          "visible": false,
+          "window_end_utc": 1700000160.0,
+          "window_start_utc": 1700000100.0
         }
       },
-      "note": "Satellite visibility SIMULATED/DIGITAL_TWIN",
+      "note": "Satellite visibility windows + freshness",
       "ok": true,
       "requirement_id": "NET-ORCH-026"
     },
@@ -580,37 +981,223 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_027",
       "evidence": {
-        "available": {
-          "captive_portal_suspected": false,
-          "dns_resolvable": true,
-          "gateway_reachable": true,
-          "latency_ms": 12.0,
-          "note": "local infra status is software-observed digital evidence",
-          "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-          "status": "AVAILABLE"
-        },
-        "degraded": {
-          "captive_portal_suspected": true,
-          "dns_resolvable": false,
-          "gateway_reachable": true,
-          "latency_ms": 80.0,
-          "note": "local infra status is software-observed digital evidence",
-          "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-          "status": "DEGRADED"
+        "LOCAL_INFRA_CAPABILITY_GRAPH": true,
+        "checks": {
+          "ap_up_gateway_down_no_internet": true,
+          "backhaul_down_no_internet": true,
+          "cache_retained": true,
+          "dns_down_local_ok": true,
+          "edge_retained": true,
+          "full_internet_available": true,
+          "not_collapsed_to_one_bit": true,
+          "peer_retained": true,
+          "stale_unknown": true,
+          "unknown_unknown": true
         },
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.local_infrastructure.v1",
-        "unavailable": {
-          "captive_portal_suspected": false,
-          "dns_resolvable": false,
-          "gateway_reachable": false,
-          "latency_ms": null,
-          "note": "local infra status is software-observed digital evidence",
-          "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
-          "status": "UNAVAILABLE"
-        }
+        "scenarios": {
+          "ap_up_gateway_down": {
+            "backhaul_reachable": false,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": true,
+            "edge_service_reachable": false,
+            "gateway_reachable": false,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "UNAVAILABLE"
+          },
+          "dns_down_direct_local": {
+            "backhaul_reachable": false,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": true,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": false,
+            "edge_service_reachable": true,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "DEGRADED"
+          },
+          "full_internet": {
+            "backhaul_reachable": true,
+            "capabilities": {
+              "INTERNET_SERVICE": true,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": true,
+            "edge_service_reachable": false,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "AVAILABLE"
+          },
+          "gateway_up_backhaul_down": {
+            "backhaul_reachable": false,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": true,
+            "edge_service_reachable": false,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "UNAVAILABLE"
+          },
+          "internet_down_cache_up": {
+            "backhaul_reachable": false,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": true,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": false,
+            "edge_service_reachable": false,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": true,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "DEGRADED"
+          },
+          "internet_down_edge_up": {
+            "backhaul_reachable": false,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": true,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": false,
+            "edge_service_reachable": true,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "DEGRADED"
+          },
+          "internet_down_peer_up": {
+            "backhaul_reachable": false,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": true
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": false,
+            "edge_service_reachable": false,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": true,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "DEGRADED"
+          },
+          "stale": {
+            "backhaul_reachable": true,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": true,
+            "edge_service_reachable": false,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1699999930.0,
+            "peer_path_available": false,
+            "provenance": "DIGITAL_SYNTHETIC_EVIDENCE",
+            "status": "UNKNOWN"
+          },
+          "unknown": {
+            "backhaul_reachable": true,
+            "capabilities": {
+              "INTERNET_SERVICE": false,
+              "LOCAL_CACHE_SERVICE": false,
+              "LOCAL_EDGE_SERVICE": false,
+              "LOCAL_PEER_SERVICE": false
+            },
+            "captive_portal_suspected": false,
+            "dns_resolvable": true,
+            "edge_service_reachable": false,
+            "gateway_reachable": true,
+            "latency_ms": 20.0,
+            "link_or_ap_available": true,
+            "local_cache_available": false,
+            "max_age_s": 30.0,
+            "note": "local infra capability graph (digital synthetic)",
+            "observed_at": 1700000050.0,
+            "peer_path_available": false,
+            "provenance": "UNKNOWN",
+            "status": "UNKNOWN"
+          }
+        },
+        "schema": "gunnchos.engineering_wave006.local_infra.v1"
       },
-      "note": "Local infrastructure status evaluation",
+      "note": "Local infrastructure capability graph",
       "ok": true,
       "requirement_id": "NET-ORCH-027"
     },
@@ -618,29 +1205,350 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_028",
       "evidence": {
+        "CARRIER_ACCEPTED": false,
         "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "no_candidates": {
+        "TRANSITION_ROLLBACK_PROOF": true,
+        "TRANSITION_TRANSACTION_RUNTIME": true,
+        "checks": {
+          "activation_rollback": true,
+          "commit_rollback": true,
+          "committed": true,
+          "duplicate_idempotent": true,
+          "expired_plan": true,
+          "interruption_measured": true,
+          "logical_session_preserved": true,
+          "no_carrier_claim": true,
+          "phases_not_mere_reassignment": true,
+          "rollback_failure": true,
+          "security_insufficient": true,
+          "target_disappeared": true
+        },
+        "duplicate": {
+          "CARRIER_ACCEPTED": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "OFFLINE",
-          "from_bearer": "wifi",
-          "note": "no admissible live path; digital offline fallback only",
-          "seamless_digital": false,
-          "selected_candidate": "offline-fallback",
-          "to_bearer": "offline-fallback"
+          "activation_time": 1700000200.005,
+          "commit_time": 1700000200.009,
+          "continuity_state": "HEALTHY",
+          "failure_reason": null,
+          "from_bearer": "wifi-home",
+          "interruption_window_ms": 9.000062942504883,
+          "logical_session_preserved": true,
+          "plan": {
+            "created_at": 1700000200.0,
+            "expires_at": 1700000230.0,
+            "logical_session_id": "logical-sess-42",
+            "make_before_break_supported": true,
+            "plan_version": 1,
+            "preconditions": [
+              "target_available",
+              "target_trust_ok",
+              "wave005_admissible"
+            ],
+            "security_required": true,
+            "service_id": "svc-continuity",
+            "source_path": "wifi-home",
+            "target_available": true,
+            "target_path": "cellular_generic",
+            "target_trust_ok": true,
+            "transition_id": "txn-eda2acc78f4e"
+          },
+          "rollback_time": null,
+          "rollback_used": false,
+          "seamless_digital": true,
+          "selected_candidate": "cellular_generic",
+          "session_id_after": "logical-sess-42",
+          "session_id_before": "logical-sess-42",
+          "start_time": 1700000200.0,
+          "state": "COMMITTED",
+          "to_bearer": "cellular_generic",
+          "transition_id": "txn-eda2acc78f4e"
+        },
+        "negatives": {
+          "activation_failure_rollback": {
+            "CARRIER_ACCEPTED": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "activation_time": 1700000200.005,
+            "commit_time": null,
+            "continuity_state": "RECOVERING",
+            "failure_reason": "activation_failure",
+            "from_bearer": "wifi-home",
+            "interruption_window_ms": 7.000207901000977,
+            "logical_session_preserved": false,
+            "plan": {
+              "created_at": 1700000200.0,
+              "expires_at": 1700000230.0,
+              "logical_session_id": "logical-sess-45",
+              "make_before_break_supported": true,
+              "plan_version": 1,
+              "preconditions": [
+                "target_available",
+                "target_trust_ok",
+                "wave005_admissible"
+              ],
+              "security_required": true,
+              "service_id": "svc-continuity",
+              "source_path": "wifi-home",
+              "target_available": true,
+              "target_path": "cellular_generic",
+              "target_trust_ok": true,
+              "transition_id": "txn-5707435ba3d5"
+            },
+            "rollback_time": 1700000200.0070002,
+            "rollback_used": true,
+            "seamless_digital": false,
+            "selected_candidate": "cellular_generic",
+            "session_id_after": "logical-sess-45",
+            "session_id_before": "logical-sess-45",
+            "start_time": 1700000200.0,
+            "state": "ROLLED_BACK",
+            "to_bearer": "cellular_generic",
+            "transition_id": "txn-5707435ba3d5"
+          },
+          "commit_failure_rollback": {
+            "CARRIER_ACCEPTED": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "activation_time": 1700000200.005,
+            "commit_time": null,
+            "continuity_state": "RECOVERING",
+            "failure_reason": "commit_failure",
+            "from_bearer": "wifi-home",
+            "interruption_window_ms": 8.00013542175293,
+            "logical_session_preserved": false,
+            "plan": {
+              "created_at": 1700000200.0,
+              "expires_at": 1700000230.0,
+              "logical_session_id": "logical-sess-46",
+              "make_before_break_supported": true,
+              "plan_version": 1,
+              "preconditions": [
+                "target_available",
+                "target_trust_ok",
+                "wave005_admissible"
+              ],
+              "security_required": true,
+              "service_id": "svc-continuity",
+              "source_path": "wifi-home",
+              "target_available": true,
+              "target_path": "cellular_generic",
+              "target_trust_ok": true,
+              "transition_id": "txn-038a7c523ac8"
+            },
+            "rollback_time": 1700000200.0080001,
+            "rollback_used": true,
+            "seamless_digital": false,
+            "selected_candidate": "cellular_generic",
+            "session_id_after": "logical-sess-46",
+            "session_id_before": "logical-sess-46",
+            "start_time": 1700000200.0,
+            "state": "ROLLED_BACK",
+            "to_bearer": "cellular_generic",
+            "transition_id": "txn-038a7c523ac8"
+          },
+          "expired_plan": {
+            "CARRIER_ACCEPTED": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "activation_time": null,
+            "commit_time": null,
+            "continuity_state": "FAILED",
+            "failure_reason": "expired_plan",
+            "from_bearer": "wifi-home",
+            "interruption_window_ms": 0.0,
+            "logical_session_preserved": false,
+            "plan": {
+              "created_at": 1700000200.0,
+              "expires_at": 1700000201.0,
+              "logical_session_id": "logical-sess-48",
+              "make_before_break_supported": true,
+              "plan_version": 1,
+              "preconditions": [
+                "target_available",
+                "target_trust_ok",
+                "wave005_admissible"
+              ],
+              "security_required": true,
+              "service_id": "svc-continuity",
+              "source_path": "wifi-home",
+              "target_available": true,
+              "target_path": "cellular_generic",
+              "target_trust_ok": true,
+              "transition_id": "txn-5f29efddb906"
+            },
+            "rollback_time": null,
+            "rollback_used": false,
+            "seamless_digital": false,
+            "selected_candidate": "cellular_generic",
+            "session_id_after": "logical-sess-48",
+            "session_id_before": "logical-sess-48",
+            "start_time": 1700000205.0,
+            "state": "FAILED",
+            "to_bearer": "cellular_generic",
+            "transition_id": "txn-5f29efddb906"
+          },
+          "rollback_failure": {
+            "CARRIER_ACCEPTED": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "activation_time": null,
+            "commit_time": null,
+            "continuity_state": "FAILED",
+            "failure_reason": "rollback_failure",
+            "from_bearer": "wifi-home",
+            "interruption_window_ms": 0.0,
+            "logical_session_preserved": false,
+            "plan": {
+              "created_at": 1700000200.0,
+              "expires_at": 1700000230.0,
+              "logical_session_id": "logical-sess-47",
+              "make_before_break_supported": true,
+              "plan_version": 1,
+              "preconditions": [
+                "target_available",
+                "target_trust_ok",
+                "wave005_admissible"
+              ],
+              "security_required": true,
+              "service_id": "svc-continuity",
+              "source_path": "wifi-home",
+              "target_available": true,
+              "target_path": "cellular_generic",
+              "target_trust_ok": true,
+              "transition_id": "txn-e70cb0bcc217"
+            },
+            "rollback_time": 1700000200.002,
+            "rollback_used": true,
+            "seamless_digital": false,
+            "selected_candidate": null,
+            "session_id_after": "",
+            "session_id_before": "logical-sess-47",
+            "start_time": 1700000200.0,
+            "state": "FAILED",
+            "to_bearer": "cellular_generic",
+            "transition_id": "txn-e70cb0bcc217"
+          },
+          "security_insufficient": {
+            "CARRIER_ACCEPTED": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "activation_time": null,
+            "commit_time": null,
+            "continuity_state": "FAILED",
+            "failure_reason": "target_security_insufficient",
+            "from_bearer": "wifi-home",
+            "interruption_window_ms": 0.0,
+            "logical_session_preserved": false,
+            "plan": {
+              "created_at": 1700000200.0,
+              "expires_at": 1700000230.0,
+              "logical_session_id": "logical-sess-44",
+              "make_before_break_supported": true,
+              "plan_version": 1,
+              "preconditions": [
+                "target_available",
+                "target_trust_ok",
+                "wave005_admissible"
+              ],
+              "security_required": true,
+              "service_id": "svc-continuity",
+              "source_path": "wifi-home",
+              "target_available": true,
+              "target_path": "untrusted-cell",
+              "target_trust_ok": true,
+              "transition_id": "txn-ebd27e0ca292"
+            },
+            "rollback_time": null,
+            "rollback_used": false,
+            "seamless_digital": false,
+            "selected_candidate": "untrusted-cell",
+            "session_id_after": "logical-sess-44",
+            "session_id_before": "logical-sess-44",
+            "start_time": 1700000200.0,
+            "state": "FAILED",
+            "to_bearer": "untrusted-cell",
+            "transition_id": "txn-ebd27e0ca292"
+          },
+          "target_disappeared": {
+            "CARRIER_ACCEPTED": false,
+            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+            "activation_time": null,
+            "commit_time": null,
+            "continuity_state": "FAILED",
+            "failure_reason": "target_disappeared",
+            "from_bearer": "wifi-home",
+            "interruption_window_ms": 0.0,
+            "logical_session_preserved": false,
+            "plan": {
+              "created_at": 1700000200.0,
+              "expires_at": 1700000230.0,
+              "logical_session_id": "logical-sess-43",
+              "make_before_break_supported": true,
+              "plan_version": 1,
+              "preconditions": [
+                "target_available",
+                "target_trust_ok",
+                "wave005_admissible"
+              ],
+              "security_required": true,
+              "service_id": "svc-continuity",
+              "source_path": "wifi-home",
+              "target_available": true,
+              "target_path": "cellular_generic",
+              "target_trust_ok": true,
+              "transition_id": "txn-73b11277c636"
+            },
+            "rollback_time": null,
+            "rollback_used": false,
+            "seamless_digital": false,
+            "selected_candidate": "cellular_generic",
+            "session_id_after": "logical-sess-43",
+            "session_id_before": "logical-sess-43",
+            "start_time": 1700000200.0,
+            "state": "FAILED",
+            "to_bearer": "cellular_generic",
+            "transition_id": "txn-73b11277c636"
+          }
         },
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.bearer_transition.v1",
-        "wifi_to_cellular": {
+        "schema": "gunnchos.engineering_wave006.bearer_transition_transaction.v1",
+        "success": {
+          "CARRIER_ACCEPTED": false,
           "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-          "continuity_state": "TRANSITIONING",
-          "from_bearer": "wifi",
-          "note": "software path reassignment only; not 3GPP/carrier handover",
+          "activation_time": 1700000200.005,
+          "commit_time": 1700000200.009,
+          "continuity_state": "HEALTHY",
+          "failure_reason": null,
+          "from_bearer": "wifi-home",
+          "interruption_window_ms": 9.000062942504883,
+          "logical_session_preserved": true,
+          "plan": {
+            "created_at": 1700000200.0,
+            "expires_at": 1700000230.0,
+            "logical_session_id": "logical-sess-42",
+            "make_before_break_supported": true,
+            "plan_version": 1,
+            "preconditions": [
+              "target_available",
+              "target_trust_ok",
+              "wave005_admissible"
+            ],
+            "security_required": true,
+            "service_id": "svc-continuity",
+            "source_path": "wifi-home",
+            "target_available": true,
+            "target_path": "cellular_generic",
+            "target_trust_ok": true,
+            "transition_id": "txn-eda2acc78f4e"
+          },
+          "rollback_time": null,
+          "rollback_used": false,
           "seamless_digital": true,
-          "selected_candidate": "cell",
-          "to_bearer": "cell"
+          "selected_candidate": "cellular_generic",
+          "session_id_after": "logical-sess-42",
+          "session_id_before": "logical-sess-42",
+          "start_time": 1700000200.0,
+          "state": "COMMITTED",
+          "to_bearer": "cellular_generic",
+          "transition_id": "txn-eda2acc78f4e"
         }
       },
-      "note": "Digital bearer transition (not live carrier handover)",
+      "note": "Bearer transition transaction + rollback",
       "ok": true,
       "requirement_id": "NET-ORCH-028"
     },
@@ -648,23 +1556,58 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_029",
       "evidence": {
-        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "distinct_pids": true,
-        "fresh_process_required": true,
-        "pids": {
-          "A": 97327,
-          "B": 97328,
-          "C": 97329
+        "SESSION_DUPLICATE_RESUME_BLOCKED": true,
+        "SESSION_RESUME_EXACTLY_ONCE": true,
+        "b_stderr": "",
+        "c_stderr": "",
+        "checks": {
+          "duplicate_resume_idempotent": true,
+          "failures": true,
+          "op1_not_replayed": true,
+          "op2_exactly_once": true,
+          "process_b_ok": true,
+          "process_c_ok": true,
+          "progress_preserved": true
         },
-        "process_b_cursor": 42,
-        "process_b_resumed": true,
-        "process_c_cursor": 42,
-        "process_c_resumed": true,
-        "process_c_sequence": 2,
+        "failures": {
+          "committed_operation_replay": true,
+          "expired_resume_token": true,
+          "integrity_mismatch": true,
+          "malformed_json": true,
+          "unsupported_schema": true,
+          "wrong_session_token": true
+        },
+        "process_a": {
+          "committed": [
+            "op-1"
+          ],
+          "pending": [
+            "op-2"
+          ],
+          "progress": 42
+        },
+        "process_b": {
+          "committed": [
+            "op-1",
+            "op-2"
+          ],
+          "mode": "B",
+          "progress": 42,
+          "resume_count": 1
+        },
+        "process_c": {
+          "committed": [
+            "op-1",
+            "op-2"
+          ],
+          "duplicate": true,
+          "mode": "C",
+          "progress": 42
+        },
         "proof_ok": true,
         "schema": "gunnchos.engineering_wave006.session_resume_a_b_c.v1"
       },
-      "note": "Session resume A\u2192B\u2192C fresh-process",
+      "note": "Durable checkpoint/resume exactly-once",
       "ok": true,
       "requirement_id": "NET-ORCH-029"
     },
@@ -672,31 +1615,101 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_030",
       "evidence": {
-        "KERNEL_MPTCP_VALIDATED": false,
+        "APPLICATION_MULTIPATH_REAL_TRANSFER": true,
+        "DUPLICATE_COMMIT_COUNT": 0,
         "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+        "MULTIPATH_PATH_FAILURE_CONTINUES": true,
+        "MULTIPATH_PAYLOAD_HASH_MATCH": true,
+        "PRODUCTION_MPTCP_VALIDATED": false,
         "REAL_MPTCP": false,
-        "dual_path": {
-          "KERNEL_MPTCP_VALIDATED": false,
+        "checks": {
+          "bytes_from_delivered_chunks": true,
+          "duplicate_commit_zero_extra": true,
+          "duplicate_suppressed": true,
+          "hash_match": true,
+          "multi_ok": true,
+          "not_byte_count_only": true,
+          "path_failure_continues": true,
+          "single_ok": true,
+          "untrusted_rejected": true
+        },
+        "multipath": {
           "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+          "PRODUCTION_MPTCP_VALIDATED": false,
           "REAL_MPTCP": false,
-          "bytes_primary": 50,
-          "bytes_secondary": 50,
-          "primary": "wifi",
-          "secondary": "cellular"
+          "application_commit_count": 1,
+          "bytes_by_path": {
+            "path-a": 8,
+            "path-b": 37
+          },
+          "duplicate_suppressed": 1,
+          "ok": true,
+          "path_failure_continued": true,
+          "payload_match": true,
+          "reassembled_hash": "e9a0d38ae345fe45dab18990602cdc77c1877c3355385ca92c6d272b18b8a680",
+          "source_hash": "e9a0d38ae345fe45dab18990602cdc77c1877c3355385ca92c6d272b18b8a680",
+          "transfer": {
+            "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+            "PRODUCTION_MPTCP_VALIDATED": false,
+            "REAL_MPTCP": false,
+            "application_commit_count": 1,
+            "bytes_by_path": {
+              "path-a": 8,
+              "path-b": 37
+            },
+            "chunk_count": 6,
+            "ok": true,
+            "path_ids": [
+              "path-a",
+              "path-b"
+            ],
+            "reassembled_hash": "e9a0d38ae345fe45dab18990602cdc77c1877c3355385ca92c6d272b18b8a680",
+            "transfer_id": "xfer-32f909d597"
+          }
         },
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.application_multipath.v1",
+        "schema": "gunnchos.engineering_wave006.application_multipath_transfer.v1",
         "single_path": {
-          "KERNEL_MPTCP_VALIDATED": false,
           "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+          "PRODUCTION_MPTCP_VALIDATED": false,
           "REAL_MPTCP": false,
-          "bytes_primary": 40,
-          "bytes_secondary": 0,
-          "primary": "wifi",
-          "secondary": null
+          "application_commit_count": 1,
+          "bytes_by_path": {
+            "path-a": 45
+          },
+          "duplicate_suppressed": 0,
+          "ok": true,
+          "path_failure_continued": false,
+          "payload_match": true,
+          "reassembled_hash": "e9a0d38ae345fe45dab18990602cdc77c1877c3355385ca92c6d272b18b8a680",
+          "source_hash": "e9a0d38ae345fe45dab18990602cdc77c1877c3355385ca92c6d272b18b8a680",
+          "transfer": {
+            "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+            "PRODUCTION_MPTCP_VALIDATED": false,
+            "REAL_MPTCP": false,
+            "application_commit_count": 1,
+            "bytes_by_path": {
+              "path-a": 45
+            },
+            "chunk_count": 6,
+            "ok": true,
+            "path_ids": [
+              "path-a"
+            ],
+            "reassembled_hash": "e9a0d38ae345fe45dab18990602cdc77c1877c3355385ca92c6d272b18b8a680",
+            "transfer_id": "xfer-81368ca626"
+          }
+        },
+        "untrusted": {
+          "MULTIPATH_KIND": "APPLICATION_LEVEL_MULTIPATH",
+          "PRODUCTION_MPTCP_VALIDATED": false,
+          "REAL_MPTCP": false,
+          "ok": false,
+          "reason": "untrusted_secondary_path",
+          "rejected": true
         }
       },
-      "note": "Application-level multipath",
+      "note": "Application-level multipath real transfer",
       "ok": true,
       "requirement_id": "NET-ORCH-030"
     },
@@ -704,21 +1717,128 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_031",
       "evidence": {
-        "adapted_full_has_attachments": true,
-        "adapted_low": {
-          "quality": "low",
-          "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        "ADAPTATION_HYSTERESIS": true,
+        "ADAPTATION_RECOVERY": true,
+        "checks": {
+          "emergency_differs": true,
+          "learning_full_params": true,
+          "no_flap": true,
+          "param_changes_recorded": true,
+          "recovery_to_full": true,
+          "saw_full": true,
+          "saw_minimum_useful": true,
+          "saw_reduced": true
         },
-        "modes": {
-          "emergency": "EMERGENCY_MINIMAL",
-          "full": "FULL",
-          "low": "LOW_BANDWIDTH",
-          "offline": "OFFLINE"
-        },
+        "flap_window": [
+          "MINIMUM_USEFUL",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED"
+        ],
+        "mode_sequence": [
+          "FULL",
+          "FULL",
+          "FULL",
+          "FULL",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "MINIMUM_USEFUL",
+          "MINIMUM_USEFUL",
+          "MINIMUM_USEFUL",
+          "MINIMUM_USEFUL",
+          "MINIMUM_USEFUL",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "REDUCED",
+          "FULL",
+          "FULL",
+          "FULL",
+          "FULL"
+        ],
+        "parameter_changes": [
+          {
+            "mode": "FULL",
+            "params": {
+              "background_sync_enabled": true,
+              "cache_preferred": false,
+              "cloud_request_policy": "allow",
+              "max_payload_bytes": 64000,
+              "media_quality": "high",
+              "prefetch_enabled": true,
+              "retry_interval_s": 1.0,
+              "sync_batch_bytes": 32000,
+              "telemetry_interval_s": 5.0
+            }
+          },
+          {
+            "mode": "REDUCED",
+            "params": {
+              "background_sync_enabled": false,
+              "cache_preferred": true,
+              "cloud_request_policy": "defer_bulk",
+              "max_payload_bytes": 8000,
+              "media_quality": "medium",
+              "prefetch_enabled": false,
+              "retry_interval_s": 3.0,
+              "sync_batch_bytes": 4000,
+              "telemetry_interval_s": 15.0
+            }
+          },
+          {
+            "mode": "MINIMUM_USEFUL",
+            "params": {
+              "background_sync_enabled": false,
+              "cache_preferred": true,
+              "cloud_request_policy": "local_only",
+              "max_payload_bytes": 1200,
+              "media_quality": "low",
+              "prefetch_enabled": false,
+              "retry_interval_s": 8.0,
+              "sync_batch_bytes": 512,
+              "telemetry_interval_s": 30.0
+            }
+          },
+          {
+            "mode": "REDUCED",
+            "params": {
+              "background_sync_enabled": false,
+              "cache_preferred": true,
+              "cloud_request_policy": "defer_bulk",
+              "max_payload_bytes": 8000,
+              "media_quality": "medium",
+              "prefetch_enabled": false,
+              "retry_interval_s": 3.0,
+              "sync_batch_bytes": 4000,
+              "telemetry_interval_s": 15.0
+            }
+          },
+          {
+            "mode": "FULL",
+            "params": {
+              "background_sync_enabled": true,
+              "cache_preferred": false,
+              "cloud_request_policy": "allow",
+              "max_payload_bytes": 64000,
+              "media_quality": "high",
+              "prefetch_enabled": true,
+              "retry_interval_s": 1.0,
+              "sync_batch_bytes": 32000,
+              "telemetry_interval_s": 5.0
+            }
+          }
+        ],
         "proof_ok": true,
         "schema": "gunnchos.engineering_wave006.low_bandwidth_adaptation.v1"
       },
-      "note": "Low-bandwidth adaptation",
+      "note": "Stateful adaptation hysteresis/recovery",
       "ok": true,
       "requirement_id": "NET-ORCH-031"
     },
@@ -727,69 +1847,66 @@
       "evaluator": "evaluate_net_orch_032",
       "evidence": {
         "PRODUCTION_APP_PRIORITY_SIGNING": false,
-        "ordered": [
-          {
-            "asserted": "CRITICAL",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "CRITICAL",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "CRITICAL",
-            "traffic_class": "EMERGENCY"
-          },
-          {
-            "asserted": "HIGH",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "HIGH",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "HIGH",
-            "traffic_class": "LEARNING"
-          },
-          {
-            "asserted": "HIGH",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "HIGH",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "HIGH",
-            "traffic_class": "COMMUNICATION"
-          },
-          {
-            "asserted": "BACKGROUND",
-            "authority": {
-              "PRODUCTION_APP_PRIORITY_SIGNING": false,
-              "asserted_priority": "BACKGROUND",
-              "issuer": "gunnchos.wave006.continuity",
-              "label": "DIGITAL_POLICY_VALIDATION",
-              "policy_version": "wave006.v1",
-              "source": "SYSTEM_POLICY",
-              "trusted": true
-            },
-            "effective": "BACKGROUND",
-            "traffic_class": "BACKGROUND"
-          }
+        "TRAFFIC_SCHEDULER_RUNTIME": true,
+        "TRAFFIC_STARVATION_BOUNDED": true,
+        "bytes_by_class_total": {
+          "BACKGROUND": 1600,
+          "COMMUNICATION": 1500,
+          "EMERGENCY": 400,
+          "LEARNING": 1500,
+          "OTHER": 0
+        },
+        "checks": {
+          "background_eventual_progress": true,
+          "background_yielded_under_severe": true,
+          "comm_learning_above_bg": true,
+          "emergency_precedence": true,
+          "not_label_sort_only": true,
+          "queue_100_plus": true,
+          "starvation_bounded": true,
+          "untrusted_emergency_rejected": true
+        },
+        "completion_by_class": {
+          "BACKGROUND": 40,
+          "COMMUNICATION": 25,
+          "EMERGENCY": 5,
+          "LEARNING": 30
+        },
+        "dispatch_order_head": [
+          "emerg-0",
+          "emerg-1",
+          "emerg-2",
+          "emerg-3",
+          "emerg-4",
+          "comm-0",
+          "comm-1",
+          "comm-2",
+          "comm-3",
+          "comm-4",
+          "comm-5",
+          "comm-6",
+          "comm-7",
+          "comm-8",
+          "comm-9",
+          "comm-10",
+          "comm-11",
+          "comm-12",
+          "comm-13",
+          "comm-14"
         ],
+        "epochs": 26,
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.traffic_prioritization.v1",
-        "self_asserted_critical_blocked": true
+        "schema": "gunnchos.engineering_wave006.traffic_scheduler_stress.v1",
+        "starvation_count": 0,
+        "wait_time_by_class": {
+          "BACKGROUND": 14.1,
+          "COMMUNICATION": 7.8,
+          "EMERGENCY": 3.0,
+          "LEARNING": 10.9,
+          "OTHER": 1.0
+        }
       },
-      "note": "Emergency/learning/communication prioritization",
+      "note": "Constrained-capacity traffic scheduler",
       "ok": true,
       "requirement_id": "NET-ORCH-032"
     },
@@ -797,35 +1914,36 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_033",
       "evidence": {
-        "distinct_pids": true,
-        "fresh_process_required": true,
-        "keys_after_a": [
-          "lesson-1",
-          "lesson-2"
-        ],
-        "keys_after_b": [
-          "lesson-1",
-          "lesson-2",
-          "lesson-3"
-        ],
-        "keys_after_c": [
-          "lesson-1",
-          "lesson-2",
-          "lesson-3"
-        ],
-        "pids": {
-          "A": 97330,
-          "B": 97331,
-          "C": 97332
+        "CACHE_INTEGRITY": true,
+        "CACHE_NAMESPACE_ISOLATION": true,
+        "CACHE_SIZE_BUDGET": true,
+        "CACHE_TTL": true,
+        "checks": {
+          "eviction_under_budget": true,
+          "exists_get": true,
+          "explicit_invalidation": true,
+          "metadata_corruption_safe": true,
+          "namespace_isolation": true,
+          "offline_cache_hit": true,
+          "payload_tamper_rejected": true,
+          "process_b_persistence": true,
+          "stale_version_path": true,
+          "ttl_expiry": true
         },
-        "process_c_lesson1": {
-          "bytes": 1200,
-          "title": "intro"
+        "process_b": {
+          "exists": true,
+          "ns_a": [
+            "ns-a-key"
+          ],
+          "ns_b_cannot_read_a": true,
+          "value": {
+            "text": "cached-learning"
+          }
         },
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.persistent_cache_a_b_c.v1"
+        "schema": "gunnchos.engineering_wave006.persistent_cache_policy.v1"
       },
-      "note": "Persistent local cache A\u2192B\u2192C",
+      "note": "Cache TTL/integrity/budget/namespace",
       "ok": true,
       "requirement_id": "NET-ORCH-033"
     },
@@ -833,26 +1951,126 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_034",
       "evidence": {
-        "deferred_while_offline": {
-          "attempted": false,
-          "pending": 1,
-          "reason": "deferred_until_connectivity:OFFLINE",
-          "remote_apply_count": 0
+        "SYNC_EXACTLY_ONCE": true,
+        "SYNC_MAX_BYTES_ENFORCED": true,
+        "SYNC_OPPORTUNITY_PLANNER": true,
+        "checks": {
+          "fresh_process_ok": true,
+          "healthy_broad": true,
+          "local_peer_subset": true,
+          "low_battery_defers_bg": true,
+          "max_bytes_enforced": true,
+          "metered_high_priority_only": true,
+          "ntn_simulated_compact": true,
+          "opportunity_expiry": true,
+          "replay_no_duplicate": true
         },
-        "flushed_when_healthy": {
-          "attempted": true,
-          "pending": 0,
-          "remote_apply_count": 1
-        },
-        "fresh_process_pending_after_flush": 0,
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.opportunistic_sync.v1",
-        "wave004_abc_reuse": {
-          "ok": true,
-          "schema": "gunnchos.engineering_wave004.offline_sync_a_b_c_restart.v1"
-        }
+        "results": {
+          "expired": {
+            "applied": [],
+            "ok": false,
+            "reason": "opportunity_expired",
+            "remaining": [
+              "peer-bg"
+            ]
+          },
+          "fresh_replay": {
+            "ledger": [
+              "idem-fit"
+            ],
+            "r1": {
+              "applied": [],
+              "bytes_used": 0,
+              "ok": true,
+              "opportunity_id": "opp-f40b43e55c",
+              "remaining": [
+                "leave"
+              ]
+            },
+            "r2": {
+              "applied": [],
+              "bytes_used": 0,
+              "ok": true,
+              "opportunity_id": "opp-f40b43e55c",
+              "remaining": [
+                "leave"
+              ]
+            }
+          },
+          "healthy": {
+            "applied": [
+              "s-emerg",
+              "s-comm",
+              "s-learn",
+              "s-bg"
+            ],
+            "bytes_used": 5700,
+            "ok": true,
+            "opportunity_id": "opp-987cd390a1",
+            "remaining": [
+              "s-big"
+            ]
+          },
+          "low_battery": {
+            "applied": [
+              "lb-comm"
+            ],
+            "bytes_used": 50,
+            "ok": true,
+            "opportunity_id": "opp-00b53a6b1a",
+            "remaining": [
+              "lb-bg"
+            ]
+          },
+          "max_bytes": {
+            "applied": [
+              "fit"
+            ],
+            "bytes_used": 50,
+            "ok": true,
+            "opportunity_id": "opp-ffe9e0899c",
+            "remaining": [
+              "leave"
+            ]
+          },
+          "metered": {
+            "applied": [
+              "m-comm"
+            ],
+            "bytes_used": 100,
+            "ok": true,
+            "opportunity_id": "opp-6bbfd956ec",
+            "remaining": [
+              "m-bg"
+            ]
+          },
+          "ntn": {
+            "applied": [
+              "ntn-hi"
+            ],
+            "bytes_used": 80,
+            "ok": true,
+            "opportunity_id": "opp-301f6a21b0",
+            "remaining": [
+              "ntn-lo"
+            ]
+          },
+          "peer": {
+            "applied": [
+              "peer-learn"
+            ],
+            "bytes_used": 40,
+            "ok": true,
+            "opportunity_id": "opp-51488e07e8",
+            "remaining": [
+              "peer-bg"
+            ]
+          }
+        },
+        "schema": "gunnchos.engineering_wave006.opportunistic_sync.v1"
       },
-      "note": "Opportunistic synchronization",
+      "note": "SyncOpportunity planner",
       "ok": true,
       "requirement_id": "NET-ORCH-034"
     },
@@ -860,84 +2078,614 @@
       "classification": "IMPLEMENTED_AND_VALIDATED",
       "evaluator": "evaluate_net_orch_035",
       "evidence": {
-        "degraded": {
-          "active_bearer": "cellular",
-          "adaptation_mode": "LOW_BANDWIDTH",
-          "claim_boundaries": {
-            "CARRIER_ACCEPTED": false,
-            "FIELD_MEASURED_PERFORMANCE": false,
-            "HUMAN_E6": false,
-            "KERNEL_MPTCP_VALIDATED": false,
-            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-            "PHYSICAL_VALIDATION": false,
-            "PRODUCTION_APP_PRIORITY_SIGNING": false,
-            "PRODUCTION_NETWORK_OPTIMALITY": false,
-            "REAL_MPTCP": false,
-            "REAL_NTN_MODEM_VALIDATED": false,
-            "STANDARDIZED_6G": false,
-            "UNIVERSAL_OPTIMALITY": false
-          },
-          "continuity_state": "DEGRADED",
-          "limitations": [
-            "metered",
-            "low_bandwidth"
-          ],
-          "transparent": true,
-          "user_visible_message": "Service is degraded; some features are limited."
+        "DEGRADED_REPORT_CANONICAL": true,
+        "DEGRADED_REPORT_RUNTIME_CONSISTENT": true,
+        "checks": {
+          "all_example_states": true,
+          "healthy_no_lost_internet": true,
+          "required_fields": true,
+          "runtime_consistent": true,
+          "shell_projection_present": true
         },
-        "healthy": {
-          "active_bearer": "wifi",
-          "adaptation_mode": "FULL",
-          "claim_boundaries": {
-            "CARRIER_ACCEPTED": false,
-            "FIELD_MEASURED_PERFORMANCE": false,
-            "HUMAN_E6": false,
-            "KERNEL_MPTCP_VALIDATED": false,
-            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-            "PHYSICAL_VALIDATION": false,
-            "PRODUCTION_APP_PRIORITY_SIGNING": false,
-            "PRODUCTION_NETWORK_OPTIMALITY": false,
-            "REAL_MPTCP": false,
-            "REAL_NTN_MODEM_VALIDATED": false,
-            "STANDARDIZED_6G": false,
-            "UNIVERSAL_OPTIMALITY": false
+        "examples": {
+          "FAILED": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "REDUCED",
+            "cache_available": false,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "FAILED",
+            "current_adaptation_profile": "REDUCED",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "manual recover / resume from checkpoint",
+            "limitations": [
+              "sync_deferred:2",
+              "internet_unavailable"
+            ],
+            "lost_capabilities": [
+              "INTERNET_SERVICE",
+              "CLOUD_SYNC"
+            ],
+            "pending_sync_items": 2,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "FAILED"
+            ],
+            "report_id": "rpt-0b3ca2e871",
+            "retained_capabilities": [
+              "SESSION_RESUME"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": true,
+            "shell_projection": {
+              "changes_pending_sync": true,
+              "headline": "Service failed \u2014 resume when path returns",
+              "recovery_condition": "manual recover / resume from checkpoint",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "SESSION_RESUME"
+              ],
+              "what_temporarily_unavailable": [
+                "INTERNET_SERVICE",
+                "CLOUD_SYNC"
+              ],
+              "work_safe_locally": false
+            },
+            "state": "FAILED",
+            "sync_deferred": false,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Service failed \u2014 resume when path returns"
           },
-          "continuity_state": "HEALTHY",
-          "limitations": [],
-          "transparent": true,
-          "user_visible_message": "Service is operating normally."
-        },
-        "offline": {
-          "active_bearer": null,
-          "adaptation_mode": "OFFLINE",
-          "claim_boundaries": {
-            "CARRIER_ACCEPTED": false,
-            "FIELD_MEASURED_PERFORMANCE": false,
-            "HUMAN_E6": false,
-            "KERNEL_MPTCP_VALIDATED": false,
-            "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-            "PHYSICAL_VALIDATION": false,
-            "PRODUCTION_APP_PRIORITY_SIGNING": false,
-            "PRODUCTION_NETWORK_OPTIMALITY": false,
-            "REAL_MPTCP": false,
-            "REAL_NTN_MODEM_VALIDATED": false,
-            "STANDARDIZED_6G": false,
-            "UNIVERSAL_OPTIMALITY": false
+          "HEALTHY": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "FULL",
+            "cache_available": true,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "HEALTHY",
+            "current_adaptation_profile": "FULL",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "none",
+            "limitations": [],
+            "lost_capabilities": [],
+            "pending_sync_items": 0,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "HEALTHY"
+            ],
+            "report_id": "rpt-edf2a6f943",
+            "retained_capabilities": [
+              "INTERNET_SERVICE",
+              "LOCAL_EDGE_OR_CACHE",
+              "LOCAL_CACHE_SERVICE"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": false,
+            "shell_projection": {
+              "changes_pending_sync": false,
+              "headline": "Service healthy",
+              "recovery_condition": "none",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "INTERNET_SERVICE",
+                "LOCAL_EDGE_OR_CACHE",
+                "LOCAL_CACHE_SERVICE"
+              ],
+              "what_temporarily_unavailable": [],
+              "work_safe_locally": true
+            },
+            "state": "HEALTHY",
+            "sync_deferred": false,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Service healthy"
           },
-          "continuity_state": "OFFLINE",
-          "limitations": [],
-          "transparent": true,
-          "user_visible_message": "Offline mode: using local cache only."
+          "OFFLINE_CAPABLE": {
+            "active_bearer": null,
+            "adaptation_mode": "REDUCED",
+            "cache_available": true,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "OFFLINE_CAPABLE",
+            "current_adaptation_profile": "REDUCED",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "restore path or use local cache/peer",
+            "limitations": [
+              "sync_deferred:2",
+              "internet_unavailable"
+            ],
+            "lost_capabilities": [
+              "INTERNET_SERVICE"
+            ],
+            "pending_sync_items": 2,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "OFFLINE_CAPABLE"
+            ],
+            "report_id": "rpt-a23b94fffa",
+            "retained_capabilities": [
+              "LOCAL_EDGE_OR_CACHE",
+              "LOCAL_CACHE_SERVICE",
+              "SESSION_RESUME"
+            ],
+            "security_warning": null,
+            "selected_paths": [],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": true,
+            "shell_projection": {
+              "changes_pending_sync": true,
+              "headline": "Offline-capable mode \u2014 cached work available",
+              "recovery_condition": "restore path or use local cache/peer",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "LOCAL_EDGE_OR_CACHE",
+                "LOCAL_CACHE_SERVICE",
+                "SESSION_RESUME"
+              ],
+              "what_temporarily_unavailable": [
+                "INTERNET_SERVICE"
+              ],
+              "work_safe_locally": true
+            },
+            "state": "OFFLINE_CAPABLE",
+            "sync_deferred": true,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Offline-capable mode \u2014 cached work available"
+          },
+          "RECOVERING": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "REDUCED",
+            "cache_available": false,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "RECOVERING",
+            "current_adaptation_profile": "REDUCED",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "complete recovery to HEALTHY",
+            "limitations": [
+              "sync_deferred:2"
+            ],
+            "lost_capabilities": [],
+            "pending_sync_items": 2,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "RECOVERING"
+            ],
+            "report_id": "rpt-806d37eea7",
+            "retained_capabilities": [
+              "INTERNET_SERVICE"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": false,
+            "shell_projection": {
+              "changes_pending_sync": true,
+              "headline": "Recovering service",
+              "recovery_condition": "complete recovery to HEALTHY",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "INTERNET_SERVICE"
+              ],
+              "what_temporarily_unavailable": [],
+              "work_safe_locally": false
+            },
+            "state": "RECOVERING",
+            "sync_deferred": false,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Recovering service"
+          },
+          "REDUCED_SERVICE": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "REDUCED",
+            "cache_available": true,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "REDUCED_SERVICE",
+            "current_adaptation_profile": "REDUCED",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "restore capacity above recovery threshold",
+            "limitations": [
+              "sync_deferred:2"
+            ],
+            "lost_capabilities": [],
+            "pending_sync_items": 2,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "REDUCED_SERVICE"
+            ],
+            "report_id": "rpt-c8c90608f2",
+            "retained_capabilities": [
+              "INTERNET_SERVICE",
+              "LOCAL_EDGE_OR_CACHE",
+              "LOCAL_CACHE_SERVICE"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": false,
+            "shell_projection": {
+              "changes_pending_sync": true,
+              "headline": "Service reduced \u2014 local work may continue",
+              "recovery_condition": "restore capacity above recovery threshold",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "INTERNET_SERVICE",
+                "LOCAL_EDGE_OR_CACHE",
+                "LOCAL_CACHE_SERVICE"
+              ],
+              "what_temporarily_unavailable": [],
+              "work_safe_locally": true
+            },
+            "state": "REDUCED_SERVICE",
+            "sync_deferred": true,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Service reduced \u2014 local work may continue"
+          },
+          "RESUMING": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "REDUCED",
+            "cache_available": false,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "RESUMING",
+            "current_adaptation_profile": "REDUCED",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "finish resume ledger",
+            "limitations": [
+              "sync_deferred:2"
+            ],
+            "lost_capabilities": [],
+            "pending_sync_items": 2,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "RESUMING"
+            ],
+            "report_id": "rpt-72523a09d4",
+            "retained_capabilities": [
+              "INTERNET_SERVICE",
+              "SESSION_RESUME"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": true,
+            "shell_projection": {
+              "changes_pending_sync": true,
+              "headline": "Resuming session",
+              "recovery_condition": "finish resume ledger",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "INTERNET_SERVICE",
+                "SESSION_RESUME"
+              ],
+              "what_temporarily_unavailable": [],
+              "work_safe_locally": false
+            },
+            "state": "RESUMING",
+            "sync_deferred": false,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Resuming session"
+          },
+          "TRANSITIONING": {
+            "active_bearer": "wifi",
+            "adaptation_mode": "REDUCED",
+            "cache_available": false,
+            "claim_boundaries": {
+              "CARRIER_ACCEPTED": false,
+              "FIELD_MEASURED_PERFORMANCE": false,
+              "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
+              "HUMAN_E6": false,
+              "KERNEL_MPTCP_VALIDATED": false,
+              "LIVE_CARRIER_HANDOVER_VALIDATED": false,
+              "PHYSICAL_VALIDATION": false,
+              "PRODUCTION_APP_PRIORITY_SIGNING": false,
+              "PRODUCTION_MPTCP_VALIDATED": false,
+              "PRODUCTION_NETWORK_OPTIMALITY": false,
+              "REAL_MPTCP": false,
+              "REAL_NTN_MODEM_VALIDATED": false,
+              "STANDARDIZED_6G": false,
+              "UNIVERSAL_OPTIMALITY": false
+            },
+            "continuity_state": "TRANSITIONING",
+            "current_adaptation_profile": "REDUCED",
+            "data_cost_warning": null,
+            "estimated_recovery_condition": "commit digital transition",
+            "limitations": [
+              "sync_deferred:2"
+            ],
+            "lost_capabilities": [],
+            "pending_sync_items": 2,
+            "provenance": "HOST_OBSERVED_DIGITAL",
+            "reason_codes": [
+              "TRANSITIONING"
+            ],
+            "report_id": "rpt-0d29a0a733",
+            "retained_capabilities": [
+              "INTERNET_SERVICE"
+            ],
+            "security_warning": null,
+            "selected_paths": [
+              "wifi"
+            ],
+            "service_class": "communication",
+            "service_id": "svc-default",
+            "session_resume_available": false,
+            "shell_projection": {
+              "changes_pending_sync": true,
+              "headline": "Transitioning bearers",
+              "recovery_condition": "commit digital transition",
+              "security_or_metered_warning": null,
+              "what_still_works": [
+                "INTERNET_SERVICE"
+              ],
+              "what_temporarily_unavailable": [],
+              "work_safe_locally": false
+            },
+            "state": "TRANSITIONING",
+            "sync_deferred": false,
+            "timestamp": 1700000600.0,
+            "transparent": true,
+            "user_visible_message": "Transitioning bearers"
+          }
         },
         "proof_ok": true,
-        "schema": "gunnchos.engineering_wave006.degraded_mode_reporting.v1"
+        "schema": "gunnchos.engineering_wave006.degraded_mode_reporting.v1",
+        "state_machine": {
+          "canonical_states": [
+            "HEALTHY",
+            "DEGRADING",
+            "TRANSITION_PREP",
+            "TRANSITIONING",
+            "RESUMING",
+            "MULTIPATH",
+            "REDUCED_SERVICE",
+            "OFFLINE_CAPABLE",
+            "RECOVERING",
+            "FAILED"
+          ],
+          "failure_path": {
+            "event": "ContinuityEvent.FAIL",
+            "from": "TRANSITIONING",
+            "ok": true,
+            "to": "FAILED"
+          },
+          "invalid_jump_rejected": {
+            "event": "ContinuityEvent.RESUME_DONE",
+            "from": "HEALTHY",
+            "ok": false,
+            "reason": "illegal transition: HEALTHY + RESUME_DONE",
+            "rejected": true
+          },
+          "legal_path": [
+            {
+              "event": "ContinuityEvent.BEGIN_TRANSITION",
+              "from": "HEALTHY",
+              "ok": true,
+              "to": "TRANSITION_PREP"
+            },
+            {
+              "event": "ContinuityEvent.TRANSITION_PREP_OK",
+              "from": "TRANSITION_PREP",
+              "ok": true,
+              "to": "TRANSITIONING"
+            },
+            {
+              "event": "ContinuityEvent.TRANSITION_COMMIT",
+              "from": "TRANSITIONING",
+              "ok": true,
+              "to": "HEALTHY"
+            }
+          ],
+          "ok": true,
+          "recovery_path": [
+            {
+              "event": "ContinuityEvent.BANDWIDTH_RECOVER",
+              "from": "REDUCED_SERVICE",
+              "ok": true,
+              "to": "RECOVERING"
+            },
+            {
+              "event": "ContinuityEvent.RECOVERY_DONE",
+              "from": "RECOVERING",
+              "ok": true,
+              "to": "HEALTHY"
+            }
+          ],
+          "schema": "gunnchos.engineering_wave006.continuity_state_machine.v1",
+          "transition_rollback_path": {
+            "event": "ContinuityEvent.TRANSITION_ROLLBACK",
+            "from": "TRANSITIONING",
+            "ok": true,
+            "to": "RECOVERING"
+          }
+        }
       },
-      "note": "Transparent degraded-mode reporting",
+      "note": "Canonical degraded report + state machine",
       "ok": true,
       "requirement_id": "NET-ORCH-035"
     }
   },
   "schema": "gunnchos.engineering_wave006.result.v1",
+  "state_machine": {
+    "canonical_states": [
+      "HEALTHY",
+      "DEGRADING",
+      "TRANSITION_PREP",
+      "TRANSITIONING",
+      "RESUMING",
+      "MULTIPATH",
+      "REDUCED_SERVICE",
+      "OFFLINE_CAPABLE",
+      "RECOVERING",
+      "FAILED"
+    ],
+    "failure_path": {
+      "event": "ContinuityEvent.FAIL",
+      "from": "TRANSITIONING",
+      "ok": true,
+      "to": "FAILED"
+    },
+    "invalid_jump_rejected": {
+      "event": "ContinuityEvent.RESUME_DONE",
+      "from": "HEALTHY",
+      "ok": false,
+      "reason": "illegal transition: HEALTHY + RESUME_DONE",
+      "rejected": true
+    },
+    "legal_path": [
+      {
+        "event": "ContinuityEvent.BEGIN_TRANSITION",
+        "from": "HEALTHY",
+        "ok": true,
+        "to": "TRANSITION_PREP"
+      },
+      {
+        "event": "ContinuityEvent.TRANSITION_PREP_OK",
+        "from": "TRANSITION_PREP",
+        "ok": true,
+        "to": "TRANSITIONING"
+      },
+      {
+        "event": "ContinuityEvent.TRANSITION_COMMIT",
+        "from": "TRANSITIONING",
+        "ok": true,
+        "to": "HEALTHY"
+      }
+    ],
+    "ok": true,
+    "recovery_path": [
+      {
+        "event": "ContinuityEvent.BANDWIDTH_RECOVER",
+        "from": "REDUCED_SERVICE",
+        "ok": true,
+        "to": "RECOVERING"
+      },
+      {
+        "event": "ContinuityEvent.RECOVERY_DONE",
+        "from": "RECOVERING",
+        "ok": true,
+        "to": "HEALTHY"
+      }
+    ],
+    "schema": "gunnchos.engineering_wave006.continuity_state_machine.v1",
+    "transition_rollback_path": {
+      "event": "ContinuityEvent.TRANSITION_ROLLBACK",
+      "from": "TRANSITIONING",
+      "ok": true,
+      "to": "RECOVERING"
+    }
+  },
+  "status": "PASS",
   "summary": {
     "blocked_environment": 0,
     "blocked_external": 0,
@@ -948,8 +2696,5 @@
   },
   "target_requirements": 10,
   "wave": "006",
-  "wave006_ci": {
-    "wave006-continuity": "pass"
-  },
   "wave006_ok": true
 }

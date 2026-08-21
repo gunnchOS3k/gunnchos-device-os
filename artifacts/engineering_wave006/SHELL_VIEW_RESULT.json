@@ -4,19 +4,32 @@
   "claim_boundaries": {
     "CARRIER_ACCEPTED": false,
     "FIELD_MEASURED_PERFORMANCE": false,
+    "FIELD_MEASURED_SATELLITE_VISIBILITY": false,
     "HUMAN_E6": false,
     "KERNEL_MPTCP_VALIDATED": false,
     "LIVE_CARRIER_HANDOVER_VALIDATED": false,
     "PHYSICAL_VALIDATION": false,
     "PRODUCTION_APP_PRIORITY_SIGNING": false,
+    "PRODUCTION_MPTCP_VALIDATED": false,
     "PRODUCTION_NETWORK_OPTIMALITY": false,
     "REAL_MPTCP": false,
     "REAL_NTN_MODEM_VALIDATED": false,
     "STANDARDIZED_6G": false,
     "UNIVERSAL_OPTIMALITY": false
   },
-  "continuity_state": "RESUMING",
+  "continuity_state": "HEALTHY",
   "limitations": [],
   "schema": "gunnchos.engineering_wave006.shell_view.v1",
-  "user_message": "Resuming your session from the last checkpoint."
+  "shell_projection": {
+    "changes_pending_sync": false,
+    "headline": "Service healthy",
+    "recovery_condition": "none",
+    "security_or_metered_warning": null,
+    "what_still_works": [
+      "INTERNET_SERVICE"
+    ],
+    "what_temporarily_unavailable": [],
+    "work_safe_locally": false
+  },
+  "user_message": "Service healthy"
 }

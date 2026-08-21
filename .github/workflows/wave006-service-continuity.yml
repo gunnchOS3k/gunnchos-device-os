@@ -64,7 +64,12 @@ jobs:
           integrity = json.loads((root / "EVALUATOR_INTEGRITY_RESULT.json").read_text())
           neg = json.loads((root / "COMPLETION_GATE_NEGATIVE_CONTROL_RESULT.json").read_text())
           e2e = json.loads((root / "E2E_SCENARIOS_A_J_RESULT.json").read_text())
+          behavioral = json.loads((root / "BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json").read_text())
+          mp = json.loads((root / "APPLICATION_MULTIPATH_TRANSFER_RESULT.json").read_text())
+          sm = json.loads((root / "CONTINUITY_STATE_MACHINE_RESULT.json").read_text())
           assert result["wave006_ok"] is True
+          assert result.get("status") == "PASS"
+          assert result.get("PARTIAL") is False
           assert result["summary"]["validated"] == 10
           assert result["summary"]["total"] == 10
           assert result["UNCONDITIONAL_TRUE_CLASSIFIERS"] == 0
@@ -75,7 +80,11 @@ jobs:
           assert integrity["ok"] is True
           assert neg["BROKEN_EVALUATOR_GATE_RESULT"] == "REJECTED"
           assert neg["ok"] is True
+          assert behavioral["BEHAVIORAL_NEGATIVE_CONTROLS_PASS"] is True
+          assert mp.get("APPLICATION_MULTIPATH_REAL_TRANSFER") is True or mp.get("proof_ok") is True
+          assert sm.get("ok") is True or sm.get("proof_ok") is True
           assert e2e["ok"] is True and e2e["passed"] == 10
+          assert result.get("MULTIPATH_KIND") == "APPLICATION_LEVEL_MULTIPATH"
           for k, v in claims.items():
               assert v is False, k
           assert result["OS_PLATFORM_020_UNTOUCHED"] is True
@@ -86,8 +95,25 @@ jobs:
               assert not abs_re.search(blob), path.name
           print("wave006 integrity CI gates PASS")
           PY
+      - name: Reject PARTIAL-as-green confusion
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("artifacts/engineering_wave006/WAVE006_RESULT.json").read_text())
+          # If not 10/10, status must be explicit PARTIAL/FAIL and wave006_ok false
+          if result["summary"]["validated"] != 10:
+              assert result["wave006_ok"] is False
+              assert result["status"] in ("PARTIAL", "FAIL")
+              assert result.get("PARTIAL") is True or result["status"] == "FAIL"
+          else:
+              assert result["wave006_ok"] is True
+              assert result["status"] == "PASS"
+          print("PARTIAL honesty gate OK")
+          PY
       - name: Upload Wave006 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: wave006-service-continuity-evidence
+          name: wave006-integrity-repair-evidence
           path: artifacts/engineering_wave006/

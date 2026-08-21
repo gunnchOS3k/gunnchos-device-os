@@ -1,0 +1,43 @@
+{
+  "BEHAVIORAL_NEGATIVE_CONTROLS_PASS": true,
+  "cases": [
+    {
+      "evaluator_would_fail": true,
+      "name": "transition_commit_without_activating_target",
+      "sabotage_detected": true
+    },
+    {
+      "evaluator_would_fail": true,
+      "name": "resume_duplicates_an_operation",
+      "sabotage_detected": true
+    },
+    {
+      "evaluator_would_fail": true,
+      "name": "multipath_only_increments_counters",
+      "sabotage_detected": true
+    },
+    {
+      "evaluator_would_fail": true,
+      "name": "cache_ignores_ttl",
+      "sabotage_detected": true
+    },
+    {
+      "evaluator_would_fail": true,
+      "name": "scheduler_starves_background_forever",
+      "sabotage_detected": true
+    },
+    {
+      "evaluator_would_fail": true,
+      "name": "sync_exceeds_max_bytes",
+      "sabotage_detected": true
+    },
+    {
+      "evaluator_would_fail": true,
+      "name": "degraded_report_claims_cache_when_missing",
+      "runtime_consistent": true,
+      "sabotage_detected": true
+    }
+  ],
+  "ok": true,
+  "schema": "gunnchos.engineering_wave006.behavioral_negative_controls.v1"
+}

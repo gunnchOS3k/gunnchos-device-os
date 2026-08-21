@@ -1,42 +1,132 @@
 {
+  "case_count": 31,
   "cases": {
-    "all_paths_down": {
+    "cache_budget_exhaustion": {
       "ok": true,
-      "result": {
-        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "continuity_state": "OFFLINE",
-        "from_bearer": "wifi",
-        "note": "no admissible live path; digital offline fallback only",
-        "seamless_digital": false,
-        "selected_candidate": "offline-fallback",
-        "to_bearer": "offline-fallback"
-      }
+      "predicate": "eviction"
     },
-    "empty_candidates": {
+    "cache_metadata_corruption": {
       "ok": true,
-      "result": {
-        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "continuity_state": "OFFLINE",
-        "from_bearer": "wifi",
-        "note": "no admissible live path; digital offline fallback only",
-        "seamless_digital": false,
-        "selected_candidate": "offline-fallback",
-        "to_bearer": "offline-fallback"
-      }
+      "predicate": "corrupt_safe"
     },
-    "untrusted_not_selected_over_trusted": {
+    "cache_payload_tamper": {
       "ok": true,
-      "result": {
-        "LIVE_CARRIER_HANDOVER_VALIDATED": false,
-        "continuity_state": "TRANSITIONING",
-        "from_bearer": "offline",
-        "note": "software path reassignment only; not 3GPP/carrier handover",
-        "seamless_digital": true,
-        "selected_candidate": "wifi-safe",
-        "to_bearer": "wifi-safe"
-      }
+      "predicate": "tamper_rejected"
+    },
+    "cache_ttl_expiry": {
+      "ok": true,
+      "predicate": "ttl_expired"
+    },
+    "checkpoint_corruption": {
+      "ok": true,
+      "predicate": "malformed_raises"
+    },
+    "checkpoint_schema_unsupported": {
+      "ok": true,
+      "predicate": "unsupported_schema"
+    },
+    "committed_operation_replay": {
+      "ok": true,
+      "predicate": "replay_blocked"
+    },
+    "duplicate_resume": {
+      "ok": true,
+      "predicate": "duplicate_resume"
+    },
+    "empty_or_expired_plan": {
+      "ok": true,
+      "predicate": "expired_plan"
+    },
+    "local_backhaul_failure": {
+      "ok": true,
+      "predicate": "backhaul_down_no_internet"
+    },
+    "local_gateway_failure": {
+      "ok": true,
+      "predicate": "gateway_down_no_internet"
+    },
+    "low_bandwidth_flapping": {
+      "ok": true,
+      "predicate": "no_flap"
+    },
+    "multipath_duplicate_chunk": {
+      "ok": true,
+      "predicate": "dup_suppressed"
+    },
+    "multipath_out_of_order": {
+      "ok": true,
+      "predicate": "ooo_reassembled"
+    },
+    "multipath_path_a_failure": {
+      "ok": true,
+      "predicate": "path_a_fail_ok"
+    },
+    "multipath_path_b_failure": {
+      "ok": true,
+      "predicate": "path_b_fail_ok"
+    },
+    "multipath_untrusted_secondary": {
+      "ok": true,
+      "predicate": "untrusted_rejected"
+    },
+    "resume_token_expired": {
+      "ok": true,
+      "predicate": "expired_token"
+    },
+    "satellite_visibility_stale": {
+      "ok": true,
+      "predicate": "stale_not_visible"
+    },
+    "satellite_window_expires_before_action": {
+      "ok": true,
+      "predicate": "window_too_short"
+    },
+    "sync_data_budget_exceeded": {
+      "ok": true,
+      "predicate": "budget"
+    },
+    "sync_opportunity_expired": {
+      "ok": true,
+      "predicate": "expired"
+    },
+    "sync_replay": {
+      "ok": true,
+      "predicate": "replay"
+    },
+    "target_bearer_disappears": {
+      "ok": true,
+      "predicate": "target_disappeared"
+    },
+    "traffic_queue_overload": {
+      "ok": true,
+      "predicate": "overload_handled"
+    },
+    "transition_activation_failure": {
+      "ok": true,
+      "predicate": "activation_failure"
+    },
+    "transition_commit_failure": {
+      "ok": true,
+      "predicate": "commit_failure"
+    },
+    "transition_rollback_failure": {
+      "ok": true,
+      "predicate": "rollback_failure"
+    },
+    "transition_rollback_success": {
+      "ok": true,
+      "predicate": "rollback_success"
+    },
+    "untrusted_critical_priority": {
+      "ok": true,
+      "predicate": "untrusted_rejected"
+    },
+    "untrusted_path_appears_during_degraded_mode": {
+      "ok": true,
+      "predicate": "untrusted_path_rejected"
     }
   },
+  "failed_cases": [],
   "ok": true,
   "schema": "gunnchos.engineering_wave006.failure_injection.v1"
 }

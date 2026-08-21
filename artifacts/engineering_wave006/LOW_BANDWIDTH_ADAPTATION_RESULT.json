@@ -1,15 +1,122 @@
 {
-  "adapted_full_has_attachments": true,
-  "adapted_low": {
-    "quality": "low",
-    "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  "ADAPTATION_HYSTERESIS": true,
+  "ADAPTATION_RECOVERY": true,
+  "checks": {
+    "emergency_differs": true,
+    "learning_full_params": true,
+    "no_flap": true,
+    "param_changes_recorded": true,
+    "recovery_to_full": true,
+    "saw_full": true,
+    "saw_minimum_useful": true,
+    "saw_reduced": true
   },
-  "modes": {
-    "emergency": "EMERGENCY_MINIMAL",
-    "full": "FULL",
-    "low": "LOW_BANDWIDTH",
-    "offline": "OFFLINE"
-  },
+  "flap_window": [
+    "MINIMUM_USEFUL",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED"
+  ],
+  "mode_sequence": [
+    "FULL",
+    "FULL",
+    "FULL",
+    "FULL",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "MINIMUM_USEFUL",
+    "MINIMUM_USEFUL",
+    "MINIMUM_USEFUL",
+    "MINIMUM_USEFUL",
+    "MINIMUM_USEFUL",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "REDUCED",
+    "FULL",
+    "FULL",
+    "FULL",
+    "FULL"
+  ],
+  "parameter_changes": [
+    {
+      "mode": "FULL",
+      "params": {
+        "background_sync_enabled": true,
+        "cache_preferred": false,
+        "cloud_request_policy": "allow",
+        "max_payload_bytes": 64000,
+        "media_quality": "high",
+        "prefetch_enabled": true,
+        "retry_interval_s": 1.0,
+        "sync_batch_bytes": 32000,
+        "telemetry_interval_s": 5.0
+      }
+    },
+    {
+      "mode": "REDUCED",
+      "params": {
+        "background_sync_enabled": false,
+        "cache_preferred": true,
+        "cloud_request_policy": "defer_bulk",
+        "max_payload_bytes": 8000,
+        "media_quality": "medium",
+        "prefetch_enabled": false,
+        "retry_interval_s": 3.0,
+        "sync_batch_bytes": 4000,
+        "telemetry_interval_s": 15.0
+      }
+    },
+    {
+      "mode": "MINIMUM_USEFUL",
+      "params": {
+        "background_sync_enabled": false,
+        "cache_preferred": true,
+        "cloud_request_policy": "local_only",
+        "max_payload_bytes": 1200,
+        "media_quality": "low",
+        "prefetch_enabled": false,
+        "retry_interval_s": 8.0,
+        "sync_batch_bytes": 512,
+        "telemetry_interval_s": 30.0
+      }
+    },
+    {
+      "mode": "REDUCED",
+      "params": {
+        "background_sync_enabled": false,
+        "cache_preferred": true,
+        "cloud_request_policy": "defer_bulk",
+        "max_payload_bytes": 8000,
+        "media_quality": "medium",
+        "prefetch_enabled": false,
+        "retry_interval_s": 3.0,
+        "sync_batch_bytes": 4000,
+        "telemetry_interval_s": 15.0
+      }
+    },
+    {
+      "mode": "FULL",
+      "params": {
+        "background_sync_enabled": true,
+        "cache_preferred": false,
+        "cloud_request_policy": "allow",
+        "max_payload_bytes": 64000,
+        "media_quality": "high",
+        "prefetch_enabled": true,
+        "retry_interval_s": 1.0,
+        "sync_batch_bytes": 32000,
+        "telemetry_interval_s": 5.0
+      }
+    }
+  ],
   "proof_ok": true,
   "schema": "gunnchos.engineering_wave006.low_bandwidth_adaptation.v1"
 }
