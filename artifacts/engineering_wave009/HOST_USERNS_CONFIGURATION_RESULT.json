@@ -1,0 +1,139 @@
+{
+  "APPARMOR_RESTRICT_USERNS_AFTER": "0",
+  "APPARMOR_RESTRICT_USERNS_BEFORE": "0",
+  "BWRAP_INVOKED_WITH_SUDO": false,
+  "MAX_USER_NAMESPACES": "63791",
+  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": true,
+  "SANDBOX_EXECUTED_AS_ROOT": false,
+  "USERNS_CLONE_AFTER": "1",
+  "USERNS_CLONE_BEFORE": "1",
+  "actions": [
+    {
+      "action": "already_set",
+      "key": "kernel.apparmor_restrict_unprivileged_userns",
+      "value": "0"
+    },
+    {
+      "action": "already_set",
+      "key": "kernel.unprivileged_userns_clone",
+      "value": "1"
+    }
+  ],
+  "after": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "0\n"
+      },
+      "value": "0"
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "63791\n"
+      },
+      "value": "63791"
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "1\n"
+      },
+      "value": "1"
+    }
+  },
+  "before": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "0\n"
+      },
+      "value": "0"
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "63791\n"
+      },
+      "value": "63791"
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "1\n"
+      },
+      "value": "1"
+    }
+  },
+  "generated_at_utc": "2026-08-21T14:33:18Z",
+  "post_repair_bwrap_smoke": {
+    "cmd": [
+      "/usr/bin/bwrap",
+      "--unshare-user",
+      "--die-with-parent",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--ro-bind",
+      "/lib32",
+      "/lib32",
+      "--",
+      "/bin/true"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "schema": "gunnchos.engineering_wave009.host_userns_configuration.v1"
+}

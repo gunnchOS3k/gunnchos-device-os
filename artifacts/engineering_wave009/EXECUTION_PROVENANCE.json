@@ -1,0 +1,122 @@
+{
+  "BWRAP_INVOKED_WITH_SUDO": false,
+  "SANDBOX_EXECUTED_AS_ROOT": false,
+  "apparmor_userns_after": "0",
+  "apparmor_userns_before": "0",
+  "branch": "HEAD",
+  "bwrap_version": {
+    "cmd": [
+      "/usr/bin/bwrap",
+      "--version"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "bubblewrap 0.9.0\n"
+  },
+  "evaluator_source_hash": "10d804e883cd23b27626422c0a6652c0ca1d7e73b445fdada959bdf0cf33f61b",
+  "fixture_marker": "PROBE_FIXTURE+SECCOMP_LAUNCHER",
+  "kernel": "6.17.0-1022-azure",
+  "normal_runner_euid": 1001,
+  "normal_runner_gid": 1001,
+  "normal_runner_uid": 1001,
+  "repo": "gunnchos-device-os",
+  "runner_image": "ubuntu24",
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "sandbox_executor_hash": "16734b3f71b0455a81b723c44bf0d078415bbb86dd05b3559f35ba816568d70f",
+  "sandbox_policy_hash": "9bb816539530d53adcb3efaf45d1f3336692b88dee43b0c203ada3c4ba5ee845",
+  "schema": "gunnchos.engineering_wave009.execution_provenance.v1",
+  "seccomp_python": {
+    "available": true,
+    "module_file": "/usr/lib/python3/dist-packages/seccomp.cpython-312-x86_64-linux-gnu.so"
+  },
+  "source_sha": "bb72edc98ca30ba7199c9bf32af7de73d4867f35",
+  "source_tree": "f65bf10f74112cc1c30b008c7e0759edd9ca2aa8",
+  "userns_sysctl_after": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "0\n"
+      },
+      "value": "0"
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "63791\n"
+      },
+      "value": "63791"
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "1\n"
+      },
+      "value": "1"
+    }
+  },
+  "userns_sysctl_before": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "0\n"
+      },
+      "value": "0"
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "63791\n"
+      },
+      "value": "63791"
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "1\n"
+      },
+      "value": "1"
+    }
+  }
+}

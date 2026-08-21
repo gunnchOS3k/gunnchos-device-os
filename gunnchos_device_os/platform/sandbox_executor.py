@@ -73,7 +73,40 @@ result = {{
     "child_spawn": False,
     "privileged_capability": False,
     "cross_app_read": False,
+    "private_root_rw": False,
+    "app_root_read_allowed": False,
+    "app_root_write_allowed": False,
+    "normal_python_execution": True,
+    "symlink_host_escape": False,
+    "symlink_cross_app_escape": False,
+    "path_traversal_escape": False,
+    "proc_root_escape": False,
+    "mount_escape": False,
+    "dangerous_device_access": False,
+    "host_root_escalation": False,
+    "uid": os.getuid(),
+    "gid": os.getgid(),
+    "euid": os.geteuid(),
+    "cap_eff": None,
+    "cap_prm": None,
+    "cap_amb": None,
+    "no_new_privs": None,
+    "seccomp_status_file": None,
 }}
+
+# Positive private-root RW proof
+try:
+    p = Path("app_private.txt")
+    p.write_text("private-v1", encoding="utf-8")
+    data = p.read_text(encoding="utf-8")
+    p.write_text("private-v2", encoding="utf-8")
+    data2 = p.read_text(encoding="utf-8")
+    st = p.stat()
+    result["app_root_write_allowed"] = data == "private-v1"
+    result["app_root_read_allowed"] = data2 == "private-v2" and st.st_size > 0
+    result["private_root_rw"] = result["app_root_write_allowed"] and result["app_root_read_allowed"]
+except Exception:
+    result["private_root_rw"] = False
 
 host_secret = os.environ.get("HOST_PRIVATE_SECRET", "")
 try:
@@ -109,10 +142,7 @@ for candidate in ("/bin/sh", "/usr/bin/id", "/bin/true", "/usr/bin/python3"):
         break
     except FileNotFoundError:
         continue
-    except Exception as exc:
-        if "Permission" in type(exc).__name__ or "permission" in str(exc).lower():
-            continue
-        # Exec blocked by seccomp typically raises OSError/PermissionError
+    except Exception:
         continue
 try:
     subprocess.run([sys.executable, "-c", "print(1)"], capture_output=True, timeout=2, check=True)
@@ -129,13 +159,21 @@ result["child_spawn"] = spawned
 try:
     os.setuid(0)
     result["privileged_capability"] = True
+    result["host_root_escalation"] = True
 except Exception:
     result["privileged_capability"] = False
 try:
     Path("/dev/mem").open("rb").read(1)
     result["privileged_capability"] = True
+    result["dangerous_device_access"] = True
 except Exception:
     pass
+try:
+    os.mount("tmpfs", "/mnt", "tmpfs", 0)
+    result["mount_escape"] = True
+    result["privileged_capability"] = True
+except Exception:
+    result["mount_escape"] = False
 
 cross = os.environ.get("CROSS_APP_SECRET", "")
 try:
@@ -144,8 +182,55 @@ try:
 except Exception:
     result["cross_app_read"] = False
 
+# Symlink / path escape probes (links prepared by parent in app root)
+try:
+    data = Path("link_host_secret").read_text(encoding="utf-8")
+    result["symlink_host_escape"] = HOST_SECRET_MARK in data
+except Exception:
+    result["symlink_host_escape"] = False
+try:
+    data = Path("link_cross_secret").read_text(encoding="utf-8")
+    result["symlink_cross_app_escape"] = "CROSS-APP-SECRET" in data
+except Exception:
+    result["symlink_cross_app_escape"] = False
+try:
+    trav = Path(os.environ.get("PATH_TRAVERSAL_TARGET", "../outside/escape_marker.txt"))
+    trav.write_text("traversal-escaped", encoding="utf-8")
+    result["path_traversal_escape"] = trav.exists() and trav.read_text(encoding="utf-8").startswith("traversal")
+except Exception:
+    result["path_traversal_escape"] = False
+try:
+    # Meaningful equivalent when /proc/self/root host escape is unavailable:
+    # attempt reading host secret via /proc/self/root + absolute path.
+    proc_target = Path("/proc/self/root") / host_secret.lstrip("/")
+    data = proc_target.read_text(encoding="utf-8")
+    result["proc_root_escape"] = HOST_SECRET_MARK in data
+except Exception:
+    result["proc_root_escape"] = False
+
+# Capability / NoNewPrivs evidence
+try:
+    status = Path("/proc/self/status").read_text(encoding="utf-8")
+    for line in status.splitlines():
+        if line.startswith("CapEff:"):
+            result["cap_eff"] = line.split(":", 1)[1].strip()
+        elif line.startswith("CapPrm:"):
+            result["cap_prm"] = line.split(":", 1)[1].strip()
+        elif line.startswith("CapAmb:"):
+            result["cap_amb"] = line.split(":", 1)[1].strip()
+        elif line.startswith("NoNewPrivs:"):
+            result["no_new_privs"] = line.split(":", 1)[1].strip()
+except Exception:
+    pass
+
+try:
+    result["seccomp_status_file"] = Path("seccomp_status.txt").read_text(encoding="utf-8").strip()
+except Exception:
+    result["seccomp_status_file"] = None
+
 print(json.dumps(result))
 '''
+
 
 @dataclass
 class SandboxExecutor:
@@ -194,6 +279,7 @@ class SandboxExecutor:
 
         threading.Thread(target=_serve, daemon=True).start()
         return sock, port
+
     def _control_reachable_unsandboxed(self, port: int) -> bool:
         try:
             with socket.create_connection(("127.0.0.1", port), timeout=1.0) as s:
@@ -269,6 +355,7 @@ class SandboxExecutor:
             ]
         )
         return cmd
+
     def _build_sandbox_exec_cmd(self, work: str, script_path: Path, py: str) -> list[str] | None:
         if not self.sandbox_exec:
             return None
@@ -325,6 +412,8 @@ class SandboxExecutor:
             "stderr_tail": (proc.stderr or "")[-800:],
             "stdout_tail": (proc.stdout or "")[-800:],
             "backend": backend,
+            "cmd_argv0": cmd[0] if cmd else None,
+            "cmd_uses_sudo": any(part == "sudo" for part in cmd),
         }
 
     def run_enforcement_suite(self, app_id: str = "sandbox-suite", *, timeout: float = 20.0) -> dict[str, Any]:
@@ -356,6 +445,13 @@ class SandboxExecutor:
         escape_target = outside / "escape_marker.txt"
         os.chmod(outside, 0o555)
 
+        # Symlink escape bait inside the writable app root (targets outside mount).
+        try:
+            (app_root / "link_host_secret").symlink_to(secret_path)
+            (app_root / "link_cross_secret").symlink_to(cross_secret)
+        except OSError:
+            pass
+
         script_path = app_root / "probe.py"
         script_path.write_text(PROBE_FIXTURE, encoding="utf-8")
         launcher_path = app_root / "seccomp_launcher.py"
@@ -363,6 +459,34 @@ class SandboxExecutor:
 
         control_sock, port = self._start_control_server()
         network_control_reachable = self._control_reachable_unsandboxed(port)
+
+        # Parent-control negatives: prove resources are real outside the sandbox.
+        control_host_secret_readable = False
+        try:
+            control_host_secret_readable = HOST_SECRET_CONTENT in secret_path.read_text(encoding="utf-8")
+        except OSError:
+            control_host_secret_readable = False
+        control_cross_app_readable = False
+        try:
+            control_cross_app_readable = "CROSS-APP-SECRET" in cross_secret.read_text(encoding="utf-8")
+        except OSError:
+            control_cross_app_readable = False
+        control_child_exec_works = False
+        try:
+            child = subprocess.run([sys.executable, "-c", "print(1)"], capture_output=True, timeout=5, check=False)
+            control_child_exec_works = child.returncode == 0 and b"1" in (child.stdout or b"")
+        except Exception:
+            control_child_exec_works = False
+        control_outside_writable_when_permitted = False
+        try:
+            os.chmod(outside, 0o755)
+            marker = outside / "control_write.txt"
+            marker.write_text("parent-ok", encoding="utf-8")
+            control_outside_writable_when_permitted = marker.read_text(encoding="utf-8") == "parent-ok"
+            marker.unlink(missing_ok=True)
+            os.chmod(outside, 0o555)
+        except OSError:
+            control_outside_writable_when_permitted = False
 
         py = sys.executable
         base_env = {
@@ -372,6 +496,7 @@ class SandboxExecutor:
             "HOST_PRIVATE_SECRET": str(secret_path),
             "OUTSIDE_WRITE_TARGET": str(escape_target),
             "CROSS_APP_SECRET": str(cross_secret),
+            "PATH_TRAVERSAL_TARGET": str(app_root / ".." / "outside" / "escape_marker.txt"),
             "CONTROL_HOST": "127.0.0.1",
             "CONTROL_PORT": str(port),
             "LANG": "C",
@@ -380,6 +505,8 @@ class SandboxExecutor:
         backend = "none"
         run: dict[str, Any] = {}
         local_status = "BLOCKED_ENVIRONMENT"
+        executed_as_root = os.geteuid() == 0
+        bwrap_invoked_with_sudo = False
 
         try:
             if self.bwrap:
@@ -392,6 +519,7 @@ class SandboxExecutor:
                     cmd.insert(idx, k)
                     cmd.insert(idx, "--setenv")
                     idx = cmd.index("--")
+                bwrap_invoked_with_sudo = any(part == "sudo" for part in cmd)
                 run = self._run_probe(backend=backend, cmd=cmd, work=app_root, env=env, timeout=timeout)
             elif self.sandbox_exec:
                 backend = "sandbox_exec"
@@ -440,6 +568,16 @@ class SandboxExecutor:
         child_spawn = bool(fixture.get("child_spawn"))
         privileged = bool(fixture.get("privileged_capability"))
         cross_app_read = bool(fixture.get("cross_app_read"))
+        private_root_rw = bool(fixture.get("private_root_rw"))
+        symlink_host = bool(fixture.get("symlink_host_escape"))
+        symlink_cross = bool(fixture.get("symlink_cross_app_escape"))
+        path_trav = bool(fixture.get("path_traversal_escape")) or parent_escape
+        proc_escape = bool(fixture.get("proc_root_escape"))
+        mount_escape = bool(fixture.get("mount_escape"))
+        dangerous_device = bool(fixture.get("dangerous_device_access"))
+        host_root_escalation = bool(fixture.get("host_root_escalation")) or (
+            bool(fixture.get("privileged_capability")) and int(fixture.get("euid") or -1) == 0 and backend == "subprocess_broker"
+        )
 
         host_blocked = not host_private_read
         outside_blocked = not outside_write
@@ -447,12 +585,45 @@ class SandboxExecutor:
         child_denied = not child_spawn
         priv_denied = not privileged
         cross_blocked = not cross_app_read
+        symlink_host_blocked = not symlink_host
+        symlink_cross_blocked = not symlink_cross
+        path_trav_blocked = not path_trav
+        proc_escape_blocked = not proc_escape
+        mount_escape_blocked = not mount_escape
+        dangerous_device_blocked = not dangerous_device
+        host_root_escalation_blocked = not host_root_escalation
+
+        seccomp_file = fixture.get("seccomp_status_file")
+        if not seccomp_file:
+            try:
+                seccomp_file = (app_root / "seccomp_status.txt").read_text(encoding="utf-8").strip()
+            except OSError:
+                seccomp_file = None
+        seccomp_loaded = isinstance(seccomp_file, str) and seccomp_file.strip() == "loaded"
 
         # Vacuous "blocked" flags when the fixture never ran must not count as probes_pass.
         fixture_ran = bool(fixture) and "host_private_read" in fixture
         probes_pass = fixture_ran and all(
-            [host_blocked, outside_blocked, network_denied, child_denied, priv_denied, cross_blocked]
+            [
+                host_blocked,
+                outside_blocked,
+                network_denied,
+                child_denied,
+                priv_denied,
+                cross_blocked,
+                private_root_rw,
+                symlink_host_blocked,
+                symlink_cross_blocked,
+                path_trav_blocked,
+                proc_escape_blocked,
+                host_root_escalation_blocked,
+                dangerous_device_blocked,
+                mount_escape_blocked,
+            ]
         )
+        # Seccomp is required for bubblewrap network/child denial on hosted CI.
+        if backend == "bubblewrap":
+            probes_pass = probes_pass and seccomp_loaded
         genuine = backend in {"bubblewrap", "sandbox_exec"}
         # Regression: host read success + outside write fail MUST fail validation
         regression_fail = host_private_read and outside_blocked
@@ -471,7 +642,22 @@ class SandboxExecutor:
             local_status = "BLOCKED_ENVIRONMENT"
             classification_hint = "BLOCKED_ENVIRONMENT"
             backend = "bubblewrap_environment_blocked"
+        elif executed_as_root or bwrap_invoked_with_sudo:
+            validated = False
+            local_status = "PROBE_FAILURE"
+            classification_hint = "IMPLEMENTATION_OPEN"
         elif regression_fail or not probes_pass or not network_control_reachable:
+            validated = False
+            local_status = "PROBE_FAILURE"
+            classification_hint = "IMPLEMENTATION_OPEN"
+        elif not all(
+            [
+                control_host_secret_readable,
+                network_control_reachable,
+                control_child_exec_works,
+                control_cross_app_readable,
+            ]
+        ):
             validated = False
             local_status = "PROBE_FAILURE"
             classification_hint = "IMPLEMENTATION_OPEN"
@@ -495,6 +681,25 @@ class SandboxExecutor:
             "CHILD_SPAWN_DENIED": child_denied,
             "CROSS_APP_READ_BLOCKED": cross_blocked,
             "PRIVILEGED_CAPABILITY_DENIED": priv_denied,
+            "PRIVATE_ROOT_RW_PASS": private_root_rw,
+            "APP_ROOT_READ_ALLOWED": bool(fixture.get("app_root_read_allowed")),
+            "APP_ROOT_WRITE_ALLOWED": bool(fixture.get("app_root_write_allowed")),
+            "NORMAL_PYTHON_EXECUTION_INSIDE_SANDBOX": bool(fixture.get("normal_python_execution")),
+            "SYMLINK_HOST_ESCAPE_BLOCKED": symlink_host_blocked,
+            "SYMLINK_CROSS_APP_ESCAPE_BLOCKED": symlink_cross_blocked,
+            "PATH_TRAVERSAL_ESCAPE_BLOCKED": path_trav_blocked,
+            "PROC_ROOT_ESCAPE_BLOCKED": proc_escape_blocked,
+            "HOST_ROOT_ESCALATION_BLOCKED": host_root_escalation_blocked,
+            "DANGEROUS_DEVICE_ACCESS_BLOCKED": dangerous_device_blocked,
+            "MOUNT_ESCAPE_BLOCKED": mount_escape_blocked,
+            "SECCOMP_LOADED": seccomp_loaded,
+            "CONTROL_HOST_SECRET_READABLE": control_host_secret_readable,
+            "CONTROL_NETWORK_REACHABLE": network_control_reachable,
+            "CONTROL_CHILD_EXEC_WORKS": control_child_exec_works,
+            "CONTROL_CROSS_APP_READABLE": control_cross_app_readable,
+            "CONTROL_OUTSIDE_WRITABLE_WHEN_PERMITTED": control_outside_writable_when_permitted,
+            "SANDBOX_EXECUTED_AS_ROOT": executed_as_root,
+            "BWRAP_INVOKED_WITH_SUDO": bwrap_invoked_with_sudo,
             "SANDBOX_EXECUTION_VALIDATED": validated,
             "LOCAL_SANDBOX_VALIDATION": local_status,
             "classification_hint": classification_hint,
@@ -508,6 +713,9 @@ class SandboxExecutor:
             "claim_boundary": CLAIM_BOUNDARY,
             "backend": backend,
             "kernel_sandbox": kernel,
+            "runner_uid": os.getuid(),
+            "runner_euid": os.geteuid(),
+            "runner_gid": os.getgid(),
         }
         self._audit("run_enforcement_suite", result)
         try:

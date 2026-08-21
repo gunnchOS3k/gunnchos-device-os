@@ -1,0 +1,134 @@
+{
+  "BEHAVIORAL_NEGATIVE_CONTROLS_PASS": true,
+  "BEHAVIORAL_NEGATIVE_CONTROL_COUNT": 12,
+  "cases": [
+    {
+      "classification": "BLOCKED_ENVIRONMENT",
+      "evaluator_would_fail": true,
+      "name": "plain_subprocess_substituted_for_bwrap",
+      "reasons": [
+        "backend_not_bubblewrap",
+        "execution_not_validated",
+        "kernel_sandbox_false",
+        "local_validation_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "fixture_never_ran",
+      "reasons": [
+        "fixture_did_not_run",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "host_private_deliberately_exposed",
+      "reasons": [
+        "host_private_read_not_blocked",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "sibling_app_secret_exposed",
+      "reasons": [
+        "cross_app_read_not_blocked",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "outside_directory_writable",
+      "reasons": [
+        "outside_write_not_blocked",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "seccomp_network_rule_removed",
+      "reasons": [
+        "network_not_denied",
+        "seccomp_not_loaded",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "seccomp_exec_rule_removed",
+      "reasons": [
+        "child_spawn_not_denied",
+        "seccomp_not_loaded",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "BLOCKED_ENVIRONMENT",
+      "evaluator_would_fail": true,
+      "name": "fake_kernel_sandbox_with_blocked_backend",
+      "reasons": [
+        "backend_not_bubblewrap",
+        "execution_not_validated",
+        "local_validation_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "missing_positive_app_root_write_proof",
+      "reasons": [
+        "private_root_rw_fail",
+        "app_root_write_fail",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "backend_string_spoofed_without_provenance",
+      "reasons": [
+        "execution_not_validated",
+        "kernel_sandbox_false"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "stale_evidence_from_earlier_source_sha",
+      "reasons": [
+        "fixture_did_not_run"
+      ],
+      "sabotage_detected": true
+    },
+    {
+      "classification": "IMPLEMENTATION_OPEN",
+      "evaluator_would_fail": true,
+      "name": "evidence_from_root_or_sudo_sandbox_execution",
+      "reasons": [
+        "sandbox_executed_as_root",
+        "bwrap_invoked_with_sudo",
+        "execution_not_validated"
+      ],
+      "sabotage_detected": true
+    }
+  ],
+  "ok": true,
+  "schema": "gunnchos.engineering_wave009.behavioral_negative_controls.v1"
+}
