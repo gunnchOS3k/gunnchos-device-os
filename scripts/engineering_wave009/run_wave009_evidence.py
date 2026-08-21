@@ -90,25 +90,21 @@ def main() -> int:
     repair = apply_ephemeral_userns_repair(allow_sudo=os.environ.get("WAVE009_ALLOW_HOST_SUDO", "0") == "1")
     _write(out, "HOST_USERNS_CONFIGURATION_RESULT.json", repair)
 
+    from gunnchos_device_os.wave009_os020.environment import _bwrap_unprivileged_smoke  # local helper
+
     bwrap = shutil.which("bwrap")
     smoke: dict[str, Any]
     if bwrap and os.geteuid() != 0:
-        proc = subprocess.run([bwrap, "--unshare-user", "--", "/usr/bin/id"], capture_output=True, text=True, check=False)
+        bound = _bwrap_unprivileged_smoke(bwrap)
         smoke = {
             "schema": "gunnchos.engineering_wave009.bwrap_smoke.v1",
-            "ok": proc.returncode == 0,
-            "returncode": proc.returncode,
-            "stdout": (proc.stdout or "")[-1000:],
-            "stderr": (proc.stderr or "")[-1000:],
+            "ok": bound.get("returncode") == 0,
+            "bound_true": bound,
             "SANDBOX_EXECUTED_AS_ROOT": False,
             "BWRAP_INVOKED_WITH_SUDO": False,
-            "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": proc.returncode == 0 or repair.get("POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS") is True,
+            "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": bound.get("returncode") == 0
+            or repair.get("POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS") is True,
         }
-        if proc.returncode != 0:
-            alt = subprocess.run([bwrap, "--unshare-user", "--", "/bin/true"], capture_output=True, text=True, check=False)
-            smoke["fallback_true"] = {"returncode": alt.returncode, "stderr": (alt.stderr or "")[-500:]}
-            smoke["ok"] = alt.returncode == 0
-            smoke["POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS"] = alt.returncode == 0
     else:
         smoke = {
             "schema": "gunnchos.engineering_wave009.bwrap_smoke.v1",

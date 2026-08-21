@@ -91,8 +91,13 @@ jobs:
         run: |
           set -euo pipefail
           test "$(id -u)" != "0"
-          bwrap --unshare-user -- /usr/bin/id
-          # Explicitly forbid sudo-wrapped fixture execution in this job.
+          BINDS=(--ro-bind /usr /usr)
+          for p in /bin /lib /lib64 /lib32; do
+            if [ -e "$p" ]; then BINDS+=(--ro-bind "$p" "$p"); fi
+          done
+          TRUE=/bin/true
+          if [ ! -x "$TRUE" ]; then TRUE=/usr/bin/true; fi
+          bwrap --unshare-user --die-with-parent "${BINDS[@]}" -- "$TRUE"
           if sudo -n true 2>/dev/null; then
             echo "sudo available for host config only; sandbox must not use it"
           fi

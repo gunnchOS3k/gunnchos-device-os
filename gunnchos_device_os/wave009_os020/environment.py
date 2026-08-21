@@ -38,6 +38,28 @@ def _sysctl(name: str) -> dict[str, Any]:
     return {"name": name, "value": value or None, "raw": out}
 
 
+def _bwrap_unprivileged_smoke(bwrap: str) -> dict[str, Any]:
+    """Minimal unprivileged userns smoke with enough binds to exec /bin/true.
+
+    Bare `bwrap --unshare-user -- /usr/bin/id` fails with ENOENT because the
+    new mount namespace has no root filesystem binds — that is not a userns failure.
+    """
+    cmd = [
+        bwrap,
+        "--unshare-user",
+        "--die-with-parent",
+        "--ro-bind",
+        "/usr",
+        "/usr",
+    ]
+    for p in ("/bin", "/lib", "/lib64", "/lib32"):
+        if Path(p).exists():
+            cmd.extend(["--ro-bind", p, p])
+    true_bin = "/bin/true" if Path("/bin/true").exists() else "/usr/bin/true"
+    cmd.extend(["--", true_bin])
+    return _run(cmd)
+
+
 def capture_environment_preflight() -> dict[str, Any]:
     bwrap = shutil.which("bwrap")
     seccomp: dict[str, Any]
@@ -48,13 +70,12 @@ def capture_environment_preflight() -> dict[str, Any]:
     except Exception as exc:  # noqa: BLE001
         seccomp = {"available": False, "error": str(exc)}
 
+    # Also capture the historical bare failure mode for diagnosis.
+    bare_smoke = _run([bwrap, "--unshare-user", "--", "/usr/bin/id"]) if bwrap else {"skipped": True}
     smoke: dict[str, Any]
     if bwrap:
-        smoke = _run([bwrap, "--unshare-user", "--", "/usr/bin/id"])
-        if smoke.get("returncode") not in (0, None):
-            # trivial true may be more portable than id when /usr missing in some setups
-            smoke_true = _run([bwrap, "--unshare-user", "--", "/bin/true"])
-            smoke = {"primary": smoke, "fallback_true": smoke_true}
+        smoke = _bwrap_unprivileged_smoke(bwrap)
+        smoke = {"bound_true": smoke, "bare_id": bare_smoke}
     else:
         smoke = {"skipped": True, "reason": "bwrap_absent"}
 
@@ -68,16 +89,15 @@ def capture_environment_preflight() -> dict[str, Any]:
     pre_repair_works = False
     pre_repair_error = None
     if bwrap:
-        if isinstance(smoke, dict) and "primary" in smoke:
-            primary = smoke["primary"]
-            fallback = smoke.get("fallback_true") or {}
-            pre_repair_works = primary.get("returncode") == 0 or fallback.get("returncode") == 0
-            if not pre_repair_works:
-                pre_repair_error = (primary.get("stderr") or fallback.get("stderr") or primary.get("error") or "")[-800:]
-        else:
-            pre_repair_works = smoke.get("returncode") == 0
-            if not pre_repair_works:
-                pre_repair_error = (smoke.get("stderr") or smoke.get("error") or "")[-800:]
+        bound = smoke.get("bound_true") or {}
+        pre_repair_works = bound.get("returncode") == 0
+        if not pre_repair_works:
+            pre_repair_error = (
+                (bound.get("stderr") or "")
+                or (bare_smoke.get("stderr") if isinstance(bare_smoke, dict) else "")
+                or bound.get("error")
+                or ""
+            )[-800:]
 
     return {
         "schema": "gunnchos.engineering_wave009.environment_preflight.v1",
@@ -151,13 +171,8 @@ def apply_ephemeral_userns_repair(*, allow_sudo: bool = True) -> dict[str, Any]:
     post_smoke: dict[str, Any]
     post_works = False
     if bwrap and os.geteuid() != 0:
-        post_smoke = _run([bwrap, "--unshare-user", "--", "/usr/bin/id"])
-        if post_smoke.get("returncode") != 0:
-            alt = _run([bwrap, "--unshare-user", "--", "/bin/true"])
-            post_smoke = {"primary": post_smoke, "fallback_true": alt}
-            post_works = alt.get("returncode") == 0
-        else:
-            post_works = True
+        post_smoke = _bwrap_unprivileged_smoke(bwrap)
+        post_works = post_smoke.get("returncode") == 0
     elif not bwrap:
         post_smoke = {"skipped": True, "reason": "bwrap_absent"}
     else:
