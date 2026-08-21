@@ -370,3 +370,28 @@ wave006:
 	@test -f artifacts/engineering_wave006/CACHE_POLICY_RESULT.json
 	@python3 -c "import json; r=json.load(open('artifacts/engineering_wave006/WAVE006_RESULT.json')); b=json.load(open('artifacts/engineering_wave006/BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json')); assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS',1)==0; assert r['COMPLETE_GATE_REQUIRES_10_OF_10'] is True; assert r['claim_flags']['STANDARDIZED_6G'] is False; assert r['summary']['total']==10; assert r['OS_PLATFORM_020_UNTOUCHED'] is True; assert r['BASELINE_COUNTS_UPDATED'] is False; assert r.get('MULTIPATH_KIND')=='APPLICATION_LEVEL_MULTIPATH'; assert b.get('BEHAVIORAL_NEGATIVE_CONTROLS_PASS') is True; assert r['wave006_ok'] is True; assert r.get('status')=='PASS'; assert r.get('PARTIAL') is False"
 
+# Engineering Wave 009 — OS-PLATFORM-020 genuine kernel sandbox validation
+WAVE009_PY ?= $(shell if [ -x .venv-wave009/bin/python ]; then echo .venv-wave009/bin/python; else echo python3; fi)
+wave009:
+	PYTHONPATH=.:src $(WAVE009_PY) -m pytest -q tests/test_wave009_os020_sandbox.py
+	PYTHONPATH=.:src $(WAVE009_PY) -m pytest -q --collect-only tests/test_wave009_os020_sandbox.py >/dev/null
+	PYTHONPATH=.:src $(WAVE009_PY) scripts/engineering_wave009/run_wave009_evidence.py
+	@test -f artifacts/engineering_wave009/WAVE009_RESULT.json
+	@test -f artifacts/engineering_wave009/OS_PLATFORM_020_RESULT.json
+	@test -f artifacts/engineering_wave009/ENVIRONMENT_PREFLIGHT.json
+	@test -f artifacts/engineering_wave009/HOST_USERNS_CONFIGURATION_RESULT.json
+	@test -f artifacts/engineering_wave009/BWRAP_SMOKE_RESULT.json
+	@test -f artifacts/engineering_wave009/SANDBOX_ENFORCEMENT_RESULT.json
+	@test -f artifacts/engineering_wave009/POSITIVE_APP_ROOT_RESULT.json
+	@test -f artifacts/engineering_wave009/FILESYSTEM_ESCAPE_RESULT.json
+	@test -f artifacts/engineering_wave009/NETWORK_SECCOMP_RESULT.json
+	@test -f artifacts/engineering_wave009/CHILD_EXEC_SECCOMP_RESULT.json
+	@test -f artifacts/engineering_wave009/PRIVILEGE_ESCAPE_RESULT.json
+	@test -f artifacts/engineering_wave009/CONTROL_PROBES_RESULT.json
+	@test -f artifacts/engineering_wave009/BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json
+	@test -f artifacts/engineering_wave009/EVALUATOR_INTEGRITY_RESULT.json
+	@test -f artifacts/engineering_wave009/COMPLETION_GATE_NEGATIVE_CONTROL_RESULT.json
+	@test -f artifacts/engineering_wave009/EXECUTION_PROVENANCE.json
+	@test -f artifacts/engineering_wave009/CLAIM_BOUNDARIES.json
+	@$(WAVE009_PY) -c "import json,os; r=json.load(open('artifacts/engineering_wave009/WAVE009_RESULT.json')); b=json.load(open('artifacts/engineering_wave009/BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json')); s=json.load(open('artifacts/engineering_wave009/SANDBOX_ENFORCEMENT_RESULT.json')); assert r.get('TARGET_REQUIREMENTS')==1; assert r.get('PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX') is False; assert r.get('BASELINE_COUNTS_UPDATED') is False; assert b.get('BEHAVIORAL_NEGATIVE_CONTROL_COUNT')>=12; assert b.get('BEHAVIORAL_NEGATIVE_CONTROLS_PASS') is True; assert s.get('SANDBOX_EXECUTED_AS_ROOT') is False; assert s.get('BWRAP_INVOKED_WITH_SUDO') is False; assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS')==0; req=os.environ.get('WAVE009_REQUIRE_SANDBOX_VALIDATED')=='1'; assert (not req) or (r.get('ENGINEERING_WAVE_009')=='PASS' and s.get('KERNEL_SANDBOX') is True)"
+

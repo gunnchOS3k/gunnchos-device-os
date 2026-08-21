@@ -1,0 +1,151 @@
+name: Wave009 OS-PLATFORM-020 Sandbox Validation
+
+on:
+  push:
+    branches: [main, 'eng/wave009-*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wave009-os020-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wave009-sandbox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install bubblewrap + python3-seccomp
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap python3-seccomp python3-venv
+          command -v bwrap
+          bwrap --version
+          test "$(id -u)" != "0"
+          /usr/bin/python3 -m venv --system-site-packages .venv-wave009
+          .venv-wave009/bin/python -c 'import seccomp; print("seccomp ok", seccomp.__file__)'
+          .venv-wave009/bin/python -m pip install --upgrade pip
+          .venv-wave009/bin/pip install pytest pyyaml cryptography
+          if [ -f requirements.txt ]; then .venv-wave009/bin/pip install -r requirements.txt; fi
+
+      - name: Capture preflight (read-only)
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave009/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+          from gunnchos_device_os.wave009_os020.environment import capture_environment_preflight, write_json
+          pre = capture_environment_preflight()
+          out = Path("artifacts/engineering_wave009")
+          write_json(out / "ENVIRONMENT_PREFLIGHT.json", pre)
+          print(json.dumps({
+            "PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS": pre.get("PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS"),
+            "PRE_REPAIR_BWRAP_ERROR": pre.get("PRE_REPAIR_BWRAP_ERROR"),
+            "uid": pre.get("uid"),
+            "euid": pre.get("euid"),
+            "apparmor": pre.get("apparmor_restrict_unprivileged_userns"),
+            "userns_clone": pre.get("userns_clone"),
+          }, indent=2))
+          assert pre.get("euid") != 0
+          PY
+
+      - name: Ephemeral host userns repair (sudo host only)
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave009/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+          from gunnchos_device_os.wave009_os020.environment import apply_ephemeral_userns_repair, write_json
+          repair = apply_ephemeral_userns_repair(allow_sudo=True)
+          write_json(Path("artifacts/engineering_wave009/HOST_USERNS_CONFIGURATION_RESULT.json"), repair)
+          print(json.dumps({
+            "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": repair.get("POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS"),
+            "USERNS_CLONE_BEFORE": repair.get("USERNS_CLONE_BEFORE"),
+            "USERNS_CLONE_AFTER": repair.get("USERNS_CLONE_AFTER"),
+            "APPARMOR_RESTRICT_USERNS_BEFORE": repair.get("APPARMOR_RESTRICT_USERNS_BEFORE"),
+            "APPARMOR_RESTRICT_USERNS_AFTER": repair.get("APPARMOR_RESTRICT_USERNS_AFTER"),
+            "MAX_USER_NAMESPACES": repair.get("MAX_USER_NAMESPACES"),
+            "SANDBOX_EXECUTED_AS_ROOT": repair.get("SANDBOX_EXECUTED_AS_ROOT"),
+            "BWRAP_INVOKED_WITH_SUDO": repair.get("BWRAP_INVOKED_WITH_SUDO"),
+          }, indent=2))
+          assert repair.get("SANDBOX_EXECUTED_AS_ROOT") is False
+          assert repair.get("BWRAP_INVOKED_WITH_SUDO") is False
+          PY
+
+      - name: Prove unprivileged bwrap (no sudo)
+        run: |
+          set -euo pipefail
+          test "$(id -u)" != "0"
+          bwrap --unshare-user -- /usr/bin/id
+          # Explicitly forbid sudo-wrapped fixture execution in this job.
+          if sudo -n true 2>/dev/null; then
+            echo "sudo available for host config only; sandbox must not use it"
+          fi
+
+      - name: Wave009 tests
+        env:
+          PYTHONPATH: '.:src'
+          WAVE009_REQUIRE_SANDBOX_VALIDATED: '1'
+        run: |
+          set -euo pipefail
+          .venv-wave009/bin/python -m pytest -q tests/test_wave009_os020_sandbox.py
+
+      - name: make wave009 (authoritative)
+        env:
+          PYTHONPATH: '.:src'
+          WAVE009_REQUIRE_SANDBOX_VALIDATED: '1'
+          WAVE009_ALLOW_HOST_SUDO: '1'
+        run: |
+          set -euo pipefail
+          make wave009
+
+      - name: Strict evidence gate
+        env:
+          PYTHONPATH: '.:src'
+        run: |
+          set -euo pipefail
+          .venv-wave009/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("artifacts/engineering_wave009")
+          wave = json.loads((root / "WAVE009_RESULT.json").read_text())
+          suite = json.loads((root / "SANDBOX_ENFORCEMENT_RESULT.json").read_text())
+          behavioral = json.loads((root / "BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json").read_text())
+          os020 = json.loads((root / "OS_PLATFORM_020_RESULT.json").read_text())
+          assert wave.get("ENGINEERING_WAVE_009") == "PASS"
+          assert wave.get("TARGET_REQUIREMENTS") == 1
+          assert os020.get("classification") == "IMPLEMENTED_AND_VALIDATED"
+          assert suite.get("SANDBOX_BACKEND") == "bubblewrap"
+          assert suite.get("KERNEL_SANDBOX") is True
+          assert suite.get("SANDBOX_EXECUTION_VALIDATED") is True
+          assert suite.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False
+          assert suite.get("SANDBOX_EXECUTED_AS_ROOT") is False
+          assert suite.get("BWRAP_INVOKED_WITH_SUDO") is False
+          assert suite.get("SECCOMP_LOADED") is True
+          assert suite.get("PRIVATE_ROOT_RW_PASS") is True
+          assert behavioral.get("BEHAVIORAL_NEGATIVE_CONTROL_COUNT") >= 12
+          assert behavioral.get("BEHAVIORAL_NEGATIVE_CONTROLS_PASS") is True
+          assert wave.get("BASELINE_COUNTS_UPDATED") is False
+          print("wave009 strict evidence gate PASS")
+          PY
+
+      - name: Upload Wave009 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wave009-os020-sandbox-evidence
+          path: artifacts/engineering_wave009/

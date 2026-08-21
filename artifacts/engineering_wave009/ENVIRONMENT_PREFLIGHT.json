@@ -1,0 +1,95 @@
+{
+  "BWRAP_INVOKED_WITH_SUDO": false,
+  "PRE_REPAIR_BWRAP_ERROR": null,
+  "PRE_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
+  "SANDBOX_EXECUTED_AS_ROOT": false,
+  "aa_status": {
+    "cmd": [
+      "aa-status"
+    ],
+    "error": "[Errno 2] No such file or directory: 'aa-status'"
+  },
+  "apparmor_restrict_unprivileged_userns": {
+    "name": "kernel.apparmor_restrict_unprivileged_userns",
+    "raw": {
+      "cmd": [
+        "sysctl",
+        "-n",
+        "kernel.apparmor_restrict_unprivileged_userns"
+      ],
+      "returncode": 1,
+      "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
+      "stdout": ""
+    },
+    "value": null
+  },
+  "bwrap_path": null,
+  "bwrap_version": null,
+  "euid": 501,
+  "generated_at_utc": "2026-08-21T14:30:16Z",
+  "gid": 20,
+  "id_cmd": {
+    "cmd": [
+      "id"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "uid=501(gunnchos) gid=20(staff) groups=20(staff),101(access_bpf),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)\n"
+  },
+  "kernel": "25.6.0",
+  "machine": "arm64",
+  "max_user_namespaces": {
+    "name": "user.max_user_namespaces",
+    "raw": {
+      "proc": null
+    },
+    "value": null
+  },
+  "os_release": null,
+  "proc_self_status_caps": {
+    "cmd": [
+      "bash",
+      "-lc",
+      "grep -E 'Seccomp|NoNewPrivs|Cap(Inh|Prm|Eff|Bnd|Amb)' /proc/self/status || true"
+    ],
+    "returncode": 0,
+    "stderr": "grep: /proc/self/status: No such file or directory\n",
+    "stdout": ""
+  },
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "raw_bwrap_smoke": {
+    "reason": "bwrap_absent",
+    "skipped": true
+  },
+  "runner_os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "schema": "gunnchos.engineering_wave009.environment_preflight.v1",
+  "seccomp_python": {
+    "available": false,
+    "error": "No module named 'seccomp'"
+  },
+  "system": "Darwin",
+  "uid": 501,
+  "uname": {
+    "cmd": [
+      "uname",
+      "-a"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "Darwin Edmunds-MacBook-Pro.local 25.6.0 Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:43 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8112 arm64\n"
+  },
+  "userns_clone": {
+    "name": "kernel.unprivileged_userns_clone",
+    "raw": {
+      "cmd": [
+        "sysctl",
+        "-n",
+        "kernel.unprivileged_userns_clone"
+      ],
+      "returncode": 1,
+      "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
+      "stdout": ""
+    },
+    "value": null
+  }
+}

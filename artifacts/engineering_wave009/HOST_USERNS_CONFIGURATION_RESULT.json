@@ -1,0 +1,114 @@
+{
+  "APPARMOR_RESTRICT_USERNS_AFTER": null,
+  "APPARMOR_RESTRICT_USERNS_BEFORE": null,
+  "BWRAP_INVOKED_WITH_SUDO": false,
+  "MAX_USER_NAMESPACES": null,
+  "POST_REPAIR_UNPRIVILEGED_BWRAP_WORKS": false,
+  "SANDBOX_EXECUTED_AS_ROOT": false,
+  "USERNS_CLONE_AFTER": null,
+  "USERNS_CLONE_BEFORE": null,
+  "actions": [
+    {
+      "action": "skip_missing_sysctl",
+      "key": "kernel.apparmor_restrict_unprivileged_userns"
+    },
+    {
+      "action": "skip_missing_sysctl",
+      "key": "kernel.unprivileged_userns_clone"
+    }
+  ],
+  "after": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'user.max_user_namespaces': Undefined error: 0\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
+        "stdout": ""
+      },
+      "value": null
+    }
+  },
+  "before": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'user.max_user_namespaces': Undefined error: 0\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
+        "stdout": ""
+      },
+      "value": null
+    }
+  },
+  "generated_at_utc": "2026-08-21T14:30:16Z",
+  "post_repair_bwrap_smoke": {
+    "reason": "bwrap_absent",
+    "skipped": true
+  },
+  "schema": "gunnchos.engineering_wave009.host_userns_configuration.v1"
+}

@@ -1,0 +1,114 @@
+{
+  "BWRAP_INVOKED_WITH_SUDO": false,
+  "SANDBOX_EXECUTED_AS_ROOT": false,
+  "apparmor_userns_after": null,
+  "apparmor_userns_before": null,
+  "branch": "eng/wave009-os020-sandbox-validation",
+  "bwrap_version": {},
+  "evaluator_source_hash": "10d804e883cd23b27626422c0a6652c0ca1d7e73b445fdada959bdf0cf33f61b",
+  "fixture_marker": "PROBE_FIXTURE+SECCOMP_LAUNCHER",
+  "kernel": "25.6.0",
+  "normal_runner_euid": 501,
+  "normal_runner_gid": 20,
+  "normal_runner_uid": 501,
+  "repo": "gunnchos-device-os",
+  "runner_image": "Darwin",
+  "runner_os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "sandbox_executor_hash": "16734b3f71b0455a81b723c44bf0d078415bbb86dd05b3559f35ba816568d70f",
+  "sandbox_policy_hash": "9bb816539530d53adcb3efaf45d1f3336692b88dee43b0c203ada3c4ba5ee845",
+  "schema": "gunnchos.engineering_wave009.execution_provenance.v1",
+  "seccomp_python": {
+    "available": false,
+    "error": "No module named 'seccomp'"
+  },
+  "source_sha": "1c9d54a6e57a568288ee6beec9d0cdf4ccbeca63",
+  "source_tree": "cf7ed432c7c36b2864a793c9f4cd2734784a0890",
+  "userns_sysctl_after": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'user.max_user_namespaces': Undefined error: 0\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
+        "stdout": ""
+      },
+      "value": null
+    }
+  },
+  "userns_sysctl_before": {
+    "apparmor_restrict_unprivileged_userns": {
+      "name": "kernel.apparmor_restrict_unprivileged_userns",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.apparmor_restrict_unprivileged_userns"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.apparmor_restrict_unprivileged_userns'\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "max_user_namespaces": {
+      "name": "user.max_user_namespaces",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "user.max_user_namespaces"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'user.max_user_namespaces': Undefined error: 0\n",
+        "stdout": ""
+      },
+      "value": null
+    },
+    "userns_clone": {
+      "name": "kernel.unprivileged_userns_clone",
+      "raw": {
+        "cmd": [
+          "sysctl",
+          "-n",
+          "kernel.unprivileged_userns_clone"
+        ],
+        "returncode": 1,
+        "stderr": "sysctl: unknown oid 'kernel.unprivileged_userns_clone'\n",
+        "stdout": ""
+      },
+      "value": null
+    }
+  }
+}
