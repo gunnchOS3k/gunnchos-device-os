@@ -84,11 +84,19 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
     (out / ".gitignore").write_text("runtime_work/\n", encoding="utf-8")
 
-    preflight = capture_environment_preflight()
-    _write(out, "ENVIRONMENT_PREFLIGHT.json", preflight)
+    preflight_path = out / "ENVIRONMENT_PREFLIGHT.json"
+    if preflight_path.exists() and os.environ.get("WAVE009_PRESERVE_PREFLIGHT", "1") == "1":
+        preflight = json.loads(preflight_path.read_text(encoding="utf-8"))
+    else:
+        preflight = capture_environment_preflight()
+        _write(out, "ENVIRONMENT_PREFLIGHT.json", preflight)
 
-    repair = apply_ephemeral_userns_repair(allow_sudo=os.environ.get("WAVE009_ALLOW_HOST_SUDO", "0") == "1")
-    _write(out, "HOST_USERNS_CONFIGURATION_RESULT.json", repair)
+    repair_path = out / "HOST_USERNS_CONFIGURATION_RESULT.json"
+    if repair_path.exists() and os.environ.get("WAVE009_PRESERVE_PREFLIGHT", "1") == "1":
+        repair = json.loads(repair_path.read_text(encoding="utf-8"))
+    else:
+        repair = apply_ephemeral_userns_repair(allow_sudo=os.environ.get("WAVE009_ALLOW_HOST_SUDO", "0") == "1")
+        _write(out, "HOST_USERNS_CONFIGURATION_RESULT.json", repair)
 
     from gunnchos_device_os.wave009_os020.environment import _bwrap_unprivileged_smoke  # local helper
 
