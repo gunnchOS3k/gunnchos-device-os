@@ -25,9 +25,18 @@
   "sandbox_profile": {
     "network_policy": "deny_all",
     "filesystem_scope": "/data/apps/gunnchos.waike_learning",
-    "allow_ipc": false
+    "allow_ipc": true
   },
   "stub_content": false,
   "source": "gunnchos_device_os.first_party_apps.waike_app",
-  "platform001": true
+  "platform001": true,
+  "relationship": {
+    "launcher_wrapper_relationship": "thin_launcher_companion",
+    "device_os_registry_id": "waike_learning_os",
+    "compatibility_alias": "waike_offline",
+    "platform_tauri_bundle_id": "com.gunnchos.waike.learning",
+    "system_of_record": "platform_tauri_learning_os",
+    "sdk_role": "device_os_companion_and_lab_seed",
+    "note": "This SDK package + apps/waike_learning HTML seed are companion/discovery/lab surfaces. The full native LMS is the Platform Tauri app (com.gunnchos.waike.learning). IPC is allowed so the thin launcher can hand off deep links and continuity checkpoints."
+  }
 }

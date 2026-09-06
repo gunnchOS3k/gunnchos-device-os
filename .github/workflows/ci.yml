@@ -117,6 +117,11 @@ jobs:
           echo "Linked sibling at $dest"
       - name: Run tests
         run: PYTHONPATH=.:src pytest -q tests/
+      - name: Learning OS runtime integration
+        run: |
+          set -euo pipefail
+          test -x fixtures/learning_os/waike-learning-os || chmod +x fixtures/learning_os/waike-learning-os
+          PYTHONPATH=.:src pytest -q tests/test_learning_os_integration.py tests/test_launcher.py
       - name: Continuation VIII release-readiness firewall
         run: |
           PYTHONPATH=.:src python3 scripts/validate_release_readiness_firewall.py

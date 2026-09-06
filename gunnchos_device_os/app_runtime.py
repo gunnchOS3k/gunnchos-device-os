@@ -61,6 +61,8 @@ RUNTIME_CATALOG: tuple[RuntimeApp, ...] = (
         entry="apps/waike_learning/index.html",
         permissions=("files_read", "network", "identity_read"),
         source_tree="apps/waike_learning",
+        # Companion seed only — full LMS SoR is Platform Tauri Learning OS.
+        stub_content=False,
     ),
     RuntimeApp(
         id="creator_studio",
