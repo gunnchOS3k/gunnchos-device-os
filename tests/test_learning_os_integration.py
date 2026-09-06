@@ -160,6 +160,8 @@ def test_ipc_transport_round_trip_and_faults(tmp_path: Path):
                 "message_type": "ack",
                 "request_id": rid,
                 "status": "ok",
+                "bundle_id": LEARNING_OS_BUNDLE_ID,
+                "app_version": "0.1.0-fixture",
             }
         )
         + "\n"

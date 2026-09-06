@@ -12,6 +12,7 @@ from .ipc_protocol import (
     PROTOCOL_ID,
     build_ack,
     build_nack,
+    validate_ack,
     validate_request,
 )
 
@@ -25,6 +26,8 @@ class IpcTransport(ABC):
         request: dict[str, Any],
         *,
         timeout_s: float = 5.0,
+        expected_bundle_id: str | None = None,
+        expected_app_version: str | None = None,
     ) -> dict[str, Any]:
         raise NotImplementedError
 
@@ -48,6 +51,8 @@ class FileIpcTransport(IpcTransport):
         request: dict[str, Any],
         *,
         timeout_s: float = 5.0,
+        expected_bundle_id: str | None = None,
+        expected_app_version: str | None = None,
     ) -> dict[str, Any]:
         ok, reason = validate_request(request)
         if not ok:
@@ -59,7 +64,11 @@ class FileIpcTransport(IpcTransport):
             return {
                 "ok": True,
                 "reason": "idempotent_replay",
-                "ack": build_ack(request_id=request_id, status="ok_replay"),
+                "ack": build_ack(
+                    request_id=request_id,
+                    status="ok_replay",
+                    bundle_id=expected_bundle_id or request.get("bundle_id"),
+                ),
                 "replay": True,
             }
         self._seen_request_ids.add(request_id)
@@ -78,12 +87,14 @@ class FileIpcTransport(IpcTransport):
                     ack = json.loads(ack_path.read_text(encoding="utf-8"))
                 except json.JSONDecodeError:
                     return {"ok": False, "reason": "bad_ack_payload", "ack": None}
-                if ack.get("protocol") != PROTOCOL_ID:
-                    return {"ok": False, "reason": "wrong_protocol_version", "ack": ack}
-                if ack.get("message_type") != MESSAGE_ACK:
-                    return {"ok": False, "reason": "nack_or_bad_message", "ack": ack}
-                if ack.get("request_id") != request_id:
-                    return {"ok": False, "reason": "ack_request_id_mismatch", "ack": ack}
+                ok_ack, ack_reason = validate_ack(
+                    ack,
+                    request_id=request_id,
+                    expected_bundle_id=expected_bundle_id or request.get("bundle_id"),
+                    expected_app_version=expected_app_version,
+                )
+                if not ok_ack:
+                    return {"ok": False, "reason": ack_reason or "bad_ack", "ack": ack}
                 return {"ok": True, "reason": None, "ack": ack, "replay": False}
             time.sleep(0.02)
         return {"ok": False, "reason": "timeout", "ack": None}
@@ -98,11 +109,13 @@ class DeterministicTestTransport(IpcTransport):
         auto_ack: bool = True,
         fail_reason: str | None = None,
         app_version: str = "0.1.0-fixture",
+        bundle_id: str | None = None,
         latency_s: float = 0.0,
     ):
         self.auto_ack = auto_ack
         self.fail_reason = fail_reason
         self.app_version = app_version
+        self.bundle_id = bundle_id
         self.latency_s = latency_s
         self.sent: list[dict[str, Any]] = []
         self._seen: set[str] = set()
@@ -112,6 +125,8 @@ class DeterministicTestTransport(IpcTransport):
         request: dict[str, Any],
         *,
         timeout_s: float = 5.0,
+        expected_bundle_id: str | None = None,
+        expected_app_version: str | None = None,
     ) -> dict[str, Any]:
         ok, reason = validate_request(request)
         if not ok:
@@ -123,7 +138,12 @@ class DeterministicTestTransport(IpcTransport):
             return {
                 "ok": True,
                 "reason": "idempotent_replay",
-                "ack": build_ack(request_id=request_id, status="ok_replay"),
+                "ack": build_ack(
+                    request_id=request_id,
+                    status="ok_replay",
+                    app_version=self.app_version,
+                    bundle_id=self.bundle_id or expected_bundle_id or request.get("bundle_id"),
+                ),
                 "replay": True,
             }
         self._seen.add(request_id)
@@ -148,9 +168,23 @@ class DeterministicTestTransport(IpcTransport):
         if not self.auto_ack:
             return {"ok": False, "reason": "timeout", "ack": None}
 
+        ack = build_ack(
+            request_id=request_id,
+            status="ok",
+            app_version=self.app_version,
+            bundle_id=self.bundle_id or expected_bundle_id or request.get("bundle_id"),
+        )
+        ok_ack, ack_reason = validate_ack(
+            ack,
+            request_id=request_id,
+            expected_bundle_id=expected_bundle_id or request.get("bundle_id"),
+            expected_app_version=expected_app_version,
+        )
+        if not ok_ack:
+            return {"ok": False, "reason": ack_reason or "bad_ack", "ack": ack}
         return {
             "ok": True,
             "reason": None,
-            "ack": build_ack(request_id=request_id, status="ok", app_version=self.app_version),
+            "ack": ack,
             "replay": False,
         }

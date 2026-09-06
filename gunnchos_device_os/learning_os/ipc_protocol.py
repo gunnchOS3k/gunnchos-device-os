@@ -95,14 +95,53 @@ def build_launch_request(
     }
 
 
-def build_ack(*, request_id: str, status: str = "ok", app_version: str | None = None) -> dict[str, Any]:
-    return {
+def build_ack(
+    *,
+    request_id: str,
+    status: str = "ok",
+    app_version: str | None = None,
+    bundle_id: str | None = None,
+) -> dict[str, Any]:
+    payload: dict[str, Any] = {
         "protocol": PROTOCOL_ID,
         "message_type": MESSAGE_ACK,
         "request_id": request_id,
         "status": status,
         "app_version": app_version,
     }
+    if bundle_id:
+        payload["bundle_id"] = bundle_id
+    return payload
+
+
+def validate_ack(
+    ack: dict[str, Any],
+    *,
+    request_id: str,
+    expected_bundle_id: str | None = None,
+    expected_app_version: str | None = None,
+) -> tuple[bool, str | None]:
+    """Validate Learning OS ACK fields for production launch success."""
+    if not isinstance(ack, dict):
+        return False, "bad_ack_payload"
+    if ack.get("protocol") != PROTOCOL_ID:
+        return False, "wrong_protocol_version"
+    if ack.get("message_type") != MESSAGE_ACK:
+        return False, "nack_or_bad_message"
+    if ack.get("request_id") != request_id:
+        return False, "ack_request_id_mismatch"
+    status = ack.get("status")
+    if status not in ("ok", "ok_replay"):
+        return False, f"ack_bad_status:{status}"
+    if expected_bundle_id:
+        got = ack.get("bundle_id")
+        if got != expected_bundle_id:
+            return False, "ack_bundle_mismatch"
+    if expected_app_version:
+        got_ver = ack.get("app_version")
+        if got_ver is not None and got_ver != expected_app_version:
+            return False, "ack_version_mismatch"
+    return True, None
 
 
 def build_nack(*, request_id: str, reason: str) -> dict[str, Any]:

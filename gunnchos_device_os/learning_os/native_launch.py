@@ -200,7 +200,22 @@ class NativeLaunchAdapter:
         env = os.environ.copy()
         env["LEARNING_OS_IPC_DIR"] = str(self.ipc_dir)
         env["LEARNING_OS_REQUEST_ID"] = request_id
+        # Prefer headless ACK path in CI when the real Tauri binary supports it.
+        # Does not replace validation/ACK code — skips webview only.
+        if os.environ.get("WAIKE_CI_HEADLESS_UI") or os.environ.get("CI_HEADLESS_UI"):
+            env["WAIKE_CI_HEADLESS_UI"] = os.environ.get("WAIKE_CI_HEADLESS_UI") or os.environ.get(
+                "CI_HEADLESS_UI", "1"
+            )
         deep_uri = (handoff["deep_link"] or {}).get("canonical") or deep_link or "waike://learn/home"
+
+        log_dir = self.ipc_dir / "proc-logs"
+        try:
+            log_dir.mkdir(parents=True, exist_ok=True)
+            stdout_f = open(log_dir / f"stdout-{request_id}.log", "w", encoding="utf-8")
+            stderr_f = open(log_dir / f"stderr-{request_id}.log", "w", encoding="utf-8")
+        except OSError:
+            stdout_f = subprocess.DEVNULL
+            stderr_f = subprocess.DEVNULL
 
         try:
             proc = subprocess.Popen(
@@ -216,11 +231,17 @@ class NativeLaunchAdapter:
                     request_id,
                 ],
                 env=env,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                stdout=stdout_f,
+                stderr=stderr_f,
                 text=True,
             )
         except OSError as exc:
+            for fh in (stdout_f, stderr_f):
+                if fh not in (subprocess.DEVNULL, None):
+                    try:
+                        fh.close()
+                    except Exception:
+                        pass
             result.reason = f"process_launch_error:{exc}"
             return result
 
@@ -240,7 +261,13 @@ class NativeLaunchAdapter:
             transport = FileIpcTransport(self.ipc_dir, receiver_present=True)
 
         time.sleep(0.05)
-        ipc_result = transport.send_and_await_ack(request, timeout_s=self.timeout_s)
+
+        ipc_result = transport.send_and_await_ack(
+            request,
+            timeout_s=self.timeout_s,
+            expected_bundle_id=LEARNING_OS_BUNDLE_ID,
+            expected_app_version=result.version,
+        )
         result.ipc = {
             "protocol": request["protocol"],
             "request": {k: v for k, v in request.items() if k != "context"}
@@ -253,25 +280,45 @@ class NativeLaunchAdapter:
                 "ack": ipc_result.get("ack"),
             },
         }
+
+        exit_code = proc.poll()
+        ack = ipc_result.get("ack") or {}
         if ipc_result.get("ok"):
             result.deep_link_delivered = True
             result.acknowledged = True
             result.launched = True
             result.reason = None
-            ack = ipc_result.get("ack") or {}
             if ack.get("app_version"):
                 result.version = ack["app_version"]
+            # Production: leave GUI running after ACK. CI must clean up explicitly.
+            if os.environ.get("LEARNING_OS_CLEANUP_AFTER_ACK") == "1":
+                if proc.poll() is None:
+                    proc.terminate()
+                    try:
+                        proc.wait(timeout=2)
+                    except subprocess.TimeoutExpired:
+                        proc.kill()
         else:
             result.deep_link_delivered = False
             result.acknowledged = False
             result.launched = False
-            result.reason = ipc_result.get("reason") or "ipc_ack_failed"
-            # Best-effort terminate hung process
+            if exit_code is not None and exit_code != 0 and ipc_result.get("reason") == "timeout":
+                result.reason = f"process_exited_before_ack:{exit_code}"
+            else:
+                result.reason = ipc_result.get("reason") or "ipc_ack_failed"
+            # Best-effort terminate hung/failed process
             if proc.poll() is None:
                 proc.terminate()
                 try:
                     proc.wait(timeout=1)
                 except subprocess.TimeoutExpired:
                     proc.kill()
+
+        for fh in (stdout_f, stderr_f):
+            if fh not in (subprocess.DEVNULL, None):
+                try:
+                    fh.close()
+                except Exception:
+                    pass
 
         return result
