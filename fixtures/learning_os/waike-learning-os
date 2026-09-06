@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Deterministic Learning OS native launch fixture (Device OS CI / local).
+
+Implements gunnchos.learning_os.ipc.v1 file-drop ack protocol used by
+NativeLaunchAdapter. Not the production Tauri LMS — protocol-compatible stub.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import time
+from pathlib import Path
+
+PROTOCOL = "gunnchos.learning_os.ipc.v1"
+VERSION = os.environ.get("LEARNING_OS_APP_VERSION", "0.1.0-fixture")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--bundle-id", default="com.gunnchos.waike.learning")
+    parser.add_argument("--deep-link", default="waike://learn/home")
+    parser.add_argument("--ipc-dir", required=True)
+    parser.add_argument("--request-id", default=os.environ.get("LEARNING_OS_REQUEST_ID", ""))
+    parser.add_argument("--fail", default=os.environ.get("LEARNING_OS_FIXTURE_FAIL", ""))
+    args = parser.parse_args()
+
+    ipc_dir = Path(args.ipc_dir)
+    ipc_dir.mkdir(parents=True, exist_ok=True)
+    request_id = args.request_id or os.environ.get("LEARNING_OS_REQUEST_ID", "")
+
+    if args.fail == "crash":
+        return 2
+
+    deadline = time.monotonic() + 8.0
+    req_path = None
+    while time.monotonic() < deadline:
+        if request_id:
+            candidate = ipc_dir / f"request-{request_id}.json"
+            if candidate.is_file():
+                req_path = candidate
+                break
+        else:
+            matches = sorted(ipc_dir.glob("request-*.json"))
+            if matches:
+                req_path = matches[-1]
+                request_id = req_path.name[len("request-") : -len(".json")]
+                break
+        time.sleep(0.02)
+    else:
+        sys.stderr.write("fixture_timeout_waiting_for_request\n")
+        return 1
+
+    try:
+        req = json.loads(req_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        ack = {
+            "protocol": PROTOCOL,
+            "message_type": "nack",
+            "request_id": request_id,
+            "reason": "bad_payload",
+        }
+        (ipc_dir / f"ack-{request_id}.json").write_text(json.dumps(ack) + "\n")
+        return 1
+
+    if req.get("protocol") != PROTOCOL:
+        ack = {
+            "protocol": PROTOCOL,
+            "message_type": "nack",
+            "request_id": request_id,
+            "reason": "wrong_protocol_version",
+        }
+        (ipc_dir / f"ack-{request_id}.json").write_text(json.dumps(ack) + "\n")
+        return 1
+
+    if args.fail == "no_ack":
+        time.sleep(9)
+        return 0
+
+    ack = {
+        "protocol": PROTOCOL,
+        "message_type": "ack",
+        "request_id": request_id,
+        "status": "ok",
+        "app_version": VERSION,
+        "deep_link": args.deep_link,
+        "bundle_id": args.bundle_id,
+    }
+    (ipc_dir / f"ack-{request_id}.json").write_text(json.dumps(ack, indent=2) + "\n")
+    # Stay briefly alive so process_started is observable
+    time.sleep(0.1)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

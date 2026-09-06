@@ -103,23 +103,13 @@ def launch_app(profile: str, mode: str, app_id: str, *, thin_learning_os: bool =
 
 
 def list_launchable(profile: str, mode: str) -> list[dict]:
+    """Single canonical implementation — includes alias→canonical mapping."""
     return [
         {
             "app": app_id,
             "allowed": evaluate(profile, mode, app_id)["allowed"],
             "runtime": _runtime_id(app_id) is not None,
             "canonical": resolve_app_id(app_id),
-        }
-        for app_id in sorted(APPS)
-    ]
-
-
-def list_launchable(profile: str, mode: str) -> list[dict]:
-    return [
-        {
-            "app": app_id,
-            "allowed": evaluate(profile, mode, app_id)["allowed"],
-            "runtime": _runtime_id(app_id) is not None,
         }
         for app_id in sorted(APPS)
     ]

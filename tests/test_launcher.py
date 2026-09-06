@@ -13,12 +13,14 @@ def test_list_launchable():
     assert len(apps) > 0
 
 
-def test_waike_offline_uses_first_party_runtime():
+def test_waike_offline_uses_thin_launcher_handoff():
     r = launch_app("student", "School", "waike_offline")
-    assert r["launched"] is True
+    # Without native Learning OS install, launched must be False (honest).
     assert r["mock"] is False
-    assert r["runtime_id"] == "waike"
-    # Thin launcher handoff — Learning OS is SoR, not seed HTML alone.
     assert r["relationship"] == "thin_launcher_companion"
     assert r["seed_is_system_of_record"] is False
     assert r["system_of_record"] == "platform_tauri_learning_os"
+    assert r.get("runtime_id") == "waike" or r.get("handoff", {}).get("runtime_id") == "waike"
+    if not r.get("available"):
+        assert r["launched"] is False
+        assert r.get("reason") == "learning_os_not_installed"

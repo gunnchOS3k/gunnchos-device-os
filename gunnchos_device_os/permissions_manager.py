@@ -41,6 +41,13 @@ ROLE_ALLOWLIST: dict[str, set[Permission]] = {
         Permission.SENSORS,
         Permission.IDENTITY_READ,
     },
+    # Grader: least privilege for Platform grader workflows (no educator AV / write).
+    "grader": {
+        Permission.FILES_READ,
+        Permission.NETWORK,
+        Permission.NOTIFICATIONS,
+        Permission.IDENTITY_READ,
+    },
     "educator": {
         Permission.FILES_READ,
         Permission.FILES_WRITE,

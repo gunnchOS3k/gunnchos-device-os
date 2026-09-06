@@ -1,0 +1,42 @@
+name: Learning OS Runtime Integration
+
+on:
+  push:
+    branches: [main, develop, 'phase-*', 'cursor/**']
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: learning-os-runtime-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  learning-os-runtime-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pyyaml
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Prove fixture executable
+        run: |
+          set -euo pipefail
+          test -f fixtures/learning_os/waike-learning-os
+          chmod +x fixtures/learning_os/waike-learning-os
+          fixtures/learning_os/waike-learning-os --help >/dev/null
+      - name: Learning OS runtime integration tests
+        run: |
+          set -euo pipefail
+          PYTHONPATH=.:src pytest -q \
+            tests/test_learning_os_integration.py \
+            tests/test_launcher.py
