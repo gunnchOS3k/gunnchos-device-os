@@ -1,6 +1,7 @@
 """Policy engine — profile + mode decisions."""
 from __future__ import annotations
 
+from .app_registry import app_id_equivalents
 from .mode_manager import get_mode_policy
 from .profile_manager import get_profile
 
@@ -10,8 +11,9 @@ def evaluate(profile: str, mode: str, app: str) -> dict:
     pol = get_mode_policy(mode)
     if mode not in prof["can_switch_to"] and profile != "admin":
         return {"allowed": False, "reason": "mode_not_permitted_for_profile"}
-    allowed = app in pol["allowed_apps"]
-    blocked = app in pol["blocked_apps"]
+    ids = app_id_equivalents(app)
+    allowed = any(a in pol["allowed_apps"] for a in ids)
+    blocked = any(a in pol["blocked_apps"] for a in ids)
     if blocked:
         allowed = False
     needs_approval = profile in ("student", "guest") and mode == "Admin"

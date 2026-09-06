@@ -18,3 +18,7 @@ def test_waike_offline_uses_first_party_runtime():
     assert r["launched"] is True
     assert r["mock"] is False
     assert r["runtime_id"] == "waike"
+    # Thin launcher handoff — Learning OS is SoR, not seed HTML alone.
+    assert r["relationship"] == "thin_launcher_companion"
+    assert r["seed_is_system_of_record"] is False
+    assert r["system_of_record"] == "platform_tauri_learning_os"
