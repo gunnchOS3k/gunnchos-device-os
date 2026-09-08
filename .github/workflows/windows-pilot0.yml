@@ -1,0 +1,27 @@
+name: Windows Pilot 0 Classification
+
+# Device OS host is WINDOWS_NOT_APPLICABLE for consumer Pilot 0.
+# This workflow records classification evidence only (does not invent Windows host PASS).
+
+on:
+  pull_request:
+  push:
+    branches: [main, "cursor/windows-pilot0-authentic-evidence*"]
+  workflow_dispatch:
+
+jobs:
+  windows-pilot0-classification:
+    name: windows-pilot0-classification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Emit NOT_APPLICABLE evidence
+        run: python3 scripts/windows_pilot0_evidence.py
+      - name: Short SHA
+        id: meta
+        run: echo "short_sha=${GITHUB_SHA:0:12}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: device-os-windows-pilot0-class-${{ steps.meta.outputs.short_sha }}
+          path: reports/windows_pilot0/**
+          retention-days: 14
