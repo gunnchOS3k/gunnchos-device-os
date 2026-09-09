@@ -156,12 +156,26 @@ def _discover_sibling(repo_root: Path, name: str) -> Path | None:
     # Worktree layout: gate-worktrees/X → repos/
     if repo_root.parent.name == "gate-worktrees":
         parents.insert(0, repo_root.parent.parent)
+    # Worktree layout: <repo>/.worktrees/<name> → sibling repos live under repos/
+    if repo_root.parent.name == ".worktrees":
+        parents.insert(0, repo_root.parent.parent.parent)
     for parent in parents:
         cand = parent / name
         if cand.is_dir():
             return cand
     absolute = Path("/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos") / name
     return absolute if absolute.is_dir() else None
+
+
+def apply_current_pin_accepted_mains(repo_root: Path) -> dict[str, Any]:
+    """Overlay ACCEPTED_MAINS SHAs from frozen pin manifest (authority)."""
+    from gunnchos_device_os.device_lab.current_pin_manifest import (
+        load_pin_manifest,
+        overlay_accepted_mains_from_pin,
+    )
+
+    doc = load_pin_manifest(repo_root)
+    return overlay_accepted_mains_from_pin(ACCEPTED_MAINS, doc)
 
 
 def _git_sha(path: Path) -> str | None:

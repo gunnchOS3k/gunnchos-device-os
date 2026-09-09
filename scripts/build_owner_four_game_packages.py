@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Build owner four-game packages into artifacts/wp011r/owner_builds from accepted mains.
 
-Does not commit multi-GB images. Packages only. Uses sibling origin/main SHAs
-matching ACCEPTED_MAINS (or live origin/main when pins already refreshed).
+Does not commit multi-GB images. Packages only. Current-pin ACCEPTED_MAIN_PIN_MANIFEST
+is the SHA authority — hardcoded ACCEPTED_MAINS tables are overlaid and mismatches
+fail closed.
 """
 from __future__ import annotations
 
@@ -22,8 +23,15 @@ import sys
 
 sys.path.insert(0, str(ROOT))
 
+from gunnchos_device_os.device_lab.current_pin_manifest import (  # noqa: E402
+    PinManifestError,
+    load_pin_manifest,
+    pin_sha_for,
+    require_build_sha_matches_pin,
+)
 from gunnchos_device_os.device_lab.owner_four_game_artifacts import (  # noqa: E402
     ACCEPTED_MAINS,
+    apply_current_pin_accepted_mains,
     _discover_sibling,
     _sha256_file,
     owner_builds_root,
@@ -505,22 +513,70 @@ def build_beatlink(builds: Path, sib: Path, sha: str) -> dict[str, Any]:
 def main() -> int:
     builds = owner_builds_root(ROOT)
     builds.mkdir(parents=True, exist_ok=True)
-    report: dict[str, Any] = {"at_utc": _utc(), "games": {}}
+    report: dict[str, Any] = {
+        "at_utc": _utc(),
+        "games": {},
+        "pin_authority": "ACCEPTED_MAIN_PIN_MANIFEST",
+    }
+    try:
+        pin_doc = load_pin_manifest(ROOT)
+        overlay = apply_current_pin_accepted_mains(ROOT)
+        report["pin_manifest_sha256"] = pin_doc.get("manifest_sha256")
+        report["pin_overlay"] = overlay
+        if not overlay.get("ok"):
+            report["ok"] = False
+            report["error"] = "pin_overlay_failed"
+            out = ROOT / "artifacts/wp011r/owner_builds/BUILD_REPORT.json"
+            out.write_text(json.dumps(report, indent=2) + "\n")
+            print(json.dumps(report, indent=2), flush=True)
+            return 1
+    except PinManifestError as exc:
+        report["ok"] = False
+        report["error"] = str(exc)
+        out = ROOT / "artifacts/wp011r/owner_builds/BUILD_REPORT.json"
+        out.write_text(json.dumps(report, indent=2) + "\n")
+        print(json.dumps(report, indent=2), flush=True)
+        return 1
+
     for key, spec in ACCEPTED_MAINS.items():
         sib = _discover_sibling(ROOT, spec["sibling"])
+        pin_sha = pin_sha_for(pin_doc, key)
         sha = spec["accepted_main_sha"]
+        try:
+            require_build_sha_matches_pin(repository=key, build_sha=sha, pin_sha=pin_sha)
+        except PinManifestError as exc:
+            report["games"][key] = {"ok": False, "error": str(exc)}
+            continue
         if not sib:
             report["games"][key] = {"ok": False, "error": "sibling_missing"}
             continue
-        # Prefer origin/main if it matches pin
+        # Pin SHA is authority. Sibling must contain the object; origin/main should match.
         origin = subprocess.check_output(
             ["git", "-C", str(sib), "rev-parse", "origin/main"], text=True
         ).strip()
-        if origin == sha:
-            use_sha = origin
-        else:
-            use_sha = sha
-        print(f"build {key} @{use_sha[:12]} from {sib}", flush=True)
+        if origin != pin_sha:
+            report["games"][key] = {
+                "ok": False,
+                "error": "origin_main_mismatch_vs_pin",
+                "origin_main": origin,
+                "pin_sha": pin_sha,
+            }
+            continue
+        # Confirm object exists in sibling
+        probe = subprocess.run(
+            ["git", "-C", str(sib), "cat-file", "-e", f"{pin_sha}^{{commit}}"],
+            capture_output=True,
+            check=False,
+        )
+        if probe.returncode != 0:
+            report["games"][key] = {
+                "ok": False,
+                "error": "pin_sha_object_missing_in_sibling",
+                "pin_sha": pin_sha,
+            }
+            continue
+        use_sha = pin_sha
+        print(f"build {key} @{use_sha[:12]} from {sib} (pin authority)", flush=True)
         try:
             if key == "anime-aggressors":
                 report["games"][key] = build_anime(builds, sib, use_sha)
@@ -530,8 +586,28 @@ def main() -> int:
                 report["games"][key] = build_archive(builds, sib, use_sha)
             elif key == "beatlink-party":
                 report["games"][key] = build_beatlink(builds, sib, use_sha)
+            built = report["games"][key]
+            if built.get("ok") and built.get("accepted_main_sha"):
+                try:
+                    require_build_sha_matches_pin(
+                        repository=key,
+                        build_sha=str(built["accepted_main_sha"]),
+                        pin_sha=pin_sha,
+                    )
+                except PinManifestError as exc:
+                    report["games"][key] = {**built, "ok": False, "error": str(exc)}
         except Exception as exc:  # noqa: BLE001
             report["games"][key] = {"ok": False, "error": str(exc)}
+    games_ok = all(bool((v or {}).get("ok")) for v in report["games"].values()) and len(
+        report["games"]
+    ) == len(ACCEPTED_MAINS)
+    if not games_ok:
+        report["ok"] = False
+        report["staging"] = {"ok": False, "error": "pin_bound_build_incomplete"}
+        out = ROOT / "artifacts/wp011r/owner_builds/BUILD_REPORT.json"
+        out.write_text(json.dumps(report, indent=2) + "\n")
+        print(json.dumps(report, indent=2), flush=True)
+        return 1
     staging = prepare_owner_guest_staging(ROOT)
     report["staging"] = {
         "ok": staging.get("ok"),
@@ -541,6 +617,7 @@ def main() -> int:
             for k, v in (staging.get("games") or {}).items()
         },
     }
+    report["ok"] = bool(staging.get("ok"))
     out = ROOT / "artifacts/wp011r/owner_builds/BUILD_REPORT.json"
     out.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2), flush=True)
