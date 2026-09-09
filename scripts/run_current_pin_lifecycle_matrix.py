@@ -285,9 +285,18 @@ def _try_guest_lifecycle_probe() -> dict[str, Any]:
     session = None
     rows: list[dict[str, Any]] = []
     try:
-        session = boot_interactive_guest(timeout_sec=180)
+        session_boot = boot_interactive_guest(
+            ROOT, Path("/tmp/gunnchos-lifecycle-guest"), boot_timeout_s=180, memory_mb=3072
+        )
+        session = session_boot.pop("_session", None)
+        if session is None:
+            return {
+                "ok": False,
+                "error": f"boot_failed:{session_boot.get('error')}",
+                "rows": [],
+            }
         # Minimal authenticity probe: guest agent reachable + weston/pids.
-        ping = _agent_call(session, "ping", {}, timeout_sec=30)
+        ping = _agent_call(session, "ping", timeout_sec=30)
         authentic = bool(ping.get("ok") or ping.get("pong") or ping.get("status") == "ok")
         for product in LIFECYCLE_PRODUCTS:
             for step in LIFECYCLE_STEPS:

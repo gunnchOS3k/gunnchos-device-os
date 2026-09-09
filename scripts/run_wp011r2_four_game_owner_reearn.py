@@ -22,6 +22,9 @@ from gunnchos_device_os.device_lab.interactive_guest_proofs import (  # noqa: E4
     _evidence_dir,
     boot_interactive_guest,
 )
+from gunnchos_device_os.device_lab.owner_four_game_artifacts import (  # noqa: E402
+    apply_current_pin_accepted_mains,
+)
 from gunnchos_device_os.device_lab.owner_four_game_guest import (  # noqa: E402
     LAB_IDS,
     attempt_owner_four_game_in_guest_pass,
@@ -146,6 +149,13 @@ def _sync_tokens(four_pass: bool, four_result: dict) -> None:
 
 def main() -> int:
     anime_only = os.environ.get("GUNNCH_FOUR_GAME_ANIME_ONLY") == "1"
+    # Bind four-game SHAs to current-pin manifest before guest verification.
+    try:
+        pin_overlay = apply_current_pin_accepted_mains(ROOT)
+        print(f"pin_overlay_ok={pin_overlay.get('ok')}", flush=True)
+    except Exception as exc:  # noqa: BLE001
+        print(json.dumps({"FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": False, "blocker": f"pin_overlay:{exc}"}))
+        return 1
     # Demote FOUR_GAME before boot so a crash cannot leave a false PASS.
     # Anime-only HID probe must not wipe earned sibling evidence.
     if not anime_only:
