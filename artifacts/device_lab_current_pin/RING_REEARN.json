@@ -1,0 +1,14 @@
+{
+  "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
+  "started_at_utc": "2026-09-09T17:45:24Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "boot": {
+    "ok": true
+  },
+  "blocker": "ring_mutation_hung_virtio_serial_wall_clock_killed",
+  "note": "Agent reachable after boot+weston; attempt_ring_app_mutation_pass hung >20m without writing evidence; SIGALRM did not interrupt; hard-killed.",
+  "finished_at_utc": "2026-09-09T18:12:50Z",
+  "elapsed_sec": 1500,
+  "prefer_fail_over_false_pass": true
+}

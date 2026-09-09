@@ -1,0 +1,62 @@
+running ['/opt/homebrew/opt/python@3.14/bin/python3.14', 'scripts/product_use_finish_rc002_legs.py']
+2026-09-09T14:16:34Z waike pack ok=True courses hint in store
+{
+  "schema": "gunnchos.product_use_rc_002.finish_legs.v1",
+  "started_at_utc": "2026-09-09T14:16:34Z",
+  "attach": {
+    "ok": false,
+    "error": "qemu_pid_missing"
+  },
+  "pack": {
+    "ok": true,
+    "course_id": "GENERAL_IT"
+  },
+  "overlay_persona": "currentpin17c",
+  "prefer_fail_over_false_pass": true,
+  "second_qemu": false,
+  "error": "qemu_pid_missing"
+}
+
+
+WAIKE_RC 1
+
+=== 2026-09-09T14:30:33Z START /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/product_use_rc_002.py ===
+fatal: cannot change to '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/waike-research-ops': No such file or directory
+Traceback (most recent call last):
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/product_use_rc_002.py", line 351, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/product_use_rc_002.py", line 235, in main
+    waike = ingest_waike()
+            ^^^^^^^^^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/product_use_rc_002.py", line 93, in ingest_waike
+    result = store.import_owner(owner, owner_commit=_git(owner, "rev-parse", "HEAD"))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/product_use_rc_002.py", line 52, in _git
+    return subprocess.check_output(["git", "-C", str(path), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', '-C', '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/waike-research-ops', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+=== 2026-09-09T14:30:41Z START /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/product_use_finish_rc002_legs.py ===
+2026-09-09T14:30:41Z waike pack ok=True courses hint in store
+{
+  "schema": "gunnchos.product_use_rc_002.finish_legs.v1",
+  "started_at_utc": "2026-09-09T14:30:41Z",
+  "attach": {
+    "ok": false,
+    "error": "qemu_pid_missing"
+  },
+  "pack": {
+    "ok": true,
+    "course_id": "GENERAL_IT"
+  },
+  "overlay_persona": "rc002",
+  "prefer_fail_over_false_pass": true,
+  "second_qemu": false,
+  "error": "qemu_pid_missing"
+}
