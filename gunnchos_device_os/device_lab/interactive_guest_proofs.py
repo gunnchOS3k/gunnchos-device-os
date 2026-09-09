@@ -2319,22 +2319,35 @@ window.addEventListener("load",function(){boot();});
         _wf("game_identity_auth_transport_ok")
         _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
         _wf("game_guest_dispatch_hid")
-        drive_game = json.dumps({"marker": marker, "via": "ring_authorized_parse_input_event_overlay"})
+        drive_game = json.dumps(
+            {"marker": marker, "via": "ring_authorized_parse_input_event_overlay"}
+        )
+        # file_put — never shell-printf JSON (quoting flakes left overlay waiting_ring_drive).
         _agent_call(
             session,
-            "process_run",
-            argv=[
-                "bash",
-                "-lc",
-                "printf '%s' "
-                + repr(drive_game)
-                + " > /var/lib/gunnchos/rings/ring_game_drive.json",
-            ],
+            "file_put",
+            path="/var/lib/gunnchos/rings/ring_game_drive.json",
+            bytes_b64=base64.b64encode(drive_game.encode("utf-8")).decode("ascii"),
             timeout_sec=10.0,
         )
         _wf("game_keyboard_event_overlay_armed")
-        for attempt in range(10):
+        for attempt in range(20):
             time.sleep(1.0)
+            status_txt = _guest_cat("/var/lib/gunnchos/rings/pedestrian_overlay_status.json")
+            _wf(
+                "game_overlay_status_poll",
+                attempt=attempt,
+                status=(status_txt or "")[:180],
+            )
+            # Re-arm drive if overlay still waiting (missed first write / race).
+            if "waiting_ring_drive" in (status_txt or "") or not status_txt:
+                _agent_call(
+                    session,
+                    "file_put",
+                    path="/var/lib/gunnchos/rings/ring_game_drive.json",
+                    bytes_b64=base64.b64encode(drive_game.encode("utf-8")).decode("ascii"),
+                    timeout_sec=10.0,
+                )
             probe = _guest_cat(game_paths[0])
             xp_line = next((ln for ln in probe.splitlines() if ln.strip().startswith("xp=")), "")
             xp_val = None
@@ -2342,20 +2355,45 @@ window.addEventListener("load",function(){boot();});
                 xp_val = int(xp_line.split("=", 1)[1].strip()) if xp_line else None
             except Exception:
                 xp_val = None
-            if marker[:8] in probe or "ring:mutation" in probe or (xp_val is not None and xp_val != 11):
-                _wf(
-                    "game_app_receipt_mutation",
-                    attempt=attempt,
-                    latency_ms=int((time.monotonic() - t_game0) * 1000),
-                    via="parse_input_event_overlay",
-                )
-                break
+            if (
+                marker[:8] in probe
+                or "ring:mutation" in probe
+                or (xp_val is not None and xp_val != 11)
+                or '"phase":"mutated"' in (status_txt or "").replace(" ", "")
+                or '"phase": "mutated"' in (status_txt or "")
+            ):
+                # If overlay reports mutated, give ProgressionSave a moment to flush.
+                if "mutated" in (status_txt or "") and marker[:8] not in probe and (
+                    xp_val is None or xp_val == 11
+                ):
+                    time.sleep(1.5)
+                    probe = _guest_cat(game_paths[0])
+                    xp_line = next(
+                        (ln for ln in probe.splitlines() if ln.strip().startswith("xp=")), ""
+                    )
+                    try:
+                        xp_val = int(xp_line.split("=", 1)[1].strip()) if xp_line else None
+                    except Exception:
+                        xp_val = None
+                if marker[:8] in probe or "ring:mutation" in probe or (
+                    xp_val is not None and xp_val != 11
+                ):
+                    _wf(
+                        "game_app_receipt_mutation",
+                        attempt=attempt,
+                        latency_ms=int((time.monotonic() - t_game0) * 1000),
+                        via="parse_input_event_overlay",
+                        overlay_phase=(status_txt or "")[:120],
+                    )
+                    break
             _hid_burst(("ret", "spc", "w"), clicks=1)
         else:
+            status_final = _guest_cat("/var/lib/gunnchos/rings/pedestrian_overlay_status.json")
             _wf(
                 "game_app_receipt_timeout",
                 latency_ms=int((time.monotonic() - t_game0) * 1000),
                 note="save unchanged after Ring HID+parse_input_event overlay; timeout not first boundary",
+                overlay_status=(status_final or "")[:240],
             )
         time.sleep(2.0)
     # Never earn via headless first-run create with dead process; never earn v1→v2 migration alone.
