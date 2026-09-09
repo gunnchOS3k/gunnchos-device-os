@@ -1,0 +1,88 @@
+{
+  "schema": "gunnchos.device_lab.ring_hang_localization.v1",
+  "generated_at_utc": "2026-09-09T20:44:44Z",
+  "device_os_head": "31d80ed21b5d0ef0882a21d9fcafb288b7ec6124",
+  "prior_phase2_hang": {
+    "blocker": "ring_mutation_hung_virtio_serial_wall_clock_killed",
+    "blocking_stage": "virtio_serial_host_roundtrip_unbounded_during_attempt_ring",
+    "note": "Phase2 hung >20m after weston inside attempt_ring; SIGALRM did not interrupt; no stage heartbeat yet."
+  },
+  "post_fix_runs": [
+    {
+      "correlation_id": "ring-1788985895-29693",
+      "elapsed_sec": 237.9,
+      "hung": false,
+      "blocker": "godot_alive_mutation_not_committed",
+      "legs": {
+        "libreoffice": true,
+        "browser": true,
+        "game": false
+      }
+    },
+    {
+      "correlation_id": "ring-1788986254-33617",
+      "elapsed_sec": 342.6,
+      "hung": false,
+      "blocker": "guest_browser_state_not_committed",
+      "legs": {
+        "libreoffice": true,
+        "browser": false,
+        "game": false
+      }
+    }
+  ],
+  "latest_waterfall_count": 45,
+  "latest_waterfall_tail": [
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:41:46Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:41:51Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:41:56Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:01Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:06Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:11Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:15Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:20Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:25Z"
+    },
+    {
+      "stage": "game_overlay_status_poll",
+      "t_utc": "2026-09-09T20:42:30Z"
+    },
+    {
+      "stage": "game_app_receipt_timeout",
+      "t_utc": "2026-09-09T20:42:34Z"
+    },
+    {
+      "stage": "stage9_host_receipt_final",
+      "t_utc": "2026-09-09T20:42:38Z"
+    }
+  ],
+  "RING_FIX_OWNED_BY_DEVICE_OS": true,
+  "hang_fixed": true,
+  "ring_pass": false
+}
