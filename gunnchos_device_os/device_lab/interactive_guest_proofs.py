@@ -1350,6 +1350,57 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         )
         return result
 
+    mutations: dict[str, Any] = {}
+    launches: dict[str, Any] = {}
+    marker = f"RINGMUTATION{int(time.time())}"
+    uinput_ok = False
+    waterfall: list[dict[str, Any]] = []
+    stage_heartbeat = evidence_dir / "RING_STAGE_HEARTBEAT.json"
+    correlation_id = f"ring-{int(time.time())}-{os.getpid()}"
+    result["correlation_id"] = correlation_id
+    # Clear prior waterfall for this evidence dir (fresh attempt).
+    try:
+        (evidence_dir / "RING_STAGE_WATERFALL.jsonl").write_text("", encoding="utf-8")
+    except OSError:
+        pass
+
+    def _wf(stage: str, **extra: Any) -> None:
+        row = {
+            "t_mono": time.monotonic(),
+            "t_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "stage": stage,
+            "correlation_id": correlation_id,
+            **extra,
+        }
+        waterfall.append(row)
+        try:
+            stage_heartbeat.write_text(json.dumps(row, indent=2) + "\n", encoding="utf-8")
+        except OSError:
+            pass
+        try:
+            with (evidence_dir / "RING_STAGE_WATERFALL.jsonl").open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(row, separators=(",", ":")) + "\n")
+        except OSError:
+            pass
+
+    _wf("stage4_virtio_serial_write_baseline_start")
+    baseline_ping = _agent_call(session, "ping", timeout_sec=8.0)
+    _wf(
+        "stage4_virtio_serial_write_baseline_done",
+        ok=bool(baseline_ping.get("ok") and baseline_ping.get("pong")),
+        transport=baseline_ping.get("transport"),
+        error=baseline_ping.get("error"),
+        error_class=baseline_ping.get("error_class"),
+    )
+    if not (baseline_ping.get("ok") and baseline_ping.get("pong")):
+        result["blocker"] = "virtio_serial_baseline_ping_failed_before_mutation"
+        result["baseline_ping"] = baseline_ping
+        result["stage_waterfall"] = waterfall
+        (evidence_dir / "RING_APP_MUTATION_EVIDENCE.json").write_text(
+            json.dumps(result, indent=2) + "\n", encoding="utf-8"
+        )
+        return result
+
     # Drive Ring stack on host. Lab DocumentSurface MUST NOT write RINGRING
     # document_state.json into the guest evidence tree (independent forbids lab:// sidecars).
     from gunnchos_device_os.device_lab.hw_backends.rings import RingsBackend
@@ -1363,15 +1414,6 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     rings.start(evidence_dir=lab_scratch, repo_root=Path(__file__).resolve().parents[2])
     rings.guest_monitor_sock = getattr(session, "monitor_sock", None)
     rings.guest_agent = getattr(session, "agent", None)
-
-    mutations: dict[str, Any] = {}
-    launches: dict[str, Any] = {}
-    marker = f"RINGMUTATION{int(time.time())}"
-    uinput_ok = False
-    waterfall: list[dict[str, Any]] = []
-
-    def _wf(stage: str, **extra: Any) -> None:
-        waterfall.append({"t_mono": time.monotonic(), "stage": stage, **extra})
 
     def _guest_cat(path: str) -> str:
         r = _agent_call(
@@ -1526,7 +1568,17 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     for dx, dy in ((160, 140), (220, 180), (0, 80)):
         _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0)
         time.sleep(0.2)
+    _wf("stage2_ring_stack_ingress_start", target="libreoffice")
+    _wf("stage3_host_device_os_routing_start", target="libreoffice")
     ring_lo = rings.inject(target="libreoffice", confidence=0.92, gesture="click")
+    _wf(
+        "stage3_host_device_os_routing_done",
+        target="libreoffice",
+        delivered=bool(ring_lo.get("delivered")),
+        via_stack=bool(ring_lo.get("via_stack")),
+        os_input=bool((ring_lo.get("os_input_path") or {}).get("attempted")),
+    )
+    _wf("stage2_ring_stack_ingress_done", target="libreoffice")
     if ring_lo.get("via_stack"):
         _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
         _inject_text_and_save(marker)
@@ -2636,6 +2688,8 @@ window.addEventListener("load",function(){boot();});
             "confidence_gate": {"low": low, "wrong": wrong, "ok": gate_ok},
             "mutation_marker": marker,
             "marker_found_in_after": bool(mutations["libreoffice"].get("mutated")),
+            "correlation_id": correlation_id,
+            "stage_waterfall": waterfall,
             "note": (
                 "Ring→SpatialInput→guest HID mutated LibreOffice+RingMemo+Pedestrian (input-driven, no lab collector / no migration-alone); guest artifacts committed"
                 if earned
@@ -2643,6 +2697,15 @@ window.addEventListener("load",function(){boot();});
             ),
         }
     )
+    _wf(
+        "stage9_host_receipt_final",
+        earned=earned,
+        blocker=result.get("blocker"),
+        libreoffice=bool(mutations.get("libreoffice", {}).get("mutated")),
+        browser=bool(mutations.get("browser", {}).get("mutated")),
+        game=bool(mutations.get("game", {}).get("mutated")),
+    )
+    result["stage_waterfall"] = waterfall
     (evidence_dir / "RING_APP_MUTATION_EVIDENCE.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
     )

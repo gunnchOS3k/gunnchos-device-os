@@ -27,7 +27,7 @@
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
@@ -73,12 +73,12 @@
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "EARNED",
-      "earned": true,
-      "summary": "EARNED: ODT RINGMUTATION + browser delta + Godot save_version; diagnostic HTML/game_state LAB_DIAGNOSTIC_ONLY",
+      "status": "OPEN_CURRENT_PIN_REEARN",
+      "earned": false,
+      "summary": "OPEN: current-pin re-earn hung on virtio-serial (ring_mutation_hung_virtio_serial_wall_clock_killed); historical WP-011R PASS scrubbed so current-pin cannot inherit.",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
-      "pass": true,
-      "digital_earned": true,
+      "pass": false,
+      "digital_earned": false,
       "required_path": "os_build/device_lab_interactive_guest (interactive_guest)"
     },
     {
@@ -97,7 +97,7 @@
     "note": "Recompute 12 categories from evidence files \u2014 not gunnchctl score alone"
   },
   "master_complete": false,
-  "note": "WP-011R.2 owner-artifact FOUR_GAME attempt. Historical #103 not revived as final. SHIPPING_IMAGE=false; VF4-6 PHYSICAL_PENDING.",
+  "note": "WP-011R.2 owner-artifact FOUR_GAME attempt. Historical #103 not revived as final. SHIPPING_IMAGE=false; VF4-6 PHYSICAL_PENDING. | 17D: synced RING pass_token=false to match Phase2 FAIL evidence for CI consistency.",
   "independent_audit": {
     "source": "independent_verifier_adversarial",
     "accepted_tip_audited": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
@@ -114,7 +114,7 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-09-09T18:14:10Z",
+  "updated_at_utc": "2026-09-09T20:05:19Z",
   "cycle3b_continue": {
     "LIVE": false,
     "DSXL": true,
