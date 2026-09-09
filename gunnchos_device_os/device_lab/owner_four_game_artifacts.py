@@ -151,6 +151,15 @@ def _sha256_tree(path: Path) -> str:
     return h.hexdigest()
 
 
+def _prefer_current_pin_worktree(sibling: Path) -> Path:
+    """Prefer repos/<name>/.worktrees/current-pin-* when present (dirty HEAD safe)."""
+    wt_root = sibling / ".worktrees"
+    if not wt_root.is_dir():
+        return sibling
+    matches = sorted(p for p in wt_root.glob("current-pin-*") if p.is_dir())
+    return matches[0] if matches else sibling
+
+
 def _discover_sibling(repo_root: Path, name: str) -> Path | None:
     parents = [repo_root.parent, repo_root.parent.parent]
     # Worktree layout: gate-worktrees/X → repos/
@@ -162,9 +171,9 @@ def _discover_sibling(repo_root: Path, name: str) -> Path | None:
     for parent in parents:
         cand = parent / name
         if cand.is_dir():
-            return cand
+            return _prefer_current_pin_worktree(cand)
     absolute = Path("/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos") / name
-    return absolute if absolute.is_dir() else None
+    return _prefer_current_pin_worktree(absolute) if absolute.is_dir() else None
 
 
 def apply_current_pin_accepted_mains(repo_root: Path) -> dict[str, Any]:
