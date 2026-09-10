@@ -1,0 +1,36 @@
+hits [PosixPath('scripts/verify_gunnchai_sibling_contract.py')]
+{
+  "GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS": false,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "ping": true,
+  "probe": "/opt/gunnchos:\nbin\n\n/root:\ngunnchos-lab-document.txt\nGUNNCHAI_ABSENT\n",
+  "blocker": "gunnchai_guest_integration_not_instrumented_for_current_pin",
+  "generated_at_utc": "2026-09-09T14:16:47Z"
+}
+
+=== 2026-09-09T14:30:41Z START /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/verify_gunnchai_sibling_contract.py ===
+{
+  "schema": "gunnchos.gunnchai_compat_sibling_verify.v1",
+  "evidence_class": "ACCEPTED_MAIN",
+  "pinned_gunnchai_sha": "d357846810b952ed49a2c168c05720143b32796b",
+  "sibling_present": false,
+  "sha_match": false,
+  "artifacts_ok": false,
+  "artifact_checks": [],
+  "ok": false,
+  "note": "Sibling gunnchAI3k absent \u2014 pin-file contract still valid; run locally with sibling checkout.",
+  "device_os_sha": "d5c2d179ae21efe5191b7d35a2080878112f18e4",
+  "contract_version": "2026-08-19"
+}
+Traceback (most recent call last):
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/verify_gunnchai_sibling_contract.py", line 13, in <module>
+    from gunnchos_device_os.cross_repo_gunnchai.contract import (  # noqa: E402
+    ...<3 lines>...
+    )
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/cross_repo_gunnchai/__init__.py", line 2, in <module>
+    from gunnchos_device_os.cross_repo_gunnchai.contract import (
+    ...<4 lines>...
+    )
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/cross_repo_gunnchai/contract.py", line 9, in <module>
+    import jsonschema
+ModuleNotFoundError: No module named 'jsonschema'

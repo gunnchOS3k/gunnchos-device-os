@@ -1,0 +1,77 @@
+RING_ONLY boot
+RING_ONLY attempt
+
+=== 2026-09-09T14:21:15Z START /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_ring_only.py ===
+RING_ONLY boot
+
+=== 2026-09-09T14:24:02Z START /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_ring_only.py ===
+RING_ONLY boot
+RING_ONLY hot_patch {'install': {'ok': False, 'error': 'guest_bash_timeout', 'marker': '/tmp/gdl_run_1788963900051.json'}, 'decode': {'ok': False, 'error': 'guest_bash_timeout', 'marker': '/tmp/gdl_run_1788963839893.json'}, 'put_errors': [{'offset': 0, 'put': {'ok': False, 'error': 'no_agent_bound'}}], 'error': 'agent_did_not_return'}
+RING_ONLY attempt
+RING_ONLY result False guest_agent_not_reachable_over_real_virtio_serial
+{
+  "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
+  "started_at_utc": "2026-09-09T14:21:15Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "boot": {
+    "ok": false,
+    "error": "qemu_start_failed"
+  },
+  "ring": {
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "blocker": "guest_agent_not_reachable_over_real_virtio_serial"
+  },
+  "blocker": "guest_agent_not_reachable_over_real_virtio_serial",
+  "elapsed_sec": 351.7,
+  "finished_at_utc": "2026-09-09T14:27:07Z"
+}
+RING_ONLY hot_patch {'install': {'ok': False, 'error': 'guest_bash_timeout', 'marker': '/tmp/gdl_run_1788964066099.json'}, 'decode': {'ok': False, 'error': 'guest_bash_timeout', 'marker': '/tmp/gdl_run_1788964005895.json'}, 'put_errors': [{'offset': 0, 'put': {'ok': False, 'error': 'no_agent_bound'}}], 'error': 'agent_did_not_return'}
+RING_ONLY attempt
+RING_ONLY result False guest_agent_not_reachable_over_real_virtio_serial
+{
+  "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
+  "started_at_utc": "2026-09-09T14:24:02Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "boot": {
+    "ok": false,
+    "error": "qemu_start_failed"
+  },
+  "ring": {
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "blocker": "guest_agent_not_reachable_over_real_virtio_serial"
+  },
+  "blocker": "guest_agent_not_reachable_over_real_virtio_serial",
+  "elapsed_sec": 351.2,
+  "finished_at_utc": "2026-09-09T14:29:53Z"
+}
+
+=== 2026-09-09T14:30:07Z START /Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_ring_only.py ===
+RING_ONLY boot
+RING_ONLY hot_patch {'install': {'ok': False, 'error': 'guest_bash_timeout', 'marker': '/tmp/gdl_run_1788964428967.json'}, 'decode': {'ok': False, 'error': 'guest_bash_timeout', 'marker': '/tmp/gdl_run_1788964368937.json'}, 'put_errors': [{'offset': 0, 'put': {'ok': False, 'error': 'no_agent_bound'}}], 'error': 'agent_did_not_return'}
+RING_ONLY attempt
+RING_ONLY result False guest_agent_not_reachable_over_real_virtio_serial
+{
+  "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
+  "started_at_utc": "2026-09-09T14:30:07Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "boot": {
+    "ok": false,
+    "error": "qemu_start_failed"
+  },
+  "ring": {
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "blocker": "guest_agent_not_reachable_over_real_virtio_serial"
+  },
+  "blocker": "guest_agent_not_reachable_over_real_virtio_serial",
+  "elapsed_sec": 352.6,
+  "finished_at_utc": "2026-09-09T14:35:59Z"
+}
+
+=== 2026-09-09T17:45:24Z START /opt/homebrew/opt/python@3.14/bin/python3.14 scripts/run_current_pin_ring_only.py ===
+RING_ONLY boot
+RING_ONLY hot_patch skipped file_get present
+RING_ONLY weston {'ok': True, 'protocol': 'gunnchos.guest_agent.v1', 'cmd': 'process_run', 'transport': 'virtio_serial', 'agent_path_label': 'virtio-serial', 'SILICON_EXACT_EMULATION': False, 'production_keys': False, 'measurement_class': 'GUEST_OBSERVED', 'argv': ['bash', '-lc', "printf '%s' 'W2NvcmVdCmJhY2tlbmQ9ZHJtLWJhY2tlbmQuc28Kc2hlbGw9ZGVza3RvcC1zaGVsbC5zbwojIFN1cGVyIChub3QgQ3RybCkgc28gQ3RybCtTIHJlYWNoZXMgYXBwcyAobW91c2VwYWQvTGlicmVPZmZpY2Ugc2F2ZSkgd2hpbGUKIyB3ZXN0b24gZGVza3RvcC1zaGVsbCBNb2QrcyBzdGlsbCBvd25zIHRoZSBjb21wb3NpdG9yIHNjcmVlbnNob290ZXIuCm1vZGlmaWVyPXN1cGVyCmlkbGUtdGltZT0wCgpbc2hlbGxdCnBhbmVsLXBvc2l0aW9uPXRvcApsb2NraW5nPWZhbHNlCmJhY2tncm91bmQtY29sb3I9MHhmZjIyNDQ4OAoKW3NjcmVlbnNhdmVyXQpwYXRoPQpkdXJhdGlvbj0wCgojIFNpbmdsZSB2aXJ0aW8tZ3B1IG1heF9vdXRwdXRzPTIgZXhwb3NlcyBWaXJ0dWFsLTEgKyBWaXJ0dWFsLTIgb24gb25lIERSTSBjYXJkLgojIER1YWwgUENJIEdQVXMgbWFrZSB3ZXN0b24gYmluZCBvbmx5IGNhcmQwIChvbmUgd2xfb3V0cHV0KSDigJQgZG8gbm90IHVzZSB0aGF0IHBhdGguCltvdXRwdXRdCm5hbWU9VmlydHVhbC0xCm1vZGU9MTI4MHg4MDAKcG9zaXRpb249MCwwCgpbb3V0cHV0XQpuYW1lPVZpcnR1YWwtMgptb2RlPTEyODB4ODAwCnBvc2l0aW9uPTEyODAsMAo=' | base64 -d > /etc/xdg/weston/weston.ini; cp /etc/xdg/weston/weston.ini /etc/gunnchos-weston/weston.ini; systemctl restart gunnchos-weston.service || true; sleep 5; pgrep -x weston && echo weston_ok"], 'returncode': 0, 'stdout': '441\nweston_ok\n', 'stderr': ''}
+RING_ONLY attempt deadline=1200s

@@ -1,0 +1,34 @@
+{"t_mono":42487.667826666,"t_utc":"2026-09-10T03:09:22Z","stage":"stage4_virtio_serial_write_baseline_start","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42487.821567666,"t_utc":"2026-09-10T03:09:22Z","stage":"stage4_virtio_serial_write_baseline_done","correlation_id":"ring-1789009762-70725","ok":true,"transport":"virtio_serial","error":null,"error_class":null}
+{"t_mono":42487.865299916,"t_utc":"2026-09-10T03:09:22Z","stage":"event_source_ready","correlation_id":"ring-1789009762-70725","marker":"RINGMUTATION1789009762"}
+{"t_mono":42503.6875045,"t_utc":"2026-09-10T03:09:38Z","stage":"stage2_ring_stack_ingress_start","correlation_id":"ring-1789009762-70725","target":"libreoffice"}
+{"t_mono":42503.689368,"t_utc":"2026-09-10T03:09:38Z","stage":"stage3_host_device_os_routing_start","correlation_id":"ring-1789009762-70725","target":"libreoffice"}
+{"t_mono":42504.053972208,"t_utc":"2026-09-10T03:09:39Z","stage":"stage3_host_device_os_routing_done","correlation_id":"ring-1789009762-70725","target":"libreoffice","delivered":true,"via_stack":true,"os_input":true}
+{"t_mono":42504.054518583,"t_utc":"2026-09-10T03:09:39Z","stage":"stage2_ring_stack_ingress_done","correlation_id":"ring-1789009762-70725","target":"libreoffice"}
+{"t_mono":42544.117901083,"t_utc":"2026-09-10T03:10:19Z","stage":"browser_http_ready","correlation_id":"ring-1789009762-70725","http":"200","chromium_pid":697}
+{"t_mono":42544.486146416,"t_utc":"2026-09-10T03:10:19Z","stage":"browser_before_snapshot","correlation_id":"ring-1789009762-70725","bytes":32,"seed_probe":"2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789009563\n"}
+{"t_mono":42544.862941208,"t_utc":"2026-09-10T03:10:19Z","stage":"ring_inject_browser","correlation_id":"ring-1789009762-70725","via_stack":true,"delivered":true,"latency_ms":376}
+{"t_mono":42544.8632975,"t_utc":"2026-09-10T03:10:19Z","stage":"identity_auth_transport_ok","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42559.908556208,"t_utc":"2026-09-10T03:10:35Z","stage":"guest_dispatch_clicks","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42561.825948,"t_utc":"2026-09-10T03:10:36Z","stage":"gunnchos_input_text","correlation_id":"ring-1789009762-70725","ok":true,"via":"uinput"}
+{"t_mono":42574.770600458,"t_utc":"2026-09-10T03:10:49Z","stage":"qemu_sendkey_marker","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42577.21426275,"t_utc":"2026-09-10T03:10:52Z","stage":"keyboard_event_overlay_armed","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42578.940075416,"t_utc":"2026-09-10T03:10:54Z","stage":"chromium_headless_marker_receipt","correlation_id":"ring-1789009762-70725","ok":true,"probe":"BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789009762\nHL_OK\n","stderr":"+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789009762'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"}
+{"t_mono":42580.180419208,"t_utc":"2026-09-10T03:10:55Z","stage":"browser_hl_committed_freeze","correlation_id":"ring-1789009762-70725","marker_present":true,"bytes":32}
+{"t_mono":42580.338658916,"t_utc":"2026-09-10T03:10:55Z","stage":"chromium_reloaded_for_drive","correlation_id":"ring-1789009762-70725","url_has_marker":true}
+{"t_mono":42582.736432166,"t_utc":"2026-09-10T03:10:57Z","stage":"app_receipt_mutation","correlation_id":"ring-1789009762-70725","attempt":0,"latency_ms":38249,"via":"keyboard_event_overlay"}
+{"t_mono":42583.081726208,"t_utc":"2026-09-10T03:10:58Z","stage":"ack_feedback_ok","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42609.483666041,"t_utc":"2026-09-10T03:11:24Z","stage":"game_seed_verify","correlation_id":"ring-1789009762-70725","ok":true,"bytes":340,"head":"[meta]\n\nsave_version=2\nsaved_at=\"2026-01-01T00:00:00\"\n\n[career]\n\nxp=11\nlevel=1\nu"}
+{"t_mono":42609.987179958,"t_utc":"2026-09-10T03:11:25Z","stage":"godot45_probe_start","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42610.49806375,"t_utc":"2026-09-10T03:11:25Z","stage":"godot45_probe_done","correlation_id":"ring-1789009762-70725","ok":true,"via":"already_present_on_guest","ver":"4.5.stable.official.876b29033\n4.5.stable.official.876b29033\n"}
+{"t_mono":42610.789343958,"t_utc":"2026-09-10T03:11:25Z","stage":"pedestrian_host_httpd","correlation_id":"ring-1789009762-70725","ok":true,"port":8766,"has_tar":true}
+{"t_mono":42610.959044208,"t_utc":"2026-09-10T03:11:26Z","stage":"pedestrian_deploy_start","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42611.122387208,"t_utc":"2026-09-10T03:11:26Z","stage":"pedestrian_deploy_done","correlation_id":"ring-1789009762-70725","ok":true,"via":"guest_curl_10.0.2.2","error":""}
+{"t_mono":42611.937156208,"t_utc":"2026-09-10T03:11:27Z","stage":"game_overlay_installed","correlation_id":"ring-1789009762-70725","ok":true,"probe":"OVERLAY_PATCHED True\n"}
+{"t_mono":42621.344423958,"t_utc":"2026-09-10T03:11:36Z","stage":"ring_inject_game","correlation_id":"ring-1789009762-70725","via_stack":true,"delivered":true,"latency_ms":379}
+{"t_mono":42621.344987541,"t_utc":"2026-09-10T03:11:36Z","stage":"game_identity_auth_transport_ok","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42628.322909666,"t_utc":"2026-09-10T03:11:43Z","stage":"game_guest_dispatch_hid","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42628.477370666,"t_utc":"2026-09-10T03:11:43Z","stage":"game_keyboard_event_overlay_armed","correlation_id":"ring-1789009762-70725"}
+{"t_mono":42629.685952833,"t_utc":"2026-09-10T03:11:44Z","stage":"game_overlay_status_poll","correlation_id":"ring-1789009762-70725","attempt":0,"status":"{\"level\":1,\"marker\":\"RINGMUTATION1789009762\",\"overlay\":\"device_lab_ring_input_overlay\",\"phase\":\"mutated\",\"production_gate_harness\":false,\"quit_after\":false,\"receipt\":\"user://ring_m"}
+{"t_mono":42630.107264416,"t_utc":"2026-09-10T03:11:45Z","stage":"game_app_receipt_mutation","correlation_id":"ring-1789009762-70725","attempt":0,"latency_ms":9142,"via":"parse_input_event_overlay","overlay_phase":"{\"level\":1,\"marker\":\"RINGMUTATION1789009762\",\"overlay\":\"device_lab_ring_input_overlay\",\"phase\":\"mutated\",\"production_gat"}
+{"t_mono":42633.717148875,"t_utc":"2026-09-10T03:11:48Z","stage":"stage9_host_receipt_final","correlation_id":"ring-1789009762-70725","earned":true,"blocker":null,"libreoffice":true,"browser":true,"game":true}

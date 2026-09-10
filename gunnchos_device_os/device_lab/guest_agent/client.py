@@ -81,7 +81,14 @@ class GuestAgentClient:
 
         Guest agent may emit unsolicited heartbeats; drain until matching cmd/pong.
         Connect retries use a short budget so a dead agent cannot burn a 20min apt timeout.
+
+        Hard rule: never block unboundedly on send/recv. Prefer select + short
+        socket timeouts so a stalled virtio-serial peer returns an error instead
+        of hanging the host past wall-clock kill (SIGALRM is unreliable on some
+        Python builds during AF_UNIX I/O).
         """
+        import select
+
         deadline = time.time() + self.timeout_sec
         last_err = None
         want_cmd = payload.get("cmd")
@@ -90,6 +97,18 @@ class GuestAgentClient:
             connect_deadline = deadline
         else:
             connect_deadline = time.time() + min(25.0, max(5.0, self.timeout_sec))
+        line = (json.dumps(payload, separators=(",", ":")) + "\n").encode("utf-8")
+
+        def _send_all_bounded(sock: socket.socket, data: bytes, send_deadline: float) -> str | None:
+            """Send with hard wall-clock; socket timeout interrupts stalled virtio peers."""
+            remaining = max(0.05, send_deadline - time.time())
+            try:
+                sock.settimeout(min(8.0, remaining))
+                sock.sendall(data)
+            except (OSError, TimeoutError) as exc:
+                return f"virtio_serial_write_timeout:{exc}"
+            return None
+
         while time.time() < deadline:
             if (
                 want_cmd != "ping"
@@ -102,6 +121,7 @@ class GuestAgentClient:
                     "error": "unix_connect_failed",
                     "detail": last_err,
                     "note": "guest_agent_not_listening",
+                    "error_class": "virtio_serial_connect",
                 }
             try:
                 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
@@ -116,10 +136,17 @@ class GuestAgentClient:
                                 break
                     except (OSError, TimeoutError):
                         pass
-                    # framebuffer_capture / file_get / process_run can take >8s; honor timeout_sec.
-                    sock.settimeout(min(30.0, max(0.5, deadline - time.time())))
-                    line = (json.dumps(payload, separators=(",", ":")) + "\n").encode("utf-8")
-                    sock.sendall(line)
+                    send_err = _send_all_bounded(sock, line, min(deadline, time.time() + 8.0))
+                    if send_err:
+                        last_err = send_err
+                        return {
+                            "ok": False,
+                            "error": "virtio_serial_write_timeout",
+                            "detail": send_err,
+                            "cmd": want_cmd,
+                            "error_class": "virtio_serial_write",
+                            "transport": "virtio_serial",
+                        }
                     buf = b""
                     matched: dict[str, Any] | None = None
                     read_budget = max(1.0, deadline - time.time())
@@ -137,13 +164,30 @@ class GuestAgentClient:
                         read_deadline = time.time() + min(12.0, read_budget)
                     idle_timeouts = 0
                     while time.time() < read_deadline:
+                        remaining = read_deadline - time.time()
+                        if remaining <= 0:
+                            break
                         try:
-                            # Keep socket timeout short so we can poll deadline, but do NOT
-                            # abort a partial JSON line on the first idle recv.
-                            sock.settimeout(1.0)
+                            ready, _, _ = select.select([sock], [], [], min(1.0, remaining))
+                        except (OSError, ValueError) as exc:
+                            last_err = f"select_read_failed:{exc}"
+                            break
+                        if not ready:
+                            if buf and b"\n" not in buf:
+                                idle_timeouts += 1
+                                if idle_timeouts < 45:
+                                    continue
+                            # No progress and no partial line — stop this attempt.
+                            if not buf:
+                                break
+                            idle_timeouts += 1
+                            if idle_timeouts >= 45:
+                                break
+                            continue
+                        try:
+                            sock.settimeout(0.5)
                             chunk = sock.recv(65536)
                         except (OSError, TimeoutError):
-                            # If we already have an incomplete line, keep waiting for more.
                             if buf and b"\n" not in buf:
                                 idle_timeouts += 1
                                 if idle_timeouts < 45:
@@ -151,7 +195,6 @@ class GuestAgentClient:
                             break
                         idle_timeouts = 0
                         if not chunk:
-                            # Peer closed — only stop if we have nothing useful pending.
                             if not buf:
                                 break
                             time.sleep(0.05)
@@ -165,7 +208,6 @@ class GuestAgentClient:
                                 obj = json.loads(raw.decode("utf-8"))
                             except json.JSONDecodeError:
                                 continue
-                            # Accept pong / matching cmd / boot_complete
                             if want_cmd == "ping" and (obj.get("pong") or obj.get("cmd") == "ping"):
                                 matched = obj
                                 break
@@ -175,11 +217,9 @@ class GuestAgentClient:
                             if want_cmd is None and obj.get("ok") is True:
                                 matched = obj
                                 break
-                            # Keep scanning past unsolicited heartbeats
                         if matched is not None:
                             break
                     if matched is not None:
-                        # Label transport honestly for virtio-serial path.
                         if "transport" not in matched:
                             matched["transport"] = "virtio_serial"
                         matched.setdefault("agent_path_label", "virtio-serial")
@@ -188,7 +228,12 @@ class GuestAgentClient:
             except (OSError, json.JSONDecodeError) as exc:
                 last_err = str(exc)
                 time.sleep(0.2)
-        return {"ok": False, "error": "unix_connect_failed", "detail": last_err}
+        return {
+            "ok": False,
+            "error": "unix_connect_failed",
+            "detail": last_err,
+            "error_class": "virtio_serial_roundtrip_timeout",
+        }
 
     def _mailbox_roundtrip(self, path: Path, payload: dict[str, Any]) -> dict[str, Any]:
         """File mailbox used when virtio-serial socket is unavailable (unit tests / hybrid)."""

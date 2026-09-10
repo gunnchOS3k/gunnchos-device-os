@@ -1,0 +1,16 @@
+{
+  "schema": "gunnchos.device_lab.ci_remediation.local_prepush_verification.v1",
+  "generated_at_utc": "2026-09-09T20:52:03Z",
+  "head": "034c3d63f528f80fd550a1ebb730d3f6fb87c67d",
+  "focused_tests_pass": true,
+  "exact_ci_failures_fixed": [
+    "tests/device_lab/test_wp011r_acceptance.py::test_master_and_silicon_tokens_remain_false",
+    "tests/device_lab/test_wp011r_tokens.py::test_master_complete_false"
+  ],
+  "ring_hang_fixed": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "ring_blocker": "guest_browser_state_not_committed",
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "ECO010_REEARN_REQUIRED_AFTER_RING_FIX": true
+}

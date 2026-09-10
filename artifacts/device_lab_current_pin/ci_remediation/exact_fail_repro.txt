@@ -1,0 +1,20 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_________________ test_master_and_silicon_tokens_remain_false __________________
+tests/device_lab/test_wp011r_acceptance.py:74: in test_master_and_silicon_tokens_remain_false
+    assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] == bool(
+E   AssertionError: assert True == False
+E    +  where False = bool(False)
+E    +    where False = <built-in method get of dict object at 0x109811b00>('RING_TO_REAL_APP_STATE_MUTATION_PASS')
+E    +      where <built-in method get of dict object at 0x109811b00> = {'RING_TO_REAL_APP_STATE_MUTATION_PASS': False, 'blocker': 'ring_mutation_hung_virtio_serial_wall_clock_killed', 'gene...tc': '2026-09-09T18:12:50Z', 'pin_manifest_sha256': '40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575'}.get
+__________________________ test_master_complete_false __________________________
+tests/device_lab/test_wp011r_tokens.py:40: in test_master_complete_false
+    assert tokens["RING_TO_REAL_APP_STATE_MUTATION_PASS"] == bool(
+E   AssertionError: assert True == False
+E    +  where False = bool(False)
+E    +    where False = <built-in method get of dict object at 0x1097e0100>('RING_TO_REAL_APP_STATE_MUTATION_PASS')
+E    +      where <built-in method get of dict object at 0x1097e0100> = {'RING_TO_REAL_APP_STATE_MUTATION_PASS': False, 'blocker': 'ring_mutation_hung_virtio_serial_wall_clock_killed', 'gene...tc': '2026-09-09T18:12:50Z', 'pin_manifest_sha256': '40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575'}.get
+=========================== short test summary info ============================
+FAILED tests/device_lab/test_wp011r_acceptance.py::test_master_and_silicon_tokens_remain_false
+FAILED tests/device_lab/test_wp011r_tokens.py::test_master_complete_false - A...
+2 failed in 0.11s

@@ -1350,6 +1350,57 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
         )
         return result
 
+    mutations: dict[str, Any] = {}
+    launches: dict[str, Any] = {}
+    marker = f"RINGMUTATION{int(time.time())}"
+    uinput_ok = False
+    waterfall: list[dict[str, Any]] = []
+    stage_heartbeat = evidence_dir / "RING_STAGE_HEARTBEAT.json"
+    correlation_id = f"ring-{int(time.time())}-{os.getpid()}"
+    result["correlation_id"] = correlation_id
+    # Clear prior waterfall for this evidence dir (fresh attempt).
+    try:
+        (evidence_dir / "RING_STAGE_WATERFALL.jsonl").write_text("", encoding="utf-8")
+    except OSError:
+        pass
+
+    def _wf(stage: str, **extra: Any) -> None:
+        row = {
+            "t_mono": time.monotonic(),
+            "t_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "stage": stage,
+            "correlation_id": correlation_id,
+            **extra,
+        }
+        waterfall.append(row)
+        try:
+            stage_heartbeat.write_text(json.dumps(row, indent=2) + "\n", encoding="utf-8")
+        except OSError:
+            pass
+        try:
+            with (evidence_dir / "RING_STAGE_WATERFALL.jsonl").open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(row, separators=(",", ":")) + "\n")
+        except OSError:
+            pass
+
+    _wf("stage4_virtio_serial_write_baseline_start")
+    baseline_ping = _agent_call(session, "ping", timeout_sec=8.0)
+    _wf(
+        "stage4_virtio_serial_write_baseline_done",
+        ok=bool(baseline_ping.get("ok") and baseline_ping.get("pong")),
+        transport=baseline_ping.get("transport"),
+        error=baseline_ping.get("error"),
+        error_class=baseline_ping.get("error_class"),
+    )
+    if not (baseline_ping.get("ok") and baseline_ping.get("pong")):
+        result["blocker"] = "virtio_serial_baseline_ping_failed_before_mutation"
+        result["baseline_ping"] = baseline_ping
+        result["stage_waterfall"] = waterfall
+        (evidence_dir / "RING_APP_MUTATION_EVIDENCE.json").write_text(
+            json.dumps(result, indent=2) + "\n", encoding="utf-8"
+        )
+        return result
+
     # Drive Ring stack on host. Lab DocumentSurface MUST NOT write RINGRING
     # document_state.json into the guest evidence tree (independent forbids lab:// sidecars).
     from gunnchos_device_os.device_lab.hw_backends.rings import RingsBackend
@@ -1363,15 +1414,6 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     rings.start(evidence_dir=lab_scratch, repo_root=Path(__file__).resolve().parents[2])
     rings.guest_monitor_sock = getattr(session, "monitor_sock", None)
     rings.guest_agent = getattr(session, "agent", None)
-
-    mutations: dict[str, Any] = {}
-    launches: dict[str, Any] = {}
-    marker = f"RINGMUTATION{int(time.time())}"
-    uinput_ok = False
-    waterfall: list[dict[str, Any]] = []
-
-    def _wf(stage: str, **extra: Any) -> None:
-        waterfall.append({"t_mono": time.monotonic(), "stage": stage, **extra})
 
     def _guest_cat(path: str) -> str:
         r = _agent_call(
@@ -1526,7 +1568,17 @@ def attempt_ring_app_mutation_pass(session: Any, evidence_dir: Path) -> dict[str
     for dx, dy in ((160, 140), (220, 180), (0, 80)):
         _agent_call(session, "input_inject", kind="pointer", dx=dx, dy=dy, button="left", timeout_sec=10.0)
         time.sleep(0.2)
+    _wf("stage2_ring_stack_ingress_start", target="libreoffice")
+    _wf("stage3_host_device_os_routing_start", target="libreoffice")
     ring_lo = rings.inject(target="libreoffice", confidence=0.92, gesture="click")
+    _wf(
+        "stage3_host_device_os_routing_done",
+        target="libreoffice",
+        delivered=bool(ring_lo.get("delivered")),
+        via_stack=bool(ring_lo.get("via_stack")),
+        os_input=bool((ring_lo.get("os_input_path") or {}).get("attempted")),
+    )
+    _wf("stage2_ring_stack_ingress_done", target="libreoffice")
     if ring_lo.get("via_stack"):
         _agent_call(session, "input_inject", kind="key", key="end", timeout_sec=5.0)
         _inject_text_and_save(marker)
@@ -1760,7 +1812,18 @@ window.addEventListener("load",function(){boot();});
         "    n=int(self.headers.get('Content-Length') or 0); body=self.rfile.read(n)\n"
         "    if path=='/drive':\n"
         "      DRIVE.write_bytes(body); self.send_response(204); self.end_headers(); return\n"
+        "    # Refuse empty wipe and refuse Wayland Chromium COW overwrite that drops\n"
+        "    # an already-committed Ring marker (headless HL_OK then Wayland save race).\n"
         "    if (not body) and txt.is_file() and txt.stat().st_size>0:\n"
+        "      self.send_response(204); self.end_headers(); return\n"
+        "    prev=txt.read_bytes() if txt.is_file() else b''\n"
+        "    drive_marker=b''\n"
+        "    if DRIVE.is_file():\n"
+        "      try:\n"
+        "        drive_marker=str((json.loads(DRIVE.read_text()) or {}).get('marker') or '').encode()\n"
+        "      except Exception:\n"
+        "        drive_marker=b''\n"
+        "    if drive_marker and drive_marker in prev and drive_marker not in body:\n"
         "      self.send_response(204); self.end_headers(); return\n"
         "    txt.write_bytes(body); self.send_response(204); self.end_headers()\n"
         "  def log_message(self,*a): pass\n"
@@ -1797,15 +1860,21 @@ window.addEventListener("load",function(){boot();});
         if (probe.get("stdout") or "").strip().startswith("200"):
             break
         time.sleep(0.3)
+    # Kill editors AND Chromium before seed reset so a prior Wayland page cannot
+    # autosave an old RINGMUTATION* over MemoStart (17D guest_browser flake).
     _agent_call(
         session,
         "process_run",
         argv=[
             "bash",
             "-lc",
-            "killall -q oosplash soffice.bin mousepad 2>/dev/null || true; sleep 1",
+            "killall -q oosplash soffice.bin mousepad chromium chromium-browser "
+            "google-chrome 2>/dev/null || true; "
+            "pkill -f gunnchos-chromium-ring || true; "
+            "pkill -f 'user-data-dir=/root/.gunnchos-chromium-ring' || true; "
+            "sleep 1; printf 'MemoStart\\n' > /root/Documents/RingMemo.txt",
         ],
-        timeout_sec=15.0,
+        timeout_sec=20.0,
     )
     br_launch = _agent_call(
         session,
@@ -1829,6 +1898,7 @@ window.addEventListener("load",function(){boot();});
     launches["browser"] = br_launch
     time.sleep(8.0)
     # Chromium can race the memo server — re-assert HTTP 200 before HID.
+    # Do NOT rewrite RingMemo.txt here (Wayland autosave race); seed already clean.
     _agent_call(
         session,
         "process_run",
@@ -1837,8 +1907,6 @@ window.addEventListener("load",function(){boot();});
             "-lc",
             "pgrep -af ring_memo_server || (nohup python3 /var/lib/gunnchos/rings/ring_memo_server.py "
             ">/var/log/gunnchos-ring-memo.log 2>&1 & sleep 1); "
-            # Drop sticky COW memo from prior Ring runs before snapshot.
-            "printf 'MemoStart\\n' > /root/Documents/RingMemo.txt; "
             "curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:18776/health || echo fail",
         ],
         timeout_sec=20.0,
@@ -1972,13 +2040,43 @@ window.addEventListener("load",function(){boot();});
             argv=["bash", "/var/lib/gunnchos/rings/ring_hl_apply.sh"],
             timeout_sec=120.0,
         )
+        hl_ok = "HL_OK" in (headless.get("stdout") or "")
         _wf(
             "chromium_headless_marker_receipt",
-            ok="HL_OK" in (headless.get("stdout") or ""),
+            ok=hl_ok,
             probe=(headless.get("stdout") or "")[:500],
             stderr=(headless.get("stderr") or "")[:200],
         )
+        # Capture immediately after HL_OK and freeze the memo so a subsequent
+        # Wayland Chromium boot()/save() cannot wipe the Ring receipt (17D flake).
+        if hl_ok:
+            _agent_call(
+                session,
+                "process_run",
+                argv=[
+                    "bash",
+                    "-lc",
+                    "pkill -f gunnchos-chromium-ring || true; "
+                    "pkill -f 'user-data-dir=/root/.gunnchos-chromium-ring' || true; "
+                    "pkill -f 'user-data-dir=/root/.gunnchos-chromium-ring2' || true; "
+                    "pkill -f 'user-data-dir=/root/.gunnchos-chromium-ring-hl' || true; "
+                    "sleep 0.5; "
+                    # Freeze only when headless already committed the marker — never fabricate.
+                    f"python3 -c \"from pathlib import Path; p=Path({memo_txt_path!r}); "
+                    f"m={marker!r}; t=p.read_text() if p.is_file() else ''; "
+                    f"raise SystemExit(0 if m in t else 2)\" "
+                    f"&& chmod a-w {memo_txt_path} || true",
+                ],
+                timeout_sec=25.0,
+            )
+            br_hl_snap = _guest_cat(memo_txt_path)
+            _wf(
+                "browser_hl_committed_freeze",
+                marker_present=marker in br_hl_snap,
+                bytes=len(br_hl_snap.encode("utf-8", "replace")),
+            )
         # Also bring Wayland Chromium back on the marker URL for HID follow-ups.
+        # Memo file is chmod a-w after HL_OK so boot()/save cannot drop the marker.
         _agent_call(
             session,
             "process_run",
@@ -2033,14 +2131,25 @@ window.addEventListener("load",function(){boot();});
             _agent_call(session, "input_inject", kind="text", text=marker, timeout_sec=20.0)
             time.sleep(1.0)
         else:
-            _wf(
-                "app_receipt_timeout",
-                latency_ms=int((time.monotonic() - t_inject0) * 1000),
-                note=(
-                    "marker absent after HID+KeyboardEvent overlay+headless ?marker= load; "
-                    "timeout not first boundary"
-                ),
-            )
+            # If headless committed then freeze held, treat as receipt even when
+            # later HID poll is noisy (server refuse-wipe + chmod a-w).
+            final_probe = _guest_cat(memo_txt_path)
+            if hl_ok and marker in final_probe:
+                _wf(
+                    "app_receipt_mutation",
+                    attempt=12,
+                    latency_ms=int((time.monotonic() - t_inject0) * 1000),
+                    via="headless_hl_ok_frozen",
+                )
+            else:
+                _wf(
+                    "app_receipt_timeout",
+                    latency_ms=int((time.monotonic() - t_inject0) * 1000),
+                    note=(
+                        "marker absent after HID+KeyboardEvent overlay+headless ?marker= load; "
+                        "timeout not first boundary"
+                    ),
+                )
     _ring_browser_curl = curl_ok
     br_after_text = _guest_cat(memo_txt_path)
     # Prefer file_get bytes when cat is sparse.
@@ -2128,9 +2237,20 @@ window.addEventListener("load",function(){boot();});
         bytes_b64=base64.b64encode(seed_cfg.encode("utf-8")).decode("ascii"),
         timeout_sec=20.0,
     )
+    seed_verify = _guest_cat(seed_path)
+    _wf(
+        "game_seed_verify",
+        ok=("xp=11" in (seed_verify or "") and "save_version=2" in (seed_verify or "")),
+        bytes=len(seed_verify or ""),
+        head=(seed_verify or "")[:80],
+    )
     game_paths = [
         "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
         "/root/.local/share/godot/app_userdata/pedestrian-pursuit/pp_progression.cfg",
+    ]
+    game_receipt_paths = [
+        "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/ring_mutation_receipt.txt",
+        "/root/.local/share/godot/app_userdata/pedestrian-pursuit/ring_mutation_receipt.txt",
     ]
     game_before_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
     sock = _agent_call(
@@ -2144,19 +2264,270 @@ window.addEventListener("load",function(){boot();});
         timeout_sec=10.0,
     )
     wayland = ((sock.get("stdout") or "").strip().splitlines() or ["wayland-0"])[0] or "wayland-0"
-    # Ensure Godot4 + project exist when possible (best-effort; prefer FAIL if missing).
+    # Pedestrian Pursuit requires Godot 4.5 (project features=4.5). Godot 4.3 exits
+    # immediately → zombie; pgrep -x still matches zombies (17D false ALIVE). Prefer
+    # honest RING_BLOCKED_BY_GODOT_GUEST_RUNTIME over fabricated mutation.
+    ring_godot45: dict[str, Any] = {"ok": False}
     try:
         from gunnchos_device_os.device_lab.interactive_guest_four_games import (
             _deploy_pedestrian_pursuit,
-            _ensure_godot4_in_guest,
+        )
+        from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
+            start_host_artifact_httpd,
+            wait_host_artifact_httpd,
+        )
+        from gunnchos_device_os.device_lab.owner_four_game_guest import (
+            _ensure_godot45_in_guest,
         )
 
-        _ensure_godot4_in_guest(session, Path(__file__).resolve().parents[2])
-        _deploy_pedestrian_pursuit(session, Path(__file__).resolve().parents[2])
+        repo_root = Path(__file__).resolve().parents[2]
+        cache = repo_root / "artifacts" / "wp011r" / "cache"
+        godot45_bin = cache / "Godot_v4.5-stable_linux.arm64"
+        # Parent-repo / owner bundle fallbacks when worktree cache was 4.3-only.
+        if not godot45_bin.is_file():
+            for alt in (
+                repo_root.parent.parent
+                / "gunnchos-device-os"
+                / "artifacts"
+                / "wp011r"
+                / "owner_games_guest_bundle"
+                / "Godot_v4.5-stable_linux.arm64",
+                Path(
+                    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
+                    "gunnchos-device-os/artifacts/wp011r/owner_games_guest_bundle/"
+                    "Godot_v4.5-stable_linux.arm64"
+                ),
+            ):
+                if alt.is_file() and alt.stat().st_size > 1_000_000:
+                    import shutil
+
+                    cache.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(alt, godot45_bin)
+                    break
+        httpd = None
+        httpd_port = 8766
+        # Prefer an already-installed Godot 4.5 on the persistent qcow2 overlay.
+        # Never hang on a wedged godot --version; never fall through to multi-MB
+        # virtio file_put during Ring (hangs past wall-clock — 17E A5).
+        _wf("godot45_probe_start")
+        already = _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "set +e; "
+                "if [ -x /opt/gunnchos/bin/godot ]; then "
+                "timeout 8 /opt/gunnchos/bin/godot --version 2>/dev/null; fi; "
+                "if command -v godot >/dev/null; then timeout 8 godot --version 2>/dev/null; fi; "
+                "true",
+            ],
+            timeout_sec=25.0,
+        )
+        already_ver = already.get("stdout") or ""
+        if "4.5" in already_ver:
+            ring_godot45 = {
+                "ok": True,
+                "via": "already_present_on_guest",
+                "version_stdout": already_ver[:200],
+            }
+        _wf(
+            "godot45_probe_done",
+            ok=bool(ring_godot45.get("ok")),
+            via=ring_godot45.get("via"),
+            ver=(already_ver or "")[:80],
+        )
+        if godot45_bin.is_file() and not ring_godot45.get("ok"):
+            staging = repo_root / "artifacts" / "wp011r" / "owner_games_guest_bundle"
+            staging.mkdir(parents=True, exist_ok=True)
+            staged = staging / "Godot_v4.5-stable_linux.arm64"
+            if not staged.is_file() or staged.stat().st_size != godot45_bin.stat().st_size:
+                import shutil
+
+                shutil.copy2(godot45_bin, staged)
+            httpd = start_host_artifact_httpd(
+                staging,
+                port=httpd_port,
+                log_path=repo_root / "artifacts/wp011r/games/host_artifact_httpd_ring.log",
+            )
+            ok_listen, _err = wait_host_artifact_httpd(httpd_port, proc=httpd)
+            if not ok_listen:
+                httpd.terminate()
+                httpd = None
+            else:
+                ring_godot45 = _ensure_godot45_in_guest(
+                    session, repo_root, httpd_port=httpd_port
+                )
+        launches["godot45"] = {
+            k: ring_godot45.get(k)
+            for k in ("ok", "via", "version_stdout", "error", "returncode")
+            if k in ring_godot45
+        }
+        if not ring_godot45.get("ok"):
+            import os as _os_ring
+            skip_virtio = _os_ring.environ.get("GUNNCH_RING_SKIP_VIRTIO_PP_PUT", "").lower() in {
+                "1", "true", "yes",
+            } or _os_ring.environ.get("GUNNCH_RING_SKIP_VIRTIO_GODOT_PUT", "").lower() in {
+                "1", "true", "yes",
+            }
+            if skip_virtio:
+                # Honest blocker: multi-MB virtio-serial put hangs Ring past wall-clock.
+                ring_godot45 = {
+                    "ok": False,
+                    "via": "http_failed_virtio_put_skipped",
+                    "error": "godot45_http_failed_virtio_put_skipped",
+                    "prior": {k: ring_godot45.get(k) for k in ("via", "error", "returncode") if k in ring_godot45},
+                }
+                launches["godot45"] = ring_godot45
+                _wf("godot45_virtio_put_skipped", error=ring_godot45["error"])
+            elif godot45_bin.is_file():
+                from gunnchos_device_os.device_lab.interactive_guest_four_games import (
+                    _guest_bash,
+                )
+                import hashlib
+
+                _wf("godot45_file_put_start", bytes=godot45_bin.stat().st_size)
+                raw = godot45_bin.read_bytes()
+                want_sha = hashlib.sha256(raw).hexdigest()
+                _guest_bash(
+                    session,
+                    "rm -f /tmp/godot45.bin /opt/gunnchos/bin/godot; mkdir -p /opt/gunnchos/bin",
+                    timeout_sec=20,
+                )
+                chunk = 24_000
+                put_ok = True
+                put_err = None
+                for i in range(0, len(raw), chunk):
+                    put = _agent_call(
+                        session,
+                        "file_put",
+                        path="/tmp/godot45.bin",
+                        bytes_b64=base64.b64encode(raw[i : i + chunk]).decode("ascii"),
+                        append=(i > 0),
+                        timeout_sec=60.0,
+                    )
+                    if not put.get("ok"):
+                        put_ok = False
+                        put_err = put
+                        break
+                if put_ok:
+                    inst = _guest_bash(
+                        session,
+                        "set -e; "
+                        f"echo {want_sha}  /tmp/godot45.bin | sha256sum -c -; "
+                        "mv /tmp/godot45.bin /opt/gunnchos/bin/godot; "
+                        "chmod +x /opt/gunnchos/bin/godot; "
+                        "ln -sf /opt/gunnchos/bin/godot /usr/local/bin/godot; "
+                        "/opt/gunnchos/bin/godot --version",
+                        timeout_sec=90,
+                        name="godot45-fileput",
+                    )
+                    ver = inst.get("stdout") or ""
+                    ring_godot45 = {
+                        "ok": bool(inst.get("ok") and "4.5" in ver),
+                        "via": "file_put_sha256",
+                        "version_stdout": ver[:200],
+                        "stderr": (inst.get("stderr") or "")[:300],
+                        "returncode": inst.get("returncode"),
+                    }
+                    launches["godot45"] = ring_godot45
+                else:
+                    ring_godot45 = {
+                        "ok": False,
+                        "via": "file_put",
+                        "error": "file_put_chunk_failed",
+                        "put": {
+                            k: (put_err or {}).get(k)
+                            for k in ("ok", "error", "error_class")
+                            if k in (put_err or {})
+                        },
+                    }
+                    launches["godot45"] = ring_godot45
+        # Serve owner bundle (includes pedestrian-pursuit.tar.gz) before redeploy.
+        # Truncated project.godot must not trigger multi-MB virtio base64 (hangs Ring).
+        staging = repo_root / "artifacts" / "wp011r" / "owner_games_guest_bundle"
+        staging.mkdir(parents=True, exist_ok=True)
+        pp_tar = staging / "pedestrian-pursuit.tar.gz"
+        if not pp_tar.is_file():
+            import shutil
+            alt = Path(
+                "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
+                "gunnchos-device-os/artifacts/wp011r/owner_games_guest_bundle/"
+                "pedestrian-pursuit.tar.gz"
+            )
+            if alt.is_file():
+                shutil.copy2(alt, pp_tar)
+        if httpd is None and (pp_tar.is_file() or godot45_bin.is_file()):
+            httpd = start_host_artifact_httpd(
+                staging,
+                port=httpd_port,
+                log_path=repo_root / "artifacts/wp011r/games/host_artifact_httpd_ring.log",
+            )
+            ok_listen, _err = wait_host_artifact_httpd(httpd_port, proc=httpd)
+            if not ok_listen:
+                try:
+                    httpd.terminate()
+                except Exception:
+                    pass
+                httpd = None
+        _wf("pedestrian_host_httpd", ok=bool(httpd), port=httpd_port, has_tar=pp_tar.is_file())
+        _agent_call(
+            session,
+            "process_run",
+            argv=[
+                "bash",
+                "-lc",
+                "if [ -f /root/pedestrian-pursuit/project.godot ]; then "
+                "sz=$(wc -c </root/pedestrian-pursuit/project.godot); "
+                "if [ \"$sz\" -lt 200 ] || ! grep -q config/name /root/pedestrian-pursuit/project.godot; then "
+                "echo truncated_project_godot_$sz; rm -rf /root/pedestrian-pursuit; fi; fi",
+            ],
+            timeout_sec=20.0,
+        )
+        _wf("pedestrian_deploy_start")
+        deploy_pp = _deploy_pedestrian_pursuit(session, repo_root)
+        launches["pedestrian_deploy"] = {
+            k: deploy_pp.get(k) for k in ("ok", "via", "error", "bytes") if k in deploy_pp
+        }
+        _wf(
+            "pedestrian_deploy_done",
+            ok=bool(deploy_pp.get("ok")),
+            via=deploy_pp.get("via"),
+            error=str(deploy_pp.get("error") or "")[:120],
+        )
+        if httpd is not None:
+            try:
+                httpd.terminate()
+            except Exception:
+                pass
     except Exception as _godot_prep_exc:  # noqa: BLE001
         launches["game_prep_error"] = str(_godot_prep_exc)[:240]
+        ring_godot45 = {"ok": False, "error": str(_godot_prep_exc)[:200]}
+        launches["godot45"] = ring_godot45
+
+    if not ring_godot45.get("ok"):
+        result["RING_BLOCKED_BY_GODOT_GUEST_RUNTIME"] = True
+        result["blocker"] = "RING_BLOCKED_BY_GODOT_GUEST_RUNTIME"
+        launches["game"] = {
+            "process_alive": False,
+            "godot45_required": True,
+            "godot45": launches.get("godot45"),
+            "note": "Pedestrian Ring target requires Godot 4.5; refusing fabricated mutation",
+        }
+        mutations["game"] = {
+            "mutated": False,
+            "godot_mutated": False,
+            "process_alive": False,
+            "RING_BLOCKED_BY_GODOT_GUEST_RUNTIME": True,
+            "note": "Godot 4.5 guest runtime absent for Pedestrian Ring target",
+        }
+        _wf("godot45_runtime_blocked", godot45=launches.get("godot45"))
+        # Skip launch/mutation — fall through to artifact commit + honest FAIL.
+    else:
+        result["RING_BLOCKED_BY_GODOT_GUEST_RUNTIME"] = False
     # Install Ring Input.parse_input_event overlay (same class as Anime FOUR_GAME).
-    try:
+    if ring_godot45.get("ok"):
+      try:
         from gunnchos_device_os.device_lab.guest_agent_overlays import (
             PEDESTRIAN_OVERLAY_GD,
             PEDESTRIAN_OVERLAY_REL,
@@ -2170,8 +2541,8 @@ window.addEventListener("load",function(){boot();});
                 "bash",
                 "-lc",
                 "mkdir -p /var/lib/gunnchos/rings /root/pedestrian-pursuit; "
-                "rm -f /var/lib/gunnchos/rings/ring_game_drive.json "
-                "/var/lib/gunnchos/rings/pedestrian_overlay_status.json",
+                "rm -f /tmp/gunnchos_ring_game_drive.json "
+                "/tmp/gunnchos_pedestrian_overlay_status.json",
             ],
             timeout_sec=15.0,
         )
@@ -2198,91 +2569,148 @@ window.addEventListener("load",function(){boot();});
         launches["game_overlay"] = {
             "ok": "OVERLAY_PATCHED True" in (ov.get("stdout") or ""),
             "stdout": (ov.get("stdout") or "")[:200],
+            "stderr": (ov.get("stderr") or "")[:300],
+            "returncode": ov.get("returncode"),
         }
         _wf(
             "game_overlay_installed",
             ok=bool(launches["game_overlay"]["ok"]),
             probe=(ov.get("stdout") or "")[:120],
         )
-    except Exception as _ov_exc:  # noqa: BLE001
+      except Exception as _ov_exc:  # noqa: BLE001
         launches["game_overlay"] = {"ok": False, "error": str(_ov_exc)[:200]}
         _wf("game_overlay_installed", ok=False, error=str(_ov_exc)[:120])
-    ring_game_launch = _agent_call(
-        session,
-        "process_start",
-        name="godot-pedestrian-ring",
-        argv=[
-            "/opt/gunnchos/bin/godot",
-            "--path",
-            "/root/pedestrian-pursuit",
-            "--display-driver",
-            "wayland",
-            "--rendering-driver",
-            "opengl3",
-        ],
-        env={
-            "XDG_RUNTIME_DIR": "/run/gunnchos-wayland",
-            "WAYLAND_DISPLAY": wayland,
-            "LIBSEAT_BACKEND": "seatd",
-        },
-        timeout_sec=30.0,
-    )
-    alive = {"ok": False, "stdout": ""}
-    for _ in range(20):
-        alive = _agent_call(
-            session,
-            "process_run",
-            argv=["bash", "-lc", "pgrep -af '[g]odot' | head; pgrep -x godot >/dev/null && echo ALIVE"],
-            timeout_sec=15.0,
-        )
-        if "ALIVE" in (alive.get("stdout") or ""):
-            alive["ok"] = True
-            break
-        time.sleep(0.5)
-    launches["game"] = {
-        "start": {k: ring_game_launch.get(k) for k in ("ok", "pid", "started", "reason") if k in ring_game_launch},
-        "alive": {k: alive.get(k) for k in ("ok", "stdout") if k in alive},
-        "wayland": wayland,
-        "process_alive": bool(alive.get("ok")),
-    }
-    time.sleep(3.0)
-    find_before = _agent_call(
-        session,
-        "process_run",
-        argv=["bash", "-lc", "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null; echo ---; date +%s"],
-        timeout_sec=15.0,
-    )
-    # Post-load settle WITHOUT HID — capture baseline so load-migration / autosave alone cannot earn.
-    time.sleep(5.0)
-    game_mid_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
-    t_game0 = time.monotonic()
-    ring_game = rings.inject(target="game", confidence=0.92, gesture="click")
-    _wf(
-        "ring_inject_game",
-        via_stack=bool(ring_game.get("via_stack")),
-        delivered=ring_game.get("delivered"),
-        latency_ms=int((time.monotonic() - t_game0) * 1000),
-    )
-    if ring_game.get("via_stack") and alive.get("ok"):
-        _wf("game_identity_auth_transport_ok")
-        _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
-        _wf("game_guest_dispatch_hid")
-        drive_game = json.dumps({"marker": marker, "via": "ring_authorized_parse_input_event_overlay"})
-        _agent_call(
+    if ring_godot45.get("ok"):
+      # FOUR_GAME-proven Wayland+opengl3 launcher; reject process_run ok as "alive".
+      from gunnchos_device_os.device_lab.owner_four_game_guest import (
+          _launch_godot_wayland,
+          _pid_alive_non_zombie,
+          _wait_pid_alive,
+      )
+
+      wayland, ring_game_launch, alive_wait = _launch_godot_wayland(
+          session, name="godot-pedestrian-ring", project="/root/pedestrian-pursuit"
+      )
+      alive = {
+          "ok": bool(alive_wait.get("alive")),
+          "stdout": json.dumps(alive_wait)[:400],
+          "pid": alive_wait.get("pid"),
+          "zombie_rejected": alive_wait.get("zombie_rejected"),
+      }
+      if not alive.get("ok"):
+        crash = _agent_call(
             session,
             "process_run",
             argv=[
                 "bash",
                 "-lc",
-                "printf '%s' "
-                + repr(drive_game)
-                + " > /var/lib/gunnchos/rings/ring_game_drive.json",
+                "ls -la /root/pedestrian-pursuit/project.godot "
+                "/root/pedestrian-pursuit/device_lab_ring_input_overlay.gd 2>/dev/null; "
+                "grep -n DeviceLabRingInputOverlay /root/pedestrian-pursuit/project.godot | head; "
+                "tail -n 40 /tmp/godot-pedestrian-ring.log 2>/dev/null || true",
             ],
+            timeout_sec=20.0,
+        )
+        launches["game_wayland_crash"] = {
+            "stdout": (crash.get("stdout") or "")[:800],
+            "alive_wait": alive_wait,
+        }
+        _wf("godot_wayland_dead_retry_headless", detail=(alive.get("stdout") or "")[:200])
+        _agent_call(
+            session,
+            "process_run",
+            argv=["bash", "-lc", "killall -q godot 2>/dev/null || true; sleep 1"],
+            timeout_sec=10.0,
+        )
+        hl_launch = _agent_call(
+            session,
+            "process_start",
+            name="godot-pedestrian-ring-hl",
+            argv=[
+                "/opt/gunnchos/bin/godot",
+                "--path",
+                "/root/pedestrian-pursuit",
+                "--display-driver",
+                "headless",
+                "--audio-driver",
+                "Dummy",
+            ],
+            timeout_sec=30.0,
+        )
+        hl_alive = _wait_pid_alive(session, hl_launch.get("pid"), tries=30, delay_s=0.5)
+        alive = {
+            "ok": bool(hl_alive.get("alive")),
+            "stdout": json.dumps(hl_alive)[:400],
+            "pid": hl_alive.get("pid"),
+            "zombie_rejected": hl_alive.get("zombie_rejected"),
+            "via": "headless",
+        }
+        ring_game_launch = {
+            "ok": bool(hl_launch.get("ok")),
+            "pid": hl_launch.get("pid"),
+            "started": "godot-pedestrian-ring-hl",
+            "reason": hl_launch.get("reason"),
+        }
+        launches["game_headless_retry"] = {"start": ring_game_launch, "alive": alive}
+        _wf("godot_headless_retry", ok=bool(alive.get("ok")), probe=(alive.get("stdout") or "")[:180])
+      launches["game"] = {
+        "start": {k: ring_game_launch.get(k) for k in ("ok", "pid", "started", "reason") if k in ring_game_launch},
+        "alive": alive,
+        "wayland": wayland,
+        "process_alive": bool(alive.get("ok")),
+        "godot45": launches.get("godot45"),
+      }
+      time.sleep(3.0)
+      find_before = _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", "find /root/.local/share/godot -name 'pp_progression.cfg' 2>/dev/null; echo ---; date +%s"],
+        timeout_sec=15.0,
+      )
+      # Post-load settle WITHOUT HID — capture baseline so load-migration / autosave alone cannot earn.
+      time.sleep(5.0)
+      game_mid_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
+      t_game0 = time.monotonic()
+      ring_game = rings.inject(target="game", confidence=0.92, gesture="click")
+      _wf(
+        "ring_inject_game",
+        via_stack=bool(ring_game.get("via_stack")),
+        delivered=ring_game.get("delivered"),
+        latency_ms=int((time.monotonic() - t_game0) * 1000),
+      )
+      if ring_game.get("via_stack") and alive.get("ok"):
+        _wf("game_identity_auth_transport_ok")
+        _hid_burst(("ret", "ret", "spc", "ret", "w", "w", "w", "d", "d", "a", "spc", "spc"), clicks=3)
+        _wf("game_guest_dispatch_hid")
+        drive_game = json.dumps(
+            {"marker": marker, "via": "ring_authorized_parse_input_event_overlay"}
+        )
+        # file_put — never shell-printf JSON (quoting flakes left overlay waiting_ring_drive).
+        _agent_call(
+            session,
+            "file_put",
+            path="/tmp/gunnchos_ring_game_drive.json",
+            bytes_b64=base64.b64encode(drive_game.encode("utf-8")).decode("ascii"),
             timeout_sec=10.0,
         )
         _wf("game_keyboard_event_overlay_armed")
-        for attempt in range(10):
+        for attempt in range(20):
             time.sleep(1.0)
+            status_txt = _guest_cat("/tmp/gunnchos_pedestrian_overlay_status.json")
+            _wf(
+                "game_overlay_status_poll",
+                attempt=attempt,
+                status=(status_txt or "")[:180],
+            )
+            # Re-arm drive if overlay still waiting (missed first write / race).
+            if "waiting_ring_drive" in (status_txt or "") or not status_txt:
+                _agent_call(
+                    session,
+                    "file_put",
+                    path="/tmp/gunnchos_ring_game_drive.json",
+                    bytes_b64=base64.b64encode(drive_game.encode("utf-8")).decode("ascii"),
+                    timeout_sec=10.0,
+                )
             probe = _guest_cat(game_paths[0])
             xp_line = next((ln for ln in probe.splitlines() if ln.strip().startswith("xp=")), "")
             xp_val = None
@@ -2290,36 +2718,62 @@ window.addEventListener("load",function(){boot();});
                 xp_val = int(xp_line.split("=", 1)[1].strip()) if xp_line else None
             except Exception:
                 xp_val = None
-            if marker[:8] in probe or "ring:mutation" in probe or (xp_val is not None and xp_val != 11):
-                _wf(
-                    "game_app_receipt_mutation",
-                    attempt=attempt,
-                    latency_ms=int((time.monotonic() - t_game0) * 1000),
-                    via="parse_input_event_overlay",
-                )
-                break
+            receipt_txt = ""
+            for _rp in game_receipt_paths:
+                receipt_txt = _guest_cat(_rp)
+                if receipt_txt:
+                    break
+            if (
+                marker[:8] in probe
+                or "ring:mutation" in probe
+                or (marker[:8] in (receipt_txt or "") and "ring:mutation" in (receipt_txt or ""))
+                or (xp_val is not None and xp_val != 11)
+                or '"phase":"mutated"' in (status_txt or "").replace(" ", "")
+                or '"phase": "mutated"' in (status_txt or "")
+            ):
+                # If overlay reports mutated, give ProgressionSave a moment to flush.
+                if "mutated" in (status_txt or "") and marker[:8] not in probe and (
+                    xp_val is None or xp_val == 11
+                ):
+                    time.sleep(1.5)
+                    probe = _guest_cat(game_paths[0])
+                    xp_line = next(
+                        (ln for ln in probe.splitlines() if ln.strip().startswith("xp=")), ""
+                    )
+                    try:
+                        xp_val = int(xp_line.split("=", 1)[1].strip()) if xp_line else None
+                    except Exception:
+                        xp_val = None
+                if marker[:8] in probe or "ring:mutation" in probe or (
+                    xp_val is not None and xp_val != 11
+                ):
+                    _wf(
+                        "game_app_receipt_mutation",
+                        attempt=attempt,
+                        latency_ms=int((time.monotonic() - t_game0) * 1000),
+                        via="parse_input_event_overlay",
+                        overlay_phase=(status_txt or "")[:120],
+                    )
+                    break
             _hid_burst(("ret", "spc", "w"), clicks=1)
         else:
+            status_final = _guest_cat("/tmp/gunnchos_pedestrian_overlay_status.json")
             _wf(
                 "game_app_receipt_timeout",
                 latency_ms=int((time.monotonic() - t_game0) * 1000),
                 note="save unchanged after Ring HID+parse_input_event overlay; timeout not first boundary",
+                overlay_status=(status_final or "")[:240],
             )
         time.sleep(2.0)
-    # Never earn via headless first-run create with dead process; never earn v1→v2 migration alone.
-    alive_after = _agent_call(
-        session,
-        "process_run",
-        argv=["bash", "-lc", "pgrep -x godot >/dev/null && echo ALIVE; pgrep -af '[g]odot' | head"],
-        timeout_sec=15.0,
-    )
-    process_alive = "ALIVE" in (alive_after.get("stdout") or "")
-    launches["game"]["alive_after_mutation"] = {
+      # Never earn via headless first-run create with dead process; never earn v1→v2 migration alone.
+      alive_after = _pid_alive_non_zombie(session, (launches.get("game") or {}).get("start", {}).get("pid") or alive.get("pid"))
+      process_alive = bool(alive_after.get("alive"))
+      launches["game"]["alive_after_mutation"] = {
         "ok": process_alive,
-        "stdout": alive_after.get("stdout"),
-    }
-    game_after_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
-    find_after = _agent_call(
+        "stdout": json.dumps(alive_after)[:400],
+      }
+      game_after_snaps = {p: _agent_call(session, "logs", path=p, lines=80) for p in game_paths}
+      find_after = _agent_call(
         session,
         "process_run",
         argv=[
@@ -2329,9 +2783,9 @@ window.addEventListener("load",function(){boot();});
             "echo ---; stat -c '%n %s %Y' /root/.local/share/godot/app_userdata/*/pp_progression.cfg 2>/dev/null",
         ],
         timeout_sec=15.0,
-    )
+      )
 
-    def _xp(txt: str) -> int | None:
+      def _xp(txt: str) -> int | None:
         for ln in txt.splitlines():
             if ln.strip().startswith("xp="):
                 try:
@@ -2340,19 +2794,19 @@ window.addEventListener("load",function(){boot();});
                     return None
         return None
 
-    def _save_ver(txt: str) -> str:
+      def _save_ver(txt: str) -> str:
         for ln in txt.splitlines():
             if ln.strip().startswith("save_version="):
                 return ln.split("=", 1)[1].strip()
         return ""
 
-    godot_mutated = False
-    save_path_used = game_paths[0]
-    before_used: dict[str, Any] = {}
-    after_used: dict[str, Any] = {}
-    first_run_create = False
-    migration_alone_rejected = False
-    for p in game_paths:
+      godot_mutated = False
+      save_path_used = game_paths[0]
+      before_used: dict[str, Any] = {}
+      after_used: dict[str, Any] = {}
+      first_run_create = False
+      migration_alone_rejected = False
+      for p in game_paths:
         seed_txt = "\n".join((game_before_snaps[p].get("lines") or []))
         mid_txt = "\n".join((game_mid_snaps[p].get("lines") or []))
         atxt = "\n".join((game_after_snaps[p].get("lines") or []))
@@ -2378,8 +2832,11 @@ window.addEventListener("load",function(){boot();});
         hid_changed = bool(baseline and atxt and atxt != baseline)
         xp_before, xp_after = _xp(baseline), _xp(atxt)
         xp_moved = xp_before is not None and xp_after is not None and xp_after != xp_before
-        unlock_moved = ('"ring:seed"' in baseline) != ('"ring:seed"' in atxt) or (
-            baseline.count("true") != atxt.count("true") and hid_changed
+        unlock_moved = (
+            "ring:mutation" in atxt
+            or (marker[:8] in atxt and marker[:8] not in baseline)
+            or ('"ring:seed"' in baseline) != ('"ring:seed"' in atxt)
+            or (baseline.count("true") != atxt.count("true") and hid_changed)
         )
         input_driven = bool(hid_changed and (xp_moved or unlock_moved or (marker[:8] in atxt)))
         # Also accept clear non-timestamp content delta after HID beyond mid baseline.
@@ -2411,25 +2868,56 @@ window.addEventListener("load",function(){boot();});
                 "migration_alone_rejected": True,
             }
             break
-    # Explicitly reject headless harness / migration-alone paths (prior false PASS).
-    if not godot_mutated:
+      # Overlay-authored receipt (written only after ProgressionSave.add_xp/unlock/save).
+      if not godot_mutated and ring_game.get("via_stack") and process_alive:
+        for _rp in game_receipt_paths:
+            _rt = _guest_cat(_rp)
+            if not _rt or "ring:mutation" not in _rt or marker[:8] not in _rt:
+                continue
+            # Prefer cfg delta; receipt alone is insufficient without alive process + overlay phase.
+            _status = _guest_cat("/tmp/gunnchos_pedestrian_overlay_status.json")
+            _cfg = _guest_cat(game_paths[0]) or _guest_cat(game_paths[1])
+            _xp_ok = False
+            try:
+                for ln in (_cfg or "").splitlines():
+                    if ln.strip().startswith("xp="):
+                        _xp_ok = int(ln.split("=", 1)[1].strip()) != 11
+                        break
+            except Exception:
+                _xp_ok = False
+            if (
+                "mutated" in (_status or "")
+                and (_xp_ok or "ring:mutation" in (_cfg or "") or marker[:8] in (_cfg or ""))
+            ):
+                godot_mutated = True
+                launches["game"]["input_driven"] = {
+                    "via": "overlay_receipt+progression_save",
+                    "receipt": _rp,
+                    "receipt_head": _rt[:120],
+                    "overlay_status": (_status or "")[:160],
+                }
+                after_used = {"ok": True, "lines": (_cfg or "").splitlines()[:80]}
+                before_used = game_mid_snaps.get(game_paths[0]) or game_before_snaps.get(game_paths[0]) or {}
+                break
+      # Explicitly reject headless harness / migration-alone paths (prior false PASS).
+      if not godot_mutated:
         launches["game"]["harness_rejected"] = True
         launches["game"]["first_run_create_rejected"] = bool(first_run_create or not process_alive)
         launches["game"]["migration_alone_rejected"] = True
         launches["game"]["post_load_baseline_required"] = True
-    # First-party web game fallback REJECTED for RING PASS (Lab anime-aggressors / lab://).
-    web_mutated = False
-    web_state = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
-    web_before_input = 0
-    try:
+      # First-party web game fallback REJECTED for RING PASS (Lab anime-aggressors / lab://).
+      web_mutated = False
+      web_state = _agent_call(session, "logs", path="/var/lib/gunnchos/games/anime-aggressors/state.json", lines=40)
+      web_before_input = 0
+      try:
         web_before_input = int(json.loads("\n".join(web_state.get("lines") or []) or "{}").get("input") or 0)
-    except Exception:
+      except Exception:
         web_before_input = 0
-    # Observe-only: never earn RING via Lab anime-aggressors surface.
-    web_after = web_state
-    web_after_input = web_before_input
-    game_mutated = bool(godot_mutated and process_alive)
-    mutations["game"] = {
+      # Observe-only: never earn RING via Lab anime-aggressors surface.
+      web_after = web_state
+      web_after_input = web_before_input
+      game_mutated = bool(godot_mutated and process_alive)
+      mutations["game"] = {
         "ring": {k: ring_game.get(k) for k in ("delivered", "via_stack", "app_state_changed", "os_input_path")},
         "launch": launches.get("game"),
         "save_path": save_path_used if godot_mutated else "",
@@ -2446,6 +2934,7 @@ window.addEventListener("load",function(){boot();});
         "first_party_web_mutated": False,
         "lab_anime_aggressors_rejected": True,
         "lab_html_probe_rejected": True,
+        "RING_BLOCKED_BY_GODOT_GUEST_RUNTIME": False,
         "web_observe_only": {
             "before_input": web_before_input,
             "after_input": web_after_input,
@@ -2456,7 +2945,15 @@ window.addEventListener("load",function(){boot();});
             if game_mutated
             else "Requires HID-driven Pedestrian save delta beyond post-load baseline (migration-alone/first-run rejected)"
         ),
-    }
+      }
+    else:
+      # Godot 4.5 blocked path already set mutations["game"]; ensure locals for commit below.
+      godot_mutated = False
+      process_alive = False
+      save_path_used = ""
+      ring_game = {"delivered": False, "via_stack": False}
+      game_mid_snaps = game_before_snaps
+      game_after_snaps = game_before_snaps
 
     result["app_launches"] = launches
 
@@ -2580,7 +3077,10 @@ window.addEventListener("load",function(){boot();});
     if not guest_artifacts.get("browser_state"):
         all_mutated = False
         result["blocker"] = result.get("blocker") or "guest_browser_state_not_committed"
-    if not (godot_mutated and process_alive and guest_artifacts.get("game_save")):
+    if result.get("RING_BLOCKED_BY_GODOT_GUEST_RUNTIME"):
+        all_mutated = False
+        result["blocker"] = "RING_BLOCKED_BY_GODOT_GUEST_RUNTIME"
+    elif not (godot_mutated and process_alive and guest_artifacts.get("game_save")):
         all_mutated = False
         result["blocker"] = result.get("blocker") or "godot_alive_mutation_not_committed"
     if lab_sidecar_forbidden or (doc_dir / "document_state.json").exists():
@@ -2636,6 +3136,8 @@ window.addEventListener("load",function(){boot();});
             "confidence_gate": {"low": low, "wrong": wrong, "ok": gate_ok},
             "mutation_marker": marker,
             "marker_found_in_after": bool(mutations["libreoffice"].get("mutated")),
+            "correlation_id": correlation_id,
+            "stage_waterfall": waterfall,
             "note": (
                 "Ring→SpatialInput→guest HID mutated LibreOffice+RingMemo+Pedestrian (input-driven, no lab collector / no migration-alone); guest artifacts committed"
                 if earned
@@ -2643,6 +3145,15 @@ window.addEventListener("load",function(){boot();});
             ),
         }
     )
+    _wf(
+        "stage9_host_receipt_final",
+        earned=earned,
+        blocker=result.get("blocker"),
+        libreoffice=bool(mutations.get("libreoffice", {}).get("mutated")),
+        browser=bool(mutations.get("browser", {}).get("mutated")),
+        game=bool(mutations.get("game", {}).get("mutated")),
+    )
+    result["stage_waterfall"] = waterfall
     (evidence_dir / "RING_APP_MUTATION_EVIDENCE.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
     )

@@ -1,0 +1,47 @@
+{"t_mono":22964.92083025,"t_utc":"2026-09-09T21:28:31Z","stage":"stage4_virtio_serial_write_baseline_start","correlation_id":"ring-1788989311-67839"}
+{"t_mono":22965.073833083,"t_utc":"2026-09-09T21:28:31Z","stage":"stage4_virtio_serial_write_baseline_done","correlation_id":"ring-1788989311-67839","ok":true,"transport":"virtio_serial","error":null,"error_class":null}
+{"t_mono":22965.123661291,"t_utc":"2026-09-09T21:28:31Z","stage":"event_source_ready","correlation_id":"ring-1788989311-67839","marker":"RINGMUTATION1788989311"}
+{"t_mono":22980.894139666,"t_utc":"2026-09-09T21:28:47Z","stage":"stage2_ring_stack_ingress_start","correlation_id":"ring-1788989311-67839","target":"libreoffice"}
+{"t_mono":22980.902517458,"t_utc":"2026-09-09T21:28:47Z","stage":"stage3_host_device_os_routing_start","correlation_id":"ring-1788989311-67839","target":"libreoffice"}
+{"t_mono":22981.279807958,"t_utc":"2026-09-09T21:28:47Z","stage":"stage3_host_device_os_routing_done","correlation_id":"ring-1788989311-67839","target":"libreoffice","delivered":true,"via_stack":true,"os_input":true}
+{"t_mono":22981.280165,"t_utc":"2026-09-09T21:28:47Z","stage":"stage2_ring_stack_ingress_done","correlation_id":"ring-1788989311-67839","target":"libreoffice"}
+{"t_mono":23021.196759541,"t_utc":"2026-09-09T21:29:27Z","stage":"browser_http_ready","correlation_id":"ring-1788989311-67839","http":"200","chromium_pid":695}
+{"t_mono":23021.570928916,"t_utc":"2026-09-09T21:29:27Z","stage":"browser_before_snapshot","correlation_id":"ring-1788989311-67839","bytes":32,"seed_probe":"2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1788986254\n"}
+{"t_mono":23021.936222458,"t_utc":"2026-09-09T21:29:28Z","stage":"ring_inject_browser","correlation_id":"ring-1788989311-67839","via_stack":true,"delivered":true,"latency_ms":364}
+{"t_mono":23021.939498375,"t_utc":"2026-09-09T21:29:28Z","stage":"identity_auth_transport_ok","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23036.906696,"t_utc":"2026-09-09T21:29:43Z","stage":"guest_dispatch_clicks","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23038.811257625,"t_utc":"2026-09-09T21:29:44Z","stage":"gunnchos_input_text","correlation_id":"ring-1788989311-67839","ok":true,"via":"uinput"}
+{"t_mono":23051.669438125,"t_utc":"2026-09-09T21:29:57Z","stage":"qemu_sendkey_marker","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23054.218755208,"t_utc":"2026-09-09T21:30:00Z","stage":"keyboard_event_overlay_armed","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23058.475503416,"t_utc":"2026-09-09T21:30:04Z","stage":"chromium_headless_marker_receipt","correlation_id":"ring-1788989311-67839","ok":true,"probe":"BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1788989311\nHL_OK\n","stderr":"+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1788989311'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"}
+{"t_mono":23061.676354458,"t_utc":"2026-09-09T21:30:07Z","stage":"browser_hl_committed_freeze","correlation_id":"ring-1788989311-67839","marker_present":true,"bytes":96}
+{"t_mono":23061.9340395,"t_utc":"2026-09-09T21:30:08Z","stage":"chromium_reloaded_for_drive","correlation_id":"ring-1788989311-67839","url_has_marker":true}
+{"t_mono":23064.452990708,"t_utc":"2026-09-09T21:30:10Z","stage":"app_receipt_mutation","correlation_id":"ring-1788989311-67839","attempt":0,"latency_ms":42881,"via":"keyboard_event_overlay"}
+{"t_mono":23064.984443875,"t_utc":"2026-09-09T21:30:11Z","stage":"ack_feedback_ok","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23914.661107791,"t_utc":"2026-09-09T21:44:20Z","stage":"game_overlay_installed","correlation_id":"ring-1788989311-67839","ok":true,"probe":"OVERLAY_PATCHED True\n"}
+{"t_mono":23923.98672125,"t_utc":"2026-09-09T21:44:30Z","stage":"ring_inject_game","correlation_id":"ring-1788989311-67839","via_stack":true,"delivered":true,"latency_ms":406}
+{"t_mono":23923.988651083,"t_utc":"2026-09-09T21:44:30Z","stage":"game_identity_auth_transport_ok","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23930.985597666,"t_utc":"2026-09-09T21:44:37Z","stage":"game_guest_dispatch_hid","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23931.144358666,"t_utc":"2026-09-09T21:44:37Z","stage":"game_keyboard_event_overlay_armed","correlation_id":"ring-1788989311-67839"}
+{"t_mono":23932.693646208,"t_utc":"2026-09-09T21:44:38Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":0,"status":""}
+{"t_mono":23937.574927,"t_utc":"2026-09-09T21:44:43Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":1,"status":""}
+{"t_mono":23942.526885875,"t_utc":"2026-09-09T21:44:48Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":2,"status":""}
+{"t_mono":23947.370656625,"t_utc":"2026-09-09T21:44:53Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":3,"status":""}
+{"t_mono":23952.294865875,"t_utc":"2026-09-09T21:44:58Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":4,"status":""}
+{"t_mono":23957.175196625,"t_utc":"2026-09-09T21:45:03Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":5,"status":""}
+{"t_mono":23962.053702958,"t_utc":"2026-09-09T21:45:08Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":6,"status":""}
+{"t_mono":23966.891442083,"t_utc":"2026-09-09T21:45:13Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":7,"status":""}
+{"t_mono":23971.737397583,"t_utc":"2026-09-09T21:45:17Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":8,"status":""}
+{"t_mono":23976.575706166,"t_utc":"2026-09-09T21:45:22Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":9,"status":""}
+{"t_mono":23981.43555425,"t_utc":"2026-09-09T21:45:27Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":10,"status":""}
+{"t_mono":23986.277077666,"t_utc":"2026-09-09T21:45:32Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":11,"status":""}
+{"t_mono":23991.113509,"t_utc":"2026-09-09T21:45:37Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":12,"status":""}
+{"t_mono":23995.990733666,"t_utc":"2026-09-09T21:45:42Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":13,"status":""}
+{"t_mono":24000.834397958,"t_utc":"2026-09-09T21:45:46Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":14,"status":""}
+{"t_mono":24005.692413666,"t_utc":"2026-09-09T21:45:51Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":15,"status":""}
+{"t_mono":24010.550804666,"t_utc":"2026-09-09T21:45:56Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":16,"status":""}
+{"t_mono":24015.42697125,"t_utc":"2026-09-09T21:46:01Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":17,"status":""}
+{"t_mono":24020.26293975,"t_utc":"2026-09-09T21:46:06Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":18,"status":""}
+{"t_mono":24025.117503291,"t_utc":"2026-09-09T21:46:11Z","stage":"game_overlay_status_poll","correlation_id":"ring-1788989311-67839","attempt":19,"status":""}
+{"t_mono":24028.976176375,"t_utc":"2026-09-09T21:46:15Z","stage":"game_app_receipt_timeout","correlation_id":"ring-1788989311-67839","latency_ms":105396,"note":"save unchanged after Ring HID+parse_input_event overlay; timeout not first boundary","overlay_status":""}
+{"t_mono":24032.511226208,"t_utc":"2026-09-09T21:46:18Z","stage":"stage9_host_receipt_final","correlation_id":"ring-1788989311-67839","earned":false,"blocker":"godot_alive_mutation_not_committed","libreoffice":true,"browser":true,"game":false}

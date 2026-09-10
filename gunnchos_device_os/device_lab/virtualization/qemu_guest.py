@@ -221,22 +221,25 @@ class QemuGuestSession:
         self.work.mkdir(parents=True, exist_ok=True)
         self.qemu_bin, self.arch = qemu_system_bin(repo_root=self.repo_root)
         self.accel = select_accel(self.arch)
-        kernel, initrd = self._resolve_images()
-        # Hard fail early if arch mismatch would produce cryptic QEMU errors.
-        image_arch = lab_guest_image_arch(self.repo_root)
-        if self.arch != image_arch and not os.environ.get("GUNNCHDEVICE_LAB_QEMU_ARCH"):
-            # Re-resolve strictly for image arch.
-            self.qemu_bin, self.arch = qemu_system_bin(prefer_arch=image_arch, repo_root=self.repo_root)
-            self.accel = select_accel(self.arch)
 
         # WP-011R: Interactive Development Guest recognition. Adds
         # virtio-gpu + virtio-keyboard/tablet + a persistent root disk on
         # top of the slim guest's kernel/initramfs boot. Fails early and
         # honestly if the disk placeholder has not been created yet — never
         # silently falls back to pretending the flag was not set.
+        #
+        # Resolve the interactive UEFI path BEFORE Alpine kernel/initrd
+        # assembly — Python 3.14 tarfile rejects Alpine absolute symlinks,
+        # and interactive guests never need that reference image.
         interactive_guest = interactive_guest_enabled()
         interactive_disk: Path | None = None
         if interactive_guest:
+            image_arch = lab_guest_image_arch(self.repo_root)
+            if self.arch != image_arch and not os.environ.get("GUNNCHDEVICE_LAB_QEMU_ARCH"):
+                self.qemu_bin, self.arch = qemu_system_bin(
+                    prefer_arch=image_arch, repo_root=self.repo_root
+                )
+                self.accel = select_accel(self.arch)
             interactive_disk = interactive_guest_disk_path(self.repo_root, arch=self.arch)
             if not interactive_disk.exists():
                 return {
@@ -285,6 +288,14 @@ class QemuGuestSession:
             # boot marker, never a Debian/weston boot). Take a dedicated
             # UEFI boot path instead and return early.
             return self._start_interactive_uefi(interactive_disk)
+
+        kernel, initrd = self._resolve_images()
+        # Hard fail early if arch mismatch would produce cryptic QEMU errors.
+        image_arch = lab_guest_image_arch(self.repo_root)
+        if self.arch != image_arch and not os.environ.get("GUNNCHDEVICE_LAB_QEMU_ARCH"):
+            # Re-resolve strictly for image arch.
+            self.qemu_bin, self.arch = qemu_system_bin(prefer_arch=image_arch, repo_root=self.repo_root)
+            self.accel = select_accel(self.arch)
 
         disk = self._ensure_persist_disk()
         self.boot_log = self.work / "qemu_boot.log"
