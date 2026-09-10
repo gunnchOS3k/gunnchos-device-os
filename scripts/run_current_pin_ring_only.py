@@ -62,6 +62,10 @@ def _mutation_worker(result_path: str) -> None:
     """Child process: boot guest + attempt mutation; write JSON result path."""
     os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
     os.environ["GUNNCH_LAB_INTERACTIVE_GUEST"] = "1"
+    # Allow guest→host HTTP (10.0.2.2) so Godot 4.5 can be fetched without a
+    # flaky 126MB virtio-serial file_put. Lab isolation remains non-shipping.
+    os.environ.setdefault("GUNNCHDEVICE_LAB_NET_RESTRICT", "0")
+    os.environ.setdefault("GUNNCH_RING_SKIP_VIRTIO_PP_PUT", "1")
     started = time.time()
     out: dict = {
         "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
@@ -186,6 +190,8 @@ def _mutation_worker(result_path: str) -> None:
 def main() -> int:
     os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
     os.environ["GUNNCH_LAB_INTERACTIVE_GUEST"] = "1"
+    os.environ.setdefault("GUNNCHDEVICE_LAB_NET_RESTRICT", "0")
+    os.environ.setdefault("GUNNCH_RING_SKIP_VIRTIO_PP_PUT", "1")
     started = time.time()
     OUT.parent.mkdir(parents=True, exist_ok=True)
     worker_out = OUT.parent / "RING_REEARN_WORKER.json"

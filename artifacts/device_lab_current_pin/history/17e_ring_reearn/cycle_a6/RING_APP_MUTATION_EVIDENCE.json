@@ -1,5 +1,5 @@
 {
-  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
   "claim_boundary": "Interactive Development Guest proofs run against a real virtio-serial guest agent inside a Debian cloud-init-provisioned guest. SILICON_EXACT_EMULATION=false. DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST=true. SHIPPING_IMAGE=false. A *_PASS token here is only ever set true when this run's own agent responses (not a mailbox stub) demonstrate it.",
   "MOUSEPAD_FILE_APPEND_ALONE_INSUFFICIENT": true,
   "marker_found_in_after": true,
@@ -15,7 +15,7 @@
     "pong": true,
     "boot_complete": true
   },
-  "correlation_id": "ring-1789009762-70725",
+  "correlation_id": "ring-1789006212-33631",
   "RING_BLOCKED_BY_GODOT_GUEST_RUNTIME": false,
   "app_launches": {
     "libreoffice": {
@@ -50,7 +50,7 @@
       "production_keys": false,
       "measurement_class": "GUEST_OBSERVED",
       "started": "chromium-ring",
-      "pid": 697
+      "pid": 696
     },
     "godot45": {
       "ok": true,
@@ -59,24 +59,22 @@
     },
     "pedestrian_deploy": {
       "ok": true,
-      "via": "guest_curl_10.0.2.2"
+      "via": "guest_curl_10.0.2.2:8766"
     },
     "game_overlay": {
-      "ok": true,
-      "stdout": "OVERLAY_PATCHED True\n",
-      "stderr": "",
-      "returncode": 0
+      "ok": false,
+      "stdout": ""
     },
     "game": {
       "start": {
         "ok": true,
-        "pid": 1976,
+        "pid": 1991,
         "started": "godot-pedestrian-ring"
       },
       "alive": {
         "ok": true,
-        "stdout": "{\"alive\": true, \"pid\": 1976, \"ps\": \"   1976 Rl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Rl\"}",
-        "pid": 1976,
+        "stdout": "{\"alive\": true, \"pid\": 1991, \"ps\": \"   1991 Rl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Rl\"}",
+        "pid": 1991,
         "zombie_rejected": false
       },
       "wayland": "wayland-0",
@@ -88,303 +86,447 @@
       },
       "alive_after_mutation": {
         "ok": true,
-        "stdout": "{\"alive\": true, \"pid\": 1976, \"ps\": \"   1976 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Sl\"}"
+        "stdout": "{\"alive\": true, \"pid\": 1991, \"ps\": \"   1991 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Sl\"}"
       },
-      "input_driven": {
-        "xp_before": 11,
-        "xp_after": 28,
-        "xp_moved": true,
-        "hid_changed_beyond_post_load_baseline": true,
-        "seed_save_version": "2",
-        "migration_alone_rejected": true
-      }
+      "harness_rejected": true,
+      "first_run_create_rejected": false,
+      "migration_alone_rejected": true,
+      "post_load_baseline_required": true
     }
   },
   "guest_artifacts": {
-    "ok": true,
+    "ok": false,
     "odt_path_guest": "/root/gunnchos-lab-document.odt",
-    "odt_bytes": 8925,
-    "odt_marker": "RINGMUTATION1789009762",
+    "odt_bytes": 8929,
+    "odt_marker": "RINGMUTATION1789006212",
     "browser_memo": "browser/RingMemo.txt",
     "browser_bytes": 32,
-    "browser_marker": "RINGMUTATION1789009762",
+    "browser_marker": "RINGMUTATION1789006212",
     "browser_state": "browser/RingMemo.txt",
     "browser_html": "browser/RingMemo.html",
     "lab_browser_collector_forbidden": true,
-    "game_save": "game/pp_progression.cfg",
-    "game_bytes": 400,
-    "game_save_guest_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-    "godot_process_alive": true,
     "committed_odt": "document/ring_editor_buffer.odt",
     "lab_ringring_rejected": true,
     "lab_document_state_forbidden": true,
     "document_state_present": false
   },
+  "blocker": "godot_alive_mutation_not_committed",
   "RING_TO_REAL_APPLICATION_INPUT_PASS": false,
   "RING_SPATIAL_ACCURACY": "SIMULATED",
   "PHYSICAL_RING_E6": false,
   "latency_waterfall": [
     {
-      "t_mono": 42487.667826666,
-      "t_utc": "2026-09-10T03:09:22Z",
+      "t_mono": 38937.780612583,
+      "t_utc": "2026-09-10T02:10:13Z",
       "stage": "stage4_virtio_serial_write_baseline_start",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42487.821567666,
-      "t_utc": "2026-09-10T03:09:22Z",
+      "t_mono": 38937.932887583,
+      "t_utc": "2026-09-10T02:10:13Z",
       "stage": "stage4_virtio_serial_write_baseline_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "transport": "virtio_serial",
       "error": null,
       "error_class": null
     },
     {
-      "t_mono": 42487.865299916,
-      "t_utc": "2026-09-10T03:09:22Z",
+      "t_mono": 38937.987510041,
+      "t_utc": "2026-09-10T02:10:13Z",
       "stage": "event_source_ready",
-      "correlation_id": "ring-1789009762-70725",
-      "marker": "RINGMUTATION1789009762"
+      "correlation_id": "ring-1789006212-33631",
+      "marker": "RINGMUTATION1789006212"
     },
     {
-      "t_mono": 42503.6875045,
-      "t_utc": "2026-09-10T03:09:38Z",
+      "t_mono": 38953.810898875,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage2_ring_stack_ingress_start",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice"
     },
     {
-      "t_mono": 42503.689368,
-      "t_utc": "2026-09-10T03:09:38Z",
+      "t_mono": 38953.815118625,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage3_host_device_os_routing_start",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice"
     },
     {
-      "t_mono": 42504.053972208,
-      "t_utc": "2026-09-10T03:09:39Z",
+      "t_mono": 38954.187486958,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage3_host_device_os_routing_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice",
       "delivered": true,
       "via_stack": true,
       "os_input": true
     },
     {
-      "t_mono": 42504.054518583,
-      "t_utc": "2026-09-10T03:09:39Z",
+      "t_mono": 38954.188949583,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage2_ring_stack_ingress_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice"
     },
     {
-      "t_mono": 42544.117901083,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.057217375,
+      "t_utc": "2026-09-10T02:11:09Z",
       "stage": "browser_http_ready",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "http": "200",
-      "chromium_pid": 697
+      "chromium_pid": 696
     },
     {
-      "t_mono": 42544.486146416,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.41722825,
+      "t_utc": "2026-09-10T02:11:09Z",
       "stage": "browser_before_snapshot",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "bytes": 32,
-      "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789009563\n"
+      "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789002621\n"
     },
     {
-      "t_mono": 42544.862941208,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.78145225,
+      "t_utc": "2026-09-10T02:11:10Z",
       "stage": "ring_inject_browser",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "via_stack": true,
       "delivered": true,
-      "latency_ms": 376
+      "latency_ms": 363
     },
     {
-      "t_mono": 42544.8632975,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.782144291,
+      "t_utc": "2026-09-10T02:11:10Z",
       "stage": "identity_auth_transport_ok",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42559.908556208,
-      "t_utc": "2026-09-10T03:10:35Z",
+      "t_mono": 39009.747616166,
+      "t_utc": "2026-09-10T02:11:24Z",
       "stage": "guest_dispatch_clicks",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42561.825948,
-      "t_utc": "2026-09-10T03:10:36Z",
+      "t_mono": 39011.760547,
+      "t_utc": "2026-09-10T02:11:26Z",
       "stage": "gunnchos_input_text",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "via": "uinput"
     },
     {
-      "t_mono": 42574.770600458,
-      "t_utc": "2026-09-10T03:10:49Z",
+      "t_mono": 39024.638860541,
+      "t_utc": "2026-09-10T02:11:39Z",
       "stage": "qemu_sendkey_marker",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42577.21426275,
-      "t_utc": "2026-09-10T03:10:52Z",
+      "t_mono": 39027.0744945,
+      "t_utc": "2026-09-10T02:11:42Z",
       "stage": "keyboard_event_overlay_armed",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42578.940075416,
-      "t_utc": "2026-09-10T03:10:54Z",
+      "t_mono": 39028.7049305,
+      "t_utc": "2026-09-10T02:11:43Z",
       "stage": "chromium_headless_marker_receipt",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
-      "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789009762\nHL_OK\n",
-      "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789009762'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
+      "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789006212\nHL_OK\n",
+      "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789006212'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
     },
     {
-      "t_mono": 42580.180419208,
-      "t_utc": "2026-09-10T03:10:55Z",
+      "t_mono": 39029.938977,
+      "t_utc": "2026-09-10T02:11:45Z",
       "stage": "browser_hl_committed_freeze",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "marker_present": true,
       "bytes": 32
     },
     {
-      "t_mono": 42580.338658916,
-      "t_utc": "2026-09-10T03:10:55Z",
+      "t_mono": 39030.102555958,
+      "t_utc": "2026-09-10T02:11:45Z",
       "stage": "chromium_reloaded_for_drive",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "url_has_marker": true
     },
     {
-      "t_mono": 42582.736432166,
-      "t_utc": "2026-09-10T03:10:57Z",
+      "t_mono": 39032.513248375,
+      "t_utc": "2026-09-10T02:11:47Z",
       "stage": "app_receipt_mutation",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "attempt": 0,
-      "latency_ms": 38249,
+      "latency_ms": 38095,
       "via": "keyboard_event_overlay"
     },
     {
-      "t_mono": 42583.081726208,
-      "t_utc": "2026-09-10T03:10:58Z",
+      "t_mono": 39032.853696041,
+      "t_utc": "2026-09-10T02:11:48Z",
       "stage": "ack_feedback_ok",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42609.483666041,
-      "t_utc": "2026-09-10T03:11:24Z",
+      "t_mono": 39058.982327458,
+      "t_utc": "2026-09-10T02:12:14Z",
       "stage": "game_seed_verify",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "bytes": 340,
       "head": "[meta]\n\nsave_version=2\nsaved_at=\"2026-01-01T00:00:00\"\n\n[career]\n\nxp=11\nlevel=1\nu"
     },
     {
-      "t_mono": 42609.987179958,
-      "t_utc": "2026-09-10T03:11:25Z",
+      "t_mono": 39059.501367791,
+      "t_utc": "2026-09-10T02:12:14Z",
       "stage": "godot45_probe_start",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42610.49806375,
-      "t_utc": "2026-09-10T03:11:25Z",
+      "t_mono": 39059.897394708,
+      "t_utc": "2026-09-10T02:12:15Z",
       "stage": "godot45_probe_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "via": "already_present_on_guest",
       "ver": "4.5.stable.official.876b29033\n4.5.stable.official.876b29033\n"
     },
     {
-      "t_mono": 42610.789343958,
-      "t_utc": "2026-09-10T03:11:25Z",
+      "t_mono": 39060.199436541,
+      "t_utc": "2026-09-10T02:12:15Z",
       "stage": "pedestrian_host_httpd",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "port": 8766,
       "has_tar": true
     },
     {
-      "t_mono": 42610.959044208,
-      "t_utc": "2026-09-10T03:11:26Z",
+      "t_mono": 39060.417901375,
+      "t_utc": "2026-09-10T02:12:15Z",
       "stage": "pedestrian_deploy_start",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42611.122387208,
-      "t_utc": "2026-09-10T03:11:26Z",
+      "t_mono": 39062.047792041,
+      "t_utc": "2026-09-10T02:12:17Z",
       "stage": "pedestrian_deploy_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
-      "via": "guest_curl_10.0.2.2",
+      "via": "guest_curl_10.0.2.2:8766",
       "error": ""
     },
     {
-      "t_mono": 42611.937156208,
-      "t_utc": "2026-09-10T03:11:27Z",
+      "t_mono": 39062.726644,
+      "t_utc": "2026-09-10T02:12:17Z",
       "stage": "game_overlay_installed",
-      "correlation_id": "ring-1789009762-70725",
-      "ok": true,
-      "probe": "OVERLAY_PATCHED True\n"
+      "correlation_id": "ring-1789006212-33631",
+      "ok": false,
+      "probe": ""
     },
     {
-      "t_mono": 42621.344423958,
-      "t_utc": "2026-09-10T03:11:36Z",
+      "t_mono": 39072.150104166,
+      "t_utc": "2026-09-10T02:12:27Z",
       "stage": "ring_inject_game",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "via_stack": true,
       "delivered": true,
-      "latency_ms": 379
+      "latency_ms": 376
     },
     {
-      "t_mono": 42621.344987541,
-      "t_utc": "2026-09-10T03:11:36Z",
+      "t_mono": 39072.150703708,
+      "t_utc": "2026-09-10T02:12:27Z",
       "stage": "game_identity_auth_transport_ok",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42628.322909666,
-      "t_utc": "2026-09-10T03:11:43Z",
+      "t_mono": 39079.098701666,
+      "t_utc": "2026-09-10T02:12:34Z",
       "stage": "game_guest_dispatch_hid",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42628.477370666,
-      "t_utc": "2026-09-10T03:11:43Z",
+      "t_mono": 39079.25853275,
+      "t_utc": "2026-09-10T02:12:34Z",
       "stage": "game_keyboard_event_overlay_armed",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42629.685952833,
-      "t_utc": "2026-09-10T03:11:44Z",
+      "t_mono": 39080.796327916,
+      "t_utc": "2026-09-10T02:12:36Z",
       "stage": "game_overlay_status_poll",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "attempt": 0,
-      "status": "{\"level\":1,\"marker\":\"RINGMUTATION1789009762\",\"overlay\":\"device_lab_ring_input_overlay\",\"phase\":\"mutated\",\"production_gate_harness\":false,\"quit_after\":false,\"receipt\":\"user://ring_m"
+      "status": ""
     },
     {
-      "t_mono": 42630.107264416,
-      "t_utc": "2026-09-10T03:11:45Z",
-      "stage": "game_app_receipt_mutation",
-      "correlation_id": "ring-1789009762-70725",
-      "attempt": 0,
-      "latency_ms": 9142,
-      "via": "parse_input_event_overlay",
-      "overlay_phase": "{\"level\":1,\"marker\":\"RINGMUTATION1789009762\",\"overlay\":\"device_lab_ring_input_overlay\",\"phase\":\"mutated\",\"production_gat"
+      "t_mono": 39086.615521291,
+      "t_utc": "2026-09-10T02:12:41Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 1,
+      "status": ""
     },
     {
-      "t_mono": 42633.717148875,
-      "t_utc": "2026-09-10T03:11:48Z",
+      "t_mono": 39092.485984708,
+      "t_utc": "2026-09-10T02:12:47Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 2,
+      "status": ""
+    },
+    {
+      "t_mono": 39098.331536625,
+      "t_utc": "2026-09-10T02:12:53Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 3,
+      "status": ""
+    },
+    {
+      "t_mono": 39104.197061916,
+      "t_utc": "2026-09-10T02:12:59Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 4,
+      "status": ""
+    },
+    {
+      "t_mono": 39110.062773791,
+      "t_utc": "2026-09-10T02:13:05Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 5,
+      "status": ""
+    },
+    {
+      "t_mono": 39115.937868375,
+      "t_utc": "2026-09-10T02:13:11Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 6,
+      "status": ""
+    },
+    {
+      "t_mono": 39121.827447958,
+      "t_utc": "2026-09-10T02:13:17Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 7,
+      "status": ""
+    },
+    {
+      "t_mono": 39127.7325945,
+      "t_utc": "2026-09-10T02:13:22Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 8,
+      "status": ""
+    },
+    {
+      "t_mono": 39133.588714083,
+      "t_utc": "2026-09-10T02:13:28Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 9,
+      "status": ""
+    },
+    {
+      "t_mono": 39139.391352625,
+      "t_utc": "2026-09-10T02:13:34Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 10,
+      "status": ""
+    },
+    {
+      "t_mono": 39145.197657166,
+      "t_utc": "2026-09-10T02:13:40Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 11,
+      "status": ""
+    },
+    {
+      "t_mono": 39150.961856208,
+      "t_utc": "2026-09-10T02:13:46Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 12,
+      "status": ""
+    },
+    {
+      "t_mono": 39156.76498275,
+      "t_utc": "2026-09-10T02:13:51Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 13,
+      "status": ""
+    },
+    {
+      "t_mono": 39162.5824575,
+      "t_utc": "2026-09-10T02:13:57Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 14,
+      "status": ""
+    },
+    {
+      "t_mono": 39168.435012458,
+      "t_utc": "2026-09-10T02:14:03Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 15,
+      "status": ""
+    },
+    {
+      "t_mono": 39174.24666075,
+      "t_utc": "2026-09-10T02:14:09Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 16,
+      "status": ""
+    },
+    {
+      "t_mono": 39180.117375541,
+      "t_utc": "2026-09-10T02:14:15Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 17,
+      "status": ""
+    },
+    {
+      "t_mono": 39186.072394291,
+      "t_utc": "2026-09-10T02:14:21Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 18,
+      "status": ""
+    },
+    {
+      "t_mono": 39191.964723291,
+      "t_utc": "2026-09-10T02:14:27Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 19,
+      "status": ""
+    },
+    {
+      "t_mono": 39196.7999765,
+      "t_utc": "2026-09-10T02:14:32Z",
+      "stage": "game_app_receipt_timeout",
+      "correlation_id": "ring-1789006212-33631",
+      "latency_ms": 125026,
+      "note": "save unchanged after Ring HID+parse_input_event overlay; timeout not first boundary",
+      "overlay_status": ""
+    },
+    {
+      "t_mono": 39201.389944458,
+      "t_utc": "2026-09-10T02:14:36Z",
       "stage": "stage9_host_receipt_final",
-      "correlation_id": "ring-1789009762-70725",
-      "earned": true,
-      "blocker": null,
+      "correlation_id": "ring-1789006212-33631",
+      "earned": false,
+      "blocker": "godot_alive_mutation_not_committed",
       "libreoffice": true,
       "browser": true,
-      "game": true
+      "game": false
     }
   ],
   "honesty": {
@@ -405,7 +547,7 @@
     "guest_os_input",
     "app_state_mutation"
   ],
-  "pipeline_ok": true,
+  "pipeline_ok": false,
   "guest_os_input_present": true,
   "mutations": {
     "libreoffice": {
@@ -511,14 +653,14 @@
       },
       "odt_probe": {
         "ok": true,
-        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"000eeabe\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1789009762</text:span></text:p></office:text></office:body></office:document-content>\n",
+        "stdout": "/root/gunnchos-lab-document.odt <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<office:document-content xmlns:css3t=\"http://www.w3.org/TR/css3-text/\" xmlns:grddl=\"http://www.w3.org/2003/g/data-view#\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xforms=\"http://www.w3.org/2002/xforms\" xmlns:dom=\"http://www.w3.org/2001/xml-events\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:ooo=\"http://openoffice.org/2004/office\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:ooow=\"http://openoffice.org/2004/writer\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:drawooo=\"http://openoffice.org/2010/draw\" xmlns:oooc=\"http://openoffice.org/2004/calc\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:of=\"urn:oasis:names:tc:opendocument:xmlns:of:1.2\" xmlns:tableooo=\"http://openoffice.org/2009/table\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:rpt=\"http://openoffice.org/2005/report\" xmlns:formx=\"urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:officeooo=\"http://openoffice.org/2009/office\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:field=\"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0\" office:version=\"1.3\"><office:scripts/><office:font-face-decls><style:font-face style:name=\"DejaVu Sans\" svg:font-family=\"&apos;DejaVu Sans&apos;\" style:font-family-generic=\"system\" style:font-pitch=\"variable\"/><style:font-face style:name=\"Liberation Serif\" svg:font-family=\"&apos;Liberation Serif&apos;\" style:font-family-generic=\"roman\" style:font-pitch=\"variable\"/></office:font-face-decls><office:automatic-styles><style:style style:name=\"T1\" style:family=\"text\"><style:text-properties officeooo:rsid=\"0007cd57\"/></style:style></office:automatic-styles><office:body><office:text><text:sequence-decls><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Illustration\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Table\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Text\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Drawing\"/><text:sequence-decl text:display-outline-level=\"0\" text:name=\"Figure\"/></text:sequence-decls><text:p text:style-name=\"Standard\">RingSeed<text:span text:style-name=\"T1\">RINGMUTATION1789006212</text:span></text:p></office:text></office:body></office:document-content>\n",
         "soffice_ready": true
       },
       "seed": {
         "ok": true
       },
       "alive": "586 /usr/lib/libreoffice/program/oosplash --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n617 /usr/lib/libreoffice/program/soffice.bin --writer --nologo --norestore --nolockcheck /root/gunnchos-lab-document.odt\n",
-      "marker": "RINGMUTATION1789009762",
+      "marker": "RINGMUTATION1789006212",
       "mutated": true,
       "libreoffice_or_writer_surface_alive": true,
       "mousepad_fallback_rejected": true
@@ -596,8 +738,8 @@
           "blocker": "Guest virtio-serial input_observe not proven (stub or missing); spatial remains SIMULATED"
         }
       },
-      "before_text": "MemoStart RINGMUTATION1789009563",
-      "after_text": "MemoStart RINGMUTATION1789009762",
+      "before_text": "MemoStart RINGMUTATION1789002621",
+      "after_text": "MemoStart RINGMUTATION1789006212",
       "memo_path": "/root/Documents/RingMemo.txt",
       "memo_html": "/root/Documents/RingMemo.html",
       "lab_collector_html_forbidden": true,
@@ -611,154 +753,154 @@
       "first_broken_boundary": null,
       "latency_waterfall": [
         {
-          "t_mono": 42487.667826666,
-          "t_utc": "2026-09-10T03:09:22Z",
+          "t_mono": 38937.780612583,
+          "t_utc": "2026-09-10T02:10:13Z",
           "stage": "stage4_virtio_serial_write_baseline_start",
-          "correlation_id": "ring-1789009762-70725"
+          "correlation_id": "ring-1789006212-33631"
         },
         {
-          "t_mono": 42487.821567666,
-          "t_utc": "2026-09-10T03:09:22Z",
+          "t_mono": 38937.932887583,
+          "t_utc": "2026-09-10T02:10:13Z",
           "stage": "stage4_virtio_serial_write_baseline_done",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "ok": true,
           "transport": "virtio_serial",
           "error": null,
           "error_class": null
         },
         {
-          "t_mono": 42487.865299916,
-          "t_utc": "2026-09-10T03:09:22Z",
+          "t_mono": 38937.987510041,
+          "t_utc": "2026-09-10T02:10:13Z",
           "stage": "event_source_ready",
-          "correlation_id": "ring-1789009762-70725",
-          "marker": "RINGMUTATION1789009762"
+          "correlation_id": "ring-1789006212-33631",
+          "marker": "RINGMUTATION1789006212"
         },
         {
-          "t_mono": 42503.6875045,
-          "t_utc": "2026-09-10T03:09:38Z",
+          "t_mono": 38953.810898875,
+          "t_utc": "2026-09-10T02:10:29Z",
           "stage": "stage2_ring_stack_ingress_start",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "target": "libreoffice"
         },
         {
-          "t_mono": 42503.689368,
-          "t_utc": "2026-09-10T03:09:38Z",
+          "t_mono": 38953.815118625,
+          "t_utc": "2026-09-10T02:10:29Z",
           "stage": "stage3_host_device_os_routing_start",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "target": "libreoffice"
         },
         {
-          "t_mono": 42504.053972208,
-          "t_utc": "2026-09-10T03:09:39Z",
+          "t_mono": 38954.187486958,
+          "t_utc": "2026-09-10T02:10:29Z",
           "stage": "stage3_host_device_os_routing_done",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "target": "libreoffice",
           "delivered": true,
           "via_stack": true,
           "os_input": true
         },
         {
-          "t_mono": 42504.054518583,
-          "t_utc": "2026-09-10T03:09:39Z",
+          "t_mono": 38954.188949583,
+          "t_utc": "2026-09-10T02:10:29Z",
           "stage": "stage2_ring_stack_ingress_done",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "target": "libreoffice"
         },
         {
-          "t_mono": 42544.117901083,
-          "t_utc": "2026-09-10T03:10:19Z",
+          "t_mono": 38994.057217375,
+          "t_utc": "2026-09-10T02:11:09Z",
           "stage": "browser_http_ready",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "http": "200",
-          "chromium_pid": 697
+          "chromium_pid": 696
         },
         {
-          "t_mono": 42544.486146416,
-          "t_utc": "2026-09-10T03:10:19Z",
+          "t_mono": 38994.41722825,
+          "t_utc": "2026-09-10T02:11:09Z",
           "stage": "browser_before_snapshot",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "bytes": 32,
-          "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789009563\n"
+          "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789002621\n"
         },
         {
-          "t_mono": 42544.862941208,
-          "t_utc": "2026-09-10T03:10:19Z",
+          "t_mono": 38994.78145225,
+          "t_utc": "2026-09-10T02:11:10Z",
           "stage": "ring_inject_browser",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "via_stack": true,
           "delivered": true,
-          "latency_ms": 376
+          "latency_ms": 363
         },
         {
-          "t_mono": 42544.8632975,
-          "t_utc": "2026-09-10T03:10:19Z",
+          "t_mono": 38994.782144291,
+          "t_utc": "2026-09-10T02:11:10Z",
           "stage": "identity_auth_transport_ok",
-          "correlation_id": "ring-1789009762-70725"
+          "correlation_id": "ring-1789006212-33631"
         },
         {
-          "t_mono": 42559.908556208,
-          "t_utc": "2026-09-10T03:10:35Z",
+          "t_mono": 39009.747616166,
+          "t_utc": "2026-09-10T02:11:24Z",
           "stage": "guest_dispatch_clicks",
-          "correlation_id": "ring-1789009762-70725"
+          "correlation_id": "ring-1789006212-33631"
         },
         {
-          "t_mono": 42561.825948,
-          "t_utc": "2026-09-10T03:10:36Z",
+          "t_mono": 39011.760547,
+          "t_utc": "2026-09-10T02:11:26Z",
           "stage": "gunnchos_input_text",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "ok": true,
           "via": "uinput"
         },
         {
-          "t_mono": 42574.770600458,
-          "t_utc": "2026-09-10T03:10:49Z",
+          "t_mono": 39024.638860541,
+          "t_utc": "2026-09-10T02:11:39Z",
           "stage": "qemu_sendkey_marker",
-          "correlation_id": "ring-1789009762-70725"
+          "correlation_id": "ring-1789006212-33631"
         },
         {
-          "t_mono": 42577.21426275,
-          "t_utc": "2026-09-10T03:10:52Z",
+          "t_mono": 39027.0744945,
+          "t_utc": "2026-09-10T02:11:42Z",
           "stage": "keyboard_event_overlay_armed",
-          "correlation_id": "ring-1789009762-70725"
+          "correlation_id": "ring-1789006212-33631"
         },
         {
-          "t_mono": 42578.940075416,
-          "t_utc": "2026-09-10T03:10:54Z",
+          "t_mono": 39028.7049305,
+          "t_utc": "2026-09-10T02:11:43Z",
           "stage": "chromium_headless_marker_receipt",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "ok": true,
-          "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789009762\nHL_OK\n",
-          "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789009762'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
+          "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789006212\nHL_OK\n",
+          "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789006212'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
         },
         {
-          "t_mono": 42580.180419208,
-          "t_utc": "2026-09-10T03:10:55Z",
+          "t_mono": 39029.938977,
+          "t_utc": "2026-09-10T02:11:45Z",
           "stage": "browser_hl_committed_freeze",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "marker_present": true,
           "bytes": 32
         },
         {
-          "t_mono": 42580.338658916,
-          "t_utc": "2026-09-10T03:10:55Z",
+          "t_mono": 39030.102555958,
+          "t_utc": "2026-09-10T02:11:45Z",
           "stage": "chromium_reloaded_for_drive",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "url_has_marker": true
         },
         {
-          "t_mono": 42582.736432166,
-          "t_utc": "2026-09-10T03:10:57Z",
+          "t_mono": 39032.513248375,
+          "t_utc": "2026-09-10T02:11:47Z",
           "stage": "app_receipt_mutation",
-          "correlation_id": "ring-1789009762-70725",
+          "correlation_id": "ring-1789006212-33631",
           "attempt": 0,
-          "latency_ms": 38249,
+          "latency_ms": 38095,
           "via": "keyboard_event_overlay"
         },
         {
-          "t_mono": 42583.081726208,
-          "t_utc": "2026-09-10T03:10:58Z",
+          "t_mono": 39032.853696041,
+          "t_utc": "2026-09-10T02:11:48Z",
           "stage": "ack_feedback_ok",
-          "correlation_id": "ring-1789009762-70725"
+          "correlation_id": "ring-1789006212-33631"
         }
       ],
       "note": "Chromium real RingMemo.html textarea document; HID typing must appear in RingMemo.txt autosave. lab_browser.html click-collector forbidden."
@@ -839,13 +981,13 @@
       "launch": {
         "start": {
           "ok": true,
-          "pid": 1976,
+          "pid": 1991,
           "started": "godot-pedestrian-ring"
         },
         "alive": {
           "ok": true,
-          "stdout": "{\"alive\": true, \"pid\": 1976, \"ps\": \"   1976 Rl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Rl\"}",
-          "pid": 1976,
+          "stdout": "{\"alive\": true, \"pid\": 1991, \"ps\": \"   1991 Rl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Rl\"}",
+          "pid": 1991,
           "zombie_rejected": false
         },
         "wayland": "wayland-0",
@@ -857,94 +999,18 @@
         },
         "alive_after_mutation": {
           "ok": true,
-          "stdout": "{\"alive\": true, \"pid\": 1976, \"ps\": \"   1976 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Sl\"}"
+          "stdout": "{\"alive\": true, \"pid\": 1991, \"ps\": \"   1991 Sl   /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit --display-driver wayland --rendering-driver opengl3\\n\", \"zombie_rejected\": false, \"stat\": \"Sl\"}"
         },
-        "input_driven": {
-          "xp_before": 11,
-          "xp_after": 28,
-          "xp_moved": true,
-          "hid_changed_beyond_post_load_baseline": true,
-          "seed_save_version": "2",
-          "migration_alone_rejected": true
-        }
+        "harness_rejected": true,
+        "first_run_create_rejected": false,
+        "migration_alone_rejected": true,
+        "post_load_baseline_required": true
       },
-      "save_path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-      "before": {
-        "ok": true,
-        "protocol": "gunnchos.guest_agent.v1",
-        "cmd": "logs",
-        "transport": "virtio_serial",
-        "agent_path_label": "virtio-serial",
-        "SILICON_EXACT_EMULATION": false,
-        "production_keys": false,
-        "measurement_class": "GUEST_OBSERVED",
-        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-        "lines": [
-          "[meta]",
-          "",
-          "save_version=2",
-          "saved_at=\"2026-01-01T00:00:00\"",
-          "",
-          "[career]",
-          "",
-          "xp=11",
-          "level=1",
-          "unlocked={",
-          "\"mode:cup\": true,",
-          "\"mode:quick_race\": true,",
-          "\"mode:time_trial\": true,",
-          "\"mode:tutorial\": true,",
-          "\"runner:dash_reed\": true,",
-          "\"shoe:starter_soles\": true,",
-          "\"ring:seed\": true",
-          "}",
-          "challenges={}",
-          "trophies=[]",
-          "tt_pbs={}",
-          "tutorial_completed=false",
-          "first_run_complete=true"
-        ]
-      },
-      "after": {
-        "ok": true,
-        "protocol": "gunnchos.guest_agent.v1",
-        "cmd": "logs",
-        "transport": "virtio_serial",
-        "agent_path_label": "virtio-serial",
-        "SILICON_EXACT_EMULATION": false,
-        "production_keys": false,
-        "measurement_class": "GUEST_OBSERVED",
-        "path": "/root/.local/share/godot/app_userdata/Pedestrian Pursuit/pp_progression.cfg",
-        "lines": [
-          "[meta]",
-          "",
-          "save_version=2",
-          "saved_at=\"2026-09-10T03:11:43\"",
-          "",
-          "[career]",
-          "",
-          "xp=28",
-          "level=1",
-          "unlocked={",
-          "\"mode:cup\": true,",
-          "\"mode:quick_race\": true,",
-          "\"mode:time_trial\": true,",
-          "\"mode:tutorial\": true,",
-          "\"ring:RINGMUTATION1789009762\": true,",
-          "\"ring:mutation\": true,",
-          "\"ring:seed\": true,",
-          "\"runner:dash_reed\": true,",
-          "\"shoe:starter_soles\": true",
-          "}",
-          "challenges={}",
-          "trophies=[]",
-          "tt_pbs={}",
-          "tutorial_completed=false",
-          "first_run_complete=true"
-        ]
-      },
-      "mutated": true,
-      "godot_mutated": true,
+      "save_path": "",
+      "before": {},
+      "after": {},
+      "mutated": false,
+      "godot_mutated": false,
       "process_alive": true,
       "first_run_create_rejected": true,
       "headless_harness_rejected": true,
@@ -960,7 +1026,7 @@
         "after_input": 0,
         "note": "Lab anime-aggressors surface never earns RING_TO_REAL_APP_STATE_MUTATION_PASS"
       },
-      "note": "Godot Pedestrian input-driven save change beyond post-load baseline; seed already save_version=2"
+      "note": "Requires HID-driven Pedestrian save delta beyond post-load baseline (migration-alone/first-run rejected)"
     }
   },
   "confidence_gate": {
@@ -970,7 +1036,7 @@
       "reject": {
         "reason": "low_confidence",
         "confidence": 0.2,
-        "nonce": "ring-nonce-4-0231bfb0"
+        "nonce": "ring-nonce-4-ad15b754"
       },
       "via_stack": true
     },
@@ -980,276 +1046,427 @@
       "reject": {
         "reason": "wrong_target",
         "requested": "browser",
-        "nonce": "ring-nonce-5-aed4beea"
+        "nonce": "ring-nonce-5-43a042c5"
       },
       "via_stack": true
     },
     "ok": true
   },
-  "mutation_marker": "RINGMUTATION1789009762",
+  "mutation_marker": "RINGMUTATION1789006212",
   "stage_waterfall": [
     {
-      "t_mono": 42487.667826666,
-      "t_utc": "2026-09-10T03:09:22Z",
+      "t_mono": 38937.780612583,
+      "t_utc": "2026-09-10T02:10:13Z",
       "stage": "stage4_virtio_serial_write_baseline_start",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42487.821567666,
-      "t_utc": "2026-09-10T03:09:22Z",
+      "t_mono": 38937.932887583,
+      "t_utc": "2026-09-10T02:10:13Z",
       "stage": "stage4_virtio_serial_write_baseline_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "transport": "virtio_serial",
       "error": null,
       "error_class": null
     },
     {
-      "t_mono": 42487.865299916,
-      "t_utc": "2026-09-10T03:09:22Z",
+      "t_mono": 38937.987510041,
+      "t_utc": "2026-09-10T02:10:13Z",
       "stage": "event_source_ready",
-      "correlation_id": "ring-1789009762-70725",
-      "marker": "RINGMUTATION1789009762"
+      "correlation_id": "ring-1789006212-33631",
+      "marker": "RINGMUTATION1789006212"
     },
     {
-      "t_mono": 42503.6875045,
-      "t_utc": "2026-09-10T03:09:38Z",
+      "t_mono": 38953.810898875,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage2_ring_stack_ingress_start",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice"
     },
     {
-      "t_mono": 42503.689368,
-      "t_utc": "2026-09-10T03:09:38Z",
+      "t_mono": 38953.815118625,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage3_host_device_os_routing_start",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice"
     },
     {
-      "t_mono": 42504.053972208,
-      "t_utc": "2026-09-10T03:09:39Z",
+      "t_mono": 38954.187486958,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage3_host_device_os_routing_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice",
       "delivered": true,
       "via_stack": true,
       "os_input": true
     },
     {
-      "t_mono": 42504.054518583,
-      "t_utc": "2026-09-10T03:09:39Z",
+      "t_mono": 38954.188949583,
+      "t_utc": "2026-09-10T02:10:29Z",
       "stage": "stage2_ring_stack_ingress_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "target": "libreoffice"
     },
     {
-      "t_mono": 42544.117901083,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.057217375,
+      "t_utc": "2026-09-10T02:11:09Z",
       "stage": "browser_http_ready",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "http": "200",
-      "chromium_pid": 697
+      "chromium_pid": 696
     },
     {
-      "t_mono": 42544.486146416,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.41722825,
+      "t_utc": "2026-09-10T02:11:09Z",
       "stage": "browser_before_snapshot",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "bytes": 32,
-      "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789009563\n"
+      "seed_probe": "2638 /root/Documents/RingMemo.html\n  32 /root/Documents/RingMemo.txt\n2670 total\nMemoStart RINGMUTATION1789002621\n"
     },
     {
-      "t_mono": 42544.862941208,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.78145225,
+      "t_utc": "2026-09-10T02:11:10Z",
       "stage": "ring_inject_browser",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "via_stack": true,
       "delivered": true,
-      "latency_ms": 376
+      "latency_ms": 363
     },
     {
-      "t_mono": 42544.8632975,
-      "t_utc": "2026-09-10T03:10:19Z",
+      "t_mono": 38994.782144291,
+      "t_utc": "2026-09-10T02:11:10Z",
       "stage": "identity_auth_transport_ok",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42559.908556208,
-      "t_utc": "2026-09-10T03:10:35Z",
+      "t_mono": 39009.747616166,
+      "t_utc": "2026-09-10T02:11:24Z",
       "stage": "guest_dispatch_clicks",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42561.825948,
-      "t_utc": "2026-09-10T03:10:36Z",
+      "t_mono": 39011.760547,
+      "t_utc": "2026-09-10T02:11:26Z",
       "stage": "gunnchos_input_text",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "via": "uinput"
     },
     {
-      "t_mono": 42574.770600458,
-      "t_utc": "2026-09-10T03:10:49Z",
+      "t_mono": 39024.638860541,
+      "t_utc": "2026-09-10T02:11:39Z",
       "stage": "qemu_sendkey_marker",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42577.21426275,
-      "t_utc": "2026-09-10T03:10:52Z",
+      "t_mono": 39027.0744945,
+      "t_utc": "2026-09-10T02:11:42Z",
       "stage": "keyboard_event_overlay_armed",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42578.940075416,
-      "t_utc": "2026-09-10T03:10:54Z",
+      "t_mono": 39028.7049305,
+      "t_utc": "2026-09-10T02:11:43Z",
       "stage": "chromium_headless_marker_receipt",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
-      "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789009762\nHL_OK\n",
-      "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789009762'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
+      "probe": "BIN=/usr/bin/chromium\nTRY:--headless=new\nHL_EXIT:0\nMEMO: MemoStart RINGMUTATION1789006212\nHL_OK\n",
+      "stderr": "+ URL='http://127.0.0.1:18776/RingMemo.html?marker=RINGMUTATION1789006212'\n+ rm -rf /root/.gunnchos-chromium-ring-hl\n+ mkdir -p /root/.gunnchos-chromium-ring-hl\n++ command -v chromium\n+ BIN=/usr/bin/c"
     },
     {
-      "t_mono": 42580.180419208,
-      "t_utc": "2026-09-10T03:10:55Z",
+      "t_mono": 39029.938977,
+      "t_utc": "2026-09-10T02:11:45Z",
       "stage": "browser_hl_committed_freeze",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "marker_present": true,
       "bytes": 32
     },
     {
-      "t_mono": 42580.338658916,
-      "t_utc": "2026-09-10T03:10:55Z",
+      "t_mono": 39030.102555958,
+      "t_utc": "2026-09-10T02:11:45Z",
       "stage": "chromium_reloaded_for_drive",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "url_has_marker": true
     },
     {
-      "t_mono": 42582.736432166,
-      "t_utc": "2026-09-10T03:10:57Z",
+      "t_mono": 39032.513248375,
+      "t_utc": "2026-09-10T02:11:47Z",
       "stage": "app_receipt_mutation",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "attempt": 0,
-      "latency_ms": 38249,
+      "latency_ms": 38095,
       "via": "keyboard_event_overlay"
     },
     {
-      "t_mono": 42583.081726208,
-      "t_utc": "2026-09-10T03:10:58Z",
+      "t_mono": 39032.853696041,
+      "t_utc": "2026-09-10T02:11:48Z",
       "stage": "ack_feedback_ok",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42609.483666041,
-      "t_utc": "2026-09-10T03:11:24Z",
+      "t_mono": 39058.982327458,
+      "t_utc": "2026-09-10T02:12:14Z",
       "stage": "game_seed_verify",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "bytes": 340,
       "head": "[meta]\n\nsave_version=2\nsaved_at=\"2026-01-01T00:00:00\"\n\n[career]\n\nxp=11\nlevel=1\nu"
     },
     {
-      "t_mono": 42609.987179958,
-      "t_utc": "2026-09-10T03:11:25Z",
+      "t_mono": 39059.501367791,
+      "t_utc": "2026-09-10T02:12:14Z",
       "stage": "godot45_probe_start",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42610.49806375,
-      "t_utc": "2026-09-10T03:11:25Z",
+      "t_mono": 39059.897394708,
+      "t_utc": "2026-09-10T02:12:15Z",
       "stage": "godot45_probe_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "via": "already_present_on_guest",
       "ver": "4.5.stable.official.876b29033\n4.5.stable.official.876b29033\n"
     },
     {
-      "t_mono": 42610.789343958,
-      "t_utc": "2026-09-10T03:11:25Z",
+      "t_mono": 39060.199436541,
+      "t_utc": "2026-09-10T02:12:15Z",
       "stage": "pedestrian_host_httpd",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
       "port": 8766,
       "has_tar": true
     },
     {
-      "t_mono": 42610.959044208,
-      "t_utc": "2026-09-10T03:11:26Z",
+      "t_mono": 39060.417901375,
+      "t_utc": "2026-09-10T02:12:15Z",
       "stage": "pedestrian_deploy_start",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42611.122387208,
-      "t_utc": "2026-09-10T03:11:26Z",
+      "t_mono": 39062.047792041,
+      "t_utc": "2026-09-10T02:12:17Z",
       "stage": "pedestrian_deploy_done",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "ok": true,
-      "via": "guest_curl_10.0.2.2",
+      "via": "guest_curl_10.0.2.2:8766",
       "error": ""
     },
     {
-      "t_mono": 42611.937156208,
-      "t_utc": "2026-09-10T03:11:27Z",
+      "t_mono": 39062.726644,
+      "t_utc": "2026-09-10T02:12:17Z",
       "stage": "game_overlay_installed",
-      "correlation_id": "ring-1789009762-70725",
-      "ok": true,
-      "probe": "OVERLAY_PATCHED True\n"
+      "correlation_id": "ring-1789006212-33631",
+      "ok": false,
+      "probe": ""
     },
     {
-      "t_mono": 42621.344423958,
-      "t_utc": "2026-09-10T03:11:36Z",
+      "t_mono": 39072.150104166,
+      "t_utc": "2026-09-10T02:12:27Z",
       "stage": "ring_inject_game",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "via_stack": true,
       "delivered": true,
-      "latency_ms": 379
+      "latency_ms": 376
     },
     {
-      "t_mono": 42621.344987541,
-      "t_utc": "2026-09-10T03:11:36Z",
+      "t_mono": 39072.150703708,
+      "t_utc": "2026-09-10T02:12:27Z",
       "stage": "game_identity_auth_transport_ok",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42628.322909666,
-      "t_utc": "2026-09-10T03:11:43Z",
+      "t_mono": 39079.098701666,
+      "t_utc": "2026-09-10T02:12:34Z",
       "stage": "game_guest_dispatch_hid",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42628.477370666,
-      "t_utc": "2026-09-10T03:11:43Z",
+      "t_mono": 39079.25853275,
+      "t_utc": "2026-09-10T02:12:34Z",
       "stage": "game_keyboard_event_overlay_armed",
-      "correlation_id": "ring-1789009762-70725"
+      "correlation_id": "ring-1789006212-33631"
     },
     {
-      "t_mono": 42629.685952833,
-      "t_utc": "2026-09-10T03:11:44Z",
+      "t_mono": 39080.796327916,
+      "t_utc": "2026-09-10T02:12:36Z",
       "stage": "game_overlay_status_poll",
-      "correlation_id": "ring-1789009762-70725",
+      "correlation_id": "ring-1789006212-33631",
       "attempt": 0,
-      "status": "{\"level\":1,\"marker\":\"RINGMUTATION1789009762\",\"overlay\":\"device_lab_ring_input_overlay\",\"phase\":\"mutated\",\"production_gate_harness\":false,\"quit_after\":false,\"receipt\":\"user://ring_m"
+      "status": ""
     },
     {
-      "t_mono": 42630.107264416,
-      "t_utc": "2026-09-10T03:11:45Z",
-      "stage": "game_app_receipt_mutation",
-      "correlation_id": "ring-1789009762-70725",
-      "attempt": 0,
-      "latency_ms": 9142,
-      "via": "parse_input_event_overlay",
-      "overlay_phase": "{\"level\":1,\"marker\":\"RINGMUTATION1789009762\",\"overlay\":\"device_lab_ring_input_overlay\",\"phase\":\"mutated\",\"production_gat"
+      "t_mono": 39086.615521291,
+      "t_utc": "2026-09-10T02:12:41Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 1,
+      "status": ""
     },
     {
-      "t_mono": 42633.717148875,
-      "t_utc": "2026-09-10T03:11:48Z",
+      "t_mono": 39092.485984708,
+      "t_utc": "2026-09-10T02:12:47Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 2,
+      "status": ""
+    },
+    {
+      "t_mono": 39098.331536625,
+      "t_utc": "2026-09-10T02:12:53Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 3,
+      "status": ""
+    },
+    {
+      "t_mono": 39104.197061916,
+      "t_utc": "2026-09-10T02:12:59Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 4,
+      "status": ""
+    },
+    {
+      "t_mono": 39110.062773791,
+      "t_utc": "2026-09-10T02:13:05Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 5,
+      "status": ""
+    },
+    {
+      "t_mono": 39115.937868375,
+      "t_utc": "2026-09-10T02:13:11Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 6,
+      "status": ""
+    },
+    {
+      "t_mono": 39121.827447958,
+      "t_utc": "2026-09-10T02:13:17Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 7,
+      "status": ""
+    },
+    {
+      "t_mono": 39127.7325945,
+      "t_utc": "2026-09-10T02:13:22Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 8,
+      "status": ""
+    },
+    {
+      "t_mono": 39133.588714083,
+      "t_utc": "2026-09-10T02:13:28Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 9,
+      "status": ""
+    },
+    {
+      "t_mono": 39139.391352625,
+      "t_utc": "2026-09-10T02:13:34Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 10,
+      "status": ""
+    },
+    {
+      "t_mono": 39145.197657166,
+      "t_utc": "2026-09-10T02:13:40Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 11,
+      "status": ""
+    },
+    {
+      "t_mono": 39150.961856208,
+      "t_utc": "2026-09-10T02:13:46Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 12,
+      "status": ""
+    },
+    {
+      "t_mono": 39156.76498275,
+      "t_utc": "2026-09-10T02:13:51Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 13,
+      "status": ""
+    },
+    {
+      "t_mono": 39162.5824575,
+      "t_utc": "2026-09-10T02:13:57Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 14,
+      "status": ""
+    },
+    {
+      "t_mono": 39168.435012458,
+      "t_utc": "2026-09-10T02:14:03Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 15,
+      "status": ""
+    },
+    {
+      "t_mono": 39174.24666075,
+      "t_utc": "2026-09-10T02:14:09Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 16,
+      "status": ""
+    },
+    {
+      "t_mono": 39180.117375541,
+      "t_utc": "2026-09-10T02:14:15Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 17,
+      "status": ""
+    },
+    {
+      "t_mono": 39186.072394291,
+      "t_utc": "2026-09-10T02:14:21Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 18,
+      "status": ""
+    },
+    {
+      "t_mono": 39191.964723291,
+      "t_utc": "2026-09-10T02:14:27Z",
+      "stage": "game_overlay_status_poll",
+      "correlation_id": "ring-1789006212-33631",
+      "attempt": 19,
+      "status": ""
+    },
+    {
+      "t_mono": 39196.7999765,
+      "t_utc": "2026-09-10T02:14:32Z",
+      "stage": "game_app_receipt_timeout",
+      "correlation_id": "ring-1789006212-33631",
+      "latency_ms": 125026,
+      "note": "save unchanged after Ring HID+parse_input_event overlay; timeout not first boundary",
+      "overlay_status": ""
+    },
+    {
+      "t_mono": 39201.389944458,
+      "t_utc": "2026-09-10T02:14:36Z",
       "stage": "stage9_host_receipt_final",
-      "correlation_id": "ring-1789009762-70725",
-      "earned": true,
-      "blocker": null,
+      "correlation_id": "ring-1789006212-33631",
+      "earned": false,
+      "blocker": "godot_alive_mutation_not_committed",
       "libreoffice": true,
       "browser": true,
-      "game": true
+      "game": false
     }
   ],
-  "note": "Ring\u2192SpatialInput\u2192guest HID mutated LibreOffice+RingMemo+Pedestrian (input-driven, no lab collector / no migration-alone); guest artifacts committed"
+  "note": "Not earned \u2014 need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)"
 }

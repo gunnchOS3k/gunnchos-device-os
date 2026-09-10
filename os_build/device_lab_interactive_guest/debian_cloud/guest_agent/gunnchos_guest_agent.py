@@ -171,9 +171,10 @@ def cmd_process_start(req: dict[str, Any]) -> dict[str, Any]:
     try:
         proc = subprocess.Popen(argv, env=env)
     except OSError as exc:
-        return _fail("process_start", f"spawn_failed:{exc}")
+        # Real virtio guest path attempted spawn — not a host mailbox stub.
+        return _fail("process_start", f"spawn_failed:{exc}", stub=False)
     _procs[str(name or argv[0])] = proc
-    return _ok("process_start", started=str(name or argv[0]), pid=proc.pid)
+    return _ok("process_start", started=str(name or argv[0]), pid=proc.pid, stub=False)
 
 
 def cmd_process_run(req: dict[str, Any]) -> dict[str, Any]:

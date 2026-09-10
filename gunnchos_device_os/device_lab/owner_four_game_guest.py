@@ -250,7 +250,7 @@ def _ensure_godot45_in_guest(session: Any, repo_root: Path, httpd_port: int = 87
         f"http://10.0.2.2:{httpd_port}/Godot_v4.5-stable_linux.arm64 && "
         "chmod +x /opt/gunnchos/bin/godot && ln -sf /opt/gunnchos/bin/godot /usr/local/bin/godot && "
         "/opt/gunnchos/bin/godot --version",
-        timeout_sec=600,
+        timeout_sec=180,
         name="godot45-http",
     )
     ver = http.get("stdout") or ""

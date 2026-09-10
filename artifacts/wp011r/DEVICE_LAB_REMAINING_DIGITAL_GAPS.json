@@ -27,13 +27,13 @@
     "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
     "LIVE_GUNNCHOS_VISUAL_PASS": true,
     "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
-    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
     "GUEST_DUAL_OUTPUT_PASS": true,
     "RING_TO_REAL_APPLICATION_INPUT_PASS": true,
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
     "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
     "RING_GUEST_UINPUT_MOUSEPAD_MUTATION": true,
-    "ECO010_SOAK_PASS": true,
+    "ECO010_SOAK_PASS": false,
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
   "gaps": [
@@ -73,12 +73,12 @@
     {
       "id": "GAP-RING-APP-MUTATION",
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
-      "status": "OPEN_CURRENT_PIN_REEARN",
-      "earned": false,
-      "summary": "OPEN: guest_browser_state_not_committed",
+      "status": "EARNED",
+      "earned": true,
+      "summary": "EARNED: current-pin Ring re-earn on Interactive Guest",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
-      "pass": false,
-      "digital_earned": false,
+      "pass": true,
+      "digital_earned": true,
       "required_path": "os_build/device_lab_interactive_guest (interactive_guest)"
     },
     {
@@ -114,7 +114,7 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-09-09T20:42:38Z",
+  "updated_at_utc": "2026-09-10T03:17:34Z",
   "cycle3b_continue": {
     "LIVE": false,
     "DSXL": true,
@@ -142,5 +142,6 @@
   "independent": {
     "INDEPENDENT_PASS": false,
     "reason": "five_gate_digital_and false until FOUR_GAME + retained gates"
-  }
+  },
+  "ECO010_REEARN_REQUIRED_AFTER_RING_FIX": true
 }
