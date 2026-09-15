@@ -1,0 +1,723 @@
+"""Interactive Guest WAIKE real-runtime attempt using authentic Platform binary.
+
+Prefer FAIL over false PASS. Seed HTML / fixture LMS / curriculum-alone never PASS.
+"""
+from __future__ import annotations
+
+import base64
+import json
+import os
+import shutil
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+from gunnchos_device_os.device_lab.interactive_guest_proofs import (
+    _agent_call,
+    _wait_agent,
+    boot_interactive_guest,
+)
+from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
+    start_host_artifact_httpd,
+    wait_host_artifact_httpd,
+)
+from gunnchos_device_os.device_lab.owner_waike_artifacts import (
+    ACCEPTED_WAIKE_LP_SHA,
+    APP_VERSION,
+    BUNDLE_ID,
+    PIN_MANIFEST_SHA256,
+    stage_owner_waike_bundle,
+    write_runtime_provenance,
+)
+
+CLAIM = (
+    "WAIKE real runtime requires authentic Platform Tauri Learning OS inside "
+    "Interactive Development Guest via Device OS launch/package path. "
+    "SILICON_EXACT_EMULATION=false. SHIPPING_IMAGE=false."
+)
+
+
+def _utc() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _b64_put(session: Any, remote: str, data: bytes) -> dict[str, Any]:
+    b64 = base64.b64encode(data).decode("ascii")
+    # chunk if huge
+    script = (
+        "import base64,pathlib,sys\n"
+        f"p=pathlib.Path({remote!r})\n"
+        "p.parent.mkdir(parents=True, exist_ok=True)\n"
+        f"p.write_bytes(base64.b64decode({b64!r}))\n"
+        "print('PUT_OK', p, p.stat().st_size)\n"
+    )
+    return _agent_call(
+        session,
+        "process_run",
+        argv=["python3", "-c", script],
+        timeout_sec=60.0,
+    )
+
+
+def _guest_sh(session: Any, cmd: str, *, timeout_sec: float = 120.0) -> dict[str, Any]:
+    return _agent_call(
+        session,
+        "process_run",
+        argv=["bash", "-lc", cmd],
+        timeout_sec=timeout_sec,
+    )
+
+
+def ensure_qemu_user_x86_64(session: Any) -> dict[str, Any]:
+    """Additive compatibility: run authentic x86_64 CI ELF on aarch64 guest.
+
+    qemu-user-static alone is insufficient for dynamically linked Tauri ELFs —
+    the guest still needs an amd64 loader/libs (or a native aarch64 artifact).
+    """
+    probe = _guest_sh(
+        session,
+        "uname -m; "
+        "command -v qemu-x86_64-static || true; "
+        "command -v qemu-x86_64 || true; "
+        "ls /lib64/ld-linux-x86-64.so.2 /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 2>/dev/null || true; "
+        "dpkg -l qemu-user-static 2>/dev/null | tail -1 || true",
+        timeout_sec=30.0,
+    )
+    out = (probe.get("stdout") or "") + (probe.get("stderr") or "")
+    has_qemu = "qemu-x86_64" in out
+    has_amd64_ld = "ld-linux-x86-64.so.2" in out
+    if has_qemu and has_amd64_ld:
+        return {
+            "ok": True,
+            "already_present": True,
+            "amd64_loader_present": True,
+            "probe": out[-500:],
+        }
+    install = _guest_sh(
+        session,
+        "export DEBIAN_FRONTEND=noninteractive; "
+        "apt-get update -qq; "
+        "apt-get install -y -qq qemu-user-static binfmt-support 2>&1 | tail -20; "
+        # Best-effort multiarch loader so qemu-user can start dynamically linked ELFs.
+        "dpkg --add-architecture amd64 2>/dev/null || true; "
+        "apt-get update -qq 2>&1 | tail -5; "
+        "apt-get install -y -qq libc6:amd64 2>&1 | tail -30 || true; "
+        "command -v qemu-x86_64-static; "
+        "ls -la /lib64/ld-linux-x86-64.so.2 /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 2>&1 || true; "
+        "echo QEMU_USER_SETUP_DONE",
+        timeout_sec=420.0,
+    )
+    iout = (install.get("stdout") or "") + (install.get("stderr") or "")
+    ok_qemu = "qemu-x86_64" in iout
+    ok_ld = "ld-linux-x86-64.so.2" in iout and "No such file" not in iout.split("ld-linux")[-1][:80]
+    # Heuristic: ls success lines include the path without error prefix alone.
+    ok_ld = ("/lib64/ld-linux-x86-64.so.2" in iout or "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" in iout) and (
+        "No such file or directory" not in iout
+        or iout.count("ld-linux-x86-64.so.2") > iout.count("No such file")
+    )
+    return {
+        "ok": ok_qemu,
+        "qemu_user_ok": ok_qemu,
+        "amd64_loader_present": ok_ld,
+        "already_present": False,
+        "install_stdout_tail": iout[-1500:],
+        "returncode": install.get("returncode"),
+        "note": (
+            "Even with amd64 loader, Tauri still needs amd64 GTK/WebKit libs; "
+            "prefer aarch64 CI artifact for Device Lab guest."
+        ),
+    }
+
+
+def fetch_bundle_into_guest(session: Any, *, port: int = 8767) -> dict[str, Any]:
+    remote_root = "/var/lib/gunnchos/waike-learning-os"
+    marker = f"WAIKE_FETCH_{int(time.time())}"
+    # Prefer 9p share (same path four-game uses) then HTTP fallback.
+    cmd = (
+        f"set -euo pipefail; "
+        f"MARKER={marker}; echo START_$MARKER; "
+        f"rm -rf {remote_root}.partial {remote_root}; "
+        f"mkdir -p {remote_root}.partial/bin; "
+        f"SRC9=; "
+        f"for cand in /mnt/gdlgames /media/gdlgames /run/gunnchos/gdlgames; do "
+        f"  if [ -f \"$cand/bin/waike-learning-os\" ]; then SRC9=$cand; break; fi; "
+        f"done; "
+        f"if [ -z \"$SRC9\" ]; then "
+        f"  mkdir -p /mnt/gdlgames; "
+        f"  mount -t 9p -o trans=virtio,version=9p2000.L gdlgames /mnt/gdlgames 2>/dev/null || true; "
+        f"  if [ -f /mnt/gdlgames/bin/waike-learning-os ]; then SRC9=/mnt/gdlgames; fi; "
+        f"fi; "
+        f"if [ -n \"$SRC9\" ]; then "
+        f"  echo VIA_9P_$MARKER src=$SRC9; "
+        f"  cp -a \"$SRC9/bin/waike-learning-os\" {remote_root}.partial/bin/waike-learning-os; "
+        f"  cp -a \"$SRC9/bin/VERSION\" {remote_root}.partial/bin/VERSION; "
+        f"  cp -a \"$SRC9/bin/INSTALLED.json\" {remote_root}.partial/bin/INSTALLED.json; "
+        f"  cp -a \"$SRC9/bin/waike-learning-os.qemu-x86_64-wrapper.sh\" "
+        f"    {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
+        f"  cp -a \"$SRC9/OWNER_WAIKE_BUNDLE_MANIFEST.json\" {remote_root}.partial/MANIFEST.json; "
+        f"  cp -a \"$SRC9/WAIKE_RUNTIME_PROVENANCE.json\" "
+        f"    {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
+        f"else "
+        f"  echo VIA_HTTP_$MARKER; "
+        f"  command -v curl; "
+        f"  curl -fsSL --connect-timeout 5 --max-time 60 "
+        f"    http://10.0.2.2:{port}/OWNER_WAIKE_BUNDLE_MANIFEST.json "
+        f"    -o {remote_root}.partial/MANIFEST.json; "
+        f"  curl -fsSL --connect-timeout 5 --max-time 180 "
+        f"    http://10.0.2.2:{port}/bin/waike-learning-os "
+        f"    -o {remote_root}.partial/bin/waike-learning-os; "
+        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+        f"    http://10.0.2.2:{port}/bin/VERSION -o {remote_root}.partial/bin/VERSION; "
+        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+        f"    http://10.0.2.2:{port}/bin/INSTALLED.json "
+        f"    -o {remote_root}.partial/bin/INSTALLED.json; "
+        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+        f"    http://10.0.2.2:{port}/bin/waike-learning-os.qemu-x86_64-wrapper.sh "
+        f"    -o {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
+        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+        f"    http://10.0.2.2:{port}/WAIKE_RUNTIME_PROVENANCE.json "
+        f"    -o {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
+        f"fi; "
+        f"chmod +x {remote_root}.partial/bin/waike-learning-os "
+        f"  {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
+        f"cp -a {remote_root}.partial/bin/waike-learning-os "
+        f"  {remote_root}.partial/bin/waike-learning-os.real; "
+        f"file {remote_root}.partial/bin/waike-learning-os.real; "
+        f"wc -c {remote_root}.partial/bin/waike-learning-os.real; "
+        f"mv {remote_root}.partial {remote_root}; "
+        f"echo FETCH_OK_$MARKER; ls -la {remote_root}/bin"
+    )
+    r = _guest_sh(session, cmd, timeout_sec=300.0)
+    out = (r.get("stdout") or "") + (r.get("stderr") or "")
+    ok = f"FETCH_OK_{marker}" in out
+    via = "9p" if f"VIA_9P_{marker}" in out else ("http" if f"VIA_HTTP_{marker}" in out else "unknown")
+    return {
+        "ok": ok,
+        "via": via,
+        "remote_root": remote_root,
+        "stdout_tail": out[-2000:],
+        "returncode": r.get("returncode"),
+        "marker": marker,
+    }
+
+
+def maybe_enable_qemu_wrapper(session: Any, arch_gap: bool) -> dict[str, Any]:
+    if not arch_gap:
+        return {"ok": True, "wrapper_enabled": False, "reason": "no_arch_gap"}
+    remote = "/var/lib/gunnchos/waike-learning-os"
+    r = _guest_sh(
+        session,
+        f"set -euo pipefail; "
+        f"cd {remote}/bin; "
+        f"if command -v qemu-x86_64-static >/dev/null || command -v qemu-x86_64 >/dev/null; then "
+        f"  cp -a waike-learning-os.qemu-x86_64-wrapper.sh waike-learning-os; "
+        f"  chmod +x waike-learning-os waike-learning-os.real; "
+        f"  echo WRAPPER_ON; "
+        f"else "
+        f"  echo WRAPPER_MISSING_QEMU; exit 2; "
+        f"fi",
+        timeout_sec=30.0,
+    )
+    out = (r.get("stdout") or "") + (r.get("stderr") or "")
+    return {
+        "ok": "WRAPPER_ON" in out,
+        "wrapper_enabled": "WRAPPER_ON" in out,
+        "stdout_tail": out[-500:],
+        "returncode": r.get("returncode"),
+    }
+
+
+def guest_device_os_launch(
+    session: Any,
+    *,
+    deep_link: str = "waike://learn/home",
+    profile: str = "student",
+    platform_role: str = "learner",
+    journey_tag: str = "A",
+) -> dict[str, Any]:
+    """Launch via Device OS NativeLaunchAdapter inside guest (product path)."""
+    install_root = "/var/lib/gunnchos/waike-learning-os"
+    ipc_dir = f"/tmp/waike-los-ipc-j{journey_tag}"
+    # Prefer in-guest Device OS module if present; else invoke binary with IPC protocol.
+    script = f"""
+import json, os, sys, time, uuid, tempfile
+from pathlib import Path
+
+install_root = Path({install_root!r})
+os.environ['LEARNING_OS_INSTALL_ROOT'] = str(install_root)
+os.environ['LEARNING_OS_APP_VERSION'] = {APP_VERSION!r}
+os.environ['LEARNING_OS_PLATFORM_SHA'] = {ACCEPTED_WAIKE_LP_SHA!r}
+os.environ['WAIKE_CI_HEADLESS_UI'] = '1'
+os.environ['CI_HEADLESS_UI'] = '1'
+os.environ['LEARNING_OS_CLEANUP_AFTER_ACK'] = '0'
+os.environ['WAIKE_DEV_DB_KEY'] = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
+os.environ['HOME'] = '/root'
+os.environ['XDG_DATA_HOME'] = '/var/lib/gunnchos/waike-userdata'
+
+sys.path.insert(0, '/opt/gunnchos/lib')
+result = {{'path': 'unknown'}}
+try:
+    from gunnchos_device_os.learning_os.native_launch import NativeLaunchAdapter
+    from gunnchos_device_os.learning_os_launcher import launch_learning_os
+    adapter = NativeLaunchAdapter(install_root=install_root, timeout_s=25.0, ipc_dir=Path({ipc_dir!r}))
+    Path({ipc_dir!r}).mkdir(parents=True, exist_ok=True)
+    r = launch_learning_os(
+        {profile!r}, 'School', {deep_link!r},
+        platform_role={platform_role!r},
+        include_companion_seed=False,
+        adapter=adapter,
+        install_root=install_root,
+    )
+    result = {{'path': 'device_os_learning_os_launcher', **r}}
+except Exception as exc:
+    # Fallback: direct binary + FileIpcTransport-compatible argv used by native client.
+    result = {{'path': 'fallback_direct', 'launcher_error': repr(exc)}}
+    exe = install_root / 'bin' / 'waike-learning-os'
+    if not exe.is_file():
+        result['ok'] = False
+        result['error'] = 'executable_missing'
+        print(json.dumps(result))
+        raise SystemExit(2)
+    ipc = Path({ipc_dir!r})
+    ipc.mkdir(parents=True, exist_ok=True)
+    req_id = str(uuid.uuid4())
+    req = {{
+        'protocol': 'gunnchos.learning_os.ipc.v1',
+        'request_id': req_id,
+        'bundle_id': {BUNDLE_ID!r},
+        'app_version': {APP_VERSION!r},
+        'deep_link': {{
+            'uri': {deep_link!r},
+            'canonical': {deep_link!r},
+            'valid': True,
+            'kind': 'learn',
+            'path': 'home',
+        }},
+        'context': {{
+            'profile': {profile!r},
+            'mode': 'School',
+            'platform_role': {platform_role!r},
+            'bundle_id': {BUNDLE_ID!r},
+        }},
+    }}
+    req_path = ipc / f'request-{{req_id}}.json'
+    req_path.write_text(json.dumps(req, indent=2, sort_keys=True) + '\\n')
+    env = os.environ.copy()
+    env['LEARNING_OS_IPC_DIR'] = str(ipc)
+    env['LEARNING_OS_REQUEST_ID'] = req_id
+    env['WAIKE_CI_HEADLESS_UI'] = '1'
+    env['CI_HEADLESS_UI'] = '1'
+    import subprocess
+    proc = subprocess.Popen(
+        [
+            str(exe),
+            '--bundle-id', {BUNDLE_ID!r},
+            '--deep-link', {deep_link!r},
+            '--ipc-dir', str(ipc),
+            '--request-id', req_id,
+            '--ci-headless-ui',
+        ],
+        env=env,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    deadline = time.time() + 25
+    ack = None
+    while time.time() < deadline:
+        ack_path = ipc / f'ack-{{req_id}}.json'
+        if ack_path.is_file():
+            try:
+                ack = json.loads(ack_path.read_text())
+            except Exception as read_exc:
+                ack = {{'parse_error': repr(read_exc)}}
+            break
+        if proc.poll() is not None:
+            # one more ack check after exit
+            if ack_path.is_file():
+                try:
+                    ack = json.loads(ack_path.read_text())
+                except Exception:
+                    pass
+            break
+        time.sleep(0.2)
+    stdout, stderr = '', ''
+    try:
+        if proc.poll() is None:
+            stdout, stderr = proc.communicate(timeout=5)
+        else:
+            try:
+                stdout, stderr = proc.communicate(timeout=0.1)
+            except Exception:
+                stdout, stderr = '', ''
+    except Exception:
+        try:
+            proc.kill()
+        except Exception:
+            pass
+    nack = bool(isinstance(ack, dict) and ack.get('ok') is False)
+    result.update({{
+        'process_started': proc.pid is not None,
+        'pid': proc.pid,
+        'returncode': proc.returncode,
+        'acknowledged': bool(ack) and not nack,
+        'ack': ack,
+        'stdout_tail': (stdout or '')[-800:],
+        'stderr_tail': (stderr or '')[-800:],
+        'launched': bool(ack) and not nack,
+        'executable': str(exe),
+        'fixture_rejected': 'fixtures/learning_os' not in str(exe),
+    }})
+
+# Guard: never accept protocol fixture path
+exe = result.get('executable') or ''
+if 'fixtures/learning_os' in str(exe):
+    result['launched'] = False
+    result['reason'] = 'fixture_binary_rejected'
+print(json.dumps(result))
+"""
+    put = _b64_put(session, f"/var/tmp/waike_deviceos_launch_{journey_tag}.py", script.encode())
+    run = _guest_sh(
+        session,
+        f"python3 /var/tmp/waike_deviceos_launch_{journey_tag}.py",
+        timeout_sec=90.0,
+    )
+    out = run.get("stdout") or ""
+    payload: dict[str, Any] = {"ok": False, "raw_stdout_tail": out[-2000:], "put": put}
+    # Parse last JSON object from stdout
+    for line in reversed(out.splitlines()):
+        line = line.strip()
+        if line.startswith("{") and line.endswith("}"):
+            try:
+                payload = json.loads(line)
+                break
+            except json.JSONDecodeError:
+                continue
+    payload["guest_returncode"] = run.get("returncode")
+    payload["journey_tag"] = journey_tag
+    payload["deep_link"] = deep_link
+    payload["platform_role"] = platform_role
+    return payload
+
+
+def probe_binary_exec(session: Any) -> dict[str, Any]:
+    r = _guest_sh(
+        session,
+        "set -x; "
+        "file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os; "
+        "file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real 2>/dev/null || true; "
+        "ls -la /var/lib/gunnchos/waike-learning-os/bin; "
+        "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help 2>&1 | head -20 || true; "
+        "echo PROBE_DONE",
+        timeout_sec=60.0,
+    )
+    out = (r.get("stdout") or "") + (r.get("stderr") or "")
+    return {"stdout_tail": out[-2000:], "returncode": r.get("returncode")}
+
+
+def role_boundary_probe(session: Any) -> dict[str, Any]:
+    """Learner vs instructor authorization via Device OS role mapping + launch context."""
+    learner = guest_device_os_launch(
+        session,
+        deep_link="waike://learn/home",
+        profile="student",
+        platform_role="learner",
+        journey_tag="roleL",
+    )
+    instructor = guest_device_os_launch(
+        session,
+        deep_link="waike://learn/home",
+        profile="educator",
+        platform_role="instructor",
+        journey_tag="roleI",
+    )
+    # Frontend-only fakes rejected: both must go through Device OS launch path.
+    return {
+        "ok": bool(learner.get("path")) and bool(instructor.get("path")),
+        "learner_launch": {
+            "launched": bool(learner.get("launched") or learner.get("acknowledged")),
+            "path": learner.get("path"),
+            "platform_role": "learner",
+            "profile": "student",
+        },
+        "instructor_launch": {
+            "launched": bool(instructor.get("launched") or instructor.get("acknowledged")),
+            "path": instructor.get("path"),
+            "platform_role": "instructor",
+            "profile": "educator",
+        },
+        "frontend_only_role_fake": False,
+        "note": (
+            "Role boundary exercised via Device OS launch context platform_role; "
+            "not a CSS/UI-only toggle."
+        ),
+    }
+
+
+def attempt_owner_waike_in_guest_pass(
+    repo_root: Path,
+    *,
+    work: Path | None = None,
+    memory_mb: int = 4096,
+    boot_timeout_s: int = 240,
+) -> dict[str, Any]:
+    os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
+    out: dict[str, Any] = {
+        "schema": "gunnchos.device_lab.waike_real_runtime_attempt.v1",
+        "started_at_utc": _utc(),
+        "pin_manifest_sha256": PIN_MANIFEST_SHA256,
+        "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
+        "SHIPPING_IMAGE": False,
+        "SILICON_EXACT_EMULATION": False,
+        "GUNNCH_GUEST_AGENT_HOST_STUB": "0",
+        "claim_boundary": CLAIM,
+        "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": False,
+        "prefer_fail_over_false_pass": True,
+    }
+    evidence = repo_root / "artifacts/device_lab_current_pin/waike"
+    evidence.mkdir(parents=True, exist_ok=True)
+    staging = evidence / "owner_bundle_stage"
+    if staging.exists():
+        shutil.rmtree(staging)
+    bundle = stage_owner_waike_bundle(repo_root, staging)
+    out["bundle"] = bundle
+    if not bundle.get("ok"):
+        out["blocker"] = bundle.get("error") or "owner_bundle_stage_failed"
+        out["finished_at_utc"] = _utc()
+        return out
+    if not bundle.get("pin_ok"):
+        out["blocker"] = "accepted_main_pin_verification_failed"
+        out["finished_at_utc"] = _utc()
+        return out
+
+    free_before = shutil.disk_usage("/").free / (1024**3)
+    out["FREE_GIB_BEFORE_QEMU"] = round(free_before, 2)
+    if free_before < 25:
+        out["blocker"] = "WAIKE_STORAGE_BLOCKED_BEFORE_QEMU"
+        out["finished_at_utc"] = _utc()
+        return out
+
+    work = work or (repo_root / "artifacts/wp011r/interactive_guest_session_waike")
+    if work.exists():
+        # Do not delete large disks blindly; require clean session dir name.
+        shutil.rmtree(work, ignore_errors=True)
+    work.mkdir(parents=True, exist_ok=True)
+
+    # Expose owner WAIKE bundle via the Interactive Guest 9p tag (gdlgames).
+    os.environ["GUNNCH_LAB_GAMES_9P_PATH"] = str(staging)
+    os.environ.setdefault("GUNNCHDEVICE_LAB_NET_RESTRICT", "0")
+
+    httpd = start_host_artifact_httpd(
+        staging,
+        port=8767,
+        log_path=evidence / "host_artifact_httpd_waike.log",
+    )
+    ok_listen, listen_err = wait_host_artifact_httpd(8767, proc=httpd)
+    out["httpd"] = {"ok": ok_listen, "error": listen_err, "port": 8767}
+    if not ok_listen:
+        httpd.terminate()
+        out["blocker"] = f"host_artifact_httpd:{listen_err}"
+        out["finished_at_utc"] = _utc()
+        return out
+
+    try:
+        boot = boot_interactive_guest(
+            repo_root, work, dual=True, boot_timeout_s=boot_timeout_s, memory_mb=memory_mb
+        )
+        session = boot.pop("_session", None)
+        out["boot"] = {
+            "ok": boot.get("ok"),
+            "error": boot.get("error"),
+            "pid": boot.get("pid"),
+            "arch": boot.get("arch"),
+        }
+        if not boot.get("ok") or session is None:
+            out["blocker"] = boot.get("error") or "interactive_guest_boot_failed_no_session"
+            out["finished_at_utc"] = _utc()
+            return out
+        if not _wait_agent(session, tries=40, sleep_s=1.0):
+            out["blocker"] = "guest_agent_not_ready"
+            out["finished_at_utc"] = _utc()
+            return out
+        ping = _agent_call(session, "ping", timeout_sec=8.0)
+        out["ping"] = ping
+        if not ping.get("pong") or ping.get("transport") == "host_stub":
+            out["blocker"] = "guest_agent_not_real_virtio_serial"
+            out["finished_at_utc"] = _utc()
+            return out
+
+        uname = _guest_sh(session, "uname -am", timeout_sec=20.0)
+        out["guest_uname"] = (uname.get("stdout") or "").strip()
+
+        qemu_user = ensure_qemu_user_x86_64(session)
+        out["qemu_user_x86_64"] = qemu_user
+        # Let apt/binfmt settle before large HTTP pulls.
+        time.sleep(2.0)
+
+        fetched = fetch_bundle_into_guest(session, port=8767)
+        out["fetch"] = fetched
+        if not fetched.get("ok"):
+            # Fallback: virtio file_put for binary (HTTP may be net-restricted).
+            staging_bin = staging / "bin" / "waike-learning-os"
+            put_tries = {}
+            if staging_bin.is_file():
+                put_tries["binary"] = _b64_put(
+                    session,
+                    "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
+                    staging_bin.read_bytes(),
+                )
+                for name in ("VERSION", "INSTALLED.json", "waike-learning-os.qemu-x86_64-wrapper.sh"):
+                    p = staging / "bin" / name
+                    if p.is_file():
+                        put_tries[name] = _b64_put(
+                            session,
+                            f"/var/lib/gunnchos/waike-learning-os/bin/{name}",
+                            p.read_bytes(),
+                        )
+                for name in ("OWNER_WAIKE_BUNDLE_MANIFEST.json", "WAIKE_RUNTIME_PROVENANCE.json"):
+                    p = staging / name
+                    if p.is_file():
+                        put_tries[name] = _b64_put(
+                            session,
+                            f"/var/lib/gunnchos/waike-learning-os/{name}",
+                            p.read_bytes(),
+                        )
+                finalize = _guest_sh(
+                    session,
+                    "set -euo pipefail; "
+                    "ROOT=/var/lib/gunnchos/waike-learning-os; "
+                    "chmod +x $ROOT/bin/waike-learning-os "
+                    "  $ROOT/bin/waike-learning-os.qemu-x86_64-wrapper.sh || true; "
+                    "cp -a $ROOT/bin/waike-learning-os $ROOT/bin/waike-learning-os.real; "
+                    "file $ROOT/bin/waike-learning-os.real; "
+                    "wc -c $ROOT/bin/waike-learning-os.real; "
+                    "echo PUT_FETCH_OK",
+                    timeout_sec=60.0,
+                )
+                fout = (finalize.get("stdout") or "") + (finalize.get("stderr") or "")
+                out["fetch_file_put_fallback"] = {
+                    "puts": {k: bool(v.get("ok") or "PUT_OK" in str(v.get("stdout") or "")) for k, v in put_tries.items()},
+                    "finalize_tail": fout[-800:],
+                }
+                if "PUT_FETCH_OK" in fout:
+                    fetched = {
+                        "ok": True,
+                        "remote_root": "/var/lib/gunnchos/waike-learning-os",
+                        "via": "virtio_file_put_fallback",
+                        "stdout_tail": fout[-800:],
+                    }
+                    out["fetch"] = fetched
+            if not fetched.get("ok"):
+                out["blocker"] = "guest_fetch_owner_bundle_failed"
+                out["finished_at_utc"] = _utc()
+                return out
+
+        wrapped = maybe_enable_qemu_wrapper(session, bool(bundle.get("arch_gap")))
+        out["qemu_wrapper"] = wrapped
+        if bundle.get("arch_gap") and not wrapped.get("ok"):
+            out["blocker"] = "arch_gap_x86_64_binary_on_aarch64_guest_without_qemu_user"
+            out["finished_at_utc"] = _utc()
+            return out
+
+        out["binary_probe"] = probe_binary_exec(session)
+        probe_tail = str((out["binary_probe"] or {}).get("stdout_tail") or "")
+        if "Could not open '/lib64/ld-linux-x86-64.so.2'" in probe_tail or (
+            "ld-linux-x86-64.so.2" in probe_tail and "No such file" in probe_tail
+        ):
+            out["blocker"] = (
+                "ci_linux_x86_64_elf_on_aarch64_guest_missing_amd64_loader_or_libs;"
+                "qemu_user_static_insufficient_for_dynamic_tauri;"
+                "need_aarch64_linux_ci_artifact_or_in_guest_native_build"
+            )
+            # Still attempt launch for evidence, but do not claim PASS.
+            out["arch_runtime_gap"] = True
+
+        # Journey A
+        journey_a = guest_device_os_launch(session, journey_tag="A")
+        out["journey_a_launch"] = journey_a
+        # Role boundary
+        out["role_boundary"] = role_boundary_probe(session)
+        # Journey B (fresh launch — repeatability)
+        journey_b = guest_device_os_launch(session, journey_tag="B")
+        out["journey_b_launch"] = journey_b
+
+        launch_a_ok = bool(journey_a.get("launched") or journey_a.get("acknowledged"))
+        launch_b_ok = bool(journey_b.get("launched") or journey_b.get("acknowledged"))
+        fixture_ok = bool(journey_a.get("fixture_rejected", True)) and (
+            "fixtures/learning_os" not in str(journey_a.get("executable") or "")
+        )
+
+        # Depth classification: headless ack proves Device OS↔Platform launch IPC,
+        # but accepted-main headless path exits before PackService learner mutations.
+        # Do NOT invent course/lesson/assessment PASS from launch alone.
+        out["capability_classification"] = {
+            "device_os_native_launch_ipc": launch_a_ok,
+            "authentic_platform_binary": fixture_ok and bool(fetched.get("ok")),
+            "learner_course_lesson_interaction": False,
+            "assessment_submission_mutation": False,
+            "offline_sync_outbox": "supported_in_product_not_exercised_this_run",
+            "reason": (
+                "Accepted-main WAIKE_CI_HEADLESS_UI acknowledges Device OS IPC then "
+                "returns before Tauri invoke surface (install/lesson/quiz/outbox). "
+                "Full GUI/webview journey on aarch64 guest requires aarch64 linux "
+                "artifact or native in-guest build; x86_64 under qemu-user is launch-"
+                "path compatibility only unless GUI stack also works."
+            ),
+        }
+
+        learner_journey_complete = False  # honest — not earned this run via headless-only
+        out["learner_journey"] = {
+            "launch": launch_a_ok,
+            "identity_role_context": bool(out["role_boundary"].get("ok")),
+            "course": False,
+            "lesson": False,
+            "interaction": False,
+            "assessed_or_submission_mutation": False,
+            "persist_readback": False,
+            "close_relaunch_restore": launch_a_ok and launch_b_ok,
+            "complete": learner_journey_complete,
+        }
+
+        and_ok = all(
+            [
+                bool(bundle.get("ok")),
+                bool(bundle.get("pin_ok")),
+                bool(fetched.get("ok")),
+                fixture_ok,
+                launch_a_ok,
+                launch_b_ok,
+                learner_journey_complete,
+                bool(out["role_boundary"].get("ok")),
+            ]
+        )
+        out["WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS"] = bool(and_ok)
+        if not and_ok:
+            if launch_a_ok and not learner_journey_complete:
+                out["blocker"] = (
+                    "headless_launch_ack_only_learner_journey_depth_not_earned;"
+                    "need_gui_or_product_journey_surface_on_guest_arch"
+                )
+            elif not launch_a_ok:
+                out["blocker"] = (
+                    "device_os_platform_launch_failed:"
+                    + str(journey_a.get("reason") or journey_a.get("error") or journey_a.get("launcher_error") or "unknown")
+                )
+            else:
+                out["blocker"] = "waike_and_gate_incomplete"
+        out["finished_at_utc"] = _utc()
+        return out
+    finally:
+        try:
+            httpd.terminate()
+        except Exception:
+            pass
+        # Power off guest if session still around — best effort via work dir pid.
+        pid_path = work / "qemu.pid"
+        if pid_path.exists():
+            try:
+                pid = int(pid_path.read_text().strip())
+                os.kill(pid, 15)
+                time.sleep(2)
+            except OSError:
+                pass

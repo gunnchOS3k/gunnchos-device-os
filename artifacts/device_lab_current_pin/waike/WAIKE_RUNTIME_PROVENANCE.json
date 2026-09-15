@@ -1,0 +1,57 @@
+{
+  "schema": "gunnchos.device_lab.waike_runtime_provenance.v1",
+  "generated_at_utc": "2026-09-15T17:38:00Z",
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "system_of_record": "platform_tauri_learning_os",
+  "bundle_id": "com.gunnchos.waike.learning",
+  "app_version": "0.1.0",
+  "accepted_main": {
+    "repository": "gunnchOS3k/gunnchos-waike-learning-platform",
+    "sha": "8610018a62e07548405a58384773d96a7be7950b",
+    "curriculum_ops_sha": "fbf7685bc5686201ccaa0128ee83346d59b3d584"
+  },
+  "rejected_surrogates": [
+    "apps/waike_learning/index.html seed companion",
+    "fixtures/learning_os/waike-learning-os protocol stub",
+    "product_use waike_guest_pack static HTML collector",
+    "research-ops curriculum alone",
+    "screenshots / API-only / process-alive alone"
+  ],
+  "pin_verification": {
+    "ok": true,
+    "learning_platform": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp",
+      "head": "8610018a62e07548405a58384773d96a7be7950b",
+      "origin_main": null,
+      "expected": "8610018a62e07548405a58384773d96a7be7950b",
+      "match": true,
+      "dirty": false
+    },
+    "research_ops": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/waike-research-ops",
+      "head": "0c627ab700cf72a89a9aad06369e5dedb8fb9b82",
+      "origin_main": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+      "expected": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+      "match": true,
+      "dirty": true
+    },
+    "note": "Dirty research-ops allowed only if origin/main pin matches; learning-platform must be clean accepted-main for PASS evidence."
+  },
+  "authentic_linux_ci_artifact": {
+    "ok": true,
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/gate-d-linux/apps/client/src-tauri/target/release/waike-learning-client",
+    "sha256": "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef",
+    "size_bytes": 8384224,
+    "file_probe": "ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=4ac1d3ef865638552e1159cfa3cb15ef6cc04cae, not stripped",
+    "arch": "x86_64",
+    "matches_gate_d_linux_sha256": true,
+    "artifact_id": "10041457013",
+    "fixture_rejected": true
+  },
+  "guest_arch_expectation": "aarch64",
+  "ci_linux_artifact_arch": "x86_64",
+  "arch_gap": true,
+  "compatibility_plan": "Device OS Interactive Guest is aarch64. Accepted-main Gate D CI publishes x86_64 linux ELF. Additive Device OS path: install qemu-user-static in guest to execute authentic CI binary, OR consume future aarch64 CI artifact without reducing WAIKE scope.",
+  "launcher_contract": "gunnchos_device_os.learning_os_launcher + NativeLaunchAdapter",
+  "claim_boundary": "SoR is Platform Tauri Learning OS. Device OS is thin launcher / package lifecycle / permissions / continuity only."
+}

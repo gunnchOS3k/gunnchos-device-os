@@ -1,10 +1,10 @@
 {
   "schema": "gunnchos.device_lab.current_pin_master.v1",
-  "generated_at_utc": "2026-09-15T05:16:05Z",
+  "generated_at_utc": "2026-09-15T18:01:06Z",
   "work_item": "DEVICE_LAB_CURRENT_PIN_REVALIDATION",
   "branch": "cursor/device-lab-current-pin-revalidation",
   "base": "origin/main",
-  "device_os_tip": "825653715747cb0397c84f05d8f71fe6e7b748f1",
+  "device_os_tip": "3dda7b80897585bae32dbbaf7fdcabc9ffabb7c7",
   "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
   "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
@@ -26,11 +26,13 @@
   "prefer_fail_over_false_pass": true,
   "cursor_never_merges": true,
   "stale_historical_proof_rejected": true,
-  "FREE_GIB": 26.0,
-  "primary_blocker": "ECO010_REEARN_REQUIRED_AFTER_RUNTIME_FIXES",
+  "FREE_GIB": 26.91,
+  "primary_blocker": "ci_linux_x86_64_elf_on_aarch64_guest_missing_amd64_loader_or_libs;qemu_user_static_insufficient_for_dynamic_tauri;need_aarch64_linux_ci_artifact_or_in_guest_native_build",
   "DEVICE_LAB_CANDIDATE_READY_FOR_OWNER": false,
   "ECO010_REEARN_REQUIRED_AFTER_RING_FIX": true,
   "ring_blocker": "guest_browser_state_not_committed",
   "ECO010_REEARN_REQUIRED_AFTER_RUNTIME_FIXES": true,
-  "prompt_17f_four_game_reearn": true
+  "prompt_17f_four_game_reearn": true,
+  "prompt_17g_waike_reearn": true,
+  "DRAFT_WAIKE_PRODUCT_PR": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/9"
 }
