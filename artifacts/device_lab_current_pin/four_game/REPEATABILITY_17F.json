@@ -1,0 +1,40 @@
+{
+  "schema": "gunnchos.device_lab.four_game_repeatability.v1",
+  "recorded_at_utc": "2026-09-15T05:16:05Z",
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "pass1": {
+    "recorded_at_utc": "2026-09-15T05:03:10Z",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "from_summary": {
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+      "games": {
+        "anime-aggressors": true,
+        "beatlink-party": true,
+        "earth-species": true,
+        "foot-racing": true
+      },
+      "blockers": null,
+      "at_utc": "2026-09-15T05:04:13Z"
+    },
+    "games": {
+      "anime-aggressors": true,
+      "beatlink-party": true,
+      "earth-species": true,
+      "foot-racing": true
+    },
+    "godot45_via": "already_present_on_guest"
+  },
+  "pass2": {
+    "recorded_at_utc": "2026-09-15T05:05:49Z",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "games": {
+      "anime-aggressors": true,
+      "foot-racing": true,
+      "earth-species": true,
+      "beatlink-party": true
+    },
+    "godot45_via": "already_present_on_guest"
+  },
+  "repeatability_ok": true,
+  "note": "Pass1 aggregate recovered from four_game_run_summary_pass1 (pass1 evidence file was demoted when pass2 started); pass2 full guest relaunch AND-true"
+}

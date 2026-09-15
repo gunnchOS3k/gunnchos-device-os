@@ -1,9 +1,27 @@
 {
   "schema": "gunnchos.device_lab.four_game_current_pin.v1",
-  "generated_at_utc": "2026-09-09T18:50:15Z",
+  "generated_at_utc": "2026-09-15T05:16:05Z",
   "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
-  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": false,
-  "blocker": "godot45_unavailable_in_guest",
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "ANIME_DEVICE_LAB_PASS": true,
+  "PEDESTRIAN_DEVICE_LAB_PASS": true,
+  "ARCHIVE_DEVICE_LAB_PASS": true,
+  "BEATLINK_DEVICE_LAB_PASS": true,
+  "blocker": null,
   "evidence": "artifacts/wp011r/games/four_games_in_guest.json",
-  "historical_tokens_not_reused": true
+  "historical_tokens_not_reused": true,
+  "godot45_via": "already_present_on_guest",
+  "godot45_host_resolve": {
+    "ok": true,
+    "via": "worktree_cache",
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/wp011r/cache/Godot_v4.5-stable_linux.arm64",
+    "provenance": {
+      "sha256": "2ec9ae0ff0702f9e1248c27708a08eaf7df639907650505a486ff7b1be005291",
+      "size_bytes": 126265544,
+      "arch": "linux.arm64",
+      "version_pin": "4.5-stable",
+      "official_source_url": "https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.arm64.zip",
+      "byte_identical_to_official_extracted": true
+    }
+  }
 }
