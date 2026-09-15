@@ -1,0 +1,45 @@
+{
+  "schema": "gunnchos.device_lab.waike_pin_drift_materiality.v1",
+  "generated_at_utc": "2026-09-15T19:58:53Z",
+  "drift_reason": "WAIKE_MULTIARCH_BUILD_SUPPORT_ACCEPTED_MAIN",
+  "old_waike_sha": "8610018a62e07548405a58384773d96a7be7950b",
+  "new_waike_sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
+  "merge_commit": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
+  "merge_parents": [
+    "8610018a62e07548405a58384773d96a7be7950b",
+    "b8e4d2368ab9fc851b50994109b96154bdc8bf12"
+  ],
+  "files_changed": [
+    {
+      "filename": ".github/workflows/device-lab-aarch64-linux.yml",
+      "status": "added",
+      "additions": 170,
+      "deletions": 0
+    },
+    {
+      "filename": "docs/product/DEVICE_LAB_AARCH64_LINUX.md",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0
+    },
+    {
+      "filename": "docs/product/MULTI_ARCHITECTURE_SUPPORT.md",
+      "status": "added",
+      "additions": 38,
+      "deletions": 0
+    }
+  ],
+  "classification": {
+    "waike_application_runtime_source": false,
+    "curriculum_source": false,
+    "device_os_runtime": false,
+    "games": false,
+    "ring": false,
+    "dsxl_live": false,
+    "workflow_docs_build_support_only": true
+  },
+  "material_to_prior_gates": false,
+  "action": "compact_revalidate_LIVE_DSXL_RING_FOUR_GAME",
+  "old_pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "new_pin_manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4"
+}

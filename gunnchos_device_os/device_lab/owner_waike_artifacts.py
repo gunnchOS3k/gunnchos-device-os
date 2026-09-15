@@ -16,17 +16,25 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ACCEPTED_WAIKE_LP_SHA = "8610018a62e07548405a58384773d96a7be7950b"
+ACCEPTED_WAIKE_LP_SHA = "2fa63da1e426179972bd9c50cd8985ebf37e4077"
 ACCEPTED_WAIKE_OPS_SHA = "fbf7685bc5686201ccaa0128ee83346d59b3d584"
-PIN_MANIFEST_SHA256 = "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575"
+PIN_MANIFEST_SHA256 = "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4"
 BUNDLE_ID = "com.gunnchos.waike.learning"
 APP_VERSION = "0.1.0"
 
-# Gate D linux CI artifact for accepted-main tip (ubuntu x86_64).
+# Gate D linux CI artifact retained for x86_64 targets (accepted-main still publishes it).
 GATE_D_LINUX_ARTIFACT_ID = "10041457013"
 GATE_D_LINUX_SHA256 = (
     "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef"
 )
+
+# Accepted-main native aarch64 Device Lab artifact (workflow run on merge #9).
+MAIN_AARCH64_ARTIFACT_ID = "10415274147"
+MAIN_AARCH64_WORKFLOW_RUN_ID = "35015695037"
+MAIN_AARCH64_SHA256 = (
+    "1725b2122c36ee8c008fc583569470496082763b6491a01be1b3b43a2d371c8b"
+)
+MAIN_AARCH64_ARTIFACT_SOURCE_SHA = ACCEPTED_WAIKE_LP_SHA
 
 
 def _utc() -> str:
@@ -143,38 +151,78 @@ def verify_pin_checkouts(repo_root: Path) -> dict[str, Any]:
     }
 
 
+def _probe_binary(path: Path) -> dict[str, Any]:
+    digest = _sha256_file(path)
+    try:
+        probe = subprocess.check_output(["file", "-b", str(path)], text=True).strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        probe = "unknown"
+    arch = "unknown"
+    if "x86-64" in probe or "x86_64" in probe:
+        arch = "x86_64"
+    elif "ARM aarch64" in probe or "arm64" in probe:
+        arch = "aarch64"
+    return {
+        "path": str(path),
+        "sha256": digest,
+        "size_bytes": path.stat().st_size,
+        "file_probe": probe,
+        "arch": arch,
+        "fixture_rejected": "fixtures/learning_os" not in str(path),
+    }
+
+
 def locate_staged_linux_binary(repo_root: Path) -> dict[str, Any]:
-    """Locate Gate D linux ELF already downloaded under device_lab_current_pin/waike."""
+    """Prefer accepted-main native aarch64; retain x86_64 Gate D for x86_64 targets."""
     base = repo_root / "artifacts/device_lab_current_pin/waike/owner_build"
-    candidates = list(
-        base.glob("gate-d-linux/**/waike-learning-client")
-    ) + list(base.glob("**/waike-learning-client"))
-    for c in candidates:
+    ordered: list[Path] = []
+    ordered.extend(base.glob("main-aarch64-linux/**/waike-learning-client"))
+    ordered.extend(base.glob("gate-d-linux/**/waike-learning-client"))
+    ordered.extend(base.glob("**/waike-learning-client"))
+    seen: set[str] = set()
+    found: list[dict[str, Any]] = []
+    for c in ordered:
         if not c.is_file():
             continue
-        digest = _sha256_file(c)
-        # file(1) arch probe
-        try:
-            probe = subprocess.check_output(["file", "-b", str(c)], text=True).strip()
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            probe = "unknown"
-        arch = "unknown"
-        if "x86-64" in probe or "x86_64" in probe:
-            arch = "x86_64"
-        elif "ARM aarch64" in probe or "arm64" in probe:
-            arch = "aarch64"
-        return {
-            "ok": True,
-            "path": str(c),
-            "sha256": digest,
-            "size_bytes": c.stat().st_size,
-            "file_probe": probe,
-            "arch": arch,
-            "matches_gate_d_linux_sha256": digest == GATE_D_LINUX_SHA256,
-            "artifact_id": GATE_D_LINUX_ARTIFACT_ID,
-            "fixture_rejected": "fixtures/learning_os" not in str(c),
-        }
-    return {"ok": False, "error": "linux_binary_not_staged", "searched": str(base)}
+        key = str(c.resolve())
+        if key in seen:
+            continue
+        seen.add(key)
+        found.append(_probe_binary(c))
+    # Prefer exact accepted-main aarch64 hash, then any aarch64, then Gate D x86_64.
+    preferred = None
+    for row in found:
+        if row["sha256"] == MAIN_AARCH64_SHA256 and row["arch"] == "aarch64":
+            preferred = row
+            break
+    if preferred is None:
+        for row in found:
+            if row["arch"] == "aarch64":
+                preferred = row
+                break
+    if preferred is None and found:
+        preferred = found[0]
+    if preferred is None:
+        return {"ok": False, "error": "linux_binary_not_staged", "searched": str(base)}
+    arch = preferred["arch"]
+    artifact_id = (
+        MAIN_AARCH64_ARTIFACT_ID if arch == "aarch64" else GATE_D_LINUX_ARTIFACT_ID
+    )
+    return {
+        "ok": True,
+        **preferred,
+        "matches_gate_d_linux_sha256": preferred["sha256"] == GATE_D_LINUX_SHA256,
+        "matches_main_aarch64_sha256": preferred["sha256"] == MAIN_AARCH64_SHA256,
+        "artifact_id": artifact_id,
+        "workflow_run_id": MAIN_AARCH64_WORKFLOW_RUN_ID if arch == "aarch64" else None,
+        "artifact_source_sha": (
+            MAIN_AARCH64_ARTIFACT_SOURCE_SHA if arch == "aarch64" else ACCEPTED_WAIKE_LP_SHA
+        ),
+        "x86_64_retained": any(r["arch"] == "x86_64" for r in found),
+        "staged_variants": [
+            {"arch": r["arch"], "sha256": r["sha256"], "path": r["path"]} for r in found
+        ],
+    }
 
 
 def write_runtime_provenance(repo_root: Path, out_dir: Path) -> dict[str, Any]:
@@ -205,10 +253,10 @@ def write_runtime_provenance(repo_root: Path, out_dir: Path) -> dict[str, Any]:
         "ci_linux_artifact_arch": binary.get("arch"),
         "arch_gap": binary.get("arch") == "x86_64",
         "compatibility_plan": (
-            "Device OS Interactive Guest is aarch64. Accepted-main Gate D CI "
-            "publishes x86_64 linux ELF. Additive Device OS path: install "
-            "qemu-user-static in guest to execute authentic CI binary, OR "
-            "consume future aarch64 CI artifact without reducing WAIKE scope."
+            "Device OS Interactive Guest is aarch64. Accepted-main publishes "
+            "native aarch64 linux ELF via Device Lab aarch64 Linux workflow; "
+            "x86_64 Gate D artifact retained for x86_64 targets. Prefer native "
+            "aarch64 guest execution; qemu-user remains additive fallback only."
         ),
         "launcher_contract": "gunnchos_device_os.learning_os_launcher + NativeLaunchAdapter",
         "claim_boundary": (
@@ -249,6 +297,10 @@ def stage_owner_waike_bundle(repo_root: Path, staging: Path) -> dict[str, Any]:
         "platform_sha": ACCEPTED_WAIKE_LP_SHA,
         "curriculum_ops_sha": ACCEPTED_WAIKE_OPS_SHA,
         "gate_d_artifact_id": GATE_D_LINUX_ARTIFACT_ID,
+        "main_aarch64_artifact_id": binary.get("artifact_id"),
+        "workflow_run_id": binary.get("workflow_run_id"),
+        "artifact_source_sha": binary.get("artifact_source_sha"),
+        "x86_64_retained": binary.get("x86_64_retained"),
         "fixture": False,
         "system_of_record": "platform_tauri_learning_os",
     }

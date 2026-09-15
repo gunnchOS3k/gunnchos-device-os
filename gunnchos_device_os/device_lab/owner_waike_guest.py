@@ -26,6 +26,7 @@ from gunnchos_device_os.device_lab.owner_waike_artifacts import (
     ACCEPTED_WAIKE_LP_SHA,
     APP_VERSION,
     BUNDLE_ID,
+    MAIN_AARCH64_SHA256,
     PIN_MANIFEST_SHA256,
     stage_owner_waike_bundle,
     write_runtime_provenance,
@@ -110,8 +111,6 @@ def ensure_qemu_user_x86_64(session: Any) -> dict[str, Any]:
     )
     iout = (install.get("stdout") or "") + (install.get("stderr") or "")
     ok_qemu = "qemu-x86_64" in iout
-    ok_ld = "ld-linux-x86-64.so.2" in iout and "No such file" not in iout.split("ld-linux")[-1][:80]
-    # Heuristic: ls success lines include the path without error prefix alone.
     ok_ld = ("/lib64/ld-linux-x86-64.so.2" in iout or "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" in iout) and (
         "No such file or directory" not in iout
         or iout.count("ld-linux-x86-64.so.2") > iout.count("No such file")
@@ -127,6 +126,68 @@ def ensure_qemu_user_x86_64(session: Any) -> dict[str, Any]:
             "Even with amd64 loader, Tauri still needs amd64 GTK/WebKit libs; "
             "prefer aarch64 CI artifact for Device Lab guest."
         ),
+    }
+
+
+def ensure_tauri_aarch64_runtime(session: Any) -> dict[str, Any]:
+    """Grow guest with legitimate WebKit/GTK/Tauri aarch64 runtime deps (additive)."""
+    packages = [
+        "libwebkit2gtk-4.1-0",
+        "libgtk-3-0",
+        "libgdk-pixbuf-2.0-0",
+        "libsoup-3.0-0",
+        "libjavascriptcoregtk-4.1-0",
+        "librsvg2-2",
+        "libayatana-appindicator3-1",
+        "xvfb",
+        "at-spi2-core",
+        "dbus-x11",
+    ]
+    probe = _guest_sh(
+        session,
+        "set -e; "
+        "uname -m; "
+        "dpkg -l libwebkit2gtk-4.1-0 libgtk-3-0 2>/dev/null | awk '/^ii/{print $2,$3}' || true; "
+        "ldconfig -p 2>/dev/null | grep -E 'libwebkit2gtk-4.1|libgtk-3' | head -5 || true; "
+        "echo PROBE_DONE",
+        timeout_sec=30.0,
+    )
+    pout = (probe.get("stdout") or "") + (probe.get("stderr") or "")
+    already = "libwebkit2gtk-4.1-0" in pout and "ii" in pout
+    pkg_line = " ".join(packages)
+    install = _guest_sh(
+        session,
+        "export DEBIAN_FRONTEND=noninteractive; "
+        "apt-get update -qq 2>&1 | tail -5; "
+        f"apt-get install -y -qq {pkg_line} 2>&1 | tail -40; "
+        "dpkg -l libwebkit2gtk-4.1-0 libgtk-3-0 libsoup-3.0-0 "
+        "  libjavascriptcoregtk-4.1-0 2>/dev/null | awk '/^ii/{print $2,$3}'; "
+        "ldconfig -p 2>/dev/null | grep -E 'libwebkit2gtk-4.1.so|libgtk-3.so' | head -8 || true; "
+        "command -v Xvfb || true; "
+        "echo TAURI_RUNTIME_SETUP_DONE",
+        timeout_sec=900.0,
+    )
+    iout = (install.get("stdout") or "") + (install.get("stderr") or "")
+    ok = "TAURI_RUNTIME_SETUP_DONE" in iout and "libwebkit2gtk-4.1-0" in iout
+    versions = [
+        line.strip()
+        for line in iout.splitlines()
+        if line.strip().startswith("libwebkit2gtk")
+        or line.strip().startswith("libgtk-3")
+        or line.strip().startswith("libsoup")
+        or line.strip().startswith("libjavascriptcoregtk")
+    ]
+    return {
+        "ok": ok,
+        "already_present": already,
+        "packages_requested": packages,
+        "package_versions": versions,
+        "install_stdout_tail": iout[-2000:],
+        "returncode": install.get("returncode"),
+        "probe_tail": pout[-500:],
+        "additive": True,
+        "no_feature_strip": True,
+        "no_static_html_bypass": True,
     }
 
 
@@ -550,8 +611,27 @@ def attempt_owner_waike_in_guest_pass(
         uname = _guest_sh(session, "uname -am", timeout_sec=20.0)
         out["guest_uname"] = (uname.get("stdout") or "").strip()
 
-        qemu_user = ensure_qemu_user_x86_64(session)
-        out["qemu_user_x86_64"] = qemu_user
+        arch_gap = bool(bundle.get("arch_gap"))
+        binary_meta = (bundle.get("binary") or {})
+        out["staged_arch"] = binary_meta.get("source_arch")
+        out["artifact_source_sha"] = binary_meta.get("artifact_source_sha")
+        out["artifact_sha256"] = binary_meta.get("artifact_sha256") or binary_meta.get("source_sha256")
+        out["matches_main_aarch64"] = (
+            str(out.get("artifact_sha256") or "") == MAIN_AARCH64_SHA256
+        )
+
+        if arch_gap:
+            qemu_user = ensure_qemu_user_x86_64(session)
+            out["qemu_user_x86_64"] = qemu_user
+        else:
+            out["qemu_user_x86_64"] = {
+                "ok": True,
+                "skipped": True,
+                "reason": "native_aarch64_artifact_no_arch_gap",
+            }
+
+        tauri_rt = ensure_tauri_aarch64_runtime(session)
+        out["tauri_aarch64_runtime"] = tauri_rt
         # Let apt/binfmt settle before large HTTP pulls.
         time.sleep(2.0)
 
@@ -613,17 +693,38 @@ def attempt_owner_waike_in_guest_pass(
                 out["finished_at_utc"] = _utc()
                 return out
 
-        wrapped = maybe_enable_qemu_wrapper(session, bool(bundle.get("arch_gap")))
+        wrapped = maybe_enable_qemu_wrapper(session, arch_gap)
         out["qemu_wrapper"] = wrapped
-        if bundle.get("arch_gap") and not wrapped.get("ok"):
+        if arch_gap and not wrapped.get("ok"):
             out["blocker"] = "arch_gap_x86_64_binary_on_aarch64_guest_without_qemu_user"
             out["finished_at_utc"] = _utc()
             return out
 
+        # Native aarch64: ensure .real exists and launcher points at ELF directly.
+        if not arch_gap:
+            native = _guest_sh(
+                session,
+                "set -euo pipefail; "
+                "ROOT=/var/lib/gunnchos/waike-learning-os/bin; "
+                "if [ ! -f $ROOT/waike-learning-os.real ]; then "
+                "  cp -a $ROOT/waike-learning-os $ROOT/waike-learning-os.real; "
+                "fi; "
+                "cp -a $ROOT/waike-learning-os.real $ROOT/waike-learning-os; "
+                "chmod +x $ROOT/waike-learning-os $ROOT/waike-learning-os.real; "
+                "file $ROOT/waike-learning-os; "
+                "echo NATIVE_ELF_READY",
+                timeout_sec=30.0,
+            )
+            out["native_elf_ready"] = {
+                "ok": "NATIVE_ELF_READY" in ((native.get("stdout") or "") + (native.get("stderr") or "")),
+                "stdout_tail": ((native.get("stdout") or "") + (native.get("stderr") or ""))[-500:],
+            }
+
         out["binary_probe"] = probe_binary_exec(session)
         probe_tail = str((out["binary_probe"] or {}).get("stdout_tail") or "")
-        if "Could not open '/lib64/ld-linux-x86-64.so.2'" in probe_tail or (
-            "ld-linux-x86-64.so.2" in probe_tail and "No such file" in probe_tail
+        if arch_gap and (
+            "Could not open '/lib64/ld-linux-x86-64.so.2'" in probe_tail
+            or ("ld-linux-x86-64.so.2" in probe_tail and "No such file" in probe_tail)
         ):
             out["blocker"] = (
                 "ci_linux_x86_64_elf_on_aarch64_guest_missing_amd64_loader_or_libs;"
@@ -647,6 +748,7 @@ def attempt_owner_waike_in_guest_pass(
         fixture_ok = bool(journey_a.get("fixture_rejected", True)) and (
             "fixtures/learning_os" not in str(journey_a.get("executable") or "")
         )
+        native_aarch64 = (not arch_gap) and "aarch64" in probe_tail.lower()
 
         # Depth classification: headless ack proves Device OS↔Platform launch IPC,
         # but accepted-main headless path exits before PackService learner mutations.
@@ -654,15 +756,18 @@ def attempt_owner_waike_in_guest_pass(
         out["capability_classification"] = {
             "device_os_native_launch_ipc": launch_a_ok,
             "authentic_platform_binary": fixture_ok and bool(fetched.get("ok")),
+            "accepted_main_aarch64_artifact": bool(out.get("matches_main_aarch64")),
+            "native_aarch64_guest_exec": native_aarch64,
+            "tauri_runtime_libs_present": bool(tauri_rt.get("ok")),
             "learner_course_lesson_interaction": False,
             "assessment_submission_mutation": False,
             "offline_sync_outbox": "supported_in_product_not_exercised_this_run",
             "reason": (
                 "Accepted-main WAIKE_CI_HEADLESS_UI acknowledges Device OS IPC then "
                 "returns before Tauri invoke surface (install/lesson/quiz/outbox). "
-                "Full GUI/webview journey on aarch64 guest requires aarch64 linux "
-                "artifact or native in-guest build; x86_64 under qemu-user is launch-"
-                "path compatibility only unless GUI stack also works."
+                "Native aarch64 artifact removes arch-gap; full learner/assessment/"
+                "offline/recovery depth still requires GUI/webview journey surface "
+                "or an accepted product non-GUI journey harness (not invented here)."
             ),
         }
 
@@ -678,6 +783,19 @@ def attempt_owner_waike_in_guest_pass(
             "close_relaunch_restore": launch_a_ok and launch_b_ok,
             "complete": learner_journey_complete,
         }
+        out["offline_reconnect"] = {
+            "exercised": False,
+            "reason": "product_outbox_surface_requires_tauri_invoke_not_headless_ack",
+        }
+        out["recovery"] = {
+            "exercised": False,
+            "reason": "controlled_failure_injection_requires_deeper_runtime_surface",
+        }
+        out["repeatability"] = {
+            "journey_a": launch_a_ok,
+            "journey_b": launch_b_ok,
+            "pass": launch_a_ok and launch_b_ok,
+        }
 
         and_ok = all(
             [
@@ -689,14 +807,20 @@ def attempt_owner_waike_in_guest_pass(
                 launch_b_ok,
                 learner_journey_complete,
                 bool(out["role_boundary"].get("ok")),
+                bool(out.get("matches_main_aarch64")),
+                not arch_gap,
             ]
         )
         out["WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS"] = bool(and_ok)
         if not and_ok:
-            if launch_a_ok and not learner_journey_complete:
+            if not out.get("matches_main_aarch64") or arch_gap:
                 out["blocker"] = (
-                    "headless_launch_ack_only_learner_journey_depth_not_earned;"
-                    "need_gui_or_product_journey_surface_on_guest_arch"
+                    "accepted_main_aarch64_artifact_not_staged_or_arch_gap_remains"
+                )
+            elif launch_a_ok and not learner_journey_complete:
+                out["blocker"] = (
+                    "native_aarch64_headless_launch_ack_only_learner_journey_depth_not_earned;"
+                    "need_gui_or_product_journey_surface_for_course_assessment_offline_recovery"
                 )
             elif not launch_a_ok:
                 out["blocker"] = (

@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.device_lab.current_pin_manifest.v1",
   "convention": "WP-011R-style pin freeze",
-  "frozen_at_utc": "2026-09-09T06:07:37Z",
+  "frozen_at_utc": "2026-09-15T19:58:53Z",
   "device_os_candidate_base": "898e44cfa8b7574c0de7b8312b0996816799eca4",
-  "prior_manifest_sha256": "066e1451b2b5cf9872ddf68f2c70330e91e6778746ca9f5ed1b519a81c9f235c",
+  "prior_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
   "pins": [
     {
       "repository": "gunnchos-device-os",
@@ -75,20 +75,21 @@
     },
     {
       "repository": "gunnchos-waike-learning-platform",
-      "sha": "8610018a62e07548405a58384773d96a7be7950b",
-      "short": "8610018a62e0",
+      "sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
+      "short": "2fa63da1e426",
       "branch": "main",
-      "source_timestamp_utc": "2026-09-09T06:07:32Z",
-      "commit_date": "2026-09-07T23:40:53-05:00",
-      "subject": "Merge pull request #8 from gunnchOS3k/cursor/windows-pilot0-authentic-evidence",
+      "source_timestamp_utc": "2026-09-15T19:58:53Z",
+      "commit_date": "2026-09-15T14:47:08-05:00",
+      "subject": "Merge pull request #9 from gunnchOS3k/cursor/device-lab-aarch64-linux-ci",
       "role": "waike_learning_platform",
       "prior_device_lab_evidence_sha": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
       "prior_evidence_stale": true,
       "stale_reason": "wp011r DEVICE_LAB_ACCEPTANCE_MATRIX assessed_tip is older Device OS tip; not current-pin",
       "ok": true,
       "prior_sha": "8610018a62e07548405a58384773d96a7be7950b",
-      "drift": false,
-      "local_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-waike-learning-platform"
+      "drift": true,
+      "local_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-waike-learning-platform",
+      "drift_reason": "WAIKE_MULTIARCH_BUILD_SUPPORT_ACCEPTED_MAIN"
     },
     {
       "repository": "anime-aggressors",
@@ -229,6 +230,6 @@
   ],
   "windows_pilot0_accepted_main_pass": true,
   "windows_ceased_to_be_digital_blocker": true,
-  "note": "Prompt 17C refresh: origin/main freeze before harness/runtime re-earn",
-  "manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575"
+  "note": "Prompt 17G.2: WAIKE LP pin refresh to accepted-main multiarch merge #9; other pins unchanged",
+  "manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4"
 }
