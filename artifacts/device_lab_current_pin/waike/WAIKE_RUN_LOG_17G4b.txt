@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/run_waike_real_runtime_reearn.py", line 180, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/scripts/run_waike_real_runtime_reearn.py", line 87, in main
+    result = attempt_owner_waike_in_guest_pass(ROOT, memory_mb=4096, boot_timeout_s=240)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/owner_waike_guest.py", line 818, in attempt_owner_waike_in_guest_pass
+    journey_a = guest_device_os_launch(session, journey_tag="A")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/owner_waike_guest.py", line 309, in guest_device_os_launch
+    script = f"""
+             ^^^^
+ValueError: Invalid format specifier ' proc.pid is not None,
+            "pid": proc.pid,
+            "returncode": proc.returncode,
+            "acknowledged": ack_ok,
+            "ack": ack,
+            "stdout_tail": (stdout or "")[-800:],
+            "stderr_tail": (stderr or "")[-800:],
+            "launched": ack_ok,
+            "executable": str(exe),
+            "fixture_rejected": "fixtures/learning_os" not in str(exe),
+        ' for object of type 'str'

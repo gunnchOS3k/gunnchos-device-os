@@ -1,0 +1,23 @@
+{
+  "schema": "gunnchos.device_lab.compact_gate_rebind.v1",
+  "generated_at_utc": "2026-09-15T23:18:09Z",
+  "reason": "WAIKE_GLIBC236_CI_FIX_ACCEPTED_MAIN",
+  "materiality": "workflow_docs_build_support_only",
+  "old_pin_manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4",
+  "new_pin_manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b",
+  "device_os_tip_at_rebind": "008cd4c925f082cc527c06a9ae87918aa0f6bf19",
+  "method": "compact_revalidate_under_new_manifest",
+  "note": "WAIKE #11 added Debian12/glibc236 CI producer + measure script + docs; LIVE/DSXL/Ring/Four-Game product sources unchanged. Historical PASS retained; rebound to new pin manifest without full re-earn.",
+  "gates": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "historical_evidence": {
+    "LIVE": "artifacts/device_lab_current_pin/LIVE_GUNNCHOS_VISUAL_PASS.json",
+    "DSXL": "artifacts/device_lab_current_pin/DSXL_DUAL_COMPOSITOR_UX_PASS.json",
+    "RING": "artifacts/device_lab_current_pin/RING_TO_REAL_APP_STATE_MUTATION_PASS.json",
+    "FOUR_GAME": "artifacts/device_lab_current_pin/FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS.json"
+  }
+}

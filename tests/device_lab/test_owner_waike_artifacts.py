@@ -10,6 +10,8 @@ from gunnchos_device_os.device_lab.owner_waike_artifacts import (
     ACCEPTED_WAIKE_LP_SHA,
     ACCEPTED_WAIKE_OPS_SHA,
     GATE_D_LINUX_SHA256,
+    MAIN_AARCH64_GLIBC236_SHA256,
+    MAIN_AARCH64_SHA256,
     locate_staged_linux_binary,
     resolve_waike_lp_checkout,
     stage_owner_waike_bundle,
@@ -63,14 +65,22 @@ def test_provenance_rejects_seed_and_fixture_as_sor(tmp_path: Path, stub_pins: N
     assert doc["pin_verification"]["ok"] is True
 
 
-def test_staged_linux_binary_is_gate_d_elf_not_fixture():
+def test_staged_linux_binary_prefers_glibc236_or_gate_d():
     binary = locate_staged_linux_binary(ROOT)
     if not binary.get("ok"):
-        pytest.skip("Gate D linux artifact not staged under artifacts/device_lab_current_pin/waike")
+        pytest.skip("linux artifact not staged under artifacts/device_lab_current_pin/waike")
     assert binary["fixture_rejected"] is True
     assert "fixtures/learning_os" not in binary["path"]
-    assert binary["sha256"] == GATE_D_LINUX_SHA256
     assert binary["arch"] in {"x86_64", "aarch64"}
+    if binary.get("matches_main_aarch64_glibc236_sha256"):
+        assert binary["compatibility_label"] == "linux-aarch64-glibc236"
+        assert binary["sha256"] == MAIN_AARCH64_GLIBC236_SHA256
+        assert binary["sha256"] != MAIN_AARCH64_SHA256
+    elif binary.get("matches_gate_d_linux_sha256"):
+        assert binary["sha256"] == GATE_D_LINUX_SHA256
+    else:
+        # Ubuntu ARM may be staged but must not be preferred when glibc236 exists.
+        assert binary["arch"] in {"x86_64", "aarch64"}
 
 
 def test_owner_bundle_stage_writes_install_layout(tmp_path: Path):

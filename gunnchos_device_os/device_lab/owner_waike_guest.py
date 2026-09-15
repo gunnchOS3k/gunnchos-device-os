@@ -26,10 +26,15 @@ from gunnchos_device_os.device_lab.owner_waike_artifacts import (
     ACCEPTED_WAIKE_LP_SHA,
     APP_VERSION,
     BUNDLE_ID,
+    MAIN_AARCH64_GLIBC236_SHA256,
     MAIN_AARCH64_SHA256,
     PIN_MANIFEST_SHA256,
     stage_owner_waike_bundle,
     write_runtime_provenance,
+)
+from gunnchos_device_os.device_lab.runtime_target_preflight import (
+    PREFERRED_LABEL,
+    run_runtime_target_preflight,
 )
 
 CLAIM = (
@@ -219,6 +224,9 @@ def fetch_bundle_into_guest(session: Any, *, port: int = 8767) -> dict[str, Any]
         f"  cp -a \"$SRC9/OWNER_WAIKE_BUNDLE_MANIFEST.json\" {remote_root}.partial/MANIFEST.json; "
         f"  cp -a \"$SRC9/WAIKE_RUNTIME_PROVENANCE.json\" "
         f"    {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
+        f"  if [ -d \"$SRC9/contracts\" ]; then cp -a \"$SRC9/contracts\" {remote_root}.partial/contracts; fi; "
+        f"  if [ -d \"$SRC9/xdg\" ]; then cp -a \"$SRC9/xdg\" {remote_root}.partial/xdg; fi; "
+        f"  if [ -d \"$SRC9/device_os_lib\" ]; then cp -a \"$SRC9/device_os_lib\" {remote_root}.partial/device_os_lib; fi; "
         f"else "
         f"  echo VIA_HTTP_$MARKER; "
         f"  command -v curl; "
@@ -315,8 +323,27 @@ os.environ['LEARNING_OS_CLEANUP_AFTER_ACK'] = '0'
 os.environ['WAIKE_DEV_DB_KEY'] = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
 os.environ['HOME'] = '/root'
 os.environ['XDG_DATA_HOME'] = '/var/lib/gunnchos/waike-userdata'
+# Stage TEST_ONLY verify key into paths load_verify_key() checks.
+from pathlib import Path as _P
+_key_candidates = [
+    install_root / 'contracts/fixtures/keys/TEST_ONLY_ed25519_public.key',
+    install_root / 'xdg/waike-learning-os/TEST_ONLY_ed25519_public.key',
+    _P('/mnt/gdlgames/contracts/fixtures/keys/TEST_ONLY_ed25519_public.key'),
+    _P('/mnt/gdlgames/xdg/waike-learning-os/TEST_ONLY_ed25519_public.key'),
+]
+_xdg = _P(os.environ['XDG_DATA_HOME']) / 'waike-learning-os'
+_xdg.mkdir(parents=True, exist_ok=True)
+for _k in _key_candidates:
+    if _k.is_file():
+        (_xdg / 'TEST_ONLY_ed25519_public.key').write_bytes(_k.read_bytes())
+        (install_root / 'contracts/fixtures/keys').mkdir(parents=True, exist_ok=True)
+        (install_root / 'contracts/fixtures/keys/TEST_ONLY_ed25519_public.key').write_bytes(_k.read_bytes())
+        break
+os.chdir(str(install_root))
 
 sys.path.insert(0, '/opt/gunnchos/lib')
+sys.path.insert(0, str(install_root / 'device_os_lib'))
+sys.path.insert(0, '/mnt/gdlgames/device_os_lib')
 result = {{'path': 'unknown'}}
 try:
     from gunnchos_device_os.learning_os.native_launch import NativeLaunchAdapter
@@ -345,9 +372,9 @@ except Exception as exc:
     req_id = str(uuid.uuid4())
     req = {{
         'protocol': 'gunnchos.learning_os.ipc.v1',
+        'message_type': 'launch_context',
         'request_id': req_id,
         'bundle_id': {BUNDLE_ID!r},
-        'app_version': {APP_VERSION!r},
         'deep_link': {{
             'uri': {deep_link!r},
             'canonical': {deep_link!r},
@@ -369,6 +396,8 @@ except Exception as exc:
     env['LEARNING_OS_REQUEST_ID'] = req_id
     env['WAIKE_CI_HEADLESS_UI'] = '1'
     env['CI_HEADLESS_UI'] = '1'
+    env['XDG_DATA_HOME'] = os.environ['XDG_DATA_HOME']
+    env['HOME'] = os.environ['HOME']
     import subprocess
     proc = subprocess.Popen(
         [
@@ -379,6 +408,7 @@ except Exception as exc:
             '--request-id', req_id,
             '--ci-headless-ui',
         ],
+        cwd=str(install_root),
         env=env,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -417,20 +447,35 @@ except Exception as exc:
             proc.kill()
         except Exception:
             pass
-    nack = bool(isinstance(ack, dict) and ack.get('ok') is False)
+    nack = bool(
+        isinstance(ack, dict)
+        and (
+            ack.get('ok') is False
+            or str(ack.get('message_type') or '').lower() == 'nack'
+        )
+    )
+    # Successful ack must be an explicit positive acknowledgement.
+    ack_ok = bool(
+        isinstance(ack, dict)
+        and not nack
+        and (
+            ack.get('ok') is True
+            or str(ack.get('message_type') or '').lower()
+            in {{'ack', 'launch_ack', 'ok'}}
+        )
+    )
     result.update({{
         'process_started': proc.pid is not None,
         'pid': proc.pid,
         'returncode': proc.returncode,
-        'acknowledged': bool(ack) and not nack,
+        'acknowledged': ack_ok,
         'ack': ack,
         'stdout_tail': (stdout or '')[-800:],
         'stderr_tail': (stderr or '')[-800:],
-        'launched': bool(ack) and not nack,
+        'launched': ack_ok,
         'executable': str(exe),
         'fixture_rejected': 'fixtures/learning_os' not in str(exe),
     }})
-
 # Guard: never accept protocol fixture path
 exe = result.get('executable') or ''
 if 'fixtures/learning_os' in str(exe):
@@ -552,6 +597,36 @@ def attempt_owner_waike_in_guest_pass(
         out["finished_at_utc"] = _utc()
         return out
 
+    # Section 6–7: RuntimeTarget preflight (static Device Lab Debian 12 profile)
+    # before QEMU so Ubuntu GLIBC_2.39 never enters the guest journey path.
+    preflight_static = run_runtime_target_preflight(
+        repo_root,
+        session=None,
+        label=PREFERRED_LABEL,
+        out_path=evidence / "RUNTIME_TARGET_PREFLIGHT.json",
+    )
+    out["runtime_target_preflight_static"] = preflight_static
+    out["RUNTIME_TARGET_PREFLIGHT_PASS"] = bool(
+        preflight_static.get("RUNTIME_TARGET_PREFLIGHT_PASS")
+    )
+    if not out["RUNTIME_TARGET_PREFLIGHT_PASS"]:
+        out["blocker"] = (
+            "RUNTIME_TARGET_PREFLIGHT_FAIL:"
+            + ",".join(preflight_static.get("blockers") or ["unknown"])
+        )
+        out["finished_at_utc"] = _utc()
+        return out
+
+    binary_meta_early = bundle.get("binary") or {}
+    if not binary_meta_early.get("matches_main_aarch64_glibc236_sha256"):
+        out["blocker"] = (
+            "glibc236_artifact_not_selected;"
+            f"label={binary_meta_early.get('compatibility_label')};"
+            "refuse_ubuntu2404_glibc239_on_debian12"
+        )
+        out["finished_at_utc"] = _utc()
+        return out
+
     free_before = shutil.disk_usage("/").free / (1024**3)
     out["FREE_GIB_BEFORE_QEMU"] = round(free_before, 2)
     if free_before < 25:
@@ -616,9 +691,15 @@ def attempt_owner_waike_in_guest_pass(
         out["staged_arch"] = binary_meta.get("source_arch")
         out["artifact_source_sha"] = binary_meta.get("artifact_source_sha")
         out["artifact_sha256"] = binary_meta.get("artifact_sha256") or binary_meta.get("source_sha256")
-        out["matches_main_aarch64"] = (
+        out["compatibility_label"] = binary_meta.get("compatibility_label")
+        out["matches_main_aarch64_glibc236"] = (
+            str(out.get("artifact_sha256") or "") == MAIN_AARCH64_GLIBC236_SHA256
+        )
+        # Retained for provenance contrast; Ubuntu ARM must not drive PASS.
+        out["matches_main_aarch64_ubuntu2404"] = (
             str(out.get("artifact_sha256") or "") == MAIN_AARCH64_SHA256
         )
+        out["matches_main_aarch64"] = out["matches_main_aarch64_glibc236"]
 
         if arch_gap:
             qemu_user = ensure_qemu_user_x86_64(session)
@@ -634,6 +715,25 @@ def attempt_owner_waike_in_guest_pass(
         out["tauri_aarch64_runtime"] = tauri_rt
         # Let apt/binfmt settle before large HTTP pulls.
         time.sleep(2.0)
+
+        # Live guest RuntimeTarget preflight after WebKit/GTK growth; required before journey.
+        preflight_live = run_runtime_target_preflight(
+            repo_root,
+            session=session,
+            label=PREFERRED_LABEL,
+            out_path=evidence / "RUNTIME_TARGET_PREFLIGHT.json",
+        )
+        out["runtime_target_preflight"] = preflight_live
+        out["RUNTIME_TARGET_PREFLIGHT_PASS"] = bool(
+            preflight_live.get("RUNTIME_TARGET_PREFLIGHT_PASS")
+        )
+        if not out["RUNTIME_TARGET_PREFLIGHT_PASS"]:
+            out["blocker"] = (
+                "RUNTIME_TARGET_PREFLIGHT_FAIL:"
+                + ",".join(preflight_live.get("blockers") or ["unknown"])
+            )
+            out["finished_at_utc"] = _utc()
+            return out
 
         fetched = fetch_bundle_into_guest(session, port=8767)
         out["fetch"] = fetched
@@ -756,7 +856,10 @@ def attempt_owner_waike_in_guest_pass(
         out["capability_classification"] = {
             "device_os_native_launch_ipc": launch_a_ok,
             "authentic_platform_binary": fixture_ok and bool(fetched.get("ok")),
-            "accepted_main_aarch64_artifact": bool(out.get("matches_main_aarch64")),
+            "accepted_main_aarch64_glibc236_artifact": bool(
+                out.get("matches_main_aarch64_glibc236")
+            ),
+            "runtime_target_preflight_pass": bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS")),
             "native_aarch64_guest_exec": native_aarch64,
             "tauri_runtime_libs_present": bool(tauri_rt.get("ok")),
             "learner_course_lesson_interaction": False,
@@ -765,9 +868,9 @@ def attempt_owner_waike_in_guest_pass(
             "reason": (
                 "Accepted-main WAIKE_CI_HEADLESS_UI acknowledges Device OS IPC then "
                 "returns before Tauri invoke surface (install/lesson/quiz/outbox). "
-                "Native aarch64 artifact removes arch-gap; full learner/assessment/"
-                "offline/recovery depth still requires GUI/webview journey surface "
-                "or an accepted product non-GUI journey harness (not invented here)."
+                "linux-aarch64-glibc236 removes Debian 12 glibc gap; full learner/"
+                "assessment/offline/recovery depth still requires GUI/webview journey "
+                "surface or an accepted product non-GUI journey harness (not invented)."
             ),
         }
 
@@ -807,19 +910,22 @@ def attempt_owner_waike_in_guest_pass(
                 launch_b_ok,
                 learner_journey_complete,
                 bool(out["role_boundary"].get("ok")),
-                bool(out.get("matches_main_aarch64")),
+                bool(out.get("matches_main_aarch64_glibc236")),
+                bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS")),
                 not arch_gap,
             ]
         )
         out["WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS"] = bool(and_ok)
         if not and_ok:
-            if not out.get("matches_main_aarch64") or arch_gap:
+            if not out.get("matches_main_aarch64_glibc236") or arch_gap:
                 out["blocker"] = (
-                    "accepted_main_aarch64_artifact_not_staged_or_arch_gap_remains"
+                    "accepted_main_glibc236_artifact_not_staged_or_arch_gap_remains"
                 )
+            elif not out.get("RUNTIME_TARGET_PREFLIGHT_PASS"):
+                out["blocker"] = "RUNTIME_TARGET_PREFLIGHT_FAIL"
             elif launch_a_ok and not learner_journey_complete:
                 out["blocker"] = (
-                    "native_aarch64_headless_launch_ack_only_learner_journey_depth_not_earned;"
+                    "native_aarch64_glibc236_headless_launch_ack_only_learner_journey_depth_not_earned;"
                     "need_gui_or_product_journey_surface_for_course_assessment_offline_recovery"
                 )
             elif not launch_a_ok:

@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.device_lab.current_pin_manifest.v1",
   "convention": "WP-011R-style pin freeze",
-  "frozen_at_utc": "2026-09-15T19:58:53Z",
+  "frozen_at_utc": "2026-09-15T23:18:09Z",
   "device_os_candidate_base": "898e44cfa8b7574c0de7b8312b0996816799eca4",
-  "prior_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "prior_manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4",
   "pins": [
     {
       "repository": "gunnchos-device-os",
@@ -75,21 +75,21 @@
     },
     {
       "repository": "gunnchos-waike-learning-platform",
-      "sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
-      "short": "2fa63da1e426",
+      "sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+      "short": "b1c3ab5d4faa",
       "branch": "main",
-      "source_timestamp_utc": "2026-09-15T19:58:53Z",
-      "commit_date": "2026-09-15T14:47:08-05:00",
-      "subject": "Merge pull request #9 from gunnchOS3k/cursor/device-lab-aarch64-linux-ci",
+      "source_timestamp_utc": "2026-09-15T23:18:09Z",
+      "commit_date": "2026-09-15T17:37:16-05:00",
+      "subject": "Merge pull request #11 from gunnchOS3k/cursor/device-lab-glibc236-apt-sigpipe",
       "role": "waike_learning_platform",
       "prior_device_lab_evidence_sha": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
       "prior_evidence_stale": true,
       "stale_reason": "wp011r DEVICE_LAB_ACCEPTANCE_MATRIX assessed_tip is older Device OS tip; not current-pin",
       "ok": true,
-      "prior_sha": "8610018a62e07548405a58384773d96a7be7950b",
+      "prior_sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
       "drift": true,
       "local_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-waike-learning-platform",
-      "drift_reason": "WAIKE_MULTIARCH_BUILD_SUPPORT_ACCEPTED_MAIN"
+      "drift_reason": "WAIKE_GLIBC236_CI_FIX_ACCEPTED_MAIN"
     },
     {
       "repository": "anime-aggressors",
@@ -230,6 +230,6 @@
   ],
   "windows_pilot0_accepted_main_pass": true,
   "windows_ceased_to_be_digital_blocker": true,
-  "note": "Prompt 17G.2: WAIKE LP pin refresh to accepted-main multiarch merge #9; other pins unchanged",
-  "manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4"
+  "note": "Prompt 17G.4: WAIKE LP pin refresh to accepted-main glibc236 merge #11; other pins unchanged",
+  "manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b"
 }

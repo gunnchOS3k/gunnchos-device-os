@@ -1,7 +1,7 @@
 {
   "schema": "gunnchos.device_lab.waike_real_runtime_attempt.v1",
-  "started_at_utc": "2026-09-15T20:01:26Z",
-  "pin_manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4",
+  "started_at_utc": "2026-09-15T23:24:29Z",
+  "pin_manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b",
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SHIPPING_IMAGE": false,
   "SILICON_EXACT_EMULATION": false,
@@ -11,23 +11,26 @@
   "prefer_fail_over_false_pass": true,
   "bundle": {
     "schema": "gunnchos.device_lab.owner_waike_bundle.v1",
-    "generated_at_utc": "2026-09-15T20:01:26Z",
+    "generated_at_utc": "2026-09-15T23:24:29Z",
     "ok": true,
     "bundle_id": "com.gunnchos.waike.learning",
     "install_layout": "bin/waike-learning-os",
     "binary": {
       "bundle_id": "com.gunnchos.waike.learning",
       "version": "0.1.0",
-      "artifact_sha256": "1725b2122c36ee8c008fc583569470496082763b6491a01be1b3b43a2d371c8b",
-      "source_sha256": "1725b2122c36ee8c008fc583569470496082763b6491a01be1b3b43a2d371c8b",
+      "artifact_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
+      "source_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
       "source_arch": "aarch64",
-      "platform_sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
+      "platform_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
       "curriculum_ops_sha": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
       "gate_d_artifact_id": "10041457013",
-      "main_aarch64_artifact_id": "10415274147",
-      "workflow_run_id": "35015695037",
-      "artifact_source_sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
+      "main_aarch64_artifact_id": "10422300001",
+      "workflow_run_id": "35031879671",
+      "artifact_source_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+      "compatibility_label": "linux-aarch64-glibc236",
+      "matches_main_aarch64_glibc236_sha256": true,
       "x86_64_retained": true,
+      "ubuntu_arm_retained_not_for_debian12": true,
       "fixture": false,
       "system_of_record": "platform_tauri_learning_os"
     },
@@ -35,7 +38,100 @@
     "arch_gap": false,
     "pin_ok": true
   },
-  "FREE_GIB_BEFORE_QEMU": 26.68,
+  "runtime_target_preflight_static": {
+    "schema": "gunnchos.device_lab.runtime_target_preflight.v1",
+    "generated_at_utc": "2026-09-15T23:24:29Z",
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "preferred_label": "linux-aarch64-glibc236",
+    "selected_label": "linux-aarch64-glibc236",
+    "checks": [
+      {
+        "name": "architecture_match",
+        "ok": true,
+        "detail": {
+          "artifact": "aarch64",
+          "guest": "aarch64"
+        }
+      },
+      {
+        "name": "elf_interpreter_match",
+        "ok": true,
+        "detail": {
+          "artifact": "/lib/ld-linux-aarch64.so.1",
+          "guest": "/lib/ld-linux-aarch64.so.1"
+        }
+      },
+      {
+        "name": "measured_max_glibc_within_guest",
+        "ok": true,
+        "detail": {
+          "measured_max_glibc": "2.34",
+          "guest_glibc": "2.36",
+          "ceiling": "2.36"
+        }
+      },
+      {
+        "name": "glibc_baseline_compatible_with_debian12_ceiling",
+        "ok": true,
+        "detail": {
+          "glibc_baseline": "2.36",
+          "guest_ceiling": "2.36"
+        }
+      },
+      {
+        "name": "preferred_compatibility_label",
+        "ok": true,
+        "detail": {
+          "compatibility_label": "linux-aarch64-glibc236",
+          "required": "linux-aarch64-glibc236"
+        }
+      },
+      {
+        "name": "guest_has_libwebkit2gtk_4_1",
+        "ok": true,
+        "detail": "has_libwebkit2gtk_4_1"
+      },
+      {
+        "name": "guest_has_libgtk_3",
+        "ok": true,
+        "detail": "has_libgtk_3"
+      },
+      {
+        "name": "guest_has_libsoup_3_0",
+        "ok": true,
+        "detail": "has_libsoup_3"
+      }
+    ],
+    "blockers": [],
+    "runtime_target_summary": {
+      "compatibility_label": "linux-aarch64-glibc236",
+      "target_id": "aarch64-glibc236",
+      "source_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+      "artifact_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
+      "architecture": "aarch64",
+      "measured_max_glibc": "2.34",
+      "glibc_baseline": "2.36",
+      "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+      "workflow_run_id": "35031879671"
+    },
+    "guest_summary": {
+      "architecture": "aarch64",
+      "glibc_version": "2.36",
+      "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+      "distro": "debian",
+      "distro_version": "12",
+      "has_libwebkit2gtk_4_1": true,
+      "has_libgtk_3": true,
+      "has_libsoup_3": true,
+      "probe_source": "device_lab_debian12_static_profile"
+    },
+    "selection": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/main-aarch64-glibc236/reports/RUNTIME_TARGET.json",
+      "preferred_label": "linux-aarch64-glibc236"
+    }
+  },
+  "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+  "FREE_GIB_BEFORE_QEMU": 26.53,
   "httpd": {
     "ok": true,
     "error": null,
@@ -61,8 +157,11 @@
   },
   "guest_uname": "Linux gunnchos-interactive-guest 6.1.0-52-arm64 #1 SMP Debian 6.1.180-1 (2026-08-03) aarch64 GNU/Linux",
   "staged_arch": "aarch64",
-  "artifact_source_sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
-  "artifact_sha256": "1725b2122c36ee8c008fc583569470496082763b6491a01be1b3b43a2d371c8b",
+  "artifact_source_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+  "artifact_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
+  "compatibility_label": "linux-aarch64-glibc236",
+  "matches_main_aarch64_glibc236": true,
+  "matches_main_aarch64_ubuntu2404": false,
   "matches_main_aarch64": true,
   "qemu_user_x86_64": {
     "ok": true,
@@ -92,29 +191,112 @@
       "libwebkit2gtk-4.1.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libwebkit2gtk-4.1.so.0",
       "libgtk-3.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libgtk-3.so.0"
     ],
-    "install_stdout_tail": "../20-xvfb_2%3a21.1.7-3+deb12u12_arm64.deb ...\nUnpacking xvfb (2:21.1.7-3+deb12u12) ...\nSetting up bubblewrap (0.8.0-2+deb12u1) ...\nSetting up libwoff1:arm64 (1.0.2-2) ...\nSetting up x11-xkb-utils (7.7+7) ...\nSetting up libdbusmenu-glib4:arm64 (18.10.20180917~bzr492+repack1-3) ...\nSetting up libmanette-0.2-0:arm64 (0.2.6-3+b1) ...\nSetting up libayatana-ido3-0.4-0:arm64 (0.9.3-1) ...\nSetting up fuse3 (3.14.0-4) ...\nupdate-initramfs: deferring update (trigger activated)\nSetting up xfonts-base (1:1.0.5+nmu1) ...\nSetting up libjavascriptcoregtk-4.1-0:arm64 (2.50.6-1~deb12u2) ...\nSetting up xdg-dbus-proxy (0.1.4-3+deb12u1) ...\nSetting up xauth (1:1.1.2-1) ...\nSetting up dbus-x11 (1.14.10-1~deb12u1) ...\nSetting up xserver-common (2:21.1.7-3+deb12u12) ...\nSetting up libayatana-indicator3-7:arm64 (0.9.3-1) ...\nSetting up libxfont2:arm64 (1:2.0.6-1) ...\nSetting up libwebkit2gtk-4.1-0:arm64 (2.50.6-1~deb12u2) ...\nSetting up libdbusmenu-gtk3-4:arm64 (18.10.20180917~bzr492+repack1-3) ...\nSetting up xdg-desktop-portal (1.16.0-2) ...\nCreated symlink /etc/systemd/user/graphical-session-pre.target.wants/xdg-desktop-portal-rewrite-launchers.service \u2192 /usr/lib/systemd/user/xdg-desktop-portal-rewrite-launchers.service.\n\nSetting up xvfb (2:21.1.7-3+deb12u12) ...\nSetting up libayatana-appindicator3-1 (0.5.92-1) ...\nSetting up xdg-desktop-portal-gtk (1.14.1-1) ...\nProcessing triggers for initramfs-tools (0.142+deb12u3) ...\nupdate-initramfs: Generating /boot/initrd.img-6.1.0-52-arm64\nProcessing triggers for libc-bin (2.36-9+deb12u14) ...\nProcessing triggers for man-db (2.11.2-2) ...\nProcessing triggers for fontconfig (2.14.1-4) ...\nlibgtk-3-0:arm64 3.24.38-2~deb12u3\nlibjavascriptcoregtk-4.1-0:arm64 2.50.6-1~deb12u2\nlibsoup-3.0-0:arm64 3.2.3-0+deb12u2\nlibwebkit2gtk-4.1-0:arm64 2.50.6-1~deb12u2\n\tlibwebkit2gtk-4.1.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libwebkit2gtk-4.1.so.0\n\tlibgtk-3.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libgtk-3.so.0\n/usr/bin/Xvfb\nTAURI_RUNTIME_SETUP_DONE\n",
+    "install_stdout_tail": "libgtk-3-0:arm64 3.24.38-2~deb12u3\nlibjavascriptcoregtk-4.1-0:arm64 2.50.6-1~deb12u2\nlibsoup-3.0-0:arm64 3.2.3-0+deb12u2\nlibwebkit2gtk-4.1-0:arm64 2.50.6-1~deb12u2\n\tlibwebkit2gtk-4.1.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libwebkit2gtk-4.1.so.0\n\tlibgtk-3.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libgtk-3.so.0\n/usr/bin/Xvfb\nTAURI_RUNTIME_SETUP_DONE\n",
     "returncode": 0,
-    "probe_tail": "aarch64\nlibgtk-3-0:arm64 3.24.38-2~deb12u3\n\tlibgtk-3.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libgtk-3.so.0\nPROBE_DONE\n",
+    "probe_tail": "aarch64\nlibgtk-3-0:arm64 3.24.38-2~deb12u3\nlibwebkit2gtk-4.1-0:arm64 2.50.6-1~deb12u2\n\tlibwebkit2gtk-4.1.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libwebkit2gtk-4.1.so.0\n\tlibgtk-3.so.0 (libc6,AArch64) => /lib/aarch64-linux-gnu/libgtk-3.so.0\nPROBE_DONE\n",
     "additive": true,
     "no_feature_strip": true,
     "no_static_html_bypass": true
   },
+  "runtime_target_preflight": {
+    "schema": "gunnchos.device_lab.runtime_target_preflight.v1",
+    "generated_at_utc": "2026-09-15T23:24:45Z",
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "preferred_label": "linux-aarch64-glibc236",
+    "selected_label": "linux-aarch64-glibc236",
+    "checks": [
+      {
+        "name": "architecture_match",
+        "ok": true,
+        "detail": {
+          "artifact": "aarch64",
+          "guest": "aarch64"
+        }
+      },
+      {
+        "name": "elf_interpreter_match",
+        "ok": true,
+        "detail": {
+          "artifact": "/lib/ld-linux-aarch64.so.1",
+          "guest": "/lib/ld-linux-aarch64.so.1"
+        }
+      },
+      {
+        "name": "measured_max_glibc_within_guest",
+        "ok": true,
+        "detail": {
+          "measured_max_glibc": "2.34",
+          "guest_glibc": "2.36",
+          "ceiling": "2.36"
+        }
+      },
+      {
+        "name": "glibc_baseline_compatible_with_debian12_ceiling",
+        "ok": true,
+        "detail": {
+          "glibc_baseline": "2.36",
+          "guest_ceiling": "2.36"
+        }
+      },
+      {
+        "name": "preferred_compatibility_label",
+        "ok": true,
+        "detail": {
+          "compatibility_label": "linux-aarch64-glibc236",
+          "required": "linux-aarch64-glibc236"
+        }
+      },
+      {
+        "name": "guest_has_libwebkit2gtk_4_1",
+        "ok": true,
+        "detail": "has_libwebkit2gtk_4_1"
+      },
+      {
+        "name": "guest_has_libgtk_3",
+        "ok": true,
+        "detail": "has_libgtk_3"
+      },
+      {
+        "name": "guest_has_libsoup_3_0",
+        "ok": true,
+        "detail": "has_libsoup_3"
+      }
+    ],
+    "blockers": [],
+    "runtime_target_summary": {
+      "compatibility_label": "linux-aarch64-glibc236",
+      "target_id": "aarch64-glibc236",
+      "source_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+      "artifact_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
+      "architecture": "aarch64",
+      "measured_max_glibc": "2.34",
+      "glibc_baseline": "2.36",
+      "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+      "workflow_run_id": "35031879671"
+    },
+    "guest_summary": {
+      "architecture": "aarch64",
+      "glibc_version": "2.36",
+      "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+      "distro": "debian",
+      "distro_version": "12",
+      "has_libwebkit2gtk_4_1": true,
+      "has_libgtk_3": true,
+      "has_libsoup_3": true,
+      "probe_source": "live_guest_agent"
+    },
+    "selection": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/main-aarch64-glibc236/reports/RUNTIME_TARGET.json",
+      "preferred_label": "linux-aarch64-glibc236"
+    }
+  },
   "fetch": {
     "ok": true,
+    "via": "9p",
     "remote_root": "/var/lib/gunnchos/waike-learning-os",
-    "via": "virtio_file_put_fallback",
-    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\n7960832 /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\nPUT_FETCH_OK\n"
-  },
-  "fetch_file_put_fallback": {
-    "puts": {
-      "binary": false,
-      "VERSION": true,
-      "INSTALLED.json": true,
-      "waike-learning-os.qemu-x86_64-wrapper.sh": true,
-      "OWNER_WAIKE_BUNDLE_MANIFEST.json": true,
-      "WAIKE_RUNTIME_PROVENANCE.json": true
-    },
-    "finalize_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\n7960832 /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\nPUT_FETCH_OK\n"
+    "stdout_tail": "START_WAIKE_FETCH_1789514685\nVIA_9P_WAIKE_FETCH_1789514685 src=/mnt/gdlgames\n/var/lib/gunnchos/waike-learning-os.partial/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=e6d4ce2722b32746bec84b19782e370fca400a09, for GNU/Linux 3.7.0, not stripped\n7893936 /var/lib/gunnchos/waike-learning-os.partial/bin/waike-learning-os.real\nFETCH_OK_WAIKE_FETCH_1789514685\ntotal 15444\ndrwxr-xr-x 2 root root       4096 Sep 15 23:24 .\ndrwxr-xr-x 6 root root       4096 Sep 15 23:24 ..\n-rw-r--r-- 1  501 dialout     840 Sep 15 23:24 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 23:24 VERSION\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 23:24 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os.real\n",
+    "returncode": 0,
+    "marker": "WAIKE_FETCH_1789514685"
   },
   "qemu_wrapper": {
     "ok": true,
@@ -122,24 +304,32 @@
     "reason": "no_arch_gap"
   },
   "native_elf_ready": {
-    "ok": true,
-    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\nNATIVE_ELF_READY\n"
+    "ok": false,
+    "stdout_tail": "learning-os.real\nFETCH_OK_WAIKE_FETCH_1789514685\ntotal 15444\ndrwxr-xr-x 2 root root       4096 Sep 15 23:24 .\ndrwxr-xr-x 6 root root       4096 Sep 15 23:24 ..\n-rw-r--r-- 1  501 dialout     840 Sep 15 23:24 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 23:24 VERSION\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 23:24 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os.real\n"
   },
   "binary_probe": {
-    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\ntotal 15572\ndrwxr-xr-x 2 root root       4096 Sep 15 20:02 .\ndrwxr-xr-x 3 root root       4096 Sep 15 20:02 ..\n-rw-r--r-- 1  501 dialout     693 Sep 15 20:02 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 20:02 VERSION\n-rwxr-xr-x 1  501 dialout 7960832 Sep 15 19:56 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 20:02 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7960832 Sep 15 19:56 waike-learning-os.real\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os)\nPROBE_DONE\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\n+ ls -la /var/lib/gunnchos/waike-learning-os/bin\n+ /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help\n+ head -20\n+ echo PROBE_DONE\n",
+    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=e6d4ce2722b32746bec84b19782e370fca400a09, for GNU/Linux 3.7.0, not stripped\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=e6d4ce2722b32746bec84b19782e370fca400a09, for GNU/Linux 3.7.0, not stripped\ntotal 15444\ndrwxr-xr-x 2 root root       4096 Sep 15 23:24 .\ndrwxr-xr-x 6 root root       4096 Sep 15 23:24 ..\n-rw-r--r-- 1  501 dialout     840 Sep 15 23:24 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 23:24 VERSION\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 23:24 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os.real\nWAIKE Learning OS verify key error: KEY\nPROBE_DONE\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\n+ ls -la /var/lib/gunnchos/waike-learning-os/bin\n+ /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help\n+ head -20\n+ echo PROBE_DONE\n",
     "returncode": 0
   },
   "journey_a_launch": {
     "path": "fallback_direct",
-    "launcher_error": "ModuleNotFoundError(\"No module named 'gunnchos_device_os'\")",
+    "launcher_error": "FileNotFoundError(2, 'No such file or directory')",
     "process_started": true,
-    "pid": 19632,
-    "returncode": 1,
-    "acknowledged": false,
-    "ack": null,
+    "pid": 829,
+    "returncode": 0,
+    "acknowledged": true,
+    "ack": {
+      "app_version": "0.1.0",
+      "bundle_id": "com.gunnchos.waike.learning",
+      "deep_link": "waike://learn/home",
+      "message_type": "ack",
+      "protocol": "gunnchos.learning_os.ipc.v1",
+      "request_id": "26640687-2c4e-4040-8c88-5c590e226861",
+      "status": "ok"
+    },
     "stdout_tail": "",
-    "stderr_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os)\n",
-    "launched": false,
+    "stderr_tail": "",
+    "launched": true,
     "executable": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
     "fixture_rejected": true,
     "guest_returncode": 0,
@@ -150,13 +340,13 @@
   "role_boundary": {
     "ok": true,
     "learner_launch": {
-      "launched": false,
+      "launched": true,
       "path": "fallback_direct",
       "platform_role": "learner",
       "profile": "student"
     },
     "instructor_launch": {
-      "launched": false,
+      "launched": true,
       "path": "fallback_direct",
       "platform_role": "instructor",
       "profile": "educator"
@@ -166,15 +356,23 @@
   },
   "journey_b_launch": {
     "path": "fallback_direct",
-    "launcher_error": "ModuleNotFoundError(\"No module named 'gunnchos_device_os'\")",
+    "launcher_error": "FileNotFoundError(2, 'No such file or directory')",
     "process_started": true,
-    "pid": 19653,
-    "returncode": 1,
-    "acknowledged": false,
-    "ack": null,
+    "pid": 854,
+    "returncode": 0,
+    "acknowledged": true,
+    "ack": {
+      "app_version": "0.1.0",
+      "bundle_id": "com.gunnchos.waike.learning",
+      "deep_link": "waike://learn/home",
+      "message_type": "ack",
+      "protocol": "gunnchos.learning_os.ipc.v1",
+      "request_id": "422b27d3-1a78-4bba-9681-4d9515a4518c",
+      "status": "ok"
+    },
     "stdout_tail": "",
-    "stderr_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os)\n",
-    "launched": false,
+    "stderr_tail": "",
+    "launched": true,
     "executable": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
     "fixture_rejected": true,
     "guest_returncode": 0,
@@ -183,25 +381,26 @@
     "platform_role": "learner"
   },
   "capability_classification": {
-    "device_os_native_launch_ipc": false,
+    "device_os_native_launch_ipc": true,
     "authentic_platform_binary": true,
-    "accepted_main_aarch64_artifact": true,
+    "accepted_main_aarch64_glibc236_artifact": true,
+    "runtime_target_preflight_pass": true,
     "native_aarch64_guest_exec": true,
     "tauri_runtime_libs_present": true,
     "learner_course_lesson_interaction": false,
     "assessment_submission_mutation": false,
     "offline_sync_outbox": "supported_in_product_not_exercised_this_run",
-    "reason": "Accepted-main WAIKE_CI_HEADLESS_UI acknowledges Device OS IPC then returns before Tauri invoke surface (install/lesson/quiz/outbox). Native aarch64 artifact removes arch-gap; full learner/assessment/offline/recovery depth still requires GUI/webview journey surface or an accepted product non-GUI journey harness (not invented here)."
+    "reason": "Accepted-main WAIKE_CI_HEADLESS_UI acknowledges Device OS IPC then returns before Tauri invoke surface (install/lesson/quiz/outbox). linux-aarch64-glibc236 removes Debian 12 glibc gap; full learner/assessment/offline/recovery depth still requires GUI/webview journey surface or an accepted product non-GUI journey harness (not invented)."
   },
   "learner_journey": {
-    "launch": false,
+    "launch": true,
     "identity_role_context": true,
     "course": false,
     "lesson": false,
     "interaction": false,
     "assessed_or_submission_mutation": false,
     "persist_readback": false,
-    "close_relaunch_restore": false,
+    "close_relaunch_restore": true,
     "complete": false
   },
   "offline_reconnect": {
@@ -213,19 +412,10 @@
     "reason": "controlled_failure_injection_requires_deeper_runtime_surface"
   },
   "repeatability": {
-    "journey_a": false,
-    "journey_b": false,
-    "pass": false
+    "journey_a": true,
+    "journey_b": true,
+    "pass": true
   },
-  "blocker": "native_aarch64_accepted_main_elf_requires_GLIBC_2.39_ubuntu2404_arm_runner;device_lab_interactive_guest_is_debian12_glibc_2.36;webkit_gtk_runtime_grown_ok_but_binary_cannot_exec;need_debian12_compatible_aarch64_build_or_guest_base_image_upgrade",
-  "finished_at_utc": "2026-09-15T20:02:56Z",
-  "glibc_compat": {
-    "guest_distro": "Debian 12 bookworm (from uname/kernel package era)",
-    "guest_libc_expected": "glibc 2.36",
-    "artifact_runner": "ubuntu-24.04-arm",
-    "artifact_requires": "GLIBC_2.39",
-    "compatible": false,
-    "evidence": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=586bf193bb96844da54154361a10672de2877962, for GNU/Linux 3.7.0, not stripped\ntotal 15572\ndrwxr-xr-x 2 root root       4096 Sep 15 20:02 .\ndrwxr-xr-x 3 root root       4096 Sep 15 20:02 ..\n-rw-r--r-- 1  501 dialout     693 Sep 15 20:02 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 20:02 VERSION\n-rwxr-xr-x 1  501 dialout 7960832 Sep 15 19:56 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 20:02 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7960832 Sep 15 19:56 waike-learning-os.real\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os)\nPROBE_DONE\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\n+ ls -la /var/lib/gunnchos/waike-learning-os/bin\n+ /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help\n+ head -20\n+ echo PROBE_DONE\n",
-    "stderr": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os)\n"
-  }
+  "blocker": "native_aarch64_glibc236_headless_launch_ack_only_learner_journey_depth_not_earned;need_gui_or_product_journey_surface_for_course_assessment_offline_recovery",
+  "finished_at_utc": "2026-09-15T23:24:53Z"
 }

@@ -16,9 +16,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ACCEPTED_WAIKE_LP_SHA = "2fa63da1e426179972bd9c50cd8985ebf37e4077"
+ACCEPTED_WAIKE_LP_SHA = "b1c3ab5d4faa4d2613569e474013ccf0976d346e"
 ACCEPTED_WAIKE_OPS_SHA = "fbf7685bc5686201ccaa0128ee83346d59b3d584"
-PIN_MANIFEST_SHA256 = "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4"
+# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE glibc236 pin.
+PIN_MANIFEST_SHA256 = "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b"
 BUNDLE_ID = "com.gunnchos.waike.learning"
 APP_VERSION = "0.1.0"
 
@@ -28,7 +29,16 @@ GATE_D_LINUX_SHA256 = (
     "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef"
 )
 
-# Accepted-main native aarch64 Device Lab artifact (workflow run on merge #9).
+# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #11 / run 35031879671).
+# Prefer this over Ubuntu 24.04 aarch64-current (GLIBC_2.39) for Interactive Guest.
+MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10422300001"
+MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35031879671"
+MAIN_AARCH64_GLIBC236_SHA256 = (
+    "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926"
+)
+MAIN_AARCH64_GLIBC236_LABEL = "linux-aarch64-glibc236"
+
+# Retained Ubuntu 24.04 ARM producer (aarch64-current) — NOT for Debian 12 guest exec.
 MAIN_AARCH64_ARTIFACT_ID = "10415274147"
 MAIN_AARCH64_WORKFLOW_RUN_ID = "35015695037"
 MAIN_AARCH64_SHA256 = (
@@ -173,9 +183,10 @@ def _probe_binary(path: Path) -> dict[str, Any]:
 
 
 def locate_staged_linux_binary(repo_root: Path) -> dict[str, Any]:
-    """Prefer accepted-main native aarch64; retain x86_64 Gate D for x86_64 targets."""
+    """Prefer accepted-main glibc236 aarch64; retain Ubuntu ARM + x86_64 Gate D."""
     base = repo_root / "artifacts/device_lab_current_pin/waike/owner_build"
     ordered: list[Path] = []
+    ordered.extend(base.glob("main-aarch64-glibc236/**/waike-learning-client"))
     ordered.extend(base.glob("main-aarch64-linux/**/waike-learning-client"))
     ordered.extend(base.glob("gate-d-linux/**/waike-learning-client"))
     ordered.extend(base.glob("**/waike-learning-client"))
@@ -189,15 +200,16 @@ def locate_staged_linux_binary(repo_root: Path) -> dict[str, Any]:
             continue
         seen.add(key)
         found.append(_probe_binary(c))
-    # Prefer exact accepted-main aarch64 hash, then any aarch64, then Gate D x86_64.
+    # Prefer exact glibc236 hash, never silently pick Ubuntu GLIBC_2.39 for guest.
     preferred = None
     for row in found:
-        if row["sha256"] == MAIN_AARCH64_SHA256 and row["arch"] == "aarch64":
+        if row["sha256"] == MAIN_AARCH64_GLIBC236_SHA256 and row["arch"] == "aarch64":
             preferred = row
             break
     if preferred is None:
+        # Do not auto-select Ubuntu 24.04 aarch64-current for Device Lab guest.
         for row in found:
-            if row["arch"] == "aarch64":
+            if row["arch"] == "x86_64":
                 preferred = row
                 break
     if preferred is None and found:
@@ -205,20 +217,36 @@ def locate_staged_linux_binary(repo_root: Path) -> dict[str, Any]:
     if preferred is None:
         return {"ok": False, "error": "linux_binary_not_staged", "searched": str(base)}
     arch = preferred["arch"]
-    artifact_id = (
-        MAIN_AARCH64_ARTIFACT_ID if arch == "aarch64" else GATE_D_LINUX_ARTIFACT_ID
-    )
+    is_glibc236 = preferred["sha256"] == MAIN_AARCH64_GLIBC236_SHA256
+    is_ubuntu_arm = preferred["sha256"] == MAIN_AARCH64_SHA256
+    if is_glibc236:
+        artifact_id = MAIN_AARCH64_GLIBC236_ARTIFACT_ID
+        workflow_run_id = MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID
+        label = MAIN_AARCH64_GLIBC236_LABEL
+    elif arch == "aarch64":
+        artifact_id = MAIN_AARCH64_ARTIFACT_ID
+        workflow_run_id = MAIN_AARCH64_WORKFLOW_RUN_ID
+        label = "linux-aarch64-current"
+    else:
+        artifact_id = GATE_D_LINUX_ARTIFACT_ID
+        workflow_run_id = None
+        label = "linux-x86_64-gate-d"
     return {
         "ok": True,
         **preferred,
         "matches_gate_d_linux_sha256": preferred["sha256"] == GATE_D_LINUX_SHA256,
-        "matches_main_aarch64_sha256": preferred["sha256"] == MAIN_AARCH64_SHA256,
+        "matches_main_aarch64_sha256": is_ubuntu_arm,
+        "matches_main_aarch64_glibc236_sha256": is_glibc236,
+        "compatibility_label": label,
         "artifact_id": artifact_id,
-        "workflow_run_id": MAIN_AARCH64_WORKFLOW_RUN_ID if arch == "aarch64" else None,
+        "workflow_run_id": workflow_run_id,
         "artifact_source_sha": (
-            MAIN_AARCH64_ARTIFACT_SOURCE_SHA if arch == "aarch64" else ACCEPTED_WAIKE_LP_SHA
+            ACCEPTED_WAIKE_LP_SHA if (is_glibc236 or is_ubuntu_arm or arch == "x86_64") else None
         ),
         "x86_64_retained": any(r["arch"] == "x86_64" for r in found),
+        "ubuntu_arm_retained_not_for_debian12": any(
+            r["sha256"] == MAIN_AARCH64_SHA256 for r in found
+        ),
         "staged_variants": [
             {"arch": r["arch"], "sha256": r["sha256"], "path": r["path"]} for r in found
         ],
@@ -252,11 +280,16 @@ def write_runtime_provenance(repo_root: Path, out_dir: Path) -> dict[str, Any]:
         "guest_arch_expectation": "aarch64",
         "ci_linux_artifact_arch": binary.get("arch"),
         "arch_gap": binary.get("arch") == "x86_64",
+        "compatibility_label": binary.get("compatibility_label"),
+        "matches_main_aarch64_glibc236_sha256": binary.get(
+            "matches_main_aarch64_glibc236_sha256"
+        ),
         "compatibility_plan": (
-            "Device OS Interactive Guest is aarch64. Accepted-main publishes "
-            "native aarch64 linux ELF via Device Lab aarch64 Linux workflow; "
-            "x86_64 Gate D artifact retained for x86_64 targets. Prefer native "
-            "aarch64 guest execution; qemu-user remains additive fallback only."
+            "Device OS Interactive Guest is Debian 12 / glibc 2.36 aarch64. "
+            "Prefer accepted-main linux-aarch64-glibc236 artifact; retain "
+            "Ubuntu aarch64-current and x86_64 Gate D but never exec Ubuntu "
+            "GLIBC_2.39 ELF on Debian 12 guest. RuntimeTarget preflight must "
+            "PASS before journey."
         ),
         "launcher_contract": "gunnchos_device_os.learning_os_launcher + NativeLaunchAdapter",
         "claim_boundary": (
@@ -300,11 +333,59 @@ def stage_owner_waike_bundle(repo_root: Path, staging: Path) -> dict[str, Any]:
         "main_aarch64_artifact_id": binary.get("artifact_id"),
         "workflow_run_id": binary.get("workflow_run_id"),
         "artifact_source_sha": binary.get("artifact_source_sha"),
+        "compatibility_label": binary.get("compatibility_label"),
+        "matches_main_aarch64_glibc236_sha256": binary.get(
+            "matches_main_aarch64_glibc236_sha256"
+        ),
         "x86_64_retained": binary.get("x86_64_retained"),
+        "ubuntu_arm_retained_not_for_debian12": binary.get(
+            "ubuntu_arm_retained_not_for_debian12"
+        ),
         "fixture": False,
         "system_of_record": "platform_tauri_learning_os",
     }
     (bin_dir / "INSTALLED.json").write_text(json.dumps(meta, indent=2) + "\n")
+    # Ship Device OS learning-os launcher modules for in-guest NativeLaunchAdapter.
+    # Additive: guest previously only had /opt/gunnchos/lib when image-baked.
+    device_os_lib_root = staging / "device_os_lib"
+    if device_os_lib_root.exists():
+        shutil.rmtree(device_os_lib_root)
+    src_pkg = Path(repo_root) / "gunnchos_device_os"
+
+    def _ignore_heavy(_dir: str, names: list[str]) -> set[str]:
+        drop = {
+            "__pycache__",
+            ".pytest_cache",
+            "device_lab",
+            "os_build",
+            "cont_viii",
+            "cont_ix",
+            "wave009_os020",
+            "a_pkt003",
+            "product_use",
+            "service_continuity_execution",
+            "cloud_dev_plane",
+            "cloud_edge",
+            "connectivity",
+            "boot",
+            "bootable_image",
+        }
+        return {n for n in names if n in drop or n.endswith(".pyc")}
+
+    shutil.copytree(src_pkg, device_os_lib_root / "gunnchos_device_os", ignore=_ignore_heavy)
+    # Stage accepted TEST_ONLY verify key (same fixture Windows Pilot 0 uses).
+    try:
+        lp_root = resolve_waike_lp_checkout(repo_root)
+        key_src = lp_root / "contracts/fixtures/keys/TEST_ONLY_ed25519_public.key"
+    except FileNotFoundError:
+        key_src = Path()
+    if key_src.is_file():
+        keys_dir = staging / "contracts" / "fixtures" / "keys"
+        keys_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(key_src, keys_dir / "TEST_ONLY_ed25519_public.key")
+        xdg = staging / "xdg" / "waike-learning-os"
+        xdg.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(key_src, xdg / "TEST_ONLY_ed25519_public.key")
     # Wrapper used when guest needs qemu-user for x86_64 ELF on aarch64.
     wrapper = staging / "bin" / "waike-learning-os.qemu-x86_64-wrapper.sh"
     wrapper.write_text(
