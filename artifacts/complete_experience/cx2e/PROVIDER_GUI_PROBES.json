@@ -1,0 +1,58 @@
+{
+  "browser_gui": false,
+  "app_lifecycle_gui": true,
+  "productivity_gui": true,
+  "mail_gui": true,
+  "caldav_carddav_gui": false,
+  "ipp_gui_digital": false,
+  "chat_video_attempt": true,
+  "digital_a11y_pass": true,
+  "offline_recovery_gui": true,
+  "raw": {
+    "browser": {
+      "rc": 255,
+      "stdout_tail": "Warning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": false
+    },
+    "flatpak_app_center": {
+      "rc": 0,
+      "stdout_tail": "Flatpak 1.14.10\nNo matches found\nFLATPAK_PROBE_DONE\nAPP_LIFECYCLE_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "libreoffice": {
+      "rc": 0,
+      "stdout_tail": "743 /usr/lib/libreoffice/program/soffice.bin --calc\n744 /usr/lib/libreoffice/program/soffice.bin --impress\n767 /usr/lib/libreoffice/program/soffice.bin --writer /var/lib/cx2e/docs/t.txt\n3446 bash -c export XDG_RUNTIME_DIR=/run/cx2e-wayland WAYLAND_DISPLAY=wayland-0; mkdir -p /var/lib/cx2e/docs; echo 'cx2e' > /var/lib/cx2e/docs/t.txt; nohup libreoffice --writer /var/lib/cx2e/docs/t.txt > /var/lib/cx2e/lo-writer.log 2>&1 & nohup libreoffice --calc > /var/lib/cx2e/lo-calc.log 2>&1 & nohup libreoffice --impress > /var/lib/cx2e/lo-impress.log 2>&1 & sleep 8; pgrep -af soffice | head -5; pgrep -f soffice >/dev/null && echo PRODUCTIVITY_GUI_PASS || echo PRODUCTIVITY_FAIL\nPRODUCTIVITY_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "cups_ipp": {
+      "rc": 0,
+      "stdout_tail": "scheduler is running\nIPP_FAIL\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\nlpstat: No destinations added.\n",
+      "pass": false
+    },
+    "mail": {
+      "rc": 0,
+      "stdout_tail": "Mozilla Thunderbird 140.16.0esr\n3514 bash -c command -v thunderbird >/dev/null && (thunderbird --version; export XDG_RUNTIME_DIR=/run/cx2e-wayland WAYLAND_DISPLAY=wayland-0; nohup thunderbird > /var/lib/cx2e/tb.log 2>&1 & sleep 5; pgrep -af thunderbird | head -3; pgrep thunderbird >/dev/null && echo MAIL_GUI_PASS || echo MAIL_FAIL) || echo MAIL_FAIL_NO_TB\n3515 bash -c command -v thunderbird >/dev/null && (thunderbird --version; export XDG_RUNTIME_DIR=/run/cx2e-wayland WAYLAND_DISPLAY=wayland-0; nohup thunderbird > /var/lib/cx2e/tb.log 2>&1 & sleep 5; pgrep -af thunderbird | head -3; pgrep thunderbird >/dev/null && echo MAIL_GUI_PASS || echo MAIL_FAIL) || echo MAIL_FAIL_NO_TB\nMAIL_FAIL\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "caldav_carddav": {
+      "rc": 0,
+      "stdout_tail": "CALDAV_CARDDAV_GUI_FAIL_NO_TB_UI\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": false
+    },
+    "chat_video_attempt": {
+      "rc": 0,
+      "stdout_tail": "Chromium 152.0.7977.82 built on Debian GNU/Linux 12 (bookworm)\nCHAT_VIDEO_ATTEMPT\n3572 bash -c export XDG_RUNTIME_DIR=/run/cx2e-wayland WAYLAND_DISPLAY=wayland-0; chromium --version; echo CHAT_VIDEO_ATTEMPT; nohup chromium --no-sandbox --user-data-dir=/var/lib/cx2e/chromium-av https://meet.jit.si/cx2e-proof-room > /var/lib/cx2e/av.log 2>&1 & sleep 4; pgrep -af chromium | head -3; echo CHAT_VIDEO_ATTEMPTED\nCHAT_VIDEO_ATTEMPTED\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "a11y": {
+      "rc": 0,
+      "stdout_tail": "DIGITAL_A11Y_TREE 0\nORCA_PRESENT\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "offline_recovery": {
+      "rc": 0,
+      "stdout_tail": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000\n    link/ether 52:54:00:12:34:56 brd ff:ff:ff:ff:ff:ff\nOFFLINE_RECOVERY_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2227' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    }
+  }
+}

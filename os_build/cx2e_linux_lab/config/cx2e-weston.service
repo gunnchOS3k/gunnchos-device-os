@@ -1,0 +1,29 @@
+[Unit]
+Description=CX2E Weston compositor (DRM/virtio-gpu)
+After=seatd.service systemd-user-sessions.service local-fs.target
+Wants=seatd.service
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+Environment=XDG_RUNTIME_DIR=/run/cx2e-wayland
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_CONFIG_HOME=/etc/cx2e-weston
+Environment=LIBSEAT_BACKEND=seatd
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/cx2e-wayland/bus
+WorkingDirectory=/var/lib/cx2e
+ExecStartPre=/bin/mkdir -p /run/cx2e-wayland /var/lib/cx2e /var/log /etc/cx2e-weston
+ExecStartPre=/bin/chmod 700 /run/cx2e-wayland
+ExecStartPre=-/sbin/modprobe uinput
+ExecStartPre=-/bin/systemctl stop getty@tty1.service
+ExecStartPre=/bin/bash -c 'if [ ! -S /run/cx2e-wayland/bus ]; then dbus-daemon --session --address=unix:path=/run/cx2e-wayland/bus --nofork --nopidfile & sleep 0.5; fi'
+ExecStart=/usr/bin/openvt -c 1 -f -s -w -- /usr/bin/weston --backend=drm-backend.so --socket=wayland-0 --log=/var/log/cx2e-weston.log
+Restart=on-failure
+RestartSec=2
+User=root
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
