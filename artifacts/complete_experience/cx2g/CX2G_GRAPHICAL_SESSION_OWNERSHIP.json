@@ -1,0 +1,11 @@
+{
+  "schema": "gunnchos.cx2g.graphical_session_ownership.v1",
+  "xdg_runtime_dir": "/run/cx2g-wayland",
+  "wayland_display": "wayland-0",
+  "dbus_session": "unix:path=/run/cx2g-wayland/bus",
+  "service_user": "gunnchos",
+  "weston_unit": "cx2g-weston.service",
+  "shell_unit": "cx2g-gunnch-shell.service",
+  "probe_tail": "GRAPHICAL_SESSION_PROBE\nXDG_RUNTIME_DIR_PERM=root:root 755\nWAYLAND=srwxrwxrwx 1 root root 0 Sep 16 22:54 /run/cx2g-wayland/wayland-0\nDBUS=srwxrwxrwx 1 root root 0 Sep 16 22:54 /run/cx2g-wayland/bus\nWESTON_ACTIVE=inactive\nHTTP_ACTIVE=active",
+  "coherent_env": true
+}

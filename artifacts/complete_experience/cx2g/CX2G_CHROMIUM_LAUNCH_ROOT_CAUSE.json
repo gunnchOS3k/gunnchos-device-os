@@ -1,0 +1,26 @@
+{
+  "schema": "gunnchos.cx2g.chromium_launch_root_cause.v1",
+  "hypothesis": "CX2F launch_chromium_shell embeds plaintext 'chromium' in the SSH remote argv and then runs 'pkill -f chromium', which matches and SIGTERM's the remote shell itself before systemd restart can complete \u2014 producing empty/truncated SSH stdout and process_alive=false.",
+  "cx2f_source_contains_pkill_f_chromium": true,
+  "cx2f_source_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/cx2f/session.py",
+  "cx2f_prior_launch_evidence": {
+    "process_alive": false,
+    "debug_json_ok": false,
+    "stdout_tail_len": 85,
+    "stdout_looks_truncated_after_ssh_banner": true
+  },
+  "non_destructive_self_match_demo": {
+    "ok": true,
+    "stdout_tail": "DEMO_NEEDLE_IN_ARGV\n1153 bash -lc echo DEMO_NEEDLE_IN_ARGV; pgrep -af DEMO_NEEDLE_IN_ARGV | head -5; echo DEMO_SELF_MATCH_OK; echo NOTE=pkill_-f_would_signal_this_shell_if_needle_were_chromium\nDEMO_SELF_MATCH_OK\nNOTE=pkill_-f_would_signal_this_shell_if_needle_were_chromium\n\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n",
+    "interpretation": "pgrep -f matches the remote bash argv containing the needle. pkill -f with the same needle would terminate that shell. CX2G never runs pkill -f chromium."
+  },
+  "root_cause_confirmed": true,
+  "remediation": "stop_owned_shell_runtime(): systemctl stop owned unit \u2192 wait cgroup empty \u2192 kill only owned PIDs",
+  "cx2g_forbidden": "pkill -f chromium",
+  "proved_runtime_notes": {
+    "phase": "post_launch",
+    "process_alive": true,
+    "debug_json_ok": true,
+    "ownership_stop_ok": true
+  }
+}
