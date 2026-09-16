@@ -1,0 +1,89 @@
+{
+  "schema": "gunnchos.cx2f.root_cause_audit.v1",
+  "generated_at_utc": "2026-09-16T21:20:00Z",
+  "source_wave": "CX2E",
+  "source_tip": "4ca488ef5d0b7083e4b80ba0fe7da87b0293306e",
+  "PASS_CLAIMED": false,
+  "answers": {
+    "1_kernel_booted_by_cx2e": {
+      "answer": "6.1.0-53-cloud-arm64 (CX2E tokens/blocker); provision serial also shows initial boot 6.1.0-52-cloud-arm64 before package install of 6.1.0-53-*",
+      "evidence": [
+        "artifacts/complete_experience/cx2e/CX2E_TOKENS.json lab_blocker",
+        "os_build/cx2e_linux_lab/work/provision_serial.log Linux version lines"
+      ]
+    },
+    "2_generic_non_cloud_kernels_installed": {
+      "answer": "linux-image-6.1.0-53-arm64 (via linux-image-arm64 meta) was installed during cloud-init; cloud kernels 6.1.0-52-cloud-arm64 and 6.1.0-53-cloud-arm64 also present",
+      "evidence": [
+        "provision_serial.log unpacking linux-image-6.1.0-53-arm64",
+        "provision_serial.log Found linux image: /boot/vmlinuz-6.1.0-53-cloud-arm64"
+      ]
+    },
+    "3_generic_kernel_has_virtio_gpu_drm": {
+      "answer": "Expected yes for Debian linux-image-*-arm64 (non-cloud) which ships virtio_gpu + DRM modules; CX2E never booted that kernel so modules were not exercised. Confirmed at CX2F runtime via modinfo/lsmod on selected non-cloud kernel.",
+      "status_at_audit": "pending_runtime_confirm",
+      "rationale": "cloud kernel lacks DRM (/dev/dri absent per CX2E blocker); generic arm64 is the intended DRM path"
+    },
+    "4_initramfs_modules": {
+      "answer": "Unknown from CX2E offline evidence whether initramfs for 6.1.0-53-arm64 includes virtio_gpu/drm; CX2F regenerates initramfs and verifies module tree before reboot",
+      "status_at_audit": "pending_runtime_confirm"
+    },
+    "5_virtio_gpu_pci_in_qemu": {
+      "answer": true,
+      "qemu_device": "virtio-gpu-pci,id=gpu0,max_outputs=1",
+      "evidence": "os_build/cx2e_linux_lab/work/qemu_graphical_cmd.json"
+    },
+    "6_qemu_display_none": {
+      "answer": true,
+      "evidence": "qemu_graphical_cmd.json contains -display none",
+      "impact": "no QEMU graphics surface for HMP screendump / VNC inspection"
+    },
+    "7_chromium_failure_mode": {
+      "answer": "unproven_or_empty_render_after_launch",
+      "detail": "CX2E launched Chromium with --app=file:///opt/cx2e/gunnch_shell/index.html; assets present (SHELL_ASSETS_OK) and process started, but shell_window_rendered stayed false and compositor capture unavailable under headless",
+      "evidence": "SESSION_FACTS.json shell_window_rendered=false; CX2E_TOKENS GUNNCH_SHELL_RENDER_PASS=false"
+    },
+    "8_vite_absolute_assets": {
+      "answer": true,
+      "sample": "<script type=\"module\" crossorigin src=\"/assets/index-Dlt4_9F5.js\"></script>",
+      "evidence": "os_build/cx2e_linux_lab/dist/gunnch_shell/index.html"
+    },
+    "9_file_url_asset_resolution_broken": {
+      "answer": true,
+      "detail": "file:///opt/cx2e/gunnch_shell/index.html resolves /assets/* against filesystem root (/assets/...), not the shell directory — production JS/CSS never load under file://"
+    },
+    "10_user_runtime_mismatch": {
+      "answer": "likely_yes",
+      "detail": "CX2E Weston unit ran as User=root with XDG_RUNTIME_DIR=/run/cx2e-wayland (root-owned sockets); Chromium launched via SSH as gunnchos. Session may have mismatched ownership/permissions for Wayland attach + AT-SPI",
+      "evidence": "os_build/cx2e_linux_lab/config/cx2e-weston.service User=root; session.py deploy as gunnchos"
+    },
+    "11_capture_mechanisms_available": {
+      "answer": {
+        "cx2e_attempted": ["weston-screenshooter", "grim"],
+        "cx2e_result": "unavailable/failed under headless-backend",
+        "cx2f_primary": "QEMU HMP screendump PPM via unix monitor",
+        "cx2f_supplementary": ["VNC loopback inspection", "portal screenshot if present", "Chromium DevTools screenshot (not sole proof)"]
+      }
+    }
+  },
+  "compound_root_cause": [
+    "Cloud kernel still defaulted by GRUB despite linux-image-arm64 install → no /dev/dri",
+    "Weston auto-rewritten to headless-backend.so when DRM missing",
+    "QEMU -display none → no framebuffer surface for screendump",
+    "Vite absolute /assets/ + file:// launch → empty Chromium shell UI",
+    "Root Weston vs gunnchos Chromium session ownership risk"
+  ],
+  "cx2f_required_repairs": [
+    "Select+boot newest *-arm64 non-cloud kernel; prove uname",
+    "VNC loopback graphics surface + retain virtio-gpu-pci",
+    "Weston drm-backend.so only on success path; remove headless success fallback",
+    "Loopback static HTTP serve of immutable gunnch_shell build",
+    "QEMU screendump PPM + FRAMEBUFFER_DIFF_REPORT",
+    "Input-to-shell mutation with rendered UI"
+  ],
+  "overlay_provenance": {
+    "parent_cx2e_overlay_sha256": "a47ca058ad21e625a38899e912afcfeee91d2b2c590e4343e3559a31e8782ea7",
+    "cx2f_overlay_sha256_at_clone": "89fca6bb02cc120bee8cd1e4d38c8eb2be83df7b4ed45f64065da2418ae0d662",
+    "cx2e_overlay_immutable": true
+  }
+}

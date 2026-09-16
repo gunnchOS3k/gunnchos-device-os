@@ -1,0 +1,26 @@
+{
+  "baseline_to_home": {
+    "ok": false,
+    "min_changed_pct_threshold": 0.2,
+    "a": {
+      "path": "/tmp/cx2f-graphical/captures/01_weston_baseline.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "71fac1fa684a43e8b1f9287901b03abcba961902a983f3b87ea7fdb69153e356",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2f-graphical/captures/02_shell_home.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "71fac1fa684a43e8b1f9287901b03abcba961902a983f3b87ea7fdb69153e356",
+      "size": 3072016
+    },
+    "changed_pixels": 0,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 0.0,
+    "bbox": null,
+    "mean_abs_channel_diff": 0.0,
+    "rationale": "Require >= 0.2% changed pixels so cursor blink alone cannot prove shell render"
+  }
+}
