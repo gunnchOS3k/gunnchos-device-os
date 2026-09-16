@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@gunnch-shell': path.resolve(__dirname, '../gunnch_shell/src'),
+      '@gunnch-shell': path.resolve(__dirname, 'src'),
     },
   },
 })

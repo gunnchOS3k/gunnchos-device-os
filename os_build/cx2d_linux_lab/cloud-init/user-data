@@ -1,0 +1,35 @@
+#cloud-config
+hostname: cx2d-linux-lab
+manage_etc_hosts: true
+users:
+  - name: gunnchos
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: [sudo, video, render, audio]
+package_update: true
+packages:
+  - weston
+  - seatd
+  - dbus-user-session
+  - xdg-desktop-portal
+  - xdg-desktop-portal-wlr
+  - flatpak
+  - cups
+  - cups-bsd
+  - chromium
+  - libreoffice
+  - at-spi2-core
+  - orca
+  - grim
+  - pipewire
+  - wireplumber
+  - python3
+  - python3-gi
+  - gir1.2-atspi-2.0
+runcmd:
+  - [ bash, -c, "mkdir -p /run/user/1000 /var/lib/cx2d && chown gunnchos:gunnchos /run/user/1000 /var/lib/cx2d" ]
+  - [ bash, -c, "echo CX2D_LAB_PROVISIONED=1 > /var/lib/cx2d/PROVISIONED" ]
+power_state:
+  mode: poweroff
+  timeout: 30
+  condition: true

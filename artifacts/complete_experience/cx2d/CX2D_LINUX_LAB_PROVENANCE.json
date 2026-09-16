@@ -1,0 +1,43 @@
+{
+  "schema": "gunnchos.cx2d.linux_lab_provenance.v1",
+  "generated_at_utc": "2026-09-16T02:58:55Z",
+  "distro": "debian",
+  "version": "12 (bookworm) genericcloud",
+  "architecture": "aarch64",
+  "kernel": "guest_kernel_pending_boot_proof",
+  "compositor": "weston (target; session not proven this run)",
+  "package_versions": {
+    "weston": "pending_guest_dpkg",
+    "chromium": "pending_guest_dpkg",
+    "libreoffice": "pending_guest_dpkg",
+    "flatpak": "pending_guest_dpkg",
+    "cups": "pending_guest_dpkg",
+    "xdg-desktop-portal": "pending_guest_dpkg",
+    "at-spi2-core": "pending_guest_dpkg",
+    "orca": "pending_guest_dpkg"
+  },
+  "image_base_sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
+  "overlay_sha256": "bfb8811904e791ae4eccb37eb04ba04462f8a962e739e3485fda3cade04a9eaa",
+  "provisioning_script_sha256": "af1e76a1b09acc2f05e342adba9e0937c96bcf7b48644699c68f9e1550b1c625",
+  "cloud_init_user_data_sha256": "0707cdddfa673094f5ac640ef6781ede4ab13f310b73402c9b7cac1795d2432e",
+  "runtime_resources": {
+    "target_ram_mb": 4096,
+    "target_cpus": 4,
+    "host": {
+      "host_os": "Darwin",
+      "host_machine": "arm64",
+      "host_release": "25.6.0",
+      "qemu_system_aarch64": "/opt/homebrew/bin/qemu-system-aarch64",
+      "qemu_system_x86_64": "/opt/homebrew/bin/qemu-system-x86_64",
+      "weston_on_host": null,
+      "flatpak_on_host": null,
+      "display": null,
+      "xdg_runtime_dir": null
+    }
+  },
+  "source_branch": "eng/cx2d-linux-real-user-journey-closure",
+  "source_head": "8c5b2a828939d67ceb89cbe4cf8e90d6ee4616c5",
+  "graphical_session_proven": false,
+  "blocker": "CX2D_LINUX_GUI_SESSION_NOT_PROVEN_ON_HOST: agent host is Darwin/arm64; CX2D overlay/cloud-init scaffolding is ready under os_build/cx2d_linux_lab/, but a real Weston/Wayland + DBus + portal session inside the guest was not completed/captured as rendered journey evidence in this run. Fail closed on REAL_USER_JOURNEY_DIGITAL_PASS and CX2D_REAL_*_WINDOW.",
+  "claim_boundary": "Expansion lab scaffolding; not Software Pilot / Device Lab #134 evidence."
+}
