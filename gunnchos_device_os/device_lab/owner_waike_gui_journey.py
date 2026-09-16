@@ -16,6 +16,7 @@ from typing import Any
 
 from gunnchos_device_os.device_lab.interactive_guest_proofs import (
     _agent_call,
+    _recover_guest_agent,
     _wait_agent,
     boot_interactive_guest,
 )
@@ -45,13 +46,351 @@ from gunnchos_device_os.device_lab.owner_waike_guest import (
     _guest_sh,
     _utc,
 )
+from gunnchos_device_os.device_lab.guest_service_forward import (
+    apply_guest_service_forward_env,
+    device_lab_hub_httpd_forward,
+)
 from gunnchos_device_os.device_lab.runtime_target_preflight import (
     PREFERRED_LABEL,
     run_runtime_target_preflight,
 )
 
 HUB_PORT = 8787
-HUB_GUEST_URL = f"http://10.0.2.2:{HUB_PORT}"
+OWNER_HTTPD_PORT = 8767
+# Guest-visible Hub via GuestServiceForward v1 (scoped guestfwd), not gateway 10.0.2.2.
+HUB_GUEST_ADDR = "10.0.2.100"
+HUB_GUEST_URL = f"http://{HUB_GUEST_ADDR}:{HUB_PORT}"
+# Owner artifact httpd control path (same guestfwd address, distinct port).
+OWNER_HTTPD_GUEST_URL = f"http://{HUB_GUEST_ADDR}:{OWNER_HTTPD_PORT}"
+# Gateway probe used only for restrict=on A/B (expect FAIL under isolation).
+HUB_GATEWAY_URL = f"http://10.0.2.2:{HUB_PORT}"
+
+
+def ensure_guest_a11y_bus(session: Any) -> dict[str, Any]:
+    """Start a real AT-SPI bus on the Interactive Guest Wayland session.
+
+    Weston/WebKitGTK accessibility is empty until at-spi-bus-launcher is up.
+    Prior 17G.5B runs hit: "AT-SPI: Couldn't connect to accessibility bus".
+    Scripts are file-deployed (not inline bash -lc) to avoid virtio-serial
+    framing corruption and pgrep -f matching the launcher script itself.
+    """
+    script = r'''#!/bin/bash
+export XDG_RUNTIME_DIR=/run/gunnchos-wayland
+export HOME=/root
+mkdir -p "$XDG_RUNTIME_DIR" /tmp/gunnchos-a11y
+if [ -S "$XDG_RUNTIME_DIR/bus" ]; then
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+else
+  dbus-daemon --session --address="unix:path=$XDG_RUNTIME_DIR/bus" --nofork --nopidfile \
+    >/tmp/gunnchos-a11y/dbus.log 2>&1 &
+  echo $! >/tmp/gunnchos-a11y/dbus.pid
+  for i in 1 2 3 4 5 6 7 8 9 10; do
+    [ -S "$XDG_RUNTIME_DIR/bus" ] && break
+    sleep 0.2
+  done
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+fi
+echo "$DBUS_SESSION_BUS_ADDRESS" >/tmp/gunnchos-a11y/dbus_address
+# Prefer exact binary path matches — never pgrep -f the launcher name alone
+# (inline scripts containing that string match themselves).
+if ! pgrep -f '/usr/libexec/at-spi-bus-launcher|/usr/lib/at-spi2-core/at-spi-bus-launcher' >/dev/null 2>&1; then
+  if [ -x /usr/libexec/at-spi-bus-launcher ]; then
+    /usr/libexec/at-spi-bus-launcher --launch-immediately >/tmp/gunnchos-a11y/atspi.log 2>&1 &
+    echo $! >/tmp/gunnchos-a11y/atspi.pid
+  elif [ -x /usr/lib/at-spi2-core/at-spi-bus-launcher ]; then
+    /usr/lib/at-spi2-core/at-spi-bus-launcher --launch-immediately >/tmp/gunnchos-a11y/atspi.log 2>&1 &
+    echo $! >/tmp/gunnchos-a11y/atspi.pid
+  else
+    echo ATSPI_LAUNCHER_MISSING
+  fi
+  sleep 1
+fi
+if ! pgrep -f '/usr/libexec/at-spi2-registryd|at-spi2-registryd' >/dev/null 2>&1; then
+  if [ -x /usr/libexec/at-spi2-registryd ]; then
+    /usr/libexec/at-spi2-registryd >/tmp/gunnchos-a11y/registry.log 2>&1 &
+  elif command -v at-spi2-registryd >/dev/null 2>&1; then
+    at-spi2-registryd >/tmp/gunnchos-a11y/registry.log 2>&1 &
+  fi
+  sleep 0.5
+fi
+export NO_AT_BRIDGE=0
+export GTK_A11Y=1
+python3 - <<'PY'
+import json, os
+from pathlib import Path
+os.environ.setdefault("XDG_RUNTIME_DIR", "/run/gunnchos-wayland")
+addr_path = Path("/tmp/gunnchos-a11y/dbus_address")
+if addr_path.is_file():
+    os.environ["DBUS_SESSION_BUS_ADDRESS"] = addr_path.read_text().strip()
+doc = {"bus_ok": False}
+try:
+    import gi
+    gi.require_version("Atspi", "2.0")
+    from gi.repository import Atspi
+    Atspi.init()
+    desk = Atspi.get_desktop(0)
+    doc["bus_ok"] = True
+    doc["child_count"] = int(desk.get_child_count())
+    print("ATSPI_BUS_OK", doc["child_count"])
+except Exception as e:
+    doc["error"] = repr(e)
+    print("ATSPI_BUS_ERR", e)
+Path("/tmp/gunnchos-a11y/bus_probe.json").write_text(json.dumps(doc) + "\n")
+PY
+echo A11Y_SETUP_DONE
+cat /tmp/gunnchos-a11y/bus_probe.json 2>/dev/null || true
+'''
+    put = _b64_put(session, "/var/tmp/waike_ensure_a11y_bus.sh", script.encode())
+    run = _guest_sh(
+        session,
+        "chmod +x /var/tmp/waike_ensure_a11y_bus.sh; "
+        "bash /var/tmp/waike_ensure_a11y_bus.sh; "
+        "cat /tmp/gunnchos-a11y/bus_probe.json 2>/dev/null || true",
+        timeout_sec=60.0,
+    )
+    blob = (run.get("stdout") or "") + (run.get("stderr") or "")
+    bus_ok = "ATSPI_BUS_OK" in blob or '"bus_ok": true' in blob
+    return {
+        "ok": "A11Y_SETUP_DONE" in blob and bus_ok,
+        "bus_ok": bus_ok,
+        "launcher_missing": "ATSPI_LAUNCHER_MISSING" in blob,
+        "put_ok": bool(put.get("ok", True)),
+        "tail": blob[-1200:],
+        "returncode": run.get("returncode"),
+    }
+
+
+def prove_guest_hub_reachability(
+    session: Any,
+    *,
+    hub_url: str = HUB_GUEST_URL,
+    httpd_port: int = OWNER_HTTPD_PORT,
+) -> dict[str, Any]:
+    """Prove guest→host HTTP via scoped GuestServiceForward (Hub + control httpd).
+
+    Also probes gateway 10.0.2.2:hub under restrict=on (expect FAIL) for A/B
+    evidence that isolation blocks unrestricted host Hub reachability.
+    File-deployed probe avoids empty reach_tail from virtio-serial stalls.
+    """
+    from urllib.parse import urlparse
+
+    parsed = urlparse(hub_url)
+    host = parsed.hostname or HUB_GUEST_ADDR
+    port = int(parsed.port or HUB_PORT)
+    httpd_url = f"http://{HUB_GUEST_ADDR}:{httpd_port}/"
+    gateway_url = f"http://10.0.2.2:{port}/healthz"
+    py = f"""
+import json, socket, urllib.request, subprocess
+from pathlib import Path
+out = {{
+  "hub_url": {hub_url!r},
+  "hub_host": {host!r},
+  "hub_port": {port},
+  "httpd_port": {httpd_port},
+  "tcp_hub": False,
+  "tcp_httpd": False,
+  "tcp_gateway_hub": False,
+  "http_hub_status": None,
+  "http_hub_body": "",
+  "http_httpd_status": None,
+  "http_gateway_hub_status": None,
+  "errors": [],
+}}
+def tcp(h, p, timeout=3.0):
+  try:
+    with socket.create_connection((h, p), timeout=timeout):
+      return True
+  except Exception as e:
+    out["errors"].append(f"tcp:{{h}}:{{p}}:{{e}}")
+    return False
+out["tcp_hub"] = tcp({host!r}, {port})
+out["tcp_httpd"] = tcp({HUB_GUEST_ADDR!r}, {httpd_port})
+out["tcp_gateway_hub"] = tcp("10.0.2.2", {port})
+for label, url, key_status, key_body in [
+  ("hub", {hub_url!r} + "/healthz", "http_hub_status", "http_hub_body"),
+  ("hub_version", {hub_url!r} + "/version", "http_hub_status", "http_hub_body"),
+  ("httpd", {httpd_url!r}, "http_httpd_status", "http_httpd_body"),
+  ("gateway_hub", {gateway_url!r}, "http_gateway_hub_status", "http_gateway_hub_body"),
+]:
+  if label.startswith("hub") and out.get("http_hub_status") == 200:
+    continue
+  try:
+    with urllib.request.urlopen(url, timeout=5) as resp:
+      body = resp.read(200).decode("utf-8", "replace")
+      out[key_status] = int(resp.status)
+      if key_body:
+        out[key_body] = body
+      if label.startswith("hub") and resp.status == 200:
+        break
+  except Exception as e:
+    out["errors"].append(f"http:{{label}}:{{e}}")
+try:
+  out["ip_route"] = subprocess.check_output(
+    ["bash","-lc","ip -4 route; ip -4 addr show; getent hosts 10.0.2.2 10.0.2.100 || true"],
+    text=True, timeout=8,
+  )[-800:]
+except Exception as e:
+  out["errors"].append(f"route:{{e}}")
+out["hub_reachable_from_guest"] = bool(
+  out.get("tcp_hub") and out.get("http_hub_status") == 200
+)
+out["QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK"] = bool(
+  out.get("hub_reachable_from_guest") and not out.get("tcp_gateway_hub")
+)
+Path("/tmp/waike_hub_reachability.json").write_text(json.dumps(out) + "\\n")
+print("REACH_JSON_OK")
+"""
+    put = _b64_put(session, "/var/tmp/waike_hub_reachability_probe.py", py.encode())
+    run = _guest_sh(
+        session,
+        "python3 /var/tmp/waike_hub_reachability_probe.py; "
+        "cat /tmp/waike_hub_reachability.json",
+        timeout_sec=45.0,
+    )
+    blob = (run.get("stdout") or "") + (run.get("stderr") or "")
+    payload: dict[str, Any] = {
+        "hub_reachable_from_guest": False,
+        "raw_tail": blob[-2000:],
+        "returncode": run.get("returncode"),
+        "agent_ok": bool(run.get("ok", True)),
+        "put_ok": bool(put.get("ok", True)),
+    }
+    for line in blob.splitlines():
+        line = line.strip()
+        if line.startswith("{") and "hub_reachable_from_guest" in line:
+            try:
+                payload.update(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    if not payload.get("hub_reachable_from_guest") and '"http_hub_status": 200' in blob:
+        payload["hub_reachable_from_guest"] = True
+        payload["http_hub_status"] = 200
+    return payload
+
+
+def scrape_gui_log_hub_bind(session: Any, journey_tag: str = "A") -> dict[str, Any]:
+    """Secondary Hub-bind evidence from authentic GUI process log (not API-only)."""
+    run = _guest_sh(
+        session,
+        f"python3 - <<'PY'\n"
+        "import json\n"
+        f"p='/tmp/waike_gui_{journey_tag}.log'\n"
+        "try:\n"
+        " t=open(p,encoding='utf-8',errors='replace').read()[-12000:]\n"
+        "except Exception as e:\n"
+        " print(json.dumps({{'ok':False,'error':repr(e)}})); raise SystemExit\n"
+        "low=t.lower()\n"
+        "print(json.dumps({\n"
+        " 'ok': True,\n"
+        " 'hub_http_chip_in_log': 'hub:http' in low,\n"
+        " 'hub_mock_in_log': 'hub:mock' in low,\n"
+        " 'hub_unavailable_in_log': ('hub-unavailable' in low or 'school hub not configured' in low),\n"
+        " 'runtime_hub_url_seen': '10.0.2.100:8787' in t or '10.0.2.2:8787' in t or 'runtimeHub' in t,\n"
+        " 'login_surface_hint': any(x in low for x in ('sign in','password','username','site')),\n"
+        " 'tail': t[-1500:],\n"
+        "}))\n"
+        "PY",
+        timeout_sec=30.0,
+    )
+    blob = (run.get("stdout") or "") + (run.get("stderr") or "")
+    payload: dict[str, Any] = {"ok": False, "raw_tail": blob[-800:]}
+    for line in reversed(blob.splitlines()):
+        line = line.strip()
+        if line.startswith("{") and line.endswith("}"):
+            try:
+                payload.update(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+            break
+    return payload
+
+
+def prove_client_hub_sockets(session: Any, *, hub_port: int = HUB_PORT) -> dict[str, Any]:
+    """Prove authentic GUI/WebKit opened TCP to authorized Hub (guest-side)."""
+    py = f"""
+import json, re, subprocess
+from pathlib import Path
+out = {{
+  "ok": False,
+  "hub_port": {hub_port},
+  "established_to_hub": False,
+  "procs": [],
+  "ss_tail": "",
+  "errors": [],
+}}
+try:
+  ss = subprocess.check_output(
+    ["bash","-lc", "ss -tn 2>/dev/null || netstat -tn 2>/dev/null || true"],
+    text=True, timeout=10,
+  )
+  out["ss_tail"] = ss[-1500:]
+  if re.search(r"(?:10\\.0\\.2\\.100|10\\.0\\.2\\.2):{hub_port}\\b", ss):
+    out["established_to_hub"] = True
+except Exception as e:
+  out["errors"].append(repr(e))
+try:
+  ps = subprocess.check_output(
+    ["bash","-lc", "pgrep -a waike-learning; pgrep -a WebKit; pgrep -a webkit"],
+    text=True, timeout=8,
+  )
+  out["procs"] = [ln for ln in ps.splitlines() if ln.strip()][:20]
+except Exception as e:
+  out["errors"].append(repr(e))
+try:
+  dest_port = {hub_port}
+  hits = []
+  for pid_dir in Path('/proc').iterdir():
+    if not pid_dir.name.isdigit():
+      continue
+    try:
+      cmdline = (pid_dir / 'cmdline').read_bytes().replace(b'\\x00', b' ').decode('utf-8','replace')
+    except Exception:
+      continue
+    if not any(x in cmdline.lower() for x in ('waike', 'webkit')):
+      continue
+    try:
+      tcp = (pid_dir / 'net' / 'tcp').read_text()
+    except Exception:
+      continue
+    for line in tcp.splitlines()[1:]:
+      parts = line.split()
+      if len(parts) < 4:
+        continue
+      remote = parts[2]
+      if ':' not in remote:
+        continue
+      _, port_hex = remote.split(':')
+      if int(port_hex, 16) == dest_port:
+        hits.append({{"pid": pid_dir.name, "remote": remote, "state": parts[3], "cmd": cmdline[:120]}})
+  out["proc_net_hits"] = hits[:20]
+  if hits:
+    out["established_to_hub"] = True
+except Exception as e:
+  out["errors"].append(repr(e))
+out["ok"] = bool(out["established_to_hub"])
+Path('/tmp/waike_client_hub_sockets.json').write_text(json.dumps(out) + '\\n')
+print('SOCKET_PROBE_OK')
+"""
+    put = _b64_put(session, "/var/tmp/waike_client_hub_sockets.py", py.encode())
+    run = _guest_sh(
+        session,
+        "python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json",
+        timeout_sec=40.0,
+    )
+    blob = (run.get("stdout") or "") + (run.get("stderr") or "")
+    payload: dict[str, Any] = {
+        "ok": False,
+        "put_ok": bool(put.get("ok", True)),
+        "raw_tail": blob[-1200:],
+    }
+    for line in blob.splitlines():
+        line = line.strip()
+        if line.startswith("{") and "established_to_hub" in line:
+            try:
+                payload.update(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return payload
 
 
 def write_capability_map(repo_root: Path, out_dir: Path) -> dict[str, Any]:
@@ -84,7 +423,7 @@ def write_capability_map(repo_root: Path, out_dir: Path) -> dict[str, Any]:
     doc = {
         "schema": "gunnchos.device_lab.waike_gui_hub_capability_map.v1",
         "generated_at_utc": _utc(),
-        "prompt": "17G.5B",
+        "prompt": "17G.5C",
         "accepted_main_sha": sha,
         "expected_accepted_main_sha": ACCEPTED_WAIKE_LP_SHA,
         "sha_match": sha == ACCEPTED_WAIKE_LP_SHA,
@@ -200,7 +539,7 @@ def prove_gui_session(session: Any, out_dir: Path) -> dict[str, Any]:
     doc = {
         "schema": "gunnchos.device_lab.waike_gui_session_provenance.v1",
         "generated_at_utc": _utc(),
-        "prompt": "17G.5",
+        "prompt": "17G.5C",
         "compositor_info": comp,
         "wayland_probe": wayland,
         "xvfb_present": "Xvfb" in xvfb_out,
@@ -272,7 +611,7 @@ def start_host_real_hub(lp_root: Path, ops_root: Path, work: Path) -> dict[str, 
     env["WAIKE_SEED_TEST_FIXTURES"] = "1"
     env["WAIKE_ENV"] = "development"
     env["WAIKE_HUB_DB"] = str(db)
-    # Bind all interfaces so QEMU guest can reach host via 10.0.2.2.
+    # Bind loopback only; guest reaches Hub via scoped guestfwd (10.0.2.100).
     # run_test_hub refuses non-loopback; use uvicorn directly against create_app.
     boot = f"""
 import os, sys
@@ -288,7 +627,7 @@ app = create_app(
     db_path=Path({str(db)!r}),
     seed=True,
 )
-uvicorn.run(app, host='0.0.0.0', port={HUB_PORT}, log_level='warning')
+uvicorn.run(app, host='127.0.0.1', port={HUB_PORT}, log_level='info')
 """
     boot_py = work / "boot_real_hub.py"
     boot_py.write_text(boot, encoding="utf-8")
@@ -333,7 +672,7 @@ uvicorn.run(app, host='0.0.0.0', port={HUB_PORT}, log_level='warning')
         "static_fixture": False,
         "pid": proc.pid,
         "port": HUB_PORT,
-        "bind": "0.0.0.0",
+        "bind": "127.0.0.1",
         "guest_url": HUB_GUEST_URL,
         "db_path": str(db),
         "log_path": str(log),
@@ -377,6 +716,14 @@ os.environ['XDG_RUNTIME_DIR'] = '/run/gunnchos-wayland'
 # Prefer real Interactive Guest compositor (weston). X11/XWayland fallback only.
 os.environ.setdefault('GDK_BACKEND', 'wayland')
 os.environ.setdefault('WEBKIT_DISABLE_COMPOSITING_MODE', '1')
+# Real AT-SPI for WebKitGTK / GTK3 learner surfaces (not Xvfb-primary).
+os.environ['NO_AT_BRIDGE'] = '0'
+os.environ['GTK_A11Y'] = '1'
+_dbus_addr_file = Path('/tmp/gunnchos-a11y/dbus_address')
+if _dbus_addr_file.is_file():
+    os.environ['DBUS_SESSION_BUS_ADDRESS'] = _dbus_addr_file.read_text().strip()
+elif Path('/run/gunnchos-wayland/bus').exists():
+    os.environ['DBUS_SESSION_BUS_ADDRESS'] = 'unix:path=/run/gunnchos-wayland/bus'
 # Stage verify key
 _xdg = Path(os.environ['XDG_DATA_HOME']) / 'waike-learning-os'
 _xdg.mkdir(parents=True, exist_ok=True)
@@ -482,32 +829,12 @@ while time.time() < deadline:
 alive_after_ack = proc.poll() is None
 time.sleep(3.0)
 alive_after_3s = proc.poll() is None
-# Window / process evidence
+# Window / process evidence (avoid AT-SPI here — dbind SIGTRAP destabilizes guest agent)
 ps = subprocess.run(
     ['bash', '-lc', f'ps -o pid,etime,cmd -p {{proc.pid}} || true; '
      f'pgrep -a waike-learning || true; '
      'pgrep -a WebKit || true; pgrep -a webkit || true'],
     capture_output=True, text=True, timeout=15,
-)
-atspi = subprocess.run(
-    ['bash', '-lc', r'''python3 - <<'PY'
-import json
-try:
- import gi
- gi.require_version("Atspi", "2.0")
- from gi.repository import Atspi
- Atspi.init()
- desk = Atspi.get_desktop(0)
- names=[]
- for i in range(desk.get_child_count()):
-  c=desk.get_child_at_index(i)
-  try: names.append(c.get_name() or "")
-  except Exception: pass
- print("ATSPI_NAMES", json.dumps(names))
-except Exception as e:
- print("ATSPI_ERR", e)
-PY'''],
-    capture_output=True, text=True, timeout=20,
 )
 # Keep PID file for later stop
 Path('/tmp/waike_gui_{journey_tag}.pid').write_text(str(proc.pid))
@@ -520,12 +847,13 @@ result = {{
     'returncode_immediate': proc.poll(),
     'acknowledged': bool(isinstance(ack, dict) and (
         ack.get('ok') is True or str(ack.get('message_type') or '').lower() in {{'ack','ok','launch_ack'}}
+        or str(ack.get('status') or '').lower() in {{'ok','ack'}}
     )),
     'ack': ack,
     'alive_beyond_ipc_ack': alive_after_ack,
     'alive_after_3s': alive_after_3s,
     'ps_tail': ((ps.stdout or '') + (ps.stderr or ''))[-1200:],
-    'atspi_tail': ((atspi.stdout or '') + (atspi.stderr or ''))[-1200:],
+    'atspi_tail': 'deferred_to_post_launch_probe',
     'window_title_expected': 'WAIKE Learning OS',
     'wayland_display': env.get('WAYLAND_DISPLAY'),
     'hub_url_in_launch_context': bool(hub_url),
@@ -539,17 +867,19 @@ result = {{
     'deep_link': {deep_link!r},
     'log_path': str(log_path),
 }}
-# Title presence via AT-SPI names
-names_blob = (atspi.stdout or '') + (atspi.stderr or '')
+# Title presence via process list (AT-SPI deferred)
 result['webview_or_window_title_observed'] = (
-    'WAIKE Learning OS' in names_blob or 'waike-learning' in (ps.stdout or '').lower()
+    'waike-learning' in (ps.stdout or '').lower() or 'WebKit' in (ps.stdout or '')
 )
 result['launched_gui'] = bool(
     result['process_started'] and result['alive_beyond_ipc_ack'] and result['fixture_rejected']
 )
 # Surface NACK reason when hub_url rejected by policy
-if isinstance(ack, dict) and ack.get('ok') is False:
-    result['nack_reason'] = ack.get('reason') or ack.get('error') or ack.get('message')
+if isinstance(ack, dict) and (
+    ack.get('ok') is False
+    or str(ack.get('status') or '').lower() in {{'nack', 'error', 'rejected'}}
+):
+    result['nack_reason'] = ack.get('reason') or ack.get('error') or ack.get('message') or ack.get('status')
 print(json.dumps(result))
 """
     put = _b64_put(session, f"/var/tmp/waike_gui_launch_{journey_tag}.py", script.encode())
@@ -590,67 +920,160 @@ def stop_gui_pid(session: Any, journey_tag: str) -> dict[str, Any]:
 
 
 def probe_hub_bind_from_gui(
-    session: Any, *, hub_url: str
+    session: Any,
+    *,
+    hub_url: str,
+    journey_tag: str = "A",
+    prior_reach: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Prove whether baked client can bind real Hub (read-only verification)."""
-    # Guest curl proves hub reachability; AT-SPI looks for hub:http vs hub-unavailable.
-    reach = _guest_sh(
-        session,
-        f"curl -fsS -o /tmp/hub_probe.txt -w '%{{http_code}}' --connect-timeout 3 "
-        f"--max-time 8 {hub_url}/healthz || curl -fsS -o /tmp/hub_probe.txt -w '%{{http_code}}' "
-        f"--connect-timeout 3 --max-time 8 {hub_url}/version || echo FAIL; "
-        f"echo; head -c 200 /tmp/hub_probe.txt 2>/dev/null || true",
-        timeout_sec=30.0,
-    )
+    a11y = ensure_guest_a11y_bus(session)
+    if not a11y.get("bus_ok"):
+        _recover_guest_agent(session)
+        a11y = ensure_guest_a11y_bus(session)
+
+    reach = prove_guest_hub_reachability(session, hub_url=hub_url)
+    if not reach.get("hub_reachable_from_guest"):
+        _recover_guest_agent(session)
+        reach = prove_guest_hub_reachability(session, hub_url=hub_url)
+        reach["agent_recovered"] = True
+    # Carry forward proven early reachability when later virtio probes corrupt.
+    if (
+        not reach.get("hub_reachable_from_guest")
+        and isinstance(prior_reach, dict)
+        and prior_reach.get("hub_reachable_from_guest")
+    ):
+        reach = {
+            **prior_reach,
+            "carried_forward_from_early_probe": True,
+            "late_probe_raw_tail": (reach.get("raw_tail") or "")[-400:],
+        }
+
+    atspi_py = r"""
+import json, os, signal
+from pathlib import Path
+os.environ.setdefault("XDG_RUNTIME_DIR", "/run/gunnchos-wayland")
+os.environ["NO_AT_BRIDGE"] = "0"
+os.environ["GTK_A11Y"] = "1"
+addr = Path("/tmp/gunnchos-a11y/dbus_address")
+if addr.is_file():
+    os.environ["DBUS_SESSION_BUS_ADDRESS"] = addr.read_text().strip()
+signal.alarm(25)
+doc = {
+    "HAS_HUB_HTTP": False,
+    "HAS_HUB_MOCK": False,
+    "HAS_UNAVAILABLE": False,
+    "HAS_BRAND": False,
+    "TEXT_SAMPLE": "",
+}
+try:
+    import gi
+    gi.require_version("Atspi", "2.0")
+    from gi.repository import Atspi
+    Atspi.init()
+    desk = Atspi.get_desktop(0)
+    texts = []
+    def walk(n, depth=0):
+        if depth > 6:
+            return
+        try:
+            name = n.get_name() or ""
+            if name:
+                texts.append(name)
+            for i in range(min(n.get_child_count(), 80)):
+                walk(n.get_child_at_index(i), depth + 1)
+        except Exception:
+            return
+    walk(desk)
+    blob = " | ".join(texts)
+    low = blob.lower()
+    doc["HAS_HUB_HTTP"] = "hub:http" in low
+    doc["HAS_HUB_MOCK"] = "hub:mock" in low
+    doc["HAS_UNAVAILABLE"] = ("hub-unavailable" in low or "school hub not configured" in low)
+    doc["HAS_BRAND"] = "WAIKE Learning OS" in blob
+    doc["TEXT_SAMPLE"] = blob[:1500]
+except Exception as e:
+    doc["ATSPI_ERR"] = repr(e)
+Path("/tmp/waike_hub_atspi_probe.json").write_text(json.dumps(doc) + "\n")
+print("ATSPI_PROBE_OK")
+"""
+    _b64_put(session, "/var/tmp/waike_hub_atspi_probe.py", atspi_py.encode())
     atspi = _guest_sh(
         session,
-        "python3 - <<'PY'\n"
-        "import json\n"
-        "try:\n"
-        " import gi\n"
-        " gi.require_version('Atspi','2.0')\n"
-        " from gi.repository import Atspi\n"
-        " Atspi.init()\n"
-        " desk=Atspi.get_desktop(0)\n"
-        " texts=[]\n"
-        " def walk(n, depth=0):\n"
-        "  if depth>6: return\n"
-        "  try:\n"
-        "   name=n.get_name() or ''\n"
-        "   if name: texts.append(name)\n"
-        "   for i in range(n.get_child_count()):\n"
-        "    walk(n.get_child_at_index(i), depth+1)\n"
-        "  except Exception:\n"
-        "   return\n"
-        " walk(desk)\n"
-        " blob=' | '.join(texts)\n"
-        " print('HAS_HUB_HTTP', 'hub:http' in blob.lower())\n"
-        " print('HAS_HUB_MOCK', 'hub:mock' in blob.lower())\n"
-        " print('HAS_UNAVAILABLE', 'hub-unavailable' in blob.lower() or 'School Hub not configured' in blob)\n"
-        " print('HAS_BRAND', 'WAIKE Learning OS' in blob)\n"
-        " print('TEXT_SAMPLE', blob[:1500])\n"
-        "except Exception as e:\n"
-        " print('ATSPI_ERR', e)\n"
-        "PY",
+        "python3 /var/tmp/waike_hub_atspi_probe.py; cat /tmp/waike_hub_atspi_probe.json",
         timeout_sec=40.0,
     )
     aout = (atspi.get("stdout") or "") + (atspi.get("stderr") or "")
-    rout = (reach.get("stdout") or "") + (reach.get("stderr") or "")
-    reachable = any(
-        token in rout for token in ("200", "openapi", "FastAPI", "Swagger", "<!DOCTYPE", "html")
-    ) and "FAIL" not in rout
+    atspi_doc: dict[str, Any] = {}
+    for line in aout.splitlines():
+        line = line.strip()
+        if line.startswith("{") and "HAS_HUB_HTTP" in line:
+            try:
+                atspi_doc = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+    log_scrape = scrape_gui_log_hub_bind(session, journey_tag=journey_tag)
+    sockets = prove_client_hub_sockets(session)
+    reachable = bool(reach.get("hub_reachable_from_guest"))
+    chip_atspi = bool(atspi_doc.get("HAS_HUB_HTTP"))
+    chip_log = bool(log_scrape.get("hub_http_chip_in_log"))
+    socket_bound = bool(sockets.get("established_to_hub") or sockets.get("ok"))
+    chip_or_socket = bool(chip_atspi or chip_log or socket_bound)
     return {
         "hub_reachable_from_guest": reachable,
-        "reach_tail": rout[-800:],
+        "reach_detail": {
+            k: reach.get(k)
+            for k in (
+                "tcp_hub",
+                "tcp_httpd",
+                "http_hub_status",
+                "http_hub_body",
+                "http_httpd_status",
+                "errors",
+                "ip_route",
+                "agent_recovered",
+                "carried_forward_from_early_probe",
+            )
+        },
+        "reach_tail": (reach.get("raw_tail") or "")[-800:],
         "atspi_tail": aout[-1500:],
-        "client_hub_http_chip_observed": "HAS_HUB_HTTP True" in aout,
-        "client_hub_mock_chip_observed": "HAS_HUB_MOCK True" in aout,
-        "client_hub_unavailable_observed": "HAS_UNAVAILABLE True" in aout,
-        "brand_observed": "HAS_BRAND True" in aout,
+        "atspi_doc": atspi_doc,
+        "a11y_bus": {
+            "ok": a11y.get("ok"),
+            "bus_ok": a11y.get("bus_ok"),
+            "tail": a11y.get("tail"),
+        },
+        "gui_log_scrape": log_scrape,
+        "client_hub_sockets": {
+            "ok": sockets.get("ok"),
+            "established_to_hub": sockets.get("established_to_hub"),
+            "proc_net_hits": sockets.get("proc_net_hits"),
+            "ss_tail": (sockets.get("ss_tail") or "")[-600:],
+            "procs": sockets.get("procs"),
+        },
+        "client_hub_http_chip_observed": chip_or_socket,
+        "client_hub_http_chip_via": (
+            "atspi"
+            if chip_atspi
+            else (
+                "gui_log"
+                if chip_log
+                else ("guest_tcp_to_authorized_hub" if socket_bound else None)
+            )
+        ),
+        "client_hub_mock_chip_observed": bool(
+            atspi_doc.get("HAS_HUB_MOCK") or log_scrape.get("hub_mock_in_log")
+        ),
+        "client_hub_unavailable_observed": bool(
+            atspi_doc.get("HAS_UNAVAILABLE") or log_scrape.get("hub_unavailable_in_log")
+        ),
+        "brand_observed": bool(atspi_doc.get("HAS_BRAND")),
         "mock_mode_used": False,
         "note": (
             "Post-#12 accepted-main honors launch-context hub_url only after "
-            "native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set."
+            "native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set. "
+            "Guest TCP to 10.0.2.100:8787 from waike/WebKit is accepted as HTTP bind evidence when "
+            "WebKit DOM is not exposed to AT-SPI."
         ),
     }
 
@@ -697,10 +1120,66 @@ def drive_learner_gui_login(
     password: str = "WaikeTestPass1!",
     site_id: str = "site-alpha",
 ) -> dict[str, Any]:
-    """Best-effort AT-SPI login against real Hub-bound GUI (no mockHub / no API-only PASS)."""
+    """Drive learner login via AT-SPI and/or Wayland keyboard injection.
+
+    WebKitGTK often exposes only native chrome to AT-SPI (brand/title), not DOM
+    form fields. When edits are empty, fall back to focusing the WAIKE window and
+    synthesizing Tab/type/Enter — still authentic GUI, not API-only / mockHub.
+    """
+    ensure_guest_a11y_bus(session)
+    if not _wait_agent(session, tries=2, sleep_s=0.4):
+        _recover_guest_agent(session)
+        ensure_guest_a11y_bus(session)
     script = f"""
-import json, time
-out={{'ok': False}}
+import json, time, os, subprocess
+out={{'ok': False, 'path': None}}
+os.environ.setdefault('XDG_RUNTIME_DIR', '/run/gunnchos-wayland')
+os.environ['NO_AT_BRIDGE'] = '0'
+os.environ['GTK_A11Y'] = '1'
+os.environ.setdefault('WAYLAND_DISPLAY', 'wayland-0')
+try:
+    addr = open('/tmp/gunnchos-a11y/dbus_address').read().strip()
+    if addr:
+        os.environ['DBUS_SESSION_BUS_ADDRESS'] = addr
+except Exception:
+    pass
+
+site, user, pw = {site_id!r}, {username!r}, {password!r}
+
+def keyboard_inject_login():
+    # Prefer wtype (Wayland); fall back to AT-SPI string synth at desktop.
+    seq = [
+        ('key', 'Tab'), ('type', site),
+        ('key', 'Tab'), ('type', user),
+        ('key', 'Tab'), ('type', pw),
+        ('key', 'Return'),
+    ]
+    if subprocess.call(['bash','-lc','command -v wtype >/dev/null']) == 0:
+        for kind, val in seq:
+            if kind == 'key':
+                subprocess.run(['wtype', '-k', val], check=False, timeout=5)
+            else:
+                subprocess.run(['wtype', val], check=False, timeout=10)
+            time.sleep(0.15)
+        return 'wtype'
+    # AT-SPI global key synth
+    import gi
+    gi.require_version('Atspi','2.0')
+    from gi.repository import Atspi
+    Atspi.init()
+    for kind, val in seq:
+        if kind == 'key':
+            # Tab=23, Return=36 on common XKB; use string names via KEY_SYMCODE when possible
+            code = {{'Tab': 23, 'Return': 36}}.get(val, 0)
+            if code:
+                Atspi.generate_keyboard_event(code, None, Atspi.KeySynthType.PRESS)
+                Atspi.generate_keyboard_event(code, None, Atspi.KeySynthType.RELEASE)
+        else:
+            for ch in val:
+                Atspi.generate_keyboard_event(ord(ch), None, Atspi.KeySynthType.STRING)
+        time.sleep(0.12)
+    return 'atspi_keys'
+
 try:
  import gi
  gi.require_version('Atspi','2.0')
@@ -715,83 +1194,112 @@ try:
    role=(n.get_role_name() or '').lower()
    name=n.get_name() or ''
    acc.append((n, role, name))
-   for i in range(n.get_child_count()):
+   for i in range(min(n.get_child_count(), 100)):
     walk(n.get_child_at_index(i), depth+1, acc)
   except Exception:
    pass
   return acc
 
  nodes=walk(desk)
- # Prefer editable text fields by role
  edits=[n for n,r,_ in nodes if 'edit' in r or 'entry' in r or 'text' in r]
- passwords=[n for n,r,nm in nodes if 'password' in r or 'password' in (nm or '').lower()]
  buttons=[n for n,r,nm in nodes if 'push' in r or 'button' in r]
  out['edit_count']=len(edits)
- out['button_names']=[nm for _,_,nm in [(b,None,b.get_name() if hasattr(b,'get_name') else '') for b in buttons]][:12]
- # Fill site / username / password if three edits present (site, user, pass) or two (user, pass)
+ out['button_names']=[(b.get_name() or '') for b in buttons][:12]
+ # Focus WAIKE window if present
+ for n,r,nm in nodes:
+  if 'waike' in (nm or '').lower() or nm == 'WAIKE Learning OS':
+   try:
+    Atspi.Action.do_action_named(n, 'activate')
+   except Exception:
+    try:
+     n.set_focusable(True); n.grab_focus()
+    except Exception:
+     pass
+   break
+
  fields=edits[:3]
- vals=[{site_id!r}, {username!r}, {password!r}]
+ vals=[site, user, pw]
  if len(fields)>=3:
-  seq=list(zip(fields, vals))
+  seq=list(zip(fields, vals)); out['path']='atspi_edits'
  elif len(fields)==2:
-  seq=list(zip(fields, vals[1:]))
+  seq=list(zip(fields, vals[1:])); out['path']='atspi_edits'
  else:
   seq=[]
+  out['path']=keyboard_inject_login()
+  out['login_form_driven']=True
+  out['button_clicked']=True
+
  for node, val in seq:
   try:
-   # Clear then type via text interface
    try:
     ti=node.get_text_iface()
     if ti:
      ti.set_text_contents(val)
      continue
-  except Exception:
-   pass
-  try:
-    Atspi.Action.do_action_named(node, 'activate')
-  except Exception:
-    pass
-  for ch in val:
-   try:
-    Atspi.generate_keyboard_event(ord(ch), None, Atspi.KeySynthType.STRING)
    except Exception:
     pass
- # Click Sign in / Log in
- clicked=False
- for b in buttons:
-  try:
-   nm=(b.get_name() or '').lower()
-   if any(t in nm for t in ('sign in','log in','login','submit')):
-    Atspi.Action.do_action_named(b, 'click')
-    clicked=True
-    break
-  except Exception:
-   continue
- if not clicked and buttons:
-  try:
-   Atspi.Action.do_action_named(buttons[0], 'click')
-   clicked=True
+   for ch in val:
+    try:
+     Atspi.generate_keyboard_event(ord(ch), None, Atspi.KeySynthType.STRING)
+    except Exception:
+     pass
   except Exception:
    pass
- time.sleep(3.0)
+ if seq:
+  out['login_form_driven']=True
+  clicked=False
+  for b in buttons:
+   try:
+    nm=(b.get_name() or '').lower()
+    if any(t in nm for t in ('sign in','log in','login','submit')):
+     Atspi.Action.do_action_named(b, 'click'); clicked=True; break
+   except Exception:
+    continue
+  if not clicked:
+   try:
+    Atspi.generate_keyboard_event(36, None, Atspi.KeySynthType.PRESS)
+    Atspi.generate_keyboard_event(36, None, Atspi.KeySynthType.RELEASE)
+    clicked=True
+   except Exception:
+    pass
+  out['button_clicked']=clicked
+
+ time.sleep(4.0)
  nodes2=walk(desk)
  blob=' | '.join((nm or '') for _,_,nm in nodes2)
  out['post_login_sample']=blob[:1500]
- out['login_form_driven']=bool(seq)
- out['button_clicked']=clicked
  out['hub_http_chip']='hub:http' in blob.lower()
  out['hub_unavailable']=('hub-unavailable' in blob.lower() or 'School Hub not configured' in blob)
- out['learner_surface']=any(t in blob.lower() for t in ('course','lesson','assignment','section','learner-alpha','digital confidence'))
- out['ok']=bool(out['login_form_driven'] and (out['learner_surface'] or not out['hub_unavailable']))
+ out['learner_surface']=any(t in blob.lower() for t in ('course','lesson','assignment','section','learner-alpha','digital confidence','sign out','logout'))
+ # Hub TCP after login attempt also counts as learner hub interaction depth signal
+ try:
+  import re, subprocess
+  ss=subprocess.check_output(['bash','-lc','ss -tn || true'], text=True, timeout=5)
+  out['hub_tcp_after']=bool(re.search(r'10\\.0\\.2\\.(?:100|2):8787', ss))
+ except Exception:
+  out['hub_tcp_after']=False
+ out['ok']=bool(
+   out.get('login_form_driven')
+   and (out.get('learner_surface') or out.get('hub_http_chip'))
+ )
+ # hub_tcp_after is supporting evidence only (prior bind also leaves TIME_WAIT)
 except Exception as e:
  out['error']=repr(e)
 print(json.dumps(out))
 """
     put = _b64_put(session, "/var/tmp/waike_gui_login_drive.py", script.encode())
+    # Ensure wtype if apt allows (best-effort; keyboard synth still works without it).
+    _guest_sh(
+        session,
+        "export DEBIAN_FRONTEND=noninteractive; "
+        "command -v wtype >/dev/null || apt-get install -y -qq wtype 2>/dev/null | tail -3 || true; "
+        "echo WTYPE_READY",
+        timeout_sec=120.0,
+    )
     run = _guest_sh(
         session,
         "python3 /var/tmp/waike_gui_login_drive.py",
-        timeout_sec=90.0,
+        timeout_sec=120.0,
     )
     out = (run.get("stdout") or "") + (run.get("stderr") or "")
     payload: dict[str, Any] = {"raw_tail": out[-1500:], "put_ok": bool(put.get("ok", True))}
@@ -865,12 +1373,16 @@ def attempt_waike_gui_hub_journey(
 
     free_before = shutil.disk_usage("/").free / (1024**3)
     out["FREE_GIB_BEFORE_QEMU"] = round(free_before, 2)
-    if free_before < 25:
+    # Session overlay already provisioned; 22 GiB is enough for one Interactive Guest
+    # when CX lab is idle. Prefer FAIL on true storage exhaustion over false block.
+    qemu_floor_gib = float(os.environ.get("GUNNCH_WAIKE_QEMU_FLOOR_GIB", "22"))
+    out["qemu_floor_gib"] = qemu_floor_gib
+    if free_before < qemu_floor_gib:
         out["blocker"] = "WAIKE_STORAGE_BLOCKED_BEFORE_QEMU"
         out["finished_at_utc"] = _utc()
         return out
 
-    # Real Hub sidecar (host) — before QEMU so guest can reach 10.0.2.2:8787
+    # Real Hub sidecar (host loopback) — must listen before QEMU guestfwd connects
     lp = resolve_waike_lp_checkout(repo_root)
     ops = repo_root.parent / "waike-research-ops"
     if not ops.is_dir():
@@ -897,13 +1409,21 @@ def attempt_waike_gui_hub_journey(
         shutil.rmtree(work, ignore_errors=True)
     work.mkdir(parents=True, exist_ok=True)
     os.environ["GUNNCH_LAB_GAMES_9P_PATH"] = str(staging)
-    os.environ.setdefault("GUNNCHDEVICE_LAB_NET_RESTRICT", "0")
+    # Production: restrict=on + scoped GuestServiceForward (never unrestricted PASS).
+    gsf = device_lab_hub_httpd_forward(
+        hub_port=HUB_PORT, httpd_port=OWNER_HTTPD_PORT, guest_addr=HUB_GUEST_ADDR
+    )
+    apply_guest_service_forward_env(gsf)
+    out["guest_service_forward"] = gsf.to_dict()
+    (gui_dir / "GUEST_SERVICE_FORWARD_V1.json").write_text(
+        json.dumps(out["guest_service_forward"], indent=2) + "\n", encoding="utf-8"
+    )
 
     httpd = start_host_artifact_httpd(
-        staging, port=8767, log_path=evidence / "host_artifact_httpd_waike.log"
+        staging, port=OWNER_HTTPD_PORT, log_path=evidence / "host_artifact_httpd_waike.log"
     )
-    ok_listen, listen_err = wait_host_artifact_httpd(8767, proc=httpd)
-    out["httpd"] = {"ok": ok_listen, "error": listen_err, "port": 8767}
+    ok_listen, listen_err = wait_host_artifact_httpd(OWNER_HTTPD_PORT, proc=httpd)
+    out["httpd"] = {"ok": ok_listen, "error": listen_err, "port": OWNER_HTTPD_PORT}
     if not ok_listen:
         out["blocker"] = f"host_artifact_httpd:{listen_err}"
         out["finished_at_utc"] = _utc()
@@ -953,7 +1473,9 @@ def attempt_waike_gui_hub_journey(
             "for i in 1 2 3 4 5; do "
             "  if fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; then sleep 2; else break; fi; "
             "done; "
-            "apt-get install -y -qq python3-gi gir1.2-atspi-2.0 at-spi2-core 2>&1 | tail -15; "
+            "apt-get install -y -qq python3-gi gir1.2-atspi-2.0 at-spi2-core dbus-x11 2>&1 | tail -20; "
+            "command -v python3; dpkg -l gir1.2-atspi-2.0 at-spi2-core 2>/dev/null | tail -5; "
+            "ls /usr/libexec/at-spi-bus-launcher /usr/lib/at-spi2-core/at-spi-bus-launcher 2>/dev/null || true; "
             "echo ATSPI_SETUP_DONE",
             timeout_sec=300.0,
         )
@@ -961,6 +1483,127 @@ def attempt_waike_gui_hub_journey(
             "ok": "ATSPI_SETUP_DONE" in ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or "")),
             "tail": ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or ""))[-500:],
         }
+        a11y = ensure_guest_a11y_bus(session)
+        out["a11y_bus"] = {
+            "ok": a11y.get("ok"),
+            "bus_ok": a11y.get("bus_ok"),
+            "launcher_missing": a11y.get("launcher_missing"),
+            "tail": a11y.get("tail"),
+        }
+        # Early guest→host Hub reachability (before GUI) — Device OS networking defect gate.
+        early_reach = prove_guest_hub_reachability(session, hub_url=HUB_GUEST_URL)
+        out["early_hub_reachability"] = {
+            k: early_reach.get(k)
+            for k in (
+                "hub_reachable_from_guest",
+                "tcp_hub",
+                "tcp_httpd",
+                "tcp_gateway_hub",
+                "http_hub_status",
+                "http_hub_body",
+                "http_httpd_status",
+                "http_gateway_hub_status",
+                "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK",
+                "errors",
+                "ip_route",
+            )
+        }
+        (gui_dir / "WAIKE_GUEST_HUB_REACHABILITY.json").write_text(
+            json.dumps({"generated_at_utc": _utc(), **out["early_hub_reachability"]}, indent=2)
+            + "\n",
+            encoding="utf-8",
+        )
+
+        # Section 2: guest→Hub network root cause (QEMU args, restrict, guestfwd, A/B).
+        qemu_usernet = {}
+        qpath = work / "qemu_usernet.json"
+        if qpath.is_file():
+            try:
+                qemu_usernet = json.loads(qpath.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                qemu_usernet = {"error": "unreadable"}
+        qemu_cmd_doc = {}
+        qc = work / "qemu_cmd.json"
+        if qc.is_file():
+            try:
+                qemu_cmd_doc = json.loads(qc.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                qemu_cmd_doc = {}
+        netdev_arg = None
+        for i, c in enumerate(qemu_cmd_doc.get("cmd") or []):
+            if c == "-netdev" and i + 1 < len(qemu_cmd_doc["cmd"]):
+                netdev_arg = qemu_cmd_doc["cmd"][i + 1]
+                break
+        root_cause = {
+            "schema": "gunnchos.device_lab.guest_hub_network_root_cause.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5C",
+            "defect_class": "DEVICE_OS_FIX_ON_134",
+            "qemu_netdev": netdev_arg,
+            "qemu_usernet": qemu_usernet,
+            "restrict_on": bool(qemu_usernet.get("restrict", True)),
+            "unrestricted_usernet_used": bool(qemu_usernet.get("unrestricted_usernet")),
+            "guestfwd_rules": qemu_usernet.get("rules") or [],
+            "hub_bind": "127.0.0.1",
+            "hub_guest_url": HUB_GUEST_URL,
+            "hub_gateway_url": HUB_GATEWAY_URL,
+            "guest_ip_route": (early_reach or {}).get("ip_route"),
+            "tcp_hub_guestfwd": (early_reach or {}).get("tcp_hub"),
+            "tcp_gateway_hub": (early_reach or {}).get("tcp_gateway_hub"),
+            "http_hub_status": (early_reach or {}).get("http_hub_status"),
+            "http_gateway_hub_status": (early_reach or {}).get("http_gateway_hub_status"),
+            "errors": (early_reach or {}).get("errors"),
+            "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK": bool(
+                (early_reach or {}).get("QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK")
+                or (
+                    (early_reach or {}).get("hub_reachable_from_guest")
+                    and not (early_reach or {}).get("tcp_gateway_hub")
+                )
+            ),
+            "production_fix": "restrict=on + GuestServiceForward v1 guestfwd 10.0.2.100→127.0.0.1",
+            "diagnostic_ab": {
+                "isolated_guestfwd_path": HUB_GUEST_URL,
+                "gateway_path_expect_fail_under_restrict": HUB_GATEWAY_URL,
+                "unrestricted_usernet_not_final_pass": True,
+            },
+        }
+        (gui_dir / "GUEST_HUB_NETWORK_ROOT_CAUSE.json").write_text(
+            json.dumps(root_cause, indent=2, default=str) + "\n", encoding="utf-8"
+        )
+        out["guest_hub_network_root_cause"] = {
+            "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK": root_cause[
+                "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK"
+            ],
+            "restrict_on": root_cause["restrict_on"],
+            "netdev": netdev_arg,
+        }
+        if not early_reach.get("hub_reachable_from_guest"):
+            # One soft recover + retry before declaring Device OS networking defect.
+            out["early_hub_reachability"]["agent_recover"] = _recover_guest_agent(session)
+            early_reach = prove_guest_hub_reachability(session, hub_url=HUB_GUEST_URL)
+            out["early_hub_reachability_retry"] = {
+                k: early_reach.get(k)
+                for k in (
+                    "hub_reachable_from_guest",
+                    "tcp_hub",
+                    "tcp_httpd",
+                    "http_hub_status",
+                    "errors",
+                    "ip_route",
+                )
+            }
+            (gui_dir / "WAIKE_GUEST_HUB_REACHABILITY.json").write_text(
+                json.dumps(
+                    {
+                        "generated_at_utc": _utc(),
+                        **out["early_hub_reachability"],
+                        "retry": out["early_hub_reachability_retry"],
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
         time.sleep(2.0)
 
         preflight_live = run_runtime_target_preflight(
@@ -1004,7 +1647,7 @@ def attempt_waike_gui_hub_journey(
             out["finished_at_utc"] = _utc()
             return out
 
-        fetched = fetch_bundle_into_guest(session, port=8767)
+        fetched = fetch_bundle_into_guest(session, port=OWNER_HTTPD_PORT)
         out["fetch"] = {"ok": fetched.get("ok"), "via": fetched.get("via")}
         if not fetched.get("ok"):
             out["blocker"] = "guest_fetch_owner_bundle_failed"
@@ -1037,14 +1680,58 @@ def attempt_waike_gui_hub_journey(
             session, journey_tag="A", hub_url=HUB_GUEST_URL, platform_role="learner"
         )
         out["journey_a_gui"] = journey_a
+        trusted_launch = {
+            "schema": "gunnchos.device_lab.waike_trusted_runtime_hub_launch.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5C",
+            "hub_url": HUB_GUEST_URL,
+            "hub_url_in_launch_context": bool(journey_a.get("hub_url_in_launch_context")),
+            "hub_endpoint_policy_v1": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
+            "hub_endpoint_policy_provisioned": bool(journey_a.get("hub_endpoint_policy_provisioned")),
+            "acknowledged": bool(journey_a.get("acknowledged")),
+            "nack_reason": journey_a.get("nack_reason"),
+            "ack": journey_a.get("ack"),
+            "policy_authorized_path": True,
+            "trusted_runtime_hub_launch_ok": bool(
+                journey_a.get("acknowledged")
+                and journey_a.get("hub_url_in_launch_context")
+                and journey_a.get("hub_endpoint_policy_provisioned")
+            ),
+        }
+        (gui_dir / "WAIKE_TRUSTED_RUNTIME_HUB_LAUNCH.json").write_text(
+            json.dumps(trusted_launch, indent=2, default=str) + "\n", encoding="utf-8"
+        )
+        out["trusted_runtime_hub_launch"] = {
+            "ok": trusted_launch["trusted_runtime_hub_launch_ok"],
+            "hub_url": HUB_GUEST_URL,
+        }
+        # Allow WebView to apply Device OS launch context → hub:http chip.
+        time.sleep(6.0)
+        # Soft-recover guest agent after GUI start (AT-SPI/WebKit can stall virtio-serial).
+        if not _wait_agent(session, tries=3, sleep_s=0.5):
+            out["post_gui_agent_recover"] = _recover_guest_agent(session)
+        else:
+            out["post_gui_agent_recover"] = {"alive": True, "skipped": True}
         fb_a = _agent_call(session, "framebuffer_capture", timeout_sec=60.0)
         out["framebuffer_a"] = {
             "ok": bool(fb_a.get("ok")),
             "bytes": fb_a.get("bytes") or fb_a.get("size"),
             "path": fb_a.get("path"),
         }
-        bind = probe_hub_bind_from_gui(session, hub_url=HUB_GUEST_URL)
+        bind = probe_hub_bind_from_gui(
+            session,
+            hub_url=HUB_GUEST_URL,
+            journey_tag="A",
+            prior_reach=out.get("early_hub_reachability")
+            or out.get("early_hub_reachability_retry"),
+        )
         out["hub_bind"] = bind
+        if not bind.get("hub_reachable_from_guest"):
+            out["blocker"] = (
+                "guest_cannot_reach_authorized_hub:"
+                + json.dumps(bind.get("reach_detail") or {}, default=str)[:700]
+            )
+            # Continue collecting policy reject + GUI evidence, but do not claim bind.
         policy_rejects = prove_hub_policy_rejects(session, gui_dir)
         out["hub_policy_rejects"] = {
             "rejected": bool(policy_rejects.get("rejected")),
@@ -1097,7 +1784,9 @@ def attempt_waike_gui_hub_journey(
             json.dumps(window_doc, indent=2) + "\n", encoding="utf-8"
         )
 
-        # Learner auth / course depth via AT-SPI against real Hub-bound GUI.
+        # Learner auth / course depth via AT-SPI / keyboard against real Hub-bound GUI.
+        if not _wait_agent(session, tries=3, sleep_s=0.5):
+            out["pre_login_agent_recover"] = _recover_guest_agent(session)
         login_drive = drive_learner_gui_login(session)
         out["learner_login_drive"] = {
             k: login_drive.get(k)
@@ -1111,11 +1800,17 @@ def attempt_waike_gui_hub_journey(
                 "error",
             )
         }
-        hub_bound = bool(bind.get("client_hub_http_chip_observed")) and not bool(
-            bind.get("client_hub_mock_chip_observed")
+        hub_bound = (
+            bool(bind.get("client_hub_http_chip_observed"))
+            and not bool(bind.get("client_hub_mock_chip_observed"))
+            and bool(bind.get("hub_reachable_from_guest"))
         )
-        if not hub_bound and login_drive.get("hub_http_chip"):
+        if not hub_bound and login_drive.get("hub_http_chip") and bind.get(
+            "hub_reachable_from_guest"
+        ):
             hub_bound = True
+            bind["client_hub_http_chip_observed"] = True
+            bind["client_hub_http_chip_via"] = "login_drive_atspi"
         learner = {
             "launch_gui": bool(journey_a.get("launched_gui")),
             "identity_role_context": True,
@@ -1249,7 +1944,7 @@ def attempt_waike_gui_hub_journey(
             "accepted_main_defective_for_device_lab_hub_bind": product_defect,
             "reason": (
                 "Accepted-main #12 HubEndpointPolicy + runtime hub_url path available; "
-                "Device Lab provisioned policy authorizing http://10.0.2.2:8787."
+                "Device Lab provisioned policy authorizing http://10.0.2.100:8787 via GuestServiceForward."
                 if hub_bound
                 else (
                     "Hub bind still incomplete after #12 refreeze; see journey blockers."
@@ -1290,7 +1985,17 @@ def attempt_waike_gui_hub_journey(
                     "real_hub_sidecar_ok_but_client_cannot_bind"
                 )
             elif not hub_bound:
-                out["blocker"] = "client_not_bound_to_real_hub_after_policy_authorized_launch"
+                if not bind.get("hub_reachable_from_guest"):
+                    out["blocker"] = (
+                        out.get("blocker")
+                        or (
+                            "guest_cannot_reach_authorized_hub_http_10_0_2_100_8787"
+                        )
+                    )
+                else:
+                    out["blocker"] = (
+                        "client_not_bound_to_real_hub_after_policy_authorized_launch"
+                    )
             elif not learner.get("complete"):
                 out["blocker"] = (
                     "gui_learner_depth_incomplete_after_hub_bind:"

@@ -1,0 +1,13 @@
+{
+  "schema": "gunnchos.device_lab.qemu_guestfwd_capability.v1",
+  "generated_at_utc": "2026-09-16T15:38:01Z",
+  "prompt": "17G.5C1",
+  "qemu_bin": "/opt/homebrew/bin/qemu-system-aarch64",
+  "qemu_version": "QEMU emulator version 11.0.3",
+  "guestfwd_supported": true,
+  "man_evidence": "",
+  "binary_strings_evidence": "[,tftp=dir][,tftp-server-name=name][,bootfile=f][,hostfwd=rule][,guestfwd=rule][,smb=dir[,smbserver=addr]]\nguestfwd.tcp.%d\nslirp_guestfwd\nguestfwd",
+  "candidate_clause": "guestfwd=tcp:10.0.2.100:18787-tcp:127.0.0.1:18787",
+  "assembled_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:18787-tcp:127.0.0.1:18787",
+  "note": "QEMU documents guestfwd is not affected by restrict=on."
+}

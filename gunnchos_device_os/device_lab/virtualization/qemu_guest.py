@@ -899,15 +899,18 @@ class QemuGuestSession:
             "-daemonize",
         ]
         if os.environ.get("GUNNCHDEVICE_LAB_INTERACTIVE_NET", "1").lower() in {"1", "true", "yes"}:
-            # Default restrict=on (lab isolation). Set GUNNCHDEVICE_LAB_NET_RESTRICT=0
-            # when guest apt/package fetch is required for honest re-earn proofs.
-            restrict = os.environ.get("GUNNCHDEVICE_LAB_NET_RESTRICT", "1").lower() not in {
-                "0",
-                "false",
-                "no",
-                "off",
-            }
-            netdev = "user,id=n0,restrict=on" if restrict else "user,id=n0"
+            # Default restrict=on (lab isolation). Prefer scoped guestfwd
+            # (GUNNCHDEVICE_LAB_GUESTFWD / GuestServiceForward v1) over
+            # unrestricted usernet. Set GUNNCHDEVICE_LAB_NET_RESTRICT=0 only
+            # for one-time diagnostics — never as final PASS configuration.
+            from gunnchos_device_os.device_lab.guest_service_forward import (
+                resolve_boot_usernet_netdev,
+            )
+
+            netdev, net_meta = resolve_boot_usernet_netdev()
+            (self.work / "qemu_usernet.json").write_text(
+                json.dumps(net_meta, indent=2) + "\n", encoding="utf-8"
+            )
             cmd += [
                 "-netdev",
                 netdev,

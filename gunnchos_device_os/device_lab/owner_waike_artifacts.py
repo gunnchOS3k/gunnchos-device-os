@@ -46,9 +46,11 @@ MAIN_AARCH64_SHA256 = (
 )
 MAIN_AARCH64_ARTIFACT_SOURCE_SHA = ACCEPTED_WAIKE_LP_SHA
 
+# Guest-visible Hub via QEMU GuestServiceForward v1 (10.0.2.100 → host loopback).
+# Not 10.0.2.2 gateway: restrict=on blocks unrestricted host reachability.
 DEVICE_LAB_HUB_ENDPOINT_POLICY_V1 = {
     "schema_version": "hub_endpoint_policy.v1",
-    "authorized_hub_base_url": "http://10.0.2.2:8787",
+    "authorized_hub_base_url": "http://10.0.2.100:8787",
     "deployment_id": "device-lab-qemu-guest",
     "site_id": "device-lab",
     "require_https": False,
@@ -397,7 +399,7 @@ def stage_owner_waike_bundle(repo_root: Path, staging: Path) -> dict[str, Any]:
         xdg = staging / "xdg" / "waike-learning-os"
         xdg.mkdir(parents=True, exist_ok=True)
         shutil.copy2(key_src, xdg / "TEST_ONLY_ed25519_public.key")
-    # HubEndpointPolicy v1 Device Lab fixture (authorizes http://10.0.2.2:8787 only).
+    # HubEndpointPolicy v1 Device Lab fixture (authorizes http://10.0.2.100:8787 only).
     policy_dir = staging / "contracts" / "fixtures"
     policy_dir.mkdir(parents=True, exist_ok=True)
     (policy_dir / "device_lab_hub_endpoint_policy.v1.json").write_text(
