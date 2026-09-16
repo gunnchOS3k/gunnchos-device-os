@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.device_lab.waike_gui_hub_capability_map.v1",
-  "generated_at_utc": "2026-09-16T00:04:01Z",
-  "prompt": "17G.5",
-  "accepted_main_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
-  "expected_accepted_main_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+  "generated_at_utc": "2026-09-16T02:56:50Z",
+  "prompt": "17G.5B",
+  "accepted_main_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
+  "expected_accepted_main_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
   "sha_match": true,
   "zero_waike_source_changes": true,
   "surfaces_inspected": {
@@ -40,8 +40,8 @@
     "mockHub_exists_for_tests_only": true,
     "resolveHub_fail_closed_production": true,
     "vite_hub_url_compile_time_only": true,
-    "runtime_hub_url_override_from_deviceos_launch_context": false,
-    "production_binary_binds_real_hub_without_rebuild": false
+    "runtime_hub_url_override_from_deviceos_launch_context": true,
+    "production_binary_binds_real_hub_without_rebuild": true
   },
   "offline": {
     "native_encrypted_outbox": true,
@@ -52,8 +52,8 @@
     "gui_window_launch_possible_without_product_change": true,
     "real_hub_process_can_run_as_sidecar_or_in_guest": true,
     "client_bind_to_real_hub_requires_vite_hub_url_or_runtime_override": true,
-    "accepted_main_defect_if_runtime_override_absent": true,
-    "recommended_smallest_product_fix": "Honor Device OS launch-context hub_url / WAIKE_HUB_URL in resolveHub (or equivalent runtime config) so native builds can bind a real Hub without baking VITE_HUB_URL at compile time. Keep fail-closed; never auto-mock in production."
+    "accepted_main_defect_if_runtime_override_absent": false,
+    "recommended_smallest_product_fix": "NONE"
   },
   "forbidden_pass_surrogates": [
     "mockHub",

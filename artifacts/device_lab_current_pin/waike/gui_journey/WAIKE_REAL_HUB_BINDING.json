@@ -1,12 +1,24 @@
 {
-  "generated_at_utc": "2026-09-16T00:06:03Z",
+  "generated_at_utc": "2026-09-16T02:59:34Z",
   "real_hub_running": true,
   "mock_mode_used": false,
   "client_bound_http": false,
   "client_mock_observed": false,
   "client_unavailable_observed": false,
   "hub_reachable_from_guest": false,
-  "defect": "accepted_main_lacks_runtime_hub_url_override",
+  "hub_url_in_launch_context": true,
+  "hub_endpoint_policy_v1": {
+    "schema_version": "hub_endpoint_policy.v1",
+    "authorized_hub_base_url": "http://10.0.2.2:8787",
+    "deployment_id": "device-lab-qemu-guest",
+    "site_id": "device-lab",
+    "require_https": false,
+    "allow_insecure_local": true,
+    "provenance": "device_lab_fixture",
+    "expires_at": null
+  },
+  "unauthorized_hub_rejected": true,
+  "defect": "client_did_not_observe_hub_http_chip_after_policy_authorized_launch",
   "detail": {
     "hub_reachable_from_guest": false,
     "reach_tail": "",
@@ -16,6 +28,6 @@
     "client_hub_unavailable_observed": false,
     "brand_observed": false,
     "mock_mode_used": false,
-    "note": "Accepted-main resolves Hub via compile-time VITE_HUB_URL only; WAIKE_HUB_URL env / launch-context hub_url are not honored yet."
+    "note": "Post-#12 accepted-main honors launch-context hub_url only after native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set."
   }
 }

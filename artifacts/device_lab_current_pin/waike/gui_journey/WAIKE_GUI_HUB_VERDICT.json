@@ -1,16 +1,16 @@
 {
-  "generated_at_utc": "2026-09-16T00:16:03Z",
-  "prompt": "17G.5",
+  "generated_at_utc": "2026-09-16T03:00:04Z",
+  "prompt": "17G.5B",
   "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "verdict": "FAIL",
-  "blocker": "accepted_main_no_runtime_hub_url_override;real_hub_sidecar_ok_but_client_cannot_bind;need_draft_waike_product_pr_then_owner_merge_refreeze",
-  "gui_window_alive": true,
+  "blocker": "client_not_bound_to_real_hub_after_policy_authorized_launch",
+  "gui_window_alive": false,
   "real_hub_running": true,
   "client_bound_real_hub": false,
+  "hub_endpoint_policy_rejects_unauthorized": true,
   "mock_hub_used": false,
   "xvfb_primary_pass": false,
   "headless_ack_only_pass": false,
-  "defect_decision": "DRAFT_WAIKE_PRODUCT_PR",
-  "RUNTIME_TARGET_PREFLIGHT_PASS": true,
-  "note": "window_alive evidence true; client Hub bind still false"
+  "defect_decision": "DEVICE_OS_FIX_ON_134",
+  "RUNTIME_TARGET_PREFLIGHT_PASS": true
 }

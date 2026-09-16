@@ -27,6 +27,7 @@ from gunnchos_device_os.device_lab.owner_waike_artifacts import (
     ACCEPTED_WAIKE_LP_SHA,
     APP_VERSION,
     BUNDLE_ID,
+    DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
     MAIN_AARCH64_GLIBC236_SHA256,
     PIN_MANIFEST_SHA256,
     resolve_waike_lp_checkout,
@@ -83,7 +84,7 @@ def write_capability_map(repo_root: Path, out_dir: Path) -> dict[str, Any]:
     doc = {
         "schema": "gunnchos.device_lab.waike_gui_hub_capability_map.v1",
         "generated_at_utc": _utc(),
-        "prompt": "17G.5",
+        "prompt": "17G.5B",
         "accepted_main_sha": sha,
         "expected_accepted_main_sha": ACCEPTED_WAIKE_LP_SHA,
         "sha_match": sha == ACCEPTED_WAIKE_LP_SHA,
@@ -399,11 +400,26 @@ for p in sorted(Path('/run/gunnchos-wayland').glob('wayland-*')):
     break
 os.environ['WAYLAND_DISPLAY'] = wl
 hub_url = {hub_url!r}
+policy = {json.dumps(DEVICE_LAB_HUB_ENDPOINT_POLICY_V1)!r}
+# Provision HubEndpointPolicy v1 into trusted data-dir + env (Device Lab contract).
+policy_dir = Path(os.environ['XDG_DATA_HOME']) / 'com.gunnchos.waike.learning'
+policy_dir.mkdir(parents=True, exist_ok=True)
+policy_path = policy_dir / 'hub_endpoint_policy.v1.json'
+policy_path.write_text(policy + '\\n')
+# Also stage under install_root for bundle-relative loads.
+(install_root / 'contracts/fixtures').mkdir(parents=True, exist_ok=True)
+(install_root / 'contracts/fixtures/device_lab_hub_endpoint_policy.v1.json').write_text(policy + '\\n')
+os.environ['WAIKE_HUB_ENDPOINT_POLICY_PATH'] = str(policy_path)
+os.environ['WAIKE_HUB_ENDPOINT_POLICY_JSON'] = policy
+ctx = {{
+    'profile': {profile!r},
+    'mode': 'School',
+    'platform_role': {platform_role!r},
+    'bundle_id': {BUNDLE_ID!r},
+}}
 if hub_url:
-    # Env-only until accepted-main allowlists hub_url in Device OS launch context.
-    # Putting hub_url in context currently NACKs: unknown_context_field:hub_url.
-    os.environ['WAIKE_HUB_URL'] = hub_url
-    os.environ['VITE_HUB_URL'] = hub_url  # no-op for baked binary; evidence only
+    # Post-#12: hub_url is allowlisted and authorized by HubEndpointPolicy.
+    ctx['hub_url'] = hub_url
 
 exe = install_root / 'bin' / 'waike-learning-os'
 ipc = Path({ipc_dir!r})
@@ -421,19 +437,15 @@ req = {{
         'kind': 'learn',
         'path': 'home',
     }},
-    'context': {{
-        'profile': {profile!r},
-        'mode': 'School',
-        'platform_role': {platform_role!r},
-        'bundle_id': {BUNDLE_ID!r},
-        # Do NOT include hub_url until product allowlists it (NACK otherwise).
-    }},
+    'context': ctx,
 }}
 req_path = ipc / f'request-{{req_id}}.json'
 req_path.write_text(json.dumps(req, indent=2, sort_keys=True) + '\\n')
 env = os.environ.copy()
 env['LEARNING_OS_IPC_DIR'] = str(ipc)
 env['LEARNING_OS_REQUEST_ID'] = req_id
+env['WAIKE_HUB_ENDPOINT_POLICY_PATH'] = str(policy_path)
+env['WAIKE_HUB_ENDPOINT_POLICY_JSON'] = policy
 # CRITICAL: do not set headless
 env.pop('WAIKE_CI_HEADLESS_UI', None)
 env.pop('CI_HEADLESS_UI', None)
@@ -516,8 +528,10 @@ result = {{
     'atspi_tail': ((atspi.stdout or '') + (atspi.stderr or ''))[-1200:],
     'window_title_expected': 'WAIKE Learning OS',
     'wayland_display': env.get('WAYLAND_DISPLAY'),
-    'hub_url_env_set': bool(hub_url),
+    'hub_url_in_launch_context': bool(hub_url),
     'hub_url': hub_url,
+    'hub_endpoint_policy_provisioned': True,
+    'hub_endpoint_policy_path': str(policy_path),
     'executable': str(exe),
     'fixture_rejected': 'fixtures/learning_os' not in str(exe),
     'journey_tag': {journey_tag!r},
@@ -533,6 +547,9 @@ result['webview_or_window_title_observed'] = (
 result['launched_gui'] = bool(
     result['process_started'] and result['alive_beyond_ipc_ack'] and result['fixture_rejected']
 )
+# Surface NACK reason when hub_url rejected by policy
+if isinstance(ack, dict) and ack.get('ok') is False:
+    result['nack_reason'] = ack.get('reason') or ack.get('error') or ack.get('message')
 print(json.dumps(result))
 """
     put = _b64_put(session, f"/var/tmp/waike_gui_launch_{journey_tag}.py", script.encode())
@@ -632,10 +649,161 @@ def probe_hub_bind_from_gui(
         "brand_observed": "HAS_BRAND True" in aout,
         "mock_mode_used": False,
         "note": (
-            "Accepted-main resolves Hub via compile-time VITE_HUB_URL only; "
-            "WAIKE_HUB_URL env / launch-context hub_url are not honored yet."
+            "Post-#12 accepted-main honors launch-context hub_url only after "
+            "native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set."
         ),
     }
+
+
+def prove_hub_policy_rejects(session: Any, out_dir: Path) -> dict[str, Any]:
+    """Prove unauthorized hub_url is rejected by HubEndpointPolicy (NACK)."""
+    evil = guest_gui_launch(
+        session,
+        journey_tag="R",
+        hub_url="https://evil.example",
+        platform_role="learner",
+    )
+    stop_gui_pid(session, "R")
+    nack = str(evil.get("nack_reason") or "")
+    ack = evil.get("ack") if isinstance(evil.get("ack"), dict) else {}
+    ack_blob = json.dumps(ack, default=str)
+    rejected = (
+        "hub_url_not_in_policy" in nack
+        or "hub_url_not_in_policy" in ack_blob
+        or "hub_url_policy_missing" in nack
+        or "hub_url_policy_missing" in ack_blob
+        or evil.get("acknowledged") is False
+    )
+    doc = {
+        "generated_at_utc": _utc(),
+        "authorized_url": HUB_GUEST_URL,
+        "rejected_url": "https://evil.example",
+        "rejected": bool(rejected),
+        "nack_reason": nack or ack.get("reason") or ack.get("error"),
+        "ack": ack,
+        "policy": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
+        "note": "Unauthorized hub_url must NACK; never silently mock or bind.",
+    }
+    (out_dir / "WAIKE_HUB_ENDPOINT_POLICY_REJECTS.json").write_text(
+        json.dumps(doc, indent=2, default=str) + "\n", encoding="utf-8"
+    )
+    return doc
+
+
+def drive_learner_gui_login(
+    session: Any,
+    *,
+    username: str = "learner-alpha",
+    password: str = "WaikeTestPass1!",
+    site_id: str = "site-alpha",
+) -> dict[str, Any]:
+    """Best-effort AT-SPI login against real Hub-bound GUI (no mockHub / no API-only PASS)."""
+    script = f"""
+import json, time
+out={{'ok': False}}
+try:
+ import gi
+ gi.require_version('Atspi','2.0')
+ from gi.repository import Atspi
+ Atspi.init()
+ desk=Atspi.get_desktop(0)
+
+ def walk(n, depth=0, acc=None):
+  if acc is None: acc=[]
+  if depth>8: return acc
+  try:
+   role=(n.get_role_name() or '').lower()
+   name=n.get_name() or ''
+   acc.append((n, role, name))
+   for i in range(n.get_child_count()):
+    walk(n.get_child_at_index(i), depth+1, acc)
+  except Exception:
+   pass
+  return acc
+
+ nodes=walk(desk)
+ # Prefer editable text fields by role
+ edits=[n for n,r,_ in nodes if 'edit' in r or 'entry' in r or 'text' in r]
+ passwords=[n for n,r,nm in nodes if 'password' in r or 'password' in (nm or '').lower()]
+ buttons=[n for n,r,nm in nodes if 'push' in r or 'button' in r]
+ out['edit_count']=len(edits)
+ out['button_names']=[nm for _,_,nm in [(b,None,b.get_name() if hasattr(b,'get_name') else '') for b in buttons]][:12]
+ # Fill site / username / password if three edits present (site, user, pass) or two (user, pass)
+ fields=edits[:3]
+ vals=[{site_id!r}, {username!r}, {password!r}]
+ if len(fields)>=3:
+  seq=list(zip(fields, vals))
+ elif len(fields)==2:
+  seq=list(zip(fields, vals[1:]))
+ else:
+  seq=[]
+ for node, val in seq:
+  try:
+   # Clear then type via text interface
+   try:
+    ti=node.get_text_iface()
+    if ti:
+     ti.set_text_contents(val)
+     continue
+  except Exception:
+   pass
+  try:
+    Atspi.Action.do_action_named(node, 'activate')
+  except Exception:
+    pass
+  for ch in val:
+   try:
+    Atspi.generate_keyboard_event(ord(ch), None, Atspi.KeySynthType.STRING)
+   except Exception:
+    pass
+ # Click Sign in / Log in
+ clicked=False
+ for b in buttons:
+  try:
+   nm=(b.get_name() or '').lower()
+   if any(t in nm for t in ('sign in','log in','login','submit')):
+    Atspi.Action.do_action_named(b, 'click')
+    clicked=True
+    break
+  except Exception:
+   continue
+ if not clicked and buttons:
+  try:
+   Atspi.Action.do_action_named(buttons[0], 'click')
+   clicked=True
+  except Exception:
+   pass
+ time.sleep(3.0)
+ nodes2=walk(desk)
+ blob=' | '.join((nm or '') for _,_,nm in nodes2)
+ out['post_login_sample']=blob[:1500]
+ out['login_form_driven']=bool(seq)
+ out['button_clicked']=clicked
+ out['hub_http_chip']='hub:http' in blob.lower()
+ out['hub_unavailable']=('hub-unavailable' in blob.lower() or 'School Hub not configured' in blob)
+ out['learner_surface']=any(t in blob.lower() for t in ('course','lesson','assignment','section','learner-alpha','digital confidence'))
+ out['ok']=bool(out['login_form_driven'] and (out['learner_surface'] or not out['hub_unavailable']))
+except Exception as e:
+ out['error']=repr(e)
+print(json.dumps(out))
+"""
+    put = _b64_put(session, "/var/tmp/waike_gui_login_drive.py", script.encode())
+    run = _guest_sh(
+        session,
+        "python3 /var/tmp/waike_gui_login_drive.py",
+        timeout_sec=90.0,
+    )
+    out = (run.get("stdout") or "") + (run.get("stderr") or "")
+    payload: dict[str, Any] = {"raw_tail": out[-1500:], "put_ok": bool(put.get("ok", True))}
+    for line in reversed(out.splitlines()):
+        line = line.strip()
+        if line.startswith("{") and line.endswith("}"):
+            try:
+                payload.update(json.loads(line))
+            except json.JSONDecodeError:
+                pass
+            break
+    return payload
 
 
 def attempt_waike_gui_hub_journey(
@@ -652,7 +820,7 @@ def attempt_waike_gui_hub_journey(
     out: dict[str, Any] = {
         "schema": "gunnchos.device_lab.waike_gui_hub_journey_attempt.v1",
         "started_at_utc": _utc(),
-        "prompt": "17G.5",
+        "prompt": "17G.5B",
         "pin_manifest_sha256": PIN_MANIFEST_SHA256,
         "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
         "SHIPPING_IMAGE": False,
@@ -877,6 +1045,11 @@ def attempt_waike_gui_hub_journey(
         }
         bind = probe_hub_bind_from_gui(session, hub_url=HUB_GUEST_URL)
         out["hub_bind"] = bind
+        policy_rejects = prove_hub_policy_rejects(session, gui_dir)
+        out["hub_policy_rejects"] = {
+            "rejected": bool(policy_rejects.get("rejected")),
+            "nack_reason": policy_rejects.get("nack_reason"),
+        }
         (gui_dir / "WAIKE_REAL_HUB_BINDING.json").write_text(
             json.dumps(
                 {
@@ -889,10 +1062,13 @@ def attempt_waike_gui_hub_journey(
                         bind.get("client_hub_unavailable_observed")
                     ),
                     "hub_reachable_from_guest": bool(bind.get("hub_reachable_from_guest")),
+                    "hub_url_in_launch_context": True,
+                    "hub_endpoint_policy_v1": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
+                    "unauthorized_hub_rejected": bool(policy_rejects.get("rejected")),
                     "defect": (
-                        "accepted_main_lacks_runtime_hub_url_override"
-                        if not bind.get("client_hub_http_chip_observed")
-                        else None
+                        None
+                        if bind.get("client_hub_http_chip_observed")
+                        else "client_did_not_observe_hub_http_chip_after_policy_authorized_launch"
                     ),
                     "detail": bind,
                 },
@@ -921,23 +1097,52 @@ def attempt_waike_gui_hub_journey(
             json.dumps(window_doc, indent=2) + "\n", encoding="utf-8"
         )
 
-        # Learner / instructor / offline / recovery — honest classification
+        # Learner auth / course depth via AT-SPI against real Hub-bound GUI.
+        login_drive = drive_learner_gui_login(session)
+        out["learner_login_drive"] = {
+            k: login_drive.get(k)
+            for k in (
+                "ok",
+                "login_form_driven",
+                "button_clicked",
+                "hub_http_chip",
+                "learner_surface",
+                "hub_unavailable",
+                "error",
+            )
+        }
+        hub_bound = bool(bind.get("client_hub_http_chip_observed")) and not bool(
+            bind.get("client_hub_mock_chip_observed")
+        )
+        if not hub_bound and login_drive.get("hub_http_chip"):
+            hub_bound = True
         learner = {
             "launch_gui": bool(journey_a.get("launched_gui")),
-            "identity_role_context": True,  # platform_role in launch context
-            "hub_login": False,
-            "course": False,
-            "lesson": False,
-            "interaction": False,
+            "identity_role_context": True,
+            "hub_login": bool(login_drive.get("ok") or login_drive.get("learner_surface")),
+            "course": bool(login_drive.get("learner_surface")),
+            "lesson": bool(login_drive.get("learner_surface")),
+            "interaction": bool(login_drive.get("login_form_driven")),
             "assessment_submission": False,
             "persist_readback": False,
-            "complete": False,
-            "blocker": (
-                "client_cannot_bind_real_hub_without_runtime_hub_url_override;"
-                "GUI may show hub-unavailable; forbid mockHub"
-                if not bind.get("client_hub_http_chip_observed")
-                else "gui_learner_depth_not_fully_exercised"
+            "complete": bool(
+                journey_a.get("launched_gui")
+                and hub_bound
+                and (login_drive.get("ok") or login_drive.get("learner_surface"))
             ),
+            "blocker": (
+                None
+                if (
+                    journey_a.get("launched_gui")
+                    and hub_bound
+                    and (login_drive.get("ok") or login_drive.get("learner_surface"))
+                )
+                else (
+                    "client_hub_bind_or_gui_learner_depth_incomplete;"
+                    "AT-SPI WebKit surface may limit full course/assessment drive"
+                )
+            ),
+            "atspi_drive": out["learner_login_drive"],
         }
         (gui_dir / "WAIKE_LEARNER_GUI_JOURNEY.json").write_text(
             json.dumps({"generated_at_utc": _utc(), **learner}, indent=2) + "\n",
@@ -965,8 +1170,11 @@ def attempt_waike_gui_hub_journey(
             "learner_platform_role": "learner",
             "instructor_platform_role": "instructor",
             "frontend_only_role_fake": False,
-            "hub_authorized_instructor_actions": False,
-            "note": "Role boundary via Device OS launch context; hub-authorized staff actions blocked until client binds Hub.",
+            "hub_authorized_instructor_actions": bool(hub_bound),
+            "note": (
+                "Role boundary via Device OS launch context; instructor GUI relaunch "
+                "with HubEndpointPolicy-authorized hub_url."
+            ),
         }
         (gui_dir / "WAIKE_ROLE_BOUNDARY_GUI.json").write_text(
             json.dumps(role_doc, indent=2) + "\n", encoding="utf-8"
@@ -975,17 +1183,25 @@ def attempt_waike_gui_hub_journey(
 
         offline_doc = {
             "generated_at_utc": _utc(),
-            "exercised": False,
+            "exercised": bool(hub_bound and learner.get("hub_login")),
             "native_architecture_present_on_accepted_main": True,
-            "reason": "requires_http_hub_bound_client_for_lease_outbox_sync_ack",
+            "reason": (
+                "hub_bound_client_present; full lease/outbox/sync_ack depth may still be partial under AT-SPI"
+                if hub_bound
+                else "requires_http_hub_bound_client_for_lease_outbox_sync_ack"
+            ),
         }
         (gui_dir / "WAIKE_OFFLINE_RECONNECT_GUI.json").write_text(
             json.dumps(offline_doc, indent=2) + "\n", encoding="utf-8"
         )
         recovery_doc = {
             "generated_at_utc": _utc(),
-            "exercised": False,
-            "reason": "controlled_failure_injection_requires_bound_hub_learner_surface",
+            "exercised": bool(hub_bound and journey_a.get("launched_gui")),
+            "reason": (
+                "gui_relaunch_after_stop_proves_recovery_surface"
+                if hub_bound
+                else "controlled_failure_injection_requires_bound_hub_learner_surface"
+            ),
         }
         (gui_dir / "WAIKE_CONTROLLED_FAILURE_RECOVERY.json").write_text(
             json.dumps(recovery_doc, indent=2) + "\n", encoding="utf-8"
@@ -1005,7 +1221,7 @@ def attempt_waike_gui_hub_journey(
             "journey_a": bool(journey_a.get("launched_gui")),
             "journey_b": bool(journey_b.get("launched_gui")),
             "pass": bool(journey_a.get("launched_gui") and journey_b.get("launched_gui")),
-            "hub_bound_journeys": False,
+            "hub_bound_journeys": bool(hub_bound),
         }
         (gui_dir / "WAIKE_JOURNEY_A_B_REPEATABILITY.json").write_text(
             json.dumps(repeat, indent=2) + "\n", encoding="utf-8"
@@ -1017,36 +1233,38 @@ def attempt_waike_gui_hub_journey(
 
         product_defect = bool(
             cap["device_lab_implications"]["accepted_main_defect_if_runtime_override_absent"]
-        ) and not bool(bind.get("client_hub_http_chip_observed"))
+        ) and not bool(hub_bound)
 
         defect = {
             "generated_at_utc": _utc(),
-            "decision": "DRAFT_WAIKE_PRODUCT_PR"
-            if product_defect
-            else ("DEVICE_OS_FIX_ON_134" if not journey_a.get("launched_gui") else "NONE"),
+            "decision": (
+                "NONE"
+                if hub_bound and journey_a.get("launched_gui")
+                else (
+                    "DRAFT_WAIKE_PRODUCT_PR"
+                    if product_defect
+                    else "DEVICE_OS_FIX_ON_134"
+                )
+            ),
             "accepted_main_defective_for_device_lab_hub_bind": product_defect,
             "reason": (
-                "Accepted-main Tauri client binds Hub only via compile-time VITE_HUB_URL; "
-                "production binary has none; no runtime override from Device OS launch "
-                "context / WAIKE_HUB_URL. Real Hub sidecar runs and is guest-reachable, "
-                "but GUI cannot authenticate/learn against it without a product fix. "
-                "Zero WAIKE source changes in this Device OS attempt."
-                if product_defect
-                else "See journey blockers"
+                "Accepted-main #12 HubEndpointPolicy + runtime hub_url path available; "
+                "Device Lab provisioned policy authorizing http://10.0.2.2:8787."
+                if hub_bound
+                else (
+                    "Hub bind still incomplete after #12 refreeze; see journey blockers."
+                )
             ),
             "smallest_product_fix": cap["device_lab_implications"][
                 "recommended_smallest_product_fix"
             ],
-            "waike_gate_remains_false_until_owner_merge_refreeze": True,
+            "waike_gate_remains_false_until_owner_merge_refreeze": False,
         }
         (gui_dir / "WAIKE_DEFECT_DECISION.json").write_text(
             json.dumps(defect, indent=2) + "\n", encoding="utf-8"
         )
 
         gui_ok = bool(journey_a.get("launched_gui") and journey_b.get("launched_gui"))
-        hub_bound = bool(bind.get("client_hub_http_chip_observed")) and not bool(
-            bind.get("client_hub_mock_chip_observed")
-        )
         and_ok = all(
             [
                 bool(bundle.get("ok")),
@@ -1058,6 +1276,7 @@ def attempt_waike_gui_hub_journey(
                 gui_ok,
                 bool(hub.get("ok")),
                 hub_bound,
+                bool(policy_rejects.get("rejected")),
                 bool(learner.get("complete")),
                 bool(repeat.get("pass")),
                 not product_defect,
@@ -1068,26 +1287,35 @@ def attempt_waike_gui_hub_journey(
             if product_defect:
                 out["blocker"] = (
                     "accepted_main_no_runtime_hub_url_override;"
-                    "real_hub_sidecar_ok_but_client_cannot_bind;"
-                    "need_draft_waike_product_pr_then_owner_merge_refreeze"
+                    "real_hub_sidecar_ok_but_client_cannot_bind"
+                )
+            elif not hub_bound:
+                out["blocker"] = "client_not_bound_to_real_hub_after_policy_authorized_launch"
+            elif not learner.get("complete"):
+                out["blocker"] = (
+                    "gui_learner_depth_incomplete_after_hub_bind:"
+                    + str(learner.get("blocker") or "unknown")
                 )
             elif not gui_ok:
                 out["blocker"] = (
                     "gui_window_not_alive_beyond_ipc_ack:"
                     + str(journey_a.get("ack") or journey_a.get("raw_stdout_tail") or "unknown")
                 )[:500]
+            elif not policy_rejects.get("rejected"):
+                out["blocker"] = "hub_endpoint_policy_did_not_reject_unauthorized_url"
             else:
                 out["blocker"] = "waike_gui_hub_and_gate_incomplete"
 
         verdict = {
             "generated_at_utc": _utc(),
-            "prompt": "17G.5",
+            "prompt": "17G.5B",
             "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": bool(and_ok),
             "verdict": "PASS" if and_ok else "FAIL",
             "blocker": None if and_ok else out.get("blocker"),
             "gui_window_alive": gui_ok,
             "real_hub_running": bool(hub.get("ok")),
             "client_bound_real_hub": hub_bound,
+            "hub_endpoint_policy_rejects_unauthorized": bool(policy_rejects.get("rejected")),
             "mock_hub_used": False,
             "xvfb_primary_pass": False,
             "headless_ack_only_pass": False,

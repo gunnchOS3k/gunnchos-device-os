@@ -1,0 +1,24 @@
+{
+  "generated_at_utc": "2026-09-16T02:59:34Z",
+  "authorized_url": "http://10.0.2.2:8787",
+  "rejected_url": "https://evil.example",
+  "rejected": true,
+  "nack_reason": "hub_url_not_in_policy",
+  "ack": {
+    "message_type": "nack",
+    "protocol": "gunnchos.learning_os.ipc.v1",
+    "reason": "hub_url_not_in_policy",
+    "request_id": "5bcd2967-7fbe-408e-9e2a-86d778aa713f"
+  },
+  "policy": {
+    "schema_version": "hub_endpoint_policy.v1",
+    "authorized_hub_base_url": "http://10.0.2.2:8787",
+    "deployment_id": "device-lab-qemu-guest",
+    "site_id": "device-lab",
+    "require_https": false,
+    "allow_insecure_local": true,
+    "provenance": "device_lab_fixture",
+    "expires_at": null
+  },
+  "note": "Unauthorized hub_url must NACK; never silently mock or bind."
+}

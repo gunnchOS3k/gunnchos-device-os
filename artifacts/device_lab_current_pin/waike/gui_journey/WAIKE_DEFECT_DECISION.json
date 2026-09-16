@@ -1,11 +1,8 @@
 {
-  "generated_at_utc": "2026-09-16T00:14:03Z",
-  "decision": "DRAFT_WAIKE_PRODUCT_PR",
-  "accepted_main_defective_for_device_lab_hub_bind": true,
-  "observed_nack": "unknown_context_field:hub_url",
-  "draft_pr": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/12",
-  "draft_pr_head": "9c4f4c25c5a85d6e2af2694cda4dfc882d09be15",
-  "reason": "Accepted-main allowlists Device OS context keys without hub_url and resolveHub only reads compile-time VITE_HUB_URL. 17G.5 earned weston compositor + authentic Tauri GUI/WebKit processes + real Hub sidecar, but client cannot bind Hub. DRAFT PR #12 adds hub_url allowlist + runtime resolveHub.",
-  "waike_gate_remains_false_until_owner_merge_refreeze": true,
-  "zero_waike_source_changes_in_device_os_attempt": true
+  "generated_at_utc": "2026-09-16T03:00:04Z",
+  "decision": "DEVICE_OS_FIX_ON_134",
+  "accepted_main_defective_for_device_lab_hub_bind": false,
+  "reason": "Hub bind still incomplete after #12 refreeze; see journey blockers.",
+  "smallest_product_fix": "NONE",
+  "waike_gate_remains_false_until_owner_merge_refreeze": false
 }

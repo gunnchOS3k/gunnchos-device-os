@@ -1,57 +1,95 @@
 {
   "schema": "gunnchos.device_lab.waike_pin_drift_materiality.v1",
-  "generated_at_utc": "2026-09-15T23:18:09Z",
-  "drift_reason": "WAIKE_GLIBC236_CI_FIX_ACCEPTED_MAIN",
-  "old_waike_sha": "2fa63da1e426179972bd9c50cd8985ebf37e4077",
-  "new_waike_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
-  "merge_commit": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+  "generated_at_utc": "2026-09-16T02:49:06Z",
+  "drift_reason": "WAIKE_RUNTIME_HUB_POLICY_ACCEPTED_MAIN",
+  "old_waike_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+  "new_waike_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
+  "merge_commit": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
   "merge_parents": [
-    "026c24b22e0134028ad7f7c38e3551a248d39923",
-    "c26aa0567395b5483c2cc24352ac881964ae75f2"
+    "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+    "f6ec52687fa5b778a552b003e19c85fc43f944de"
   ],
   "files_changed": [
     {
-      "filename": ".github/workflows/device-lab-aarch64-glibc236.yml",
-      "status": "added",
-      "additions": 311,
-      "deletions": 0
-    },
-    {
-      "filename": "docs/product/DEVICE_LAB_AARCH64_GLIBC236.md",
-      "status": "added",
-      "additions": 78,
-      "deletions": 0
-    },
-    {
-      "filename": "docs/product/DEVICE_LAB_AARCH64_LINUX.md",
+      "filename": "apps/client/src-tauri/Cargo.lock",
       "status": "modified",
       "additions": 1,
+      "deletions": 0
+    },
+    {
+      "filename": "apps/client/src-tauri/Cargo.toml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0
+    },
+    {
+      "filename": "apps/client/src-tauri/src/deviceos_launch.rs",
+      "status": "modified",
+      "additions": 110,
+      "deletions": 0
+    },
+    {
+      "filename": "apps/client/src-tauri/src/hub_endpoint_policy.rs",
+      "status": "added",
+      "additions": 378,
+      "deletions": 0
+    },
+    {
+      "filename": "apps/client/src-tauri/src/lib.rs",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0
+    },
+    {
+      "filename": "apps/client/src/App.tsx",
+      "status": "modified",
+      "additions": 17,
+      "deletions": 3
+    },
+    {
+      "filename": "apps/client/src/lib/hub/resolveHub.test.ts",
+      "status": "modified",
+      "additions": 122,
       "deletions": 1
     },
     {
-      "filename": "docs/product/MULTI_ARCHITECTURE_SUPPORT.md",
+      "filename": "apps/client/src/lib/hub/resolveHub.ts",
       "status": "modified",
-      "additions": 36,
-      "deletions": 20
+      "additions": 97,
+      "deletions": 5
     },
     {
-      "filename": "scripts/measure_max_glibc.py",
+      "filename": "contracts/fixtures/device_lab_hub_endpoint_policy.v1.json",
       "status": "added",
-      "additions": 105,
+      "additions": 10,
+      "deletions": 0
+    },
+    {
+      "filename": "contracts/schemas/hub_endpoint_policy.v1.json",
+      "status": "added",
+      "additions": 59,
+      "deletions": 0
+    },
+    {
+      "filename": "docs/product/RUNTIME_HUB_TRUST_BOUNDARY.md",
+      "status": "added",
+      "additions": 89,
       "deletions": 0
     }
   ],
   "classification": {
-    "waike_application_runtime_source": false,
+    "waike_application_runtime_source": true,
     "curriculum_source": false,
     "device_os_runtime": false,
     "games": false,
     "ring": false,
     "dsxl_live": false,
-    "workflow_docs_build_support_only": true
+    "workflow_docs_build_support_only": false,
+    "hub_endpoint_policy_runtime": true
   },
   "material_to_prior_gates": false,
-  "action": "compact_revalidate_LIVE_DSXL_RING_FOUR_GAME",
-  "old_pin_manifest_sha256": "0cc5d082080a2bdf1e5c4afe800a87a5fb26a4bd1104a662395a85370393fdb4",
-  "new_pin_manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b"
+  "material_to_waike_runtime": true,
+  "action": "compact_revalidate_LIVE_DSXL_RING_FOUR_GAME; full_waike_gui_hub_reearn",
+  "old_pin_manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b",
+  "new_pin_manifest_sha256": "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15"
 }

@@ -16,25 +16,25 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ACCEPTED_WAIKE_LP_SHA = "b1c3ab5d4faa4d2613569e474013ccf0976d346e"
+ACCEPTED_WAIKE_LP_SHA = "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c"
 ACCEPTED_WAIKE_OPS_SHA = "fbf7685bc5686201ccaa0128ee83346d59b3d584"
-# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE glibc236 pin.
-PIN_MANIFEST_SHA256 = "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b"
+# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE #12 hub policy pin.
+PIN_MANIFEST_SHA256 = "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15"
 BUNDLE_ID = "com.gunnchos.waike.learning"
 APP_VERSION = "0.1.0"
 
-# Gate D linux CI artifact retained for x86_64 targets (accepted-main still publishes it).
+# Gate D linux CI artifact retained for x86_64 targets (pre-#12 binary still staged).
 GATE_D_LINUX_ARTIFACT_ID = "10041457013"
 GATE_D_LINUX_SHA256 = (
     "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef"
 )
 
-# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #11 / run 35031879671).
+# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #12 / run 35046618011).
 # Prefer this over Ubuntu 24.04 aarch64-current (GLIBC_2.39) for Interactive Guest.
-MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10422300001"
-MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35031879671"
+MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10426884231"
+MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35046618011"
 MAIN_AARCH64_GLIBC236_SHA256 = (
-    "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926"
+    "3df1e42e5d6c1b8b7e8ee31a636b2a6bec49120f38b6d28bd290b8a6e3fa1207"
 )
 MAIN_AARCH64_GLIBC236_LABEL = "linux-aarch64-glibc236"
 
@@ -45,6 +45,17 @@ MAIN_AARCH64_SHA256 = (
     "1725b2122c36ee8c008fc583569470496082763b6491a01be1b3b43a2d371c8b"
 )
 MAIN_AARCH64_ARTIFACT_SOURCE_SHA = ACCEPTED_WAIKE_LP_SHA
+
+DEVICE_LAB_HUB_ENDPOINT_POLICY_V1 = {
+    "schema_version": "hub_endpoint_policy.v1",
+    "authorized_hub_base_url": "http://10.0.2.2:8787",
+    "deployment_id": "device-lab-qemu-guest",
+    "site_id": "device-lab",
+    "require_https": False,
+    "allow_insecure_local": True,
+    "provenance": "device_lab_fixture",
+    "expires_at": None,
+}
 
 
 def _utc() -> str:
@@ -386,6 +397,17 @@ def stage_owner_waike_bundle(repo_root: Path, staging: Path) -> dict[str, Any]:
         xdg = staging / "xdg" / "waike-learning-os"
         xdg.mkdir(parents=True, exist_ok=True)
         shutil.copy2(key_src, xdg / "TEST_ONLY_ed25519_public.key")
+    # HubEndpointPolicy v1 Device Lab fixture (authorizes http://10.0.2.2:8787 only).
+    policy_dir = staging / "contracts" / "fixtures"
+    policy_dir.mkdir(parents=True, exist_ok=True)
+    (policy_dir / "device_lab_hub_endpoint_policy.v1.json").write_text(
+        json.dumps(DEVICE_LAB_HUB_ENDPOINT_POLICY_V1, indent=2) + "\n", encoding="utf-8"
+    )
+    policy_xdg = staging / "xdg" / "com.gunnchos.waike.learning"
+    policy_xdg.mkdir(parents=True, exist_ok=True)
+    (policy_xdg / "hub_endpoint_policy.v1.json").write_text(
+        json.dumps(DEVICE_LAB_HUB_ENDPOINT_POLICY_V1, indent=2) + "\n", encoding="utf-8"
+    )
     # Wrapper used when guest needs qemu-user for x86_64 ELF on aarch64.
     wrapper = staging / "bin" / "waike-learning-os.qemu-x86_64-wrapper.sh"
     wrapper.write_text(
