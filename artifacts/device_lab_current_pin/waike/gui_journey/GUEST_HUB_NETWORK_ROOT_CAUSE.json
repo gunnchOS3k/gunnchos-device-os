@@ -1,0 +1,56 @@
+{
+  "schema": "gunnchos.device_lab.guest_hub_network_root_cause.v1",
+  "generated_at_utc": "2026-09-16T23:28:02Z",
+  "prompt": "17G.5D",
+  "defect_class": "DEVICE_OS_FIX_ON_134",
+  "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+  "qemu_usernet": {
+    "restrict": true,
+    "guestfwd_rule_count": 1,
+    "rules": [
+      {
+        "name": "device_lab_hub",
+        "guest_addr": "10.0.2.100",
+        "guest_port": 8787,
+        "host_addr": "127.0.0.1",
+        "host_port": 8787,
+        "protocol": "tcp"
+      }
+    ],
+    "netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+    "unrestricted_usernet": false,
+    "schema": "gunnchos.device_lab.guest_service_forward.v1"
+  },
+  "restrict_on": true,
+  "unrestricted_usernet_used": false,
+  "guestfwd_rules": [
+    {
+      "name": "device_lab_hub",
+      "guest_addr": "10.0.2.100",
+      "guest_port": 8787,
+      "host_addr": "127.0.0.1",
+      "host_port": 8787,
+      "protocol": "tcp"
+    }
+  ],
+  "hub_bind": "127.0.0.1",
+  "hub_guest_url": "http://10.0.2.100:8787",
+  "hub_gateway_url": "http://10.0.2.2:8787",
+  "guest_ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86393sec preferred_lft 86393sec\n",
+  "tcp_hub_guestfwd": true,
+  "tcp_gateway_hub": false,
+  "http_hub_status": 200,
+  "http_gateway_hub_status": null,
+  "errors": [
+    "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+    "tcp:10.0.2.2:8787:[Errno 111] Connection refused"
+  ],
+  "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK": true,
+  "production_fix": "restrict=on + GuestServiceForward v1 guestfwd 10.0.2.100\u2192127.0.0.1",
+  "diagnostic_ab": {
+    "isolated_guestfwd_path": "http://10.0.2.100:8787",
+    "gateway_path_expect_fail_under_restrict": "http://10.0.2.2:8787",
+    "unrestricted_usernet_not_final_pass": true
+  },
+  "probed_before_apt_atspi": true
+}

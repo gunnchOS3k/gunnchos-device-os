@@ -1,0 +1,31 @@
+{
+  "schema": "gunnchos.device_lab.waike_hub_endpoint_policy.v1",
+  "generated_at_utc": "2026-09-16T23:29:59Z",
+  "prompt": "17G.5D",
+  "authorized_hub_base_url": "http://10.0.2.100:8787",
+  "policy": {
+    "schema_version": "hub_endpoint_policy.v1",
+    "authorized_hub_base_url": "http://10.0.2.100:8787",
+    "deployment_id": "device-lab-qemu-guest",
+    "site_id": "device-lab",
+    "require_https": false,
+    "allow_insecure_local": true,
+    "provenance": "device_lab_fixture",
+    "expires_at": null
+  },
+  "allow_insecure_local": true,
+  "mockHub_disabled": true,
+  "unauthorized_rejected": false,
+  "rejects": [
+    {
+      "url": "http://10.0.2.2:8787",
+      "expected": "reject"
+    },
+    {
+      "url": "https://evil.example",
+      "expected": "reject",
+      "observed_rejected": false
+    }
+  ],
+  "nack_reason": null
+}

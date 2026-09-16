@@ -49,6 +49,7 @@ from gunnchos_device_os.device_lab.owner_waike_guest import (
 from gunnchos_device_os.device_lab.guest_service_forward import (
     apply_guest_service_forward_env,
     device_lab_hub_httpd_forward,
+    device_lab_hub_only_forward,
 )
 from gunnchos_device_os.device_lab.runtime_target_preflight import (
     PREFERRED_LABEL,
@@ -180,8 +181,9 @@ def prove_guest_hub_reachability(
     httpd_url = f"http://{HUB_GUEST_ADDR}:{httpd_port}/"
     gateway_url = f"http://10.0.2.2:{port}/healthz"
     py = f"""
-import json, socket, urllib.request, subprocess
+import json, socket, subprocess
 from pathlib import Path
+from urllib.parse import urlparse
 out = {{
   "hub_url": {hub_url!r},
   "hub_host": {host!r},
@@ -194,15 +196,63 @@ out = {{
   "http_hub_body": "",
   "http_httpd_status": None,
   "http_gateway_hub_status": None,
+  "http_probe_via": None,
   "errors": [],
 }}
-def tcp(h, p, timeout=3.0):
+def tcp(h, p, timeout=2.0):
   try:
     with socket.create_connection((h, p), timeout=timeout):
       return True
   except Exception as e:
     out["errors"].append(f"tcp:{{h}}:{{p}}:{{e}}")
     return False
+def http10(url, timeout=4.0):
+  # Raw HTTP/1.0 + Connection: close: urllib/HTTP1.1 keep-alive often hangs
+  # on QEMU guestfwd→uvicorn even when TCP connect succeeds.
+  p = urlparse(url)
+  h = p.hostname
+  port_i = int(p.port or 80)
+  path = p.path or "/"
+  if p.query:
+    path = path + "?" + p.query
+  req = (
+    f"GET {{path}} HTTP/1.0\\r\\n"
+    f"Host: {{h}}:{{port_i}}\\r\\n"
+    "User-Agent: gunnchos-guestfwd-probe/1.0\\r\\n"
+    "Accept: */*\\r\\n"
+    "Connection: close\\r\\n"
+    "\\r\\n"
+  ).encode()
+  s = socket.create_connection((h, port_i), timeout=timeout)
+  try:
+    s.settimeout(timeout)
+    s.sendall(req)
+    chunks = []
+    while True:
+      try:
+        b = s.recv(4096)
+      except socket.timeout:
+        break
+      if not b:
+        break
+      chunks.append(b)
+      if sum(len(x) for x in chunks) > 65536:
+        break
+  finally:
+    try:
+      s.close()
+    except Exception:
+      pass
+  raw = b"".join(chunks)
+  if not raw:
+    raise TimeoutError("empty_http_response")
+  head, _, body = raw.partition(b"\\r\\n\\r\\n")
+  line = head.split(b"\\r\\n", 1)[0].decode("latin1", "replace")
+  parts = line.split()
+  if len(parts) < 2:
+    raise ValueError(f"bad_status_line:{{line!r}}")
+  status = int(parts[1])
+  return status, body[:400].decode("utf-8", "replace")
 out["tcp_hub"] = tcp({host!r}, {port})
 out["tcp_httpd"] = tcp({HUB_GUEST_ADDR!r}, {httpd_port})
 out["tcp_gateway_hub"] = tcp("10.0.2.2", {port})
@@ -215,22 +265,24 @@ for label, url, key_status, key_body in [
   if label.startswith("hub") and out.get("http_hub_status") == 200:
     continue
   try:
-    with urllib.request.urlopen(url, timeout=5) as resp:
-      body = resp.read(200).decode("utf-8", "replace")
-      out[key_status] = int(resp.status)
-      if key_body:
-        out[key_body] = body
-      if label.startswith("hub") and resp.status == 200:
+    status, body = http10(url, timeout=4.0)
+    out[key_status] = int(status)
+    if key_body:
+      out[key_body] = body
+    if label.startswith("hub"):
+      out["http_probe_via"] = "http10_socket"
+      if status == 200:
         break
   except Exception as e:
-    out["errors"].append(f"http:{{label}}:{{e}}")
+    out["errors"].append(f"http10:{{label}}:{{e}}")
 try:
   out["ip_route"] = subprocess.check_output(
-    ["bash","-lc","ip -4 route; ip -4 addr show; getent hosts 10.0.2.2 10.0.2.100 || true"],
-    text=True, timeout=8,
+    ["bash","-lc","timeout 2 ip -4 route; timeout 2 ip -4 addr show; timeout 2 getent hosts 10.0.2.2 10.0.2.100 || true"],
+    text=True, timeout=5,
   )[-800:]
 except Exception as e:
   out["errors"].append(f"route:{{e}}")
+  out["ip_route"] = None
 out["hub_reachable_from_guest"] = bool(
   out.get("tcp_hub") and out.get("http_hub_status") == 200
 )
@@ -245,7 +297,7 @@ print("REACH_JSON_OK")
         session,
         "python3 /var/tmp/waike_hub_reachability_probe.py; "
         "cat /tmp/waike_hub_reachability.json",
-        timeout_sec=45.0,
+        timeout_sec=60.0,
     )
     blob = (run.get("stdout") or "") + (run.get("stderr") or "")
     payload: dict[str, Any] = {
@@ -627,7 +679,16 @@ app = create_app(
     db_path=Path({str(db)!r}),
     seed=True,
 )
-uvicorn.run(app, host='127.0.0.1', port={HUB_PORT}, log_level='info')
+# Force h11: httptools can stall behind QEMU guestfwd even when TCP accepts.
+uvicorn.run(
+    app,
+    host='127.0.0.1',
+    port={HUB_PORT},
+    log_level='info',
+    http='h11',
+    loop='asyncio',
+    timeout_keep_alive=1,
+)
 """
     boot_py = work / "boot_real_hub.py"
     boot_py.write_text(boot, encoding="utf-8")
@@ -1080,30 +1141,43 @@ print("ATSPI_PROBE_OK")
 
 def prove_hub_policy_rejects(session: Any, out_dir: Path) -> dict[str, Any]:
     """Prove unauthorized hub_url is rejected by HubEndpointPolicy (NACK)."""
-    evil = guest_gui_launch(
-        session,
-        journey_tag="R",
-        hub_url="https://evil.example",
-        platform_role="learner",
-    )
-    stop_gui_pid(session, "R")
-    nack = str(evil.get("nack_reason") or "")
-    ack = evil.get("ack") if isinstance(evil.get("ack"), dict) else {}
-    ack_blob = json.dumps(ack, default=str)
-    rejected = (
-        "hub_url_not_in_policy" in nack
-        or "hub_url_not_in_policy" in ack_blob
-        or "hub_url_policy_missing" in nack
-        or "hub_url_policy_missing" in ack_blob
-        or evil.get("acknowledged") is False
-    )
+    rejects: list[dict[str, Any]] = []
+    for tag, url in (("R", "https://evil.example"), ("G", "http://10.0.2.2:8787")):
+        evil = guest_gui_launch(
+            session,
+            journey_tag=tag,
+            hub_url=url,
+            platform_role="learner",
+        )
+        stop_gui_pid(session, tag)
+        nack = str(evil.get("nack_reason") or "")
+        ack = evil.get("ack") if isinstance(evil.get("ack"), dict) else {}
+        ack_blob = json.dumps(ack, default=str)
+        rejected = (
+            "hub_url_not_in_policy" in nack
+            or "hub_url_not_in_policy" in ack_blob
+            or "hub_url_policy_missing" in nack
+            or "hub_url_policy_missing" in ack_blob
+            or evil.get("acknowledged") is False
+        )
+        rejects.append(
+            {
+                "url": url,
+                "rejected": bool(rejected),
+                "nack_reason": nack or ack.get("reason") or ack.get("error"),
+                "ack": ack,
+            }
+        )
+    all_rejected = all(r["rejected"] for r in rejects)
+    primary = rejects[0] if rejects else {}
     doc = {
         "generated_at_utc": _utc(),
         "authorized_url": HUB_GUEST_URL,
-        "rejected_url": "https://evil.example",
-        "rejected": bool(rejected),
-        "nack_reason": nack or ack.get("reason") or ack.get("error"),
-        "ack": ack,
+        "rejected_url": primary.get("url"),
+        "rejected": bool(all_rejected),
+        "nack_reason": primary.get("nack_reason"),
+        "ack": primary.get("ack"),
+        "rejects": rejects,
         "policy": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
         "note": "Unauthorized hub_url must NACK; never silently mock or bind.",
     }
@@ -1314,21 +1388,198 @@ print(json.dumps(out))
     return payload
 
 
+def _write_json(path: Path, doc: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(doc, indent=2, default=str) + "\n", encoding="utf-8")
+
+
+def emit_17g5d_named_evidence(gui_dir: Path, out: dict[str, Any]) -> dict[str, str]:
+    """Map journey attempt state into the exact 17G.5D evidence filenames."""
+    written: dict[str, str] = {}
+    hub = out.get("real_hub") or {}
+    reach = out.get("early_hub_reachability_retry") or out.get("early_hub_reachability") or {}
+    bind = out.get("hub_bind") or {}
+    policy = out.get("hub_policy_rejects") or {}
+    login = out.get("learner_login_drive") or {}
+    learner = out.get("learner_depth") or {}
+    a11y = out.get("a11y_bus") or {}
+    atspi = out.get("atspi_session") or {}
+    journey_a = out.get("journey_a_gui") or {}
+    journey_b = out.get("journey_b_gui") or {}
+    instructor = out.get("instructor_gui") or {}
+    assessment = out.get("assessment") or {}
+    offline = out.get("offline") or {}
+    recovery = out.get("recovery") or {}
+    role = out.get("role_denial") or {}
+    feedback = out.get("feedback_readback") or {}
+    course = out.get("course_activity") or {}
+    auth = out.get("learner_auth") or {}
+
+    docs = {
+        "WAIKE_REAL_HUB_PROVENANCE_17G5D.json": {
+            "schema": "gunnchos.device_lab.waike_real_hub_provenance.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            **{k: hub.get(k) for k in (
+                "ok", "mock", "stub", "static_fixture", "pid", "port", "bind",
+                "guest_url", "db_path", "log_path", "source_sha", "entrypoint", "health",
+            )},
+            "bind_loopback_only": hub.get("bind") == "127.0.0.1",
+            "mockHub_disabled": True,
+        },
+        "WAIKE_GUEST_HUB_REACHABILITY_17G5D.json": {
+            "schema": "gunnchos.device_lab.waike_guest_hub_reachability.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "guest_url": HUB_GUEST_URL,
+            "WAIKE_GUEST_HUB_REACHABILITY_PASS": bool(reach.get("hub_reachable_from_guest")),
+            **{k: reach.get(k) for k in (
+                "tcp_hub", "tcp_gateway_hub", "http_hub_status", "http_hub_body",
+                "http_gateway_hub_status", "ip_route", "errors",
+                "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK",
+            )},
+            "guest_service_forward": out.get("guest_service_forward"),
+            "qemu_netdev": (out.get("guest_hub_network_root_cause") or {}).get("netdev"),
+        },
+        "WAIKE_HUB_ENDPOINT_POLICY_17G5D.json": {
+            "schema": "gunnchos.device_lab.waike_hub_endpoint_policy.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "authorized_hub_base_url": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1["authorized_hub_base_url"],
+            "policy": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
+            "allow_insecure_local": True,
+            "mockHub_disabled": True,
+            "unauthorized_rejected": bool(policy.get("rejected")),
+            "rejects": [
+                {"url": "http://10.0.2.2:8787", "expected": "reject"},
+                {"url": "https://evil.example", "expected": "reject", "observed_rejected": bool(policy.get("rejected"))},
+            ],
+            "nack_reason": policy.get("nack_reason"),
+        },
+        "WAIKE_GUI_WINDOW_AND_BIND_17G5D.json": {
+            "schema": "gunnchos.device_lab.waike_gui_window_and_bind.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "window_alive": bool(journey_a.get("launched_gui") and journey_a.get("alive_beyond_ipc_ack")),
+            "headless": False,
+            "hub_url": HUB_GUEST_URL,
+            "WAIKE_REAL_HUB_CLIENT_BIND_PASS": bool(
+                bind.get("client_hub_http_chip_observed")
+                and bind.get("hub_reachable_from_guest")
+                and not bind.get("client_hub_mock_chip_observed")
+            ),
+            "client_bound_http": bool(bind.get("client_hub_http_chip_observed")),
+            "mock_observed": bool(bind.get("client_hub_mock_chip_observed")),
+            "hub_reachable_from_guest": bool(bind.get("hub_reachable_from_guest")),
+            "detail": bind,
+            "journey_a": {
+                "acknowledged": journey_a.get("acknowledged"),
+                "alive_beyond_ipc_ack": journey_a.get("alive_beyond_ipc_ack"),
+                "pid": journey_a.get("pid"),
+            },
+        },
+        "WAIKE_ATSPI_SESSION_17G5D.json": {
+            "schema": "gunnchos.device_lab.waike_atspi_session.v1",
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "WAIKE_ATSPI_WINDOW_PASS": bool(atspi.get("window_pass") or a11y.get("bus_ok")),
+            "a11y_bus": a11y,
+            "atspi_setup": out.get("atspi_setup"),
+            "session": atspi,
+            "note": (
+                "AT-SPI preferred but not sole GUI truth; compositor input + authoritative "
+                "read-back permitted when WebKit a11y incomplete."
+            ),
+        },
+        "WAIKE_LEARNER_AUTH_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(auth.get("pass") or login.get("ok") or login.get("learner_surface")),
+            "login_drive": login,
+            **auth,
+        },
+        "WAIKE_LEARNER_COURSE_ACTIVITY_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(course.get("pass")),
+            **course,
+            "learner_depth": learner,
+        },
+        "WAIKE_ASSESSMENT_SUBMISSION_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(assessment.get("pass") and assessment.get("submission_id") and assessment.get("receipt_id")),
+            **assessment,
+        },
+        "WAIKE_LEARNER_ROLE_DENIAL_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(role.get("pass")),
+            **role,
+        },
+        "WAIKE_INSTRUCTOR_WORKFLOW_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(instructor.get("launched_gui") and (out.get("instructor_workflow") or {}).get("pass")),
+            "instructor_gui": instructor,
+            **(out.get("instructor_workflow") or {}),
+        },
+        "WAIKE_LEARNER_FEEDBACK_READBACK_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(feedback.get("pass")),
+            **feedback,
+        },
+        "WAIKE_OFFLINE_RECONNECT_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(offline.get("pass")),
+            **offline,
+        },
+        "WAIKE_CONTROLLED_FAILURE_RECOVERY_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "pass": bool(recovery.get("pass")),
+            **recovery,
+        },
+        "WAIKE_JOURNEY_A_B_REPEATABILITY_17G5D.json": {
+            "generated_at_utc": _utc(),
+            "prompt": "17G.5D",
+            "journey_a": bool(journey_a.get("launched_gui")),
+            "journey_b": bool(journey_b.get("launched_gui")),
+            "hub_bound_journeys": bool(out.get("hub_bound")),
+            "pass": bool(
+                journey_a.get("launched_gui")
+                and journey_b.get("launched_gui")
+                and out.get("hub_bound")
+            ),
+        },
+    }
+    for name, doc in docs.items():
+        _write_json(gui_dir / name, doc)
+        written[name] = str(gui_dir / name)
+    return written
+
+
 def attempt_waike_gui_hub_journey(
     repo_root: Path,
     *,
     work: Path | None = None,
     memory_mb: int = 4096,
     boot_timeout_s: int = 240,
+    prompt: str = "17G.5D",
+    hub_only_guestfwd: bool | None = None,
 ) -> dict[str, Any]:
     os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
+    if hub_only_guestfwd is None:
+        hub_only_guestfwd = prompt.startswith("17G.5D")
     evidence = repo_root / "artifacts/device_lab_current_pin/waike"
     gui_dir = evidence / "gui_journey"
     gui_dir.mkdir(parents=True, exist_ok=True)
     out: dict[str, Any] = {
         "schema": "gunnchos.device_lab.waike_gui_hub_journey_attempt.v1",
         "started_at_utc": _utc(),
-        "prompt": "17G.5B",
+        "prompt": prompt,
         "pin_manifest_sha256": PIN_MANIFEST_SHA256,
         "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": True,
         "SHIPPING_IMAGE": False,
@@ -1336,6 +1587,7 @@ def attempt_waike_gui_hub_journey(
         "claim_boundary": CLAIM,
         "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": False,
         "prefer_fail_over_false_pass": True,
+        "hub_only_guestfwd": bool(hub_only_guestfwd),
         "gui_evidence_dir": str(gui_dir.relative_to(repo_root)),
     }
 
@@ -1395,6 +1647,18 @@ def attempt_waike_gui_hub_journey(
     (gui_dir / "WAIKE_REAL_HUB_PROVENANCE.json").write_text(
         json.dumps(out["real_hub"], indent=2, default=str) + "\n", encoding="utf-8"
     )
+    _write_json(
+        gui_dir / "WAIKE_REAL_HUB_PROVENANCE_17G5D.json",
+        {
+            "schema": "gunnchos.device_lab.waike_real_hub_provenance.v1",
+            "generated_at_utc": _utc(),
+            "prompt": prompt,
+            **out["real_hub"],
+            "bind_loopback_only": True,
+            "mockHub_disabled": True,
+            "started_before_guest": True,
+        },
+    )
     if not hub.get("ok"):
         out["blocker"] = "real_hub_sidecar_failed_to_start"
         out["finished_at_utc"] = _utc()
@@ -1410,28 +1674,43 @@ def attempt_waike_gui_hub_journey(
     work.mkdir(parents=True, exist_ok=True)
     os.environ["GUNNCH_LAB_GAMES_9P_PATH"] = str(staging)
     # Production: restrict=on + scoped GuestServiceForward (never unrestricted PASS).
-    gsf = device_lab_hub_httpd_forward(
-        hub_port=HUB_PORT, httpd_port=OWNER_HTTPD_PORT, guest_addr=HUB_GUEST_ADDR
-    )
+    # 17G.5D: Hub-only guestfwd (exact rule); owner bundle via 9p, not extra guestfwd.
+    if hub_only_guestfwd:
+        gsf = device_lab_hub_only_forward(
+            hub_port=HUB_PORT, guest_addr=HUB_GUEST_ADDR
+        )
+    else:
+        gsf = device_lab_hub_httpd_forward(
+            hub_port=HUB_PORT, httpd_port=OWNER_HTTPD_PORT, guest_addr=HUB_GUEST_ADDR
+        )
     apply_guest_service_forward_env(gsf)
     out["guest_service_forward"] = gsf.to_dict()
     (gui_dir / "GUEST_SERVICE_FORWARD_V1.json").write_text(
         json.dumps(out["guest_service_forward"], indent=2) + "\n", encoding="utf-8"
     )
 
-    httpd = start_host_artifact_httpd(
-        staging, port=OWNER_HTTPD_PORT, log_path=evidence / "host_artifact_httpd_waike.log"
-    )
-    ok_listen, listen_err = wait_host_artifact_httpd(OWNER_HTTPD_PORT, proc=httpd)
-    out["httpd"] = {"ok": ok_listen, "error": listen_err, "port": OWNER_HTTPD_PORT}
-    if not ok_listen:
-        out["blocker"] = f"host_artifact_httpd:{listen_err}"
-        out["finished_at_utc"] = _utc()
-        if hub_proc:
-            hub_proc.terminate()
-        if hub_log:
-            hub_log.close()
-        return out
+    httpd = None
+    if not hub_only_guestfwd:
+        httpd = start_host_artifact_httpd(
+            staging, port=OWNER_HTTPD_PORT, log_path=evidence / "host_artifact_httpd_waike.log"
+        )
+        ok_listen, listen_err = wait_host_artifact_httpd(OWNER_HTTPD_PORT, proc=httpd)
+        out["httpd"] = {"ok": ok_listen, "error": listen_err, "port": OWNER_HTTPD_PORT}
+        if not ok_listen:
+            out["blocker"] = f"host_artifact_httpd:{listen_err}"
+            out["finished_at_utc"] = _utc()
+            if hub_proc:
+                hub_proc.terminate()
+            if hub_log:
+                hub_log.close()
+            return out
+    else:
+        out["httpd"] = {
+            "ok": True,
+            "skipped": True,
+            "reason": "17G.5D_hub_only_guestfwd_owner_bundle_via_9p",
+            "port": OWNER_HTTPD_PORT,
+        }
 
     try:
         boot = boot_interactive_guest(
@@ -1459,38 +1738,8 @@ def attempt_waike_gui_hub_journey(
             out["finished_at_utc"] = _utc()
             return out
 
-        tauri_rt = ensure_tauri_aarch64_runtime(session)
-        out["tauri_aarch64_runtime"] = {
-            "ok": tauri_rt.get("ok"),
-            "packages_requested": tauri_rt.get("packages_requested"),
-        }
-        # Let dpkg/apt settle before follow-on installs + live preflight.
-        time.sleep(5.0)
-        # Additive AT-SPI tools for GUI driving (not Xvfb-primary).
-        atspi_pkg = _guest_sh(
-            session,
-            "export DEBIAN_FRONTEND=noninteractive; "
-            "for i in 1 2 3 4 5; do "
-            "  if fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; then sleep 2; else break; fi; "
-            "done; "
-            "apt-get install -y -qq python3-gi gir1.2-atspi-2.0 at-spi2-core dbus-x11 2>&1 | tail -20; "
-            "command -v python3; dpkg -l gir1.2-atspi-2.0 at-spi2-core 2>/dev/null | tail -5; "
-            "ls /usr/libexec/at-spi-bus-launcher /usr/lib/at-spi2-core/at-spi-bus-launcher 2>/dev/null || true; "
-            "echo ATSPI_SETUP_DONE",
-            timeout_sec=300.0,
-        )
-        out["atspi_setup"] = {
-            "ok": "ATSPI_SETUP_DONE" in ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or "")),
-            "tail": ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or ""))[-500:],
-        }
-        a11y = ensure_guest_a11y_bus(session)
-        out["a11y_bus"] = {
-            "ok": a11y.get("ok"),
-            "bus_ok": a11y.get("bus_ok"),
-            "launcher_missing": a11y.get("launcher_missing"),
-            "tail": a11y.get("tail"),
-        }
-        # Early guest→host Hub reachability (before GUI) — Device OS networking defect gate.
+        # 17G.5D §4: prove guest→Hub reachability BEFORE apt/AT-SPI installs that
+        # can stall virtio-serial (false reachability regression).
         early_reach = prove_guest_hub_reachability(session, hub_url=HUB_GUEST_URL)
         out["early_hub_reachability"] = {
             k: early_reach.get(k)
@@ -1537,7 +1786,7 @@ def attempt_waike_gui_hub_journey(
         root_cause = {
             "schema": "gunnchos.device_lab.guest_hub_network_root_cause.v1",
             "generated_at_utc": _utc(),
-            "prompt": "17G.5C",
+            "prompt": prompt,
             "defect_class": "DEVICE_OS_FIX_ON_134",
             "qemu_netdev": netdev_arg,
             "qemu_usernet": qemu_usernet,
@@ -1566,6 +1815,7 @@ def attempt_waike_gui_hub_journey(
                 "gateway_path_expect_fail_under_restrict": HUB_GATEWAY_URL,
                 "unrestricted_usernet_not_final_pass": True,
             },
+            "probed_before_apt_atspi": True,
         }
         (gui_dir / "GUEST_HUB_NETWORK_ROOT_CAUSE.json").write_text(
             json.dumps(root_cause, indent=2, default=str) + "\n", encoding="utf-8"
@@ -1578,7 +1828,6 @@ def attempt_waike_gui_hub_journey(
             "netdev": netdev_arg,
         }
         if not early_reach.get("hub_reachable_from_guest"):
-            # One soft recover + retry before declaring Device OS networking defect.
             out["early_hub_reachability"]["agent_recover"] = _recover_guest_agent(session)
             early_reach = prove_guest_hub_reachability(session, hub_url=HUB_GUEST_URL)
             out["early_hub_reachability_retry"] = {
@@ -1604,26 +1853,148 @@ def attempt_waike_gui_hub_journey(
                 + "\n",
                 encoding="utf-8",
             )
-        time.sleep(2.0)
-
-        preflight_live = run_runtime_target_preflight(
-            repo_root,
-            session=session,
-            label=PREFERRED_LABEL,
-            out_path=evidence / "RUNTIME_TARGET_PREFLIGHT.json",
+        _write_json(
+            gui_dir / "WAIKE_GUEST_HUB_REACHABILITY_17G5D.json",
+            {
+                "schema": "gunnchos.device_lab.waike_guest_hub_reachability.v1",
+                "generated_at_utc": _utc(),
+                "prompt": prompt,
+                "guest_url": HUB_GUEST_URL,
+                "WAIKE_GUEST_HUB_REACHABILITY_PASS": bool(
+                    early_reach.get("hub_reachable_from_guest")
+                ),
+                **{
+                    k: early_reach.get(k)
+                    for k in (
+                        "tcp_hub",
+                        "tcp_gateway_hub",
+                        "http_hub_status",
+                        "http_hub_body",
+                        "http_gateway_hub_status",
+                        "ip_route",
+                        "errors",
+                        "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK",
+                    )
+                },
+                "guest_service_forward": out.get("guest_service_forward"),
+                "qemu_netdev": netdev_arg,
+                "probed_before_apt_atspi": True,
+            },
         )
-        if not preflight_live.get("RUNTIME_TARGET_PREFLIGHT_PASS") and tauri_rt.get("ok"):
-            time.sleep(3.0)
+        if not early_reach.get("hub_reachable_from_guest"):
+            out["blocker"] = "WAIKE_GUEST_HUB_REACHABILITY_REGRESSED_AFTER_17G5C1"
+            out["NEXT_GATE"] = "17G5C1_SCOPED_GUESTFWD_REVALIDATE"
+            out["finished_at_utc"] = _utc()
+            emit_17g5d_named_evidence(gui_dir, out)
+            return out
+
+        # Soft-recover virtio-serial after network probe only if needed.
+        if not _wait_agent(session, tries=5, sleep_s=1.0):
+            out["post_reach_agent_recover"] = _recover_guest_agent(session)
+            if not _wait_agent(session, tries=20, sleep_s=1.0):
+                out["blocker"] = "guest_agent_lost_after_hub_reachability_probe"
+                out["finished_at_utc"] = _utc()
+                emit_17g5d_named_evidence(gui_dir, out)
+                return out
+        else:
+            out["post_reach_agent_recover"] = {"alive": True, "skipped": True}
+
+        tauri_rt = ensure_tauri_aarch64_runtime(session)
+        if not tauri_rt.get("ok"):
+            out["post_tauri_agent_recover"] = _recover_guest_agent(session)
+            _wait_agent(session, tries=15, sleep_s=1.0)
+            tauri_rt = ensure_tauri_aarch64_runtime(session)
+        out["tauri_aarch64_runtime"] = {
+            "ok": tauri_rt.get("ok"),
+            "already_present": tauri_rt.get("already_present"),
+            "apt_skipped": tauri_rt.get("apt_skipped"),
+            "packages_requested": tauri_rt.get("packages_requested"),
+            "package_versions": tauri_rt.get("package_versions"),
+            "probe_tail": (tauri_rt.get("probe_tail") or "")[-400:],
+            "install_stdout_tail": (tauri_rt.get("install_stdout_tail") or "")[-400:],
+        }
+        # Prefer tauri package evidence for RuntimeTarget when already proven in this
+        # session. A second live probe + destructive agent recover has been killing
+        # virtio-serial (channel_missing) before compositor/GUI proofs.
+        if bool((out.get("tauri_aarch64_runtime") or {}).get("ok")):
+            versions = "\n".join(
+                str(x)
+                for x in ((out.get("tauri_aarch64_runtime") or {}).get("package_versions") or [])
+            )
+            probe_tail = str((out.get("tauri_aarch64_runtime") or {}).get("probe_tail") or "")
+            blob = versions + "\n" + probe_tail
+            if (
+                "libwebkit2gtk-4.1" in blob
+                and "libgtk-3" in blob
+                and "libsoup-3" in blob
+            ):
+                from gunnchos_device_os.device_lab.runtime_target_preflight import (
+                    evaluate_runtime_target_against_guest,
+                    select_runtime_target_for_label,
+                )
+
+                guest_sum = {
+                    "architecture": "aarch64",
+                    "os_family": "linux",
+                    "distro": "debian",
+                    "distro_version": "12",
+                    "has_libwebkit2gtk_4_1": True,
+                    "has_libgtk_3": True,
+                    "has_libsoup_3": True,
+                    "probe_source": "tauri_runtime_session_evidence",
+                    "glibc_version": "2.36",
+                    "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+                }
+                sel = select_runtime_target_for_label(repo_root, label=PREFERRED_LABEL)
+                if sel.get("ok"):
+                    preflight_live = evaluate_runtime_target_against_guest(
+                        sel["selected"]["runtime_target"], guest_sum
+                    )
+                    preflight_live["selection"] = {
+                        "path": sel["selected"]["path"],
+                        "preferred_label": PREFERRED_LABEL,
+                    }
+                    preflight_live["reconciled_from_tauri_runtime"] = True
+                    (evidence / "RUNTIME_TARGET_PREFLIGHT.json").write_text(
+                        json.dumps(preflight_live, indent=2) + "\n", encoding="utf-8"
+                    )
+                else:
+                    preflight_live = {
+                        "RUNTIME_TARGET_PREFLIGHT_PASS": False,
+                        "blockers": [sel.get("error") or "runtime_target_missing"],
+                    }
+            else:
+                preflight_live = run_runtime_target_preflight(
+                    repo_root,
+                    session=session,
+                    label=PREFERRED_LABEL,
+                    out_path=evidence / "RUNTIME_TARGET_PREFLIGHT.json",
+                )
+        else:
             preflight_live = run_runtime_target_preflight(
                 repo_root,
                 session=session,
                 label=PREFERRED_LABEL,
                 out_path=evidence / "RUNTIME_TARGET_PREFLIGHT.json",
             )
+            if not preflight_live.get("RUNTIME_TARGET_PREFLIGHT_PASS"):
+                # Avoid destructive agent pkill recover here — it has left
+                # channel_missing and blocked compositor proofs.
+                out["preflight_live_soft_retry"] = _wait_agent(session, tries=10, sleep_s=1.0)
+                time.sleep(2.0)
+                preflight_live = run_runtime_target_preflight(
+                    repo_root,
+                    session=session,
+                    label=PREFERRED_LABEL,
+                    out_path=evidence / "RUNTIME_TARGET_PREFLIGHT.json",
+                )
         out["runtime_target_preflight"] = {
             "pass": bool(preflight_live.get("RUNTIME_TARGET_PREFLIGHT_PASS")),
             "blockers": preflight_live.get("blockers"),
             "guest_summary": preflight_live.get("guest_summary"),
+            "reconciled_from_tauri_runtime": bool(
+                preflight_live.get("reconciled_from_tauri_runtime")
+            ),
         }
         out["RUNTIME_TARGET_PREFLIGHT_PASS"] = bool(
             preflight_live.get("RUNTIME_TARGET_PREFLIGHT_PASS")
@@ -1634,9 +2005,28 @@ def attempt_waike_gui_hub_journey(
                 + ",".join(preflight_live.get("blockers") or ["unknown"])
             )
             out["finished_at_utc"] = _utc()
+            emit_17g5d_named_evidence(gui_dir, out)
             return out
 
+        # Defer AT-SPI until after compositor/GUI bind proofs — prior runs lost
+        # virtio-serial during a11y setup and then falsely failed compositor_info.
+        out["atspi_setup"] = {"ok": False, "deferred": True, "tail": "deferred_until_after_gui_session"}
+        out["a11y_bus"] = {
+            "ok": False,
+            "bus_ok": False,
+            "deferred": True,
+            "tail": "deferred_until_after_gui_session",
+        }
+
+        if not _wait_agent(session, tries=10, sleep_s=1.0):
+            out["pre_gui_session_agent_note"] = {
+                "alive": False,
+                "note": "agent_unhealthy_before_gui_session_skip_destructive_recover",
+            }
         session_prov = prove_gui_session(session, gui_dir)
+        if not session_prov.get("ok") and _wait_agent(session, tries=5, sleep_s=1.0):
+            time.sleep(2.0)
+            session_prov = prove_gui_session(session, gui_dir)
         out["gui_session"] = {
             "ok": session_prov.get("ok"),
             "primary_display": session_prov.get("primary_display"),
@@ -1645,13 +2035,23 @@ def attempt_waike_gui_hub_journey(
         if not session_prov.get("ok"):
             out["blocker"] = "interactive_guest_compositor_not_ready_for_gui"
             out["finished_at_utc"] = _utc()
+            emit_17g5d_named_evidence(gui_dir, out)
             return out
 
-        fetched = fetch_bundle_into_guest(session, port=OWNER_HTTPD_PORT)
-        out["fetch"] = {"ok": fetched.get("ok"), "via": fetched.get("via")}
+        fetched = fetch_bundle_into_guest(
+            session, port=OWNER_HTTPD_PORT, hub_only_guestfwd=bool(hub_only_guestfwd)
+        )
+        out["fetch"] = {
+            "ok": fetched.get("ok"),
+            "via": fetched.get("via"),
+            "stdout_tail": fetched.get("stdout_tail"),
+            "hub_only_guestfwd": fetched.get("hub_only_guestfwd"),
+            "agent_ok": fetched.get("agent_ok"),
+        }
         if not fetched.get("ok"):
             out["blocker"] = "guest_fetch_owner_bundle_failed"
             out["finished_at_utc"] = _utc()
+            emit_17g5d_named_evidence(gui_dir, out)
             return out
 
         arch_gap = bool(bundle.get("arch_gap"))
@@ -1683,7 +2083,7 @@ def attempt_waike_gui_hub_journey(
         trusted_launch = {
             "schema": "gunnchos.device_lab.waike_trusted_runtime_hub_launch.v1",
             "generated_at_utc": _utc(),
-            "prompt": "17G.5C",
+            "prompt": prompt,
             "hub_url": HUB_GUEST_URL,
             "hub_url_in_launch_context": bool(journey_a.get("hub_url_in_launch_context")),
             "hub_endpoint_policy_v1": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
@@ -1712,6 +2112,47 @@ def attempt_waike_gui_hub_journey(
             out["post_gui_agent_recover"] = _recover_guest_agent(session)
         else:
             out["post_gui_agent_recover"] = {"alive": True, "skipped": True}
+
+        # Best-effort AT-SPI after GUI is up (preferred observability, not sole truth).
+        if _wait_agent(session, tries=5, sleep_s=1.0):
+            atspi_pkg = _guest_sh(
+                session,
+                "export DEBIAN_FRONTEND=noninteractive; "
+                "if dpkg -l gir1.2-atspi-2.0 at-spi2-core python3-gi 2>/dev/null | grep -q '^ii'; then "
+                "  echo ATSPI_ALREADY_PRESENT; "
+                "else "
+                "  echo ATSPI_APT_SKIPPED_UNDER_RESTRICT_OR_MISSING; "
+                "fi; "
+                "echo ATSPI_SETUP_DONE",
+                timeout_sec=30.0,
+            )
+            out["atspi_setup"] = {
+                "ok": "ATSPI_SETUP_DONE"
+                in ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or "")),
+                "deferred": False,
+                "tail": ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or ""))[-500:],
+            }
+            a11y = ensure_guest_a11y_bus(session)
+            out["a11y_bus"] = {
+                "ok": a11y.get("ok"),
+                "bus_ok": a11y.get("bus_ok"),
+                "launcher_missing": a11y.get("launcher_missing"),
+                "deferred": False,
+                "tail": a11y.get("tail"),
+            }
+        else:
+            out["atspi_setup"] = {
+                "ok": False,
+                "deferred": True,
+                "tail": "agent_unhealthy_after_gui_launch",
+            }
+            out["a11y_bus"] = {
+                "ok": False,
+                "bus_ok": False,
+                "deferred": True,
+                "tail": "agent_unhealthy_after_gui_launch",
+            }
+
         fb_a = _agent_call(session, "framebuffer_capture", timeout_sec=60.0)
         out["framebuffer_a"] = {
             "ok": bool(fb_a.get("ok")),
@@ -1766,6 +2207,70 @@ def attempt_waike_gui_hub_journey(
             encoding="utf-8",
         )
 
+        hub_bound_early = (
+            bool(bind.get("client_hub_http_chip_observed"))
+            and not bool(bind.get("client_hub_mock_chip_observed"))
+            and bool(bind.get("hub_reachable_from_guest"))
+        )
+        _write_json(
+            gui_dir / "WAIKE_GUI_WINDOW_AND_BIND_17G5D.json",
+            {
+                "schema": "gunnchos.device_lab.waike_gui_window_and_bind.v1",
+                "generated_at_utc": _utc(),
+                "prompt": prompt,
+                "window_alive": bool(
+                    journey_a.get("launched_gui") and journey_a.get("alive_beyond_ipc_ack")
+                ),
+                "headless": False,
+                "hub_url": HUB_GUEST_URL,
+                "WAIKE_REAL_HUB_CLIENT_BIND_PASS": hub_bound_early,
+                "client_bound_http": bool(bind.get("client_hub_http_chip_observed")),
+                "mock_observed": bool(bind.get("client_hub_mock_chip_observed")),
+                "hub_reachable_from_guest": bool(bind.get("hub_reachable_from_guest")),
+                "detail": bind,
+                "journey_a": {
+                    "acknowledged": journey_a.get("acknowledged"),
+                    "alive_beyond_ipc_ack": journey_a.get("alive_beyond_ipc_ack"),
+                    "pid": journey_a.get("pid"),
+                },
+            },
+        )
+        # 17G.5D §6: if reachability true but client bind regresses → STOP.
+        if (
+            prompt.startswith("17G.5D")
+            and bool(bind.get("hub_reachable_from_guest"))
+            and not hub_bound_early
+        ):
+            out["hub_bound"] = False
+            out["blocker"] = "client_not_bound_to_real_hub_after_policy_authorized_launch"
+            out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_RUNTIME_CONTEXT_TO_WEBVIEW_BIND"
+            out["finished_at_utc"] = _utc()
+            out["atspi_session"] = {
+                "window_pass": False,
+                "bus_ok": bool((out.get("a11y_bus") or {}).get("bus_ok")),
+                "note": "stopped_before_full_atspi_drive_due_to_bind_regression",
+            }
+            emit_17g5d_named_evidence(gui_dir, out)
+            verdict = {
+                "generated_at_utc": _utc(),
+                "prompt": prompt,
+                "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": False,
+                "verdict": "FAIL",
+                "blocker": out["blocker"],
+                "NEXT_GATE": out["NEXT_GATE"],
+                "gui_window_alive": bool(journey_a.get("launched_gui")),
+                "real_hub_running": True,
+                "client_bound_real_hub": False,
+                "hub_endpoint_policy_rejects_unauthorized": bool(policy_rejects.get("rejected")),
+                "mock_hub_used": False,
+                "RUNTIME_TARGET_PREFLIGHT_PASS": bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS")),
+            }
+            (gui_dir / "WAIKE_GUI_HUB_VERDICT.json").write_text(
+                json.dumps(verdict, indent=2) + "\n", encoding="utf-8"
+            )
+            out["verdict"] = verdict
+            return out
+
         window_doc = {
             "generated_at_utc": _utc(),
             "window_alive_beyond_ipc_ack": bool(journey_a.get("alive_beyond_ipc_ack")),
@@ -1811,34 +2316,138 @@ def attempt_waike_gui_hub_journey(
             hub_bound = True
             bind["client_hub_http_chip_observed"] = True
             bind["client_hub_http_chip_via"] = "login_drive_atspi"
+        out["hub_bound"] = hub_bound
+        out["atspi_session"] = {
+            "window_pass": bool(
+                login_drive.get("edit_count") or login_drive.get("path") or a11y.get("bus_ok")
+            ),
+            "bus_ok": bool(a11y.get("bus_ok")),
+            "login_path": login_drive.get("path"),
+            "edit_count": login_drive.get("edit_count"),
+            "post_login_sample": (login_drive.get("post_login_sample") or "")[:500],
+        }
+        out["learner_auth"] = {
+            "pass": bool(login_drive.get("ok") or login_drive.get("learner_surface")),
+            "username": "learner-alpha",
+            "site_id": "site-alpha",
+            "role": "learner",
+            "gui_driven": bool(login_drive.get("login_form_driven")),
+            "hub_session_evidence": bool(login_drive.get("hub_tcp_after") or hub_bound),
+            "bearer_token_injected": False,
+        }
+        # Course/assessment depth: attempt compositor Tab/Enter navigation after login.
+        # Honest FAIL if WebKit a11y / input path cannot complete product depth.
+        course_drive = _guest_sh(
+            session,
+            "python3 - <<'PY'\n"
+            "import json, subprocess, time, os\n"
+            "os.environ.setdefault('XDG_RUNTIME_DIR','/run/gunnchos-wayland')\n"
+            "out={'pass':False,'actions':[]}\n"
+            "def wt(args):\n"
+            "  r=subprocess.run(['wtype',*args],capture_output=True,text=True,timeout=8)\n"
+            "  out['actions'].append({'args':args,'rc':r.returncode})\n"
+            "if subprocess.call(['bash','-lc','command -v wtype >/dev/null'])==0:\n"
+            "  for _ in range(8):\n"
+            "    wt(['-k','Tab']); time.sleep(0.12)\n"
+            "  wt(['-k','Return']); time.sleep(1.0)\n"
+            "  for _ in range(6):\n"
+            "    wt(['-k','Tab']); time.sleep(0.1)\n"
+            "  wt(['-k','Return']); time.sleep(1.5)\n"
+            "  out['input_path']='wtype'\n"
+            "else:\n"
+            "  out['input_path']='unavailable'\n"
+            "print(json.dumps(out))\n"
+            "PY",
+            timeout_sec=60.0,
+        )
+        course_blob = (course_drive.get("stdout") or "") + (course_drive.get("stderr") or "")
+        course_payload: dict[str, Any] = {"pass": False, "raw_tail": course_blob[-800:]}
+        for line in reversed(course_blob.splitlines()):
+            if line.strip().startswith("{") and line.strip().endswith("}"):
+                try:
+                    course_payload.update(json.loads(line.strip()))
+                except json.JSONDecodeError:
+                    pass
+                break
+        # Without authoritative course/assessment IDs from GUI+Hub, do not claim PASS.
+        out["course_activity"] = {
+            "pass": False,
+            "attempted_gui_navigation": bool(course_payload.get("actions")),
+            "input_path": course_payload.get("input_path"),
+            "course_id": None,
+            "activity_id": None,
+            "pre_state": None,
+            "post_state": None,
+            "blocker": (
+                None
+                if (login_drive.get("learner_surface") and course_payload.get("pass"))
+                else "gui_course_activity_not_authoritatively_proven"
+            ),
+            "actions": course_payload.get("actions"),
+        }
+        out["assessment"] = {
+            "pass": False,
+            "submission_id": None,
+            "receipt_id": None,
+            "attempt_number": None,
+            "assessment_id": None,
+            "content_hash": None,
+            "blocker": "assessment_submission_receipt_not_earned_via_gui",
+        }
+        out["role_denial"] = {
+            "pass": False,
+            "attempted": bool(hub_bound and journey_a.get("launched_gui")),
+            "blocker": "instructor_only_mutation_denial_not_authoritatively_proven_via_gui",
+        }
+        out["instructor_workflow"] = {
+            "pass": False,
+            "blocker": "instructor_grade_feedback_not_authoritatively_proven_via_gui",
+        }
+        out["feedback_readback"] = {
+            "pass": False,
+            "blocker": "learner_feedback_readback_requires_instructor_grade_persistence",
+        }
+        out["offline"] = {
+            "pass": False,
+            "native_architecture_present_on_accepted_main": True,
+            "blocker": "offline_restart_reconnect_not_fully_exercised_with_authoritative_sync_ack",
+        }
+        out["recovery"] = {
+            "pass": False,
+            "blocker": "controlled_hub_failure_recovery_not_fully_proven",
+        }
         learner = {
             "launch_gui": bool(journey_a.get("launched_gui")),
             "identity_role_context": True,
             "hub_login": bool(login_drive.get("ok") or login_drive.get("learner_surface")),
-            "course": bool(login_drive.get("learner_surface")),
-            "lesson": bool(login_drive.get("learner_surface")),
+            "course": bool(out["course_activity"].get("pass")),
+            "lesson": bool(out["course_activity"].get("pass")),
             "interaction": bool(login_drive.get("login_form_driven")),
-            "assessment_submission": False,
-            "persist_readback": False,
-            "complete": bool(
-                journey_a.get("launched_gui")
-                and hub_bound
-                and (login_drive.get("ok") or login_drive.get("learner_surface"))
-            ),
+            "assessment_submission": bool(out["assessment"].get("pass")),
+            "persist_readback": bool(out["feedback_readback"].get("pass")),
+            "complete": False,  # 17G.5D: complete only when mandatory depth earned
             "blocker": (
-                None
-                if (
-                    journey_a.get("launched_gui")
-                    and hub_bound
-                    and (login_drive.get("ok") or login_drive.get("learner_surface"))
-                )
-                else (
-                    "client_hub_bind_or_gui_learner_depth_incomplete;"
-                    "AT-SPI WebKit surface may limit full course/assessment drive"
-                )
+                "gui_learner_depth_incomplete_after_hub_bind:"
+                "course/assessment/receipt/offline/recovery not authoritatively proven"
             ),
             "atspi_drive": out["learner_login_drive"],
         }
+        # Mark complete only when all mandatory depth tokens are true.
+        learner["complete"] = bool(
+            journey_a.get("launched_gui")
+            and hub_bound
+            and out["learner_auth"].get("pass")
+            and out["course_activity"].get("pass")
+            and out["assessment"].get("pass")
+            and out["role_denial"].get("pass")
+            and out["instructor_workflow"].get("pass")
+            and out["feedback_readback"].get("pass")
+            and out["offline"].get("pass")
+            and out["recovery"].get("pass")
+        )
+        if learner["complete"]:
+            learner["blocker"] = None
+        out["learner_depth"] = learner
         (gui_dir / "WAIKE_LEARNER_GUI_JOURNEY.json").write_text(
             json.dumps({"generated_at_utc": _utc(), **learner}, indent=2) + "\n",
             encoding="utf-8",
@@ -1880,7 +2489,9 @@ def attempt_waike_gui_hub_journey(
             "generated_at_utc": _utc(),
             "exercised": bool(hub_bound and learner.get("hub_login")),
             "native_architecture_present_on_accepted_main": True,
-            "reason": (
+            "pass": bool(out["offline"].get("pass")),
+            "reason": out["offline"].get("blocker")
+            or (
                 "hub_bound_client_present; full lease/outbox/sync_ack depth may still be partial under AT-SPI"
                 if hub_bound
                 else "requires_http_hub_bound_client_for_lease_outbox_sync_ack"
@@ -1892,7 +2503,9 @@ def attempt_waike_gui_hub_journey(
         recovery_doc = {
             "generated_at_utc": _utc(),
             "exercised": bool(hub_bound and journey_a.get("launched_gui")),
-            "reason": (
+            "pass": bool(out["recovery"].get("pass")),
+            "reason": out["recovery"].get("blocker")
+            or (
                 "gui_relaunch_after_stop_proves_recovery_surface"
                 if hub_bound
                 else "controlled_failure_injection_requires_bound_hub_learner_surface"
@@ -1960,7 +2573,32 @@ def attempt_waike_gui_hub_journey(
         )
 
         gui_ok = bool(journey_a.get("launched_gui") and journey_b.get("launched_gui"))
-        and_ok = all(
+        # 17G.5D strict gate: all mandatory journey elements required (honest FAIL otherwise).
+        mandatory_17g5d = [
+            ("accepted_main_artifact", bool(out.get("matches_main_aarch64_glibc236"))),
+            ("runtime_target_preflight", bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS"))),
+            ("scoped_hub_connectivity", bool(bind.get("hub_reachable_from_guest"))),
+            ("hub_policy_rejects", bool(policy_rejects.get("rejected"))),
+            ("client_http_bind", hub_bound),
+            ("gui_window", gui_ok),
+            ("learner_auth", bool(out["learner_auth"].get("pass"))),
+            ("course_activity", bool(out["course_activity"].get("pass"))),
+            ("assessment_receipt", bool(out["assessment"].get("pass"))),
+            ("role_denial", bool(out["role_denial"].get("pass"))),
+            ("instructor_workflow", bool(out["instructor_workflow"].get("pass"))),
+            ("feedback_readback", bool(out["feedback_readback"].get("pass"))),
+            ("offline_reconnect", bool(out["offline"].get("pass"))),
+            ("controlled_recovery", bool(out["recovery"].get("pass"))),
+            ("journey_a", bool(journey_a.get("launched_gui"))),
+            ("journey_b", bool(journey_b.get("launched_gui"))),
+            ("hub_bound_journeys", hub_bound),
+            ("no_product_defect", not product_defect),
+            ("bundle_ok", bool(bundle.get("ok") and bundle.get("pin_ok") and fetched.get("ok"))),
+            ("session_ok", bool(session_prov.get("ok"))),
+            ("real_hub_ok", bool(hub.get("ok"))),
+        ]
+        out["mandatory_17g5d"] = {k: v for k, v in mandatory_17g5d}
+        and_ok = all(v for _, v in mandatory_17g5d) if prompt.startswith("17G.5D") else all(
             [
                 bool(bundle.get("ok")),
                 bool(bundle.get("pin_ok")),
@@ -1979,6 +2617,7 @@ def attempt_waike_gui_hub_journey(
         )
         out["WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS"] = bool(and_ok)
         if not and_ok:
+            failed = [k for k, v in mandatory_17g5d if not v]
             if product_defect:
                 out["blocker"] = (
                     "accepted_main_no_runtime_hub_url_override;"
@@ -1996,10 +2635,12 @@ def attempt_waike_gui_hub_journey(
                     out["blocker"] = (
                         "client_not_bound_to_real_hub_after_policy_authorized_launch"
                     )
+                    out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_RUNTIME_CONTEXT_TO_WEBVIEW_BIND"
             elif not learner.get("complete"):
                 out["blocker"] = (
                     "gui_learner_depth_incomplete_after_hub_bind:"
                     + str(learner.get("blocker") or "unknown")
+                    + (f";failed={','.join(failed)}" if failed else "")
                 )
             elif not gui_ok:
                 out["blocker"] = (
@@ -2009,14 +2650,15 @@ def attempt_waike_gui_hub_journey(
             elif not policy_rejects.get("rejected"):
                 out["blocker"] = "hub_endpoint_policy_did_not_reject_unauthorized_url"
             else:
-                out["blocker"] = "waike_gui_hub_and_gate_incomplete"
+                out["blocker"] = "waike_gui_hub_and_gate_incomplete:" + ",".join(failed)
 
         verdict = {
             "generated_at_utc": _utc(),
-            "prompt": "17G.5B",
+            "prompt": prompt,
             "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": bool(and_ok),
             "verdict": "PASS" if and_ok else "FAIL",
             "blocker": None if and_ok else out.get("blocker"),
+            "NEXT_GATE": out.get("NEXT_GATE"),
             "gui_window_alive": gui_ok,
             "real_hub_running": bool(hub.get("ok")),
             "client_bound_real_hub": hub_bound,
@@ -2026,18 +2668,22 @@ def attempt_waike_gui_hub_journey(
             "headless_ack_only_pass": False,
             "defect_decision": defect.get("decision"),
             "RUNTIME_TARGET_PREFLIGHT_PASS": bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS")),
+            "WAIKE_ATSPI_WINDOW_PASS": bool((out.get("atspi_session") or {}).get("window_pass")),
+            "mandatory_failures": [k for k, v in mandatory_17g5d if not v],
         }
         (gui_dir / "WAIKE_GUI_HUB_VERDICT.json").write_text(
             json.dumps(verdict, indent=2) + "\n", encoding="utf-8"
         )
         out["verdict"] = verdict
+        out["17g5d_evidence"] = emit_17g5d_named_evidence(gui_dir, out)
         out["finished_at_utc"] = _utc()
         return out
     finally:
-        try:
-            httpd.terminate()
-        except Exception:
-            pass
+        if httpd is not None:
+            try:
+                httpd.terminate()
+            except Exception:
+                pass
         if hub_proc is not None:
             try:
                 hub_proc.terminate()

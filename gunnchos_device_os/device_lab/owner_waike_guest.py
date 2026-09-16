@@ -135,7 +135,13 @@ def ensure_qemu_user_x86_64(session: Any) -> dict[str, Any]:
 
 
 def ensure_tauri_aarch64_runtime(session: Any) -> dict[str, Any]:
-    """Grow guest with legitimate WebKit/GTK/Tauri aarch64 runtime deps (additive)."""
+    """Grow guest with legitimate WebKit/GTK/Tauri aarch64 runtime deps (additive).
+
+    Under Device Lab ``restrict=on`` the guest cannot reach Debian mirrors.
+    Prefer already-provisioned packages on the Interactive Guest overlay; only
+    attempt ``apt-get`` when missing, with a hard fail-fast (never hang the
+    virtio-serial guest agent on a blocked network).
+    """
     packages = [
         "libwebkit2gtk-4.1-0",
         "libgtk-3-0",
@@ -152,28 +158,64 @@ def ensure_tauri_aarch64_runtime(session: Any) -> dict[str, Any]:
         session,
         "set -e; "
         "uname -m; "
-        "dpkg -l libwebkit2gtk-4.1-0 libgtk-3-0 2>/dev/null | awk '/^ii/{print $2,$3}' || true; "
-        "ldconfig -p 2>/dev/null | grep -E 'libwebkit2gtk-4.1|libgtk-3' | head -5 || true; "
+        "dpkg -l libwebkit2gtk-4.1-0 libgtk-3-0 libsoup-3.0-0 "
+        "  libjavascriptcoregtk-4.1-0 2>/dev/null | awk '/^ii/{print $2,$3}' || true; "
+        "ldconfig -p 2>/dev/null | grep -E 'libwebkit2gtk-4.1|libgtk-3|libsoup-3' | head -8 || true; "
         "echo PROBE_DONE",
         timeout_sec=30.0,
     )
     pout = (probe.get("stdout") or "") + (probe.get("stderr") or "")
-    already = "libwebkit2gtk-4.1-0" in pout and "ii" in pout
+    have_webkit = "libwebkit2gtk-4.1-0" in pout and (
+        "ii" in pout or "libwebkit2gtk-4.1.so" in pout
+    )
+    have_gtk = "libgtk-3-0" in pout or "libgtk-3.so" in pout
+    have_soup = "libsoup-3.0-0" in pout or "libsoup-3" in pout
+    already = bool(have_webkit and have_gtk and have_soup)
+    if already:
+        versions = [
+            line.strip()
+            for line in pout.splitlines()
+            if line.strip().startswith("libwebkit2gtk")
+            or line.strip().startswith("libgtk-3")
+            or line.strip().startswith("libsoup")
+            or line.strip().startswith("libjavascriptcoregtk")
+        ]
+        return {
+            "ok": True,
+            "already_present": True,
+            "packages_requested": packages,
+            "package_versions": versions,
+            "install_stdout_tail": "skipped_apt_under_restrict_on_packages_present",
+            "returncode": probe.get("returncode"),
+            "probe_tail": pout[-500:],
+            "additive": True,
+            "no_feature_strip": True,
+            "no_static_html_bypass": True,
+            "apt_skipped": True,
+        }
+
+    # Fail-fast apt: restrict=on blocks mirrors; do not hang virtio-serial.
     pkg_line = " ".join(packages)
     install = _guest_sh(
         session,
         "export DEBIAN_FRONTEND=noninteractive; "
-        "apt-get update -qq 2>&1 | tail -5; "
-        f"apt-get install -y -qq {pkg_line} 2>&1 | tail -40; "
+        "export APT_CONFIG=/dev/null; "
+        "timeout 45 apt-get update -o Acquire::Retries=0 -o "
+        "  Acquire::http::Timeout=5 -o Acquire::https::Timeout=5 -qq 2>&1 | tail -8; "
+        f"timeout 120 apt-get install -y -qq -o Acquire::Retries=0 "
+        f"  -o Acquire::http::Timeout=5 -o Acquire::https::Timeout=5 {pkg_line} "
+        "  2>&1 | tail -40; "
         "dpkg -l libwebkit2gtk-4.1-0 libgtk-3-0 libsoup-3.0-0 "
         "  libjavascriptcoregtk-4.1-0 2>/dev/null | awk '/^ii/{print $2,$3}'; "
         "ldconfig -p 2>/dev/null | grep -E 'libwebkit2gtk-4.1.so|libgtk-3.so' | head -8 || true; "
         "command -v Xvfb || true; "
         "echo TAURI_RUNTIME_SETUP_DONE",
-        timeout_sec=900.0,
+        timeout_sec=200.0,
     )
     iout = (install.get("stdout") or "") + (install.get("stderr") or "")
-    ok = "TAURI_RUNTIME_SETUP_DONE" in iout and "libwebkit2gtk-4.1-0" in iout
+    ok = "TAURI_RUNTIME_SETUP_DONE" in iout and "libwebkit2gtk-4.1-0" in iout and (
+        "ii" in iout or "libwebkit2gtk-4.1.so" in iout
+    )
     versions = [
         line.strip()
         for line in iout.splitlines()
@@ -184,7 +226,7 @@ def ensure_tauri_aarch64_runtime(session: Any) -> dict[str, Any]:
     ]
     return {
         "ok": ok,
-        "already_present": already,
+        "already_present": False,
         "packages_requested": packages,
         "package_versions": versions,
         "install_stdout_tail": iout[-2000:],
@@ -193,25 +235,60 @@ def ensure_tauri_aarch64_runtime(session: Any) -> dict[str, Any]:
         "additive": True,
         "no_feature_strip": True,
         "no_static_html_bypass": True,
+        "apt_skipped": False,
+        "restrict_on_note": (
+            "apt may fail under restrict=on without offline package cache; "
+            "prefer overlay-provisioned WebKit/GTK deps"
+        ),
     }
 
 
-def fetch_bundle_into_guest(session: Any, *, port: int = 8767) -> dict[str, Any]:
+def fetch_bundle_into_guest(
+    session: Any, *, port: int = 8767, hub_only_guestfwd: bool = False
+) -> dict[str, Any]:
     remote_root = "/var/lib/gunnchos/waike-learning-os"
     marker = f"WAIKE_FETCH_{int(time.time())}"
-    # Prefer 9p share (same path four-game uses) then HTTP fallback.
+    # Prefer 9p share (same path four-game uses). HTTP fallback only when httpd
+    # guestfwd is present; 17G.5D hub-only must stay on 9p.
+    http_branch = (
+        f"  echo HUB_ONLY_NO_HTTPD_$MARKER; exit 41; "
+        if hub_only_guestfwd
+        else (
+            f"  echo VIA_HTTP_$MARKER; "
+            f"  command -v curl; "
+            f"  curl -fsSL --connect-timeout 5 --max-time 60 "
+            f"    http://10.0.2.100:{port}/OWNER_WAIKE_BUNDLE_MANIFEST.json "
+            f"    -o {remote_root}.partial/MANIFEST.json; "
+            f"  curl -fsSL --connect-timeout 5 --max-time 180 "
+            f"    http://10.0.2.100:{port}/bin/waike-learning-os "
+            f"    -o {remote_root}.partial/bin/waike-learning-os; "
+            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+            f"    http://10.0.2.100:{port}/bin/VERSION -o {remote_root}.partial/bin/VERSION; "
+            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+            f"    http://10.0.2.100:{port}/bin/INSTALLED.json "
+            f"    -o {remote_root}.partial/bin/INSTALLED.json; "
+            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+            f"    http://10.0.2.100:{port}/bin/waike-learning-os.qemu-x86_64-wrapper.sh "
+            f"    -o {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
+            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
+            f"    http://10.0.2.100:{port}/WAIKE_RUNTIME_PROVENANCE.json "
+            f"    -o {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
+        )
+    )
     cmd = (
-        f"set -euo pipefail; "
+        f"set -uo pipefail; "
         f"MARKER={marker}; echo START_$MARKER; "
         f"rm -rf {remote_root}.partial {remote_root}; "
         f"mkdir -p {remote_root}.partial/bin; "
         f"SRC9=; "
+        f"ls -la /mnt/gdlgames /media/gdlgames 2>/dev/null | head -20 || true; "
         f"for cand in /mnt/gdlgames /media/gdlgames /run/gunnchos/gdlgames; do "
         f"  if [ -f \"$cand/bin/waike-learning-os\" ]; then SRC9=$cand; break; fi; "
         f"done; "
         f"if [ -z \"$SRC9\" ]; then "
         f"  mkdir -p /mnt/gdlgames; "
-        f"  mount -t 9p -o trans=virtio,version=9p2000.L gdlgames /mnt/gdlgames 2>/dev/null || true; "
+        f"  mount -t 9p -o trans=virtio,version=9p2000.L gdlgames /mnt/gdlgames 2>&1 | tail -5 || true; "
+        f"  ls -la /mnt/gdlgames /mnt/gdlgames/bin 2>/dev/null | head -20 || true; "
         f"  if [ -f /mnt/gdlgames/bin/waike-learning-os ]; then SRC9=/mnt/gdlgames; fi; "
         f"fi; "
         f"if [ -n \"$SRC9\" ]; then "
@@ -228,25 +305,7 @@ def fetch_bundle_into_guest(session: Any, *, port: int = 8767) -> dict[str, Any]
         f"  if [ -d \"$SRC9/xdg\" ]; then cp -a \"$SRC9/xdg\" {remote_root}.partial/xdg; fi; "
         f"  if [ -d \"$SRC9/device_os_lib\" ]; then cp -a \"$SRC9/device_os_lib\" {remote_root}.partial/device_os_lib; fi; "
         f"else "
-        f"  echo VIA_HTTP_$MARKER; "
-        f"  command -v curl; "
-        f"  curl -fsSL --connect-timeout 5 --max-time 60 "
-        f"    http://10.0.2.100:{port}/OWNER_WAIKE_BUNDLE_MANIFEST.json "
-        f"    -o {remote_root}.partial/MANIFEST.json; "
-        f"  curl -fsSL --connect-timeout 5 --max-time 180 "
-        f"    http://10.0.2.100:{port}/bin/waike-learning-os "
-        f"    -o {remote_root}.partial/bin/waike-learning-os; "
-        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-        f"    http://10.0.2.100:{port}/bin/VERSION -o {remote_root}.partial/bin/VERSION; "
-        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-        f"    http://10.0.2.100:{port}/bin/INSTALLED.json "
-        f"    -o {remote_root}.partial/bin/INSTALLED.json; "
-        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-        f"    http://10.0.2.100:{port}/bin/waike-learning-os.qemu-x86_64-wrapper.sh "
-        f"    -o {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
-        f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-        f"    http://10.0.2.100:{port}/WAIKE_RUNTIME_PROVENANCE.json "
-        f"    -o {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
+        f"{http_branch}"
         f"fi; "
         f"chmod +x {remote_root}.partial/bin/waike-learning-os "
         f"  {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
@@ -265,9 +324,11 @@ def fetch_bundle_into_guest(session: Any, *, port: int = 8767) -> dict[str, Any]
         "ok": ok,
         "via": via,
         "remote_root": remote_root,
-        "stdout_tail": out[-2000:],
+        "stdout_tail": out[-2500:],
         "returncode": r.get("returncode"),
         "marker": marker,
+        "hub_only_guestfwd": bool(hub_only_guestfwd),
+        "agent_ok": bool(r.get("ok", True)),
     }
 
 

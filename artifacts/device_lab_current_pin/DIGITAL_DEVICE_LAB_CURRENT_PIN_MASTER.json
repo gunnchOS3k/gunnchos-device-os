@@ -1,10 +1,10 @@
 {
   "schema": "gunnchos.device_lab.current_pin_master.v1",
-  "generated_at_utc": "2026-09-16T03:00:06Z",
+  "generated_at_utc": "2026-09-16T23:30:02Z",
   "work_item": "DEVICE_LAB_CURRENT_PIN_REVALIDATION",
   "branch": "cursor/device-lab-current-pin-revalidation",
   "base": "origin/main",
-  "device_os_tip": "471855907cb33a67d4a4cf0260816db0029943d7",
+  "device_os_tip": "5ce7cb3e857b5b90cc19c939fb2d21831641a47b",
   "pin_manifest_sha256": "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15",
   "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
@@ -26,8 +26,8 @@
   "prefer_fail_over_false_pass": true,
   "cursor_never_merges": true,
   "stale_historical_proof_rejected": true,
-  "FREE_GIB": 24.88,
-  "primary_blocker": "client_not_bound_to_real_hub_after_policy_authorized_launch",
+  "FREE_GIB": 20.73,
+  "primary_blocker": "guest_fetch_owner_bundle_failed",
   "DEVICE_LAB_CANDIDATE_READY_FOR_OWNER": false,
   "ECO010_REEARN_REQUIRED_AFTER_RING_FIX": true,
   "ring_blocker": "guest_browser_state_not_committed",
@@ -47,5 +47,10 @@
   "gui_window_alive": true,
   "real_hub_running": true,
   "client_bound_real_hub": false,
-  "prompt_17g5b_waike_pr12_refreeze_gui_hub_reearn": true
+  "prompt_17g5b_waike_pr12_refreeze_gui_hub_reearn": true,
+  "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+  "WAIKE_ATSPI_WINDOW_PASS": false,
+  "prompt_17g5d_full_waike_gui_hub_reearn": true,
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_9P_BUNDLE_FETCH_OVER_VIRTIO_SERIAL"
 }
