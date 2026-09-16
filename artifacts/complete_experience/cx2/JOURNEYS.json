@@ -1,0 +1,311 @@
+{
+  "J1": {
+    "name": "J1_school_office_paper",
+    "ok": true,
+    "steps": {
+      "doc": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home/providers/productivity/docs/j1_essay.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "pid_probe": true,
+        "odf_valid_zip": true,
+        "content_verified": true,
+        "sha256": "9439cb3e101c6f10526af155c93d9ad9730405c7e080e16eeff5c2745b807a75",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "edited": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home/providers/productivity/docs/j1_essay.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "pid_probe": true,
+        "odf_valid_zip": true,
+        "content_verified": true,
+        "sha256": "edff7160e71c54f11a696bd9325555f900d338fb290cac6f941efddb008524f4",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "pdf": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home/providers/productivity/docs/j1_essay.pdf",
+        "via": "libreoffice",
+        "sha256": "e04f162a9a00ea26b88fc351de268d0054f197dc3c23399054df4835873a4593",
+        "reopen_verified": true,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "printed": {
+        "ok": true,
+        "job": {
+          "job_id": "job_1789526074132",
+          "printer": "EPSON_XP_4200_Series",
+          "document": "/tmp/cx2_evidence_home/providers/productivity/docs/j1_essay.pdf",
+          "state": "submitted_cups",
+          "cups_stdout": "request id is EPSON_XP_4200_Series-123 (1 file(s))\n"
+        },
+        "output": "/tmp/cx2_evidence_home/providers/printing/output/job_1789526074132.pdf",
+        "sha256": "e04f162a9a00ea26b88fc351de268d0054f197dc3c23399054df4835873a4593",
+        "PHYSICAL_PRINTER_VALIDATION_PENDING": true,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "ui": "Vault"
+    },
+    "PHYSICAL_PRINTER_VALIDATION_PENDING": true,
+    "evidence_class": "REAL_USER_JOURNEY_DIGITAL_PASS"
+  },
+  "J2": {
+    "name": "J2_research_web_mail",
+    "ok": true,
+    "steps": {
+      "browser": "REAL_PROVIDER_CLI_PASS",
+      "mail": {
+        "ok": true,
+        "smtp_stored": 1,
+        "imap_fetched": 1,
+        "vault_eml": "mail/sent_1789526074828.eml",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "ui": "Connect"
+    },
+    "evidence_class": "REAL_PROVIDER_PARTIAL"
+  },
+  "J3": {
+    "name": "J3_app_lifecycle",
+    "ok": true,
+    "steps": {
+      "install": {
+        "installed": true,
+        "app": {
+          "app_id": "org.gunnchos.cx2.testapp",
+          "name": "CX2 Test App",
+          "lane": "LOCAL_PACKAGE_REPO",
+          "version": "1.0.0",
+          "provenance": "cx2_local_test_repo",
+          "permissions": [
+            "files.read",
+            "notifications"
+          ],
+          "installed": true,
+          "storage_path": "/tmp/cx2_evidence_home/providers/app_center/installed/org.gunnchos.cx2.testapp",
+          "files_deployed": [
+            "manifest.json",
+            "run.py"
+          ],
+          "source": "local_repo"
+        },
+        "evidence_class": "HARNESS_ONLY",
+        "deploy_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "launch": {
+        "launched": true,
+        "app_id": "org.gunnchos.cx2.testapp",
+        "pid": 26623,
+        "version": "1.0.0",
+        "process_evidence": {
+          "app_id": "org.gunnchos.cx2.testapp",
+          "version": "1.0.0",
+          "pid": 26623,
+          "argv": [
+            "/tmp/cx2_evidence_home/providers/app_center/installed/org.gunnchos.cx2.testapp/run.py"
+          ],
+          "started_at": 1789526074.870652
+        },
+        "returncode": 0,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS",
+        "gui_window": false,
+        "claim_boundary": "process_evidence_without_compositor_window_on_this_host"
+      },
+      "update": {
+        "updated": true,
+        "from": "1.0.0",
+        "to": "2.0.0",
+        "rollback_available": true,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "rollback": {
+        "rolled_back": true,
+        "version": "1.0.0",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "uninstall": {
+        "uninstalled": true,
+        "cleanup_complete": true,
+        "app_id": "org.gunnchos.cx2.testapp",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      }
+    },
+    "evidence_class": "REAL_PROVIDER_CLI_PASS"
+  },
+  "J4": {
+    "name": "J4_calendar_collaboration",
+    "ok": true,
+    "steps": {
+      "calendar": {
+        "ok": true,
+        "created": {
+          "uid": "cx2-evt-1",
+          "ok": true
+        },
+        "synced_body_len": 85,
+        "edited": {
+          "uid": "cx2-evt-1",
+          "ok": true
+        },
+        "deleted": {
+          "ok": true
+        },
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "contacts": {
+        "ok": true,
+        "created": {
+          "uid": "cx2-c1",
+          "ok": true
+        },
+        "synced": "BEGIN:VCARD\nFN:CX2 Peer\nEMAIL:peer@localhost\nUID:cx2-c1\nEND:VCARD\n",
+        "edited": {
+          "uid": "cx2-c1",
+          "ok": true
+        },
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "chat_video": {
+        "candidates": {
+          "jitsi_meet_browser": "EXTERNAL_PROVIDER_PENDING",
+          "matrix_element": "EXTERNAL_PROVIDER_PENDING",
+          "first_party_webrtc": "EXTERNAL_PROVIDER_PENDING"
+        },
+        "HUMAN_AV_QUALITY_PENDING": true,
+        "PHYSICAL_CAMERA_MIC_PENDING": true,
+        "qualified_path": null,
+        "evidence_class": "EXTERNAL_PROVIDER_PENDING"
+      },
+      "ui": "Connect"
+    },
+    "evidence_class": "REAL_PROVIDER_CLI_PASS",
+    "HUMAN_AV_QUALITY_PENDING": true,
+    "PHYSICAL_CAMERA_MIC_PENDING": true
+  },
+  "J5": {
+    "name": "J5_offline_reconnect",
+    "ok": true,
+    "steps": {
+      "queue": {
+        "ok": true,
+        "queue": [
+          {
+            "id": "q_1789526075",
+            "state": "sent",
+            "subject": "offline"
+          }
+        ],
+        "send": {
+          "ok": true,
+          "smtp_stored": 1,
+          "imap_fetched": 1,
+          "vault_eml": "mail/sent_1789526075852.eml",
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "duplicates": 1,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      }
+    },
+    "evidence_class": "REAL_PROVIDER_CLI_PASS"
+  },
+  "J6": {
+    "name": "J6_accessibility",
+    "ok": true,
+    "steps": {
+      "traverse": {
+        "ok": true,
+        "visited": [
+          "home",
+          "vault",
+          "app_center",
+          "connect",
+          "assist",
+          "care"
+        ],
+        "focus_visible": true,
+        "keyboard_traps": false,
+        "accessible_names": [
+          true
+        ],
+        "evidence_class": "HARNESS_PASS",
+        "human_validation": "HUMAN_VALIDATION_PENDING"
+      },
+      "assist": "Assist"
+    },
+    "HUMAN_A11Y_PENDING": true,
+    "HUMAN_VALIDATION_PENDING": true,
+    "evidence_class": "HARNESS_PASS",
+    "human_validation_packet": "artifacts/complete_experience/cx2/HUMAN_A11Y_VALIDATION_PACKET.md"
+  },
+  "J7": {
+    "name": "J7_recovery",
+    "ok": true,
+    "steps": {
+      "backup": "j7_backup",
+      "restored": {
+        "provider_id": "gunnchos.cx0.backup_provider.v1",
+        "encryption": "none",
+        "restore_verified": true,
+        "files": [
+          {
+            "path": "captures/evidence.mp4",
+            "sha256": "5e9c9490b3f3b988f8b84959f369483d6673783b94c060133e5980b64a71f655"
+          },
+          {
+            "path": "captures/evidence.png",
+            "sha256": "04b44b19f607ee6f60e667666e26679b77806cd56849a37954c58f4450732b63"
+          },
+          {
+            "path": "critical/data.bin",
+            "sha256": "e10d38686b814aaa765e1a9aa6bf3298d7ac8df07a12f441647b2eb455609aeb"
+          },
+          {
+            "path": "docs/evidence_doc.odt",
+            "sha256": "29c1bd851b99485783dd95301cfc19301144400ef9acb78dd5223e85526ed491"
+          },
+          {
+            "path": "docs/evidence_doc.pdf",
+            "sha256": "e7d95dc4b4d6c8275123e33fa111b234b42ab2ab8f96442acd62f18b250d0fbc"
+          },
+          {
+            "path": "docs/j1_essay.odt",
+            "sha256": "edff7160e71c54f11a696bd9325555f900d338fb290cac6f941efddb008524f4"
+          },
+          {
+            "path": "docs/j1_essay.pdf",
+            "sha256": "e04f162a9a00ea26b88fc351de268d0054f197dc3c23399054df4835873a4593"
+          },
+          {
+            "path": "mail/sent_1789526069650.eml",
+            "sha256": "c50aeb1b5d14f68f756ab87f325784c10d4319d44788d8c4ee6cf12760ba16a6"
+          },
+          {
+            "path": "mail/sent_1789526074828.eml",
+            "sha256": "d77f49405e73c2a7e8f2944ef8eaa837c34c3311c6f385fdd857b17f810afd73"
+          },
+          {
+            "path": "mail/sent_1789526075852.eml",
+            "sha256": "e7e80d7c4d559e2c0a585dc64f1dc14460a8344cd36783f1d5cb6cce78a52955"
+          },
+          {
+            "path": "offline/draft.txt",
+            "sha256": "a34c97976a6c9bd7004bd608027712ee1460a9f40241bf68996d76240495ca7e"
+          },
+          {
+            "path": "research/note.txt",
+            "sha256": "0b1853b941f3d4b80fde987b2b9abbd6f5a6df15d1afe42f718983dbb0bcfde8"
+          }
+        ],
+        "claim_boundary": "local_versioned_backup_with_integrity_manifest",
+        "backup_id": "j7_backup",
+        "versioned": true,
+        "integrity_manifest": true
+      },
+      "care_ui": "Care"
+    },
+    "evidence_class": "REAL_PROVIDER_CLI_PASS"
+  }
+}
