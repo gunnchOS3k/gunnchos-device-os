@@ -36,13 +36,16 @@ class AuthenticJourneyRunner:
         # GUI surface touch
         ui = self.shell.surface("vault")
         real_provider = bool(doc.get("ok") and pdf.get("ok"))
-        real_gui = ui.get("surface") == "vault"
-        # Print typically EXTERNAL on macOS without CUPS queue
-        status = "REAL_USER_JOURNEY_DIGITAL_PASS" if real_provider and real_gui and printed.get("ok") else (
-            "REAL_PROVIDER_PARTIAL" if real_provider else "BLOCKED"
-        )
-        if real_provider and not printed.get("ok"):
+        # ProductShell.surface is API contract, not compositor/React rendered proof
+        rendered_gui_proven = False
+        if real_provider and printed.get("ok") and rendered_gui_proven:
+            status = "REAL_USER_JOURNEY_DIGITAL_PASS"
+        elif real_provider and printed.get("ok"):
+            status = "REAL_PROVIDER_CLI_PASS"
+        elif real_provider:
             status = "REAL_PROVIDER_PARTIAL"
+        else:
+            status = "BLOCKED"
         return {
             "name": "J1_school_office_paper",
             "ok": real_provider,
@@ -71,8 +74,7 @@ class AuthenticJourneyRunner:
         )
         # Browser often CLI-only without GUI automation
         klass = "REAL_PROVIDER_PARTIAL" if real else "HARNESS_ONLY"
-        if mail.get("ok") and browser.get("evidence_class") == "REAL_PROVIDER_GUI_PASS" and ui.get("surface") == "connect":
-            klass = "REAL_USER_JOURNEY_DIGITAL_PASS"
+        # Require explicit rendered GUI proof for journey DIGITAL_PASS (not API surface alone)
         return {
             "name": "J2_research_web_mail",
             "ok": bool(mail.get("ok")),
@@ -91,12 +93,12 @@ class AuthenticJourneyRunner:
         un = apps.uninstall("org.gunnchos.cx2.testapp")
         ui = self.shell.surface("app_center")
         ok = all([inst.get("installed"), launch.get("launched"), upd.get("updated"), rb.get("rolled_back"), launch2.get("launched"), un.get("uninstalled")])
-        klass = "REAL_USER_JOURNEY_DIGITAL_PASS" if ok and ui.get("surface") == "app_center" and launch.get("pid") else (
-            "REAL_PROVIDER_CLI_PASS" if ok else "BLOCKED"
-        )
-        # Without compositor window, demote from full journey digital pass
-        if klass == "REAL_USER_JOURNEY_DIGITAL_PASS" and not launch.get("gui_window"):
+        if ok and launch.get("pid") and launch.get("gui_window"):
+            klass = "REAL_USER_JOURNEY_DIGITAL_PASS"
+        elif ok and launch.get("pid"):
             klass = "REAL_PROVIDER_CLI_PASS"
+        else:
+            klass = "BLOCKED"
         return {
             "name": "J3_app_lifecycle",
             "ok": ok,
