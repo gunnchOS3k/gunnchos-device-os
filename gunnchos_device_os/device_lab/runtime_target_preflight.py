@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -281,10 +282,41 @@ def probe_guest_runtime_profile(session: Any | None = None) -> dict[str, Any]:
                 glibc = m.group(1)
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
     arch = "unknown"
-    if lines and lines[0] in {"aarch64", "arm64", "x86_64"}:
-        arch = "aarch64" if lines[0] == "arm64" else lines[0]
-    elif "aarch64" in text:
+    for ln in lines[:8]:
+        if ln in {"aarch64", "arm64", "x86_64"}:
+            arch = "aarch64" if ln == "arm64" else ln
+            break
+    if arch == "unknown" and "aarch64" in text:
         arch = "aarch64"
+    elif arch == "unknown" and "x86_64" in text:
+        arch = "x86_64"
+    if arch == "unknown" or "GUEST_RUNTIME_PROBE_DONE" not in text:
+        time.sleep(2.0)
+        result2 = _guest_sh(
+            session,
+            "set +e; "
+            "uname -m; "
+            "getconf GNU_LIBC_VERSION 2>/dev/null || true; "
+            "ldd --version 2>&1 | head -1; "
+            "ls -l /lib/ld-linux-aarch64.so.1 2>/dev/null || true; "
+            "ldconfig -p 2>/dev/null | grep -E 'libwebkit2gtk-4.1.so|libgtk-3.so.0|libsoup-3.0.so' | head -20; "
+            "echo GUEST_RUNTIME_PROBE_DONE",
+            timeout_sec=60.0,
+        )
+        text2 = (result2.get("stdout") or "") + (result2.get("stderr") or "")
+        if text2.strip():
+            text = text2
+            if not glibc:
+                m2 = re.search(r"GNU libc\s+(\d+\.\d+)", text)
+                if m2:
+                    glibc = m2.group(1)
+            lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+            for ln in lines[:8]:
+                if ln in {"aarch64", "arm64", "x86_64"}:
+                    arch = "aarch64" if ln == "arm64" else ln
+                    break
+            if arch == "unknown" and "aarch64" in text:
+                arch = "aarch64"
     return {
         "architecture": arch,
         "os_family": "linux",
