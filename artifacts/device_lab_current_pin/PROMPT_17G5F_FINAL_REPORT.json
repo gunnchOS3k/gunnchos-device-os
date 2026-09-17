@@ -1,0 +1,385 @@
+{
+  "schema": "gunnchos.device_lab.prompt_17g5f_final_report.v1",
+  "generated_at_utc": "2026-09-17T14:10:30Z",
+  "prompt": "17G.5F",
+  "RUN_CONDITION_NOT_MET": false,
+  "A_owner_merge_proof": {
+    "generated_at_utc": "2026-09-17T13:58:12Z",
+    "prompt": "17G.5F",
+    "repo": "gunnchOS3k/gunnchos-waike-learning-platform",
+    "pr": 15,
+    "pr_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/15",
+    "state": "MERGED",
+    "merged_at": "2026-09-17T05:15:47Z",
+    "merged_by": "gunnchOS3k",
+    "merge_method": "create_a_merge_commit",
+    "is_merge_commit": true,
+    "accepted_main_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "main_tip_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "accepted_main_is_main_tip": true,
+    "parents": [
+      "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15",
+      "7575f0f121cf3ab5b54862b5813b4b1b9be0fab2"
+    ],
+    "expected_pre_merge_head": "7575f0f121cf3ab5b54862b5813b4b1b9be0fab2",
+    "pre_merge_head_match": true,
+    "message": "Merge pull request #15 from gunnchOS3k/cursor/waike-csp-runtime-apply-remediation",
+    "author": "Edmund Gunn, Jr.",
+    "date": "2026-09-17T05:15:47Z",
+    "drift_reason": "WAIKE_RUNTIME_CSP_WEBKITGTK_APPLY_ACCEPTED_MAIN",
+    "prior_waike_pin": "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15",
+    "RUN_CONDITION_MET": true,
+    "WAIKE_PR15_ACCEPTED_MAIN": true
+  },
+  "B_post_merge_ci": {
+    "generated_at_utc": "2026-09-17T13:58:16Z",
+    "prompt": "17G.5F",
+    "repo": "gunnchOS3k/gunnchos-waike-learning-platform",
+    "accepted_main_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "required_workflows": {
+      "Gate C": {
+        "id": 35185051612,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/actions/runs/35185051612",
+        "updated_at": "2026-09-17T05:28:14Z",
+        "head_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
+      },
+      "Gate D": {
+        "id": 35185051565,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/actions/runs/35185051565",
+        "updated_at": "2026-09-17T05:31:22Z",
+        "head_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
+      },
+      "Device Lab aarch64 Linux": {
+        "id": 35185051578,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/actions/runs/35185051578",
+        "updated_at": "2026-09-17T05:20:54Z",
+        "head_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
+      },
+      "Device Lab aarch64 glibc236": {
+        "id": 35185051542,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/actions/runs/35185051542",
+        "updated_at": "2026-09-17T05:21:01Z",
+        "head_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
+      },
+      "Windows Pilot 0": {
+        "id": 35185051552,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/actions/runs/35185051552",
+        "updated_at": "2026-09-17T05:54:39Z",
+        "head_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
+      }
+    },
+    "required_jobs": {
+      "verify-gate-d": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      },
+      "verify-gate-c": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      },
+      "rust": {
+        "conclusions": [
+          "success",
+          "success"
+        ],
+        "all_success": true
+      },
+      "frontend": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      },
+      "native-linux": {
+        "conclusions": [
+          "success",
+          "success"
+        ],
+        "all_success": true
+      },
+      "windows-pilot0-windows-latest": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      },
+      "native-linux-aarch64-glibc236": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      },
+      "windows-pilot0-windows-2025": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      },
+      "native-linux-aarch64": {
+        "conclusions": [
+          "success"
+        ],
+        "all_success": true
+      }
+    },
+    "all_required_terminal_success": true,
+    "check_runs_total": 77,
+    "check_runs_all_success": true,
+    "NEXT_GATE": null
+  },
+  "C_new_glibc236_artifact": {
+    "generated_at_utc": "2026-09-17T13:58:47Z",
+    "prompt": "17G.5F",
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "compatibility_label": "linux-aarch64-glibc236",
+    "source_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "expected_source_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "source_sha_match": true,
+    "artifact_sha256": "6442824be7f27355b7189d307cc45da69be31c7ddd30a96134a80c820fb2333a",
+    "expected_artifact_sha256": "6442824be7f27355b7189d307cc45da69be31c7ddd30a96134a80c820fb2333a",
+    "artifact_sha256_match": true,
+    "zip_sha256": "488a0279e2a1628b2d9309db15e6bf906ef429412c029ba45c5389eff3337a2d",
+    "rejected_prior_artifact_sha256": "e928a1c4170a1511fa3fcad249e9d4d17138075651cd5c510a78ea312ea17be6",
+    "workflow_run_id": "35185051542",
+    "artifact_id": "10481618959",
+    "glibc_baseline": "2.36",
+    "measured_max_glibc": "2.34",
+    "fresh_post_15_artifact": true,
+    "no_pre_15_reuse": true
+  },
+  "D_historical_diagnostic": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/history/pre_17g5f_historical_diagnostic_20260917T135847Z",
+  "E_pin_drift": {
+    "schema": "gunnchos.device_lab.pin_drift.v1",
+    "checked_at_utc": "2026-09-17T14:00:28Z",
+    "prompt": "17G.5F",
+    "prior_manifest_sha256": "56f3ec29ad5b90219165a3bded3261605a3e7e5bb0ec9760cafb6fe3e5e4d936",
+    "current_manifest_sha256": "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42",
+    "drift": true,
+    "drifts": [
+      {
+        "repository": "gunnchos-waike-learning-platform",
+        "prior_sha": "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15",
+        "current_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+        "drift_reason": "WAIKE_RUNTIME_CSP_WEBKITGTK_APPLY_ACCEPTED_MAIN",
+        "material_to_prior_gates": false,
+        "material_to_waike_runtime": true
+      }
+    ],
+    "fetch_errors": [],
+    "note": "WAIKE accepted-main re-freeze after WebKitGTK CSP apply merge #15"
+  },
+  "F_materiality_rebind": {
+    "schema": "gunnchos.device_lab.waike_csp_materiality_rebind.v1",
+    "generated_at_utc": "2026-09-17T14:00:28Z",
+    "prompt": "17G.5F",
+    "reason": "WAIKE_RUNTIME_CSP_WEBKITGTK_APPLY_ACCEPTED_MAIN",
+    "materiality": "waike_runtime_csp_webkitgtk_apply_only_not_live_dsxl_ring_four_game_sources",
+    "old_pin_manifest_sha256": "56f3ec29ad5b90219165a3bded3261605a3e7e5bb0ec9760cafb6fe3e5e4d936",
+    "new_pin_manifest_sha256": "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42",
+    "method": "compact_revalidate_under_new_manifest",
+    "note": "WAIKE #15 adds effective WebView CSP (DirectiveMap + HTML meta) for Runtime Hub; LIVE/DSXL/Ring/Four-Game product sources unchanged. Historical PASS retained; rebound to new pin manifest without full re-earn.",
+    "gates": {
+      "LIVE_GUNNCHOS_VISUAL_PASS": true,
+      "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+      "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+      "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+    },
+    "historical_evidence": {
+      "LIVE": "artifacts/device_lab_current_pin/LIVE_GUNNCHOS_VISUAL_PASS.json",
+      "DSXL": "artifacts/device_lab_current_pin/DSXL_DUAL_COMPOSITOR_UX_PASS.json",
+      "RING": "artifacts/device_lab_current_pin/RING_TO_REAL_APP_STATE_MUTATION_PASS.json",
+      "FOUR_GAME": "artifacts/device_lab_current_pin/FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS.json"
+    },
+    "WAIKE_CSP_MATERIALITY_REBIND": true
+  },
+  "G_device_os_pr": {
+    "number": 134,
+    "unmerged": true,
+    "tip_pre": "d89790ef8b4e56e77953287b0a9b67680a039d43",
+    "tip_post": "d89790ef8b4e56e77953287b0a9b67680a039d43"
+  },
+  "H_portal_pr": {
+    "number": 14,
+    "unmerged": true,
+    "tip_pre": "9d137e4a6eabb3e313534ea07df89fc9f77a0586",
+    "tip_post": "9d137e4a6eabb3e313534ea07df89fc9f77a0586"
+  },
+  "I_network_architecture": {
+    "restrict": "on",
+    "guestfwd": "guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+    "guest_url": "http://10.0.2.100:8787",
+    "no_mockHub": true,
+    "no_unrestricted_usernet": true
+  },
+  "J_effective_webview_csp": {
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "runtime_effective_csp_connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
+    "html_meta_injected": true,
+    "no_scheme_wide": true,
+    "authorized_hub_origin": "http://10.0.2.100:8787"
+  },
+  "K_gui_hub_verdict": {
+    "generated_at_utc": "2026-09-17T14:08:21Z",
+    "prompt": "17G.5F",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "verdict": "FAIL",
+    "blocker": "waike_client_http_absent_despite_effective_csp_pass:diag_or_fetch_path_still_blocked",
+    "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+    "gui_window_alive": true,
+    "real_hub_running": true,
+    "client_bound_real_hub": false,
+    "hub_endpoint_policy_rejects_unauthorized": true,
+    "mock_hub_used": false,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "bind_via_attempted": "guest_tcp_to_authorized_hub",
+    "csp_connect_blocked_hint": true,
+    "hub_sidecar_client_http": false
+  },
+  "L_waike_gate": {
+    "generated_at_utc": "2026-09-17T14:08:23Z",
+    "prompt": "17G.5F",
+    "pin_manifest_sha256": "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42",
+    "device_os_tip_pre_commit": "d89790ef8b4e56e77953287b0a9b67680a039d43",
+    "device_os_tip_post": "d89790ef8b4e56e77953287b0a9b67680a039d43",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+    "WAIKE_ATSPI_WINDOW_PASS": false,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "verdict": "FAIL",
+    "blocker": "waike_client_http_absent_despite_effective_csp_pass:diag_or_fetch_path_still_blocked",
+    "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+    "evidence": "artifacts/device_lab_current_pin/waike/WAIKE_GUEST_ATTEMPT.json",
+    "gui_journey": "artifacts/device_lab_current_pin/waike/gui_journey/",
+    "prefer_fail_over_false_pass": true,
+    "mock_hub_used": false,
+    "hub_only_guestfwd": true,
+    "guest_url": "http://10.0.2.100:8787",
+    "guestfwd": "guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+    "accepted_main_glibc236_artifact_used": true,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "rejected_prior_artifact_sha256": "e928a1c4170a1511fa3fcad249e9d4d17138075651cd5c510a78ea312ea17be6",
+    "drift_reason": "WAIKE_RUNTIME_CSP_WEBKITGTK_APPLY_ACCEPTED_MAIN",
+    "artifact_source_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "artifact_sha256": "6442824be7f27355b7189d307cc45da69be31c7ddd30a96134a80c820fb2333a",
+    "mandatory_17g5f": null,
+    "17g5f_evidence": null
+  },
+  "M_strict_verdict": {
+    "schema": "gunnchos.device_lab.waike_strict_verdict_17g5f.v1",
+    "generated_at_utc": "2026-09-17T14:10:30Z",
+    "prompt": "17G.5F",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+    "WAIKE_ATSPI_WINDOW_PASS": false,
+    "accepted_main_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "artifact_sha256": "6442824be7f27355b7189d307cc45da69be31c7ddd30a96134a80c820fb2333a",
+    "rejected_prior_artifact_sha256": "e928a1c4170a1511fa3fcad249e9d4d17138075651cd5c510a78ea312ea17be6",
+    "no_pre_15_pass_reuse": true,
+    "mock_hub_used": false,
+    "hub_only_guestfwd": true,
+    "restrict_on": true,
+    "guest_url": "http://10.0.2.100:8787",
+    "effective_connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
+    "html_meta_injected": true,
+    "hub_sidecar_healthz_only": true,
+    "client_diag_hub_login_fetch_start": false,
+    "blocker": "waike_client_http_absent_despite_effective_csp_pass:diag_or_fetch_path_still_blocked",
+    "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+    "diagnosis": "Accepted-main #15 effective WebView CSP PASS (DirectiveMap + HTML meta + WAIKE_EFFECTIVE_CSP* with http://10.0.2.100:8787). Guest Hub reachability PASS under restrict=on + scoped guestfwd. HubEndpointPolicy rejects unauthorized. GUI login form driven. Hub sidecar still healthz-only \u2014 no client HTTP beyond healthz and no client diag hub_login_fetch_*. Cannot claim WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS; prefer honest FAIL. NEXT: Device OS #134 client HTTP bind re-earn (fetch/diag path), not another WAIKE CSP PR.",
+    "GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS": false,
+    "do_not_start_gunnchai": true,
+    "do_not_merge_134_or_portal_14": true
+  },
+  "N_shared_runtime_regression": {
+    "schema": "gunnchos.device_lab.shared_runtime_regression_17g5f.v1",
+    "generated_at_utc": "2026-09-17T14:08:23Z",
+    "prompt": "17G.5F",
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "default_usernet_restrict_on": true,
+    "default_netdev": "user,id=n0,restrict=on",
+    "waike_service_forward_opt_in": true,
+    "hub_only_guestfwd_contract": {
+      "schema": "gunnchos.device_lab.guest_service_forward.v1",
+      "restrict": true,
+      "rules": [
+        {
+          "name": "device_lab_hub",
+          "guest_addr": "10.0.2.100",
+          "guest_port": 8787,
+          "host_addr": "127.0.0.1",
+          "host_port": 8787,
+          "protocol": "tcp"
+        }
+      ],
+      "notes": "restrict=on isolation; explicit guestfwd only; Hub/httpd bind host loopback.",
+      "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787"
+    },
+    "no_global_network_relaxation": true,
+    "ECO010_SOAK_PASS": false,
+    "ECO010_deferred": true,
+    "material_invalidation_reearn_required": false,
+    "note": "17G.5F focused shared-runtime regression after CSP accepted-main re-freeze; LIVE/DSXL/RING/FOUR_GAME retained; ECO010 deferred; gunnchAI not started."
+  },
+  "O_expansion_firewall": {
+    "device_os_release_branch": "cursor/device-lab-current-pin-revalidation",
+    "device_os_release_tip": "d89790ef8b4e56e77953287b0a9b67680a039d43",
+    "device_os_not_cx_branch": true,
+    "no_pr_135_created_by_this_script": true,
+    "portal14_tip": "9d137e4a6eabb3e313534ea07df89fc9f77a0586",
+    "portal14_branch": "release/stream-p1-rc0-digital-freeze",
+    "portal14_not_pr16_plus": true,
+    "waike_accepted_main": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "waike_no_pr13_required": true,
+    "gunnchai_not_started": true,
+    "pass": true
+  },
+  "P_retained_gates": {
+    "LIVE": true,
+    "DSXL": true,
+    "RING": true,
+    "FOUR_GAME": true,
+    "ECO010": false,
+    "GUNNCHAI": false
+  },
+  "Q_NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+  "R_GUNNCHAI_DEVICE_LAB_INTEGRATION": false,
+  "S_cursor_merges_nothing": true,
+  "T_tokens": {
+    "WAIKE_PR15_ACCEPTED_MAIN_MERGE_PROOF": true,
+    "WAIKE_PR15_ACCEPTED_MAIN_POST_MERGE_CI": true,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "WAIKE_CSP_MATERIALITY_REBIND": true,
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "PIN_DRIFT": true,
+    "prefer_fail_over_false_pass": true
+  }
+}

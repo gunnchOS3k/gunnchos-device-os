@@ -67,7 +67,7 @@ OWNER_HTTPD_GUEST_URL = f"http://{HUB_GUEST_ADDR}:{OWNER_HTTPD_PORT}"
 HUB_GATEWAY_URL = f"http://10.0.2.2:{HUB_PORT}"
 
 # Prompts that require scoped GuestServiceForward + full GUI/Hub depth (CSP-aware from 17G.5E).
-_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E")
+_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E", "17G.5F")
 
 
 def _is_full_gui_hub_prompt(prompt: str) -> bool:
@@ -154,6 +154,88 @@ def prove_exact_runtime_csp(repo_root: Path) -> dict[str, Any]:
         and out["static_fail_closed_no_scheme_wildcard"]
         and out["no_scheme_wide_tokens"]
     )
+    return out
+
+
+def prove_effective_webview_csp(repo_root: Path, *, gui_log: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Prove WebView-effective CSP (not source construction alone).
+
+    Requires: DirectiveMap apply path, HTML meta injection source, and runtime
+    stderr tokens WAIKE_EFFECTIVE_CSP* / WAIKE_CSP_HTML_META_INJECTED with the
+    authorized Hub origin in connect-src. Scheme-wide tokens are FAIL.
+    """
+    out: dict[str, Any] = {
+        "schema": "gunnchos.device_lab.waike_effective_webview_csp.v1",
+        "generated_at_utc": _utc(),
+        "authorized_hub_origin": HUB_GUEST_URL,
+        "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": False,
+        "source_construction_alone_insufficient": True,
+    }
+    exact = prove_exact_runtime_csp(repo_root)
+    out["exact_runtime_csp"] = {
+        "WAIKE_EXACT_RUNTIME_CSP_PASS": bool(exact.get("WAIKE_EXACT_RUNTIME_CSP_PASS")),
+        "no_scheme_wide_tokens": bool(exact.get("no_scheme_wide_tokens")),
+    }
+    try:
+        lp = resolve_waike_lp_checkout(repo_root)
+    except FileNotFoundError as exc:
+        out["error"] = str(exc)
+        return out
+    csp_rs = lp / "apps/client/src-tauri/src/hub_connect_csp.rs"
+    lib_rs = lp / "apps/client/src-tauri/src/lib.rs"
+    rs = csp_rs.read_text(encoding="utf-8") if csp_rs.is_file() else ""
+    lib = lib_rs.read_text(encoding="utf-8") if lib_rs.is_file() else ""
+    out["directive_map_apply"] = "DirectiveMap" in rs or "Csp::DirectiveMap" in rs or "directive_map" in rs.lower()
+    out["html_meta_injection_source"] = (
+        "install_html_csp_meta_assets" in rs or "install_html_csp_meta_assets" in lib
+    )
+    out["stderr_effective_tokens_source"] = all(
+        tok in lib
+        for tok in (
+            "WAIKE_EFFECTIVE_CSP_CONNECT_SRC",
+            "WAIKE_EFFECTIVE_CSP",
+            "WAIKE_CSP_HTML_META_INJECTED",
+        )
+    )
+    out["fold_launch_authorized_hub"] = "apply_hub_connect_csp_to_config_with_launch" in lib
+    gui_log = gui_log or {}
+    connect_src = str(gui_log.get("effective_csp_connect_src") or "")
+    effective_csp = str(gui_log.get("effective_csp") or "")
+    meta_injected = bool(gui_log.get("csp_html_meta_injected"))
+    out["runtime_effective_csp_connect_src"] = connect_src or None
+    out["runtime_effective_csp"] = effective_csp[:500] if effective_csp else None
+    out["runtime_csp_html_meta_injected"] = meta_injected
+    out["runtime_tokens_observed"] = bool(connect_src or effective_csp or meta_injected)
+    authorized_in_connect = HUB_GUEST_URL in connect_src or HUB_GUEST_URL in effective_csp
+    out["authorized_hub_origin_in_effective_connect_src"] = authorized_in_connect
+    import re as _re
+
+    scheme_hits = [
+        tok
+        for tok in ("http:", "https:", "ws:", "wss:")
+        if _re.search(rf"(?:^|[\s;]){_re.escape(tok)}(?:$|[\s;])", connect_src + " " + effective_csp)
+    ]
+    out["scheme_wide_tokens_in_effective"] = scheme_hits
+    out["no_scheme_wide_in_effective"] = not scheme_hits
+    out["WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS"] = bool(
+        exact.get("WAIKE_EXACT_RUNTIME_CSP_PASS")
+        and out["directive_map_apply"]
+        and out["html_meta_injection_source"]
+        and out["stderr_effective_tokens_source"]
+        and out["fold_launch_authorized_hub"]
+        and out["runtime_tokens_observed"]
+        and meta_injected
+        and authorized_in_connect
+        and out["no_scheme_wide_in_effective"]
+    )
+    if not out["runtime_tokens_observed"]:
+        out["blocker"] = "effective_csp_runtime_tokens_absent_from_gui_log"
+    elif not authorized_in_connect:
+        out["blocker"] = "authorized_hub_origin_missing_from_effective_connect_src"
+    elif scheme_hits:
+        out["blocker"] = f"scheme_wide_tokens_in_effective:{','.join(scheme_hits)}"
+    elif not meta_injected:
+        out["blocker"] = "csp_html_meta_injection_token_absent"
     return out
 
 
@@ -419,7 +501,7 @@ from pathlib import Path
 p = Path('/tmp/waike_gui_{journey_tag}.log')
 out = {{'ok': False, 'path': str(p)}}
 try:
-    t = p.read_text(encoding='utf-8', errors='replace')[-16000:] if p.is_file() else ''
+    t = p.read_text(encoding='utf-8', errors='replace')[-32000:] if p.is_file() else ''
 except Exception as e:
     out['error'] = repr(e)
     print(json.dumps(out))
@@ -430,6 +512,14 @@ login_surface = (
     or ('data-testid="login-form"' in low)
     or ('sign in' in low and 'password' in low and 'school hub not configured' not in low)
 )
+eff_connect = ''
+eff_csp = ''
+for line in t.splitlines():
+    if line.startswith('WAIKE_EFFECTIVE_CSP_CONNECT_SRC='):
+        eff_connect = line.split('=', 1)[1].strip()
+    elif line.startswith('WAIKE_EFFECTIVE_CSP='):
+        eff_csp = line.split('=', 1)[1].strip()
+meta_inj = 'WAIKE_CSP_HTML_META_INJECTED=true' in t
 out.update({{
     'ok': True,
     'bytes': len(t),
@@ -452,7 +542,13 @@ out.update({{
         'refused to connect' in low or 'content security policy' in low
         or 'csp' in low and 'connect' in low
     ),
-    'tail': t[-1800:],
+    'effective_csp_connect_src': eff_connect,
+    'effective_csp': eff_csp,
+    'csp_html_meta_injected': meta_inj,
+    'client_diag_hub_login_fetch_start': 'hub_login_fetch_start' in t,
+    'client_diag_hub_login_fetch_error': 'hub_login_fetch_error' in t,
+    'client_diag_csp_violation': 'csp_violation' in t,
+    'tail': t[-2200:],
 }})
 Path('/tmp/waike_gui_log_scrape.json').write_text(json.dumps(out) + '\\n')
 print('GUI_LOG_SCRAPE_OK')
@@ -468,14 +564,13 @@ print('GUI_LOG_SCRAPE_OK')
     payload: dict[str, Any] = {"ok": False, "raw_tail": blob[-800:]}
     for line in reversed(blob.splitlines()):
         line = line.strip()
-        if line.startswith("{") and ("hub_http_chip_in_log" in line or "login_surface" in line):
+        if line.startswith("{") and ("hub_http_chip_in_log" in line or "login_surface" in line or "effective_csp" in line):
             try:
                 payload.update(json.loads(line))
             except json.JSONDecodeError:
                 continue
             break
     return payload
-
 
 def scrape_hub_sidecar_client_bind(hub_log: Path) -> dict[str, Any]:
     """Host-side Hub access evidence: WebView client requests (not guest healthz alone)."""
@@ -2018,11 +2113,39 @@ def attempt_waike_gui_hub_journey(
     (gui_dir / "WAIKE_EXACT_RUNTIME_CSP.json").write_text(
         json.dumps(csp_proof, indent=2) + "\n", encoding="utf-8"
     )
-    if prompt.startswith("17G.5E") and not csp_proof.get("WAIKE_EXACT_RUNTIME_CSP_PASS"):
+    if prompt.startswith(("17G.5E", "17G.5F")) and not csp_proof.get(
+        "WAIKE_EXACT_RUNTIME_CSP_PASS"
+    ):
         out["blocker"] = "WAIKE_EXACT_RUNTIME_CSP_FAIL"
         out["NEXT_GATE"] = "WAIKE_CSP_SOURCE_CONTRACT_REMEDIATION"
         out["finished_at_utc"] = _utc()
         return out
+    # Source-level WebKitGTK apply contract (runtime tokens proven after GUI launch).
+    if prompt.startswith("17G.5F"):
+        eff_src = prove_effective_webview_csp(repo_root, gui_log={})
+        out["effective_webview_csp_source"] = {
+            k: eff_src.get(k)
+            for k in (
+                "directive_map_apply",
+                "html_meta_injection_source",
+                "stderr_effective_tokens_source",
+                "fold_launch_authorized_hub",
+                "exact_runtime_csp",
+            )
+        }
+        if not all(
+            [
+                eff_src.get("directive_map_apply"),
+                eff_src.get("html_meta_injection_source"),
+                eff_src.get("stderr_effective_tokens_source"),
+                eff_src.get("fold_launch_authorized_hub"),
+                (eff_src.get("exact_runtime_csp") or {}).get("WAIKE_EXACT_RUNTIME_CSP_PASS"),
+            ]
+        ):
+            out["blocker"] = "WAIKE_EFFECTIVE_CSP_SOURCE_CONTRACT_FAIL"
+            out["NEXT_GATE"] = "WAIKE_CSP_RUNTIME_APPLY_REMEDIATION"
+            out["finished_at_utc"] = _utc()
+            return out
 
     free_before = shutil.disk_usage("/").free / (1024**3)
     out["FREE_GIB_BEFORE_QEMU"] = round(free_before, 2)
@@ -2698,6 +2821,31 @@ def attempt_waike_gui_hub_journey(
                 "GUI login drive; AT-SPI skipped post-WebKit to protect virtio-serial."
             ),
         }
+        if prompt.startswith("17G.5F"):
+            eff = prove_effective_webview_csp(repo_root, gui_log=gui_log)
+            out["effective_webview_csp"] = eff
+            bind["effective_webview_csp"] = eff
+            (gui_dir / "WAIKE_EFFECTIVE_WEBVIEW_CSP.json").write_text(
+                json.dumps(eff, indent=2) + "\n", encoding="utf-8"
+            )
+            (gui_dir / "WAIKE_EFFECTIVE_CSP_CONNECT_SRC.json").write_text(
+                json.dumps(
+                    {
+                        "connect_src": eff.get("runtime_effective_csp_connect_src"),
+                        "authorized_hub_origin": HUB_GUEST_URL,
+                        "authorized_present": eff.get(
+                            "authorized_hub_origin_in_effective_connect_src"
+                        ),
+                        "html_meta_injected": eff.get("runtime_csp_html_meta_injected"),
+                        "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": eff.get(
+                            "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS"
+                        ),
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
         out["hub_bind_pre_login"] = {
             "via": None,
             "observed": False,
@@ -2823,7 +2971,21 @@ def attempt_waike_gui_hub_journey(
             if csp_hint:
                 # After accepted-main CSP merge, residual CSP bind failure is a
                 # runtime/apply defect — not the pre-merge draft gate.
-                if prompt.startswith("17G.5E"):
+                if prompt.startswith("17G.5F"):
+                    eff = out.get("effective_webview_csp") or {}
+                    if not eff.get("WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS"):
+                        out["blocker"] = (
+                            "waike_effective_webview_csp_unproven_or_incomplete:"
+                            + str(eff.get("blocker") or "tokens_or_origin_missing")
+                        )
+                        out["NEXT_GATE"] = "WAIKE_EFFECTIVE_CSP_RUNTIME_PROOF"
+                    else:
+                        out["blocker"] = (
+                            "waike_client_http_absent_despite_effective_csp_pass:"
+                            "diag_or_fetch_path_still_blocked"
+                        )
+                        out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN"
+                elif prompt.startswith("17G.5E"):
                     out["blocker"] = (
                         "waike_webview_csp_still_blocks_hub_after_accepted_main_csp:"
                         "exact_origin_connect_src_expected_but_client_http_absent"
@@ -3207,6 +3369,32 @@ def attempt_waike_gui_hub_journey(
             csp_doc = out.get("exact_runtime_csp") or {}
             mandatory_17g5d.append(
                 ("exact_runtime_csp", bool(csp_doc.get("WAIKE_EXACT_RUNTIME_CSP_PASS")))
+            )
+        if prompt.startswith("17G.5F"):
+            csp_doc = out.get("exact_runtime_csp") or {}
+            eff_doc = out.get("effective_webview_csp") or {}
+            mandatory_17g5d.append(
+                ("exact_runtime_csp", bool(csp_doc.get("WAIKE_EXACT_RUNTIME_CSP_PASS")))
+            )
+            mandatory_17g5d.append(
+                (
+                    "effective_webview_csp",
+                    bool(eff_doc.get("WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS")),
+                )
+            )
+            # Real client HTTP bind requires Hub beyond healthz + client diag evidence.
+            hub_access = (bind.get("hub_sidecar_access") or {})
+            gui_log = bind.get("gui_log_scrape") or {}
+            diag_ok = bool(
+                gui_log.get("client_diag_hub_login_fetch_start")
+                or hub_access.get("auth_login_observed")
+                or hub_access.get("client_http_observed")
+            )
+            mandatory_17g5d.append(
+                (
+                    "client_http_beyond_healthz_with_diag",
+                    bool(hub_bound and hub_access.get("client_http_observed") and diag_ok),
+                )
             )
         out["mandatory_17g5d"] = {k: v for k, v in mandatory_17g5d}
         and_ok = all(v for _, v in mandatory_17g5d) if _is_full_gui_hub_prompt(prompt) else all(

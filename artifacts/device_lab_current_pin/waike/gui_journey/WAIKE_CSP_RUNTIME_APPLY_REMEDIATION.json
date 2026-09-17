@@ -1,0 +1,72 @@
+{
+  "schema": "gunnchos.device_lab.waike_csp_runtime_apply_remediation.v1",
+  "generated_at_utc": "2026-09-17T05:08:30Z",
+  "prompt": "WAIKE_CSP_RUNTIME_APPLY_REMEDIATION",
+  "WAIKE_CSP_RUNTIME_APPLY_DIAGNOSED": true,
+  "WAIKE_CSP_RUNTIME_APPLY_FIXED_IN_DRAFT": true,
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "WAIKE_CSP_APPLY_PR_OWNER_MERGE_READY": true,
+  "accepted_main_sha": "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15",
+  "draft_pr": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/15",
+  "draft_head": "7575f0f121cf3ab5b54862b5813b4b1b9be0fab2",
+  "branch": "cursor/waike-csp-runtime-apply-remediation",
+  "diagnosis": {
+    "source_contract_exact_csp_pass": true,
+    "hub_endpoint_policy_authorized": true,
+    "trusted_runtime_hub_launch_ack": true,
+    "guest_hub_reachability_pass": true,
+    "gui_login_driven": true,
+    "hub_sidecar_client_http": false,
+    "hub_healthz_only": true,
+    "webkit_proc_net_tcp_attribution_unreliable": true,
+    "note": "Shared netns /proc/<pid>/net/tcp cannot prove WebKit initiated Hub HTTP.",
+    "config_mut_apply_returns_ok_when_ack": true,
+    "effective_webview_csp_unproven_on_17g5e": true,
+    "likely_gap": "Tauri 2.11 sets CSP via custom-protocol headers; WebKitGTK historically needs HTML meta; #14 had no effective-CSP evidence or meta injection.",
+    "alternate_blockers_considered": {
+      "cors": "Would still log OPTIONS/POST on Hub; none observed \u2192 not sole blocker",
+      "wrong_hub_url": "Launch context + policy matched http://10.0.2.100:8787",
+      "mockHub": "Disabled; resolveHub fail-closed",
+      "silent_login_no_hub": "onLogin previously returned silently if !hub; now errors + report_client_diag",
+      "device_os_policy_timing": "Policy env set before Popen; ACK after CSP apply \u2014 not a Device OS #134 defect"
+    }
+  },
+  "fix": {
+    "store_directive_map": true,
+    "fold_launch_authorized_hub": true,
+    "assert_launch_origin_in_connect_src": true,
+    "html_csp_meta_injection": true,
+    "stderr_effective_csp_tokens": [
+      "WAIKE_EFFECTIVE_CSP_CONNECT_SRC",
+      "WAIKE_EFFECTIVE_CSP",
+      "WAIKE_CSP_HTML_META_INJECTED"
+    ],
+    "client_diag": [
+      "csp_violation",
+      "hub_login_fetch_start",
+      "hub_login_fetch_error"
+    ],
+    "no_scheme_wildcards": true,
+    "hub_endpoint_policy_unchanged": true,
+    "no_mockHub": true
+  },
+  "local_tests": {
+    "cargo_test_hub_connect_csp": "11 passed; 0 failed"
+  },
+  "NEXT_OWNER_ACTION": "MERGE_PR_15_WITH_MERGE_COMMIT",
+  "NEXT_GATE": "WAIKE_CSP_APPLY_ACCEPTED_MAIN_REFREEZE_AND_GUI_HUB_JOURNEY_REEARN",
+  "ci": {
+    "pass_count": 150,
+    "fail_count": 0,
+    "verify_gate_c": true,
+    "verify_gate_d": true,
+    "native_linux": true,
+    "native_linux_aarch64": true,
+    "native_linux_aarch64_glibc236": true,
+    "windows_pilot0_windows_latest": true,
+    "windows_pilot0_windows_2025": true,
+    "rust": true,
+    "frontend": true
+  }
+}
