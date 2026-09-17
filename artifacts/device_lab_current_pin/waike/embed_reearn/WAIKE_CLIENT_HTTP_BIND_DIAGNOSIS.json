@@ -1,0 +1,108 @@
+{
+  "schema": "gunnchos.device_lab.waike_client_http_bind_diagnosis.v1",
+  "generated_at_utc": "2026-09-17T18:29:00Z",
+  "prompt": "17G.5H_bind_reearn",
+  "prior_stop": {
+    "blocker": "waike_login_fetch_started_but_hub_saw_no_client_http:cors_or_path_or_guestfwd",
+    "client_diag_hub_login_fetch_start": true,
+    "client_diag_hub_login_fetch_error": false,
+    "hub_sidecar_healthz_only": true,
+    "guest_tcp_estab_to_hub": true,
+    "effective_csp_pass": true,
+    "hub_reachable_http10_healthz": true
+  },
+  "hypothesis_ranking": [
+    {
+      "rank": 1,
+      "id": "cors_preflight_missing_on_hub",
+      "likelihood": "HIGH",
+      "evidence": [
+        "Hub create_app had no CORSMiddleware on accepted-main 34fb050c",
+        "WebView Origin is http://ipc.localhost (custom-protocol); login is POST application/json → browser OPTIONS preflight required",
+        "Hub access log showed zero OPTIONS and zero POST while WebKit had ESTABLISHED TCP to 10.0.2.100:8787",
+        "fetch_start diag true and fetch_error false ⇒ in-flight hang consistent with unanswered/hung preflight"
+      ],
+      "not_explained_alone": "If OPTIONS bytes never leave WebKit, guestfwd stall could co-cause"
+    },
+    {
+      "rank": 2,
+      "id": "guestfwd_http11_keepalive_stall",
+      "likelihood": "MEDIUM",
+      "evidence": [
+        "Journey already documents HTTP/1.1 keep-alive hang on guestfwd→uvicorn; probes use HTTP/1.0 Connection: close",
+        "WebKit ESTAB without uvicorn access line matches incomplete request delivery"
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "wrong_path_or_url",
+      "likelihood": "LOW",
+      "evidence": [
+        "hub_login_fetch_start detail=http://10.0.2.100:8787 matches HubEndpointPolicy authorized base",
+        "client.ts posts /api/v1/auth/login under that base"
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "csp_still_blocking",
+      "likelihood": "LOW",
+      "evidence": [
+        "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS true; authorized origin in connect-src; no csp_violation diag"
+      ]
+    },
+    {
+      "rank": 5,
+      "id": "hub_endpoint_policy_reject",
+      "likelihood": "LOW",
+      "evidence": [
+        "client_diag_hub_resolved true; unauthorized rejects proven separately; login form driven"
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "hub_not_logging_or_wrong_bind",
+      "likelihood": "LOW",
+      "evidence": [
+        "healthz logged on 127.0.0.1:8787; guestfwd NAT makes guest appear as loopback"
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "tls_vs_http_mismatch",
+      "likelihood": "REJECTED",
+      "evidence": [
+        "fetch detail and policy use http://10.0.2.100:8787"
+      ]
+    }
+  ],
+  "additive_fixes_landed": {
+    "device_os_134": [
+      "hub_guestfwd_cors_proxy.py fronts guestfwd :8787 → uvicorn :8788; answers OPTIONS locally; injects ACAO for ipc.localhost; forces Connection: close",
+      "start_host_real_hub starts proxy; scrape merges proxy log (OPTIONS/POST count as client HTTP)",
+      "prove_guest_webkit_mimic_login_post classifies guestfwd vs CORS before GUI",
+      "drive_learner_gui_login_until_hub_http no longer stops early on fetch_start alone; longer waits"
+    ],
+    "waike_lp_draft_branch": {
+      "branch": "cursor/waike-hub-device-lab-cors",
+      "commit": "b2c2f23",
+      "pushed": true,
+      "draft_pr_opened": false,
+      "draft_pr_blocker": "gh/api.github.com Forbidden (invalid token); create via https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/new/cursor/waike-hub-device-lab-cors",
+      "change": "CORSMiddleware on Hub for Tauri custom-protocol origins + unit test"
+    }
+  },
+  "reearn_attempt": {
+    "hub_cors_proxy_unit_test": "PASS",
+    "hub_sidecar_start_with_proxy": "PASS (healthz 200 via :8787 proxy in sandboxed preflight)",
+    "qemu_guest_bind_reearn": "BLOCKED_IN_AGENT_SANDBOX",
+    "qemu_error": "Assertion failed: (errno == ENOENT), function sysctl_for_bool, file cpuinfo-aarch64.c — HVF/sysctl denied; required_permissions=all not honored for this subagent",
+    "launchd_bootstrap": "FAIL Input/output error (sandbox)",
+    "ready_script": "artifacts/device_lab_current_pin/_launchd_17g5h_bind_reearn.sh"
+  },
+  "truth_tokens": {
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+    "honest_fail_reason": "Bind not re-proven this turn: QEMU HVF unavailable in agent sandbox after additive CORS proxy landed. Prior evidence still shows fetch_start without Hub client HTTP; fix ready for unsandboxed re-run."
+  }
+}

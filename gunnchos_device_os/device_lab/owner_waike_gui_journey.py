@@ -58,6 +58,8 @@ from gunnchos_device_os.device_lab.runtime_target_preflight import (
 )
 
 HUB_PORT = 8787
+# Real uvicorn binds here; guestfwd hits HUB_PORT via CORS/logging proxy.
+HUB_UPSTREAM_PORT = 8788
 OWNER_HTTPD_PORT = 8767
 # Guest-visible Hub via GuestServiceForward v1 (scoped guestfwd), not gateway 10.0.2.2.
 HUB_GUEST_ADDR = "10.0.2.100"
@@ -67,8 +69,9 @@ OWNER_HTTPD_GUEST_URL = f"http://{HUB_GUEST_ADDR}:{OWNER_HTTPD_PORT}"
 # Gateway probe used only for restrict=on A/B (expect FAIL under isolation).
 HUB_GATEWAY_URL = f"http://10.0.2.2:{HUB_PORT}"
 
-# Prompts that require scoped GuestServiceForward + full GUI/Hub depth (CSP-aware from 17G.5E).
-_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E", "17G.5F")
+# Prompts that require scoped GuestServiceForward + full GUI/Hub depth (CSP-aware from 17G.5E;
+# 17G.5H adds custom-protocol frontendDist embed + no-devUrl Sign-in mount proof).
+_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E", "17G.5F", "17G.5H")
 
 
 def _is_full_gui_hub_prompt(prompt: str) -> bool:
@@ -583,30 +586,46 @@ print('GUI_LOG_SCRAPE_OK')
             break
     return payload
 
-def scrape_hub_sidecar_client_bind(hub_log: Path) -> dict[str, Any]:
-    """Host-side Hub access evidence: WebView client requests (not guest healthz alone)."""
+def scrape_hub_sidecar_client_bind(hub_log: Path, *, proxy_log: Path | None = None) -> dict[str, Any]:
+    """Host-side Hub access evidence: WebView client requests (not guest healthz alone).
+
+    Merges uvicorn access log with optional guestfwd CORS proxy log so OPTIONS /
+    proxied POSTs count even when preflight is answered locally.
+    """
     out: dict[str, Any] = {
         "ok": False,
         "path": str(hub_log),
+        "proxy_log_path": str(proxy_log) if proxy_log else None,
         "client_http_observed": False,
         "auth_login_observed": False,
         "healthz_only": False,
         "request_lines": [],
         "tail": "",
+        "options_observed": False,
+        "proxy_client_http_observed": False,
     }
-    if not hub_log.is_file():
+    texts: list[str] = []
+    if hub_log.is_file():
+        try:
+            texts.append(hub_log.read_text(encoding="utf-8", errors="replace"))
+        except OSError as e:
+            out["error"] = repr(e)
+            return out
+    else:
         out["error"] = "hub_log_missing"
         return out
-    try:
-        text = hub_log.read_text(encoding="utf-8", errors="replace")
-    except OSError as e:
-        out["error"] = repr(e)
-        return out
+    if proxy_log is not None and proxy_log.is_file():
+        try:
+            texts.append(proxy_log.read_text(encoding="utf-8", errors="replace"))
+        except OSError:
+            pass
+    text = "\n".join(texts)
     out["tail"] = text[-2500:]
     lines = [
         ln
         for ln in text.splitlines()
-        if '"' in ln and ("GET " in ln or "POST " in ln or "PUT " in ln)
+        if '"' in ln
+        and ("GET " in ln or "POST " in ln or "PUT " in ln or "OPTIONS " in ln)
     ]
     out["request_lines"] = lines[-40:]
     non_health = [
@@ -616,8 +635,18 @@ def scrape_hub_sidecar_client_bind(hub_log: Path) -> dict[str, Any]:
     ]
     auth = [ln for ln in lines if "/api/v1/auth/login" in ln or "/api/v1/auth/" in ln]
     api = [ln for ln in lines if "/api/v1/" in ln]
+    options = [ln for ln in lines if "OPTIONS " in ln]
+    proxy_client = [
+        ln
+        for ln in lines
+        if ("PROXY" in ln or "CORS_LOCAL" in ln)
+        and "/healthz" not in ln
+        and "/version" not in ln
+    ]
     out["auth_login_observed"] = bool(auth)
-    out["client_http_observed"] = bool(non_health or api or auth)
+    out["options_observed"] = bool(options)
+    out["proxy_client_http_observed"] = bool(proxy_client)
+    out["client_http_observed"] = bool(non_health or api or auth or proxy_client)
     out["healthz_only"] = bool(lines) and not out["client_http_observed"]
     out["ok"] = bool(out["client_http_observed"])
     out["counts"] = {
@@ -625,8 +654,148 @@ def scrape_hub_sidecar_client_bind(hub_log: Path) -> dict[str, Any]:
         "non_healthz": len(non_health),
         "api_v1": len(api),
         "auth": len(auth),
+        "options": len(options),
+        "proxy_client": len(proxy_client),
     }
     return out
+
+
+def prove_guest_webkit_mimic_login_post(
+    session: Any,
+    *,
+    hub_url: str = HUB_GUEST_URL,
+    username: str = "learner-alpha",
+    password: str = "WaikeTestPass1!",
+    site_id: str = "site-alpha",
+    origin: str = "http://ipc.localhost",
+) -> dict[str, Any]:
+    """Guest-side OPTIONS+POST mimicking WebKit CORS login (not GUI).
+
+    Separates guestfwd POST path health from WebView Origin/CORS behavior.
+    """
+    py = f"""
+import json, socket
+from urllib.parse import urlparse
+out = {{
+  "ok": False,
+  "hub_url": {hub_url!r},
+  "origin": {origin!r},
+  "options_status": None,
+  "options_headers": {{}},
+  "post_status": None,
+  "post_body_head": "",
+  "errors": [],
+}}
+def raw(method, path, body=b"", extra_headers=None, timeout=8.0):
+  p = urlparse({hub_url!r})
+  host = p.hostname
+  port = int(p.port or 80)
+  hdrs = [
+    f"Host: {{host}}:{{port}}",
+    f"Origin: {origin}",
+    "User-Agent: gunnchos-webkit-mimic/1.0",
+    "Accept: */*",
+    "Connection: close",
+  ]
+  if extra_headers:
+    hdrs.extend(extra_headers)
+  if body:
+    hdrs.append(f"Content-Length: {{len(body)}}")
+  req = (f"{{method}} {{path}} HTTP/1.1\\r\\n" + "\\r\\n".join(hdrs) + "\\r\\n\\r\\n").encode() + body
+  s = socket.create_connection((host, port), timeout=timeout)
+  try:
+    s.settimeout(timeout)
+    s.sendall(req)
+    chunks = []
+    while True:
+      try:
+        b = s.recv(4096)
+      except socket.timeout:
+        break
+      if not b:
+        break
+      chunks.append(b)
+      if sum(len(x) for x in chunks) > 65536:
+        break
+  finally:
+    try:
+      s.close()
+    except Exception:
+      pass
+  raw_b = b"".join(chunks)
+  if not raw_b:
+    raise TimeoutError("empty_http_response")
+  head, _, body_b = raw_b.partition(b"\\r\\n\\r\\n")
+  line = head.split(b"\\r\\n", 1)[0].decode("latin1", "replace")
+  parts = line.split()
+  status = int(parts[1]) if len(parts) > 1 else -1
+  headers = {{}}
+  for ln in head.split(b"\\r\\n")[1:]:
+    if b":" in ln:
+      k, _, v = ln.partition(b":")
+      headers[k.decode("latin1", "replace").strip().lower()] = v.decode("latin1", "replace").strip()
+  return status, headers, body_b[:800].decode("utf-8", "replace")
+try:
+  st, hdrs, _ = raw(
+    "OPTIONS",
+    "/api/v1/auth/login",
+    extra_headers=[
+      "Access-Control-Request-Method: POST",
+      "Access-Control-Request-Headers: content-type",
+    ],
+  )
+  out["options_status"] = st
+  out["options_headers"] = {{
+    k: hdrs.get(k)
+    for k in (
+      "access-control-allow-origin",
+      "access-control-allow-methods",
+      "access-control-allow-headers",
+      "access-control-allow-private-network",
+    )
+  }}
+except Exception as e:
+  out["errors"].append(f"options:{{e!r}}")
+try:
+  body = json.dumps({{
+    "username": {username!r},
+    "password": {password!r},
+    "site_id": {site_id!r},
+  }}).encode()
+  st, hdrs, body_txt = raw(
+    "POST",
+    "/api/v1/auth/login",
+    body=body,
+    extra_headers=["Content-Type: application/json"],
+  )
+  out["post_status"] = st
+  out["post_body_head"] = body_txt
+  out["post_acao"] = hdrs.get("access-control-allow-origin")
+except Exception as e:
+  out["errors"].append(f"post:{{e!r}}")
+out["ok"] = bool(
+  out.get("options_status") in (200, 204)
+  and out.get("post_status") in (200, 401, 403, 422)
+)
+print(json.dumps(out))
+"""
+    _b64_put(session, "/var/tmp/waike_webkit_mimic_login.py", py.encode())
+    res = _guest_sh(
+        session,
+        "python3 /var/tmp/waike_webkit_mimic_login.py",
+        timeout_sec=25.0,
+    )
+    raw_out = (res.get("stdout") or "") + (res.get("stderr") or "")
+    doc: dict[str, Any] = {"ok": False, "raw_tail": raw_out[-1200:]}
+    for line in raw_out.splitlines():
+        line = line.strip()
+        if line.startswith("{") and "options_status" in line:
+            try:
+                doc.update(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+            break
+    return doc
 
 
 def prove_client_hub_sockets(session: Any, *, hub_port: int = HUB_PORT) -> dict[str, Any]:
@@ -882,13 +1051,21 @@ def prove_gui_session(session: Any, out_dir: Path) -> dict[str, Any]:
 
 
 def start_host_real_hub(lp_root: Path, ops_root: Path, work: Path) -> dict[str, Any]:
-    """Real accepted-main Hub as guest-reachable host sidecar (no mockHub)."""
+    """Real accepted-main Hub as guest-reachable host sidecar (no mockHub).
+
+    Uvicorn binds HUB_UPSTREAM_PORT; a Device Lab CORS/logging proxy listens on
+    HUB_PORT (guestfwd target) so WebKit preflight/Origin from ipc.localhost
+    can complete without waiting for a new WAIKE Hub binary.
+    """
     work.mkdir(parents=True, exist_ok=True)
     venv = work / "hub_venv"
     db = work / "hub_device_lab.sqlite"
     log = work / "hub_sidecar.log"
+    proxy_log = work / "hub_guestfwd_cors_proxy.log"
     if db.exists():
         db.unlink()
+    if proxy_log.exists():
+        proxy_log.unlink()
     py = shutil.which("python3") or "python3"
     pip = venv / "bin" / "pip"
     hub_dir = lp_root / "services" / "hub"
@@ -935,8 +1112,8 @@ def start_host_real_hub(lp_root: Path, ops_root: Path, work: Path) -> dict[str, 
     env["WAIKE_SEED_TEST_FIXTURES"] = "1"
     env["WAIKE_ENV"] = "development"
     env["WAIKE_HUB_DB"] = str(db)
-    # Bind loopback only; guest reaches Hub via scoped guestfwd (10.0.2.100).
-    # run_test_hub refuses non-loopback; use uvicorn directly against create_app.
+    # Bind loopback only; guest reaches Hub via scoped guestfwd (10.0.2.100)
+    # → CORS proxy on HUB_PORT → uvicorn on HUB_UPSTREAM_PORT.
     boot = f"""
 import os, sys
 from pathlib import Path
@@ -952,10 +1129,11 @@ app = create_app(
     seed=True,
 )
 # Force h11: httptools can stall behind QEMU guestfwd even when TCP accepts.
+# Upstream port: Device Lab CORS proxy fronts guestfwd on {HUB_PORT}.
 uvicorn.run(
     app,
     host='127.0.0.1',
-    port={HUB_PORT},
+    port={HUB_UPSTREAM_PORT},
     log_level='info',
     http='h11',
     loop='asyncio',
@@ -972,18 +1150,57 @@ uvicorn.run(
         env=env,
         cwd=str(hub_dir),
     )
-    ready = False
+    ready_up = False
     last_err = None
     for _ in range(60):
         try:
-            with socket.create_connection(("127.0.0.1", HUB_PORT), timeout=1.0):
-                ready = True
+            with socket.create_connection(("127.0.0.1", HUB_UPSTREAM_PORT), timeout=1.0):
+                ready_up = True
                 break
         except OSError as exc:
             last_err = str(exc)
             if proc.poll() is not None:
                 break
             time.sleep(0.5)
+
+    proxy_mod = Path(__file__).resolve().parent / "hub_guestfwd_cors_proxy.py"
+    proxy_logf = open(proxy_log, "w", encoding="utf-8")
+    proxy_proc = None
+    ready = False
+    if ready_up and proxy_mod.is_file():
+        proxy_proc = subprocess.Popen(
+            [
+                py,
+                str(proxy_mod),
+                "--listen-host",
+                "127.0.0.1",
+                "--listen-port",
+                str(HUB_PORT),
+                "--upstream-host",
+                "127.0.0.1",
+                "--upstream-port",
+                str(HUB_UPSTREAM_PORT),
+                "--log",
+                str(proxy_log),
+            ],
+            stdout=proxy_logf,
+            stderr=subprocess.STDOUT,
+        )
+        for _ in range(40):
+            try:
+                with socket.create_connection(("127.0.0.1", HUB_PORT), timeout=1.0):
+                    ready = True
+                    break
+            except OSError as exc:
+                last_err = str(exc)
+                if proxy_proc.poll() is not None:
+                    break
+                time.sleep(0.25)
+    elif ready_up:
+        # Fail closed: without proxy, guestfwd would hit uvicorn without CORS.
+        last_err = "hub_guestfwd_cors_proxy_missing"
+        ready = False
+
     health = None
     if ready:
         try:
@@ -999,22 +1216,28 @@ uvicorn.run(
             except Exception as exc2:  # noqa: BLE001
                 health = {"probe_error": str(exc), "version_error": str(exc2)}
     return {
-        "ok": ready and proc.poll() is None,
+        "ok": ready and proc.poll() is None and (proxy_proc is None or proxy_proc.poll() is None),
         "mock": False,
         "stub": False,
         "static_fixture": False,
         "pid": proc.pid,
+        "proxy_pid": None if proxy_proc is None else proxy_proc.pid,
         "port": HUB_PORT,
+        "upstream_port": HUB_UPSTREAM_PORT,
         "bind": "127.0.0.1",
         "guest_url": HUB_GUEST_URL,
         "db_path": str(db),
         "log_path": str(log),
+        "proxy_log_path": str(proxy_log),
+        "cors_proxy": True,
         "source_sha": ACCEPTED_WAIKE_LP_SHA,
-        "entrypoint": "services/hub app.main.create_app seed=True production_auth",
+        "entrypoint": "services/hub app.main.create_app seed=True production_auth + guestfwd_cors_proxy",
         "health": health,
         "last_err": last_err,
         "proc": proc,
+        "proxy_proc": proxy_proc,
         "log_handle": logf,
+        "proxy_log_handle": proxy_logf,
     }
 
 
@@ -1262,6 +1485,7 @@ def probe_hub_bind_from_gui(
     journey_tag: str = "A",
     prior_reach: dict[str, Any] | None = None,
     hub_log_path: Path | None = None,
+    proxy_log_path: Path | None = None,
 ) -> dict[str, Any]:
     """Prove whether baked client can bind real Hub (read-only verification).
 
@@ -1371,7 +1595,7 @@ print("ATSPI_PROBE_OK")
     log_scrape = scrape_gui_log_hub_bind(session, journey_tag=journey_tag)
     sockets = prove_client_hub_sockets(session)
     hub_access = (
-        scrape_hub_sidecar_client_bind(hub_log_path)
+        scrape_hub_sidecar_client_bind(hub_log_path, proxy_log=proxy_log_path)
         if hub_log_path is not None
         else {"ok": False, "skipped": True}
     )
@@ -1753,12 +1977,17 @@ def drive_learner_gui_login_until_hub_http(
     session: Any,
     hub_log: Path,
     *,
+    proxy_log: Path | None = None,
     username: str = "learner-alpha",
     password: str = "WaikeTestPass1!",
     site_id: str = "site-alpha",
     max_attempts: int = 3,
 ) -> dict[str, Any]:
-    """Retry authentic GUI Sign-in until Hub sees non-healthz client HTTP."""
+    """Retry authentic GUI Sign-in until Hub sees non-healthz client HTTP.
+
+    Do not stop early on hub_login_fetch_start alone — that diag only proves the
+    frontend entered login(); bind requires Hub/proxy access-log evidence.
+    """
     attempts: list[dict[str, Any]] = []
     strategies = ("tab_cycle_then_grid", "abs_grid", "tab_cycle")
     last_drive: dict[str, Any] = {}
@@ -1773,8 +2002,10 @@ def drive_learner_gui_login_until_hub_http(
             site_id=site_id,
             strategy=strat,
         )
-        time.sleep(4.0 + i * 1.5)
-        hub_access = scrape_hub_sidecar_client_bind(hub_log)
+        # WebKit→guestfwd POST/OPTIONS can take several seconds; wait longer when
+        # fetch_start already observed so hanging preflight can complete.
+        time.sleep(6.0 + i * 2.0)
+        hub_access = scrape_hub_sidecar_client_bind(hub_log, proxy_log=proxy_log)
         gui_log = scrape_gui_log_hub_bind(session, journey_tag="A")
         attempt = {
             "attempt": i + 1,
@@ -1782,6 +2013,7 @@ def drive_learner_gui_login_until_hub_http(
             "login_form_driven": bool(last_drive.get("login_form_driven")),
             "hub_client_http": bool(hub_access.get("client_http_observed")),
             "auth_login": bool(hub_access.get("auth_login_observed")),
+            "options_observed": bool(hub_access.get("options_observed")),
             "diag_fetch_start": bool(gui_log.get("client_diag_hub_login_fetch_start")),
             "diag_fetch_error": bool(gui_log.get("client_diag_hub_login_fetch_error")),
             "csp_block": bool(gui_log.get("csp_connect_blocked_hint")),
@@ -1789,15 +2021,13 @@ def drive_learner_gui_login_until_hub_http(
             "inject_tail": (last_drive.get("agent_inject") or {}).get("tail"),
         }
         attempts.append(attempt)
-        if hub_access.get("client_http_observed") or gui_log.get(
-            "client_diag_hub_login_fetch_start"
-        ):
+        if hub_access.get("client_http_observed"):
+            break
+        # Definitive client failure — further GUI retries unlikely to help.
+        if gui_log.get("client_diag_hub_login_fetch_error") and i >= 1:
             break
     return {
-        "ok": bool(
-            hub_access.get("client_http_observed")
-            or gui_log.get("client_diag_hub_login_fetch_start")
-        ),
+        "ok": bool(hub_access.get("client_http_observed")),
         "login_form_driven": bool(last_drive.get("login_form_driven")),
         "path": last_drive.get("path"),
         "strategy": last_drive.get("strategy"),
@@ -2281,7 +2511,7 @@ def attempt_waike_gui_hub_journey(
     (gui_dir / "WAIKE_EXACT_RUNTIME_CSP.json").write_text(
         json.dumps(csp_proof, indent=2) + "\n", encoding="utf-8"
     )
-    if prompt.startswith(("17G.5E", "17G.5F")) and not csp_proof.get(
+    if prompt.startswith(("17G.5E", "17G.5F", "17G.5H")) and not csp_proof.get(
         "WAIKE_EXACT_RUNTIME_CSP_PASS"
     ):
         out["blocker"] = "WAIKE_EXACT_RUNTIME_CSP_FAIL"
@@ -2289,7 +2519,7 @@ def attempt_waike_gui_hub_journey(
         out["finished_at_utc"] = _utc()
         return out
     # Source-level WebKitGTK apply contract (runtime tokens proven after GUI launch).
-    if prompt.startswith("17G.5F"):
+    if prompt.startswith(("17G.5F", "17G.5H")):
         eff_src = prove_effective_webview_csp(repo_root, gui_log={})
         out["effective_webview_csp_source"] = {
             k: eff_src.get(k)
@@ -2334,8 +2564,15 @@ def attempt_waike_gui_hub_journey(
     hub_work = gui_dir / "hub_sidecar"
     hub = start_host_real_hub(lp, ops, hub_work)
     hub_proc = hub.pop("proc", None)
+    hub_proxy_proc = hub.pop("proxy_proc", None)
     hub_log = hub.pop("log_handle", None)
-    out["real_hub"] = {k: v for k, v in hub.items() if k not in ("proc", "log_handle")}
+    hub_proxy_log_handle = hub.pop("proxy_log_handle", None)
+    hub_proxy_log_path = Path(str(hub.get("proxy_log_path") or (hub_work / "hub_guestfwd_cors_proxy.log")))
+    out["real_hub"] = {
+        k: v
+        for k, v in hub.items()
+        if k not in ("proc", "log_handle", "proxy_proc", "proxy_log_handle")
+    }
     (gui_dir / "WAIKE_REAL_HUB_PROVENANCE.json").write_text(
         json.dumps(out["real_hub"], indent=2, default=str) + "\n", encoding="utf-8"
     )
@@ -2349,13 +2586,25 @@ def attempt_waike_gui_hub_journey(
             "bind_loopback_only": True,
             "mockHub_disabled": True,
             "started_before_guest": True,
+            "guestfwd_cors_proxy": True,
+            "upstream_port": HUB_UPSTREAM_PORT,
         },
     )
     if not hub.get("ok"):
         out["blocker"] = "real_hub_sidecar_failed_to_start"
         out["finished_at_utc"] = _utc()
+        if hub_proxy_proc:
+            try:
+                hub_proxy_proc.terminate()
+            except Exception:
+                pass
         if hub_proc:
             hub_proc.terminate()
+        if hub_proxy_log_handle:
+            try:
+                hub_proxy_log_handle.close()
+            except Exception:
+                pass
         if hub_log:
             hub_log.close()
         return out
@@ -2391,8 +2640,18 @@ def attempt_waike_gui_hub_journey(
         if not ok_listen:
             out["blocker"] = f"host_artifact_httpd:{listen_err}"
             out["finished_at_utc"] = _utc()
+            if hub_proxy_proc:
+                try:
+                    hub_proxy_proc.terminate()
+                except Exception:
+                    pass
             if hub_proc:
                 hub_proc.terminate()
+            if hub_proxy_log_handle:
+                try:
+                    hub_proxy_log_handle.close()
+                except Exception:
+                    pass
             if hub_log:
                 hub_log.close()
             return out
@@ -2924,9 +3183,19 @@ def attempt_waike_gui_hub_journey(
             "pulled": bool(fb_a.get("pulled")),
         }
         hub_log_path = hub_work / "hub_sidecar.log"
+        proxy_log_path = hub_proxy_log_path
         # Host-side Hub scrape needs no guest agent — do it first for baseline.
-        hub_access_pre = scrape_hub_sidecar_client_bind(hub_log_path)
+        hub_access_pre = scrape_hub_sidecar_client_bind(
+            hub_log_path, proxy_log=proxy_log_path
+        )
         out["hub_access_pre_login"] = hub_access_pre
+
+        # Guest WebKit-mimic OPTIONS+POST classifies guestfwd vs CORS before GUI.
+        mimic: dict[str, Any] = {"ok": False, "skipped": True}
+        if agent_ok:
+            mimic = prove_guest_webkit_mimic_login_post(session)
+        out["guest_webkit_mimic_login"] = mimic
+        _write_json(gui_dir / "WAIKE_GUEST_WEBKIT_MIMIC_LOGIN.json", mimic)
 
         hub_ready: dict[str, Any] = {"ok": False, "skipped": True}
         if agent_ok:
@@ -2948,7 +3217,7 @@ def attempt_waike_gui_hub_journey(
 
         if agent_ok:
             login_for_bind = drive_learner_gui_login_until_hub_http(
-                session, hub_log_path
+                session, hub_log_path, proxy_log=proxy_log_path
             )
         else:
             login_for_bind = {
@@ -2971,7 +3240,7 @@ def attempt_waike_gui_hub_journey(
         }
         # Prefer final scrape from retry loop; fall back to fresh scrape.
         hub_access_post = login_for_bind.get("hub_access_final") or scrape_hub_sidecar_client_bind(
-            hub_log_path
+            hub_log_path, proxy_log=proxy_log_path
         )
         out["hub_access_post_login"] = hub_access_post
 
@@ -3050,7 +3319,7 @@ def attempt_waike_gui_hub_journey(
                 "multi-strategy GUI login retries; AT-SPI skipped post-WebKit."
             ),
         }
-        if prompt.startswith("17G.5F"):
+        if prompt.startswith(("17G.5F", "17G.5H")):
             eff = prove_effective_webview_csp(repo_root, gui_log=gui_log)
             out["effective_webview_csp"] = eff
             bind["effective_webview_csp"] = eff
@@ -3198,7 +3467,7 @@ def attempt_waike_gui_hub_journey(
                 csp_hint = True
                 bind["csp_inferred_from_socket_without_hub_http"] = True
             out["hub_bound"] = False
-            if prompt.startswith("17G.5F") and eff_pass:
+            if prompt.startswith(("17G.5F", "17G.5H")) and eff_pass:
                 diag_start = bool(gui_log.get("client_diag_hub_login_fetch_start"))
                 diag_err = bool(gui_log.get("client_diag_hub_login_fetch_error"))
                 hub_unavail = bool(gui_log.get("hub_unavailable_in_log"))
@@ -3234,7 +3503,7 @@ def attempt_waike_gui_hub_journey(
             elif csp_hint:
                 # After accepted-main CSP merge, residual CSP bind failure is a
                 # runtime/apply defect — not the pre-merge draft gate.
-                if prompt.startswith("17G.5F"):
+                if prompt.startswith(("17G.5F", "17G.5H")):
                     out["blocker"] = (
                         "waike_effective_webview_csp_unproven_or_incomplete:"
                         + str(eff_preview.get("blocker") or "tokens_or_origin_missing")
@@ -3629,7 +3898,7 @@ def attempt_waike_gui_hub_journey(
             mandatory_17g5d.append(
                 ("exact_runtime_csp", bool(csp_doc.get("WAIKE_EXACT_RUNTIME_CSP_PASS")))
             )
-        if prompt.startswith("17G.5F"):
+        if prompt.startswith(("17G.5F", "17G.5H")):
             csp_doc = out.get("exact_runtime_csp") or {}
             eff_doc = out.get("effective_webview_csp") or {}
             mandatory_17g5d.append(
@@ -3742,6 +4011,15 @@ def attempt_waike_gui_hub_journey(
                 httpd.terminate()
             except Exception:
                 pass
+        if hub_proxy_proc is not None:
+            try:
+                hub_proxy_proc.terminate()
+                hub_proxy_proc.wait(timeout=3)
+            except Exception:
+                try:
+                    hub_proxy_proc.kill()
+                except Exception:
+                    pass
         if hub_proc is not None:
             try:
                 hub_proc.terminate()
@@ -3751,6 +4029,11 @@ def attempt_waike_gui_hub_journey(
                     hub_proc.kill()
                 except Exception:
                     pass
+        if hub_proxy_log_handle is not None:
+            try:
+                hub_proxy_log_handle.close()
+            except Exception:
+                pass
         if hub_log is not None:
             try:
                 hub_log.close()
