@@ -1,0 +1,181 @@
+{
+  "schema": "gunnchos.cx4.evidence_report.v1",
+  "generated_at_utc": "2026-09-17T20:36:02Z",
+  "wave": "CX4.0",
+  "tokens": {
+    "CX4_CURRENT_TIP_GUEST_OVERLAY_PASS": true,
+    "CX4_CURRENT_TIP_GUEST_SMOKE_PASS": true,
+    "CX4_HUMAN_A11Y_PACKET_READY": true,
+    "CX4_PHYSICAL_PRINTER_PACKET_READY": true,
+    "CX4_CAMERA_MIC_AV_PACKET_READY": true,
+    "CX4_PHYSICAL_PERIPHERAL_PACKET_READY": true,
+    "CX4_EVT_PACKET_READY": true,
+    "CX4_DVT_PACKET_READY": true,
+    "CX4_PVT_PACKET_READY": true,
+    "CX4_FIRMWARE_LIFECYCLE_PACKET_READY": true,
+    "CX4_SUPPORT_BUNDLE_READY": true,
+    "CX4_REPAIR_RMA_PACKET_READY": true,
+    "CX4_CHAT_MEETING_PROVIDER_READINESS_PASS": true,
+    "CX4_EXTERNAL_ISSUER_PACKET_READY": true,
+    "CX4_PRIVACY_REVIEW_PACKET_READY": true,
+    "CX4_RIGHTS_REGISTER_READY": true,
+    "CX4_CERTIFICATION_MATRIX_READY": true,
+    "CX4_MANUFACTURING_PACKET_READY": true,
+    "CX4_OWNER_ACTION_PACKET_READY": true,
+    "CX4_ALL_AUTOMATABLE_NON_DIGITAL_PREWORK_PASS": true,
+    "J6_CLASS": "HUMAN_VALIDATION_PENDING",
+    "PHYSICAL_PRINTER_PENDING": true,
+    "PHYSICAL_CAMERA_MIC_AV_PENDING": true,
+    "EVT_PENDING": true,
+    "DVT_PENDING": true,
+    "PVT_PENDING": true,
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+    "certification_claimed": false,
+    "certified": false,
+    "legal_approval": false,
+    "manufacturing_pass": false,
+    "physical_printer_pass": false,
+    "physical_camera_mic_av_pass": false,
+    "human_a11y_pass": false,
+    "evt_pass": false,
+    "dvt_pass": false,
+    "pvt_pass": false,
+    "external_provider_integration_pass": false,
+    "CX4_DEVICE_LAB_134_UNALTERED": true,
+    "CX4_PORTAL_14_UNALTERED": true,
+    "CX4_PORTAL_15_UNALTERED": true,
+    "CX4_WAIKE_RELEASE_UNALTERED": true,
+    "CX4_NO_MERGES": true,
+    "CX4_NO_DEVICE_LAB": true,
+    "CX3_EDUCATION_CAREER_DIGITAL_CLOSURE_PASS": true,
+    "CX3_WAIKE_EARNED_CREDENTIAL_INTEGRATION_PASS": false,
+    "WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE": false,
+    "lab_blocker": "",
+    "notes": ""
+  },
+  "facts": {
+    "tip": "472819b839cd852459cc484c40d8b86eb5f86e96",
+    "wave": "CX4.0",
+    "certification_claimed": false,
+    "overlay": {
+      "ok": true,
+      "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+      "blocker": null,
+      "canonical": {
+        "ok": true,
+        "blocker": null,
+        "immutable": {
+          "cx2h2": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+          "cx2h3": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+          "cx2h4": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2"
+        },
+        "canonical_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical",
+        "note": "CX2H3/CX2H4 content deltas lost with deleted worktree overlays; layers rebuilt as thin COW on durable CX2H2 for current-tip boot continuity."
+      },
+      "parent": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+      "chain": {
+        "ok": true,
+        "image": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+        "layers": [
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 101515264
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 200704
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 200704
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 650117120
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 744816640
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 171048960
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 426835968
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+            "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+            "virtual_size": 17179869184,
+            "actual_size": 5352652800
+          },
+          {
+            "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+            "backing_file": null,
+            "virtual_size": 3221225472,
+            "actual_size": 341901312
+          }
+        ],
+        "blocker": null
+      },
+      "reused": true
+    },
+    "smoke": {
+      "schema": "gunnchos.cx4.current_tip_guest_smoke.v1",
+      "generated_at_utc": "2026-09-17T20:34:10Z",
+      "ok": true,
+      "CX4_CURRENT_TIP_GUEST_SMOKE_PASS": true,
+      "blocker": null,
+      "winner_attempt": 1
+    },
+    "packets": {
+      "schema": null,
+      "generated_at_utc": null,
+      "FULL_COMPLETE_EXPERIENCE_COMPLETE": null,
+      "human_a11y": true,
+      "printer": true,
+      "av": true,
+      "peripherals": true,
+      "device_quartet": true,
+      "firmware": true,
+      "support_repair": true,
+      "chat_meeting": true,
+      "issuer": true,
+      "privacy_rights": true,
+      "cert_mfg": true
+    },
+    "blocker_register_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/docs/complete-experience/cx4_readiness/CX4_MASTER_NON_DIGITAL_BLOCKER_REGISTER.json",
+    "edmund": {
+      "ready": true,
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/docs/complete-experience/cx4_readiness/CX4_EDMUND_ACTION_PACKET.md",
+      "automatable_actions_included": false
+    },
+    "smoke_injected_from_proven_evidence": true
+  },
+  "NEXT_CX_GATE": "CX4_OWNER_HUMAN_PHYSICAL_EXECUTION",
+  "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+  "firewall": {
+    "CX4_DEVICE_LAB_134_UNALTERED": true,
+    "CX4_PORTAL_14_UNALTERED": true,
+    "CX4_PORTAL_15_UNALTERED": true,
+    "CX4_WAIKE_RELEASE_UNALTERED": true,
+    "CX4_NO_MERGES": true,
+    "CX4_NO_DEVICE_LAB": true
+  }
+}

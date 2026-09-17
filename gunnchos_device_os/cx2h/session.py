@@ -34,7 +34,8 @@ def re_prove_shell_prereqs(repo: Path, monitor: Path, captures: Path) -> Dict[st
     # Kernel: accept already-booted non-cloud (no GRUB rewrite unless cloud)
     kuname = _ssh(repo, "uname -r; cat /proc/cmdline | head -c 200", timeout=30)
     kout = kuname.stdout or ""
-    non_cloud = "cloud" not in kout.split()[0] and "arm64" in kout
+    kparts = kout.split()
+    non_cloud = bool(kparts) and "cloud" not in kparts[0] and "arm64" in kout
     facts["kernel_uname"] = kout[-500:]
     facts["non_cloud_already"] = non_cloud
     if not non_cloud:
