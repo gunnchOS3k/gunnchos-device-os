@@ -16,10 +16,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ACCEPTED_WAIKE_LP_SHA = "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c"
+ACCEPTED_WAIKE_LP_SHA = "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15"
 ACCEPTED_WAIKE_OPS_SHA = "fbf7685bc5686201ccaa0128ee83346d59b3d584"
-# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE #12 hub policy pin.
-PIN_MANIFEST_SHA256 = "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15"
+# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE #14 exact CSP pin.
+PIN_MANIFEST_SHA256 = "56f3ec29ad5b90219165a3bded3261605a3e7e5bb0ec9760cafb6fe3e5e4d936"
 BUNDLE_ID = "com.gunnchos.waike.learning"
 APP_VERSION = "0.1.0"
 
@@ -29,12 +29,13 @@ GATE_D_LINUX_SHA256 = (
     "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef"
 )
 
-# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #12 / run 35046618011).
+# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #14 / run 35176055033).
 # Prefer this over Ubuntu 24.04 aarch64-current (GLIBC_2.39) for Interactive Guest.
-MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10426884231"
-MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35046618011"
+# Prior #12 artifact 3df1e42e… MUST NOT be reused for CSP-aware re-earn.
+MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10478930435"
+MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35176055033"
 MAIN_AARCH64_GLIBC236_SHA256 = (
-    "3df1e42e5d6c1b8b7e8ee31a636b2a6bec49120f38b6d28bd290b8a6e3fa1207"
+    "e928a1c4170a1511fa3fcad249e9d4d17138075651cd5c510a78ea312ea17be6"
 )
 MAIN_AARCH64_GLIBC236_LABEL = "linux-aarch64-glibc236"
 

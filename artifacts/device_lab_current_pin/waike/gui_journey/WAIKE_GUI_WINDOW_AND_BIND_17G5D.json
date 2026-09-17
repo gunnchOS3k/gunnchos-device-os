@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.device_lab.waike_gui_window_and_bind.v1",
-  "generated_at_utc": "2026-09-17T01:30:42Z",
+  "generated_at_utc": "2026-09-17T04:00:05Z",
   "prompt": "17G.5D",
   "window_alive": true,
   "headless": false,
@@ -36,10 +36,10 @@
       "auth_login_observed": false,
       "healthz_only": true,
       "request_lines": [
-        "INFO:     127.0.0.1:54543 - \"GET /healthz HTTP/1.1\" 200 OK",
-        "INFO:     127.0.0.1:54544 - \"GET /healthz HTTP/1.0\" 200 OK"
+        "INFO:     127.0.0.1:59951 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:59952 - \"GET /healthz HTTP/1.0\" 200 OK"
       ],
-      "tail": "INFO:     Started server process [94145]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)\nINFO:     127.0.0.1:54543 - \"GET /healthz HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:54544 - \"GET /healthz HTTP/1.0\" 200 OK\n",
+      "tail": "INFO:     Started server process [15821]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)\nINFO:     127.0.0.1:59951 - \"GET /healthz HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:59952 - \"GET /healthz HTTP/1.0\" 200 OK\n",
       "counts": {
         "access_lines": 2,
         "non_healthz": 0,
@@ -50,11 +50,11 @@
     "client_hub_sockets": {
       "ok": true,
       "put_ok": true,
-      "raw_tail": "inux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}]}\n",
+      "raw_tail": " \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}]}\n",
       "hub_port": 8787,
       "established_to_hub": true,
       "procs": [],
-      "ss_tail": "State      Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\nFIN-WAIT-2 0      0          10.0.2.15:54034   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:53922   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:54018   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:54046   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:33676   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:53936   10.0.2.100:8787       \n",
+      "ss_tail": "State      Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\nFIN-WAIT-2 0      0          10.0.2.15:51770   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:51738   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:51754   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:49074   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:60344   10.0.2.100:8787       \n",
       "errors": [
         "CalledProcessError(1, ['bash', '-lc', 'pgrep -a waike-learning; pgrep -a WebKit; pgrep -a webkit'])"
       ],
@@ -90,18 +90,6 @@
           "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
         },
         {
-          "pid": "611",
-          "remote": "6402000A:2253",
-          "state": "05",
-          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
-        },
-        {
-          "pid": "623",
-          "remote": "6402000A:2253",
-          "state": "05",
-          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
-        },
-        {
           "pid": "623",
           "remote": "6402000A:2253",
           "state": "05",
@@ -162,10 +150,22 @@
           "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
         },
         {
-          "pid": "626",
+          "pid": "704",
           "remote": "6402000A:2253",
           "state": "05",
-          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+          "cmd": "bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json "
+        },
+        {
+          "pid": "704",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json "
+        },
+        {
+          "pid": "704",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json "
         },
         {
           "pid": "704",

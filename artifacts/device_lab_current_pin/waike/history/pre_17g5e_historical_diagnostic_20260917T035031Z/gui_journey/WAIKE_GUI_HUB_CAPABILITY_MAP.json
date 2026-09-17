@@ -1,0 +1,67 @@
+{
+  "schema": "gunnchos.device_lab.waike_gui_hub_capability_map.v1",
+  "generated_at_utc": "2026-09-17T01:28:42Z",
+  "prompt": "17G.5C",
+  "accepted_main_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
+  "expected_accepted_main_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
+  "sha_match": true,
+  "zero_waike_source_changes": true,
+  "surfaces_inspected": {
+    "tauri_conf": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/apps/client/src-tauri/tauri.conf.json",
+    "App.tsx": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/apps/client/src/App.tsx",
+    "assessment": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/apps/client/src/components/assessment",
+    "hub_client": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/apps/client/src/lib/hub",
+    "offline_ts": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/apps/client/src/lib/offline",
+    "offline_rs": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/apps/client/src-tauri/src/offline.rs",
+    "services_hub": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/services/hub",
+    "migrations": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/services/hub/app/migrations",
+    "run_test_hub": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/scripts/run_test_hub.py",
+    "deviceos_real_tauri_e2e": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp/scripts/deviceos_real_tauri_e2e.py",
+    "learner_instructor_offline_tests": [
+      "tests/gate_a/test_learner_e2e.py",
+      "tests/gate_a/test_instructor_e2e.py",
+      "tests/gate_a/test_offline_restart.py",
+      "tests/gate_d/test_learner_journey.py",
+      "tests/gate_d/test_instructor_journey.py",
+      "tests/gate_d/test_offline_cross_device.py"
+    ]
+  },
+  "gui": {
+    "product_name": "WAIKE Learning OS",
+    "window_title": "WAIKE Learning OS",
+    "tauri_v2": true,
+    "webview_required_for_learner_depth": true,
+    "headless_env_skips_webview": true,
+    "headless_ack_only_insufficient_for_pass": true
+  },
+  "hub": {
+    "real_hub_service_present": true,
+    "run_test_hub_loopback_only": true,
+    "mockHub_exists_for_tests_only": true,
+    "resolveHub_fail_closed_production": true,
+    "vite_hub_url_compile_time_only": true,
+    "runtime_hub_url_override_from_deviceos_launch_context": true,
+    "production_binary_binds_real_hub_without_rebuild": true
+  },
+  "offline": {
+    "native_encrypted_outbox": true,
+    "ack_requires_receipt": true,
+    "client_cannot_set_acknowledged_directly": true
+  },
+  "device_lab_implications": {
+    "gui_window_launch_possible_without_product_change": true,
+    "real_hub_process_can_run_as_sidecar_or_in_guest": true,
+    "client_bind_to_real_hub_requires_vite_hub_url_or_runtime_override": true,
+    "accepted_main_defect_if_runtime_override_absent": false,
+    "recommended_smallest_product_fix": "NONE"
+  },
+  "forbidden_pass_surrogates": [
+    "mockHub",
+    "static_html",
+    "api_only",
+    "headless_ack_only",
+    "xvfb_as_primary_when_weston_exists",
+    "js_injection_as_learner_activity",
+    "direct_db_edit_as_learner_activity"
+  ]
+}

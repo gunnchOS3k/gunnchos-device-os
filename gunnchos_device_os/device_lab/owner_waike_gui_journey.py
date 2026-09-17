@@ -66,6 +66,96 @@ OWNER_HTTPD_GUEST_URL = f"http://{HUB_GUEST_ADDR}:{OWNER_HTTPD_PORT}"
 # Gateway probe used only for restrict=on A/B (expect FAIL under isolation).
 HUB_GATEWAY_URL = f"http://10.0.2.2:{HUB_PORT}"
 
+# Prompts that require scoped GuestServiceForward + full GUI/Hub depth (CSP-aware from 17G.5E).
+_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E")
+
+
+def _is_full_gui_hub_prompt(prompt: str) -> bool:
+    return any(prompt.startswith(p) for p in _FULL_GUI_HUB_PROMPTS)
+
+
+def prove_exact_runtime_csp(repo_root: Path) -> dict[str, Any]:
+    """Prove accepted-main CSP is exact Hub origin (no scheme-wide connect-src tokens).
+
+    Evidence is source+policy contract on the pinned LP checkout; runtime bind
+    success then confirms the webview applied the exact origin.
+    """
+    out: dict[str, Any] = {
+        "schema": "gunnchos.device_lab.waike_exact_runtime_csp.v1",
+        "generated_at_utc": _utc(),
+        "authorized_hub_origin": HUB_GUEST_URL,
+        "WAIKE_EXACT_RUNTIME_CSP_PASS": False,
+    }
+    try:
+        lp = resolve_waike_lp_checkout(repo_root)
+    except FileNotFoundError as exc:
+        out["error"] = str(exc)
+        return out
+    tauri = lp / "apps/client/src-tauri/tauri.conf.json"
+    csp_rs = lp / "apps/client/src-tauri/src/hub_connect_csp.rs"
+    lib_rs = lp / "apps/client/src-tauri/src/lib.rs"
+    out["learning_platform_path"] = str(lp)
+    out["tauri_conf"] = str(tauri)
+    out["hub_connect_csp_rs"] = str(csp_rs)
+    if not tauri.is_file() or not csp_rs.is_file():
+        out["error"] = "csp_sources_missing"
+        return out
+    try:
+        conf = json.loads(tauri.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        out["error"] = f"tauri_conf_invalid:{exc}"
+        return out
+    csp = (
+        ((conf.get("app") or {}).get("security") or {}).get("csp")
+        or ((conf.get("security") or {}).get("csp"))
+        or ""
+    )
+    out["static_csp"] = csp
+    scheme_wildcards = [tok for tok in ("http:", "https:", "ws:", "wss:") if tok in csp.split()]
+    # Also catch bare tokens in connect-src lists like `connect-src http:`
+    for tok in ("http:", "https:", "ws:", "wss:"):
+        if f" {tok}" in f" {csp}" or csp.endswith(tok) or f"{tok} " in csp:
+            if tok not in scheme_wildcards:
+                scheme_wildcards.append(tok)
+    # Refine: only flag if token appears as a CSP source (space/semicolon bounded)
+    import re as _re
+
+    scheme_wildcards = [
+        tok
+        for tok in ("http:", "https:", "ws:", "wss:")
+        if _re.search(rf"(?:^|[\s;]){_re.escape(tok)}(?:$|[\s;])", csp)
+    ]
+    out["static_scheme_wildcards"] = scheme_wildcards
+    out["static_fail_closed_no_scheme_wildcard"] = not scheme_wildcards
+    rs = csp_rs.read_text(encoding="utf-8")
+    out["hub_connect_csp_present"] = True
+    out["refuses_scheme_wildcard"] = "hub_csp_scheme_wildcard_forbidden" in rs
+    out["appends_exact_hub_origin"] = "connect_origins_for_hub_base" in rs
+    out["lib_wires_csp"] = lib_rs.is_file() and (
+        "hub_connect_csp" in lib_rs.read_text(encoding="utf-8")
+    )
+    out["policy_authorized_hub_base_url"] = DEVICE_LAB_HUB_ENDPOINT_POLICY_V1[
+        "authorized_hub_base_url"
+    ]
+    out["policy_matches_guest_hub_url"] = (
+        DEVICE_LAB_HUB_ENDPOINT_POLICY_V1["authorized_hub_base_url"] == HUB_GUEST_URL
+    )
+    expected_connect = [HUB_GUEST_URL, HUB_GUEST_URL.replace("http://", "ws://")]
+    out["expected_runtime_connect_origins"] = expected_connect
+    out["no_scheme_wide_tokens"] = bool(
+        out["static_fail_closed_no_scheme_wildcard"] and out["refuses_scheme_wildcard"]
+    )
+    out["WAIKE_EXACT_RUNTIME_CSP_PASS"] = bool(
+        out["hub_connect_csp_present"]
+        and out["refuses_scheme_wildcard"]
+        and out["appends_exact_hub_origin"]
+        and out["lib_wires_csp"]
+        and out["policy_matches_guest_hub_url"]
+        and out["static_fail_closed_no_scheme_wildcard"]
+        and out["no_scheme_wide_tokens"]
+    )
+    return out
+
 
 def ensure_guest_a11y_bus(session: Any) -> dict[str, Any]:
     """Start a real AT-SPI bus on the Interactive Guest Wayland session.
@@ -1871,7 +1961,7 @@ def attempt_waike_gui_hub_journey(
 ) -> dict[str, Any]:
     os.environ["GUNNCH_GUEST_AGENT_HOST_STUB"] = "0"
     if hub_only_guestfwd is None:
-        hub_only_guestfwd = prompt.startswith("17G.5D")
+        hub_only_guestfwd = _is_full_gui_hub_prompt(prompt)
     evidence = repo_root / "artifacts/device_lab_current_pin/waike"
     gui_dir = evidence / "gui_journey"
     gui_dir.mkdir(parents=True, exist_ok=True)
@@ -1919,6 +2009,18 @@ def attempt_waike_gui_hub_journey(
     )
     if not out["RUNTIME_TARGET_PREFLIGHT_PASS"]:
         out["blocker"] = "RUNTIME_TARGET_PREFLIGHT_FAIL"
+        out["finished_at_utc"] = _utc()
+        return out
+
+    csp_proof = prove_exact_runtime_csp(repo_root)
+    csp_proof["prompt"] = prompt
+    out["exact_runtime_csp"] = csp_proof
+    (gui_dir / "WAIKE_EXACT_RUNTIME_CSP.json").write_text(
+        json.dumps(csp_proof, indent=2) + "\n", encoding="utf-8"
+    )
+    if prompt.startswith("17G.5E") and not csp_proof.get("WAIKE_EXACT_RUNTIME_CSP_PASS"):
+        out["blocker"] = "WAIKE_EXACT_RUNTIME_CSP_FAIL"
+        out["NEXT_GATE"] = "WAIKE_CSP_SOURCE_CONTRACT_REMEDIATION"
         out["finished_at_utc"] = _utc()
         return out
 
@@ -2694,9 +2796,9 @@ def attempt_waike_gui_hub_journey(
                 },
             },
         )
-        # 17G.5D §6: if reachability true but client bind regresses → STOP.
+        # 17G.5D/E §6: if reachability true but client bind regresses → STOP.
         if (
-            prompt.startswith("17G.5D")
+            _is_full_gui_hub_prompt(prompt)
             and bool(bind.get("hub_reachable_from_guest"))
             and not hub_bound_early
         ):
@@ -2719,11 +2821,20 @@ def attempt_waike_gui_hub_journey(
                 bind["csp_inferred_from_socket_without_hub_http"] = True
             out["hub_bound"] = False
             if csp_hint:
-                out["blocker"] = (
-                    "waike_webview_csp_blocks_hub_connect_src:"
-                    "tauri.conf.json default-src 'self' without connect-src for authorized hub"
-                )
-                out["NEXT_GATE"] = "WAIKE_DRAFT_CSP_CONNECT_SRC_FOR_RUNTIME_HUB"
+                # After accepted-main CSP merge, residual CSP bind failure is a
+                # runtime/apply defect — not the pre-merge draft gate.
+                if prompt.startswith("17G.5E"):
+                    out["blocker"] = (
+                        "waike_webview_csp_still_blocks_hub_after_accepted_main_csp:"
+                        "exact_origin_connect_src_expected_but_client_http_absent"
+                    )
+                    out["NEXT_GATE"] = "WAIKE_CSP_RUNTIME_APPLY_REMEDIATION"
+                else:
+                    out["blocker"] = (
+                        "waike_webview_csp_blocks_hub_connect_src:"
+                        "tauri.conf.json default-src 'self' without connect-src for authorized hub"
+                    )
+                    out["NEXT_GATE"] = "WAIKE_DRAFT_CSP_CONNECT_SRC_FOR_RUNTIME_HUB"
                 out["WAIKE_PRODUCT_DEFECT_DRAFT"] = True
             else:
                 out["blocker"] = "client_not_bound_to_real_hub_after_policy_authorized_launch"
@@ -3068,7 +3179,7 @@ def attempt_waike_gui_hub_journey(
         )
 
         gui_ok = bool(journey_a.get("launched_gui") and journey_b.get("launched_gui"))
-        # 17G.5D strict gate: all mandatory journey elements required (honest FAIL otherwise).
+        # 17G.5D/E strict gate: all mandatory journey elements required (honest FAIL otherwise).
         mandatory_17g5d = [
             ("accepted_main_artifact", bool(out.get("matches_main_aarch64_glibc236"))),
             ("runtime_target_preflight", bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS"))),
@@ -3092,8 +3203,13 @@ def attempt_waike_gui_hub_journey(
             ("session_ok", bool(session_prov.get("ok"))),
             ("real_hub_ok", bool(hub.get("ok"))),
         ]
+        if prompt.startswith("17G.5E"):
+            csp_doc = out.get("exact_runtime_csp") or {}
+            mandatory_17g5d.append(
+                ("exact_runtime_csp", bool(csp_doc.get("WAIKE_EXACT_RUNTIME_CSP_PASS")))
+            )
         out["mandatory_17g5d"] = {k: v for k, v in mandatory_17g5d}
-        and_ok = all(v for _, v in mandatory_17g5d) if prompt.startswith("17G.5D") else all(
+        and_ok = all(v for _, v in mandatory_17g5d) if _is_full_gui_hub_prompt(prompt) else all(
             [
                 bool(bundle.get("ok")),
                 bool(bundle.get("pin_ok")),

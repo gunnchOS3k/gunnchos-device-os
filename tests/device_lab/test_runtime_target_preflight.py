@@ -24,7 +24,7 @@ def test_select_prefers_linux_aarch64_glibc236():
     rt = sel["selected"]["runtime_target"]
     assert rt["compatibility_label"] == "linux-aarch64-glibc236"
     assert rt["architecture"] == "aarch64"
-    assert rt["source_sha"] == "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c"
+    assert rt["source_sha"] == "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15"
 
 
 def test_positive_preflight_glibc236_vs_debian12_guest():
