@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.device_lab.waike_strict_verdict_17g5f.v1",
-  "generated_at_utc": "2026-09-17T14:10:30Z",
+  "generated_at_utc": "2026-09-17T15:33:54Z",
   "prompt": "17G.5F",
   "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
@@ -20,9 +20,12 @@
   "html_meta_injected": true,
   "hub_sidecar_healthz_only": true,
   "client_diag_hub_login_fetch_start": false,
-  "blocker": "waike_client_http_absent_despite_effective_csp_pass:diag_or_fetch_path_still_blocked",
-  "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
-  "diagnosis": "Accepted-main #15 effective WebView CSP PASS (DirectiveMap + HTML meta + WAIKE_EFFECTIVE_CSP* with http://10.0.2.100:8787). Guest Hub reachability PASS under restrict=on + scoped guestfwd. HubEndpointPolicy rejects unauthorized. GUI login form driven. Hub sidecar still healthz-only \u2014 no client HTTP beyond healthz and no client diag hub_login_fetch_*. Cannot claim WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS; prefer honest FAIL. NEXT: Device OS #134 client HTTP bind re-earn (fetch/diag path), not another WAIKE CSP PR.",
+  "webview_white_screen_localhost_refused": true,
+  "blocker": "waike_webview_loads_devurl_localhost_1420_without_custom_protocol",
+  "NEXT_GATE": "WAIKE_PR16_CUSTOM_PROTOCOL_EMBED_OWNER_MERGE_REFREEZE",
+  "diagnosis": "Effective WebView CSP PASS and Hub reachability PASS under restrict=on + hub guestfwd. Authentic GUI window alive, but framebuffer proves white WebView: 'Could not connect to localhost: Connection refused' \u2014 no login form, no hub_login_fetch_*, Hub healthz-only. Root cause: Device Lab cargo release builds omit tauri/custom-protocol, so binary loads devUrl :1420. Draft WAIKE PR #16. Keep WAIKE=false until owner merge + new artifact.",
+  "waike_draft_pr": 16,
+  "waike_draft_pr_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/16",
   "GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS": false,
   "do_not_start_gunnchai": true,
   "do_not_merge_134_or_portal_14": true

@@ -1,35 +1,33 @@
 {
-  "schema": "gunnchos.device_lab.waike_csp_product_defect_draft.v1",
-  "generated_at_utc": "2026-09-17T01:31:48Z",
+  "schema": "gunnchos.device_lab.waike_product_defect_draft.v1",
+  "generated_at_utc": "2026-09-17T15:33:54Z",
+  "prompt": "17G.5F",
+  "decision": "DRAFT_WAIKE_PRODUCT_PR",
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
-  "WAIKE_REAL_RUNTIME": false,
-  "blocker": "waike_webview_csp_blocks_hub_connect_src:tauri.conf.json default-src 'self' without connect-src for authorized hub",
-  "NEXT_GATE": "WAIKE_DRAFT_CSP_CONNECT_SRC_FOR_RUNTIME_HUB",
+  "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+  "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+  "blocker": "waike_webview_loads_devurl_localhost_1420_without_custom_protocol",
   "evidence": {
-    "trusted_launch_ack": true,
-    "hub_url": "http://10.0.2.100:8787",
-    "guest_hub_reachability_pass": true,
-    "login_form_driven": true,
-    "login_path": "agent_abs_click_enter_submit",
-    "hub_sidecar_client_http": false,
-    "hub_sidecar_auth_login": false,
-    "hub_healthz_only": true,
-    "guest_tcp_webkit_to_authorized_hub": true,
-    "bind_via": "guest_tcp_to_authorized_hub",
-    "socket_only_pending_hub_http": true,
-    "csp_inferred_from_socket_without_hub_http": true,
-    "gui_log_csp_literal": false,
-    "accepted_main_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
-    "artifact_sha256": "3df1e42e5d6c1b8b7e8ee31a636b2a6bec49120f38b6d28bd290b8a6e3fa1207"
+    "framebuffer_pre": "artifacts/device_lab_current_pin/waike/gui_journey/WAIKE_GUI_FRAMEBUFFER_PRE_LOGIN.png",
+    "framebuffer_post": "artifacts/device_lab_current_pin/waike/gui_journey/WAIKE_GUI_FRAMEBUFFER_POST_LOGIN.png",
+    "observed_ui": "Could not connect to localhost: Connection refused (white WebView; no login form)",
+    "hub_sidecar": "healthz-only",
+    "client_diag_hub_login_fetch_start": false,
+    "binary_contains_localhost_1420": true,
+    "binary_contains_login_surface_marker": false,
+    "artifact_sha256": "6442824be7f27355b7189d307cc45da69be31c7ddd30a96134a80c820fb2333a",
+    "accepted_main_sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
   },
-  "proposed_waike_fix": {
-    "file": "apps/client/src-tauri/tauri.conf.json",
-    "add_directive": "connect-src 'self' http: https: ws: wss:",
-    "rationale": "Native HubEndpointPolicy remains the authorization boundary; CSP must allow fetch to the policy-authorized runtime Hub base.",
-    "draft_patch_path": ".deps/waike-csp-draft/"
+  "root_cause": "Device Lab aarch64/glibc236 workflows build with `cargo build --release` without Tauri CLI implicit `--features custom-protocol`, so release binaries load tauri.conf.json devUrl http://localhost:1420 instead of embedded frontendDist.",
+  "smallest_product_fix": {
+    "pr": 16,
+    "pr_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/16",
+    "draft": true,
+    "branch": "cursor/waike-glibc236-embed-frontend-dist",
+    "head_sha": "e376402"
   },
-  "keep_tokens": {
-    "WAIKE_REAL_RUNTIME": false,
-    "do_not_start_gunnchai": true
-  }
+  "NEXT_GATE": "WAIKE_PR16_CUSTOM_PROTOCOL_EMBED_OWNER_MERGE_REFREEZE",
+  "do_not_claim_waike_pass": true,
+  "do_not_start_gunnchai": true
 }

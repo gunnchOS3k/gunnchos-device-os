@@ -1,10 +1,10 @@
 {
   "schema": "gunnchos.device_lab.current_pin_master.v1",
-  "generated_at_utc": "2026-09-17T14:10:30Z",
+  "generated_at_utc": "2026-09-17T15:33:54Z",
   "work_item": "DEVICE_LAB_CURRENT_PIN_REVALIDATION",
   "branch": "cursor/device-lab-current-pin-revalidation",
   "base": "origin/main",
-  "device_os_tip": "d89790ef8b4e56e77953287b0a9b67680a039d43",
+  "device_os_tip": "1eda6623e3432296feed21af95cfff7b6f94059e",
   "pin_manifest_sha256": "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42",
   "LIVE_GUNNCHOS_VISUAL_PASS": true,
   "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
@@ -26,8 +26,8 @@
   "prefer_fail_over_false_pass": true,
   "cursor_never_merges": true,
   "stale_historical_proof_rejected": true,
-  "FREE_GIB": 19.76,
-  "primary_blocker": "waike_client_http_absent_despite_effective_csp_pass:diag_or_fetch_path_still_blocked",
+  "FREE_GIB": 18.89,
+  "primary_blocker": "waike_webview_loads_devurl_localhost_1420_without_custom_protocol",
   "DEVICE_LAB_CANDIDATE_READY_FOR_OWNER": false,
   "ECO010_REEARN_REQUIRED_AFTER_RING_FIX": true,
   "ring_blocker": "guest_browser_state_not_committed",
@@ -52,11 +52,12 @@
   "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
   "WAIKE_ATSPI_WINDOW_PASS": false,
   "prompt_17g5d_full_waike_gui_hub_reearn": true,
-  "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+  "NEXT_GATE": "WAIKE_PR16_CUSTOM_PROTOCOL_EMBED_OWNER_MERGE_REFREEZE",
   "prompt_17g5e_waike_csp_accepted_main_refreeze_gui_hub_reearn": true,
   "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
   "artifact_sha256": "e928a1c4170a1511fa3fcad249e9d4d17138075651cd5c510a78ea312ea17be6",
   "drift_reason": "WAIKE_RUNTIME_CSP_EXACT_HUB_ORIGIN_ACCEPTED_MAIN",
   "prompt_17g5f_waike_csp_apply_accepted_main_refreeze_gui_hub_reearn": true,
-  "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true
+  "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+  "waike_draft_pr": 16
 }
