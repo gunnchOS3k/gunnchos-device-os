@@ -1,0 +1,763 @@
+{
+  "schema": "gunnchos.device_lab.gunnchai.journey_a.v1",
+  "generated_at_utc": "2026-09-17T22:43:56Z",
+  "ask_status": 200,
+  "ask_body": {
+    "action": "ask",
+    "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+    "continuity": "SDK_SANDBOX_MEMORY",
+    "ok": true,
+    "result": {
+      "app_id": "gunnchai_tutor",
+      "app_log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-post-waike-closure/artifacts/device_lab_current_pin/gunnchai/companion_sandbox/app_runtime.log",
+      "claim_boundary": "Digital gunnchAI Tutor app with live product-service assist when available, local reply template fallback, prompt/response safety gates, sandbox session memory, and WAIKE lesson context binding. Not production LLM deployment, not frontier model quality, not HUMAN_E6.",
+      "depth_claim": "D5_runtime_candidate",
+      "entry": "apps/gunnchai_tutor/index.html",
+      "guard": {
+        "claim_boundary": "Digital tutor safety gates + local reply templates + optional live gunnchAI product-service assist. Not production LLM deployment, not frontier model quality.",
+        "denied": false,
+        "mock": false,
+        "ok": true,
+        "reason": null
+      },
+      "mock": false,
+      "not_claimed": [
+        "frontier_model_quality",
+        "production_llm_deployment",
+        "human_e6_comprehension",
+        "cx48_capability_broker_runtime"
+      ],
+      "ok": true,
+      "owner_functions": [
+        "tutor_session",
+        "prompt_injection_guard",
+        "response_safety_gate",
+        "product_service_assist_or_local_template",
+        "session_memory_persist",
+        "waike_lesson_binding",
+        "ai_suggests_human_verifies"
+      ],
+      "permissions": {
+        "granted": [
+          "ai_interface",
+          "storage_read",
+          "storage_write"
+        ],
+        "missing": [],
+        "network_policy": "deny_all",
+        "ok": true,
+        "required": [
+          "storage_read",
+          "storage_write",
+          "ai_interface"
+        ]
+      },
+      "persisted_memory_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-post-waike-closure/artifacts/device_lab_current_pin/gunnchai/companion_sandbox/tutor_memory.json",
+      "persisted_session_count": 3,
+      "reply": {
+        "base_url": "http://127.0.0.1:18791",
+        "capability_broker_record": {
+          "backend": "llama.cpp",
+          "fallbackReason": null,
+          "fallbackUsed": false,
+          "mechanism": "hybrid",
+          "modelId": "llama.cpp",
+          "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+          "offline": true,
+          "processingMode": "local-only",
+          "provider_choice_recorded": true,
+          "realInference": true
+        },
+        "claim_boundary": "Digital tutor safety gates + local reply templates + optional live gunnchAI product-service assist. Not production LLM deployment, not frontier model quality.",
+        "governance": {
+          "consentGranted": false,
+          "disclosure": "DISCLOSURE: LOCAL-ONLY for tutoring. No cloud model call is permitted under current policy (processingMode=local-only; userCloudConsent=false). Data does not leave this device via this router.",
+          "evalBaselineRef": "fixtures/system-layer/eval",
+          "fallbackSafe": true,
+          "humanOverrideActive": false,
+          "minimizationApplied": false,
+          "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+          "purpose": "device_lab_gunnchai_tutor",
+          "purposeDeclared": true
+        },
+        "health": {
+          "base_url": "http://127.0.0.1:18791",
+          "body": {
+            "bindHint": "127.0.0.1",
+            "cancellationSupported": true,
+            "capabilities": [
+              {
+                "method": "GET",
+                "path": "/health",
+                "route": "tutoring"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/os/discover",
+                "route": "workflow"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/os/model-status",
+                "route": "workflow"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/os/rag-status",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/tutoring",
+                "route": "tutoring"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/code",
+                "route": "code"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/device_help",
+                "route": "device_help"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/a11y",
+                "route": "a11y"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/game_coach",
+                "route": "game_coach"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/network",
+                "route": "network"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/rag",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/scientific",
+                "route": "scientific"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/translation",
+                "route": "translation"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/workflow",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/security",
+                "route": "security"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/continuity",
+                "route": "continuity"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/content_adaptation",
+                "route": "content_adaptation"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/connection_path",
+                "route": "connection_path"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/input_interpretation",
+                "route": "input_interpretation"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/safety_alert",
+                "route": "safety_alert"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/ingest",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/chunk",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/index",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/search",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/attribution",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/delete",
+                "route": "rag"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/rag/rebuild",
+                "route": "rag"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/continuity/sessions",
+                "route": "continuity"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/continuity/export",
+                "route": "continuity"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/continuity/import",
+                "route": "continuity"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/governance/status",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/governance/purpose",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/governance/consent",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/governance/minimization",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/governance/override",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/governance/rollback",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/governance/model-rollback",
+                "route": "workflow"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/governance/monitor",
+                "route": "workflow"
+              },
+              {
+                "method": "GET",
+                "path": "/v1/audit",
+                "route": "workflow"
+              },
+              {
+                "method": "POST",
+                "path": "/v1/assist/cancel",
+                "route": "workflow"
+              }
+            ],
+            "discordNormative": false,
+            "fullPlatformDigitalComplete": true,
+            "governance": {
+              "activeModelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+              "consent": false,
+              "monitoringEvents": 4,
+              "overrideActive": false,
+              "purpose": "Local gunnchAI product assist for tutoring, code, device, a11y, coaching, network, RAG, science, translation, workflow, security, and continuity.",
+              "safeFallback": true
+            },
+            "metricsMode": "measured",
+            "offline": true,
+            "osIntegrationToken": "GUNNCHAI_OS_INTEGRATION_LOCAL_PASS",
+            "rag": {
+              "chunks": 37,
+              "corpora": {
+                "archive": 1,
+                "device": 1,
+                "local-runtime": 5,
+                "system": 2,
+                "waike": 8
+              },
+              "documents": 17,
+              "indexPath": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/var/gunnchai/rag/index.json",
+              "rebuiltAt": "2026-08-08T20:18:11.169Z"
+            },
+            "realLocalInference": true,
+            "service": "gunnchAI3k-product-service",
+            "status": "ok",
+            "timeoutSupported": true,
+            "token": "GUNNCHAI_PRODUCT_SERVICE_LOCAL_PASS",
+            "version": "0.7.0-continuation-vii"
+          },
+          "error": null,
+          "ok": true,
+          "status": 200
+        },
+        "http_status": 200,
+        "mock": false,
+        "ok": true,
+        "prompt_echo": "Explain OFDM at a high level for a Device Lab learner",
+        "provenance": {
+          "backend": "llama.cpp",
+          "capability": "tutoring",
+          "fallbackReason": null,
+          "fallbackUsed": false,
+          "generatedAt": "2026-09-17T22:43:56.257Z",
+          "grounded": false,
+          "integrityNote": "Structured product assist; model-unavailable uses deterministic fallback.",
+          "mechanism": "hybrid",
+          "modelId": "llama.cpp",
+          "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+          "offline": true,
+          "processingMode": "local-only",
+          "realInference": true,
+          "requestId": "448bc9c1-813c-4a62-928e-5ac9cb439114",
+          "sources": []
+        },
+        "provider_path": "LIVE_PRODUCT_SERVICE",
+        "raw_ok": true,
+        "request_id": "448bc9c1-813c-4a62-928e-5ac9cb439114",
+        "source": "product_service",
+        "structured": {
+          "binary": "/opt/homebrew/bin/llama-cli",
+          "checkQuestion": "What is one property of [topic=wireless_basics; profile=student] Explain OFDM at a?",
+          "concept": "[topic=wireless_basics; profile=student] Explain OFDM at a",
+          "kind": "tutoring",
+          "llamaMetrics": {
+            "binary": "/opt/homebrew/bin/llama-cli",
+            "contextSize": 512,
+            "generationTokPerSec": 93.3,
+            "hardwarePath": "cpu",
+            "latencyMs": 3292,
+            "modelPath": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/models/local/SmolLM2-135M-Instruct-Q4_K_M.gguf",
+            "nPredict": 64,
+            "outputTokens": 112,
+            "peakRssBytes": 244482048,
+            "promptTokPerSec": 555.7,
+            "promptTokens": null,
+            "quant": "Q4_K_M",
+            "runtimeVersion": "",
+            "ttftMs": 72
+          },
+          "llmNarrative": "Capability: tutoring\nQuery: [topic=wireless_basics; profile=student] Explain OFDM at a high level for a Device Lab learner\n\n[WAIKE lesson context: wireless_basics_101; read-only tutoring]\nLocal context:\n[device:fixtures/system-layer/integrations/device-docs/device_help_subset.md] # Device docs subset (local RAG)\n\nStudent / handheld / DS-XL local troubleshooting notes for gunnchOS integration.\n\n## Storage health\n1. Check free disk and reclaimable caches ... (truncated)\nStudent / handheld / DS-XL local troubleshooting notes for gunnchOS integration.\n\n## Storage health\n1. Check free disk and reclaimable caches.\n2. Prefer local-only diagnostics; do not upload device logs wit\n[waike:fixtures/system-layer/",
+          "mechanism": "hybrid",
+          "metricsMode": "measured",
+          "modelPath": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/models/local/SmolLM2-135M-Instruct-Q4_K_M.gguf",
+          "rawModelChars": 709,
+          "realInference": true,
+          "rubricFields": [
+            "concept",
+            "steps",
+            "checkQuestion"
+          ],
+          "selectedArchitecture": "llama.cpp",
+          "steps": [
+            "Define [topic=wireless_basics; profile=student] Explain OFDM at a in one sentence.",
+            "Work a small example for [topic=wireless_basics; profile=student] Explain OFDM at a.",
+            "Ask a check question about [topic=wireless_basics; profile=student] Explain OFDM at a."
+          ],
+          "summary": "[llama.cpp REAL local inference]\nCapability: tutoring\nQuery: [topic=wireless_basics; profile=student] Explain OFDM at a high level for a Device Lab learner\n\n[WAIKE lesson context: wireless_basics_101; read-only tutoring]\nLocal context:\n[device:fixtures/system-layer/integrations/device-docs/device_help_subset.md] # Device docs subset (local RAG)\n\nStudent / handheld / DS-XL local troubleshooting not"
+        },
+        "text": "[llama.cpp REAL local inference]\nCapability: tutoring\nQuery: [topic=wireless_basics; profile=student] Explain OFDM at a high level for a Device Lab learner\n\n[WAIKE lesson context: wireless_basics_101; read-only tutoring]\nLocal context:\n[device:fixtures/system-layer/integrations/device-docs/device_help_subset.md] # Device docs subset (local RAG)\n\nStudent / handheld / DS-XL local troubleshooting notes for gunnchOS integration.\n\n## Storage health\n1. Check free disk and reclaimable caches ... (truncated)\nStudent / handheld / DS-XL local troubleshooting notes for gunnchOS integration.\n\n## Storage health\n1. Check free disk and reclaimable caches.\n2. Prefer local-only diagnostics; do not upload device logs wit\n[waike:fixtures/system-layer/\n\n[structured overlay]\nTUTORING[[topic=wireless_basics; profile=student] Explain OFDM at a]\nConcept: [topic=wireless_basics; profile=student] Explain OFDM at a\nSteps: Define [topic=wireless_basics; profile=student] Explain OFDM at a in one sentence. | Work a small example for [topic=wireless_basics; profile=student] Explain OFDM at a. | Ask a check question about [topic=wireless_basics; profile=student] Explain OFDM at a.\nCheck: What is one property of [topic=wireless_basics; profile=student] Explain OFDM at a?"
+      },
+      "safety": {
+        "claim_boundary": "Digital tutor safety gates + local reply templates + optional live gunnchAI product-service assist. Not production LLM deployment, not frontier model quality.",
+        "mock": false,
+        "requires_educator_review": false,
+        "safe_to_show": true
+      },
+      "sdk_app_id": "gunnchos.gunnchai_tutor",
+      "sdk_version": "0.3.1",
+      "session": {
+        "claim_boundary": "Digital tutor safety gates + local reply templates + optional live gunnchAI product-service assist. Not production LLM deployment, not frontier model quality.",
+        "mock": false,
+        "pii_collection": false,
+        "profile": "student",
+        "require_live": true,
+        "runtime": "product_service",
+        "safety": "ai_suggests_human_verifies",
+        "started": true,
+        "topic": "wireless_basics"
+      },
+      "stub_content": false,
+      "ui_present": true,
+      "waike_context": {
+        "available": true,
+        "completion_fabricated": false,
+        "grades_written": false,
+        "integration": "waike_lesson_binding",
+        "lesson_id": "wireless_basics_101",
+        "lessons": [
+          "waike_gary_upnow_intro",
+          "wireless_basics_101",
+          "python_starter_pack",
+          "DIGITAL_CONFIDENCE",
+          "IT_SUPPORT_HARDWARE",
+          "SOFTWARE_BUILDER",
+          "NETWORKING_INFRA",
+          "CYBER_SOC",
+          "DATA_DASHBOARDS",
+          "AI_ML_EDGE",
+          "EMBEDDED_PROTOTYPING",
+          "WIRELESS_6G",
+          "PM_AGILE_LSS",
+          "GAME_DEV_INTERACTIVE",
+          "SEVEN_GC_APPRENTICESHIP",
+          "CLOUD_DEVOPS",
+          "COMM_PD_ETHICS",
+          "ROBOTICS_CONTROL",
+          "GUNNCHOS_PRODUCT_LAB",
+          "HARDWARE_ENGINEERING",
+          "DATA_VIZ_BI"
+        ],
+        "mastery_fabricated": false,
+        "read_only": true
+      }
+    },
+    "runtime": "first_party_apps.gunnchai_tutor",
+    "wired": true
+  },
+  "checklist_slice": {
+    "1_ui_launch": {
+      "ok": true,
+      "bridge_health": {
+        "apps": [
+          "creator_studio",
+          "gunnchai_tutor",
+          "waike_learning"
+        ],
+        "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+        "ok": true,
+        "sandbox_data_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-post-waike-closure/artifacts/device_lab_current_pin/gunnchai/companion_sandbox",
+        "service": "companion_bridge",
+        "wired": true
+      },
+      "ui_status": 200,
+      "ui_err": null,
+      "ui_bytes": 1710,
+      "evidence_class": "GUI_ACTION",
+      "path": "companion_bridge \u2192 apps/gunnchai_tutor/index.html"
+    },
+    "2_real_model_provider": {
+      "ok": true,
+      "health": {
+        "status": "ok",
+        "service": "gunnchAI3k-product-service",
+        "version": "0.7.0-continuation-vii",
+        "token": "GUNNCHAI_PRODUCT_SERVICE_LOCAL_PASS",
+        "osIntegrationToken": "GUNNCHAI_OS_INTEGRATION_LOCAL_PASS",
+        "offline": true,
+        "bindHint": "127.0.0.1",
+        "realLocalInference": true,
+        "metricsMode": "measured",
+        "rag": {
+          "documents": 17,
+          "chunks": 37,
+          "corpora": {
+            "archive": 1,
+            "device": 1,
+            "local-runtime": 5,
+            "system": 2,
+            "waike": 8
+          },
+          "rebuiltAt": "2026-08-08T20:18:11.169Z",
+          "indexPath": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/var/gunnchai/rag/index.json"
+        },
+        "governance": {
+          "purpose": "Local gunnchAI product assist for tutoring, code, device, a11y, coaching, network, RAG, science, translation, workflow, security, and continuity.",
+          "consent": false,
+          "monitoringEvents": 4,
+          "overrideActive": false,
+          "safeFallback": true,
+          "activeModelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v"
+        },
+        "capabilities": [
+          {
+            "route": "tutoring",
+            "method": "GET",
+            "path": "/health"
+          },
+          {
+            "route": "workflow",
+            "method": "GET",
+            "path": "/v1/os/discover"
+          },
+          {
+            "route": "workflow",
+            "method": "GET",
+            "path": "/v1/os/model-status"
+          },
+          {
+            "route": "rag",
+            "method": "GET",
+            "path": "/v1/os/rag-status"
+          },
+          {
+            "route": "tutoring",
+            "method": "POST",
+            "path": "/v1/assist/tutoring"
+          },
+          {
+            "route": "code",
+            "method": "POST",
+            "path": "/v1/assist/code"
+          },
+          {
+            "route": "device_help",
+            "method": "POST",
+            "path": "/v1/assist/device_help"
+          },
+          {
+            "route": "a11y",
+            "method": "POST",
+            "path": "/v1/assist/a11y"
+          },
+          {
+            "route": "game_coach",
+            "method": "POST",
+            "path": "/v1/assist/game_coach"
+          },
+          {
+            "route": "network",
+            "method": "POST",
+            "path": "/v1/assist/network"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/assist/rag"
+          },
+          {
+            "route": "scientific",
+            "method": "POST",
+            "path": "/v1/assist/scientific"
+          },
+          {
+            "route": "translation",
+            "method": "POST",
+            "path": "/v1/assist/translation"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/assist/workflow"
+          },
+          {
+            "route": "security",
+            "method": "POST",
+            "path": "/v1/assist/security"
+          },
+          {
+            "route": "continuity",
+            "method": "POST",
+            "path": "/v1/assist/continuity"
+          },
+          {
+            "route": "content_adaptation",
+            "method": "POST",
+            "path": "/v1/assist/content_adaptation"
+          },
+          {
+            "route": "connection_path",
+            "method": "POST",
+            "path": "/v1/assist/connection_path"
+          },
+          {
+            "route": "input_interpretation",
+            "method": "POST",
+            "path": "/v1/assist/input_interpretation"
+          },
+          {
+            "route": "safety_alert",
+            "method": "POST",
+            "path": "/v1/assist/safety_alert"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/ingest"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/chunk"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/index"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/search"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/attribution"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/delete"
+          },
+          {
+            "route": "rag",
+            "method": "POST",
+            "path": "/v1/rag/rebuild"
+          },
+          {
+            "route": "continuity",
+            "method": "GET",
+            "path": "/v1/continuity/sessions"
+          },
+          {
+            "route": "continuity",
+            "method": "POST",
+            "path": "/v1/continuity/export"
+          },
+          {
+            "route": "continuity",
+            "method": "POST",
+            "path": "/v1/continuity/import"
+          },
+          {
+            "route": "workflow",
+            "method": "GET",
+            "path": "/v1/governance/status"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/governance/purpose"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/governance/consent"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/governance/minimization"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/governance/override"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/governance/rollback"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/governance/model-rollback"
+          },
+          {
+            "route": "workflow",
+            "method": "GET",
+            "path": "/v1/governance/monitor"
+          },
+          {
+            "route": "workflow",
+            "method": "GET",
+            "path": "/v1/audit"
+          },
+          {
+            "route": "workflow",
+            "method": "POST",
+            "path": "/v1/assist/cancel"
+          }
+        ],
+        "cancellationSupported": true,
+        "timeoutSupported": true,
+        "fullPlatformDigitalComplete": true,
+        "discordNormative": false
+      },
+      "evidence_class": "REAL_PROVIDER|LOCAL_PROVIDER"
+    },
+    "3_capability_broker_provider_choice": {
+      "ok": true,
+      "ask_status": 200,
+      "ask_err": null,
+      "provider_path": "LIVE_PRODUCT_SERVICE",
+      "source": "product_service",
+      "request_id": "448bc9c1-813c-4a62-928e-5ac9cb439114",
+      "capability_broker_record": {
+        "backend": "llama.cpp",
+        "fallbackReason": null,
+        "fallbackUsed": false,
+        "mechanism": "hybrid",
+        "modelId": "llama.cpp",
+        "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+        "offline": true,
+        "processingMode": "local-only",
+        "provider_choice_recorded": true,
+        "realInference": true
+      },
+      "provenance": {
+        "backend": "llama.cpp",
+        "capability": "tutoring",
+        "fallbackReason": null,
+        "fallbackUsed": false,
+        "generatedAt": "2026-09-17T22:43:56.257Z",
+        "grounded": false,
+        "integrityNote": "Structured product assist; model-unavailable uses deterministic fallback.",
+        "mechanism": "hybrid",
+        "modelId": "llama.cpp",
+        "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+        "offline": true,
+        "processingMode": "local-only",
+        "realInference": true,
+        "requestId": "448bc9c1-813c-4a62-928e-5ac9cb439114",
+        "sources": []
+      },
+      "evidence_class": "REAL_PROVIDER|LOCAL_PROVIDER"
+    },
+    "5_tool_output_to_user": {
+      "ok": true,
+      "text_len": 1258,
+      "evidence_class": "GUI_ACTION",
+      "note": "Reply returned through /api/gunnchai/ask to UI shell"
+    },
+    "15_no_api_only_substitution": {
+      "ok": true,
+      "path": "UI shell loaded + Ask posted to companion bridge API (same path as browser Ask button)"
+    }
+  }
+}
