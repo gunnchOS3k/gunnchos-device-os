@@ -1799,8 +1799,82 @@ def _inject_key(session: Any, key: str, *, mods: list[str] | None = None) -> dic
     return _agent_call(session, "input_inject", **kwargs)
 
 
+# US QWERTY punctuation → (key name for guest agent, optional mods).
+# Older guest agents' kind=text path silently dropped non-alnum, which turned
+# learner-alpha / WaikeTestPass1! / site-alpha into learneralpha / WaikeTestPass1
+# / sitealpha and caused real Tauri login 401 (clen=77) vs mimic 200 (clen=85).
+_INJECT_TEXT_PUNCT: dict[str, tuple[str, list[str] | None]] = {
+    "-": ("minus", None),
+    "_": ("minus", ["shift"]),
+    "!": ("1", ["shift"]),
+    "@": ("2", ["shift"]),
+    "#": ("3", ["shift"]),
+    "$": ("4", ["shift"]),
+    "%": ("5", ["shift"]),
+    "^": ("6", ["shift"]),
+    "&": ("7", ["shift"]),
+    "*": ("8", ["shift"]),
+    "(": ("9", ["shift"]),
+    ")": ("0", ["shift"]),
+    ".": ("dot", None),
+    ",": ("comma", None),
+    "/": ("slash", None),
+    "?": ("slash", ["shift"]),
+    "=": ("equal", None),
+    "+": ("equal", ["shift"]),
+}
+
+
 def _inject_text(session: Any, text: str) -> dict[str, Any]:
-    return _agent_call(session, "input_inject", kind="text", text=text, timeout_sec=6.0)
+    """Type text via per-char key inject so '-' and '!' survive older guest agents.
+
+    Falls back to bulk kind=text only when every character is alphanumeric/space
+    (safe on both old and new agents).
+    """
+    if not text:
+        return {"ok": True, "kind": "text", "text": text, "path": "empty"}
+    needs_punct = any(
+        (not ch.isalnum()) and ch != " " for ch in text
+    )
+    if not needs_punct:
+        return _agent_call(session, "input_inject", kind="text", text=text, timeout_sec=6.0)
+
+    ok = True
+    typed = 0
+    skipped: list[str] = []
+    for ch in text:
+        if ch == " ":
+            r = _inject_key(session, "space")
+        elif ch.isalpha():
+            if ch.isupper():
+                r = _inject_key(session, ch.lower(), mods=["shift"])
+            else:
+                r = _inject_key(session, ch)
+        elif ch.isdigit():
+            r = _inject_key(session, ch)
+        elif ch in _INJECT_TEXT_PUNCT:
+            key, mods = _INJECT_TEXT_PUNCT[ch]
+            r = _inject_key(session, key, mods=mods)
+        else:
+            skipped.append(ch)
+            continue
+        if not r.get("ok"):
+            ok = False
+            break
+        typed += 1
+        time.sleep(0.012)
+    out: dict[str, Any] = {
+        "ok": ok,
+        "kind": "text",
+        "text": text,
+        "path": "per_char_key",
+        "typed": typed,
+        "injected_via": "uinput_key_chars",
+    }
+    if skipped:
+        out["skipped_chars"] = "".join(skipped)[:64]
+        out["ok"] = False
+    return out
 
 
 def wait_gui_hub_ready_for_login(

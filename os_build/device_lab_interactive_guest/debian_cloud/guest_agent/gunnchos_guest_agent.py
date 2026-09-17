@@ -459,6 +459,42 @@ _KEYNAME_MAP = {
     "shift": "KEY_LEFTSHIFT",
     "super": "KEY_LEFTMETA",
     "meta": "KEY_LEFTMETA",
+    "minus": "KEY_MINUS",
+    "dash": "KEY_MINUS",
+    "hyphen": "KEY_MINUS",
+    "dot": "KEY_DOT",
+    "period": "KEY_DOT",
+    "slash": "KEY_SLASH",
+    "equal": "KEY_EQUAL",
+    "comma": "KEY_COMMA",
+}
+
+# US QWERTY punctuation for kind=text (code name, needs_shift).
+# Prior agents silently skipped non-alnum via `continue`, which stripped '-' and '!'
+# from WAIKE demo credentials (learner-alpha / WaikeTestPass1! / site-alpha).
+_TEXT_PUNCT_US = {
+    "-": ("KEY_MINUS", False),
+    "_": ("KEY_MINUS", True),
+    "!": ("KEY_1", True),
+    "@": ("KEY_2", True),
+    "#": ("KEY_3", True),
+    "$": ("KEY_4", True),
+    "%": ("KEY_5", True),
+    "^": ("KEY_6", True),
+    "&": ("KEY_7", True),
+    "*": ("KEY_8", True),
+    "(": ("KEY_9", True),
+    ")": ("KEY_0", True),
+    ".": ("KEY_DOT", False),
+    ",": ("KEY_COMMA", False),
+    "/": ("KEY_SLASH", False),
+    "?": ("KEY_SLASH", True),
+    "=": ("KEY_EQUAL", False),
+    "+": ("KEY_EQUAL", True),
+    ";": ("KEY_SEMICOLON", False),
+    ":": ("KEY_SEMICOLON", True),
+    "'": ("KEY_APOSTROPHE", False),
+    '"': ("KEY_APOSTROPHE", True),
 }
 
 
@@ -511,6 +547,7 @@ def cmd_input_inject(req: dict[str, Any]) -> dict[str, Any]:
             )
         if kind == "text":
             text = str(req.get("text") or "")
+            skipped: list[str] = []
             for ch in text:
                 if ch == " ":
                     code = e.KEY_SPACE
@@ -521,7 +558,11 @@ def cmd_input_inject(req: dict[str, Any]) -> dict[str, Any]:
                 elif ch.isdigit():
                     code = getattr(e, f"KEY_{ch}")
                     shift = False
+                elif ch in _TEXT_PUNCT_US:
+                    code_name, shift = _TEXT_PUNCT_US[ch]
+                    code = getattr(e, code_name)
                 else:
+                    skipped.append(ch)
                     continue
                 if shift:
                     kbd.write(e.EV_KEY, e.KEY_LEFTSHIFT, 1)
@@ -533,7 +574,10 @@ def cmd_input_inject(req: dict[str, Any]) -> dict[str, Any]:
                     kbd.write(e.EV_KEY, e.KEY_LEFTSHIFT, 0)
                 kbd.syn()
                 time.sleep(0.01)
-            return _ok("input_inject", kind="text", text=text, injected_via="uinput")
+            out = _ok("input_inject", kind="text", text=text, injected_via="uinput")
+            if skipped:
+                out["skipped_chars"] = "".join(skipped)[:64]
+            return out
         if kind == "pointer":
             dx = int(req.get("dx") or 0)
             dy = int(req.get("dy") or 0)
