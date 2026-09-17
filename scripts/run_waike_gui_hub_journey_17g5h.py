@@ -441,7 +441,7 @@ def _main_impl() -> int:
     if passed:
         next_gate = "GUNNCHAI_DEVICE_LAB_INTEGRATION"
     elif not next_gate:
-        next_gate = "DEVICE_OS_134_WAIKE_EFFECTIVE_CSP_GUI_HUB_REEARN"
+        next_gate = "DEVICE_OS_134_WAIKE_GUI_COURSE_ASSESSMENT_OFFLINE_DEPTH"
 
     gate = {
         "generated_at_utc": _utc(),

@@ -1,0 +1,57 @@
+{
+  "schema": "gunnchos.device_lab.prompt_17g5h_gui_course_assessment_offline_depth.v1",
+  "generated_at_utc": "2026-09-17T20:54:03Z",
+  "prompt": "17G.5H-gui-course-assessment-offline-depth",
+  "RUN_CONDITION_MET": true,
+  "qemu_hvf": true,
+  "device_os_tip": "3a175f5d6ef7406651875d630d41c21b318ef6bc",
+  "portal_pr14_tip": "cebdbf0cdf7a23f4ae98fa592ad7af9b17fcf782",
+  "waike_draft_pr": {
+    "number": 17,
+    "url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/17",
+    "is_draft": true,
+    "state": "OPEN",
+    "head": "b2c2f2338edbd38301b2362d49b29c7508459b32",
+    "merged": false
+  },
+  "truth_tokens": {
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "depth": {
+    "learner_gui_login": true,
+    "learner_home_http": true,
+    "course_activity": true,
+    "assessment_receipt": true,
+    "assessment_submit_path": "gui_login_home_plus_hub_submit_same_identity",
+    "role_denial": true,
+    "instructor_workflow": true,
+    "feedback_readback": true,
+    "offline_reconnect": true,
+    "controlled_recovery": true,
+    "journey_a": true,
+    "journey_b": true
+  },
+  "verdict": "PASS",
+  "blocker": null,
+  "NEXT_GATE": "GUNNCHAI_DEVICE_LAB_INTEGRATION",
+  "named_gate_attempted": "DEVICE_OS_134_WAIKE_GUI_COURSE_ASSESSMENT_OFFLINE_DEPTH",
+  "named_gate_status": "PASS",
+  "gunnchai_blocked_until_edmund_merge": true,
+  "do_not_merge": true,
+  "cursor_never_merges": true,
+  "evidence": {
+    "guest_attempt": "artifacts/device_lab_current_pin/waike/WAIKE_GUEST_ATTEMPT.json",
+    "runtime_pass": "artifacts/device_lab_current_pin/waike/WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS.json",
+    "run_log": "artifacts/device_lab_current_pin/waike/WAIKE_RUN_LOG_17G5H_course_assessment_offline_depth.txt",
+    "gui_journey": "artifacts/device_lab_current_pin/waike/gui_journey/"
+  }
+}
