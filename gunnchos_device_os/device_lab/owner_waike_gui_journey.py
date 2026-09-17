@@ -672,9 +672,11 @@ def prove_guest_webkit_mimic_login_post(
     """Guest-side OPTIONS+POST mimicking WebKit CORS login (not GUI).
 
     Separates guestfwd POST path health from WebView Origin/CORS behavior.
+    Prefer HTTP/1.0 + Connection: close (healthz path that already works through
+    guestfwd); also record an HTTP/1.1 matrix cell for diagnosis.
     """
     py = f"""
-import json, socket
+import json, socket, time
 from urllib.parse import urlparse
 out = {{
   "ok": False,
@@ -684,9 +686,11 @@ out = {{
   "options_headers": {{}},
   "post_status": None,
   "post_body_head": "",
+  "http_version_used": "HTTP/1.0",
+  "matrix": {{}},
   "errors": [],
 }}
-def raw(method, path, body=b"", extra_headers=None, timeout=8.0):
+def raw(method, path, body=b"", extra_headers=None, timeout=8.0, http_ver="HTTP/1.0"):
   p = urlparse({hub_url!r})
   host = p.hostname
   port = int(p.port or 80)
@@ -701,11 +705,17 @@ def raw(method, path, body=b"", extra_headers=None, timeout=8.0):
     hdrs.extend(extra_headers)
   if body:
     hdrs.append(f"Content-Length: {{len(body)}}")
-  req = (f"{{method}} {{path}} HTTP/1.1\\r\\n" + "\\r\\n".join(hdrs) + "\\r\\n\\r\\n").encode() + body
+  req = (f"{{method}} {{path}} {{http_ver}}\\r\\n" + "\\r\\n".join(hdrs) + "\\r\\n\\r\\n").encode() + body
   s = socket.create_connection((host, port), timeout=timeout)
   try:
+    # Brief settle: some guestfwd paths drop bytes sent in the same tick as SYN-ACK.
+    time.sleep(0.05)
     s.settimeout(timeout)
     s.sendall(req)
+    try:
+      s.shutdown(socket.SHUT_WR)
+    except Exception:
+      pass
     chunks = []
     while True:
       try:
@@ -735,44 +745,64 @@ def raw(method, path, body=b"", extra_headers=None, timeout=8.0):
       k, _, v = ln.partition(b":")
       headers[k.decode("latin1", "replace").strip().lower()] = v.decode("latin1", "replace").strip()
   return status, headers, body_b[:800].decode("utf-8", "replace")
-try:
-  st, hdrs, _ = raw(
-    "OPTIONS",
-    "/api/v1/auth/login",
-    extra_headers=[
-      "Access-Control-Request-Method: POST",
-      "Access-Control-Request-Headers: content-type",
-    ],
-  )
-  out["options_status"] = st
-  out["options_headers"] = {{
-    k: hdrs.get(k)
-    for k in (
-      "access-control-allow-origin",
-      "access-control-allow-methods",
-      "access-control-allow-headers",
-      "access-control-allow-private-network",
+
+# Matrix: classify guestfwd HTTP/1.0 vs 1.1 and GET vs OPTIONS/POST.
+for ver in ("HTTP/1.0", "HTTP/1.1"):
+  cell = {{}}
+  try:
+    st, _, _ = raw("GET", "/healthz", http_ver=ver, timeout=6.0)
+    cell["get_healthz"] = st
+  except Exception as e:
+    cell["get_healthz_err"] = repr(e)
+  try:
+    st, hdrs, _ = raw(
+      "OPTIONS",
+      "/api/v1/auth/login",
+      extra_headers=[
+        "Access-Control-Request-Method: POST",
+        "Access-Control-Request-Headers: content-type",
+      ],
+      http_ver=ver,
+      timeout=8.0,
     )
-  }}
-except Exception as e:
-  out["errors"].append(f"options:{{e!r}}")
-try:
-  body = json.dumps({{
-    "username": {username!r},
-    "password": {password!r},
-    "site_id": {site_id!r},
-  }}).encode()
-  st, hdrs, body_txt = raw(
-    "POST",
-    "/api/v1/auth/login",
-    body=body,
-    extra_headers=["Content-Type: application/json"],
-  )
-  out["post_status"] = st
-  out["post_body_head"] = body_txt
-  out["post_acao"] = hdrs.get("access-control-allow-origin")
-except Exception as e:
-  out["errors"].append(f"post:{{e!r}}")
+    cell["options"] = st
+    cell["options_acao"] = hdrs.get("access-control-allow-origin")
+  except Exception as e:
+    cell["options_err"] = repr(e)
+  try:
+    body = json.dumps({{
+      "username": {username!r},
+      "password": {password!r},
+      "site_id": {site_id!r},
+    }}).encode()
+    st, hdrs, body_txt = raw(
+      "POST",
+      "/api/v1/auth/login",
+      body=body,
+      extra_headers=["Content-Type: application/json"],
+      http_ver=ver,
+      timeout=8.0,
+    )
+    cell["post"] = st
+    cell["post_acao"] = hdrs.get("access-control-allow-origin")
+    cell["post_body_head"] = body_txt[:200]
+  except Exception as e:
+    cell["post_err"] = repr(e)
+  out["matrix"][ver] = cell
+
+# Primary bind cell: HTTP/1.0 (matches working healthz guestfwd path).
+m0 = out["matrix"].get("HTTP/1.0") or {{}}
+out["options_status"] = m0.get("options")
+out["post_status"] = m0.get("post")
+out["post_body_head"] = m0.get("post_body_head") or ""
+out["post_acao"] = m0.get("post_acao")
+out["options_headers"] = {{
+  "access-control-allow-origin": m0.get("options_acao"),
+}}
+for ver, cell in out["matrix"].items():
+  for k, v in cell.items():
+    if k.endswith("_err"):
+      out["errors"].append(f"{{ver}}:{{k}}:{{v}}")
 out["ok"] = bool(
   out.get("options_status") in (200, 204)
   and out.get("post_status") in (200, 401, 403, 422)
@@ -783,10 +813,10 @@ print(json.dumps(out))
     res = _guest_sh(
         session,
         "python3 /var/tmp/waike_webkit_mimic_login.py",
-        timeout_sec=25.0,
+        timeout_sec=90.0,
     )
     raw_out = (res.get("stdout") or "") + (res.get("stderr") or "")
-    doc: dict[str, Any] = {"ok": False, "raw_tail": raw_out[-1200:]}
+    doc: dict[str, Any] = {"ok": False, "raw_tail": raw_out[-2000:]}
     for line in raw_out.splitlines():
         line = line.strip()
         if line.startswith("{") and "options_status" in line:

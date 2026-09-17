@@ -16,10 +16,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ACCEPTED_WAIKE_LP_SHA = "5037df0c2dd1a966fcb07422a27366b14fe56b2f"
+ACCEPTED_WAIKE_LP_SHA = "34fb050ccabec813cef4811d64581b32453e1ec2"
 ACCEPTED_WAIKE_OPS_SHA = "fbf7685bc5686201ccaa0128ee83346d59b3d584"
-# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE #15 WebKitGTK CSP apply pin.
-PIN_MANIFEST_SHA256 = "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42"
+# Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE #16 custom-protocol embed pin.
+PIN_MANIFEST_SHA256 = "46008cb675a9dd898e65bf05edc78b86ba5cbf1287278ebc7d44b048c0f8bd8b"
 BUNDLE_ID = "com.gunnchos.waike.learning"
 APP_VERSION = "0.1.0"
 
@@ -29,13 +29,13 @@ GATE_D_LINUX_SHA256 = (
     "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef"
 )
 
-# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #15 / run 35185051542).
+# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #16 / run 35250606721).
 # Prefer this over Ubuntu 24.04 aarch64-current (GLIBC_2.39) for Interactive Guest.
-# Prior #14 artifact e928a1c4… MUST NOT be reused for WebKitGTK CSP-apply re-earn.
-MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10481618959"
-MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35185051542"
+# Prior #15 artifact 6442824b… MUST NOT be reused for custom-protocol frontendDist embed re-earn.
+MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10509448344"
+MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35250606721"
 MAIN_AARCH64_GLIBC236_SHA256 = (
-    "6442824be7f27355b7189d307cc45da69be31c7ddd30a96134a80c820fb2333a"
+    "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8"
 )
 MAIN_AARCH64_GLIBC236_LABEL = "linux-aarch64-glibc236"
 

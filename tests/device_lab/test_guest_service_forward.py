@@ -44,7 +44,7 @@ def test_one_valid_guest_service_forward_emits_guestfwd():
 
 
 def test_device_lab_hub_httpd_forward_contract():
-    c = device_lab_hub_httpd_forward()
+    c = device_lab_hub_httpd_forward(use_cmd_relay=False)
     d = c.to_dict()
     assert d["schema"] == "gunnchos.device_lab.guest_service_forward.v1"
     assert d["restrict"] is True
@@ -52,6 +52,33 @@ def test_device_lab_hub_httpd_forward_contract():
     assert "guestfwd=tcp:10.0.2.100:8767-tcp:127.0.0.1:8767" in d["qemu_netdev"]
     assert d["qemu_netdev"].startswith("user,id=n0,restrict=on,")
 
+
+def test_device_lab_hub_cmd_relay_contract():
+    from gunnchos_device_os.device_lab.guest_service_forward import (
+        apply_guest_service_forward_env,
+        device_lab_hub_only_forward,
+        hub_guestfwd_cmd_relay_command,
+        parse_guestfwd_env,
+        resolve_boot_usernet_netdev,
+    )
+
+    cmd = hub_guestfwd_cmd_relay_command(host_port=8787)
+    assert "hub_guestfwd_cmd_relay_8787.sh" in cmd
+    assert " " not in cmd
+    assert "," not in cmd
+    c = device_lab_hub_only_forward(use_cmd_relay=True)
+    d = c.to_dict()
+    assert "-cmd:" in d["qemu_netdev"]
+    assert "hub_guestfwd_cmd_relay_8787.sh" in d["qemu_netdev"]
+    assert "10.0.2.100:8787" in d["qemu_netdev"]
+    assert d["rules"][0]["cmd"]
+    # Env round-trip must preserve cmd (boot path uses parse_guestfwd_env).
+    apply_guest_service_forward_env(c)
+    parsed = parse_guestfwd_env()
+    assert parsed and parsed[0].cmd
+    netdev, meta = resolve_boot_usernet_netdev()
+    assert "-cmd:" in netdev
+    assert meta["rules"][0]["cmd"]
 
 def test_invalid_guest_ip_rejected():
     """3. Invalid guest IP rejected."""
@@ -138,7 +165,8 @@ def test_policy_fixture_matches_guestfwd_url():
 
 
 def test_apply_env_sets_restrict_and_guestfwd(monkeypatch):
-    c = device_lab_hub_httpd_forward()
+    # Legacy -tcp: path (cmd relay covered by test_device_lab_hub_cmd_relay_contract).
+    c = device_lab_hub_httpd_forward(use_cmd_relay=False)
     apply_guest_service_forward_env(c)
     assert os.environ["GUNNCHDEVICE_LAB_NET_RESTRICT"] == "1"
     assert os.environ["GUNNCHDEVICE_LAB_INTERACTIVE_NET"] == "1"

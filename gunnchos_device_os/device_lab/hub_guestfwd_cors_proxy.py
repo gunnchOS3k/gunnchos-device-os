@@ -107,16 +107,23 @@ async def _handle(
 ) -> None:
     peer = client_writer.get_extra_info("peername")
     peer_s = f"{peer[0]}:{peer[1]}" if peer else "unknown"
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    _log_line(log_path, f"{stamp} INFO:     {peer_s} - ACCEPT")
     try:
-        request_line, headers, body_prefix = await _read_headers(client_reader)
+        request_line, headers, body_prefix = await asyncio.wait_for(
+            _read_headers(client_reader), timeout=12.0
+        )
         if not request_line:
+            _log_line(
+                log_path,
+                f"{stamp} INFO:     {peer_s} - EMPTY_REQUEST "
+                f"prefix_len={len(body_prefix)}",
+            )
             return
         method = request_line.split(b" ", 1)[0].decode("latin1", "replace")
-        path_q = (
-            request_line.split(b" ", 2)[1].decode("latin1", "replace")
-            if b" " in request_line
-            else "/"
-        )
+        bits = request_line.split(b" ")
+        path_q = bits[1].decode("latin1", "replace") if len(bits) > 1 else "/"
+        http_ver = bits[2].decode("latin1", "replace") if len(bits) > 2 else "?"
         origin = _header_value(headers, b"Origin")
         clen = int(_header_value(headers, b"Content-Length") or "0")
         remaining = max(0, clen - len(body_prefix))
@@ -126,7 +133,8 @@ async def _handle(
         stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         _log_line(
             log_path,
-            f'{stamp} INFO:     {peer_s} - "{method} {path_q} HTTP/1.1" PROXY',
+            f'{stamp} INFO:     {peer_s} - "{method} {path_q} {http_ver}" PROXY '
+            f"origin={origin!r} clen={clen}",
         )
 
         if method.upper() == "OPTIONS":
@@ -134,11 +142,17 @@ async def _handle(
                 (b"Content-Length", b"0"),
                 (b"Connection", b"close"),
             ]
-            client_writer.write(b"HTTP/1.1 204 No Content\r\n" + _header_block(resp_headers))
+            # HTTP/1.0 clients tolerate 1.1 status; keep 1.0 if asked.
+            status_line = (
+                b"HTTP/1.0 204 No Content\r\n"
+                if http_ver.startswith("HTTP/1.0")
+                else b"HTTP/1.1 204 No Content\r\n"
+            )
+            client_writer.write(status_line + _header_block(resp_headers))
             await client_writer.drain()
             _log_line(
                 log_path,
-                f'{stamp} INFO:     {peer_s} - "OPTIONS {path_q} HTTP/1.1" 204 CORS_LOCAL',
+                f'{stamp} INFO:     {peer_s} - "OPTIONS {path_q} {http_ver}" 204 CORS_LOCAL',
             )
             return
 
@@ -151,15 +165,19 @@ async def _handle(
                 if k.lower() not in {b"connection", b"proxy-connection", b"keep-alive"}
             ]
             filtered.append((b"Connection", b"close"))
-            up_writer.write(request_line + b"\r\n" + _header_block(filtered) + body_prefix)
+            # Prefer HTTP/1.0 toward upstream when guest used 1.0 (guestfwd hygiene).
+            up_req_line = request_line
+            if http_ver.startswith("HTTP/1.0"):
+                up_req_line = method.encode("latin1") + b" " + path_q.encode("latin1") + b" HTTP/1.0"
+            up_writer.write(up_req_line + b"\r\n" + _header_block(filtered) + body_prefix)
             await up_writer.drain()
 
-            up_req_line, up_headers, up_body = await _read_headers(up_reader)
-            if not up_req_line:
+            up_status_line, up_headers, up_body = await _read_headers(up_reader)
+            if not up_status_line:
                 client_writer.write(b"HTTP/1.1 502 Bad Gateway\r\nConnection: close\r\n\r\n")
                 await client_writer.drain()
                 return
-            status_bits = up_req_line.split(b" ", 2)
+            status_bits = up_status_line.split(b" ", 2)
             status_code = status_bits[1].decode("latin1", "replace") if len(status_bits) > 1 else "?"
             # Drop upstream Connection / CORS; inject Device Lab CORS.
             out_headers = [
@@ -186,7 +204,7 @@ async def _handle(
                 # Stream chunked as-is (re-add transfer-encoding).
                 out_headers = [(k, v) for k, v in out_headers if k.lower() != b"transfer-encoding"]
                 out_headers.append((b"Transfer-Encoding", b"chunked"))
-                client_writer.write(up_req_line + b"\r\n" + _header_block(out_headers) + up_body)
+                client_writer.write(up_status_line + b"\r\n" + _header_block(out_headers) + up_body)
                 await client_writer.drain()
                 while True:
                     chunk = await up_reader.read(65536)
@@ -209,12 +227,12 @@ async def _handle(
                         body += chunk
                     out_headers = [(k, v) for k, v in out_headers if k.lower() != b"content-length"]
                     out_headers.append((b"Content-Length", str(len(body)).encode("ascii")))
-                client_writer.write(up_req_line + b"\r\n" + _header_block(out_headers) + body)
+                client_writer.write(up_status_line + b"\r\n" + _header_block(out_headers) + body)
                 await client_writer.drain()
 
             _log_line(
                 log_path,
-                f'{stamp} INFO:     {peer_s} - "{method} {path_q} HTTP/1.1" {status_code} OK',
+                f'{stamp} INFO:     {peer_s} - "{method} {path_q} {http_ver}" {status_code} OK',
             )
         finally:
             up_writer.close()
@@ -222,6 +240,8 @@ async def _handle(
                 await up_writer.wait_closed()
             except Exception:  # noqa: BLE001
                 pass
+    except asyncio.TimeoutError:
+        _log_line(log_path, f"PROXY_TIMEOUT peer={peer_s} waiting_headers")
     except Exception as exc:  # noqa: BLE001
         _log_line(log_path, f"PROXY_ERROR peer={peer_s} err={exc!r}")
     finally:
