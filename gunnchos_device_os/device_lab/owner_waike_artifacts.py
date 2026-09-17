@@ -16,10 +16,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ACCEPTED_WAIKE_LP_SHA = "34fb050ccabec813cef4811d64581b32453e1ec2"
+ACCEPTED_WAIKE_LP_SHA = "7ccb64459df088d41655af51c959a7bbbac849a3"
 ACCEPTED_WAIKE_OPS_SHA = "fbf7685bc5686201ccaa0128ee83346d59b3d584"
 # Updated when ACCEPTED_MAIN_PIN_MANIFEST is recomputed for WAIKE #16 custom-protocol embed pin.
-PIN_MANIFEST_SHA256 = "46008cb675a9dd898e65bf05edc78b86ba5cbf1287278ebc7d44b048c0f8bd8b"
+PIN_MANIFEST_SHA256 = "8da7a6f9688e88b8fa31ad61c6f0f4229a8cbf83cbc0ad0711a81557643df36b"
 BUNDLE_ID = "com.gunnchos.waike.learning"
 APP_VERSION = "0.1.0"
 
@@ -29,11 +29,11 @@ GATE_D_LINUX_SHA256 = (
     "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef"
 )
 
-# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #16 / run 35250606721).
+# Accepted-main Debian 12 / glibc236 aarch64 Device Lab artifact (merge #17 / run 35274733231).
 # Prefer this over Ubuntu 24.04 aarch64-current (GLIBC_2.39) for Interactive Guest.
-# Prior #15 artifact 6442824b… MUST NOT be reused for custom-protocol frontendDist embed re-earn.
-MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10509448344"
-MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35250606721"
+# Prior #15/#16 CI runs MUST NOT be reused for Hub CORS accepted-main re-freeze; prefer run 35274733231 even when binary digest is unchanged.
+MAIN_AARCH64_GLIBC236_ARTIFACT_ID = "10520470972"
+MAIN_AARCH64_GLIBC236_WORKFLOW_RUN_ID = "35274733231"
 MAIN_AARCH64_GLIBC236_SHA256 = (
     "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8"
 )

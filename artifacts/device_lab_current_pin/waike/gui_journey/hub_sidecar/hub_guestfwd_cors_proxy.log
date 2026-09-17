@@ -1,46 +1,76 @@
 INFO:     hub_guestfwd_cors_proxy listening on http://127.0.0.1:8787 → 127.0.0.1:8788
-2026-09-17T19:59:53Z INFO:     127.0.0.1:62720 - ACCEPT
-2026-09-17T19:59:53Z INFO:     127.0.0.1:62720 - EMPTY_REQUEST prefix_len=0
-2026-09-17T19:59:53Z INFO:     127.0.0.1:62721 - ACCEPT
-2026-09-17T19:59:53Z INFO:     127.0.0.1:62721 - "GET /healthz HTTP/1.1" PROXY origin=None clen=0
-2026-09-17T19:59:53Z INFO:     127.0.0.1:62721 - "GET /healthz HTTP/1.1" 200 OK
-2026-09-17T20:00:05Z INFO:     127.0.0.1:62729 - ACCEPT
-2026-09-17T20:00:05Z INFO:     127.0.0.1:62730 - ACCEPT
-2026-09-17T20:00:05Z INFO:     127.0.0.1:62729 - EMPTY_REQUEST prefix_len=0
-2026-09-17T20:00:05Z INFO:     127.0.0.1:62730 - "GET /healthz HTTP/1.0" PROXY origin=None clen=0
-2026-09-17T20:00:05Z INFO:     127.0.0.1:62730 - "GET /healthz HTTP/1.0" 200 OK
-2026-09-17T20:00:14Z INFO:     127.0.0.1:62737 - ACCEPT
-2026-09-17T20:00:14Z INFO:     127.0.0.1:62738 - ACCEPT
-2026-09-17T20:00:14Z INFO:     127.0.0.1:62737 - EMPTY_REQUEST prefix_len=0
-2026-09-17T20:00:14Z INFO:     127.0.0.1:62738 - "GET /healthz HTTP/1.0" PROXY origin=None clen=0
-2026-09-17T20:00:14Z INFO:     127.0.0.1:62738 - "GET /healthz HTTP/1.0" 200 OK
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62753 - ACCEPT
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62753 - "GET /healthz HTTP/1.0" PROXY origin='http://ipc.localhost' clen=0
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62753 - "GET /healthz HTTP/1.0" 200 OK
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62757 - ACCEPT
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62757 - "OPTIONS /api/v1/auth/login HTTP/1.0" PROXY origin='http://ipc.localhost' clen=0
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62757 - "OPTIONS /api/v1/auth/login HTTP/1.0" 204 CORS_LOCAL
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62760 - ACCEPT
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62760 - "POST /api/v1/auth/login HTTP/1.0" PROXY origin='http://ipc.localhost' clen=85
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62760 - "POST /api/v1/auth/login HTTP/1.0" 200 OK
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62764 - ACCEPT
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62764 - "GET /healthz HTTP/1.1" PROXY origin='http://ipc.localhost' clen=0
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62764 - "GET /healthz HTTP/1.1" 200 OK
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62768 - ACCEPT
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62768 - "OPTIONS /api/v1/auth/login HTTP/1.1" PROXY origin='http://ipc.localhost' clen=0
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62768 - "OPTIONS /api/v1/auth/login HTTP/1.1" 204 CORS_LOCAL
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62771 - ACCEPT
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62771 - "POST /api/v1/auth/login HTTP/1.1" PROXY origin='http://ipc.localhost' clen=85
-2026-09-17T20:00:50Z INFO:     127.0.0.1:62771 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62780 - ACCEPT
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62780 - "OPTIONS /api/v1/auth/login HTTP/1.1" PROXY origin='tauri://localhost' clen=0
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62780 - "OPTIONS /api/v1/auth/login HTTP/1.1" 204 CORS_LOCAL
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62783 - ACCEPT
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62783 - "POST /api/v1/auth/login HTTP/1.1" PROXY origin='tauri://localhost' clen=80
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62783 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62787 - ACCEPT
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62787 - "OPTIONS /api/v1/learner/home HTTP/1.1" PROXY origin='tauri://localhost' clen=0
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62787 - "OPTIONS /api/v1/learner/home HTTP/1.1" 204 CORS_LOCAL
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62790 - ACCEPT
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62790 - "GET /api/v1/learner/home HTTP/1.1" PROXY origin='tauri://localhost' clen=0
-2026-09-17T20:01:13Z INFO:     127.0.0.1:62790 - "GET /api/v1/learner/home HTTP/1.1" 200 OK
+2026-09-17T21:23:28Z INFO:     127.0.0.1:65500 - ACCEPT
+2026-09-17T21:23:28Z INFO:     127.0.0.1:65500 - EMPTY_REQUEST prefix_len=0
+2026-09-17T21:23:28Z INFO:     127.0.0.1:65501 - ACCEPT
+2026-09-17T21:23:28Z INFO:     127.0.0.1:65501 - "GET /healthz HTTP/1.1" PROXY origin=None clen=0
+2026-09-17T21:23:28Z INFO:     127.0.0.1:65501 - "GET /healthz HTTP/1.1" 200 OK
+2026-09-17T21:23:40Z INFO:     127.0.0.1:65512 - ACCEPT
+2026-09-17T21:23:40Z INFO:     127.0.0.1:65511 - ACCEPT
+2026-09-17T21:23:40Z INFO:     127.0.0.1:65512 - "GET /healthz HTTP/1.0" PROXY origin=None clen=0
+2026-09-17T21:23:40Z INFO:     127.0.0.1:65511 - EMPTY_REQUEST prefix_len=0
+2026-09-17T21:23:40Z INFO:     127.0.0.1:65512 - "GET /healthz HTTP/1.0" 200 OK
+2026-09-17T21:23:49Z INFO:     127.0.0.1:65519 - ACCEPT
+2026-09-17T21:23:49Z INFO:     127.0.0.1:65520 - ACCEPT
+2026-09-17T21:23:49Z INFO:     127.0.0.1:65519 - EMPTY_REQUEST prefix_len=0
+2026-09-17T21:23:49Z INFO:     127.0.0.1:65520 - "GET /healthz HTTP/1.0" PROXY origin=None clen=0
+2026-09-17T21:23:49Z INFO:     127.0.0.1:65520 - "GET /healthz HTTP/1.0" 200 OK
+2026-09-17T21:24:25Z INFO:     127.0.0.1:65532 - ACCEPT
+2026-09-17T21:24:25Z INFO:     127.0.0.1:65532 - "GET /healthz HTTP/1.0" PROXY origin='http://ipc.localhost' clen=0
+2026-09-17T21:24:25Z INFO:     127.0.0.1:65532 - "GET /healthz HTTP/1.0" 200 OK
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - ACCEPT
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - "OPTIONS /api/v1/auth/login HTTP/1.0" PROXY origin='http://ipc.localhost' clen=0
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - "OPTIONS /api/v1/auth/login HTTP/1.0" 204 CORS_LOCAL
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - ACCEPT
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - "POST /api/v1/auth/login HTTP/1.0" PROXY origin='http://ipc.localhost' clen=85
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - "POST /api/v1/auth/login HTTP/1.0" 200 OK
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - ACCEPT
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - "GET /healthz HTTP/1.1" PROXY origin='http://ipc.localhost' clen=0
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - "GET /healthz HTTP/1.1" 200 OK
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - ACCEPT
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - "OPTIONS /api/v1/auth/login HTTP/1.1" PROXY origin='http://ipc.localhost' clen=0
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - "OPTIONS /api/v1/auth/login HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - ACCEPT
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - "POST /api/v1/auth/login HTTP/1.1" PROXY origin='http://ipc.localhost' clen=85
+2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - ACCEPT
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - "OPTIONS /api/v1/auth/login HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - "OPTIONS /api/v1/auth/login HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - ACCEPT
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - "POST /api/v1/auth/login HTTP/1.1" PROXY origin='tauri://localhost' clen=80
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - ACCEPT
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - "OPTIONS /api/v1/learner/home HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - "OPTIONS /api/v1/learner/home HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - ACCEPT
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - "GET /api/v1/learner/home HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - "GET /api/v1/learner/home HTTP/1.1" 200 OK
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49232 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49232 - "OPTIONS /api/v1/auth/login HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49232 - "OPTIONS /api/v1/auth/login HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49235 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49235 - "POST /api/v1/auth/login HTTP/1.1" PROXY origin='tauri://localhost' clen=83
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49235 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49241 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49241 - "OPTIONS /api/v1/assignments HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49241 - "OPTIONS /api/v1/assignments HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49244 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49244 - "OPTIONS /api/v1/instructor/sections/sec_alpha_dc_w01/dashboard HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49244 - "OPTIONS /api/v1/instructor/sections/sec_alpha_dc_w01/dashboard HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49247 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49247 - "GET /api/v1/assignments HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49247 - "GET /api/v1/assignments HTTP/1.1" 200 OK
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49251 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49251 - "GET /api/v1/instructor/sections/sec_alpha_dc_w01/dashboard HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49251 - "GET /api/v1/instructor/sections/sec_alpha_dc_w01/dashboard HTTP/1.1" 200 OK
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49253 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49253 - "OPTIONS /api/v1/assignments/digital_confidence_w01 HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49253 - "OPTIONS /api/v1/assignments/digital_confidence_w01 HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49256 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49256 - "GET /api/v1/assignments/digital_confidence_w01 HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49256 - "GET /api/v1/assignments/digital_confidence_w01 HTTP/1.1" 200 OK
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49260 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49260 - "OPTIONS /api/v1/instructor/assignments/digital_confidence_w01/queue HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49260 - "OPTIONS /api/v1/instructor/assignments/digital_confidence_w01/queue HTTP/1.1" 204 CORS_LOCAL
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49263 - ACCEPT
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49263 - "GET /api/v1/instructor/assignments/digital_confidence_w01/queue HTTP/1.1" PROXY origin='tauri://localhost' clen=0
+2026-09-17T21:27:26Z INFO:     127.0.0.1:49263 - "GET /api/v1/instructor/assignments/digital_confidence_w01/queue HTTP/1.1" 200 OK

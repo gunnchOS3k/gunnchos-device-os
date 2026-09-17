@@ -71,7 +71,7 @@ HUB_GATEWAY_URL = f"http://10.0.2.2:{HUB_PORT}"
 
 # Prompts that require scoped GuestServiceForward + full GUI/Hub depth (CSP-aware from 17G.5E;
 # 17G.5H adds custom-protocol frontendDist embed + no-devUrl Sign-in mount proof).
-_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E", "17G.5F", "17G.5H")
+_FULL_GUI_HUB_PROMPTS = ("17G.5D", "17G.5E", "17G.5F", "17G.5H", "17G.5I")
 
 
 def _is_full_gui_hub_prompt(prompt: str) -> bool:
@@ -3355,7 +3355,7 @@ def attempt_waike_gui_hub_journey(
     (gui_dir / "WAIKE_EXACT_RUNTIME_CSP.json").write_text(
         json.dumps(csp_proof, indent=2) + "\n", encoding="utf-8"
     )
-    if prompt.startswith(("17G.5E", "17G.5F", "17G.5H")) and not csp_proof.get(
+    if prompt.startswith(("17G.5E", "17G.5F", "17G.5H", "17G.5I")) and not csp_proof.get(
         "WAIKE_EXACT_RUNTIME_CSP_PASS"
     ):
         out["blocker"] = "WAIKE_EXACT_RUNTIME_CSP_FAIL"
@@ -3363,7 +3363,7 @@ def attempt_waike_gui_hub_journey(
         out["finished_at_utc"] = _utc()
         return out
     # Source-level WebKitGTK apply contract (runtime tokens proven after GUI launch).
-    if prompt.startswith(("17G.5F", "17G.5H")):
+    if prompt.startswith(("17G.5F", "17G.5H", "17G.5I")):
         eff_src = prove_effective_webview_csp(repo_root, gui_log={})
         out["effective_webview_csp_source"] = {
             k: eff_src.get(k)
@@ -4168,7 +4168,7 @@ def attempt_waike_gui_hub_journey(
                 "multi-strategy GUI login retries; AT-SPI skipped post-WebKit."
             ),
         }
-        if prompt.startswith(("17G.5F", "17G.5H")):
+        if prompt.startswith(("17G.5F", "17G.5H", "17G.5I")):
             eff = prove_effective_webview_csp(repo_root, gui_log=gui_log)
             out["effective_webview_csp"] = eff
             bind["effective_webview_csp"] = eff
@@ -4316,7 +4316,7 @@ def attempt_waike_gui_hub_journey(
                 csp_hint = True
                 bind["csp_inferred_from_socket_without_hub_http"] = True
             out["hub_bound"] = False
-            if prompt.startswith(("17G.5F", "17G.5H")) and eff_pass:
+            if prompt.startswith(("17G.5F", "17G.5H", "17G.5I")) and eff_pass:
                 diag_start = bool(gui_log.get("client_diag_hub_login_fetch_start"))
                 diag_err = bool(gui_log.get("client_diag_hub_login_fetch_error"))
                 hub_unavail = bool(gui_log.get("hub_unavailable_in_log"))
@@ -4352,7 +4352,7 @@ def attempt_waike_gui_hub_journey(
             elif csp_hint:
                 # After accepted-main CSP merge, residual CSP bind failure is a
                 # runtime/apply defect — not the pre-merge draft gate.
-                if prompt.startswith(("17G.5F", "17G.5H")):
+                if prompt.startswith(("17G.5F", "17G.5H", "17G.5I")):
                     out["blocker"] = (
                         "waike_effective_webview_csp_unproven_or_incomplete:"
                         + str(eff_preview.get("blocker") or "tokens_or_origin_missing")
@@ -4846,7 +4846,7 @@ def attempt_waike_gui_hub_journey(
             mandatory_17g5d.append(
                 ("exact_runtime_csp", bool(csp_doc.get("WAIKE_EXACT_RUNTIME_CSP_PASS")))
             )
-        if prompt.startswith(("17G.5F", "17G.5H")):
+        if prompt.startswith(("17G.5F", "17G.5H", "17G.5I")):
             csp_doc = out.get("exact_runtime_csp") or {}
             eff_doc = out.get("effective_webview_csp") or {}
             mandatory_17g5d.append(

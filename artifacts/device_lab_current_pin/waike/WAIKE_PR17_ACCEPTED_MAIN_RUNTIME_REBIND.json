@@ -1,0 +1,36 @@
+{
+  "schema": "gunnchos.device_lab.waike_pr17_accepted_main_runtime_rebind.v1",
+  "generated_at_utc": "2026-09-17T21:28:29Z",
+  "prompt": "17G.5I",
+  "mode": "compact_critical",
+  "equivalence_pass": true,
+  "accepted_main_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+  "artifact_sha256": "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8",
+  "pin_manifest_sha256": "8da7a6f9688e88b8fa31ad61c6f0f4229a8cbf83cbc0ad0711a81557643df36b",
+  "steps": {
+    "scoped_guestfwd_relay": true,
+    "hub_endpoint_policy": true,
+    "effective_runtime_csp": true,
+    "tauri_options_to_hub": true,
+    "tauri_login_post": true,
+    "learner_home_get": true,
+    "course_activity_readback": true,
+    "assessment_submission_readback": true,
+    "offline_reconnect_readback": true,
+    "no_duplicate_mutation": true
+  },
+  "critical_steps_all_true": true,
+  "prior_full_journey_provenance_compatible": true,
+  "WAIKE_PR17_ACCEPTED_MAIN_RUNTIME_REBIND_PASS": true,
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "gate": {
+    "verdict": "PASS",
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+    "WAIKE_ATSPI_WINDOW_PASS": true,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true
+  },
+  "note": "Compact critical rebind after Hub CORS accepted-main #17; journey gate PASS is authority."
+}

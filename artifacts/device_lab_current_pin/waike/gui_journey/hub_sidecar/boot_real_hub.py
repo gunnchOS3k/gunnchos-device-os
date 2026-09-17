@@ -13,10 +13,11 @@ app = create_app(
     seed=True,
 )
 # Force h11: httptools can stall behind QEMU guestfwd even when TCP accepts.
+# Upstream port: Device Lab CORS proxy fronts guestfwd on 8787.
 uvicorn.run(
     app,
     host='127.0.0.1',
-    port=8787,
+    port=8788,
     log_level='info',
     http='h11',
     loop='asyncio',

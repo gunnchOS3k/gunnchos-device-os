@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.device_lab.current_pin_manifest.v1",
   "convention": "WP-011R-style pin freeze",
-  "frozen_at_utc": "2026-09-17T14:00:28Z",
+  "frozen_at_utc": "2026-09-17T21:18:45Z",
   "device_os_candidate_base": "898e44cfa8b7574c0de7b8312b0996816799eca4",
-  "prior_manifest_sha256": "56f3ec29ad5b90219165a3bded3261605a3e7e5bb0ec9760cafb6fe3e5e4d936",
+  "prior_manifest_sha256": "46008cb675a9dd898e65bf05edc78b86ba5cbf1287278ebc7d44b048c0f8bd8b",
   "pins": [
     {
       "repository": "gunnchos-device-os",
@@ -75,21 +75,21 @@
     },
     {
       "repository": "gunnchos-waike-learning-platform",
-      "sha": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
-      "short": "5037df0c2dd1",
+      "sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "short": "7ccb64459df0",
       "branch": "main",
-      "source_timestamp_utc": "2026-09-17T14:00:28Z",
-      "commit_date": "2026-09-17T00:15:47-05:00",
-      "subject": "Merge pull request #15 from gunnchOS3k/cursor/waike-csp-runtime-apply-remediation",
+      "source_timestamp_utc": "2026-09-17T21:18:45Z",
+      "commit_date": "2026-09-17T16:05:54-05:00",
+      "subject": "Merge pull request #17 from gunnchOS3k/cursor/waike-hub-device-lab-cors",
       "role": "waike_learning_platform",
       "prior_device_lab_evidence_sha": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
       "prior_evidence_stale": true,
       "stale_reason": "wp011r DEVICE_LAB_ACCEPTANCE_MATRIX assessed_tip is older Device OS tip; not current-pin",
       "ok": true,
-      "prior_sha": "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15",
+      "prior_sha": "34fb050ccabec813cef4811d64581b32453e1ec2",
       "drift": true,
       "local_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-waike-learning-platform",
-      "drift_reason": "WAIKE_RUNTIME_CSP_WEBKITGTK_APPLY_ACCEPTED_MAIN"
+      "drift_reason": "WAIKE_HUB_CORS_ACCEPTED_MAIN_PR17"
     },
     {
       "repository": "anime-aggressors",
@@ -230,6 +230,6 @@
   ],
   "windows_pilot0_accepted_main_pass": true,
   "windows_ceased_to_be_digital_blocker": true,
-  "note": "Prompt 17G.5F: WAIKE LP pin refresh to accepted-main merge #15 WebKitGTK effective CSP apply; other pins unchanged",
-  "manifest_sha256": "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42"
+  "note": "17G.5I re-freeze after WAIKE #17 Hub CORS accepted-main merge; drift_reason=WAIKE_HUB_CORS_ACCEPTED_MAIN_PR17",
+  "manifest_sha256": "8da7a6f9688e88b8fa31ad61c6f0f4229a8cbf83cbc0ad0711a81557643df36b"
 }

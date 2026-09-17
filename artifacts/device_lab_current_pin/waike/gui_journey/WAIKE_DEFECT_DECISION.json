@@ -1,9 +1,8 @@
 {
-  "generated_at_utc": "2026-09-17T15:33:54Z",
-  "decision": "DRAFT_WAIKE_PRODUCT_PR",
-  "accepted_main_defective_for_device_lab_hub_bind": true,
-  "reason": "Device Lab aarch64/glibc236 workflows build with `cargo build --release` without Tauri CLI implicit `--features custom-protocol`, so release binaries load tauri.conf.json devUrl http://localhost:1420 instead of embedded frontendDist.",
-  "waike_pr": 16,
-  "waike_pr_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/16",
-  "waike_gate_remains_false_until_owner_merge_refreeze": true
+  "generated_at_utc": "2026-09-17T21:27:48Z",
+  "decision": "NONE",
+  "accepted_main_defective_for_device_lab_hub_bind": false,
+  "reason": "Accepted-main #12 HubEndpointPolicy + runtime hub_url path available; Device Lab provisioned policy authorizing http://10.0.2.100:8787 via GuestServiceForward.",
+  "smallest_product_fix": "NONE",
+  "waike_gate_remains_false_until_owner_merge_refreeze": false
 }

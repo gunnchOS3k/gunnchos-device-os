@@ -1,9 +1,9 @@
 {
   "schema": "gunnchos.device_lab.guest_hub_network_root_cause.v1",
-  "generated_at_utc": "2026-09-17T15:24:48Z",
-  "prompt": "17G.5F",
+  "generated_at_utc": "2026-09-17T21:23:46Z",
+  "prompt": "17G.5I",
   "defect_class": "DEVICE_OS_FIX_ON_134",
-  "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+  "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh",
   "qemu_usernet": {
     "restrict": true,
     "guestfwd_rule_count": 1,
@@ -14,10 +14,11 @@
         "guest_port": 8787,
         "host_addr": "127.0.0.1",
         "host_port": 8787,
-        "protocol": "tcp"
+        "protocol": "tcp",
+        "cmd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
       }
     ],
-    "netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+    "netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh",
     "unrestricted_usernet": false,
     "schema": "gunnchos.device_lab.guest_service_forward.v1"
   },
@@ -30,7 +31,8 @@
       "guest_port": 8787,
       "host_addr": "127.0.0.1",
       "host_port": 8787,
-      "protocol": "tcp"
+      "protocol": "tcp",
+      "cmd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
     }
   ],
   "hub_bind": "127.0.0.1",

@@ -1,0 +1,4 @@
+UPSTREAM_LISTEN 18788
+PEER=('127.0.0.1', 59988) RAW=b'POST /api/v1/auth/login HTTP/1.1\r\nHost: 127.0.0.1:18787\r\nOrigin: http://ipc.localhost\r\nUser-Agent: gunnchos-webkit-mimic/1.0\r\nAccept: */*\r\nContent-Type: application/json\r\nContent-Length: 85\r\nConnection: close\r\n\r\n{"username": "learner-alpha", "password": "WaikeTestPass1!", "site_id": "site-alpha"}'
+PEER=('127.0.0.1', 59991) RAW=b'POST /api/v1/auth/login HTTP/1.0\r\nHost: 127.0.0.1:18787\r\nOrigin: http://ipc.localhost\r\nUser-Agent: gunnchos-webkit-mimic/1.0\r\nAccept: */*\r\nContent-Type: application/json\r\nContent-Length: 85\r\nConnection: close\r\n\r\n{"username": "learner-alpha", "password": "WaikeTestPass1!", "site_id": "site-alpha"}'
+PEER=('127.0.0.1', 59993) RAW=b'GET /healthz HTTP/1.1\r\nHost: 127.0.0.1:18787\r\nOrigin: http://ipc.localhost\r\nUser-Agent: gunnchos-webkit-mimic/1.0\r\nAccept: */*\r\nConnection: close\r\n\r\n'
