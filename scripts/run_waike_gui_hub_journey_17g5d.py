@@ -34,7 +34,7 @@ OUT = ROOT / "artifacts/device_lab_current_pin"
 WAIKE = OUT / "waike"
 GUI = WAIKE / "gui_journey"
 PROMPT = "17G.5D"
-EXPECTED_DEVICE_OS_HEAD = "9e986afb18ebfbf0e75bd582b3ca001d32b940fa"
+EXPECTED_DEVICE_OS_HEAD = "bc2500e533a3bb06c5200927a95f382ed66bc421"
 EXPECTED_PORTAL_HEAD = "757ab8b6bc9c385fff09644222359bf941732deb"
 PORTAL_WT = Path(
     "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
