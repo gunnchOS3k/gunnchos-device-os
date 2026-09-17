@@ -1,0 +1,27 @@
+{
+  "schema": "gunnchos.cx2h4.security_regression_audit.v1",
+  "checks": {
+    "no_world_writable_session_sockets_as_preferred": true,
+    "no_broad_csp_network_permissions_claimed": true,
+    "no_browser_tls_bypass_in_final_evidence": true,
+    "no_plaintext_production_credentials_committed": true,
+    "no_unrestricted_qemu_networking_as_scoped_substitute": true,
+    "no_fake_provider_state_as_pass": true,
+    "lab_disabled_sandbox_not_production_safe": true,
+    "no_direct_api_db_user_action_substitution_hidden": true
+  },
+  "findings": [
+    {
+      "id": "LAB_CHROMIUM_NO_SANDBOX",
+      "severity": "info",
+      "note": "Lab uses --no-sandbox for QEMU guest; must not be claimed production-safe",
+      "production_safe_claim": false
+    },
+    {
+      "id": "PORTAL_MATRIX_PRESENT",
+      "severity": "info",
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx2h4-p0-digital-closure/artifacts/complete_experience/cx2h/CX2H_XDG_PORTAL_MATRIX.json"
+    }
+  ],
+  "CX2H4_SECURITY_REGRESSION_FREE": true
+}

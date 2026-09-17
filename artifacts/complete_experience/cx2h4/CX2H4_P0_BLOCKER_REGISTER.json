@@ -1,0 +1,127 @@
+{
+  "schema": "gunnchos.cx2h4.p0_blocker_register.v1",
+  "blocks_cx3": [],
+  "does_not_block_cx3": [
+    {
+      "blocker_id": "DEFER_DOM7",
+      "domain": 7,
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "exact_missing_behavior": "PHYSICAL_VALIDATION_PENDING",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER"
+    },
+    {
+      "blocker_id": "DEFER_DOM8",
+      "domain": 8,
+      "evidence_class": "HUMAN_VALIDATION_PENDING",
+      "exact_missing_behavior": "HUMAN_VALIDATION_PENDING",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER"
+    },
+    {
+      "blocker_id": "DEFER_DOM16",
+      "domain": 16,
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "exact_missing_behavior": "PHYSICAL_VALIDATION_PENDING",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER"
+    },
+    {
+      "blocker_id": "DEFER_DOM19",
+      "domain": 19,
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "exact_missing_behavior": "PHYSICAL_VALIDATION_PENDING",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER"
+    },
+    {
+      "blocker_id": "HUMAN_A11Y",
+      "domain": 8,
+      "evidence_class": "HUMAN_VALIDATION_PENDING",
+      "exact_missing_behavior": "human accessibility study",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "PHYSICAL_PRINTER",
+      "domain": 7,
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "exact_missing_behavior": "physical printer SI",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "PHYSICAL_CAMERA_MIC",
+      "domain": 6,
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "exact_missing_behavior": "physical camera/mic",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "AV_QUALITY",
+      "domain": 6,
+      "evidence_class": "HUMAN_VALIDATION_PENDING",
+      "exact_missing_behavior": "AV subjective quality",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "FIRMWARE_HW",
+      "domain": 19,
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "exact_missing_behavior": "firmware on real hardware",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "WARRANTY_RMA",
+      "domain": 21,
+      "evidence_class": "BUSINESS_PENDING",
+      "exact_missing_behavior": "warranty/RMA",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "CX3_CREDENTIALS",
+      "domain": 10,
+      "evidence_class": "NOT_APPLICABLE",
+      "exact_missing_behavior": "later CX3 credential work",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    },
+    {
+      "blocker_id": "CHAT_VIDEO_P1",
+      "domain": 6,
+      "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+      "exact_missing_behavior": "Connect chat/video (P1)",
+      "automatable": false,
+      "human_physical_external": true,
+      "blocks_cx3": false,
+      "recommended_next_gate": "LATER_NON_DIGITAL_OR_P1"
+    }
+  ],
+  "blocks_cx3_count": 0
+}

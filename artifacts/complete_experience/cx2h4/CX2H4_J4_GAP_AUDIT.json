@@ -1,0 +1,123 @@
+{
+  "schema": "gunnchos.cx2h4.j4_gap_audit.v1",
+  "J4_P0_DIGITAL_BLOCKER": false,
+  "prior_j4": {
+    "evidence_class": "REAL_PROVIDER_CLI_PASS",
+    "note": "CX2 had CalDAV/CardDAV CLI; GUI missing \u2192 CX2H* J4_CLASS=BLOCKED"
+  },
+  "calendar": {
+    "provider": "cx2h4_minimal_caldav + Chromium GUI",
+    "ui_surface": "Chromium \u2192 CalDAV HTML GUI \u2192 PUT /caldav/...ics",
+    "real_fixture_contract": "real",
+    "persistence": true,
+    "offline_behavior": "local server objects survive provider process restart (filesystem)",
+    "user_action_path": "user clicks Create calendar event in browser GUI",
+    "evidence_class": "REAL_PROVIDER_GUI_PASS",
+    "ok": true,
+    "launch": {
+      "ok": true,
+      "pid": 2284,
+      "url": "http://10.0.2.2:18580/",
+      "alive_after_4s": true,
+      "cdp_port": 9334,
+      "error": null
+    },
+    "fb_diff": {
+      "ok": true,
+      "min_changed_pct_threshold": 0.2,
+      "a": {
+        "path": "/tmp/cx2h4-graphical/captures/j4_before_browser.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "25f3f7b1fbcc7fcd55364a71dfa386f05555b33a0230d404e7aaaabecace847b",
+        "size": 3072016
+      },
+      "b": {
+        "path": "/tmp/cx2h4-graphical/captures/j4_calendar_gui.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "816710f79d26c87335e0721028ef4a47769113d473e50e18e5594dc8cd16261d",
+        "size": 3072016
+      },
+      "changed_pixels": 809629,
+      "total_pixels": 1024000,
+      "changed_pixel_pct": 79.0653,
+      "bbox": {
+        "min_x": 1,
+        "min_y": 32,
+        "max_x": 1124,
+        "max_y": 799
+      },
+      "mean_abs_channel_diff": 16.9145,
+      "rationale": "Require >= 0.2% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "cdp_title": {
+      "ok": true,
+      "result": null
+    },
+    "cdp_click": {
+      "ok": true,
+      "result": null
+    },
+    "server": {
+      "event_ok": true,
+      "event_path": "/tmp/cx2h4-caldav/caldav/user/calendar/cx2h4-evt-1.ics",
+      "event_bytes": 187,
+      "http_event_prefix": "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//gunnchOS//CX2H4//EN\r\nBEGIN:VEVENT\r\nUID:cx2h4-evt-1\r\nSUMMARY:CX2H4-P0-CAL-EVENT\r\n"
+    }
+  },
+  "contacts": {
+    "provider": "cx2h4_minimal_carddav + Chromium GUI",
+    "ui_surface": "Chromium \u2192 CardDAV HTML GUI \u2192 PUT /carddav/...vcf",
+    "real_fixture_contract": "real",
+    "persistence": true,
+    "offline_behavior": "local server objects survive provider process restart (filesystem)",
+    "user_action_path": "user clicks Create contact in browser GUI",
+    "evidence_class": "REAL_PROVIDER_GUI_PASS",
+    "ok": true,
+    "server": {
+      "contact_ok": true,
+      "contact_path": "/tmp/cx2h4-caldav/carddav/user/contacts/cx2h4-c1.vcf",
+      "contact_bytes": 83,
+      "http_contact_prefix": "BEGIN:VCARD\r\nVERSION:3.0\r\nFN:CX2H4 Peer\r\nEMAIL:peer@cx2h4.test\r\nUID:cx2h4-c1\r\nEND:VCARD\r\n"
+    }
+  },
+  "chat_messaging": {
+    "provider": null,
+    "ui_surface": null,
+    "real_fixture_contract": "external_pending",
+    "persistence": false,
+    "offline_behavior": "n/a",
+    "user_action_path": "none qualified",
+    "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+    "ok": false,
+    "gap_backlog": "CX-P1 Connect chat/video",
+    "note": "P1 major \u2014 not ordinary-user P0 baseline; do not hide"
+  },
+  "meeting_video_entry": {
+    "provider": null,
+    "ui_surface": null,
+    "real_fixture_contract": "external_pending",
+    "persistence": false,
+    "offline_behavior": "n/a",
+    "user_action_path": "digital meeting-join entry not productized",
+    "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+    "HUMAN_AV_QUALITY_PENDING": true,
+    "PHYSICAL_CAMERA_MIC_PENDING": true,
+    "ok": false,
+    "gap_backlog": "CX-P1 Connect chat/video",
+    "note": "Physical camera/mic not required for digital join; join path still missing \u2192 external/P1"
+  },
+  "collaboration_file_sharing": {
+    "provider": null,
+    "ui_surface": null,
+    "real_fixture_contract": "not_declared_p0",
+    "persistence": false,
+    "evidence_class": "NOT_APPLICABLE",
+    "ok": true,
+    "note": "No separate P0 collab/file-sharing product surface declared beyond Vault+mail attachment (J2)"
+  },
+  "J4_CLASS": "REAL_PROVIDER_GUI_PARTIAL",
+  "p0_basis": "GUNNCHOS3K ordinary-user baseline + CX-P0-006 email/calendar; chat/video is CX-P1",
+  "ok": true
+}

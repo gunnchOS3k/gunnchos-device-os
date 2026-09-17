@@ -1,0 +1,382 @@
+{
+  "schema": "gunnchos.cx2h4.domain_closure_matrix.v1",
+  "domains": [
+    {
+      "domain": 1,
+      "name": "Onboarding / identity",
+      "user_facing_authority": "Device OS IdentityPlane / Home",
+      "requirement": "First-run/local owner/guest/switch/lock without second computer",
+      "implementation_location": "gunnchos_device_os/cx1 + ProductShell",
+      "provider": "IdentitySession v1",
+      "evidence_artifacts": [
+        "artifacts/complete_experience/cx1/CX1_EVIDENCE_REPORT.json",
+        "cx2h shell home"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "session survives shell restart (CX2H shell prereq)",
+      "offline_status": "local authority works offline",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 2,
+      "name": "Files / storage / Vault / backup / recovery",
+      "user_facing_authority": "Vault / Care",
+      "requirement": "Create/edit/persist files; backup/restore (J1/J7)",
+      "implementation_location": "cx2h2 vault provider + J1/J7",
+      "provider": "FileProvider + BackupProvider",
+      "evidence_artifacts": [
+        "cx2h2/CX2H2_J1_JOURNEY.json",
+        "cx2h2/CX2H2_J7_JOURNEY.json"
+      ],
+      "evidence_class": "REAL_USER_JOURNEY_DIGITAL_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "J7 restore read-back",
+      "offline_status": "local Vault offline-capable",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 3,
+      "name": "App discovery / install / lifecycle",
+      "user_facing_authority": "App Center",
+      "requirement": "Install/update/rollback/uninstall/launch (J3)",
+      "implementation_location": "cx2h Flatpak + App Center GUI",
+      "provider": "Flatpak AppProvider",
+      "evidence_artifacts": [
+        "cx2h/CX2H_TOKENS.json"
+      ],
+      "evidence_class": "REAL_USER_JOURNEY_DIGITAL_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "J3 persistence",
+      "offline_status": "local repo install offline after seed",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 4,
+      "name": "Web / browser / PWA",
+      "user_facing_authority": "Browser",
+      "requirement": "HTTPS browse + download into Vault (J2)",
+      "implementation_location": "cx2h3 Chromium GUI",
+      "provider": "Chromium",
+      "evidence_artifacts": [
+        "cx2h3/CX2H3_J2_JOURNEY.json",
+        "cx2h3/CX2H3_BROWSER_HTTPS_DOWNLOAD_GUI.json"
+      ],
+      "evidence_class": "REAL_USER_JOURNEY_DIGITAL_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "J2 persistence",
+      "offline_status": "offline covered by J5",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 5,
+      "name": "Productivity",
+      "user_facing_authority": "LibreOffice Writer/Calc/Impress",
+      "requirement": "Text docs + spreadsheet + presentation GUI if P0",
+      "implementation_location": "cx2h2 Writer + cx2h4 Calc/Impress",
+      "provider": "LibreOffice",
+      "evidence_artifacts": [
+        "cx2h2 Writer proofs",
+        "cx2h4/CX2H4_OFFICE_BREADTH_AUDIT.json"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "save/reopen formula+deck",
+      "offline_status": "local ODF files",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 6,
+      "name": "Communications / collaboration",
+      "user_facing_authority": "Connect",
+      "requirement": "Email P0 (J2); calendar/contacts P0 GUI; chat/video P1 external",
+      "implementation_location": "Thunderbird mail (J2) + CalDAV/CardDAV GUI (CX2H4)",
+      "provider": "Thunderbird + cx2h4 CalDAV/CardDAV",
+      "evidence_artifacts": [
+        "cx2h3 mail proofs",
+        "cx2h4/CX2H4_J4_GAP_AUDIT.json"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PARTIAL",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "server-side CalDAV/CardDAV objects",
+      "offline_status": "mail queue via J5; calendar local store",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "chat/meeting EXTERNAL_PROVIDER_PENDING (CX-P1)",
+      "remediation": null
+    },
+    {
+      "domain": 7,
+      "name": "Peripherals / printing",
+      "user_facing_authority": "Print / CUPS",
+      "requirement": "Digital CUPS/IPP pass; physical printer pending",
+      "implementation_location": "cx2h2 CUPS/IPP print journey",
+      "provider": "CUPS",
+      "evidence_artifacts": [
+        "cx2h2/CX2H2_PRINT_GUI_JOURNEY.json"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "print job spool evidence",
+      "offline_status": "local PDF/CUPS queue",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "PHYSICAL_VALIDATION_PENDING",
+      "remediation": null
+    },
+    {
+      "domain": 8,
+      "name": "Accessibility / Assist",
+      "user_facing_authority": "Assist",
+      "requirement": "Digital a11y inventory/AT path; human study pending",
+      "implementation_location": "cx1 Assist + shell semantics",
+      "provider": "Assist plane",
+      "evidence_artifacts": [
+        "cx1 a11y",
+        "cx2h2/CX2H2_A11Y_NOTES.json"
+      ],
+      "evidence_class": "HUMAN_VALIDATION_PENDING",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "local",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "HUMAN_VALIDATION_PENDING",
+      "remediation": null
+    },
+    {
+      "domain": 9,
+      "name": "Learning / WAIKE entry point",
+      "user_facing_authority": "WAIKE entry (CX integration only)",
+      "requirement": "CX entry/integration \u2014 not Device Lab WAIKE release",
+      "implementation_location": "shell Assist/WAIKE entry stubs",
+      "provider": "WAIKE (train-owned Hub bind CX-P0-012)",
+      "evidence_artifacts": [
+        "gap CX-P0-012 train-owned"
+      ],
+      "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "Device Lab train / CX-P0-012 \u2014 does not block CX3 digital foundation per firewall",
+      "remediation": null
+    },
+    {
+      "domain": 10,
+      "name": "Career / portfolio / credentials",
+      "user_facing_authority": "Portfolio (CX3)",
+      "requirement": "OB3/CLR later CX3 unless portion is P0 (none claimed)",
+      "implementation_location": "deferred",
+      "provider": "none",
+      "evidence_artifacts": [],
+      "evidence_class": "NOT_APPLICABLE",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "CX3_EDUCATION_CREDENTIALS_PORTFOLIO",
+      "remediation": null
+    },
+    {
+      "domain": 11,
+      "name": "Creative studio",
+      "user_facing_authority": "Creative FOSS matrix",
+      "requirement": "P1 packaging qualification",
+      "implementation_location": "deferred",
+      "provider": "none",
+      "evidence_artifacts": [],
+      "evidence_class": "NOT_APPLICABLE",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "CX4 / CX-P1-002",
+      "remediation": null
+    },
+    {
+      "domain": 12,
+      "name": "Developer / data / AI / cybersecurity / maker",
+      "user_facing_authority": "Developer workstation",
+      "requirement": "P1 OCI/workstation \u2014 not ordinary-user P0",
+      "implementation_location": "deferred; baseline token not_required",
+      "provider": "none required for P0",
+      "evidence_artifacts": [
+        "cx2h4/CX2H4_DEVELOPER_BASELINE_AUDIT.json"
+      ],
+      "evidence_class": "NOT_APPLICABLE",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "CX-P1-003",
+      "remediation": null
+    },
+    {
+      "domain": 13,
+      "name": "AI / gunnchAI",
+      "user_facing_authority": "gunnchAI broker (not Device Lab borrow)",
+      "requirement": "No Device Lab gunnchAI truth borrowing",
+      "implementation_location": "not claimed in CX2H4",
+      "provider": "none",
+      "evidence_artifacts": [],
+      "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "CX-P1 Capability Broker",
+      "remediation": null
+    },
+    {
+      "domain": 14,
+      "name": "Leisure / media / games",
+      "user_facing_authority": "Media/games",
+      "requirement": "Media playback P1 (HUMAN_QA); not ordinary-user P0 blocker",
+      "implementation_location": "deferred; media token not_required",
+      "provider": "mpv/ffmpeg available in some images \u2014 not claimed",
+      "evidence_artifacts": [
+        "cx2h4/CX2H4_MEDIA_PLAYBACK_AUDIT.json"
+      ],
+      "evidence_class": "NOT_APPLICABLE",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "CX-P1 media/HUMAN_QA",
+      "remediation": null
+    },
+    {
+      "domain": 15,
+      "name": "Compatibility / Bridge",
+      "user_facing_authority": "Bridge / Windows end-state",
+      "requirement": "Preserve Windows in end-state even if unfinished",
+      "implementation_location": "compat corpus declared; not P0 digital closure",
+      "provider": "compat lane",
+      "evidence_artifacts": [
+        "stage2/compat notes"
+      ],
+      "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "Windows end-state preserved as unfinished",
+      "remediation": null
+    },
+    {
+      "domain": 16,
+      "name": "Continuity",
+      "user_facing_authority": "Dock/continuity",
+      "requirement": "Physical dock SI later",
+      "implementation_location": "deferred",
+      "provider": "none",
+      "evidence_artifacts": [],
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "PHYSICAL_VALIDATION_PENDING",
+      "remediation": null
+    },
+    {
+      "domain": 17,
+      "name": "Offline / community hub",
+      "user_facing_authority": "OfflinePlane",
+      "requirement": "Offline work + reconnect exactly-once (J5)",
+      "implementation_location": "cx2h3 J5",
+      "provider": "OfflinePlane + mail queue",
+      "evidence_artifacts": [
+        "cx2h3/CX2H3_J5_JOURNEY.json"
+      ],
+      "evidence_class": "REAL_USER_JOURNEY_DIGITAL_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "offline restart persistence",
+      "offline_status": "core path",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 18,
+      "name": "Security / privacy / trust",
+      "user_facing_authority": "PermissionsPlane / Security dashboard",
+      "requirement": "Consent + portal fail-closed; no security regressions",
+      "implementation_location": "cx1 PermissionGrant + cx2h portals + cx2h4 security audit",
+      "provider": "xdg-desktop-portal + PermissionsPlane",
+      "evidence_artifacts": [
+        "cx2h portals",
+        "cx2h4/CX2H4_SECURITY_REGRESSION_AUDIT.json"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "grants durable",
+      "offline_status": "local",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": null,
+      "remediation": null
+    },
+    {
+      "domain": 19,
+      "name": "Firmware / drivers / hardware lifecycle",
+      "user_facing_authority": "fwupd/LVFS",
+      "requirement": "Physical hardware pending",
+      "implementation_location": "deferred",
+      "provider": "none",
+      "evidence_artifacts": [],
+      "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "n/a",
+      "offline_status": "n/a",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "PHYSICAL_VALIDATION_PENDING",
+      "remediation": null
+    },
+    {
+      "domain": 20,
+      "name": "Administration",
+      "user_facing_authority": "Settings / MDM later",
+      "requirement": "Local settings OK; production MDM P1",
+      "implementation_location": "shell Care/settings surfaces",
+      "provider": "local settings",
+      "evidence_artifacts": [
+        "shell care captures"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "local",
+      "offline_status": "local",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "production MDM CX-P1",
+      "remediation": null
+    },
+    {
+      "domain": 21,
+      "name": "Support / repair / ownership / Care",
+      "user_facing_authority": "Care SupportBundle",
+      "requirement": "Diagnostics export; warranty/RMA later/business",
+      "implementation_location": "cx1 Care SupportBundle",
+      "provider": "SupportBundle",
+      "evidence_artifacts": [
+        "cx1 Care evidence"
+      ],
+      "evidence_class": "REAL_PROVIDER_GUI_PASS",
+      "branch_commit_provenance": "eng/cx2h4-p0-digital-closure-audit@070923b010c393ab4395a72120840b7cfd355ec3",
+      "restart_persistence": "bundle checksums",
+      "offline_status": "local export",
+      "p0_digital_blocker": false,
+      "deferred_gate_class": "warranty/RMA later",
+      "remediation": null
+    }
+  ],
+  "domain_count": 21,
+  "p0_digital_blockers": []
+}
