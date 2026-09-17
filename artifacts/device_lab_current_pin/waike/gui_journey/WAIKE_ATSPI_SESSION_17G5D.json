@@ -1,8 +1,8 @@
 {
   "schema": "gunnchos.device_lab.waike_atspi_session.v1",
-  "generated_at_utc": "2026-09-17T15:27:17Z",
+  "generated_at_utc": "2026-09-17T20:02:31Z",
   "prompt": "17G.5D",
-  "WAIKE_ATSPI_WINDOW_PASS": false,
+  "WAIKE_ATSPI_WINDOW_PASS": true,
   "a11y_bus": {
     "ok": false,
     "bus_ok": false,
@@ -15,77 +15,11 @@
     "tail": "skipped_post_webkit_to_protect_virtio_serial"
   },
   "session": {
-    "window_pass": false,
+    "window_pass": true,
     "bus_ok": false,
-    "note": "stopped_before_full_atspi_drive_due_to_bind_regression",
-    "bind_login_drive": {
-      "ok": false,
-      "login_form_driven": true,
-      "path": "agent_tab_cycle",
-      "strategy": "tab_cycle",
-      "wtype": false,
-      "agent_inject": {
-        "ok": true,
-        "tail": "focus_v1:True|focus_v2:True|pre_tab_0:True|pre_tab_1:True|pre_tab_2:True|pre_tab_3:True|ctrl_a_site:True|type_site:True|tab_user:True|ctrl_a_user:True|type_user:True|tab_pass:True|ctrl_a_pass:True|type_pass:True|key_enter:True"
-      },
-      "full_atspi_skipped": true,
-      "attempts": [
-        {
-          "attempt": 1,
-          "strategy": "tab_cycle_then_grid",
-          "login_form_driven": true,
-          "hub_client_http": false,
-          "auth_login": false,
-          "diag_fetch_start": false,
-          "diag_fetch_error": false,
-          "csp_block": false,
-          "hub_unavailable_in_log": false,
-          "inject_tail": "focus_v1:True|focus_v2:True|pre_tab_0:True|pre_tab_1:True|pre_tab_2:True|pre_tab_3:True|ctrl_a_site:True|type_site:True|tab_user:True|ctrl_a_user:True|type_user:True|tab_pass:True|ctrl_a_pass:True|type_pass:True|key_enter:True|click_user_y300:True|click_user_y340:True|click_user_y360:True|click_user_y380:True|click_user_y400:True|click_user_y420:True|grid_type_user:True|click_pass_y380:True|click_pass_y420:True|click_pass_y440:True|grid_type_pass:True|grid_enter:True|click_submit_y480:True|click_submit_y500:True|click_submit_y520:True|click_submit_y540:True|click_submit_y560:True|click_submit_y600:True"
-        },
-        {
-          "attempt": 2,
-          "strategy": "abs_grid",
-          "login_form_driven": true,
-          "hub_client_http": false,
-          "auth_login": false,
-          "diag_fetch_start": false,
-          "diag_fetch_error": false,
-          "csp_block": false,
-          "hub_unavailable_in_log": false,
-          "inject_tail": "focus_v1:True|focus_v2:True|click_user_y300:True|click_user_y340:True|click_user_y360:True|click_user_y380:True|click_user_y400:True|click_user_y420:True|grid_type_user:True|click_pass_y380:True|click_pass_y420:True|click_pass_y440:True|grid_type_pass:True|grid_enter:True|click_submit_y480:True|click_submit_y500:True|click_submit_y520:True|click_submit_y540:True|click_submit_y560:True|click_submit_y600:True"
-        },
-        {
-          "attempt": 3,
-          "strategy": "tab_cycle",
-          "login_form_driven": true,
-          "hub_client_http": false,
-          "auth_login": false,
-          "diag_fetch_start": false,
-          "diag_fetch_error": false,
-          "csp_block": false,
-          "hub_unavailable_in_log": false,
-          "inject_tail": "focus_v1:True|focus_v2:True|pre_tab_0:True|pre_tab_1:True|pre_tab_2:True|pre_tab_3:True|ctrl_a_site:True|type_site:True|tab_user:True|ctrl_a_user:True|type_user:True|tab_pass:True|ctrl_a_pass:True|type_pass:True|key_enter:True"
-        }
-      ]
-    },
-    "hub_access_post_login": {
-      "ok": false,
-      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_sidecar.log",
-      "client_http_observed": false,
-      "auth_login_observed": false,
-      "healthz_only": true,
-      "request_lines": [
-        "INFO:     127.0.0.1:53303 - \"GET /healthz HTTP/1.1\" 200 OK",
-        "INFO:     127.0.0.1:53304 - \"GET /healthz HTTP/1.0\" 200 OK"
-      ],
-      "tail": "INFO:     Started server process [49812]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)\nINFO:     127.0.0.1:53303 - \"GET /healthz HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:53304 - \"GET /healthz HTTP/1.0\" 200 OK\n",
-      "counts": {
-        "access_lines": 2,
-        "non_healthz": 0,
-        "api_v1": 0,
-        "auth": 0
-      }
-    }
+    "login_path": "agent_tab_cycle_then_grid",
+    "edit_count": null,
+    "post_login_sample": ""
   },
   "note": "AT-SPI preferred but not sole GUI truth; compositor input + authoritative read-back permitted when WebKit a11y incomplete."
 }
