@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from gunnchos_device_os.device_lab.owner_waike_artifacts import ACCEPTED_WAIKE_LP_SHA
 from gunnchos_device_os.device_lab.runtime_target_preflight import (
     DEVICE_LAB_GUEST_PROFILE,
     PREFERRED_LABEL,
@@ -24,7 +25,7 @@ def test_select_prefers_linux_aarch64_glibc236():
     rt = sel["selected"]["runtime_target"]
     assert rt["compatibility_label"] == "linux-aarch64-glibc236"
     assert rt["architecture"] == "aarch64"
-    assert rt["source_sha"] == "95c7b847c76e9d58dcf3536ea7268e1b65fdcd15"
+    assert rt["source_sha"] == ACCEPTED_WAIKE_LP_SHA
 
 
 def test_positive_preflight_glibc236_vs_debian12_guest():
