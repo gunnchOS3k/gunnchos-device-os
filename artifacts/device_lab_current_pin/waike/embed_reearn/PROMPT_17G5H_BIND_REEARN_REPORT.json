@@ -1,0 +1,43 @@
+{
+  "schema": "gunnchos.device_lab.prompt_17g5h_bind_reearn_report.v1",
+  "generated_at_utc": "2026-09-17T18:30:30Z",
+  "prompt": "17G.5H_CLIENT_HTTP_BIND_REEARN",
+  "A_prior_stop": "O_real_client_http_bind — login fetch started; Hub healthz-only",
+  "B_hypothesis_rank_1": "cors_preflight_missing_on_hub (HIGH)",
+  "C_hypothesis_rank_2": "guestfwd_http11_keepalive_stall (MEDIUM)",
+  "D_hypothesis_rank_3_plus": "wrong_path LOW; CSP LOW; HubEndpointPolicy LOW; hub logging LOW; TLS REJECTED",
+  "E_device_os_fix": "a42f9aa guestfwd CORS proxy :8787→:8788 + mimic probe + retry fix",
+  "F_proxy_unit_test": true,
+  "G_hub_sidecar_with_proxy_healthz": true,
+  "H_qemu_bind_reearn": false,
+  "I_qemu_block": "agent_sandbox_sysctl_hvf_denied",
+  "J_waike_cors_branch": "cursor/waike-hub-device-lab-cors@b2c2f23 pushed",
+  "K_waike_draft_pr_opened": false,
+  "L_waike_draft_pr_create_url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/new/cursor/waike-hub-device-lab-cors",
+  "M_device_os_134": {
+    "state": "OPEN",
+    "is_draft": true,
+    "head": "a42f9aa",
+    "url": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/134",
+    "unmerged": true
+  },
+  "N_portal_14": {
+    "state": "OPEN",
+    "is_draft": true,
+    "head": "906c592",
+    "url": "https://github.com/gunnchOS3k/gunnchos-research-portal/pull/14",
+    "unmerged": true
+  },
+  "O_WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+  "P_WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "Q_LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "R_DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "S_RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "T_FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+  "CX_lanes_untouched": true,
+  "gunnchai_started": false,
+  "merges_performed": false,
+  "ready_unsandboxed_command": "bash artifacts/device_lab_current_pin/_launchd_17g5h_bind_reearn.sh",
+  "evidence": "artifacts/device_lab_current_pin/waike/embed_reearn/WAIKE_CLIENT_HTTP_BIND_DIAGNOSIS.json"
+}
