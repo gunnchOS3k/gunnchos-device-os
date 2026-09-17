@@ -1,0 +1,115 @@
+{
+  "ok": true,
+  "blocker": null,
+  "steps": {
+    "launch": {
+      "ok": true,
+      "pid": 2192,
+      "alive_after_5s": true,
+      "application": "libreoffice-writer",
+      "binary": "/usr/bin/libreoffice",
+      "version": {
+        "binary": "/usr/bin/libreoffice",
+        "version_stdout": "LibreOffice 7.4.7.2 40(Build:2)",
+        "ok": true
+      },
+      "path": null,
+      "launch_log": "/var/lib/cx2h2/vault/logs/writer_1789658389.log",
+      "ps": "2192 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658389 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer\n2248 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658389 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer\n2292 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+      "headless": false,
+      "error": null
+    },
+    "uno_sock": {
+      "ok": true,
+      "stdout": "READY\n"
+    },
+    "live_uno_export": {
+      "ok": true,
+      "dest": "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf",
+      "size": 1124,
+      "method": "gui_live_uno_writer_pdf_Export",
+      "headless": false,
+      "ps_before": "   2248 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658389 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer",
+      "sock_wait": {
+        "cmd": [
+          "bash",
+          "-lc",
+          "for i in $(seq 1 40); do ss -ltn 2>/dev/null | grep -q ':2002' && echo READY && exit 0; netstat -ltn 2>/dev/null | grep -q ':2002' && echo READY && exit 0; sleep 0.5; done; echo NO_SOCK; exit 1"
+        ],
+        "returncode": 0,
+        "stdout": "READY\n",
+        "stderr": ""
+      },
+      "live_gui_required": true
+    },
+    "shortcut_export": {
+      "exists": false,
+      "skipped_until_after_uno": true
+    },
+    "menubar_fb": {
+      "ok": true,
+      "sha256": "a704a1a4e6b8d245fcccc29cf4400d334ab6e5409a8432e4e80978d7383161cf"
+    },
+    "filemenu_fb": {
+      "ok": true,
+      "sha256": "a704a1a4e6b8d245fcccc29cf4400d334ab6e5409a8432e4e80978d7383161cf"
+    },
+    "atspi_export": {
+      "ok": true,
+      "clicked": true,
+      "via": "atspi",
+      "name": "Export Directly as PDF",
+      "action": "0"
+    },
+    "exists": {
+      "ok": true,
+      "stdout": "-rw-r--r-- 1 gunnchos gunnchos 1124 Sep 17 15:20 /var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf\n/var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf: PDF document, version 1.6, 1 pages\n"
+    },
+    "export_method": "gui_live_uno_writer_pdf_Export",
+    "register": {
+      "ok": true,
+      "path": "cx2h2_j1_essay.pdf",
+      "size": 1124,
+      "sha256": "cf9f02fa3476db35e7d4ed30d88a66773d0b989c1686697c323600d2665e22a1",
+      "modified_at": 1789658403.9763198
+    },
+    "pdf_structure": "PDF 1124",
+    "pdf_open": "2541\n2540 bash -c export XDG_RUNTIME_DIR=/run/user/1000; export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus; export WAYLAND_DISPLAY=wayland-0; export XDG_CURRENT_DESKTOP=GNOME; export XDG_SESSION_TYPE=wayland; export XDG_SESSION_CLASS=user; export GUNNCHOS_SESSION=1;  nohup evince /var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf >/tmp/cx2h2-evince.log 2>&1 & echo $!; sleep 3; pgrep -af evince | head -5 || true\n2541 evince /var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf\n2548 /usr/libexec/evinced\n",
+    "after_pdf": {
+      "ok": true,
+      "sha256": "88831f0b40a7edd6d12503608f5d524f8289032be1cb67ea00f059164a623d1f"
+    },
+    "fb_diff": {
+      "ok": true,
+      "min_changed_pct_threshold": 0.2,
+      "a": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_before_pdf.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "b7cc3a6f5c9f70eef33b69b85e46046be7234441c07e6f00c24b621a17d5b4e1",
+        "size": 3072016
+      },
+      "b": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_pdf_opened.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "88831f0b40a7edd6d12503608f5d524f8289032be1cb67ea00f059164a623d1f",
+        "size": 3072016
+      },
+      "changed_pixels": 634506,
+      "total_pixels": 1024000,
+      "changed_pixel_pct": 61.9635,
+      "bbox": {
+        "min_x": 0,
+        "min_y": 32,
+        "max_x": 1279,
+        "max_y": 799
+      },
+      "mean_abs_channel_diff": 15.0093,
+      "rationale": "Require >= 0.2% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "text_channel": "\f"
+  },
+  "pdf": "cx2h2_j1_essay.pdf",
+  "CX2H2_REAL_PDF_EXPORT_GUI_PASS": true
+}

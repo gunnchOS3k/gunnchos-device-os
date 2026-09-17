@@ -1,0 +1,172 @@
+{
+  "ok": true,
+  "blocker": null,
+  "steps": {
+    "before": {
+      "ok": true,
+      "sha256": "a6f6827ab318f96c60ffc7fc3a7f76c621a1e3c0d11c84cdd80a6dd9ea4299ca",
+      "path": "/tmp/cx2h2-graphical/captures/j1_before_writer.ppm"
+    },
+    "launch": {
+      "ok": true,
+      "pid": 1658,
+      "alive_after_5s": true,
+      "application": "libreoffice-writer",
+      "binary": "/usr/bin/libreoffice",
+      "version": {
+        "binary": "/usr/bin/libreoffice",
+        "version_stdout": "LibreOffice 7.4.7.2 40(Build:2)",
+        "ok": true
+      },
+      "path": null,
+      "launch_log": "/var/lib/cx2h2/vault/logs/writer_1789658247.log",
+      "ps": "1658 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658247 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer\n1718 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658247 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer\n1761 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+      "headless": false,
+      "error": null
+    },
+    "dismiss_recovery": {
+      "ok": true,
+      "clicked": true,
+      "via": "atspi",
+      "name": "Cancel Checkout...",
+      "action": "0"
+    },
+    "focus_writer": {
+      "ok": false,
+      "found": [
+        {
+          "name": "Untitled 1 - LibreOffice Writer",
+          "role": "frame"
+        }
+      ]
+    },
+    "after_launch": {
+      "ok": true,
+      "sha256": "393b12ee65282a44f2bf3bc5e8d4fbc7573fd0e07afae2329592d965b4420de8",
+      "path": "/tmp/cx2h2-graphical/captures/j1_writer_launched.ppm"
+    },
+    "fb_diff": {
+      "ok": true,
+      "min_changed_pct_threshold": 0.5,
+      "a": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_before_writer.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "a6f6827ab318f96c60ffc7fc3a7f76c621a1e3c0d11c84cdd80a6dd9ea4299ca",
+        "size": 3072016
+      },
+      "b": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_writer_launched.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "393b12ee65282a44f2bf3bc5e8d4fbc7573fd0e07afae2329592d965b4420de8",
+        "size": 3072016
+      },
+      "changed_pixels": 940472,
+      "total_pixels": 1024000,
+      "changed_pixel_pct": 91.843,
+      "bbox": {
+        "min_x": 0,
+        "min_y": 32,
+        "max_x": 1279,
+        "max_y": 799
+      },
+      "mean_abs_channel_diff": 198.2308,
+      "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "atspi": {
+      "ok": true,
+      "found": [
+        {
+          "name": "Untitled 1 - LibreOffice Writer",
+          "role": "frame",
+          "depth": 2
+        }
+      ],
+      "needle": "Writer"
+    },
+    "window_proven": true,
+    "typed_fb": {
+      "ok": true,
+      "sha256": "f49edfbe30d5ba6514743cd3eb00f58bfc243ca20a0316212a5c8d78362109ce"
+    },
+    "typed_diff": {
+      "ok": true,
+      "min_changed_pct_threshold": 0.05,
+      "a": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_writer_launched.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "393b12ee65282a44f2bf3bc5e8d4fbc7573fd0e07afae2329592d965b4420de8",
+        "size": 3072016
+      },
+      "b": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_writer_typed.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "f49edfbe30d5ba6514743cd3eb00f58bfc243ca20a0316212a5c8d78362109ce",
+        "size": 3072016
+      },
+      "changed_pixels": 9140,
+      "total_pixels": 1024000,
+      "changed_pixel_pct": 0.8926,
+      "bbox": {
+        "min_x": 8,
+        "min_y": 12,
+        "max_x": 1241,
+        "max_y": 796
+      },
+      "mean_abs_channel_diff": 95.7639,
+      "rationale": "Require >= 0.05% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "atspi_save": {
+      "ok": true,
+      "filled": true,
+      "activated": true
+    },
+    "save_exists": {
+      "ok": true,
+      "stdout": "-rw-r--r-- 1 gunnchos gunnchos 10027 Sep 17 15:19 /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n10027\nzip_ok\n",
+      "stderr": "Warning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n"
+    },
+    "register": {
+      "ok": true,
+      "path": "cx2h2_j1_essay.odt",
+      "size": 10027,
+      "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+      "modified_at": 1789658357.6430624
+    },
+    "reopen": {
+      "ok": true,
+      "pid": 1934,
+      "alive_after_5s": true,
+      "application": "libreoffice-writer",
+      "binary": "/usr/bin/libreoffice",
+      "version": {
+        "binary": "/usr/bin/libreoffice",
+        "version_stdout": "LibreOffice 7.4.7.2 40(Build:2)",
+        "ok": true
+      },
+      "path": "cx2h2_j1_essay.odt",
+      "launch_log": "/var/lib/cx2h2/vault/logs/writer_1789658367.log",
+      "ps": "1934 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658367 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n1997 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658367 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n2022 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+      "headless": false,
+      "error": null
+    },
+    "reopen_atspi": {
+      "ok": false,
+      "found": [],
+      "needle": "Writer"
+    },
+    "readback": {
+      "ok": true,
+      "text": "CX2H2-J1-DETERMINISTIC-ESSAY-alpha-7gc BOLD_FORMAT_MARK",
+      "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6"
+    }
+  },
+  "document": "cx2h2_j1_essay.odt",
+  "deterministic_text": "CX2H2-J1-DETERMINISTIC-ESSAY-alpha-7gc",
+  "content_ok": true,
+  "window_ok": true,
+  "CX2H2_REAL_WRITER_GUI_PASS": true
+}

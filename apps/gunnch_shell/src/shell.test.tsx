@@ -5,23 +5,60 @@ import CompleteExperienceShell from './CompleteExperienceShell'
 beforeEach(() => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () => ({
-      ok: true,
-      json: async () => ({
-        provider: 'flatpak',
-        apps: [
-          {
-            id: 'org.gunnchos.CX2HTestApp',
-            name: 'CX2H Test App',
-            source: 'flatpak:cx2h-local',
-            version: '1.0.0',
-            permissions: ['wayland'],
-            installed: false,
-            provenance: 'local_flatpak_repo',
-          },
-        ],
-      }),
-    })),
+    vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.includes(':8767')) {
+        if (url.includes('/api/backups')) {
+          return {
+            ok: true,
+            text: async () => JSON.stringify({ ok: true, backups: [] }),
+            json: async () => ({ ok: true, backups: [] }),
+          }
+        }
+        return {
+          ok: true,
+          text: async () =>
+            JSON.stringify({
+              ok: true,
+              provider: 'cx2h2-vault',
+              files: [],
+            }),
+          json: async () => ({ ok: true, provider: 'cx2h2-vault', files: [] }),
+        }
+      }
+      return {
+        ok: true,
+        text: async () =>
+          JSON.stringify({
+            provider: 'flatpak',
+            apps: [
+              {
+                id: 'org.gunnchos.CX2HTestApp',
+                name: 'CX2H Test App',
+                source: 'flatpak:cx2h-local',
+                version: '1.0.0',
+                permissions: ['wayland'],
+                installed: false,
+                provenance: 'local_flatpak_repo',
+              },
+            ],
+          }),
+        json: async () => ({
+          provider: 'flatpak',
+          apps: [
+            {
+              id: 'org.gunnchos.CX2HTestApp',
+              name: 'CX2H Test App',
+              source: 'flatpak:cx2h-local',
+              version: '1.0.0',
+              permissions: ['wayland'],
+              installed: false,
+              provenance: 'local_flatpak_repo',
+            },
+          ],
+        }),
+      }
+    }),
   )
 })
 
