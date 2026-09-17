@@ -35,7 +35,7 @@ WAIKE = OUT / "waike"
 GUI = WAIKE / "gui_journey"
 PROMPT = "17G.5F"
 EXPECTED_DEVICE_OS_HEAD = "caa7787ba40a78a1988ae842916a34adb7b5698e"
-EXPECTED_PORTAL_HEAD = "118eaca2600c0283c8cbd6accfefb4c88f3524e8"
+EXPECTED_PORTAL_HEAD = "539843d5b61dab5bbfe45549dec9184e7f246d55"
 PORTAL_WT = Path(
     "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
     "gunnchos-research-portal/.worktrees/device-lab-17f-portal14"
