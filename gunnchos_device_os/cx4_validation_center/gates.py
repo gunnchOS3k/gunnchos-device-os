@@ -13,9 +13,9 @@ REAL_EVIDENCE_CLASSES = {"HUMAN_OBSERVED", "HUMAN_OBSERVED+SYSTEM_CAPTURED", "SY
 
 def session_is_template_or_fixture(session: Dict[str, Any]) -> bool:
     alias = (session.get("participant_alias") or "").lower()
-    if alias in {"template", "fixture", "test-fixture", "software-qa"}:
+    if alias in {"template", "fixture", "test-fixture", "software-qa", "rehearsal-bot"}:
         return True
-    if session.get("is_fixture") or session.get("is_template"):
+    if session.get("is_fixture") or session.get("is_template") or session.get("is_rehearsal"):
         return True
     # mock-only evidence cannot satisfy physical gates
     evidence = session.get("evidence") or []
@@ -53,6 +53,13 @@ def can_promote_gate(session: Dict[str, Any], task_id: str, gate_name: str) -> D
     """Never auto-promote. Returns structured denial/allow for later human process."""
     reasons: List[str] = []
     task = get_task(task_id)
+    elig = (session.get("evidence_eligibility") or "PILOT_NON_GATING").upper()
+    if elig in {
+        "REHEARSAL_NON_GATING",
+        "PILOT_NON_GATING",
+        "INVALIDATED_BY_MATERIAL_DRIFT",
+    }:
+        reasons.append(f"eligibility_not_final_gating:{elig}")
     if session_is_template_or_fixture(session):
         reasons.append("template_or_fixture_not_real_evidence")
     if not task:
@@ -100,4 +107,5 @@ def enforce_pending_tokens(tokens: Optional[Cx41Tokens] = None) -> Cx41Tokens:
     t.pvt_pass = False
     t.CX4_VALIDATION_REVIEWER_SIGNOFF_ENFORCED = True
     t.MINORS_MODE_DISABLED_BY_DEFAULT = True
+    t.CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE = False
     return t

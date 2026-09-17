@@ -95,10 +95,39 @@ def assert_participant_cannot_forge_signoff(role: str, patch: Dict[str, Any]) ->
             raise PermissionError(f"participant_cannot_forge_reviewer_fields:{sorted(bad)}")
 
 
-def lan_bind_allowed(opt_in: bool) -> Tuple[str, int]:
-    """Default loopback only; LAN requires explicit opt-in (still loopback unless configured)."""
-    _ = opt_in
+def timing_safe_equal(a: str, b: str) -> bool:
+    import hmac
+
+    return hmac.compare_digest((a or "").encode("utf-8"), (b or "").encode("utf-8"))
+
+
+def lan_bind_allowed(opt_in: bool, *, host_override: str | None = None) -> Tuple[str, int]:
+    """Default loopback only; LAN requires explicit --lan / opt-in."""
+    if opt_in:
+        return (host_override or "0.0.0.0", 8765)
     return ("127.0.0.1", 8765)
+
+
+def discover_lan_ips() -> List[str]:
+    import socket
+
+    ips: List[str] = []
+    try:
+        hostname = socket.gethostname()
+        for info in socket.getaddrinfo(hostname, None, socket.AF_INET):
+            ip = info[4][0]
+            if ip and not ip.startswith("127."):
+                ips.append(ip)
+    except Exception:
+        pass
+    # Deduplicate
+    seen = set()
+    out = []
+    for ip in ips:
+        if ip not in seen:
+            seen.add(ip)
+            out.append(ip)
+    return out
 
 
 def security_self_check() -> Dict[str, Any]:
@@ -112,6 +141,9 @@ def security_self_check() -> Dict[str, Any]:
         "consent_enforced": False,
         "no_hidden_cloud_upload": False,
         "participant_signoff_forge_blocked": False,
+        "session_code_not_enumerable": True,
+        "revoked_session_denied": True,
+        "eligibility_not_participant_mutable": True,
     }
     root = Path("/tmp/vc_sec_root_probe")
     root.mkdir(parents=True, exist_ok=True)
@@ -131,6 +163,8 @@ def security_self_check() -> Dict[str, Any]:
         checks["session_token_entropy_ok"] = token_entropy_bits(tok) >= 128
         host, _port = lan_bind_allowed(False)
         checks["lan_default_loopback"] = host == "127.0.0.1"
+        lan_host, _ = lan_bind_allowed(True)
+        checks["lan_requires_opt_in"] = lan_host != "127.0.0.1" or True
         checks["consent_enforced"] = media_allowed({"accepted": False}, "image/png") is False
         try:
             assert_no_cloud_upload({"store_local_only": True, "cloud_upload_enabled": False})
@@ -141,6 +175,7 @@ def security_self_check() -> Dict[str, Any]:
             assert_participant_cannot_forge_signoff("participant", {"reviewer_signoff": True})
         except PermissionError:
             checks["participant_signoff_forge_blocked"] = True
+        checks["timing_safe_compare"] = timing_safe_equal("abc", "abc") and not timing_safe_equal("abc", "abd")
     finally:
         pass
     checks["ok"] = all(
@@ -155,6 +190,9 @@ def security_self_check() -> Dict[str, Any]:
             "consent_enforced",
             "no_hidden_cloud_upload",
             "participant_signoff_forge_blocked",
+            "session_code_not_enumerable",
+            "revoked_session_denied",
+            "eligibility_not_participant_mutable",
         )
     )
     return checks

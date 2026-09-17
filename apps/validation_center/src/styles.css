@@ -141,3 +141,18 @@ fieldset { border: 1px solid var(--border); margin: 0.75rem 0; padding: 0.75rem;
   h1 { font-size: 1.7rem; }
   .review-table { font-size: 0.9rem; }
 }
+
+/* CX4.2 pilot readiness */
+:focus-visible, button:focus, a:focus, input:focus, select:focus, textarea:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.wizard-nav, .evidence-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.need-help { background: var(--warn); color: #fff; border-color: var(--warn); }
+.privacy-summary { max-width: 40rem; }
+.evidence-actions button { font-size: 1rem; }
+@media (max-width: 640px) {
+  .app-header, main, footer { padding: 0.75rem; }
+  nav { gap: 0.35rem; }
+  .dash-grid { grid-template-columns: 1fr; }
+}

@@ -57,7 +57,7 @@
   function setMode(mode) {
     state.mode = mode;
     $$(".mode-btn").forEach((btn) => btn.setAttribute("aria-pressed", String(btn.dataset.mode === mode)));
-    ["home", "moderator", "participant", "reviewer"].forEach((m) => {
+    ["home", "entry", "moderator", "participant", "reviewer"].forEach((m) => {
       const view = $("#view-" + m);
       if (view) view.hidden = m !== mode;
     });
@@ -171,7 +171,12 @@
       moderator: $("#moderator-name").value.trim(),
       device_sku: $("#sku-select").value,
       build_version: $("#build-version").value.trim(),
-      lan_bind_opt_in: $("#lan-opt-in").checked,
+      lan_bind_opt_in: $("#lan-opt-in") ? $("#lan-opt-in").checked : false,
+      evidence_eligibility: "PILOT_NON_GATING",
+      is_rehearsal: false,
+      session_title: pack_ids.join(" + "),
+      expected_duration_minutes: task_ids.reduce((n, tid) => n + (taskById(tid)?.estimated_minutes || 0), 0),
+      privacy_summary: "Your responses stay on this local Validation Center unless an operator exports them. You can stop at any time.",
       started_at: null,
       submitted_at: null,
       session_status: "consent_pending",
@@ -208,7 +213,7 @@
     if (!s) return;
     $("#moderator-session").hidden = false;
     $("#mod-session-meta").textContent =
-      "Code " + s.session_code + " · " + s.participant_alias + " · status " + s.session_status + (s.access_revoked ? " · LINK REVOKED" : "");
+      "Code " + s.session_code + " · " + s.participant_alias + " · eligibility " + (s.evidence_eligibility || "PILOT_NON_GATING") + " · status " + s.session_status + (s.access_revoked ? " · LINK REVOKED" : "");
     const ul = $("#mod-task-list");
     ul.innerHTML = "";
     s.task_results.forEach((tr) => {
@@ -307,6 +312,36 @@
   }
 
   function renderReviewer() {
+    const awaiting = $("#awaiting-review-list");
+    if (awaiting) {
+      awaiting.innerHTML = "";
+      state.sessions
+        .filter((s) => ["submitted", "needs_clarification"].includes(s.session_status))
+        .forEach((s) => {
+          const li = document.createElement("li");
+          const blocking = (s.issues || []).filter((i) => Number(i.severity) >= 3).length;
+          li.textContent =
+            (s.participant_alias || "?") +
+            " · packs " +
+            (s.pack_ids || []).join(",") +
+            " · build " +
+            (s.build_version || "?") +
+            " · gating eligibility " +
+            (s.evidence_eligibility || "PILOT_NON_GATING") +
+            " · completion " +
+            s.session_status +
+            " · blocking issues " +
+            blocking +
+            " · evidence " +
+            (s.evidence || []).length;
+          awaiting.appendChild(li);
+        });
+      if (!awaiting.children.length) {
+        const li = document.createElement("li");
+        li.textContent = "None awaiting review";
+        awaiting.appendChild(li);
+      }
+    }
     const body = $("#review-body");
     body.innerHTML = "";
     const completionFilter = ($("#rev-filter-completion").value || "").toLowerCase();
@@ -412,7 +447,7 @@
     });
   });
 
-  $("#create-session-form").addEventListener("submit", createSession);
+  if ($("#create-session-form")) $("#create-session-form").addEventListener("submit", createSession);
 
   $("#consent-accept").addEventListener("click", () => {
     const s = currentSession();
@@ -576,13 +611,15 @@
 
   function readRating() {
     const completion = (document.querySelector('input[name="completion"]:checked') || {}).value || "";
+    const prefer = !!( $("#prefer-not-to-answer") && $("#prefer-not-to-answer").checked );
     return {
       completion,
-      ease: Number($("#rating-ease").value),
-      confidence: Number($("#rating-confidence").value),
-      satisfaction: Number($("#rating-satisfaction").value),
+      ease: prefer ? null : Number($("#rating-ease").value),
+      confidence: prefer ? null : Number($("#rating-confidence").value),
+      satisfaction: prefer ? null : Number($("#rating-satisfaction").value),
       accessibility_impact: $("#rating-a11y").value,
       physical_comfort: $("#rating-comfort").value || null,
+      prefer_not_to_answer: prefer,
       comment: document.querySelector('textarea[name="comment"]').value,
       what_was_confusing: document.querySelector('textarea[name="what_was_confusing"]').value,
       what_would_make_easier: document.querySelector('textarea[name="what_would_make_easier"]').value,
@@ -675,6 +712,184 @@
 
   $("#rev-filter-completion").addEventListener("input", () => renderReviewer());
   $("#rev-filter-severity").addEventListener("input", () => renderReviewer());
+
+
+  // --- CX4.2 pilot readiness UI ---
+  let wizardStep = 1;
+  function showWizardStep(n) {
+    wizardStep = n;
+    const label = $("#wizard-step-label");
+    if (label) label.textContent = "Wizard step " + n + " of 6";
+    $$(".wizard-pane").forEach((pane) => {
+      pane.hidden = Number(pane.dataset.step) !== n;
+    });
+    if (n === 5) {
+      const tids = Array.from(($("#task-select") || { selectedOptions: [] }).selectedOptions).map((o) => o.value);
+      const mins = tids.reduce((sum, tid) => sum + (taskById(tid)?.estimated_minutes || 0), 0);
+      const dur = $("#wizard-duration");
+      if (dur) dur.textContent = "Expected duration: about " + mins + " minutes";
+    }
+  }
+  if ($("#wizard-next")) {
+    $("#wizard-next").addEventListener("click", () => showWizardStep(Math.min(6, wizardStep + 1)));
+    $("#wizard-back").addEventListener("click", () => showWizardStep(Math.max(1, wizardStep - 1)));
+    showWizardStep(1);
+  }
+  if ($("#wizard-launch")) {
+    $("#wizard-launch").addEventListener("click", (evt) => {
+      createSession(evt);
+      const s = currentSession();
+      if (!s) return;
+      $("#launch-result").hidden = false;
+      $("#launch-code").textContent = s.session_code;
+      $("#launch-url").textContent = location.origin + location.pathname + "#entry?code=" + encodeURIComponent(s.session_code);
+      $("#moderator-session").hidden = false;
+      setMode("moderator");
+    });
+  }
+  if ($("#participant-entry")) {
+    $("#participant-entry").addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      const code = ($("#session-code-entry").value || "").trim().toUpperCase();
+      const token = ($("#session-token-entry").value || "").trim();
+      const err = $("#entry-error");
+      const match = state.sessions.find((s) => (s.session_code || "").toUpperCase() === code);
+      if (!match || match.access_revoked) {
+        err.textContent = "Could not join session. Check the code with your moderator.";
+        return;
+      }
+      if (token && match.access_token && token !== match.access_token) {
+        err.textContent = "Could not join session. Check the code with your moderator.";
+        return;
+      }
+      // Do not expose internal branch / gate tokens
+      $("#entry-session-meta").hidden = false;
+      $("#entry-session-title").textContent = match.session_title || "Validation session";
+      $("#entry-duration").textContent = "Expected duration: about " + (match.expected_duration_minutes || "—") + " minutes";
+      $("#entry-privacy").textContent = match.privacy_summary || "privacy summary";
+      if (!$("#entry-consent-ack").checked) {
+        err.textContent = "Please confirm the privacy summary before starting.";
+        return;
+      }
+      if ($("#entry-a11y-large")?.checked) { state.a11y.textSize = "150"; $("#opt-text-size").value = "150"; }
+      if ($("#entry-a11y-contrast")?.checked) { state.a11y.highContrast = true; $("#opt-high-contrast").checked = true; }
+      if ($("#entry-a11y-simple")?.checked) { state.a11y.simpleLanguage = true; $("#opt-simple-language").checked = true; }
+      if ($("#entry-a11y-motion")?.checked) { state.a11y.reducedMotion = true; $("#opt-reduced-motion").checked = true; }
+      applyA11y();
+      state.currentSessionId = match.session_id;
+      saveState();
+      setMode("participant");
+    });
+  }
+  if ($("#scan-qr-btn")) {
+    $("#scan-qr-btn").addEventListener("click", () => {
+      const st = $("#qr-status");
+      if (!window.isSecureContext || !navigator.mediaDevices) {
+        st.textContent = "Camera QR scan is not available here. Enter the session code instead.";
+        return;
+      }
+      st.textContent = "QR camera support detected; enter code manually if scan UI is unavailable in this build.";
+    });
+  }
+
+  function attachEvidence(kind) {
+    const s = currentSession();
+    if (!s) return;
+    const consent = s.consent_state || {};
+    const consentEl = $("#evidence-consent-state");
+    if (consentEl) {
+      consentEl.textContent =
+        "Consent — photos: " + !!consent.media_photo + ", audio: " + !!consent.media_audio + ", video: " + !!consent.media_video;
+    }
+    const tr = s.task_results[state.taskIndex];
+    if (!tr) return;
+    const needsMedia = ["screenshot", "photo", "video", "audio"].includes(kind);
+    if (needsMedia) {
+      const ok =
+        (kind === "screenshot" || kind === "photo") ? consent.media_photo :
+        kind === "audio" ? consent.media_audio :
+        kind === "video" ? consent.media_video : true;
+      if (!ok) {
+        alert("Media consent is required before attaching this evidence. You can still add a note or file if allowed.");
+        return;
+      }
+    }
+    const input = $("#ev-file-input");
+    const finish = (name, note) => {
+      const item = {
+        evidence_id: "ev_" + Math.random().toString(16).slice(2, 10),
+        file_name: name,
+        mime: kind === "note" ? "text/plain" : "application/octet-stream",
+        sha256: "pending-local-" + Date.now().toString(16),
+        timestamp: new Date().toISOString(),
+        source: "HUMAN_OBSERVED",
+        task_id: tr.task_id,
+        privacy_classification: "internal",
+        attribution: "participant",
+        notes: note || kind,
+        preview: name,
+      };
+      s.evidence.push(item);
+      tr.evidence_refs.push(item.evidence_id);
+      const list = $("#ev-preview-list");
+      if (list) {
+        const li = document.createElement("li");
+        li.textContent = name + " (" + kind + ") — remove before submission if needed";
+        const rm = document.createElement("button");
+        rm.type = "button";
+        rm.textContent = "Remove";
+        rm.addEventListener("click", () => {
+          s.evidence = s.evidence.filter((e) => e.evidence_id !== item.evidence_id);
+          tr.evidence_refs = tr.evidence_refs.filter((id) => id !== item.evidence_id);
+          li.remove();
+          saveState();
+        });
+        li.appendChild(rm);
+        list.appendChild(li);
+      }
+      saveState();
+    };
+    if (kind === "note") {
+      const note = window.prompt("Add note");
+      if (note) finish("note.txt", note);
+      return;
+    }
+    if (input) {
+      input.onchange = () => {
+        const f = input.files && input.files[0];
+        if (f) finish(f.name, "uploaded-" + kind);
+        input.value = "";
+      };
+      input.click();
+    } else {
+      finish(kind + ".bin", "fallback-upload");
+    }
+  }
+  [
+    ["ev-screenshot", "screenshot"],
+    ["ev-photo", "photo"],
+    ["ev-video", "video"],
+    ["ev-audio", "audio"],
+    ["ev-file", "file"],
+    ["ev-note", "note"],
+  ].forEach(([id, kind]) => {
+    const el = $("#" + id);
+    if (el) el.addEventListener("click", () => attachEvidence(kind));
+  });
+  if ($("#task-need-help")) {
+    $("#task-need-help").addEventListener("click", () => alert("Help requested. A moderator can assist. You may pause or stop at any time."));
+  }
+  if ($("#task-stop-session")) {
+    $("#task-stop-session").addEventListener("click", () => {
+      const s = currentSession();
+      if (!s) return;
+      if (!window.confirm("Stop this session? Your progress is autosaved.")) return;
+      s.session_status = "paused";
+      saveState();
+      alert("Session stopped/paused. You can resume later with your moderator.");
+    });
+  }
+
 
   // hydrate a11y controls
   $("#opt-text-size").value = state.a11y.textSize || "100";

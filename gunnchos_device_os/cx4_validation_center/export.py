@@ -26,11 +26,14 @@ def _public_evidence(session: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def export_json(session: Dict[str, Any], submission: Dict[str, Any] | None = None) -> str:
     payload = {
+        "evidence_eligibility": session.get("evidence_eligibility"),
+        "is_rehearsal": bool(session.get("is_rehearsal")),
         "provenance": {
             "branch": session.get("branch"),
             "commit": session.get("commit"),
             "build_version": session.get("build_version"),
             "device_sku": session.get("device_sku"),
+            "evidence_eligibility": session.get("evidence_eligibility"),
         },
         "task_definitions": [],
         "responses": session.get("task_results"),
@@ -58,6 +61,7 @@ def export_csv(session: Dict[str, Any]) -> str:
     w = csv.writer(buf)
     w.writerow(
         [
+            "evidence_eligibility",
             "task_id",
             "completion",
             "ease",
@@ -68,10 +72,12 @@ def export_csv(session: Dict[str, Any]) -> str:
             "state",
         ]
     )
+    elig = session.get("evidence_eligibility") or ""
     for tr in session.get("task_results") or []:
         r = tr.get("participant_rating") or {}
         w.writerow(
             [
+                elig,
                 tr.get("task_id"),
                 r.get("completion") or tr.get("participant_completion"),
                 r.get("ease"),

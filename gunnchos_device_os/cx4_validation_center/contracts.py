@@ -210,6 +210,7 @@ class ParticipantRating:
     comment: str = ""
     what_was_confusing: str = ""
     what_would_make_easier: str = ""
+    prefer_not_to_answer: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -292,6 +293,15 @@ class ValidationSession:
     version: str = CONTRACT_VERSION
     lan_bind_opt_in: bool = False
     updated_at: Optional[str] = None
+    evidence_eligibility: str = "PILOT_NON_GATING"
+    is_rehearsal: bool = False
+    is_fixture: bool = False
+    expected_duration_minutes: int = 0
+    session_title: str = ""
+    privacy_summary: str = (
+        "Your responses stay on this local Validation Center unless an operator exports them. "
+        "You can stop at any time."
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

@@ -20,6 +20,14 @@ from gunnchos_device_os.cx4_validation_center.contracts import (
     sha256_json,
     validate_rating,
 )
+from gunnchos_device_os.cx4_validation_center.eligibility import (
+    DEFAULT_ELIGIBILITY,
+    ValidationEvidenceEligibility,
+    assert_cannot_promote_to_accepted,
+    assert_role_cannot_set_eligibility,
+    normalize_eligibility,
+    resolve_create_eligibility,
+)
 from gunnchos_device_os.cx4_validation_center.library import build_task_library
 from gunnchos_device_os.cx4_validation_center.security import (
     assert_no_cloud_upload,
@@ -29,6 +37,7 @@ from gunnchos_device_os.cx4_validation_center.security import (
     require_strong_session_token,
     safe_join,
     sanitize_attachment_name,
+    timing_safe_equal,
 )
 
 
@@ -96,6 +105,11 @@ class ValidationStore:
         commit: str = "",
         reviewer: str = "",
         lan_bind_opt_in: bool = False,
+        evidence_eligibility: Optional[str] = None,
+        is_rehearsal: bool = False,
+        is_fixture: bool = False,
+        session_title: str = "",
+        role: str = "moderator",
     ) -> Dict[str, Any]:
         if not participant_alias.strip():
             raise StoreError("participant_alias_required")
@@ -112,16 +126,31 @@ class ValidationStore:
             if lib[tid].pack_id not in pack_ids:
                 raise StoreError("task_not_in_selected_packs", tid)
 
+        try:
+            elig = resolve_create_eligibility(
+                evidence_eligibility,
+                is_rehearsal_session=bool(is_rehearsal),
+                allow_final=False,
+            )
+            assert_role_cannot_set_eligibility(role, elig if evidence_eligibility else None)
+        except PermissionError as exc:
+            raise StoreError("eligibility_forbidden", str(exc)) from exc
+        except ValueError as exc:
+            raise StoreError("invalid_eligibility", str(exc)) from exc
+
         sid = new_id("sess")
         results = []
+        duration = 0
         for tid in task_ids:
             t = lib[tid]
+            duration += int(t.estimated_minutes or 0)
             results.append(
                 ValidationTaskResult(
                     task_id=tid,
                     step_completions=[False] * len(t.participant_steps),
                 ).to_dict()
             )
+        title = session_title.strip() or (" + ".join(pack_ids))
         session = ValidationSession(
             session_id=sid,
             pack_ids=list(pack_ids),
@@ -139,8 +168,101 @@ class ValidationStore:
             access_token=require_strong_session_token(),
             task_ids=list(task_ids),
             lan_bind_opt_in=bool(lan_bind_opt_in),
+            evidence_eligibility=elig,
+            is_rehearsal=bool(is_rehearsal) or elig == ValidationEvidenceEligibility.REHEARSAL_NON_GATING.value,
+            is_fixture=bool(is_fixture),
+            expected_duration_minutes=duration,
+            session_title=title,
         ).to_dict()
         return self.save_session(session)
+
+    def set_evidence_eligibility(self, session_id: str, eligibility: str, *, role: str) -> Dict[str, Any]:
+        s = self.load_session(session_id)
+        current = normalize_eligibility(s.get("evidence_eligibility") or DEFAULT_ELIGIBILITY.value)
+        try:
+            assert_role_cannot_set_eligibility(role, eligibility)
+            assert_cannot_promote_to_accepted(current, eligibility, role=role)
+            if role == "participant":
+                raise PermissionError("participant_cannot_alter_eligibility")
+            if current == ValidationEvidenceEligibility.REHEARSAL_NON_GATING.value:
+                req = normalize_eligibility(eligibility)
+                if req in {
+                    ValidationEvidenceEligibility.FINAL_GATING_ELIGIBLE.value,
+                    ValidationEvidenceEligibility.FINAL_GATING_ACCEPTED.value,
+                    ValidationEvidenceEligibility.PILOT_NON_GATING.value,
+                }:
+                    raise PermissionError("rehearsal_cannot_become_gating")
+            if current == ValidationEvidenceEligibility.INVALIDATED_BY_MATERIAL_DRIFT.value:
+                req = normalize_eligibility(eligibility)
+                if req in {
+                    ValidationEvidenceEligibility.FINAL_GATING_ELIGIBLE.value,
+                    ValidationEvidenceEligibility.FINAL_GATING_ACCEPTED.value,
+                }:
+                    raise PermissionError("cannot_promote_material_drift_invalidated")
+        except (PermissionError, ValueError) as exc:
+            raise StoreError("eligibility_forbidden", str(exc)) from exc
+        s["evidence_eligibility"] = normalize_eligibility(eligibility)
+        return self.save_session(s)
+
+    def join_by_code(self, code: str, *, access_token: str = "") -> Dict[str, Any]:
+        """Lookup by exact session code + token. Does not enumerate sessions anonymously."""
+        code_n = (code or "").strip().upper()
+        if not code_n or len(code_n) < 6:
+            raise StoreError("session_code_invalid")
+        match = None
+        for s in self.list_sessions():
+            if timing_safe_equal((s.get("session_code") or "").upper(), code_n):
+                match = s
+                break
+        if match is None:
+            # Constant-ish failure — do not reveal whether code exists vs token wrong.
+            raise StoreError("session_join_denied")
+        if match.get("access_revoked"):
+            raise StoreError("access_revoked")
+        if access_token:
+            if not timing_safe_equal(match.get("access_token") or "", access_token):
+                raise StoreError("session_join_denied")
+        # Participant-safe projection — no branch/gate tokens/other sessions
+        return {
+            "session_id": match["session_id"],
+            "session_code": match["session_code"],
+            "session_title": match.get("session_title") or "",
+            "expected_duration_minutes": match.get("expected_duration_minutes") or 0,
+            "privacy_summary": match.get("privacy_summary") or "",
+            "evidence_eligibility": match.get("evidence_eligibility"),
+            "session_status": match.get("session_status"),
+            "pack_ids": match.get("pack_ids"),
+            "task_ids": match.get("task_ids"),
+            "access_token_required": True,
+        }
+
+    def backup_pending_sessions(self, dest: Path) -> Dict[str, Any]:
+        dest = Path(dest)
+        dest.mkdir(parents=True, exist_ok=True)
+        saved = []
+        for s in self.list_sessions():
+            if s.get("session_status") in {
+                SessionStatus.SUBMITTED.value,
+                SessionStatus.REVIEWED.value,
+                SessionStatus.REVOKED.value,
+            }:
+                continue
+            path = dest / f"{s['session_id']}.json"
+            path.write_text(json.dumps(s, indent=2, sort_keys=True), encoding="utf-8")
+            saved.append(s["session_id"])
+        return {"backed_up": saved, "dest": str(dest)}
+
+    def restore_pending_sessions(self, src: Path) -> Dict[str, Any]:
+        src = Path(src)
+        restored = []
+        for path in sorted(src.glob("*.json")):
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if "session_id" not in data or "evidence_eligibility" not in data:
+                # legacy backups without eligibility get pilot default
+                data.setdefault("evidence_eligibility", DEFAULT_ELIGIBILITY.value)
+            self.save_session(data)
+            restored.append(data["session_id"])
+        return {"restored": restored}
 
     def revoke_access(self, session_id: str) -> Dict[str, Any]:
         s = self.load_session(session_id)
@@ -285,6 +407,7 @@ class ValidationStore:
                 "participant_alias": s.get("participant_alias"),
                 "device_sku": s.get("device_sku"),
                 "build_version": s.get("build_version"),
+                "evidence_eligibility": s.get("evidence_eligibility"),
                 "incomplete_forced": bool(force_incomplete and incomplete),
                 "incomplete_tasks": incomplete,
             }
@@ -294,6 +417,8 @@ class ValidationStore:
                 "moderator": s.get("moderator"),
                 "reviewer": s.get("reviewer"),
                 "session_code": s.get("session_code"),
+                "evidence_eligibility": s.get("evidence_eligibility"),
+                "is_rehearsal": bool(s.get("is_rehearsal")),
             }
             stamp = _now()
             body = {
@@ -366,6 +491,7 @@ class ValidationStore:
         notes: str = "",
         state: str = "signed_off",
         role: str = "reviewer",
+        accept_as_final_gating: bool = False,
     ) -> Dict[str, Any]:
         if role != "reviewer":
             raise StoreError("reviewer_role_required")
@@ -376,6 +502,15 @@ class ValidationStore:
             SessionStatus.REVIEWED.value,
         }:
             raise StoreError("session_not_submitted")
+        elig = normalize_eligibility(s.get("evidence_eligibility") or DEFAULT_ELIGIBILITY.value)
+        if accept_as_final_gating:
+            raise StoreError(
+                "eligibility_forbidden",
+                f"reviewer_cannot_accept_non_gating_as_final:{elig}",
+            )
+        if elig == ValidationEvidenceEligibility.INVALIDATED_BY_MATERIAL_DRIFT.value and signoff:
+            # Signoff as "reviewed" is allowed for process notes, but never as final gating acceptance.
+            notes = (notes or "") + " [material-drift-invalidated; not final gating]"
         patch = {
             "reviewer_signoff": bool(signoff),
             "reviewer_notes": notes,
@@ -384,6 +519,7 @@ class ValidationStore:
         s = self.patch_task_result(session_id, task_id, patch, role="reviewer")
         if all(tr.get("reviewer_signoff") for tr in s["task_results"]):
             s["session_status"] = SessionStatus.REVIEWED.value
+            # Never flip eligibility to FINAL_GATING_ACCEPTED from reviewer UI
             self.save_session(s)
         elif any(tr.get("reviewer_state") == "clarification_requested" for tr in s["task_results"]):
             s["session_status"] = SessionStatus.NEEDS_CLARIFICATION.value

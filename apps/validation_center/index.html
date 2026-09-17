@@ -17,6 +17,7 @@
     <nav aria-label="Primary">
       <button type="button" class="mode-btn" data-mode="home" aria-pressed="true">Home</button>
       <button type="button" class="mode-btn" data-mode="moderator" aria-pressed="false">Moderator</button>
+      <button type="button" class="mode-btn" data-mode="entry" aria-pressed="false">Enter Session</button>
       <button type="button" class="mode-btn" data-mode="participant" aria-pressed="false">Participant</button>
       <button type="button" class="mode-btn" data-mode="reviewer" aria-pressed="false">Reviewer</button>
       <button type="button" id="open-a11y-options" aria-haspopup="dialog" aria-controls="a11y-options">Accessibility Options</button>
@@ -67,15 +68,53 @@
       </section>
     </section>
 
+    
+
+    <section id="view-entry" class="view" hidden aria-labelledby="entry-title">
+      <h2 id="entry-title">Enter Session</h2>
+      <form id="participant-entry" class="panel">
+        <label for="session-code-entry">Enter Session Code
+          <input id="session-code-entry" name="session_code" type="text" autocomplete="one-time-code" required minlength="6" maxlength="12" />
+        </label>
+        <label for="session-token-entry">Access token (from moderator)
+          <input id="session-token-entry" name="access_token" type="password" autocomplete="off" />
+        </label>
+        <div class="qr-block">
+          <p>Scan QR Code (when camera/browser support exists)</p>
+          <button type="button" id="scan-qr-btn">Scan QR Code</button>
+          <p id="qr-status" class="status-text" role="status" data-status-text="qr">Camera scan is optional; you can type the code instead.</p>
+        </div>
+        <div id="entry-session-meta" class="panel" hidden>
+          <p id="entry-session-title"></p>
+          <p id="entry-duration"></p>
+          <p id="entry-privacy" class="privacy-summary">privacy summary</p>
+        </div>
+        <fieldset>
+          <legend>Accessibility options before starting</legend>
+          <label><input type="checkbox" id="entry-a11y-large" /> Larger text</label>
+          <label><input type="checkbox" id="entry-a11y-contrast" /> High contrast</label>
+          <label><input type="checkbox" id="entry-a11y-simple" /> Simplified instructions</label>
+          <label><input type="checkbox" id="entry-a11y-motion" /> Reduced motion</label>
+        </fieldset>
+        <label><input type="checkbox" id="entry-consent-ack" required /> I understand the privacy summary and consent to participate</label>
+        <button type="submit" class="primary" id="entry-start">Start</button>
+        <p id="entry-error" class="error" role="alert" aria-live="assertive"></p>
+      </form>
+    </section>
+
     <section id="view-moderator" class="view" hidden aria-labelledby="mod-title">
       <h2 id="mod-title">Moderator mode</h2>
-      <form id="create-session-form" class="panel">
-        <fieldset>
-          <legend>Create session</legend>
+      <div id="moderator-wizard" class="panel" data-wizard="true">
+        <p class="wizard-step" id="wizard-step-label" data-status-text="wizard">Wizard step 1 of 6</p>
+        <div class="wizard-pane" data-step="1">
+          <h3>What are we testing?</h3>
           <label>Validation pack
-            <select id="pack-select" multiple size="6" required aria-describedby="pack-help"></select>
+            <select id="pack-select" multiple size="8" required aria-describedby="pack-help"></select>
           </label>
-          <p id="pack-help">Only selected packs are included. Tasks are not all active by default.</p>
+          <p id="pack-help">Choose Human Accessibility, Printer, Camera/Mic/AV, Peripheral, Device EVT, Ergonomics, Support/Recovery, or custom selected tasks.</p>
+        </div>
+        <div class="wizard-pane" data-step="2" hidden>
+          <h3>What device/build?</h3>
           <label>Device / SKU
             <select id="sku-select">
               <option>Student 14.5</option>
@@ -86,18 +125,48 @@
               <option>host</option>
             </select>
           </label>
+          <label>Build / version <input id="build-version" type="text" autocomplete="off" /></label>
+          <label>Commit SHA <input id="commit-sha" type="text" autocomplete="off" readonly placeholder="filled at launch" /></label>
+          <p>Evidence eligibility: <strong id="elig-display">PILOT_NON_GATING</strong> (moderator cannot override to FINAL)</p>
+          <label>Hardware notes <textarea id="hardware-notes" rows="2"></textarea></label>
+        </div>
+        <div class="wizard-pane" data-step="3" hidden>
+          <h3>Who is participating?</h3>
+          <label>Participant alias <input id="participant-alias" type="text" required autocomplete="nickname" placeholder="alias (preferred)" /></label>
+          <label>Moderator name <input id="moderator-name" type="text" required /></label>
+        </div>
+        <div class="wizard-pane" data-step="4" hidden>
+          <h3>Consent media requirements</h3>
+          <label><input type="checkbox" id="req-photo" /> Photos may be requested</label>
+          <label><input type="checkbox" id="req-audio" /> Audio may be requested</label>
+          <label><input type="checkbox" id="req-video" /> Video may be requested</label>
+        </div>
+        <div class="wizard-pane" data-step="5" hidden>
+          <h3>Tasks</h3>
           <label>Tasks
             <select id="task-select" multiple size="8" required></select>
           </label>
-          <label>Build / version <input id="build-version" type="text" autocomplete="off" /></label>
-          <label>Participant alias <input id="participant-alias" type="text" required autocomplete="nickname" /></label>
-          <label>Moderator name <input id="moderator-name" type="text" required /></label>
+          <p id="wizard-duration" class="status-text" data-status-text="duration">Expected duration: —</p>
+        </div>
+        <div class="wizard-pane" data-step="6" hidden>
+          <h3>Launch</h3>
           <label><input id="lan-opt-in" type="checkbox" /> Local-LAN access opt-in (loopback default remains)</label>
-          <button type="submit" class="primary">Start session</button>
-        </fieldset>
-      </form>
+          <button type="button" id="wizard-launch" class="primary">Generate session</button>
+          <div id="launch-result" hidden>
+            <p>Session code: <strong id="launch-code"></strong></p>
+            <p>Participant URL: <code id="launch-url"></code></p>
+            <p id="launch-qr" class="status-text" data-status-text="qr">QR: use participant URL / session code</p>
+            <p>Eligibility class is locked to PILOT_NON_GATING unless this is an explicit rehearsal.</p>
+          </div>
+        </div>
+        <div class="wizard-nav">
+          <button type="button" id="wizard-back">Back</button>
+          <button type="button" id="wizard-next" class="primary">Next</button>
+        </div>
+      </div>
+      <form id="create-session-form" hidden aria-hidden="true"></form>
       <div id="moderator-session" class="panel" hidden>
-        <h3>Current session</h3>
+        <h3>Current session / moderator dashboard</h3>
         <p id="mod-session-meta" class="status-text" data-status-text="session"></p>
         <p>Elapsed: <span id="mod-elapsed">0:00</span></p>
         <ul id="mod-task-list"></ul>
@@ -140,10 +209,25 @@
         <div class="actions">
           <button type="button" id="task-start" class="primary">Start Task</button>
           <button type="button" id="task-pause">Pause</button>
-          <button type="button" id="task-add-note">Add note</button>
-          <button type="button" id="task-add-evidence">Add evidence</button>
-          <button type="button" id="task-report-issue">Report issue</button>
+          <button type="button" id="task-stop-session">Stop session</button>
+          <button type="button" id="task-need-help" class="need-help">I need help</button>
           <button type="button" id="task-complete" class="primary">Complete Task</button>
+        </div>
+        <div id="evidence-capture-ux" class="panel" aria-labelledby="evidence-ux-title">
+          <h3 id="evidence-ux-title">Evidence capture</h3>
+          <p id="evidence-consent-state" class="status-text" data-status-text="consent">Consent state shown before attach.</p>
+          <div class="evidence-actions">
+            <button type="button" id="ev-screenshot">Add Screenshot</button>
+            <button type="button" id="ev-photo">Add Photo</button>
+            <button type="button" id="ev-video">Add Video</button>
+            <button type="button" id="ev-audio">Add Audio</button>
+            <button type="button" id="ev-file">Add File</button>
+            <button type="button" id="ev-note">Add Note</button>
+            <button type="button" id="task-report-issue">Report Issue</button>
+          </div>
+          <input type="file" id="ev-file-input" hidden />
+          <p id="ev-fallback" class="status-text" data-status-text="fallback">If this browser cannot capture a media type, use file upload. The session will not fail.</p>
+          <ul id="ev-preview-list" aria-live="polite"></ul>
         </div>
         <details>
           <summary>Technical details</summary>
@@ -195,6 +279,7 @@
               <option value="blocking_barrier">Blocking barrier</option>
             </select>
           </label>
+          <label><input type="checkbox" id="prefer-not-to-answer" name="prefer_not_to_answer" /> Prefer not to answer optional scales</label>
           <label>Physical comfort (optional)
             <select name="physical_comfort" id="rating-comfort">
               <option value="">—</option>
@@ -224,6 +309,11 @@
 
     <section id="view-reviewer" class="view" hidden aria-labelledby="rev-title">
       <h2 id="rev-title">Reviewer mode</h2>
+      <section id="awaiting-review" class="panel" aria-labelledby="awaiting-title">
+        <h3 id="awaiting-title">Awaiting Review</h3>
+        <ul id="awaiting-review-list" class="status-text" data-status-text="awaiting"></ul>
+        <p>Gating eligibility class is shown per session. Reviewers cannot promote rehearsal/pilot to FINAL_GATING_ACCEPTED.</p>
+      </section>
       <div class="filters">
         <label>Filter completion <input id="rev-filter-completion" type="text" /></label>
         <label>Filter severity <input id="rev-filter-severity" type="number" min="1" max="4" /></label>

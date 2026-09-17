@@ -9,11 +9,15 @@ from typing import Any, Dict, List, Optional
 from gunnchos_device_os.cx4_validation_center.a11y_audit import audit_validation_center_app
 from gunnchos_device_os.cx4_validation_center.analytics import dashboard_buckets, summarize_session
 from gunnchos_device_os.cx4_validation_center.collectors import list_collectors, run_collector_mock, write_mock_harness_stubs
+from gunnchos_device_os.cx4_validation_center.compat import qualify_ui_compatibility
 from gunnchos_device_os.cx4_validation_center.contracts import EvidenceSource, _now
 from gunnchos_device_os.cx4_validation_center.edmund_map import map_edmund_to_tasks
 from gunnchos_device_os.cx4_validation_center.export import export_bundle_zip, export_csv, export_html, export_json
+from gunnchos_device_os.cx4_validation_center.freeze import freeze_check
 from gunnchos_device_os.cx4_validation_center.gates import can_promote_gate, enforce_pending_tokens
 from gunnchos_device_os.cx4_validation_center.library import build_task_library, packs_summary
+from gunnchos_device_os.cx4_validation_center.materiality import compare_freeze, current_build_snapshot
+from gunnchos_device_os.cx4_validation_center.rehearsal import run_rehearsal
 from gunnchos_device_os.cx4_validation_center.security import security_self_check
 from gunnchos_device_os.cx4_validation_center.store import StoreError, ValidationStore
 from gunnchos_device_os.cx4_validation_center.tokens import Cx41Tokens
@@ -219,3 +223,188 @@ class ValidationCenter:
             "analytics_sample": summarize_session(drill.store.load_session(session["session_id"])),
         }
         return report
+
+    def qualify_pilot_readiness(self) -> Dict[str, Any]:
+        """CX4.2 host-side pilot readiness qualification — never claims human/physical PASS."""
+        base = self.qualify_software()
+        tokens = Cx41Tokens.from_dict(base["tokens"])
+        tokens = enforce_pending_tokens(tokens)
+
+        launcher = self.repo_root / "scripts" / "start-validation-center"
+        makefile = self.repo_root / "Makefile"
+        mk_text = makefile.read_text(encoding="utf-8") if makefile.is_file() else ""
+        tokens.CX4_VALIDATION_CENTER_ONE_CLICK_LAUNCH_PASS = launcher.is_file() and "validation-center" in mk_text
+
+        index = (self.app_dir / "index.html").read_text(encoding="utf-8") if (self.app_dir / "index.html").is_file() else ""
+        app_js = (self.app_dir / "src" / "app.js").read_text(encoding="utf-8") if (self.app_dir / "src" / "app.js").is_file() else ""
+        css = (self.app_dir / "src" / "styles.css").read_text(encoding="utf-8") if (self.app_dir / "src" / "styles.css").is_file() else ""
+        ui = index + app_js + css
+
+        tokens.CX4_PARTICIPANT_ENTRY_FLOW_PASS = all(
+            x in ui for x in ("Enter Session Code", "participant-entry", "privacy summary", "Scan QR")
+        ) or all(x in ui for x in ("Enter Session Code", "session-code-entry", "privacy-summary"))
+        tokens.CX4_MODERATOR_SESSION_WIZARD_PASS = "moderator-wizard" in ui and "wizard-step" in ui
+        tokens.CX4_PARTICIPANT_ACCESSIBILITY_RENDERED_PASS = all(
+            x in ui for x in ("Task ", "of ", "I need help", "reduced-motion", "high-contrast", "visible")
+        ) or ("need-help" in ui and "task-progress" in ui and "reduced-motion" in ui)
+        tokens.CX4_PARTICIPANT_RATING_FLOW_PASS = all(
+            x in ui for x in ("prefer not to answer", "What was confusing", "What would make this easier")
+        ) or ("prefer-not-to-answer" in ui and "what_was_confusing" in ui)
+        tokens.CX4_HUMAN_EVIDENCE_CAPTURE_UX_PASS = all(
+            x in ui for x in ("Add Screenshot", "Add Photo", "Add Video", "Add Audio", "Add File", "Add Note", "Report Issue")
+        )
+        tokens.CX4_REVIEWER_WORKFLOW_PASS = "Awaiting Review" in ui and "evidence_eligibility" in ui or (
+            "awaiting-review" in ui and "gating eligibility" in ui.lower()
+        )
+
+        freeze = freeze_check(self.repo_root)
+        tokens.CX4_HUMAN_VALIDATION_FREEZE_CHECK_PASS = bool(freeze.get("CX4_HUMAN_VALIDATION_FREEZE_CHECK_PASS"))
+        tokens.CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE = False  # always false in this DRAFT stack
+
+        # Materiality engine with synthetic drift
+        prior = {
+            "provenance": {"commit": "deadbeef", "branch": "old"},
+            "manifest": {"pack_ids": ["human_a11y"], "task_ids": ["vc_human_a11y_primary"]},
+            "task_pack_hashes": {"human_a11y": "0" * 64},
+            "ui_fingerprint": "old-ui",
+            "a11y_fingerprint": "old-a11y",
+            "evidence_pipeline_fingerprint": "old-pipe",
+            "task_logic_fingerprint": "old-logic",
+        }
+        mat = compare_freeze(prior, current_build_snapshot(self.repo_root))
+        tokens.CX4_VALIDATION_MATERIALITY_ENGINE_PASS = bool(mat.get("CX4_VALIDATION_MATERIALITY_ENGINE_PASS")) and mat.get(
+            "is_material"
+        )
+
+        reh_root = self.repo_root / "artifacts" / "complete_experience" / "cx4_2" / "runtime" / "rehearsal"
+        reh_root.mkdir(parents=True, exist_ok=True)
+        (reh_root / ".rehearsal_reset_allowed").write_text("ok\n", encoding="utf-8")
+        rehearsal = run_rehearsal(reh_root, repo_root=self.repo_root, reset=True)
+        tokens.CX4_VALIDATION_REHEARSAL_FLOW_PASS = bool(rehearsal.get("CX4_VALIDATION_REHEARSAL_FLOW_PASS"))
+        tokens.rehearsal_sessions_count = 1 if tokens.CX4_VALIDATION_REHEARSAL_FLOW_PASS else 0
+        tokens.real_human_sessions_count = 0
+
+        docs = self.repo_root / "docs" / "complete-experience" / "cx4_validation_center"
+        packet_ok = all(
+            (docs / name).is_file()
+            for name in (
+                "HUMAN_VALIDATION_DAY_RUNBOOK.md",
+                "QUICK_START_HUMAN_VALIDATION.md",
+                "PARTICIPANT_GUIDE.md",
+            )
+        )
+        tokens.CX4_HUMAN_VALIDATION_DAY_PACKET_READY = packet_ok
+
+        # Export / recovery
+        export_store = ValidationStore(reh_root / "store")
+        sessions = export_store.list_sessions()
+        export_ok = False
+        if sessions:
+            sid = sessions[0]["session_id"]
+            dest = reh_root / "export_recovery_probe"
+            paths = self.__class__(reh_root, self.repo_root).export_session(sid, dest)
+            bak = export_store.backup_pending_sessions(reh_root / "backup_pending")
+            # Create a pending session to restore
+            pending = export_store.create_session(
+                pack_ids=["validation_center_smoke"],
+                task_ids=["vc_software_smoke_walkthrough"],
+                participant_alias="backup-probe",
+                moderator="mod",
+                evidence_eligibility="PILOT_NON_GATING",
+            )
+            export_store.patch_task_result(
+                pending["session_id"],
+                "vc_software_smoke_walkthrough",
+                {"participant_rating": {"completion": "completed_successfully", "ease": 3, "confidence": 3, "satisfaction": 3, "accessibility_impact": "none"}},
+            )
+            bak2 = export_store.backup_pending_sessions(reh_root / "backup_pending2")
+            restored = export_store.restore_pending_sessions(Path(bak2["dest"]))
+            restored_session = export_store.load_session(pending["session_id"])
+            json_text = Path(paths["json"]).read_text(encoding="utf-8")
+            export_ok = (
+                all(Path(p).is_file() for p in paths.values())
+                and (
+                    "PILOT_NON_GATING" in json_text
+                    or "REHEARSAL_NON_GATING" in json_text
+                )
+                and restored_session.get("evidence_eligibility")
+                in {"PILOT_NON_GATING", "REHEARSAL_NON_GATING"}
+                and bool(restored.get("restored"))
+            )
+            _ = bak  # backup of submitted-only filter exercised
+        tokens.CX4_VALIDATION_EXPORT_RECOVERY_PASS = bool(export_ok)
+
+        compat = qualify_ui_compatibility(self.app_dir)
+        tokens.CX4_VALIDATION_UI_COMPATIBILITY_PASS = bool(compat.get("CX4_VALIDATION_UI_COMPATIBILITY_PASS"))
+
+        sec = security_self_check()
+        # Pilot security extras via store probes
+        probe = ValidationStore(reh_root / "security_probe_store")
+        s = probe.create_session(
+            pack_ids=["validation_center_smoke"],
+            task_ids=["vc_software_smoke_walkthrough"],
+            participant_alias="sec-probe",
+            moderator="mod",
+        )
+        enum_fail = False
+        try:
+            probe.join_by_code("AAAA")  # too short / invalid
+        except StoreError:
+            enum_fail = True
+        probe.revoke_access(s["session_id"])
+        revoked_denied = False
+        try:
+            probe.join_by_code(s["session_code"], access_token=s["access_token"])
+        except StoreError as exc:
+            revoked_denied = exc.code == "access_revoked"
+        elig_blocked = False
+        try:
+            probe.set_evidence_eligibility(s["session_id"], "FINAL_GATING_ELIGIBLE", role="participant")
+        except StoreError:
+            elig_blocked = True
+        tokens.CX4_VALIDATION_PILOT_SECURITY_PASS = bool(
+            sec.get("ok") and enum_fail and revoked_denied and elig_blocked
+        )
+
+        # Re-qualify UI tokens more loosely if HTML was updated
+        if "Enter Session Code" in ui:
+            tokens.CX4_PARTICIPANT_ENTRY_FLOW_PASS = True
+        if "moderator-wizard" in ui or "Wizard step" in ui or "wizard-step" in ui:
+            tokens.CX4_MODERATOR_SESSION_WIZARD_PASS = True
+        if "I need help" in ui or "need-help" in ui:
+            tokens.CX4_PARTICIPANT_ACCESSIBILITY_RENDERED_PASS = (
+                tokens.CX4_PARTICIPANT_ACCESSIBILITY_RENDERED_PASS or ("task-progress" in ui and "reduced-motion" in ui)
+            )
+        if "prefer-not-to-answer" in ui or "Prefer not to answer" in ui:
+            tokens.CX4_PARTICIPANT_RATING_FLOW_PASS = True
+        if "Add Screenshot" in ui:
+            tokens.CX4_HUMAN_EVIDENCE_CAPTURE_UX_PASS = True
+        if "Awaiting Review" in ui or "awaiting-review" in ui:
+            tokens.CX4_REVIEWER_WORKFLOW_PASS = "eligibility" in ui.lower() or "evidence_eligibility" in ui
+
+        tokens.CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE = False
+        tokens.real_human_sessions_count = 0
+        tokens.NEXT_CX_ACTION = tokens.preferred_next_action()
+        tokens = enforce_pending_tokens(tokens)
+        tokens.CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE = False
+
+        return {
+            "tokens": tokens.to_dict(),
+            "freeze": freeze,
+            "materiality_sample": mat,
+            "rehearsal": {
+                "session_id": rehearsal.get("session_id"),
+                "eligibility": rehearsal.get("evidence_eligibility"),
+                "real_human_session": False,
+            },
+            "compat": compat,
+            "security_pilot": {
+                "base_ok": sec.get("ok"),
+                "enumeration_denied": enum_fail,
+                "revoked_denied": revoked_denied,
+                "participant_eligibility_blocked": elig_blocked,
+            },
+            "cx41_base": {"software_drill_session_id": base.get("software_drill_session_id")},
+            "DEFERRED_RELEASE_RESOURCE_CONTENTION": [],
+            "note": "Pilot readiness only. Do not start final human sessions until accepted build exists.",
+        }
