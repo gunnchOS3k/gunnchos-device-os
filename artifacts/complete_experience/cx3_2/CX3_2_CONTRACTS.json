@@ -1,0 +1,151 @@
+{
+  "ok": true,
+  "contracts": [
+    "CareerProfile",
+    "PortfolioSharePackage"
+  ],
+  "schemas": {
+    "CareerProfile": {
+      "schema": "gunnchos.cx3_2.contracts.CareerProfile.v1",
+      "required": [
+        "profile_id",
+        "owner_id",
+        "display_name",
+        "headline",
+        "summary",
+        "skills",
+        "credential_refs",
+        "portfolio_collection_refs",
+        "artifact_refs",
+        "projects",
+        "education",
+        "experience",
+        "visibility",
+        "provenance",
+        "created_at",
+        "updated_at",
+        "certification_claimed"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string"
+        },
+        "owner_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "headline": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "skills": {
+          "type": "array"
+        },
+        "credential_refs": {
+          "type": "array"
+        },
+        "portfolio_collection_refs": {
+          "type": "array"
+        },
+        "artifact_refs": {
+          "type": "array"
+        },
+        "projects": {
+          "type": "array"
+        },
+        "education": {
+          "type": "array"
+        },
+        "experience": {
+          "type": "array"
+        },
+        "contact": {
+          "type": "object"
+        },
+        "links": {
+          "type": "object"
+        },
+        "visibility": {
+          "type": "object"
+        },
+        "provenance": {
+          "type": "object"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        }
+      }
+    },
+    "PortfolioSharePackage": {
+      "schema": "gunnchos.cx3_2.contracts.PortfolioSharePackage.v1",
+      "required": [
+        "package_id",
+        "format",
+        "created_at",
+        "selected",
+        "career_public",
+        "credentials",
+        "artifacts",
+        "verification",
+        "privacy_manifest",
+        "hashes",
+        "status_snapshot_at",
+        "certification_claimed"
+      ],
+      "properties": {
+        "package_id": {
+          "type": "string"
+        },
+        "format": {
+          "const": "gunnchos.portfolio_share_package.v1"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "selected": {
+          "type": "object"
+        },
+        "career_public": {
+          "type": "object"
+        },
+        "credentials": {
+          "type": "array"
+        },
+        "artifacts": {
+          "type": "array"
+        },
+        "collections": {
+          "type": "array"
+        },
+        "verification": {
+          "type": "object"
+        },
+        "privacy_manifest": {
+          "type": "object"
+        },
+        "hashes": {
+          "type": "object"
+        },
+        "issuer_public_metadata": {
+          "type": "array"
+        },
+        "status_snapshot_at": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        }
+      }
+    }
+  }
+}

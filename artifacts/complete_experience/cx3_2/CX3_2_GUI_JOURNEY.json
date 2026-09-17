@@ -1,0 +1,250 @@
+{
+  "certification_claimed": false,
+  "ok": true,
+  "health": {
+    "ok": true,
+    "provider": "cx3_2-career-verifier",
+    "certification_claimed": false,
+    "port": 8772
+  },
+  "career_journey": {
+    "ok": true,
+    "profile": {
+      "profile_id": "career:ea136e4657d5",
+      "owner_id": "profile:lab-student",
+      "display_name": "Lab Student",
+      "headline": "Career profile via GUI journey",
+      "summary": "Built inside gunnchOS without second computer.",
+      "skills": [
+        "portfolio",
+        "credentials",
+        "verification"
+      ],
+      "credential_refs": [
+        "cred:06d49a12f70c4849822453310a364748"
+      ],
+      "portfolio_collection_refs": [
+        "pc:339ec106ee19"
+      ],
+      "artifact_refs": [
+        "pa:a421c9b6fa76",
+        "pa:dfa312cb8341"
+      ],
+      "projects": [
+        {
+          "title": "CX3.2 share journey",
+          "summary": "User-authored highlight",
+          "source": "user_entered",
+          "verified": false
+        }
+      ],
+      "education": [
+        {
+          "label": "Self-directed lab learning",
+          "source": "user_entered",
+          "verified": false,
+          "certification_claimed": false
+        }
+      ],
+      "experience": [],
+      "contact": {
+        "email": "private-lab-student@example.invalid"
+      },
+      "links": {},
+      "visibility": {
+        "display_name": "public_local",
+        "headline": "public_local",
+        "summary": "public_local",
+        "skills": "public_local",
+        "contact": "private",
+        "credentials": "selective",
+        "artifacts": "selective",
+        "projects": "selective",
+        "links": "selective"
+      },
+      "provenance": {
+        "display_name": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "headline": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "summary": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "skills": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "projects": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "education": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "experience": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "credential_refs": {
+          "source": "composed_refs",
+          "verified": false,
+          "note": "refs only; independent verifier checks signatures",
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "artifact_refs": {
+          "source": "composed_refs",
+          "verified": false,
+          "note": "refs only; independent verifier checks signatures",
+          "updated_at": "2026-09-17T19:18:02Z"
+        },
+        "portfolio_collection_refs": {
+          "source": "composed_refs",
+          "verified": false,
+          "note": "refs only; independent verifier checks signatures",
+          "updated_at": "2026-09-17T19:18:02Z"
+        }
+      },
+      "created_at": "2026-09-17T19:18:02Z",
+      "updated_at": "2026-09-17T19:18:02Z",
+      "certification_claimed": false
+    },
+    "certification_claimed": false,
+    "CX3_REAL_CAREER_PROFILE_GUI_PASS": true
+  },
+  "resume": {
+    "ok": true,
+    "export_sha256": "514144bc4397122e9a9b8663cc7a649e1a6457cece7c42e52f8d1a827a0141d3",
+    "certification_claimed": false
+  },
+  "share": {
+    "ok": true,
+    "package_id": "psp:72d401dc8784",
+    "certification_claimed": false
+  },
+  "verifier": {
+    "ok": true,
+    "valid": true,
+    "tampered_valid": false,
+    "revoked": {
+      "ok": true,
+      "valid": false,
+      "tampered": false,
+      "credentials": [
+        {
+          "credential_id": "cred:06d49a12f70c4849822453310a364748",
+          "signature_verified": true,
+          "status": "revoked",
+          "freshness": "fresh",
+          "revoked": true,
+          "valid": false,
+          "evidence": {
+            "evidence_id": "ev:vault:1831a33895ea",
+            "artifact_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "artifact_path": "cx2h2_j1_essay.odt",
+            "source": "vault"
+          },
+          "issuer_id": "issuer:lab:bff3e3e49793",
+          "certification_claimed": false
+        }
+      ],
+      "artifact_integrity_ok": true,
+      "privacy_manifest": {
+        "excluded_fields": [
+          "contact"
+        ],
+        "excluded_credential_ids": [
+          "cred:87871be3a77749b78ac54edb97aa0eef"
+        ],
+        "excluded_artifact_ids": [
+          "pa:dfa312cb8341"
+        ],
+        "private_contact_excluded": true,
+        "certification_claimed": false
+      },
+      "wallet_db_used": false,
+      "wallet_db_refusal": {
+        "ok": true,
+        "wallet_db_used": false,
+        "refused_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx3_2_linux_lab/work/wallet",
+        "note": "Independent verifier does not read Wallet DB as authority"
+      },
+      "status_online": true,
+      "verified_at": "2026-09-17T19:18:02Z",
+      "certification_claimed": false
+    },
+    "offline": {
+      "ok": true,
+      "valid": false,
+      "tampered": false,
+      "credentials": [
+        {
+          "credential_id": "cred:06d49a12f70c4849822453310a364748",
+          "signature_verified": true,
+          "status": "revoked",
+          "freshness": "stale",
+          "revoked": true,
+          "valid": false,
+          "evidence": {
+            "evidence_id": "ev:vault:1831a33895ea",
+            "artifact_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "artifact_path": "cx2h2_j1_essay.odt",
+            "source": "vault"
+          },
+          "issuer_id": "issuer:lab:bff3e3e49793",
+          "certification_claimed": false
+        }
+      ],
+      "artifact_integrity_ok": true,
+      "privacy_manifest": {
+        "excluded_fields": [
+          "contact"
+        ],
+        "excluded_credential_ids": [
+          "cred:87871be3a77749b78ac54edb97aa0eef"
+        ],
+        "excluded_artifact_ids": [
+          "pa:dfa312cb8341"
+        ],
+        "private_contact_excluded": true,
+        "certification_claimed": false
+      },
+      "wallet_db_used": false,
+      "wallet_db_refusal": {
+        "ok": true,
+        "wallet_db_used": false,
+        "refused_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx3_2_linux_lab/work/wallet",
+        "note": "Independent verifier does not read Wallet DB as authority"
+      },
+      "status_online": false,
+      "verified_at": "2026-09-17T19:18:02Z",
+      "certification_claimed": false
+    },
+    "wallet_db_used": false,
+    "certification_claimed": false,
+    "CX3_REAL_VERIFIER_GUI_PASS": true
+  },
+  "shell_surfaces_present": true,
+  "CX3_REAL_CAREER_PROFILE_GUI_PASS": true,
+  "CX3_REAL_VERIFIER_GUI_PASS": true,
+  "CX3_NO_SECOND_COMPUTER_CAREER_PASS": true
+}

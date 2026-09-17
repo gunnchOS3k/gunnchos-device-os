@@ -1,0 +1,45 @@
+{
+  "schema": "gunnchos.cx3_2.waike_accepted_main_discovery.v1",
+  "generated_at_utc": "2026-09-17T19:18:02Z",
+  "waike_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-waike-learning-platform",
+  "expected_merge_16": "34fb050ccabec813cef4811d64581b32453e1ec2",
+  "certification_claimed": false,
+  "waike_mutated": false,
+  "ok": true,
+  "main_sha": "34fb050ccabec813cef4811d64581b32453e1ec2",
+  "pr16_ancestry": true,
+  "main_matches_expected": true,
+  "hub_apis": [
+    "GET /api/v1/assignments/{id}/mastery",
+    "GET /api/v1/submissions/{id}",
+    "GET /api/v1/submissions/{id}/receipt",
+    "GET /api/v1/sections/{id}/gradebook",
+    "GET /api/v1/gradebook",
+    "POST /api/v1/assignments/{id}/submissions (write \u2014 NOT used by CX3.2 adapter)"
+  ],
+  "schemas": [
+    {
+      "path": "contracts/schemas/assessment.v1.json",
+      "exists": true
+    },
+    {
+      "path": "contracts/schemas/assessment_lifecycle/submission_receipt.v1.json",
+      "exists": true
+    },
+    {
+      "path": "contracts/schemas/rubric.v1.json",
+      "exists": true
+    },
+    {
+      "path": "contracts/deviceos/WAIKE_LEARNING_OS_INTEGRATION_CONTRACT.json",
+      "exists": true
+    }
+  ],
+  "auth_model": "actor bearer/session via Hub require_actor (learner/instructor roles)",
+  "can_expose_real_completed_learning_evidence_readonly": false,
+  "device_lab_trustworthy_completion_available": false,
+  "lab_blocker_reason": "RELEASE_TRAIN_DEPENDENCY_PENDING",
+  "assessment_submission_pass": false,
+  "learner_gui_complete": false,
+  "readonly": true
+}

@@ -1,0 +1,71 @@
+{
+  "attempted": true,
+  "overlay": {
+    "ok": true,
+    "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx3_linux_lab/overlays/cx3-aarch64.qcow2",
+    "parent": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx2h4_linux_lab/overlays/cx2h4-aarch64.qcow2",
+    "qemu_img": {
+      "cmd": [
+        "/opt/homebrew/bin/qemu-img",
+        "create",
+        "-f",
+        "qcow2",
+        "-b",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx2h4-p0-digital-closure/os_build/cx2h4_linux_lab/overlays/cx2h4-aarch64.qcow2",
+        "-F",
+        "qcow2",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx3_linux_lab/overlays/cx3-aarch64.qcow2"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    }
+  },
+  "graphical": {
+    "schema": "gunnchos.cx3.graphical_boot.v1",
+    "ok": true,
+    "blocker": null,
+    "ssh_port": 2229,
+    "foreign_qemu_present": false,
+    "foreign_qemu_policy": "never_kill; CX lock governs CX slot only",
+    "overlay": {
+      "ok": true,
+      "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx3_linux_lab/overlays/cx3-aarch64.qcow2",
+      "parent": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier/os_build/cx2h4_linux_lab/overlays/cx2h4-aarch64.qcow2",
+      "reused": true
+    },
+    "lock": {
+      "ok": true,
+      "lock": {
+        "pid": 87329,
+        "branch": "eng/cx3-credential-wallet-portfolio-foundation",
+        "repo": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-waike-career-sharing-verifier",
+        "purpose": "CX3_CREDENTIAL_WALLET_PORTFOLIO",
+        "start_timestamp_utc": "2026-09-17T19:18:03Z",
+        "monitor": "/tmp/cx3-graphical/monitor.sock",
+        "ssh_port": 2229,
+        "wave": "CX3.1",
+        "qemu_pid": 87341
+      }
+    },
+    "graphics": {
+      "display_backend": "vnc",
+      "vnc_display": 1,
+      "vnc_tcp_port": 5901,
+      "monitor_socket": "/tmp/cx3-graphical/monitor.sock"
+    },
+    "accel": {
+      "accel": "hvf",
+      "cpu": "host"
+    },
+    "runtime": {
+      "boot_log": "/tmp/cx3-graphical/qemu_boot.log",
+      "pidfile": "/tmp/cx3-graphical/qemu.pid",
+      "monitor": "/tmp/cx3-graphical/monitor.sock",
+      "captures": "/tmp/cx3-graphical/captures",
+      "base": "/tmp/cx3-graphical"
+    },
+    "qemu_pid": 87341,
+    "ssh_ready": true,
+    "guest_booted": true
+  }
+}

@@ -8,6 +8,8 @@ import AssistSurface from './surfaces/AssistSurface'
 import CareSurface from './surfaces/CareSurface'
 import WalletSurface from './surfaces/WalletSurface'
 import PortfolioSurface from './surfaces/PortfolioSurface'
+import CareerProfileSurface from './surfaces/CareerProfileSurface'
+import VerifierSurface from './surfaces/VerifierSurface'
 import './cx2.css'
 
 export type Cx2Surface =
@@ -19,6 +21,8 @@ export type Cx2Surface =
   | 'care'
   | 'wallet'
   | 'portfolio'
+  | 'career'
+  | 'verifier'
 
 const SURFACES: { id: Cx2Surface; label: string; shortcut: string }[] = [
   { id: 'home', label: 'Home', shortcut: '1' },
@@ -29,6 +33,8 @@ const SURFACES: { id: Cx2Surface; label: string; shortcut: string }[] = [
   { id: 'care', label: 'Care', shortcut: '6' },
   { id: 'wallet', label: 'Wallet', shortcut: '7' },
   { id: 'portfolio', label: 'Portfolio', shortcut: '8' },
+  { id: 'career', label: 'Career', shortcut: '9' },
+  { id: 'verifier', label: 'Verifier', shortcut: '0' },
 ]
 
 export type DeviceProfile = 'student_14_5' | 'handheld_hybrid' | 'ds_xl' | 'docked' | 'ci_qemu'
@@ -74,9 +80,10 @@ export default function CompleteExperienceShell({
 
   useEffect(() => {
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.altKey && e.key >= '1' && e.key <= '8') {
+      if (e.altKey && ((e.key >= '1' && e.key <= '9') || e.key === '0')) {
         e.preventDefault()
-        go(SURFACES[Number(e.key) - 1].id)
+        const idx = e.key === '0' ? 9 : Number(e.key) - 1
+        if (SURFACES[idx]) go(SURFACES[idx].id)
       }
       if (e.key === 'Escape') back()
       if (e.altKey && e.key.toLowerCase() === 'h') home()
@@ -120,6 +127,10 @@ export default function CompleteExperienceShell({
         return <WalletSurface offline={offline} onError={setError} />
       case 'portfolio':
         return <PortfolioSurface offline={offline} onError={setError} />
+      case 'career':
+        return <CareerProfileSurface offline={offline} onError={setError} />
+      case 'verifier':
+        return <VerifierSurface offline={offline} onError={setError} />
     }
   })()
 
