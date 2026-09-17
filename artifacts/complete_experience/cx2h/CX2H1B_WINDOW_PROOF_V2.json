@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "fb_diff": {
+    "ok": true,
+    "min_changed_pct_threshold": 0.5,
+    "a": {
+      "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "90989eab232bc52b33528973054ef1ad092659d01cf9a5538e48c3a0ffc59940",
+      "size": 3072016
+    },
+    "changed_pixels": 500542,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 48.8811,
+    "bbox": {
+      "min_x": 76,
+      "min_y": 12,
+      "max_x": 1241,
+      "max_y": 670
+    },
+    "mean_abs_channel_diff": 90.3557,
+    "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+  },
+  "atspi": {
+    "ok": false,
+    "found": [],
+    "needle": "CX2H Test App V2"
+  },
+  "color": {
+    "ok": true,
+    "mean_rgb": {
+      "r": 197,
+      "g": 96,
+      "b": 39,
+      "n": 120000
+    },
+    "label": "v2_orangish",
+    "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm"
+  },
+  "channels_required": [
+    "framebuffer_diff_v1_vs_v2",
+    "atspi_or_dominant_color"
+  ]
+}

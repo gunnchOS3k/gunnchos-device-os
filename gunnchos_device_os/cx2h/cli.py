@@ -104,11 +104,35 @@ def run_cx2h1(repo: Path) -> Dict[str, Any]:
     facts["FRAMEBUFFER_DIFF_REPORT"] = {
         "v1": (j3.get("steps") or {}).get("diff_v1"),
         "v1_v2": (j3.get("steps") or {}).get("diff_v1_v2"),
+        "noise_calibration": {
+            "v1_min_changed_pct": 0.5,
+            "v1_v2_min_changed_pct": 0.5,
+            "baseline_pair": "after_install_vs_launch_v1 (not app_center_vs_launch)",
+            "note": "Thresholds not lowered; compare against same App Center chrome so install UI churn cannot fake a window",
+        },
     }
     facts["CX2H_FRAMEBUFFER_CAPTURE_MANIFEST"] = {
         "dir": str(captures),
         "frames": sorted(p.name for p in captures.glob("j3_*.ppm")),
     }
+    facts["CX2H1B_WINDOW_PROOF_V1"] = (j3.get("steps") or {}).get("window_proof_v1")
+    facts["CX2H1B_WINDOW_PROOF_V2"] = (j3.get("steps") or {}).get("window_proof_v2")
+    facts["CX2H1B_PROVIDER_LAUNCH_RESULT"] = {
+        "v1": (j3.get("steps") or {}).get("provider_launch_v1"),
+        "v2": (j3.get("steps") or {}).get("provider_launch_v2"),
+    }
+    review_path = evidence_root(repo) / "CX2H1B_J3_EVIDENCE_REVIEW.json"
+    if review_path.is_file():
+        try:
+            facts["CX2H1B_J3_EVIDENCE_REVIEW"] = json.loads(review_path.read_text())
+        except Exception:
+            pass
+    rc_path = evidence_root(repo) / "CX2H1B_FLATPAK_LAUNCH_ROOT_CAUSE.json"
+    if rc_path.is_file():
+        try:
+            facts["CX2H1B_FLATPAK_LAUNCH_ROOT_CAUSE"] = json.loads(rc_path.read_text())
+        except Exception:
+            pass
 
     if tokens.J3_CLASS != "REAL_USER_JOURNEY_DIGITAL_PASS":
         tokens.lab_blocker = j3.get("blocker") or "CX2H_J3_INCOMPLETE"

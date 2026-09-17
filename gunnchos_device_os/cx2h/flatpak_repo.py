@@ -31,7 +31,20 @@ def _upload_seeds(repo: Path) -> Dict[str, Any]:
     results = {}
     for ver in ("v1", "v2"):
         src = lab / "flatpak" / f"app-{ver}"
+        # Wipe destination so scp -r does not nest app-vN/app-vN/
+        _ssh(repo, f"rm -rf /var/lib/cx2h/flatpak-src/app-{ver} && mkdir -p /var/lib/cx2h/flatpak-src/app-{ver}", timeout=30)
         r = scp_to_guest(key, port, src, f"/var/lib/cx2h/flatpak-src/app-{ver}")
+        # If scp placed contents under app-vN/app-vN, flatten
+        _ssh(
+            repo,
+            f"if [ -d /var/lib/cx2h/flatpak-src/app-{ver}/app-{ver} ]; then "
+            f"  cp -a /var/lib/cx2h/flatpak-src/app-{ver}/app-{ver}/. /var/lib/cx2h/flatpak-src/app-{ver}/; "
+            f"  rm -rf /var/lib/cx2h/flatpak-src/app-{ver}/app-{ver}; "
+            f"fi; "
+            f"test -f /var/lib/cx2h/flatpak-src/app-{ver}/share/app.py && echo SEED_APP_PY_OK_{ver} || echo SEED_APP_PY_MISSING_{ver}; "
+            f"ls -la /var/lib/cx2h/flatpak-src/app-{ver}/share/",
+            timeout=30,
+        )
         results[ver] = {"rc": r.returncode, "err": (r.stderr or "")[-300:]}
     return results
 

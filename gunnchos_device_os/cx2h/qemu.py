@@ -185,8 +185,19 @@ def start_graphical_guest(repo: Optional[Path] = None, *, ssh_port: int = DEFAUL
     result["graphics"] = graphics
     result["accel"] = accel
     result["runtime"] = {k: str(v) for k, v in rt.items()}
-    (work / "qemu_graphical_cmd.json").write_text(json.dumps(cmd, indent=2) + "\n")
-    (work / "runtime_graphical.json").write_text(json.dumps(result["runtime"], indent=2) + "\n")
+    # Prefer /tmp for host metadata — Cursor sandbox may block writes under Downloads/.
+    meta_dir = rt["base"] / "work"
+    meta_dir.mkdir(parents=True, exist_ok=True)
+    for name, payload in (
+        ("qemu_graphical_cmd.json", cmd),
+        ("runtime_graphical.json", result["runtime"]),
+    ):
+        for dest in (meta_dir / name, work / name):
+            try:
+                dest.write_text(json.dumps(payload, indent=2) + "\n")
+                break
+            except OSError:
+                continue
     import subprocess
 
     proc = subprocess.run(cmd, capture_output=True, text=True)
@@ -201,17 +212,35 @@ def start_graphical_guest(repo: Optional[Path] = None, *, ssh_port: int = DEFAUL
     lock_meta["qemu_pid"] = pid
     lock_meta["wave"] = "CX2H"
     Path("/tmp/gunnchos-cx-qemu.lock").write_text(json.dumps(lock_meta, indent=2) + "\n")
-    # Ensure SSH key available (copy from CX2G lab if needed)
+    # Ensure SSH key available (copy from CX2G lab if needed; fall back to /tmp)
     g_lab = repo / "os_build" / "cx2g_linux_lab" / "ssh"
     h_lab = lab / "ssh"
+    tmp_ssh = rt["base"] / "ssh"
+    tmp_ssh.mkdir(parents=True, exist_ok=True)
     if g_lab.is_dir():
         for name in ("id_ed25519", "id_ed25519.pub"):
-            src, dst = g_lab / name, h_lab / name
-            if src.is_file() and not dst.is_file():
-                shutil.copy2(src, dst)
-                os.chmod(dst, 0o600)
-    keys = ensure_ssh_keypair(lab)
-    ssh_ok = wait_ssh(port=ssh_port, key=Path(keys["private"]), timeout_s=480)
+            src = g_lab / name
+            if not src.is_file():
+                continue
+            for dst_dir in (h_lab, tmp_ssh):
+                dst = dst_dir / name
+                if dst.is_file():
+                    continue
+                try:
+                    dst_dir.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(src, dst)
+                    os.chmod(dst, 0o600)
+                    break
+                except OSError:
+                    continue
+    try:
+        keys = ensure_ssh_keypair(lab)
+    except OSError:
+        keys = ensure_ssh_keypair(rt["base"])
+    key_path = Path(keys["private"])
+    if not key_path.is_file() and (tmp_ssh / "id_ed25519").is_file():
+        key_path = tmp_ssh / "id_ed25519"
+    ssh_ok = wait_ssh(port=ssh_port, key=key_path, timeout_s=480)
     result["ssh_ready"] = ssh_ok
     result["ok"] = bool(ssh_ok and pid and _pid_alive(pid))
     result["guest_booted"] = bool(pid and _pid_alive(pid))

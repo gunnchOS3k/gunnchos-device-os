@@ -137,6 +137,11 @@ Type=simple
 User=gunnchos
 Environment=FLATPAK_USER_DIR=/var/lib/cx2h/flatpak-user
 Environment=CX2H_PROVIDER_PORT=8766
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=GDK_BACKEND=wayland
+Environment=XKB_CONFIG_ROOT=/usr/share/X11/xkb
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 ExecStart=/usr/bin/python3 /var/lib/cx2h/bin/cx2h_app_center_provider.py
 Restart=on-failure
 

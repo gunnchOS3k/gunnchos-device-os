@@ -25,7 +25,7 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "fa7de2f61185e448b5ae9afa43a85e613971321288db5044ede74fdcc65a53eb"
+      "sha256": "dfa332d6bae87f251171fc3e5bac287db1900b40e0753526e89c3d6336e8036e"
     },
     "search": {
       "ok": true,
@@ -90,10 +90,38 @@
       "branches": [
         "1.0.0"
       ],
-      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 1.5\u00a0kB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 95b9661dbb8766871d2bae105af4c5b3fba67055240616d6e0d182b4fcc713e1\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 00:49:09 +0000\nSTATE_DONE\n"
+      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 03:26:15 +0000\nSTATE_DONE\n"
     },
     "provider_last_after_install": {
-      "action": null
+      "action": "install",
+      "ok": true,
+      "info": {
+        "installed": true,
+        "version": "1.0.0",
+        "branch": "1.0.0",
+        "all_branches": [
+          "1.0.0"
+        ],
+        "raw": "          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 03:26:15 +0000\n"
+      },
+      "stdout": "Installing app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n",
+      "stderr": "",
+      "requested_version": "1.0.0",
+      "install_args": [
+        "cx2h-local",
+        "app/org.gunnchos.CX2HTestApp/aarch64/1.0.0"
+      ],
+      "attempts": [
+        {
+          "args": [
+            "cx2h-local",
+            "app/org.gunnchos.CX2HTestApp/aarch64/1.0.0"
+          ],
+          "rc": 0,
+          "stderr": "",
+          "stdout": "Installing app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n"
+        }
+      ]
     },
     "fb_after_install": {
       "path": "/tmp/cx2h-graphical/captures/j3_02_after_install.ppm",
@@ -105,7 +133,7 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79"
+      "sha256": "a1ab07f422da1a412f38a4b2d1ae875d6bcd7ea17165296a0d351846d1454af4"
     },
     "ui_open": {
       "ok": true,
@@ -127,7 +155,40 @@
         "needle": "Open"
       }
     },
-    "launch_probe": "2240 bash -c export XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-0; pgrep -af 'cx2h-testapp|CX2HTestApp|chromium.*cx2h-testapp|chromium.*CX2H|chromium.*app=file' | head -15; ls /var/tmp/cx2h-testapp-* 2>/dev/null | head; echo LAUNCH_PROBE_DONE\nLAUNCH_PROBE_DONE\n",
+    "provider_launch_v1": {
+      "ok": true,
+      "instance_id": "2120424247",
+      "pid": "2548",
+      "application": "org.gunnchos.CX2HTestApp",
+      "version": "1.0.0",
+      "branch": "1.0.0",
+      "alive_after_5s": true,
+      "launch_log": "\n=== launch 2026-09-17T03:26:36Z version=1.0.0 ===\nF: Not sharing \"/usr/share/X11/xkb\" with sandbox: Path \"/usr\" is reserved by Flatpak\n\n=== launch 2026-09-17T03:26:40Z version=1.0.0 ===\nF: Not sharing \"/usr/share/X11/xkb\" with sandbox: Path \"/usr\" is reserved by Flatpak\nCX2H_XWAYLAND_FAIL\nCX2H_BACKEND_WAYLAND_FALLBACK\nCX2H_LAUNCHER exec_py=/run/host/usr/bin/python3 app=/app/share/cx2h-testapp/app.py backend=wayland display=\n\n(app.py:2): Gtk-WARNING **: 03:26:42.070: Locale not supported by C library.\n\tUsing the fallback 'C' locale.\nCX2H_APP_START version=1.0.0 gdk_backend=wayland display=None wayland=wayland-0\nCX2H_WINDOW_MAPPED\n",
+      "error": null,
+      "flatpak_ps": "2120424247\torg.gunnchos.CX2HTestApp\t2548\n1445756471\torg.gunnchos.CX2HTestApp\t2494\n",
+      "shell_pid": "2547",
+      "shell_still_running": true,
+      "shell_pid_not_sufficient": true,
+      "window_mapped_marker": true,
+      "gtk_aborted": false,
+      "info": {
+        "installed": true,
+        "version": "1.0.0",
+        "branch": "1.0.0",
+        "all_branches": [
+          "1.0.0"
+        ],
+        "raw": "          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 03:26:15 +0000\n"
+      }
+    },
+    "flatpak_ps_v1": {
+      "raw": "2120424247\torg.gunnchos.CX2HTestApp\t2548\n1445756471\torg.gunnchos.CX2HTestApp\t2494\n---\n2503 /run/host/usr/bin/python3 /app/share/cx2h-testapp/app.py\n2558 /run/host/usr/bin/python3 /app/share/cx2h-testapp/app.py\nPS_PROBE_DONE\n",
+      "has_instance": true,
+      "lines": [
+        "2120424247\torg.gunnchos.CX2HTestApp\t2548",
+        "1445756471\torg.gunnchos.CX2HTestApp\t2494"
+      ]
+    },
     "fb_v1": {
       "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
       "ok": true,
@@ -138,36 +199,104 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79"
+      "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5"
     },
     "diff_v1": {
       "ok": true,
-      "min_changed_pct_threshold": 0.02,
+      "min_changed_pct_threshold": 0.5,
       "a": {
-        "path": "/tmp/cx2h-graphical/captures/j3_01_app_center.ppm",
+        "path": "/tmp/cx2h-graphical/captures/j3_02_after_install.ppm",
         "w": 1280,
         "h": 800,
-        "sha256": "fa7de2f61185e448b5ae9afa43a85e613971321288db5044ede74fdcc65a53eb",
+        "sha256": "a1ab07f422da1a412f38a4b2d1ae875d6bcd7ea17165296a0d351846d1454af4",
         "size": 3072016
       },
       "b": {
         "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
         "w": 1280,
         "h": 800,
-        "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79",
+        "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
         "size": 3072016
       },
-      "changed_pixels": 76003,
+      "changed_pixels": 655031,
       "total_pixels": 1024000,
-      "changed_pixel_pct": 7.4222,
+      "changed_pixel_pct": 63.9679,
       "bbox": {
-        "min_x": 94,
-        "min_y": 376,
-        "max_x": 1058,
-        "max_y": 614
+        "min_x": 49,
+        "min_y": 35,
+        "max_x": 1176,
+        "max_y": 799
       },
-      "mean_abs_channel_diff": 27.4509,
-      "rationale": "Require >= 0.02% changed pixels so cursor blink alone cannot prove shell render"
+      "mean_abs_channel_diff": 23.8614,
+      "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "atspi_v1": {
+      "ok": false,
+      "found": [],
+      "needle": "CX2H Test App V1"
+    },
+    "color_v1": {
+      "ok": true,
+      "mean_rgb": {
+        "r": 11,
+        "g": 61,
+        "b": 46,
+        "n": 120000
+      },
+      "label": "v1_greenish",
+      "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm"
+    },
+    "window_proof_v1": {
+      "ok": true,
+      "fb_diff": {
+        "ok": true,
+        "min_changed_pct_threshold": 0.5,
+        "a": {
+          "path": "/tmp/cx2h-graphical/captures/j3_02_after_install.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "a1ab07f422da1a412f38a4b2d1ae875d6bcd7ea17165296a0d351846d1454af4",
+          "size": 3072016
+        },
+        "b": {
+          "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
+          "size": 3072016
+        },
+        "changed_pixels": 655031,
+        "total_pixels": 1024000,
+        "changed_pixel_pct": 63.9679,
+        "bbox": {
+          "min_x": 49,
+          "min_y": 35,
+          "max_x": 1176,
+          "max_y": 799
+        },
+        "mean_abs_channel_diff": 23.8614,
+        "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+      },
+      "atspi": {
+        "ok": false,
+        "found": [],
+        "needle": "CX2H Test App V1"
+      },
+      "color": {
+        "ok": true,
+        "mean_rgb": {
+          "r": 11,
+          "g": 61,
+          "b": 46,
+          "n": 120000
+        },
+        "label": "v1_greenish",
+        "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm"
+      },
+      "channels_required": [
+        "framebuffer_diff_vs_after_install",
+        "atspi_or_dominant_color"
+      ]
     },
     "ui_update": {
       "ok": true,
@@ -197,7 +326,63 @@
       "branches": [
         "2.0.0"
       ],
-      "raw": "org.gunnchos.CX2HTestApp\t2.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/2.0.0\n        Arch: aarch64\n      Branch: 2.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 1.5\u00a0kB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 953112f2774a3840060612c6bb42713117638943d5a29294d2d89481eac28d03\n     Subject: CX2HTestApp 2.0.0\n        Date: 2026-09-17 00:49:09 +0000\nSTATE_DONE\n"
+      "raw": "org.gunnchos.CX2HTestApp\t2.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/2.0.0\n        Arch: aarch64\n      Branch: 2.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: e72b2719ac68a45d1c09054080c37de41a8a28eb6567e9b4122fae5d4dcc696e\n     Subject: CX2HTestApp 2.0.0\n        Date: 2026-09-17 03:26:18 +0000\nSTATE_DONE\n"
+    },
+    "ui_open_v2": {
+      "ok": true,
+      "result": {
+        "result": {
+          "type": "object",
+          "value": {
+            "clicked": true,
+            "action": "open",
+            "label": "Open"
+          }
+        }
+      },
+      "target": "http://127.0.0.1:8765/",
+      "atspi_fallback": {
+        "ok": false,
+        "clicked": false,
+        "found": [],
+        "needle": "Open"
+      }
+    },
+    "provider_launch_v2": {
+      "ok": true,
+      "instance_id": "297866364",
+      "pid": "2813",
+      "application": "org.gunnchos.CX2HTestApp",
+      "version": "2.0.0",
+      "branch": "2.0.0",
+      "alive_after_5s": true,
+      "launch_log": "\n=== launch 2026-09-17T03:26:36Z version=1.0.0 ===\nF: Not sharing \"/usr/share/X11/xkb\" with sandbox: Path \"/usr\" is reserved by Flatpak\n\n=== launch 2026-09-17T03:26:40Z version=1.0.0 ===\nF: Not sharing \"/usr/share/X11/xkb\" with sandbox: Path \"/usr\" is reserved by Flatpak\nCX2H_XWAYLAND_FAIL\nCX2H_BACKEND_WAYLAND_FALLBACK\nCX2H_LAUNCHER exec_py=/run/host/usr/bin/python3 app=/app/share/cx2h-testapp/app.py backend=wayland display=\n\n(app.py:2): Gtk-WARNING **: 03:26:42.070: Locale not supported by C library.\n\tUsing the fallback 'C' locale.\nCX2H_APP_START version=1.0.0 gdk_backend=wayland display=None wayland=wayland-0\nCX2H_WINDOW_MAPPED\nCX2H_XWAYLAND_FAIL\nCX2H_BACKEND_WAYLAND_FALLBACK\nCX2H_LAUNCHER exec_py=/run/host/usr/bin/python3 app=/app/share/cx2h-testapp/app.py backend=wayland display=\n\n(app.py:2): Gtk-WARNING **: 03:26:45.544: Locale not supported by C library.\n\tUsing the fallback 'C' locale.\nCX2H_APP_START version=1.0.0 gdk_backend=wayland display=None wayland=wayland-0\nCX2H_WINDOW_MAPPED\n\n=== launch 2026-09-17T03:26:59Z version=2.0.0 ===\nF: Not sharing \"/usr/share/X11/xkb\" with sandbox: Path \"/usr\" is reserved by Flatpak\n\n=== launch 2026-09-17T03:27:02Z version=2.0.0 ===\nF: Not sharing \"/usr/share/X11/xkb\" with sandbox: Path \"/usr\" is reserved by Flatpak\nCX2H_XWAYLAND_FAIL\nCX2H_BACKEND_WAYLAND_FALLBACK\nCX2H_LAUNCHER exec_py=/run/host/usr/bin/python3 app=/app/share/cx2h-testapp/app.py backend=wayland display=\n\n(app.py:2): Gtk-WARNING **: 03:27:04.953: Locale not supported by C library.\n\tUsing the fallback 'C' locale.\nCX2H_APP_START version=2.0.0 gdk_backend=wayland display=None wayland=wayland-0\nCX2H_WINDOW_MAPPED\n",
+      "error": null,
+      "flatpak_ps": "297866364\torg.gunnchos.CX2HTestApp\t2813\n1322340582\torg.gunnchos.CX2HTestApp\t2759\n2120424247\torg.gunnchos.CX2HTestApp\t2548\n1445756471\torg.gunnchos.CX2HTestApp\t2494\n",
+      "shell_pid": "2812",
+      "shell_still_running": true,
+      "shell_pid_not_sufficient": true,
+      "window_mapped_marker": true,
+      "gtk_aborted": false,
+      "info": {
+        "installed": true,
+        "version": "2.0.0",
+        "branch": "2.0.0",
+        "all_branches": [
+          "2.0.0"
+        ],
+        "raw": "          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/2.0.0\n        Arch: aarch64\n      Branch: 2.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: e72b2719ac68a45d1c09054080c37de41a8a28eb6567e9b4122fae5d4dcc696e\n     Subject: CX2HTestApp 2.0.0\n        Date: 2026-09-17 03:26:18 +0000\n"
+      }
+    },
+    "flatpak_ps_v2": {
+      "raw": "297866364\torg.gunnchos.CX2HTestApp\t2813\n1322340582\torg.gunnchos.CX2HTestApp\t2759\n2120424247\torg.gunnchos.CX2HTestApp\t2548\n1445756471\torg.gunnchos.CX2HTestApp\t2494\n---\n2503 /run/host/usr/bin/python3 /app/share/cx2h-testapp/app.py\n2558 /run/host/usr/bin/python3 /app/share/cx2h-testapp/app.py\n2768 /run/host/usr/bin/python3 /app/share/cx2h-testapp/app.py\n2822 /run/host/usr/bin/python3 /app/share/cx2h-testapp/app.py\nPS_PROBE_DONE\n",
+      "has_instance": true,
+      "lines": [
+        "297866364\torg.gunnchos.CX2HTestApp\t2813",
+        "1322340582\torg.gunnchos.CX2HTestApp\t2759",
+        "2120424247\torg.gunnchos.CX2HTestApp\t2548",
+        "1445756471\torg.gunnchos.CX2HTestApp\t2494"
+      ]
     },
     "fb_v2": {
       "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm",
@@ -209,36 +394,104 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "998c911ced685c52639a393fd68a263078993faaede3cab14db54a033b63f318"
+      "sha256": "90989eab232bc52b33528973054ef1ad092659d01cf9a5538e48c3a0ffc59940"
     },
     "diff_v1_v2": {
-      "ok": false,
-      "min_changed_pct_threshold": 0.01,
+      "ok": true,
+      "min_changed_pct_threshold": 0.5,
       "a": {
         "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
         "w": 1280,
         "h": 800,
-        "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79",
+        "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
         "size": 3072016
       },
       "b": {
         "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm",
         "w": 1280,
         "h": 800,
-        "sha256": "998c911ced685c52639a393fd68a263078993faaede3cab14db54a033b63f318",
+        "sha256": "90989eab232bc52b33528973054ef1ad092659d01cf9a5538e48c3a0ffc59940",
         "size": 3072016
       },
-      "changed_pixels": 50,
+      "changed_pixels": 500542,
       "total_pixels": 1024000,
-      "changed_pixel_pct": 0.0049,
+      "changed_pixel_pct": 48.8811,
       "bbox": {
-        "min_x": 244,
-        "min_y": 517,
-        "max_x": 251,
-        "max_y": 526
+        "min_x": 76,
+        "min_y": 12,
+        "max_x": 1241,
+        "max_y": 670
       },
-      "mean_abs_channel_diff": 55.8733,
-      "rationale": "Require >= 0.01% changed pixels so cursor blink alone cannot prove shell render"
+      "mean_abs_channel_diff": 90.3557,
+      "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "atspi_v2": {
+      "ok": false,
+      "found": [],
+      "needle": "CX2H Test App V2"
+    },
+    "color_v2": {
+      "ok": true,
+      "mean_rgb": {
+        "r": 197,
+        "g": 96,
+        "b": 39,
+        "n": 120000
+      },
+      "label": "v2_orangish",
+      "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm"
+    },
+    "window_proof_v2": {
+      "ok": true,
+      "fb_diff": {
+        "ok": true,
+        "min_changed_pct_threshold": 0.5,
+        "a": {
+          "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
+          "size": 3072016
+        },
+        "b": {
+          "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "90989eab232bc52b33528973054ef1ad092659d01cf9a5538e48c3a0ffc59940",
+          "size": 3072016
+        },
+        "changed_pixels": 500542,
+        "total_pixels": 1024000,
+        "changed_pixel_pct": 48.8811,
+        "bbox": {
+          "min_x": 76,
+          "min_y": 12,
+          "max_x": 1241,
+          "max_y": 670
+        },
+        "mean_abs_channel_diff": 90.3557,
+        "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+      },
+      "atspi": {
+        "ok": false,
+        "found": [],
+        "needle": "CX2H Test App V2"
+      },
+      "color": {
+        "ok": true,
+        "mean_rgb": {
+          "r": 197,
+          "g": 96,
+          "b": 39,
+          "n": 120000
+        },
+        "label": "v2_orangish",
+        "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm"
+      },
+      "channels_required": [
+        "framebuffer_diff_v1_vs_v2",
+        "atspi_or_dominant_color"
+      ]
     },
     "ui_rollback": {
       "ok": true,
@@ -268,7 +521,7 @@
       "branches": [
         "1.0.0"
       ],
-      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 1.5\u00a0kB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 95b9661dbb8766871d2bae105af4c5b3fba67055240616d6e0d182b4fcc713e1\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 00:49:09 +0000\nSTATE_DONE\n"
+      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 03:26:15 +0000\nSTATE_DONE\n"
     },
     "fb_rollback": {
       "path": "/tmp/cx2h-graphical/captures/j3_05_rollback.ppm",
@@ -280,7 +533,7 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79"
+      "sha256": "90989eab232bc52b33528973054ef1ad092659d01cf9a5538e48c3a0ffc59940"
     },
     "ui_uninstall": {
       "ok": true,
@@ -323,7 +576,7 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "859cca659982d24e1d2893e581b7575afb5fb602ba6db287f0de72154fb709a4"
+      "sha256": "1655317359b54e286da7aeca838fb86d52086cff4c3bfcae8d5fd941d3204911"
     },
     "persist_reinstall_ui": {
       "ok": true,
@@ -353,10 +606,10 @@
       "branches": [
         "1.0.0"
       ],
-      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 1.5\u00a0kB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 95b9661dbb8766871d2bae105af4c5b3fba67055240616d6e0d182b4fcc713e1\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 00:49:09 +0000\nSTATE_DONE\n"
+      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 03:26:15 +0000\nSTATE_DONE\n"
     },
     "shell_restart": {
-      "stdout": "DEBUG_OK\n{\"installed\": true, \"version\": \"1.0.0\", \"branch\": \"1.0.0\", \"all_branches\": [\"1.0.0\"], \"raw\": \"          ID: org.gunnchos.CX2HTestApp\\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\\n        Arch: aarch64\\n      Branch: 1.0.0\\n      Origin: cx2h-local\\n  Collection: \\nInstallation: user\\n   Installed: 1.5\\u00a0kB\\n     Runtime: org.gunnchos.Platform/aarch64/stable\\n         Sdk: org.gunnchos.Platform/aarch64/stable\\n\\n      Commit: 95b9661dbb8766871d2bae105af4c5b3fba67055240616d6e0d182b4fcc713e1\\n     Subject: CX2HTestApp 1.0.0\\n        Date: 2026-09-17 00:49:09 +0000\\n\"}",
+      "stdout": "DEBUG_OK\n{\"installed\": true, \"version\": \"1.0.0\", \"branch\": \"1.0.0\", \"all_branches\": [\"1.0.0\"], \"raw\": \"          ID: org.gunnchos.CX2HTestApp\\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\\n        Arch: aarch64\\n      Branch: 1.0.0\\n      Origin: cx2h-local\\n  Collection: \\nInstallation: user\\n   Installed: 2.8\\u00a0MB\\n     Runtime: org.gunnchos.Platform/aarch64/stable\\n         Sdk: org.gunnchos.Platform/aarch64/stable\\n\\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\\n     Subject: CX2HTestApp 1.0.0\\n        Date: 2026-09-17 03:26:15 +0000\\n\"}",
       "ok": true
     },
     "ui_after_restart": {
@@ -380,7 +633,7 @@
       "branches": [
         "1.0.0"
       ],
-      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 1.5\u00a0kB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 95b9661dbb8766871d2bae105af4c5b3fba67055240616d6e0d182b4fcc713e1\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 00:49:09 +0000\nSTATE_DONE\n"
+      "raw": "org.gunnchos.CX2HTestApp\t1.0.0\t\tcx2h-local\n---\n          ID: org.gunnchos.CX2HTestApp\n         Ref: app/org.gunnchos.CX2HTestApp/aarch64/1.0.0\n        Arch: aarch64\n      Branch: 1.0.0\n      Origin: cx2h-local\n  Collection: \nInstallation: user\n   Installed: 2.8\u00a0MB\n     Runtime: org.gunnchos.Platform/aarch64/stable\n         Sdk: org.gunnchos.Platform/aarch64/stable\n\n      Commit: 8929ea23a946d7e2693661a9fea9cdfcf0b0de7f034cf58b6afcda4357c7834b\n     Subject: CX2HTestApp 1.0.0\n        Date: 2026-09-17 03:26:15 +0000\nSTATE_DONE\n"
     },
     "fb_persistence": {
       "path": "/tmp/cx2h-graphical/captures/j3_07_persistence.ppm",
@@ -392,8 +645,21 @@
       "height": 800,
       "maxval": 255,
       "valid_ppm": true,
-      "sha256": "46cf0f1b7581b31b99e4d8ca105e086ada084deac2fb1ff81790ca1eb26864ea"
+      "sha256": "46eeea576501e78b6cb2fd87b7d3891e0d769d78333608ae66cf0ade8ed044af"
     }
+  },
+  "criteria": {
+    "provider_pass": true,
+    "install_pass": true,
+    "launch_pass": true,
+    "update_pass": true,
+    "rollback_pass": true,
+    "uninstall_pass": true,
+    "persistence_pass": true,
+    "window_v1": true,
+    "window_v2": true,
+    "launch_structured_v1": true,
+    "launch_structured_v2": true
   },
   "tokens": {
     "CX2H_REAL_APP_CENTER_PROVIDER_PASS": true,

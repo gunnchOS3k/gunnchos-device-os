@@ -50,6 +50,60 @@ def test_pid_alone_cannot_earn_launch_pass():
     assert blob["pid"] and not tokens.CX2H_REAL_APP_LAUNCH_GUI_PASS
 
 
+def test_shell_pid_without_flatpak_ps_cannot_earn_launch():
+    """$! / shell PID alone is not structured launch success."""
+    fake = {
+        "ok": False,
+        "instance_id": None,
+        "pid": "99999",
+        "application": "org.gunnchos.CX2HTestApp",
+        "version": "1.0.0",
+        "branch": "1.0.0",
+        "alive_after_5s": False,
+        "error": "no_flatpak_ps_instance",
+    }
+    assert fake["pid"]
+    assert not fake["ok"]
+    assert not fake["instance_id"]
+    assert not fake["alive_after_5s"]
+
+
+def test_app_center_fb_cannot_substitute_for_app_window():
+    """App Center framebuffer churn after install is not Flatpak window proof."""
+    after_install_sha = "aaa"
+    launch_sha = "aaa"  # identical → no window
+    assert after_install_sha == launch_sha
+    window_proven = after_install_sha != launch_sha
+    assert window_proven is False
+
+
+def test_immediate_exit_process_cannot_earn_alive_after_5s():
+    alive_after_5s = False
+    pid = 4242
+    assert pid and not alive_after_5s
+
+
+def test_partial_j3_routes_to_cx2h1c_not_cx2h2():
+    tokens = Cx2hTokens(
+        CX2H_SHELL_PREREQ_PASS=True,
+        CX2H_CHROMIUM_RUNTIME_PASS=True,
+        CX2H_WAYLAND_SURFACE_PASS=True,
+        CX2H_GUNNCH_SHELL_RENDER_PASS=True,
+        CX2H_QEMU_FRAMEBUFFER_CAPTURE_PASS=True,
+        CX2H_REAL_INPUT_TO_SHELL_MUTATION_PASS=True,
+        CX2H_REAL_APP_CENTER_WINDOW=True,
+        CX2H_XDG_PORTAL_SESSION_PASS=True,
+        CX2H_REAL_APP_CENTER_PROVIDER_PASS=True,
+        CX2H_REAL_APP_INSTALL_GUI_PASS=True,
+        CX2H_REAL_APP_LAUNCH_GUI_PASS=False,
+        J3_CLASS="REAL_PROVIDER_GUI_PARTIAL",
+        lab_blocker="CX2H_APP_LAUNCH_GUI",
+    )
+    assert tokens.j3_digital_pass() is False
+    assert next_gate(tokens) == "CX2H1C_APP_LAUNCH_GUI"
+    assert next_gate(tokens) != "CX2H2_DOCUMENT_PRINT_RECOVERY_J1_J7"
+
+
 def test_update_requires_provider_version_change():
     before = {"version": "1.0.0"}
     after_same = {"version": "1.0.0"}

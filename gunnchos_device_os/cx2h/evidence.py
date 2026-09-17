@@ -15,6 +15,11 @@ from gunnchos_device_os.cx2h.tokens import Cx2hTokens
 def next_gate(tokens: Cx2hTokens) -> str:
     if tokens.J3_CLASS == "REAL_USER_JOURNEY_DIGITAL_PASS" and tokens.CX2H_XDG_PORTAL_SESSION_PASS:
         return "CX2H2_DOCUMENT_PRINT_RECOVERY_J1_J7"
+    if tokens.J3_CLASS == "REAL_PROVIDER_GUI_PARTIAL":
+        frag = (tokens.lab_blocker or "APP_LAUNCH_GUI").split(":")[0].strip().replace(" ", "_")[:80]
+        if frag.startswith("CX2H_"):
+            frag = frag[5:]
+        return "CX2H1C_" + frag
     if tokens.lab_blocker:
         frag = tokens.lab_blocker.split(":")[0].strip().replace(" ", "_")[:80]
         if frag.startswith("CX2H_"):
@@ -32,11 +37,22 @@ def next_gate(tokens: Cx2hTokens) -> str:
 def write_evidence(repo: Optional[Path], tokens: Cx2hTokens, facts: Dict[str, Any]) -> Dict[str, Any]:
     repo = repo or repo_root_from_here()
     root = evidence_root(repo)
-    root.mkdir(parents=True, exist_ok=True)
+    # Mirror under /tmp so sandboxed hosts that cannot write Downloads/ still retain evidence.
+    mirror = Path("/tmp/cx2h1b_evidence")
+    for d in (root, mirror):
+        try:
+            d.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            pass
     generated = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
     def dump(name: str, obj: Any) -> None:
-        (root / name).write_text(json.dumps(obj, indent=2) + "\n")
+        text = json.dumps(obj, indent=2) + "\n"
+        for d in (root, mirror):
+            try:
+                (d / name).write_text(text)
+            except OSError:
+                continue
 
     if "CX2H_PORTAL_ROOT_CAUSE" in facts:
         dump("CX2H_PORTAL_ROOT_CAUSE.json", facts["CX2H_PORTAL_ROOT_CAUSE"])
@@ -52,6 +68,16 @@ def write_evidence(repo: Optional[Path], tokens: Cx2hTokens, facts: Dict[str, An
         dump("FRAMEBUFFER_DIFF_REPORT.json", facts["FRAMEBUFFER_DIFF_REPORT"])
     if "CX2H_FRAMEBUFFER_CAPTURE_MANIFEST" in facts:
         dump("CX2H_FRAMEBUFFER_CAPTURE_MANIFEST.json", facts["CX2H_FRAMEBUFFER_CAPTURE_MANIFEST"])
+    if "CX2H1B_J3_EVIDENCE_REVIEW" in facts:
+        dump("CX2H1B_J3_EVIDENCE_REVIEW.json", facts["CX2H1B_J3_EVIDENCE_REVIEW"])
+    if "CX2H1B_FLATPAK_LAUNCH_ROOT_CAUSE" in facts:
+        dump("CX2H1B_FLATPAK_LAUNCH_ROOT_CAUSE.json", facts["CX2H1B_FLATPAK_LAUNCH_ROOT_CAUSE"])
+    if "CX2H1B_WINDOW_PROOF_V1" in facts:
+        dump("CX2H1B_WINDOW_PROOF_V1.json", facts["CX2H1B_WINDOW_PROOF_V1"])
+    if "CX2H1B_WINDOW_PROOF_V2" in facts:
+        dump("CX2H1B_WINDOW_PROOF_V2.json", facts["CX2H1B_WINDOW_PROOF_V2"])
+    if "CX2H1B_PROVIDER_LAUNCH_RESULT" in facts:
+        dump("CX2H1B_PROVIDER_LAUNCH_RESULT.json", facts["CX2H1B_PROVIDER_LAUNCH_RESULT"])
 
     # Force journey classes per CX2H.1 scope
     tokens.J1_CLASS = "BLOCKED"
@@ -82,9 +108,14 @@ def write_evidence(repo: Optional[Path], tokens: Cx2hTokens, facts: Dict[str, An
         "facts_keys": sorted(facts.keys()),
     }
     dump("CX2H_EVIDENCE_REPORT.json", report)
-    (root / "README.md").write_text(
+    readme = (
         "# CX2H evidence\n\nPortal session + J3 App Center real-user lifecycle.\n"
         "`FULL_COMPLETE_EXPERIENCE_COMPLETE=false`\n"
         "J1/J2/J5/J7 remain BLOCKED in CX2H.1.\n"
     )
+    for d in (root, mirror):
+        try:
+            (d / "README.md").write_text(readme)
+        except OSError:
+            continue
     return report

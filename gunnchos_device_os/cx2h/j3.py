@@ -302,33 +302,167 @@ def _ui_search(repo: Path, q: str) -> Dict[str, Any]:
 
 def _provider_api(repo: Path, path: str, method: str = "GET", body: Optional[dict] = None) -> Dict[str, Any]:
     if method == "GET":
-        r = _ssh(repo, f"curl -sf http://127.0.0.1:8766{path}", timeout=60)
+        r = _ssh(repo, f"curl -sS http://127.0.0.1:8766{path}", timeout=60)
     else:
+        # Single JSON encode for curl -d (do not double-encode)
         payload = json.dumps(body or {})
         r = _ssh(
             repo,
-            "curl -sf -X POST http://127.0.0.1:8766"
+            "curl -sS -X POST http://127.0.0.1:8766"
             + path
-            + " -H 'Content-Type: application/json' -d "
+            + " -H 'Content-Type: application/json' --data-binary "
             + json.dumps(payload),
-            timeout=120,
+            timeout=180,
         )
+    raw = (r.stdout or "").strip()
     try:
-        return json.loads((r.stdout or "").strip() or "{}")
+        return json.loads(raw or "{}")
     except Exception:
-        return {"raw": (r.stdout or "")[-1000:], "stderr": (r.stderr or "")[-400:]}
+        return {
+            "raw": raw[-1000:],
+            "stderr": (r.stderr or "")[-400:],
+            "ssh_rc": r.returncode,
+        }
+
+
+def _provider_launch_result(repo: Path) -> Dict[str, Any]:
+    """Authoritative structured launch result from provider (not $! alone)."""
+    return _provider_api(repo, "/api/launch", method="POST", body={"app_id": APP_ID})
+
+
+def _flatpak_ps_probe(repo: Path) -> Dict[str, Any]:
+    r = _ssh(
+        repo,
+        "export FLATPAK_USER_DIR=/var/lib/cx2h/flatpak-user "
+        "XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-0; "
+        "flatpak ps --columns=instance,application,pid 2>/dev/null; "
+        "echo ---; "
+        "pgrep -a -f '/app/share/cx2h-testapp/app.py|/var/tmp/cx2h-testapp-|/app/bin/cx2h-testapp' 2>/dev/null | "
+        "grep -v 'pgrep' | head -10 || true; "
+        "echo PS_PROBE_DONE",
+        timeout=60,
+    )
+    out = r.stdout or ""
+    has_instance = APP_ID in out and "PS_PROBE_DONE" in out
+    # Exclude the probe command line itself: require flatpak ps table or app.py path
+    lines = [ln for ln in out.splitlines() if APP_ID in ln and "pgrep" not in ln and "bash -c" not in ln]
+    return {"raw": out[-2000:], "has_instance": bool(lines) or ("\t" + APP_ID in out), "lines": lines[:10]}
+
+
+def _atspi_window_probe(repo: Path, *, title_contains: str) -> Dict[str, Any]:
+    script = f"""
+import json
+try:
+    import gi
+    gi.require_version('Atspi', '2.0')
+    from gi.repository import Atspi
+except Exception as ex:
+    print(json.dumps({{'ok': False, 'error': 'atspi_import:'+str(ex)}}))
+    raise SystemExit(0)
+Atspi.init()
+needle = {title_contains!r}.lower()
+found = []
+desktop = Atspi.get_desktop(0)
+
+def walk(node, depth=0):
+    if node is None or depth > 6:
+        return
+    try:
+        name = (node.get_name() or '')
+        role = (node.get_role_name() or '')
+        hay = (name + ' ' + role).lower()
+        if needle in hay and role.lower() in ('frame', 'window', 'application', 'dialog'):
+            found.append({{'name': name, 'role': role, 'depth': depth}})
+        for i in range(min(node.get_child_count() or 0, 30)):
+            walk(node.get_child_at_index(i), depth+1)
+    except Exception:
+        return
+
+walk(desktop)
+print(json.dumps({{'ok': bool(found), 'found': found[:12], 'needle': {title_contains!r}}}))
+"""
+    r = _ssh(repo, "python3 - <<'PY'\n" + script + "\nPY", timeout=90)
+    out = (r.stdout or "").strip()
+    try:
+        return json.loads(out.splitlines()[-1])
+    except Exception:
+        return {"ok": False, "raw": out[-1000:]}
+
+
+def _dominant_color_host(ppm: Path) -> Dict[str, Any]:
+    """Secondary visual channel on host PPM: mean RGB of center crop (v1 green vs v2 orange)."""
+    import re
+
+    if not ppm.is_file():
+        return {"ok": False, "error": "ppm_missing", "path": str(ppm)}
+    data = ppm.read_bytes()
+    m = re.match(br"P6\s+(?:#.*?\n\s*)*(\d+)\s+(\d+)\s+(\d+)\s", data, re.S)
+    if not m:
+        return {"ok": False, "error": "bad_ppm", "path": str(ppm)}
+    w, h = int(m.group(1)), int(m.group(2))
+    pix = data[m.end() :]
+    x0, y0 = max(0, w // 2 - 200), max(0, h // 2 - 150)
+    x1, y1 = min(w, x0 + 400), min(h, y0 + 300)
+    rs = gs = bs = n = 0
+    for y in range(y0, y1):
+        for x in range(x0, x1):
+            o = (y * w + x) * 3
+            if o + 2 >= len(pix):
+                break
+            rs += pix[o]
+            gs += pix[o + 1]
+            bs += pix[o + 2]
+            n += 1
+    mean = {"r": rs // max(n, 1), "g": gs // max(n, 1), "b": bs // max(n, 1), "n": n}
+    label = "unknown"
+    if mean["g"] > mean["r"] + 20 and mean["g"] > mean["b"]:
+        label = "v1_greenish"
+    elif mean["r"] > mean["g"] + 30 and mean["r"] > mean["b"]:
+        label = "v2_orangish"
+    return {"ok": True, "mean_rgb": mean, "label": label, "path": str(ppm)}
+
+
+def _structured_launch_ok(launch: Dict[str, Any]) -> bool:
+    if not launch:
+        return False
+    return bool(
+        launch.get("ok")
+        and launch.get("instance_id")
+        and launch.get("pid")
+        and launch.get("application") == APP_ID
+        and launch.get("version")
+        and launch.get("alive_after_5s")
+    )
 
 
 def run_j3_journey(repo: Path, monitor: Path, captures: Path) -> Dict[str, Any]:
     steps: Dict[str, Any] = {}
     captures.mkdir(parents=True, exist_ok=True)
     _ensure_atspi_tools(repo)
+    # GTK host deps for Flatpak-wrapped test app
+    _ssh(
+        repo,
+        "sudo apt-get install -y -qq python3-gi python3-gi-cairo gir1.2-gtk-3.0 2>/dev/null | tail -3 || true",
+        timeout=180,
+    )
 
     steps["goto_app_center"] = _ui_goto_app_center(repo)
     hmp(monitor, "sendkey alt-3")
     time.sleep(1.0)
     steps["fb_app_center"] = screendump(monitor, captures / "j3_01_app_center.ppm")
 
+    # Clean slate so Install button exists (prior diagnosis must not skip UI install)
+    _ssh(
+        repo,
+        "export FLATPAK_USER_DIR=/var/lib/cx2h/flatpak-user; "
+        "flatpak --user kill org.gunnchos.CX2HTestApp 2>/dev/null || true; "
+        "flatpak --user uninstall -y org.gunnchos.CX2HTestApp 2>/dev/null || true; "
+        "for b in 1.0.0 2.0.0 stable; do flatpak --user uninstall -y org.gunnchos.CX2HTestApp//$b 2>/dev/null || true; done; "
+        "curl -sS -X POST http://127.0.0.1:8766/api/uninstall -H 'Content-Type: application/json' -d '{}' >/dev/null || true",
+        timeout=180,
+    )
+    time.sleep(1)
+    _ui_goto_app_center(repo)
     steps["search"] = _ui_search(repo, "CX2H")
     provider_before = _provider_api(repo, "/api/apps?q=CX2H")
     steps["provider_catalog"] = provider_before
@@ -350,30 +484,52 @@ def run_j3_journey(repo: Path, monitor: Path, captures: Path) -> Dict[str, Any]:
     install_pass = bool(steps["provider_after_install"].get("installed") and install_clicked)
     steps["fb_after_install"] = screendump(monitor, captures / "j3_02_after_install.ppm")
 
+    # --- Launch v1: UI Open + structured provider launch verification ---
     steps["ui_open"] = _ui_click_action(repo, "open")
-    time.sleep(5)
-    launch_probe = _ssh(
-        repo,
-        "export XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-0; "
-        "pgrep -af 'cx2h-testapp|CX2HTestApp|chromium.*cx2h-testapp|chromium.*CX2H|chromium.*app=file' | head -15; "
-        "ls /var/tmp/cx2h-testapp-* 2>/dev/null | head; "
-        "echo LAUNCH_PROBE_DONE",
-        timeout=60,
-    )
-    steps["launch_probe"] = (launch_probe.stdout or "")[-1500:]
+    time.sleep(2)
+    # Prefer provider /api/last if UI already launched; otherwise force structured launch
+    last = _provider_api(repo, "/api/last")
+    if last.get("action") == "launch" and _structured_launch_ok(last):
+        steps["provider_launch_v1"] = last
+    else:
+        steps["provider_launch_v1"] = _provider_launch_result(repo)
+    time.sleep(2)
+    steps["flatpak_ps_v1"] = _flatpak_ps_probe(repo)
     steps["fb_v1"] = screendump(monitor, captures / "j3_03_launch_v1.ppm")
+    # Window channel 1: FB vs after_install (same App Center chrome) — require real change
     diff_v1 = ppm_diff(
-        Path(steps["fb_app_center"]["path"]) if steps["fb_app_center"].get("path") else captures / "j3_01_app_center.ppm",
+        Path(steps["fb_after_install"]["path"])
+        if steps["fb_after_install"].get("path")
+        else captures / "j3_02_after_install.ppm",
         Path(steps["fb_v1"]["path"]) if steps["fb_v1"].get("path") else captures / "j3_03_launch_v1.ppm",
-        min_changed_pct=0.02,
+        min_changed_pct=0.5,
     )
     steps["diff_v1"] = diff_v1
+    # Window channel 2: AT-SPI frame title OR dominant color of center crop
+    steps["atspi_v1"] = _atspi_window_probe(repo, title_contains="CX2H Test App V1")
+    steps["color_v1"] = _dominant_color_host(
+        Path(steps["fb_v1"]["path"]) if steps["fb_v1"].get("path") else captures / "j3_03_launch_v1.ppm"
+    )
+    window_v1 = bool(
+        diff_v1.get("ok")
+        and (steps["atspi_v1"].get("ok") or (steps["color_v1"].get("label") == "v1_greenish"))
+    )
+    steps["window_proof_v1"] = {
+        "ok": window_v1,
+        "fb_diff": diff_v1,
+        "atspi": steps["atspi_v1"],
+        "color": steps["color_v1"],
+        "channels_required": ["framebuffer_diff_vs_after_install", "atspi_or_dominant_color"],
+    }
     launch_clicked = _extract_clicked(steps["ui_open"])
+    launch_struct = _structured_launch_ok(steps["provider_launch_v1"])
     launch_pass = bool(
         install_pass
         and launch_clicked
+        and launch_struct
+        and str(steps["provider_launch_v1"].get("version") or "").startswith("1")
+        and window_v1
         and steps["fb_v1"].get("ok")
-        and (diff_v1.get("ok") or "chromium" in steps["launch_probe"].lower() or "CX2H" in steps["launch_probe"])
     )
 
     steps["ui_update"] = _ui_click_action(repo, "update")
@@ -385,20 +541,52 @@ def run_j3_journey(repo: Path, monitor: Path, captures: Path) -> Dict[str, Any]:
             break
         time.sleep(2)
     update_clicked = _extract_clicked(steps["ui_update"])
-    update_pass = update_clicked and (
+    update_version_ok = update_clicked and (
         "2" in str(steps.get("provider_after_update", {}).get("version") or "")
         or "2.0.0" in (steps.get("provider_after_update", {}).get("raw") or "")
     )
-    _ui_click_action(repo, "open")
-    time.sleep(5)
+    # Kill v1 then launch v2
+    _ssh(
+        repo,
+        "export FLATPAK_USER_DIR=/var/lib/cx2h/flatpak-user; flatpak --user kill org.gunnchos.CX2HTestApp 2>/dev/null || true",
+        timeout=30,
+    )
+    time.sleep(1)
+    steps["ui_open_v2"] = _ui_click_action(repo, "open")
+    time.sleep(2)
+    last2 = _provider_api(repo, "/api/last")
+    if last2.get("action") == "launch" and _structured_launch_ok(last2) and str(last2.get("version") or "").startswith("2"):
+        steps["provider_launch_v2"] = last2
+    else:
+        steps["provider_launch_v2"] = _provider_launch_result(repo)
+    time.sleep(2)
+    steps["flatpak_ps_v2"] = _flatpak_ps_probe(repo)
     steps["fb_v2"] = screendump(monitor, captures / "j3_04_launch_v2.ppm")
     diff_v2 = ppm_diff(
         Path(steps["fb_v1"]["path"]) if steps["fb_v1"].get("path") else captures / "j3_03_launch_v1.ppm",
         Path(steps["fb_v2"]["path"]) if steps["fb_v2"].get("path") else captures / "j3_04_launch_v2.ppm",
-        min_changed_pct=0.01,
+        min_changed_pct=0.5,
     )
     steps["diff_v1_v2"] = diff_v2
-    update_pass = update_pass and bool(diff_v2.get("ok") or steps["fb_v2"].get("ok"))
+    steps["atspi_v2"] = _atspi_window_probe(repo, title_contains="CX2H Test App V2")
+    steps["color_v2"] = _dominant_color_host(
+        Path(steps["fb_v2"]["path"]) if steps["fb_v2"].get("path") else captures / "j3_04_launch_v2.ppm"
+    )
+    window_v2 = bool(
+        diff_v2.get("ok")
+        and (steps["atspi_v2"].get("ok") or (steps["color_v2"].get("label") == "v2_orangish"))
+    )
+    steps["window_proof_v2"] = {
+        "ok": window_v2,
+        "fb_diff": diff_v2,
+        "atspi": steps["atspi_v2"],
+        "color": steps["color_v2"],
+        "channels_required": ["framebuffer_diff_v1_vs_v2", "atspi_or_dominant_color"],
+    }
+    launch_v2_ok = _structured_launch_ok(steps["provider_launch_v2"]) and str(
+        steps["provider_launch_v2"].get("version") or ""
+    ).startswith("2")
+    update_pass = bool(update_version_ok and launch_v2_ok and window_v2 and steps["fb_v2"].get("ok"))
 
     steps["ui_rollback"] = _ui_click_action(repo, "rollback")
     time.sleep(6)
@@ -459,11 +647,43 @@ def run_j3_journey(repo: Path, monitor: Path, captures: Path) -> Dict[str, Any]:
     )
     steps["fb_persistence"] = screendump(monitor, captures / "j3_07_persistence.ppm")
 
-    j3_pass = all([provider_pass, install_pass, launch_pass, update_pass, uninstall_pass, persistence_pass])
+    criteria = {
+        "provider_pass": provider_pass,
+        "install_pass": install_pass,
+        "launch_pass": launch_pass,
+        "update_pass": update_pass,
+        "rollback_pass": rollback_pass,
+        "uninstall_pass": uninstall_pass,
+        "persistence_pass": persistence_pass,
+        "window_v1": window_v1,
+        "window_v2": window_v2,
+        "launch_structured_v1": launch_struct,
+        "launch_structured_v2": launch_v2_ok,
+    }
+    j3_full = all(
+        [
+            provider_pass,
+            install_pass,
+            launch_pass,
+            update_pass,
+            rollback_pass,
+            uninstall_pass,
+            persistence_pass,
+        ]
+    )
+    # Fail closed: partial when provider lifecycle mostly works but launch/window incomplete
+    if j3_full:
+        j3_class = "REAL_USER_JOURNEY_DIGITAL_PASS"
+    elif provider_pass and install_pass and (uninstall_pass or persistence_pass):
+        j3_class = "REAL_PROVIDER_GUI_PARTIAL"
+    else:
+        j3_class = "BLOCKED"
+
     return {
         "schema": "gunnchos.cx2h.j3_app_center_journey.v1",
-        "J3_CLASS": "REAL_USER_JOURNEY_DIGITAL_PASS" if j3_pass else "BLOCKED",
+        "J3_CLASS": j3_class,
         "steps": steps,
+        "criteria": criteria,
         "tokens": {
             "CX2H_REAL_APP_CENTER_PROVIDER_PASS": provider_pass,
             "CX2H_REAL_APP_INSTALL_GUI_PASS": install_pass,
@@ -474,7 +694,7 @@ def run_j3_journey(repo: Path, monitor: Path, captures: Path) -> Dict[str, Any]:
             "CX2H_J3_PERSISTENCE_PASS": persistence_pass,
         },
         "blocker": None
-        if j3_pass
+        if j3_full
         else _first_blocker(provider_pass, install_pass, launch_pass, update_pass, uninstall_pass, persistence_pass),
     }
 
