@@ -47,8 +47,8 @@ def acquire_lock(
             pid = int(cur.get("pid") or 0)
             alive = pid > 0 and _pid_alive(pid)
             owned = (
-                str(cur.get("purpose", "")).startswith(("CX2F", "CX2G", "CX2H"))
-                or str(cur.get("branch", "")).startswith(("eng/cx2f", "eng/cx2g", "eng/cx2h"))
+                str(cur.get("purpose", "")).startswith(("CX2F", "CX2G", "CX2H", "CX3"))
+                or str(cur.get("branch", "")).startswith(("eng/cx2f", "eng/cx2g", "eng/cx2h", "eng/cx3"))
             )
             if alive and not owned:
                 if time.time() >= deadline:

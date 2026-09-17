@@ -6,9 +6,19 @@ import AppCenterSurface from './surfaces/AppCenterSurface'
 import ConnectSurface from './surfaces/ConnectSurface'
 import AssistSurface from './surfaces/AssistSurface'
 import CareSurface from './surfaces/CareSurface'
+import WalletSurface from './surfaces/WalletSurface'
+import PortfolioSurface from './surfaces/PortfolioSurface'
 import './cx2.css'
 
-export type Cx2Surface = 'home' | 'vault' | 'app_center' | 'connect' | 'assist' | 'care'
+export type Cx2Surface =
+  | 'home'
+  | 'vault'
+  | 'app_center'
+  | 'connect'
+  | 'assist'
+  | 'care'
+  | 'wallet'
+  | 'portfolio'
 
 const SURFACES: { id: Cx2Surface; label: string; shortcut: string }[] = [
   { id: 'home', label: 'Home', shortcut: '1' },
@@ -17,6 +27,8 @@ const SURFACES: { id: Cx2Surface; label: string; shortcut: string }[] = [
   { id: 'connect', label: 'Connect', shortcut: '4' },
   { id: 'assist', label: 'Assist', shortcut: '5' },
   { id: 'care', label: 'Care', shortcut: '6' },
+  { id: 'wallet', label: 'Wallet', shortcut: '7' },
+  { id: 'portfolio', label: 'Portfolio', shortcut: '8' },
 ]
 
 export type DeviceProfile = 'student_14_5' | 'handheld_hybrid' | 'ds_xl' | 'docked' | 'ci_qemu'
@@ -62,7 +74,7 @@ export default function CompleteExperienceShell({
 
   useEffect(() => {
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.altKey && e.key >= '1' && e.key <= '6') {
+      if (e.altKey && e.key >= '1' && e.key <= '8') {
         e.preventDefault()
         go(SURFACES[Number(e.key) - 1].id)
       }
@@ -104,6 +116,10 @@ export default function CompleteExperienceShell({
         )
       case 'care':
         return <CareSurface offline={offline} onError={setError} />
+      case 'wallet':
+        return <WalletSurface offline={offline} onError={setError} />
+      case 'portfolio':
+        return <PortfolioSurface offline={offline} onError={setError} />
     }
   })()
 
@@ -161,7 +177,7 @@ export default function CompleteExperienceShell({
         {body}
       </main>
       <footer className="cx2-footer" role="contentinfo">
-        Profile {profile.replace(/_/g, ' ')} · keyboard Alt+1..6 · Escape back
+        Profile {profile.replace(/_/g, ' ')} · keyboard Alt+1..8 · Escape back
       </footer>
     </div>
   )
