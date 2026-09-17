@@ -1,0 +1,51 @@
+{
+  "schema": "gunnchos.device_lab.prompt_17g5h_csp_gui_hub_reearn.v1",
+  "generated_at_utc": "2026-09-17T19:44:39Z",
+  "prompt": "17G.5H-csp-gui-hub-reearn",
+  "RUN_CONDITION_MET": true,
+  "qemu_hvf": true,
+  "device_os_tip": "d59fddca2ebc27639471b7fa3d6f117bb9d69cf8",
+  "portal_pr14_tip": "945e33e99698902da8533ccc2aa2b967f4dc8436",
+  "waike_draft_pr": {
+    "number": 17,
+    "url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/17",
+    "is_draft": true,
+    "state": "OPEN",
+    "head": "b2c2f2338edbd38301b2362d49b29c7508459b32",
+    "merged": false
+  },
+  "truth_tokens": {
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "csp_gui_hub_reearn": {
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
+    "authorized_hub_origin": "http://10.0.2.100:8787",
+    "html_meta_injected": true,
+    "bind_retained": true,
+    "learner_auth_pass": true,
+    "hub_session_evidence": true,
+    "journey_a_b_repeatability_pass": true,
+    "learner_gui_course": false,
+    "learner_gui_assessment": false,
+    "tauri_login_still_401_on_proxy": true,
+    "mimic_login_200": true,
+    "note": "Effective CSP + Hub bind retained under cmd-relay. GUI Hub login session evidence true via harness; real Tauri Origin POST still 401 (clen=77) vs mimic learner-alpha 200 (clen=85). Course/assessment/offline depth still FAIL."
+  },
+  "verdict": "CSP_BIND_PASS_RUNTIME_DEPTH_FAIL",
+  "blocker": "gui_learner_depth_incomplete_after_hub_bind:gui_learner_depth_incomplete_after_hub_bind:course/assessment/receipt/offline/recovery not authoritatively proven;failed=course_activity,assessment_receipt,role_denial,instructor_workflow,feedback_readback,offline_reconnect,controlled_recovery",
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_GUI_LEARNER_DEPTH_REEARN",
+  "named_gate_attempted": "DEVICE_OS_134_WAIKE_EFFECTIVE_CSP_GUI_HUB_REEARN",
+  "named_gate_status": "CSP_AND_BIND_REEARNED_DEPTH_REMAINS",
+  "do_not_merge": true,
+  "cursor_never_merges": true
+}

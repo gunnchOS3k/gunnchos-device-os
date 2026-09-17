@@ -1,29 +1,27 @@
 {
-  "generated_at_utc": "2026-09-17T15:27:17Z",
-  "prompt": "17G.5F",
+  "generated_at_utc": "2026-09-17T19:43:34Z",
+  "prompt": "17G.5H",
   "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "verdict": "FAIL",
-  "blocker": "waike_login_submit_not_observed:no_hub_login_fetch_diag_after_gui_drive_retries",
-  "NEXT_GATE": "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN",
+  "blocker": "gui_learner_depth_incomplete_after_hub_bind:gui_learner_depth_incomplete_after_hub_bind:course/assessment/receipt/offline/recovery not authoritatively proven;failed=course_activity,assessment_receipt,role_denial,instructor_workflow,feedback_readback,offline_reconnect,controlled_recovery",
+  "NEXT_GATE": null,
   "gui_window_alive": true,
   "real_hub_running": true,
-  "client_bound_real_hub": false,
+  "client_bound_real_hub": true,
   "hub_endpoint_policy_rejects_unauthorized": true,
   "mock_hub_used": false,
+  "xvfb_primary_pass": false,
+  "headless_ack_only_pass": false,
+  "defect_decision": "NONE",
   "RUNTIME_TARGET_PREFLIGHT_PASS": true,
-  "bind_via_attempted": null,
-  "csp_connect_blocked_hint": false,
-  "hub_sidecar_client_http": false,
-  "client_diag_hub_login_fetch_start": false,
-  "gui_hub_ready_before_login": {
-    "ok": true,
-    "ready": true,
-    "polls": 1,
-    "waited_s": 8.75,
-    "blocker": null,
-    "csp_html_meta_injected": true,
-    "effective_csp_connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
-    "runtime_hub_url_seen": true,
-    "hub_unavailable_in_log": false
-  }
+  "WAIKE_ATSPI_WINDOW_PASS": true,
+  "mandatory_failures": [
+    "course_activity",
+    "assessment_receipt",
+    "role_denial",
+    "instructor_workflow",
+    "feedback_readback",
+    "offline_reconnect",
+    "controlled_recovery"
+  ]
 }

@@ -1,9 +1,9 @@
 {
-  "generated_at_utc": "2026-09-17T19:21:58Z",
+  "generated_at_utc": "2026-09-17T19:43:36Z",
   "prompt": "17G.5H",
   "pin_manifest_sha256": "46008cb675a9dd898e65bf05edc78b86ba5cbf1287278ebc7d44b048c0f8bd8b",
-  "device_os_tip_pre_commit": "ddc7788b68b2b0467268ba144175e4047a21a6c3",
-  "device_os_tip_post": "ddc7788b68b2b0467268ba144175e4047a21a6c3",
+  "device_os_tip_pre_commit": "d59fddca2ebc27639471b7fa3d6f117bb9d69cf8",
+  "device_os_tip_post": "d59fddca2ebc27639471b7fa3d6f117bb9d69cf8",
   "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
   "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
   "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
@@ -11,14 +11,14 @@
   "RUNTIME_TARGET_PREFLIGHT_PASS": true,
   "verdict": "FAIL",
   "blocker": "gui_learner_depth_incomplete_after_hub_bind:gui_learner_depth_incomplete_after_hub_bind:course/assessment/receipt/offline/recovery not authoritatively proven;failed=course_activity,assessment_receipt,role_denial,instructor_workflow,feedback_readback,offline_reconnect,controlled_recovery",
-  "NEXT_GATE": "DEVICE_OS_134_WAIKE_EFFECTIVE_CSP_GUI_HUB_REEARN",
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_GUI_LEARNER_DEPTH_REEARN",
   "evidence": "artifacts/device_lab_current_pin/waike/WAIKE_GUEST_ATTEMPT.json",
   "gui_journey": "artifacts/device_lab_current_pin/waike/gui_journey/",
   "prefer_fail_over_false_pass": true,
   "mock_hub_used": false,
   "hub_only_guestfwd": true,
   "guest_url": "http://10.0.2.100:8787",
-  "guestfwd": "guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+  "guestfwd": "guestfwd=tcp:10.0.2.100:8787-cmd:hub_guestfwd_cmd_relay_8787.sh",
   "accepted_main_glibc236_artifact_used": true,
   "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
   "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
@@ -27,5 +27,7 @@
   "artifact_source_sha": "34fb050ccabec813cef4811d64581b32453e1ec2",
   "artifact_sha256": "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8",
   "mandatory_17g5h": null,
-  "17g5h_evidence": null
+  "17g5h_evidence": null,
+  "updated_at_utc": "2026-09-17T19:44:39Z",
+  "csp_gui_hub_reearn_note": "CSP+bind re-earned; learner depth remains"
 }
