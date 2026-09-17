@@ -60,6 +60,36 @@ def verify_authoritative(auth: Path) -> dict[str, Any]:
     pins = freeze.get("accepted_mains") or {}
     retained = (freeze.get("retained_prior_gates") or {})
 
+    # Fail-closed: never trust declared PASS tokens alone.
+    reqs = gunnchai.get("requirements_1_to_15") or {}
+    gunnchai_reqs_ok = bool(reqs) and all(v is True for v in reqs.values()) and len(reqs) >= 15
+
+    eco_pass_claimed = check_token(eco, "ECO010_SOAK_PASS")
+    eco_dur_req = int(eco.get("duration_sec_requested") or 0)
+    eco_dur_ran = float(eco.get("duration_sec_ran") or 0)
+    eco_integrity_ok = (
+        eco_pass_claimed
+        and eco_dur_req >= 1800
+        and eco_dur_ran >= 1800
+        and bool(eco.get("simultaneous_soak_complete") is True)
+        and bool(eco.get("repo_soak_ok") is True)
+        and bool(eco.get("duration_shortened_to_pass") is not True)
+        and not bool(eco.get("forged"))
+    )
+
+    mandatory = list(lifecycle.get("mandatory_apps") or [])
+    summaries = lifecycle.get("app_summaries") or {}
+    row_apps = {r.get("app") for r in (lifecycle.get("rows") or []) if isinstance(r, dict)}
+    lifecycle_pass_claimed = check_token(lifecycle, "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS")
+    lifecycle_integrity_ok = (
+        lifecycle_pass_claimed
+        and bool(mandatory)
+        and set(mandatory).issubset(set(summaries.keys()))
+        and set(mandatory).issubset(row_apps)
+        and all(bool((summaries.get(a) or {}).get("ok")) for a in mandatory)
+        and set(summaries.keys()) == set(mandatory)
+    )
+
     checks = {
         "freeze_present": not freeze.get("_missing"),
         "freeze_run_condition": bool((freeze.get("run_condition") or {}).get("RUN_CONDITION_MET")),
@@ -74,9 +104,16 @@ def verify_authoritative(auth: Path) -> dict[str, Any]:
         or bool(retained.get("FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS")),
         "WAIKE": check_token(waike, "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS")
         or bool(retained.get("WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS")),
-        "GUNNCHAI": check_token(gunnchai, "GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS"),
-        "LIFECYCLE": check_token(lifecycle, "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS"),
-        "ECO010": check_token(eco, "ECO010_SOAK_PASS"),
+        "GUNNCHAI": check_token(gunnchai, "GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS")
+        and gunnchai_reqs_ok,
+        "gunnchai_requirements_all_true": gunnchai_reqs_ok,
+        "LIFECYCLE": lifecycle_integrity_ok,
+        "lifecycle_mandatory_apps_present": bool(mandatory)
+        and set(mandatory).issubset(set(summaries.keys()))
+        and set(mandatory).issubset(row_apps),
+        "lifecycle_app_identity_exact": bool(mandatory) and set(summaries.keys()) == set(mandatory),
+        "ECO010": eco_integrity_ok,
+        "eco010_duration_ge_1800": (not eco_pass_claimed) or (eco_dur_req >= 1800 and eco_dur_ran >= 1800),
         "gunnchai_sha_is_accepted_main": pins.get("gunnchAI3k")
         == "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
         "device_os_sha_is_134_merge": pins.get("gunnchos-device-os")
@@ -248,46 +285,9 @@ def adversarial_tests(auth: Path) -> dict[str, Any]:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    # Independent process assumption: fresh read only
+    # Independent process assumption: fresh read only.
+    # All fail-closed integrity checks live in verify_authoritative (also used on adversarial copies).
     auth_report = verify_authoritative(AUTH)
-    # Strengthen: gunnchai requirements must all be true if present
-    g = load(AUTH / "gunnchai" / "GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS.json")
-    reqs = g.get("requirements_1_to_15") or {}
-    if reqs and not all(bool(v) is True for v in reqs.values()):
-        auth_report["checks"]["gunnchai_requirements_all_true"] = False
-        auth_report["missing"].append("gunnchai_requirements_all_true")
-        auth_report["PASS"] = False
-    else:
-        auth_report["checks"]["gunnchai_requirements_all_true"] = True
-
-    # Strengthen ECO010: duration must be >= 1800 when claiming PASS
-    eco = load(AUTH / "eco010" / "ECO010_SOAK_PASS.json")
-    if eco.get("_missing"):
-        eco = load(AUTH / "ECO010_SOAK_PASS.json")
-    if eco.get("ECO010_SOAK_PASS") is True:
-        dur = int(eco.get("duration_sec_requested") or 0)
-        if dur < 1800:
-            auth_report["checks"]["eco010_duration_ge_1800"] = False
-            auth_report["missing"].append("eco010_duration_ge_1800")
-            auth_report["PASS"] = False
-        else:
-            auth_report["checks"]["eco010_duration_ge_1800"] = True
-    # lifecycle forged-row defense
-    life = load(AUTH / "CURRENT_PIN_APP_LIFECYCLE_MATRIX.json")
-    if life.get("CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS") is True:
-        apps = set(life.get("mandatory_apps") or [])
-        summaries = life.get("app_summaries") or {}
-        if apps and not apps.issubset(set(summaries.keys())):
-            auth_report["checks"]["lifecycle_mandatory_apps_present"] = False
-            auth_report["missing"].append("lifecycle_mandatory_apps_present")
-            auth_report["PASS"] = False
-        elif apps and not all(summaries.get(a, {}).get("ok") for a in apps):
-            auth_report["checks"]["lifecycle_mandatory_apps_ok"] = False
-            auth_report["missing"].append("lifecycle_mandatory_apps_ok")
-            auth_report["PASS"] = False
-        else:
-            auth_report["checks"]["lifecycle_mandatory_apps_present"] = True
-            auth_report["checks"]["lifecycle_mandatory_apps_ok"] = True
 
     adv = adversarial_tests(AUTH)
     # Re-verify after adversarial that auth untouched
