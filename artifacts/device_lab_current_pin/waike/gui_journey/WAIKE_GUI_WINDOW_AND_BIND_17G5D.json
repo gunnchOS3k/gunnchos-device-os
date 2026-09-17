@@ -1,18 +1,60 @@
 {
   "schema": "gunnchos.device_lab.waike_gui_window_and_bind.v1",
-  "generated_at_utc": "2026-09-16T23:29:59Z",
+  "generated_at_utc": "2026-09-17T00:14:49Z",
   "prompt": "17G.5D",
-  "window_alive": false,
+  "window_alive": true,
   "headless": false,
   "hub_url": "http://10.0.2.100:8787",
   "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
   "client_bound_http": false,
   "mock_observed": false,
-  "hub_reachable_from_guest": false,
-  "detail": {},
+  "hub_reachable_from_guest": true,
+  "detail": {
+    "hub_reachable_from_guest": true,
+    "reach_detail": {
+      "tcp_hub": true,
+      "tcp_httpd": false,
+      "http_hub_status": 200,
+      "http_hub_body": "{\"status\":\"ok\"}",
+      "http_httpd_status": null,
+      "errors": [
+        "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+        "tcp:10.0.2.2:8787:[Errno 111] Connection refused"
+      ],
+      "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86393sec preferred_lft 86393sec\n",
+      "agent_recovered": null,
+      "carried_forward_from_early_probe": true
+    },
+    "reach_tail": "",
+    "atspi_tail": "",
+    "atspi_doc": {},
+    "a11y_bus": {
+      "ok": true,
+      "bus_ok": true,
+      "tail": "ATSPI_BUS_OK 0\nA11Y_SETUP_DONE\n{\"bus_ok\": true, \"child_count\": 0}\n{\"bus_ok\": true, \"child_count\": 0}\n"
+    },
+    "gui_log_scrape": {
+      "ok": false,
+      "raw_tail": ""
+    },
+    "client_hub_sockets": {
+      "ok": false,
+      "established_to_hub": null,
+      "proc_net_hits": null,
+      "ss_tail": "",
+      "procs": null
+    },
+    "client_hub_http_chip_observed": false,
+    "client_hub_http_chip_via": null,
+    "client_hub_mock_chip_observed": false,
+    "client_hub_unavailable_observed": false,
+    "brand_observed": false,
+    "mock_mode_used": false,
+    "note": "Post-#12 accepted-main honors launch-context hub_url only after native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set. Guest TCP to 10.0.2.100:8787 from waike/WebKit is accepted as HTTP bind evidence when WebKit DOM is not exposed to AT-SPI."
+  },
   "journey_a": {
-    "acknowledged": null,
-    "alive_beyond_ipc_ack": null,
-    "pid": null
+    "acknowledged": true,
+    "alive_beyond_ipc_ack": true,
+    "pid": 641
   }
 }

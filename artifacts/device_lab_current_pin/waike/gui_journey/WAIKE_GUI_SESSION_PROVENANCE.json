@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.device_lab.waike_gui_session_provenance.v1",
-  "generated_at_utc": "2026-09-16T23:29:34Z",
+  "generated_at_utc": "2026-09-17T00:04:51Z",
   "prompt": "17G.5C",
   "compositor_info": {
     "ok": true,
@@ -23,13 +23,13 @@
     "note": "Real registry query via wayland-info against the running compositor socket."
   },
   "wayland_probe": {
-    "ok": false,
+    "ok": true,
     "wayland_display": "wayland-0",
-    "stdout_tail": ""
+    "stdout_tail": "XDG_RUNTIME_DIR=/run/gunnchos-wayland\n/run/gunnchos-wayland/wayland-0\n444 /usr/bin/weston --backend=drm-backend.so --socket=wayland-0 --log=/var/log/gunnchos-weston.log\n455 /usr/lib/aarch64-linux-gnu/weston-keyboard\n456 /usr/lib/aarch64-linux-gnu/weston-desktop-shell\nactive\n/usr/bin/weston-info\n/usr/bin/wayland-info\nPROBE_GUI_ENV_DONE\n"
   },
-  "xvfb_present": false,
+  "xvfb_present": true,
   "xvfb_used_as_primary_pass_surface": false,
-  "primary_display": "compositor_missing_or_not_ready",
+  "primary_display": "interactive_guest_weston_wayland",
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
   "SILICON_EXACT_EMULATION": false,
   "ok": true

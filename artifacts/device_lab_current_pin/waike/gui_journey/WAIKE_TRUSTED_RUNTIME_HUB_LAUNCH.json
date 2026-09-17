@@ -1,0 +1,31 @@
+{
+  "schema": "gunnchos.device_lab.waike_trusted_runtime_hub_launch.v1",
+  "generated_at_utc": "2026-09-17T00:04:56Z",
+  "prompt": "17G.5D",
+  "hub_url": "http://10.0.2.100:8787",
+  "hub_url_in_launch_context": true,
+  "hub_endpoint_policy_v1": {
+    "schema_version": "hub_endpoint_policy.v1",
+    "authorized_hub_base_url": "http://10.0.2.100:8787",
+    "deployment_id": "device-lab-qemu-guest",
+    "site_id": "device-lab",
+    "require_https": false,
+    "allow_insecure_local": true,
+    "provenance": "device_lab_fixture",
+    "expires_at": null
+  },
+  "hub_endpoint_policy_provisioned": true,
+  "acknowledged": true,
+  "nack_reason": null,
+  "ack": {
+    "app_version": "0.1.0",
+    "bundle_id": "com.gunnchos.waike.learning",
+    "deep_link": "waike://learn/home",
+    "message_type": "ack",
+    "protocol": "gunnchos.learning_os.ipc.v1",
+    "request_id": "d1115022-ce60-41a7-a207-be7eca815516",
+    "status": "ok"
+  },
+  "policy_authorized_path": true,
+  "trusted_runtime_hub_launch_ok": true
+}

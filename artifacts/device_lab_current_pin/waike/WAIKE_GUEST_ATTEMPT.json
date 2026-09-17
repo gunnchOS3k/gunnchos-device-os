@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.device_lab.waike_gui_hub_journey_attempt.v1",
-  "started_at_utc": "2026-09-16T23:27:41Z",
+  "started_at_utc": "2026-09-17T00:03:39Z",
   "prompt": "17G.5D",
   "pin_manifest_sha256": "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15",
   "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
@@ -40,14 +40,14 @@
     }
   },
   "RUNTIME_TARGET_PREFLIGHT_PASS": true,
-  "FREE_GIB_BEFORE_QEMU": 19.98,
+  "FREE_GIB_BEFORE_QEMU": 20.29,
   "qemu_floor_gib": 18.0,
   "real_hub": {
     "ok": true,
     "mock": false,
     "stub": false,
     "static_fixture": false,
-    "pid": 74140,
+    "pid": 81553,
     "port": 8787,
     "bind": "127.0.0.1",
     "guest_url": "http://10.0.2.100:8787",
@@ -116,25 +116,8 @@
     "netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787"
   },
   "post_reach_agent_recover": {
-    "scheduled": {
-      "ok": true,
-      "protocol": "gunnchos.guest_agent.v1",
-      "cmd": "process_run",
-      "transport": "virtio_serial",
-      "agent_path_label": "virtio-serial",
-      "SILICON_EXACT_EMULATION": false,
-      "production_keys": false,
-      "measurement_class": "GUEST_OBSERVED",
-      "argv": [
-        "bash",
-        "-lc",
-        "python3 /var/tmp/waike_hub_reachability_probe.py; cat /tmp/waike_hub_reachability.json"
-      ],
-      "returncode": 0,
-      "stdout": "REACH_JSON_OK\n{\"hub_url\": \"http://10.0.2.100:8787\", \"hub_host\": \"10.0.2.100\", \"hub_port\": 8787, \"httpd_port\": 8767, \"tcp_hub\": true, \"tcp_httpd\": false, \"tcp_gateway_hub\": false, \"http_hub_status\": null, \"http_hub_body\": \"\", \"http_httpd_status\": null, \"http_gateway_hub_status\": null, \"http_probe_via\": null, \"errors\": [\"tcp:10.0.2.100:8767:[Errno 111] Connection refused\", \"tcp:10.0.2.2:8787:[Errno 111] Connection refused\", \"http10:hub:empty_http_response\", \"http10:hub_version:empty_http_response\", \"http10:httpd:[Errno 111] Connection refused\", \"http10:gateway_hub:[Errno 111] Connection refused\"], \"ip_route\": \"10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \\n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\\n    inet 127.0.0.1/8 scope host lo\\n       valid_lft forever preferred_lft forever\\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\\n       valid_lft 86352sec preferred_lft 86352sec\\n\", \"hub_reachable_from_guest\": false, \"QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK\": false}\n",
-      "stderr": ""
-    },
-    "alive": true
+    "alive": true,
+    "skipped": true
   },
   "tauri_aarch64_runtime": {
     "ok": true,
@@ -181,28 +164,230 @@
     "reconciled_from_tauri_runtime": true
   },
   "atspi_setup": {
-    "ok": false,
-    "deferred": true,
-    "tail": "deferred_until_after_gui_session"
+    "ok": true,
+    "deferred": false,
+    "tail": "ATSPI_ALREADY_PRESENT\nATSPI_SETUP_DONE\n"
   },
   "a11y_bus": {
-    "ok": false,
-    "bus_ok": false,
-    "deferred": true,
-    "tail": "deferred_until_after_gui_session"
+    "ok": true,
+    "bus_ok": true,
+    "launcher_missing": false,
+    "deferred": false,
+    "tail": "ATSPI_BUS_OK 0\nA11Y_SETUP_DONE\n{\"bus_ok\": true, \"child_count\": 0}\n{\"bus_ok\": true, \"child_count\": 0}\n"
+  },
+  "fetch": {
+    "ok": true,
+    "via": "9p",
+    "stdout_tail": "START_WAIKE_FETCH_1789603442\nVIA_9P_WAIKE_FETCH_1789603442 src=/mnt/gdlgames\n/var/lib/gunnchos/waike-learning-os.partial/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=1d34d255dcf1bd7953e95ca8aec50a4180bb5f0a, for GNU/Linux 3.7.0, not stripped\nBYTES_WAIKE_FETCH_1789603442=7963784\nFETCH_OK_WAIKE_FETCH_1789603442\ntotal 15580\ndrwxr-xr-x 2 root root       4096 Sep 17 00:04 .\ndrwxr-xr-x 6 root root       4096 Sep 17 00:04 ..\n-rw-r--r-- 1  501 dialout     840 Sep 17 00:03 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 17 00:03 VERSION\n-rwxr-xr-x 1  501 dialout 7963784 Sep 16 02:45 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 17 00:03 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7963784 Sep 16 02:45 waike-learning-os.real\n",
+    "hub_only_guestfwd": true,
+    "agent_ok": true,
+    "put_ok": true,
+    "agent_error": null,
+    "agent_error_class": null,
+    "agent_detail": null,
+    "fetched_before_gui_session": true
+  },
+  "post_fetch_hub_reachability": {
+    "hub_reachable_from_guest": false,
+    "tcp_hub": true,
+    "http_hub_status": null,
+    "agent_ok": true,
+    "attempts": [
+      {
+        "hub_reachable_from_guest": false,
+        "tcp_hub": true,
+        "http_hub_status": null,
+        "agent_ok": true,
+        "errors": [
+          "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+          "tcp:10.0.2.2:8787:[Errno 111] Connection refused",
+          "http10:hub:empty_http_response",
+          "http10:hub_version:empty_http_response",
+          "http10:httpd:[Errno 111] Connection refused",
+          "http10:gateway_hub:[Errno 111] Connection refused"
+        ]
+      },
+      {
+        "hub_reachable_from_guest": false,
+        "tcp_hub": true,
+        "http_hub_status": null,
+        "agent_ok": true,
+        "errors": [
+          "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+          "tcp:10.0.2.2:8787:[Errno 111] Connection refused",
+          "http10:hub:empty_http_response",
+          "http10:hub_version:empty_http_response",
+          "http10:httpd:[Errno 111] Connection refused",
+          "http10:gateway_hub:[Errno 111] Connection refused"
+        ]
+      },
+      {
+        "hub_reachable_from_guest": false,
+        "tcp_hub": true,
+        "http_hub_status": null,
+        "agent_ok": true,
+        "errors": [
+          "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+          "tcp:10.0.2.2:8787:[Errno 111] Connection refused",
+          "http10:hub:empty_http_response",
+          "http10:hub_version:empty_http_response",
+          "http10:httpd:[Errno 111] Connection refused",
+          "http10:gateway_hub:[Errno 111] Connection refused"
+        ]
+      },
+      {
+        "hub_reachable_from_guest": false,
+        "tcp_hub": true,
+        "http_hub_status": null,
+        "agent_ok": true,
+        "errors": [
+          "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+          "tcp:10.0.2.2:8787:[Errno 111] Connection refused",
+          "http10:hub:empty_http_response",
+          "http10:hub_version:empty_http_response",
+          "http10:httpd:[Errno 111] Connection refused",
+          "http10:gateway_hub:[Errno 111] Connection refused"
+        ]
+      }
+    ],
+    "http_flake_tolerated": true,
+    "note": "tcp_hub retained after 9p fetch; HTTP flake tolerated to continue GUI"
   },
   "gui_session": {
     "ok": true,
-    "primary_display": "compositor_missing_or_not_ready",
+    "primary_display": "interactive_guest_weston_wayland",
     "xvfb_used_as_primary_pass_surface": false
   },
-  "fetch": {
-    "ok": false,
-    "via": "unknown",
-    "stdout_tail": "",
-    "hub_only_guestfwd": true,
-    "agent_ok": false
+  "qemu_wrapper": {
+    "ok": true,
+    "wrapper_enabled": false,
+    "reason": "no_arch_gap"
   },
-  "blocker": "guest_fetch_owner_bundle_failed",
-  "finished_at_utc": "2026-09-16T23:29:59Z"
+  "native_elf_ready": {
+    "ok": true
+  },
+  "binary_probe": {
+    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=1d34d255dcf1bd7953e95ca8aec50a4180bb5f0a, for GNU/Linux 3.7.0, not stripped\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=1d34d255dcf1bd7953e95ca8aec50a4180bb5f0a, for GNU/Linux 3.7.0, not stripped\ntotal 15580\ndrwxr-xr-x 2 root root       4096 Sep 17 00:04 .\ndrwxr-xr-x 6 root root       4096 Sep 17 00:04 ..\n-rw-r--r-- 1  501 dialout     840 Sep 17 00:03 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 17 00:03 VERSION\n-rwxr-xr-x 1  501 dialout 7963784 Sep 16 02:45 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 17 00:03 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7963784 Sep 16 02:45 waike-learning-os.real\nWAIKE Learning OS verify key error: KEY\nPROBE_DONE\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\n+ ls -la /var/lib/gunnchos/waike-learning-os/bin\n+ /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help\n+ head -20\n+ echo PROBE_DONE\n",
+    "returncode": 0
+  },
+  "matches_main_aarch64_glibc236": true,
+  "journey_a_gui": {
+    "path": "gui_direct_no_headless",
+    "headless": false,
+    "xvfb_primary": false,
+    "process_started": true,
+    "pid": 641,
+    "returncode_immediate": null,
+    "acknowledged": true,
+    "ack": {
+      "app_version": "0.1.0",
+      "bundle_id": "com.gunnchos.waike.learning",
+      "deep_link": "waike://learn/home",
+      "message_type": "ack",
+      "protocol": "gunnchos.learning_os.ipc.v1",
+      "request_id": "d1115022-ce60-41a7-a207-be7eca815516",
+      "status": "ok"
+    },
+    "alive_beyond_ipc_ack": true,
+    "alive_after_3s": true,
+    "ps_tail": "    PID     ELAPSED CMD\n    641       00:03 /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://learn/home --ipc-dir /tmp/waike-los-gui-jA --request-id d1115022-ce60-41a7-a207-be7eca815516\n641 /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://learn/home --ipc-dir /tmp/waike-los-gui-jA --request-id d1115022-ce60-41a7-a207-be7eca815516\n653 /usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13\n656 /usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17\n",
+    "atspi_tail": "deferred_to_post_launch_probe",
+    "window_title_expected": "WAIKE Learning OS",
+    "wayland_display": "wayland-0",
+    "hub_url_in_launch_context": true,
+    "hub_url": "http://10.0.2.100:8787",
+    "hub_endpoint_policy_provisioned": true,
+    "hub_endpoint_policy_path": "/var/lib/gunnchos/waike-userdata/com.gunnchos.waike.learning/hub_endpoint_policy.v1.json",
+    "executable": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
+    "fixture_rejected": true,
+    "journey_tag": "A",
+    "platform_role": "learner",
+    "deep_link": "waike://learn/home",
+    "log_path": "/tmp/waike_gui_A.log",
+    "webview_or_window_title_observed": true,
+    "launched_gui": true
+  },
+  "trusted_runtime_hub_launch": {
+    "ok": true,
+    "hub_url": "http://10.0.2.100:8787"
+  },
+  "post_gui_agent_recover": {
+    "alive": true,
+    "skipped": true
+  },
+  "framebuffer_a": {
+    "ok": true,
+    "bytes": 22582,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-09-17_00-05-12.png"
+  },
+  "hub_bind": {
+    "hub_reachable_from_guest": true,
+    "reach_detail": {
+      "tcp_hub": true,
+      "tcp_httpd": false,
+      "http_hub_status": 200,
+      "http_hub_body": "{\"status\":\"ok\"}",
+      "http_httpd_status": null,
+      "errors": [
+        "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+        "tcp:10.0.2.2:8787:[Errno 111] Connection refused"
+      ],
+      "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86393sec preferred_lft 86393sec\n",
+      "agent_recovered": null,
+      "carried_forward_from_early_probe": true
+    },
+    "reach_tail": "",
+    "atspi_tail": "",
+    "atspi_doc": {},
+    "a11y_bus": {
+      "ok": true,
+      "bus_ok": true,
+      "tail": "ATSPI_BUS_OK 0\nA11Y_SETUP_DONE\n{\"bus_ok\": true, \"child_count\": 0}\n{\"bus_ok\": true, \"child_count\": 0}\n"
+    },
+    "gui_log_scrape": {
+      "ok": false,
+      "raw_tail": ""
+    },
+    "client_hub_sockets": {
+      "ok": false,
+      "established_to_hub": null,
+      "proc_net_hits": null,
+      "ss_tail": "",
+      "procs": null
+    },
+    "client_hub_http_chip_observed": false,
+    "client_hub_http_chip_via": null,
+    "client_hub_mock_chip_observed": false,
+    "client_hub_unavailable_observed": false,
+    "brand_observed": false,
+    "mock_mode_used": false,
+    "note": "Post-#12 accepted-main honors launch-context hub_url only after native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set. Guest TCP to 10.0.2.100:8787 from waike/WebKit is accepted as HTTP bind evidence when WebKit DOM is not exposed to AT-SPI."
+  },
+  "hub_policy_rejects": {
+    "rejected": false,
+    "nack_reason": null
+  },
+  "hub_bound": false,
+  "blocker": "client_not_bound_to_real_hub_after_policy_authorized_launch",
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_RUNTIME_CONTEXT_TO_WEBVIEW_BIND",
+  "finished_at_utc": "2026-09-17T00:14:49Z",
+  "atspi_session": {
+    "window_pass": false,
+    "bus_ok": true,
+    "note": "stopped_before_full_atspi_drive_due_to_bind_regression"
+  },
+  "verdict": {
+    "generated_at_utc": "2026-09-17T00:14:49Z",
+    "prompt": "17G.5D",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "verdict": "FAIL",
+    "blocker": "client_not_bound_to_real_hub_after_policy_authorized_launch",
+    "NEXT_GATE": "DEVICE_OS_134_WAIKE_RUNTIME_CONTEXT_TO_WEBVIEW_BIND",
+    "gui_window_alive": true,
+    "real_hub_running": true,
+    "client_bound_real_hub": false,
+    "hub_endpoint_policy_rejects_unauthorized": false,
+    "mock_hub_used": false,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true
+  }
 }

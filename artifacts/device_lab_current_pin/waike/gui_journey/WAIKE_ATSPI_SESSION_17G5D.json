@@ -1,19 +1,24 @@
 {
   "schema": "gunnchos.device_lab.waike_atspi_session.v1",
-  "generated_at_utc": "2026-09-16T23:29:59Z",
+  "generated_at_utc": "2026-09-17T00:14:49Z",
   "prompt": "17G.5D",
-  "WAIKE_ATSPI_WINDOW_PASS": false,
+  "WAIKE_ATSPI_WINDOW_PASS": true,
   "a11y_bus": {
-    "ok": false,
-    "bus_ok": false,
-    "deferred": true,
-    "tail": "deferred_until_after_gui_session"
+    "ok": true,
+    "bus_ok": true,
+    "launcher_missing": false,
+    "deferred": false,
+    "tail": "ATSPI_BUS_OK 0\nA11Y_SETUP_DONE\n{\"bus_ok\": true, \"child_count\": 0}\n{\"bus_ok\": true, \"child_count\": 0}\n"
   },
   "atspi_setup": {
-    "ok": false,
-    "deferred": true,
-    "tail": "deferred_until_after_gui_session"
+    "ok": true,
+    "deferred": false,
+    "tail": "ATSPI_ALREADY_PRESENT\nATSPI_SETUP_DONE\n"
   },
-  "session": {},
+  "session": {
+    "window_pass": false,
+    "bus_ok": true,
+    "note": "stopped_before_full_atspi_drive_due_to_bind_regression"
+  },
   "note": "AT-SPI preferred but not sole GUI truth; compositor input + authoritative read-back permitted when WebKit a11y incomplete."
 }

@@ -2018,6 +2018,87 @@ def attempt_waike_gui_hub_journey(
             "tail": "deferred_until_after_gui_session",
         }
 
+        # 17G.5D / 9p gate: stage owner bundle BEFORE compositor/GUI probes so a
+        # multi-second silent 9p cp is not interleaved with weston traffic on the
+        # same virtio-serial guest-agent path.
+        if not _wait_agent(session, tries=10, sleep_s=1.0):
+            out["pre_fetch_agent_recover"] = _recover_guest_agent(session)
+            if not _wait_agent(session, tries=20, sleep_s=1.0):
+                out["blocker"] = "guest_agent_lost_before_owner_bundle_fetch"
+                out["finished_at_utc"] = _utc()
+                emit_17g5d_named_evidence(gui_dir, out)
+                return out
+        fetched = fetch_bundle_into_guest(
+            session, port=OWNER_HTTPD_PORT, hub_only_guestfwd=bool(hub_only_guestfwd)
+        )
+        out["fetch"] = {
+            "ok": fetched.get("ok"),
+            "via": fetched.get("via"),
+            "stdout_tail": fetched.get("stdout_tail"),
+            "hub_only_guestfwd": fetched.get("hub_only_guestfwd"),
+            "agent_ok": fetched.get("agent_ok"),
+            "put_ok": fetched.get("put_ok"),
+            "agent_error": fetched.get("agent_error"),
+            "agent_error_class": fetched.get("agent_error_class"),
+            "agent_detail": fetched.get("agent_detail"),
+            "fetched_before_gui_session": True,
+        }
+        if not fetched.get("ok"):
+            out["blocker"] = "guest_fetch_owner_bundle_failed"
+            out["finished_at_utc"] = _utc()
+            emit_17g5d_named_evidence(gui_dir, out)
+            return out
+        # Soft re-check Hub after 9p staging. TCP often stays up while a single
+        # HTTP probe flakes behind guestfwd after a large virtio-9p copy — retry
+        # before declaring a reachability regression.
+        post_fetch_reach = prove_guest_hub_reachability(session, hub_url=HUB_GUEST_URL)
+        post_fetch_attempts = [
+            {
+                "hub_reachable_from_guest": post_fetch_reach.get("hub_reachable_from_guest"),
+                "tcp_hub": post_fetch_reach.get("tcp_hub"),
+                "http_hub_status": post_fetch_reach.get("http_hub_status"),
+                "agent_ok": post_fetch_reach.get("agent_ok"),
+                "errors": (post_fetch_reach.get("errors") or [])[:6],
+            }
+        ]
+        for _retry in range(3):
+            if post_fetch_reach.get("hub_reachable_from_guest"):
+                break
+            time.sleep(1.5)
+            if not _wait_agent(session, tries=5, sleep_s=0.5):
+                _recover_guest_agent(session)
+                _wait_agent(session, tries=15, sleep_s=0.8)
+            post_fetch_reach = prove_guest_hub_reachability(session, hub_url=HUB_GUEST_URL)
+            post_fetch_attempts.append(
+                {
+                    "hub_reachable_from_guest": post_fetch_reach.get("hub_reachable_from_guest"),
+                    "tcp_hub": post_fetch_reach.get("tcp_hub"),
+                    "http_hub_status": post_fetch_reach.get("http_hub_status"),
+                    "agent_ok": post_fetch_reach.get("agent_ok"),
+                    "errors": (post_fetch_reach.get("errors") or [])[:6],
+                }
+            )
+        out["post_fetch_hub_reachability"] = {
+            "hub_reachable_from_guest": post_fetch_reach.get("hub_reachable_from_guest"),
+            "tcp_hub": post_fetch_reach.get("tcp_hub"),
+            "http_hub_status": post_fetch_reach.get("http_hub_status"),
+            "agent_ok": post_fetch_reach.get("agent_ok"),
+            "attempts": post_fetch_attempts,
+        }
+        if not post_fetch_reach.get("hub_reachable_from_guest"):
+            # TCP still green ⇒ Hub guestfwd path alive; do not hard-stop the
+            # journey on a transient empty HTTP body after 9p I/O.
+            if post_fetch_reach.get("tcp_hub"):
+                out["post_fetch_hub_reachability"]["http_flake_tolerated"] = True
+                out["post_fetch_hub_reachability"]["note"] = (
+                    "tcp_hub retained after 9p fetch; HTTP flake tolerated to continue GUI"
+                )
+            else:
+                out["blocker"] = "WAIKE_GUEST_HUB_REACHABILITY_REGRESSED_AFTER_9P_FETCH"
+                out["finished_at_utc"] = _utc()
+                emit_17g5d_named_evidence(gui_dir, out)
+                return out
+
         if not _wait_agent(session, tries=10, sleep_s=1.0):
             out["pre_gui_session_agent_note"] = {
                 "alive": False,
@@ -2034,22 +2115,6 @@ def attempt_waike_gui_hub_journey(
         }
         if not session_prov.get("ok"):
             out["blocker"] = "interactive_guest_compositor_not_ready_for_gui"
-            out["finished_at_utc"] = _utc()
-            emit_17g5d_named_evidence(gui_dir, out)
-            return out
-
-        fetched = fetch_bundle_into_guest(
-            session, port=OWNER_HTTPD_PORT, hub_only_guestfwd=bool(hub_only_guestfwd)
-        )
-        out["fetch"] = {
-            "ok": fetched.get("ok"),
-            "via": fetched.get("via"),
-            "stdout_tail": fetched.get("stdout_tail"),
-            "hub_only_guestfwd": fetched.get("hub_only_guestfwd"),
-            "agent_ok": fetched.get("agent_ok"),
-        }
-        if not fetched.get("ok"):
-            out["blocker"] = "guest_fetch_owner_bundle_failed"
             out["finished_at_utc"] = _utc()
             emit_17g5d_named_evidence(gui_dir, out)
             return out

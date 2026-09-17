@@ -246,77 +246,92 @@ def ensure_tauri_aarch64_runtime(session: Any) -> dict[str, Any]:
 def fetch_bundle_into_guest(
     session: Any, *, port: int = 8767, hub_only_guestfwd: bool = False
 ) -> dict[str, Any]:
+    """Stage owner WAIKE bundle into guest via 9p (hub-only) or HTTP guestfwd.
+
+    File-deployed script keeps the virtio-serial request small; status markers
+    stay short so a multi-second silent 9p ``cp`` does not depend on streaming
+    stdout. Caller must use a GuestAgentClient that waits through silent
+    process_run (see guest_agent.client idle-buf fix).
+    """
     remote_root = "/var/lib/gunnchos/waike-learning-os"
     marker = f"WAIKE_FETCH_{int(time.time())}"
     # Prefer 9p share (same path four-game uses). HTTP fallback only when httpd
     # guestfwd is present; 17G.5D hub-only must stay on 9p.
-    http_branch = (
-        f"  echo HUB_ONLY_NO_HTTPD_$MARKER; exit 41; "
-        if hub_only_guestfwd
-        else (
-            f"  echo VIA_HTTP_$MARKER; "
-            f"  command -v curl; "
-            f"  curl -fsSL --connect-timeout 5 --max-time 60 "
-            f"    http://10.0.2.100:{port}/OWNER_WAIKE_BUNDLE_MANIFEST.json "
-            f"    -o {remote_root}.partial/MANIFEST.json; "
-            f"  curl -fsSL --connect-timeout 5 --max-time 180 "
-            f"    http://10.0.2.100:{port}/bin/waike-learning-os "
-            f"    -o {remote_root}.partial/bin/waike-learning-os; "
-            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-            f"    http://10.0.2.100:{port}/bin/VERSION -o {remote_root}.partial/bin/VERSION; "
-            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-            f"    http://10.0.2.100:{port}/bin/INSTALLED.json "
-            f"    -o {remote_root}.partial/bin/INSTALLED.json; "
-            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-            f"    http://10.0.2.100:{port}/bin/waike-learning-os.qemu-x86_64-wrapper.sh "
-            f"    -o {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
-            f"  curl -fsSL --connect-timeout 5 --max-time 30 "
-            f"    http://10.0.2.100:{port}/WAIKE_RUNTIME_PROVENANCE.json "
-            f"    -o {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
-        )
+    script = f"""#!/bin/bash
+set -uo pipefail
+MARKER={marker}
+REMOTE={remote_root}
+PORT={port}
+HUB_ONLY={1 if hub_only_guestfwd else 0}
+echo START_$MARKER
+rm -rf "$REMOTE.partial" "$REMOTE"
+mkdir -p "$REMOTE.partial/bin"
+SRC9=
+for cand in /mnt/gdlgames /media/gdlgames /run/gunnchos/gdlgames; do
+  if [ -f "$cand/bin/waike-learning-os" ]; then SRC9=$cand; break; fi
+done
+if [ -z "$SRC9" ]; then
+  mkdir -p /mnt/gdlgames
+  mount -t 9p -o trans=virtio,version=9p2000.L,ro gdlgames /mnt/gdlgames 2>/tmp/waike_9p_mount.err || true
+  if [ -f /mnt/gdlgames/bin/waike-learning-os ]; then SRC9=/mnt/gdlgames; fi
+fi
+if [ -n "$SRC9" ]; then
+  echo VIA_9P_$MARKER src=$SRC9
+  cp -a "$SRC9/bin/waike-learning-os" "$REMOTE.partial/bin/waike-learning-os"
+  cp -a "$SRC9/bin/VERSION" "$REMOTE.partial/bin/VERSION"
+  cp -a "$SRC9/bin/INSTALLED.json" "$REMOTE.partial/bin/INSTALLED.json"
+  cp -a "$SRC9/bin/waike-learning-os.qemu-x86_64-wrapper.sh" \\
+    "$REMOTE.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh"
+  cp -a "$SRC9/OWNER_WAIKE_BUNDLE_MANIFEST.json" "$REMOTE.partial/MANIFEST.json"
+  cp -a "$SRC9/WAIKE_RUNTIME_PROVENANCE.json" "$REMOTE.partial/WAIKE_RUNTIME_PROVENANCE.json"
+  [ -d "$SRC9/contracts" ] && cp -a "$SRC9/contracts" "$REMOTE.partial/contracts"
+  [ -d "$SRC9/xdg" ] && cp -a "$SRC9/xdg" "$REMOTE.partial/xdg"
+  # Launch adapter can import from live 9p; copy only if present and small enough.
+  if [ -d "$SRC9/device_os_lib" ]; then
+    cp -a "$SRC9/device_os_lib" "$REMOTE.partial/device_os_lib"
+  fi
+else
+  if [ "$HUB_ONLY" = "1" ]; then
+    echo HUB_ONLY_NO_HTTPD_$MARKER
+    exit 41
+  fi
+  echo VIA_HTTP_$MARKER
+  command -v curl
+  curl -fsSL --connect-timeout 5 --max-time 60 \\
+    "http://10.0.2.100:${{PORT}}/OWNER_WAIKE_BUNDLE_MANIFEST.json" \\
+    -o "$REMOTE.partial/MANIFEST.json"
+  curl -fsSL --connect-timeout 5 --max-time 180 \\
+    "http://10.0.2.100:${{PORT}}/bin/waike-learning-os" \\
+    -o "$REMOTE.partial/bin/waike-learning-os"
+  curl -fsSL --connect-timeout 5 --max-time 30 \\
+    "http://10.0.2.100:${{PORT}}/bin/VERSION" -o "$REMOTE.partial/bin/VERSION"
+  curl -fsSL --connect-timeout 5 --max-time 30 \\
+    "http://10.0.2.100:${{PORT}}/bin/INSTALLED.json" \\
+    -o "$REMOTE.partial/bin/INSTALLED.json"
+  curl -fsSL --connect-timeout 5 --max-time 30 \\
+    "http://10.0.2.100:${{PORT}}/bin/waike-learning-os.qemu-x86_64-wrapper.sh" \\
+    -o "$REMOTE.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh"
+  curl -fsSL --connect-timeout 5 --max-time 30 \\
+    "http://10.0.2.100:${{PORT}}/WAIKE_RUNTIME_PROVENANCE.json" \\
+    -o "$REMOTE.partial/WAIKE_RUNTIME_PROVENANCE.json"
+fi
+chmod +x "$REMOTE.partial/bin/waike-learning-os" \\
+  "$REMOTE.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh"
+cp -a "$REMOTE.partial/bin/waike-learning-os" "$REMOTE.partial/bin/waike-learning-os.real"
+BYTES=$(wc -c < "$REMOTE.partial/bin/waike-learning-os.real" | tr -d ' ')
+file "$REMOTE.partial/bin/waike-learning-os.real" | head -1
+echo BYTES_$MARKER=$BYTES
+mv "$REMOTE.partial" "$REMOTE"
+echo FETCH_OK_$MARKER
+ls -la "$REMOTE/bin" | head -10
+"""
+    put = _b64_put(session, "/var/tmp/waike_owner_bundle_fetch.sh", script.encode())
+    r = _guest_sh(
+        session,
+        "chmod +x /var/tmp/waike_owner_bundle_fetch.sh; "
+        "/var/tmp/waike_owner_bundle_fetch.sh",
+        timeout_sec=300.0,
     )
-    cmd = (
-        f"set -uo pipefail; "
-        f"MARKER={marker}; echo START_$MARKER; "
-        f"rm -rf {remote_root}.partial {remote_root}; "
-        f"mkdir -p {remote_root}.partial/bin; "
-        f"SRC9=; "
-        f"ls -la /mnt/gdlgames /media/gdlgames 2>/dev/null | head -20 || true; "
-        f"for cand in /mnt/gdlgames /media/gdlgames /run/gunnchos/gdlgames; do "
-        f"  if [ -f \"$cand/bin/waike-learning-os\" ]; then SRC9=$cand; break; fi; "
-        f"done; "
-        f"if [ -z \"$SRC9\" ]; then "
-        f"  mkdir -p /mnt/gdlgames; "
-        f"  mount -t 9p -o trans=virtio,version=9p2000.L gdlgames /mnt/gdlgames 2>&1 | tail -5 || true; "
-        f"  ls -la /mnt/gdlgames /mnt/gdlgames/bin 2>/dev/null | head -20 || true; "
-        f"  if [ -f /mnt/gdlgames/bin/waike-learning-os ]; then SRC9=/mnt/gdlgames; fi; "
-        f"fi; "
-        f"if [ -n \"$SRC9\" ]; then "
-        f"  echo VIA_9P_$MARKER src=$SRC9; "
-        f"  cp -a \"$SRC9/bin/waike-learning-os\" {remote_root}.partial/bin/waike-learning-os; "
-        f"  cp -a \"$SRC9/bin/VERSION\" {remote_root}.partial/bin/VERSION; "
-        f"  cp -a \"$SRC9/bin/INSTALLED.json\" {remote_root}.partial/bin/INSTALLED.json; "
-        f"  cp -a \"$SRC9/bin/waike-learning-os.qemu-x86_64-wrapper.sh\" "
-        f"    {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
-        f"  cp -a \"$SRC9/OWNER_WAIKE_BUNDLE_MANIFEST.json\" {remote_root}.partial/MANIFEST.json; "
-        f"  cp -a \"$SRC9/WAIKE_RUNTIME_PROVENANCE.json\" "
-        f"    {remote_root}.partial/WAIKE_RUNTIME_PROVENANCE.json; "
-        f"  if [ -d \"$SRC9/contracts\" ]; then cp -a \"$SRC9/contracts\" {remote_root}.partial/contracts; fi; "
-        f"  if [ -d \"$SRC9/xdg\" ]; then cp -a \"$SRC9/xdg\" {remote_root}.partial/xdg; fi; "
-        f"  if [ -d \"$SRC9/device_os_lib\" ]; then cp -a \"$SRC9/device_os_lib\" {remote_root}.partial/device_os_lib; fi; "
-        f"else "
-        f"{http_branch}"
-        f"fi; "
-        f"chmod +x {remote_root}.partial/bin/waike-learning-os "
-        f"  {remote_root}.partial/bin/waike-learning-os.qemu-x86_64-wrapper.sh; "
-        f"cp -a {remote_root}.partial/bin/waike-learning-os "
-        f"  {remote_root}.partial/bin/waike-learning-os.real; "
-        f"file {remote_root}.partial/bin/waike-learning-os.real; "
-        f"wc -c {remote_root}.partial/bin/waike-learning-os.real; "
-        f"mv {remote_root}.partial {remote_root}; "
-        f"echo FETCH_OK_$MARKER; ls -la {remote_root}/bin"
-    )
-    r = _guest_sh(session, cmd, timeout_sec=300.0)
     out = (r.get("stdout") or "") + (r.get("stderr") or "")
     ok = f"FETCH_OK_{marker}" in out
     via = "9p" if f"VIA_9P_{marker}" in out else ("http" if f"VIA_HTTP_{marker}" in out else "unknown")
@@ -329,6 +344,10 @@ def fetch_bundle_into_guest(
         "marker": marker,
         "hub_only_guestfwd": bool(hub_only_guestfwd),
         "agent_ok": bool(r.get("ok", True)),
+        "put_ok": bool(put.get("ok", True)),
+        "agent_error": r.get("error"),
+        "agent_error_class": r.get("error_class"),
+        "agent_detail": r.get("detail"),
     }
 
 

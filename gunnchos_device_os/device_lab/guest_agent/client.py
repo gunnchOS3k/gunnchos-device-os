@@ -173,12 +173,19 @@ class GuestAgentClient:
                             last_err = f"select_read_failed:{exc}"
                             break
                         if not ready:
-                            if buf and b"\n" not in buf:
+                            # Guest process_run / 9p copies can be silent for many
+                            # seconds while the agent blocks in subprocess.run.
+                            # Empty-buf silence must wait until read_deadline —
+                            # aborting early closes the unix stream, the guest
+                            # reply hits a broken pipe, and the host sees
+                            # virtio_serial_roundtrip_timeout with empty stdout
+                            # (17G.5D owner-bundle 9p fetch failure mode).
+                            if not buf:
+                                continue
+                            if b"\n" not in buf:
                                 idle_timeouts += 1
                                 if idle_timeouts < 45:
                                     continue
-                            # No progress and no partial line — stop this attempt.
-                            if not buf:
                                 break
                             idle_timeouts += 1
                             if idle_timeouts >= 45:
