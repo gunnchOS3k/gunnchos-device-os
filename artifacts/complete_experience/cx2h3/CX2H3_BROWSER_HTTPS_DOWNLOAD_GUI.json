@@ -1,0 +1,71 @@
+{
+  "launch": {
+    "ok": true,
+    "pid": 38977,
+    "alive_after_5s": true,
+    "cdp_port": 9333,
+    "url": "https://cx2h3.test:18443/",
+    "download_dir": "/var/lib/cx2h2/vault/files",
+    "ignore_certificate_errors": false
+  },
+  "title": {
+    "ok": true,
+    "ws": "ws://127.0.0.1:9333/devtools/page/B2C53A0A2458288FD9824160A626E4A9",
+    "title": "CX2H3 Deterministic HTTPS Document Source",
+    "url": "https://cx2h3.test:18443/",
+    "result": {
+      "id": 2,
+      "result": {
+        "result": {
+          "type": "string",
+          "value": "CX2H3 Deterministic HTTPS Document Source"
+        }
+      }
+    }
+  },
+  "download": {
+    "click": {
+      "ok": true,
+      "ws": "ws://127.0.0.1:9333/devtools/page/B2C53A0A2458288FD9824160A626E4A9",
+      "title": "CX2H3 Deterministic HTTPS Document Source",
+      "url": "https://cx2h3.test:18443/",
+      "result": {
+        "id": 2,
+        "result": {
+          "result": {
+            "type": "object",
+            "value": {
+              "ok": true,
+              "title": "CX2H3 Deterministic HTTPS Document Source",
+              "sha": "a1556ac9c93b56e3afe9a1ea8ae88ce48c6ddfc6aaeba156e549f608419a7ffa",
+              "href": "https://cx2h3.test:18443/download/cx2h3_j2_source.odt"
+            }
+          }
+        }
+      }
+    },
+    "click_inner": {
+      "ok": true,
+      "title": "CX2H3 Deterministic HTTPS Document Source",
+      "sha": "a1556ac9c93b56e3afe9a1ea8ae88ce48c6ddfc6aaeba156e549f608419a7ffa",
+      "href": "https://cx2h3.test:18443/download/cx2h3_j2_source.odt"
+    },
+    "vault": {
+      "ok": true,
+      "path": "/var/lib/cx2h2/vault/files/cx2h3_j2_source.odt",
+      "rel": "cx2h3_j2_source.odt",
+      "sha256": "a1556ac9c93b56e3afe9a1ea8ae88ce48c6ddfc6aaeba156e549f608419a7ffa",
+      "size": 910
+    },
+    "ok": true
+  },
+  "hash_match": true,
+  "expected_sha256": "a1556ac9c93b56e3afe9a1ea8ae88ce48c6ddfc6aaeba156e549f608419a7ffa",
+  "captures": {
+    "before": "/tmp/cx2h3-graphical/captures/j2_before_browser.ppm",
+    "launched": "/tmp/cx2h3-graphical/captures/j2_browser_launched.ppm",
+    "download": "/tmp/cx2h3-graphical/captures/j2_after_download.ppm"
+  },
+  "ignore_certificate_errors": false,
+  "curl_used_as_browser": false
+}
