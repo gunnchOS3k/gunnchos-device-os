@@ -1,0 +1,60 @@
+{
+  "v1": {
+    "ok": true,
+    "min_changed_pct_threshold": 0.02,
+    "a": {
+      "path": "/tmp/cx2h-graphical/captures/j3_01_app_center.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "fa7de2f61185e448b5ae9afa43a85e613971321288db5044ede74fdcc65a53eb",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79",
+      "size": 3072016
+    },
+    "changed_pixels": 76003,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 7.4222,
+    "bbox": {
+      "min_x": 94,
+      "min_y": 376,
+      "max_x": 1058,
+      "max_y": 614
+    },
+    "mean_abs_channel_diff": 27.4509,
+    "rationale": "Require >= 0.02% changed pixels so cursor blink alone cannot prove shell render"
+  },
+  "v1_v2": {
+    "ok": false,
+    "min_changed_pct_threshold": 0.01,
+    "a": {
+      "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "6409be916dc6ec5efe37450ca39f19327d0c3e88bc1275d4cd2b5a6d336afd79",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "998c911ced685c52639a393fd68a263078993faaede3cab14db54a033b63f318",
+      "size": 3072016
+    },
+    "changed_pixels": 50,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 0.0049,
+    "bbox": {
+      "min_x": 244,
+      "min_y": 517,
+      "max_x": 251,
+      "max_y": 526
+    },
+    "mean_abs_channel_diff": 55.8733,
+    "rationale": "Require >= 0.01% changed pixels so cursor blink alone cannot prove shell render"
+  }
+}

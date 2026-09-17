@@ -47,8 +47,8 @@ def acquire_lock(
             pid = int(cur.get("pid") or 0)
             alive = pid > 0 and _pid_alive(pid)
             owned = (
-                str(cur.get("purpose", "")).startswith(("CX2F", "CX2G"))
-                or str(cur.get("branch", "")).startswith(("eng/cx2f", "eng/cx2g"))
+                str(cur.get("purpose", "")).startswith(("CX2F", "CX2G", "CX2H"))
+                or str(cur.get("branch", "")).startswith(("eng/cx2f", "eng/cx2g", "eng/cx2h"))
             )
             if alive and not owned:
                 if time.time() >= deadline:
@@ -102,7 +102,7 @@ def qemu_owned_by_cx2g(pidfile: Path, lock: Optional[Dict[str, Any]] = None) -> 
     lock = lock or read_lock()
     if not lock:
         return False
-    if not str(lock.get("purpose", "")).startswith("CX2G"):
+    if not str(lock.get("purpose", "")).startswith(("CX2G", "CX2H")):
         return False
     if not pidfile.is_file():
         return False
