@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>gunnchOS Validation Center</title>
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="app-header" role="banner">
+    <div class="brand-block">
+      <p class="brand">gunnchOS</p>
+      <h1>Validation Center</h1>
+      <p class="tagline">Human and field evidence collection — not an automatic PASS generator.</p>
+    </div>
+    <nav aria-label="Primary">
+      <button type="button" class="mode-btn" data-mode="home" aria-pressed="true">Home</button>
+      <button type="button" class="mode-btn" data-mode="moderator" aria-pressed="false">Moderator</button>
+      <button type="button" class="mode-btn" data-mode="participant" aria-pressed="false">Participant</button>
+      <button type="button" class="mode-btn" data-mode="reviewer" aria-pressed="false">Reviewer</button>
+      <button type="button" id="open-a11y-options" aria-haspopup="dialog" aria-controls="a11y-options">Accessibility Options</button>
+    </nav>
+    <p id="autosave-status" class="autosave status-text" role="status" aria-live="polite" data-status-text="idle">Autosave: idle</p>
+  </header>
+
+  <div id="a11y-options" class="a11y-panel" hidden role="dialog" aria-modal="true" aria-labelledby="a11y-title">
+    <h2 id="a11y-title">Accessibility Options</h2>
+    <div class="a11y-grid">
+      <label>Text size
+        <select id="opt-text-size">
+          <option value="100">100%</option>
+          <option value="125">125%</option>
+          <option value="150">150%</option>
+          <option value="200">200%</option>
+        </select>
+      </label>
+      <label>Spacing
+        <select id="opt-spacing">
+          <option value="normal">Normal</option>
+          <option value="relaxed">Relaxed</option>
+          <option value="wide">Wide</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="opt-reduced-motion" /> Reduced motion</label>
+      <label><input type="checkbox" id="opt-high-contrast" /> High contrast</label>
+      <label><input type="checkbox" id="opt-simple-language" /> Simplified task instructions</label>
+      <label><input type="checkbox" id="opt-read-aloud" /> Read-aloud hook (if available)</label>
+    </div>
+    <button type="button" id="close-a11y-options">Close Accessibility Options</button>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <section id="view-home" class="view" aria-labelledby="home-title">
+      <h2 id="home-title">Home dashboard</h2>
+      <div class="dash-grid">
+        <section aria-labelledby="ready-title"><h3 id="ready-title">Ready to Run</h3><ul id="ready-list" class="status-text" data-status-text="ready"></ul></section>
+        <section aria-labelledby="progress-title"><h3 id="progress-title">In Progress</h3><ul id="progress-list" class="status-text" data-status-text="in-progress"></ul></section>
+        <section aria-labelledby="submitted-title"><h3 id="submitted-title">Submitted</h3><ul id="submitted-list" class="status-text" data-status-text="submitted"></ul></section>
+        <section aria-labelledby="needs-title"><h3 id="needs-title">Needs Attention</h3><ul id="needs-list" class="status-text" data-status-text="needs-attention"></ul></section>
+        <section aria-labelledby="reviewed-title"><h3 id="reviewed-title">Reviewed</h3><ul id="reviewed-list" class="status-text" data-status-text="reviewed"></ul></section>
+        <section aria-labelledby="external-title"><h3 id="external-title">Pending External</h3><ul id="external-list" class="status-text" data-status-text="pending-external"></ul></section>
+      </div>
+      <section aria-labelledby="edmund-title" class="edmund-map">
+        <h3 id="edmund-title">Edmund action packet (UI mapped)</h3>
+        <div id="edmund-list"></div>
+      </section>
+    </section>
+
+    <section id="view-moderator" class="view" hidden aria-labelledby="mod-title">
+      <h2 id="mod-title">Moderator mode</h2>
+      <form id="create-session-form" class="panel">
+        <fieldset>
+          <legend>Create session</legend>
+          <label>Validation pack
+            <select id="pack-select" multiple size="6" required aria-describedby="pack-help"></select>
+          </label>
+          <p id="pack-help">Only selected packs are included. Tasks are not all active by default.</p>
+          <label>Device / SKU
+            <select id="sku-select">
+              <option>Student 14.5</option>
+              <option>Handheld Hybrid</option>
+              <option>DS-XL Coder</option>
+              <option>Edge I/O Rings</option>
+              <option>First-party Dock</option>
+              <option>host</option>
+            </select>
+          </label>
+          <label>Tasks
+            <select id="task-select" multiple size="8" required></select>
+          </label>
+          <label>Build / version <input id="build-version" type="text" autocomplete="off" /></label>
+          <label>Participant alias <input id="participant-alias" type="text" required autocomplete="nickname" /></label>
+          <label>Moderator name <input id="moderator-name" type="text" required /></label>
+          <label><input id="lan-opt-in" type="checkbox" /> Local-LAN access opt-in (loopback default remains)</label>
+          <button type="submit" class="primary">Start session</button>
+        </fieldset>
+      </form>
+      <div id="moderator-session" class="panel" hidden>
+        <h3>Current session</h3>
+        <p id="mod-session-meta" class="status-text" data-status-text="session"></p>
+        <p>Elapsed: <span id="mod-elapsed">0:00</span></p>
+        <ul id="mod-task-list"></ul>
+        <label>Observation notes <textarea id="mod-notes" rows="4"></textarea></label>
+        <button type="button" id="mod-pause">Pause</button>
+        <button type="button" id="mod-resume">Resume</button>
+        <button type="button" id="mod-skip">Skip with reason</button>
+        <button type="button" id="mod-revoke">Revoke session link</button>
+        <p id="mod-evidence-status" class="status-text" data-status-text="evidence" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="view-participant" class="view" hidden aria-labelledby="part-title">
+      <h2 id="part-title">Participant mode</h2>
+      <section id="consent-screen" class="panel" aria-labelledby="consent-title">
+        <h3 id="consent-title">Consent</h3>
+        <p id="consent-text"></p>
+        <label><input type="checkbox" id="consent-purpose" /> I understand the purpose of this session</label>
+        <fieldset>
+          <legend>Optional media consent</legend>
+          <label><input type="checkbox" id="consent-photo" /> Photos</label>
+          <label><input type="checkbox" id="consent-audio" /> Audio</label>
+          <label><input type="checkbox" id="consent-video" /> Video</label>
+        </fieldset>
+        <p>Minors / K-12 mode is disabled by default.</p>
+        <button type="button" id="consent-accept" class="primary">Accept and continue</button>
+        <button type="button" id="consent-decline">Decline</button>
+        <p id="consent-error" class="error" role="alert" aria-live="assertive"></p>
+      </section>
+
+      <section id="task-screen" class="panel" hidden aria-labelledby="task-heading">
+        <p id="task-progress" class="status-text" data-status-text="progress" aria-live="polite">Task 0 of 0</p>
+        <h3 id="task-heading">Task</h3>
+        <p id="task-why"></p>
+        <p id="task-prereq"></p>
+        <p id="task-estimate"></p>
+        <p id="task-safety" class="safety"></p>
+        <ol id="task-steps"></ol>
+        <p><strong>Expected result:</strong> <span id="task-expected"></span></p>
+        <div class="actions">
+          <button type="button" id="task-start" class="primary">Start Task</button>
+          <button type="button" id="task-pause">Pause</button>
+          <button type="button" id="task-add-note">Add note</button>
+          <button type="button" id="task-add-evidence">Add evidence</button>
+          <button type="button" id="task-report-issue">Report issue</button>
+          <button type="button" id="task-complete" class="primary">Complete Task</button>
+        </div>
+        <details>
+          <summary>Technical details</summary>
+          <pre id="task-technical"></pre>
+        </details>
+
+        <form id="rating-form" class="panel" aria-labelledby="rating-title">
+          <h3 id="rating-title">Task ratings</h3>
+          <fieldset>
+            <legend>Task completion</legend>
+            <label><input type="radio" name="completion" value="completed_successfully" /> Completed successfully</label>
+            <label><input type="radio" name="completion" value="completed_with_difficulty" /> Completed with difficulty</label>
+            <label><input type="radio" name="completion" value="could_not_complete" /> Could not complete</label>
+            <label><input type="radio" name="completion" value="not_attempted_skipped" /> Not attempted / skipped</label>
+          </fieldset>
+          <label>Ease
+            <select name="ease" id="rating-ease">
+              <option value="1">1 Very difficult</option>
+              <option value="2">2 Difficult</option>
+              <option value="3">3 Neutral</option>
+              <option value="4">4 Easy</option>
+              <option value="5">5 Very easy</option>
+            </select>
+          </label>
+          <label>Confidence
+            <select name="confidence" id="rating-confidence">
+              <option value="1">1 Not confident</option>
+              <option value="2">2 Slightly confident</option>
+              <option value="3">3 Neutral</option>
+              <option value="4">4 Confident</option>
+              <option value="5">5 Very confident</option>
+            </select>
+          </label>
+          <label>Satisfaction
+            <select name="satisfaction" id="rating-satisfaction">
+              <option value="1">1 Very dissatisfied</option>
+              <option value="2">2 Dissatisfied</option>
+              <option value="3">3 Neutral</option>
+              <option value="4">4 Satisfied</option>
+              <option value="5">5 Very satisfied</option>
+            </select>
+          </label>
+          <label>Accessibility impact
+            <select name="accessibility_impact" id="rating-a11y">
+              <option value="none">None</option>
+              <option value="minor_friction">Minor friction</option>
+              <option value="moderate_barrier">Moderate barrier</option>
+              <option value="major_barrier">Major barrier</option>
+              <option value="blocking_barrier">Blocking barrier</option>
+            </select>
+          </label>
+          <label>Physical comfort (optional)
+            <select name="physical_comfort" id="rating-comfort">
+              <option value="">—</option>
+              <option value="comfortable">Comfortable</option>
+              <option value="slight_discomfort">Slight discomfort</option>
+              <option value="moderate_discomfort">Moderate discomfort</option>
+              <option value="severe_discomfort">Severe discomfort</option>
+              <option value="stop_test">Stop test</option>
+            </select>
+          </label>
+          <label>Comment <textarea name="comment" rows="3"></textarea></label>
+          <label>What was confusing? <textarea name="what_was_confusing" rows="2"></textarea></label>
+          <label>What would make this easier? <textarea name="what_would_make_easier" rows="2"></textarea></label>
+          <button type="button" id="submit-task" class="primary">Submit Task</button>
+          <button type="button" id="next-task">Next Task</button>
+        </form>
+      </section>
+
+      <section id="final-review" class="panel" hidden>
+        <h3>Final review</h3>
+        <div id="final-summary"></div>
+        <label>Final comments <textarea id="final-comments" rows="3"></textarea></label>
+        <button type="button" id="submit-session" class="primary">Submit Session</button>
+        <p id="submit-status" class="status-text" data-status-text="submit" role="status" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <section id="view-reviewer" class="view" hidden aria-labelledby="rev-title">
+      <h2 id="rev-title">Reviewer mode</h2>
+      <div class="filters">
+        <label>Filter completion <input id="rev-filter-completion" type="text" /></label>
+        <label>Filter severity <input id="rev-filter-severity" type="number" min="1" max="4" /></label>
+      </div>
+      <table class="review-table" aria-describedby="rev-help">
+        <caption id="rev-help">Submitted tasks awaiting review. Reviewer decision is distinct from participant self-rating.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Session</th>
+            <th scope="col">Alias</th>
+            <th scope="col">SKU</th>
+            <th scope="col">Task</th>
+            <th scope="col">Completion</th>
+            <th scope="col">Ease</th>
+            <th scope="col">Confidence</th>
+            <th scope="col">Satisfaction</th>
+            <th scope="col">A11y impact</th>
+            <th scope="col">Issue sev</th>
+            <th scope="col">Evidence</th>
+            <th scope="col">Reviewer state</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="review-body"></tbody>
+      </table>
+      <p class="note">Reviewer signoff is required before any human/physical PASS token can later be promoted.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Local-first storage. No hidden cloud upload. Automated a11y checks do not claim WCAG conformance.</p>
+  </footer>
+  <script src="src/library_embed.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

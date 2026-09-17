@@ -1,0 +1,494 @@
+{
+  "a11y_audit": {
+    "CX4_VALIDATION_CENTER_AUTOMATED_A11Y_PASS": true,
+    "checks": {
+      "a11y_options_panel": true,
+      "buttons_have_text": true,
+      "focus_styles_present": true,
+      "has_h1": true,
+      "has_lang": true,
+      "has_main_landmark": true,
+      "has_nav_or_header": true,
+      "labels_present": true,
+      "large_targets_css": true,
+      "no_color_only_status": true,
+      "reduced_motion_support": true,
+      "skip_link_or_landmarks": true
+    },
+    "failed": [],
+    "note": "Automated checks only; human validation remains pending.",
+    "wcag_conformance_claimed": false
+  },
+  "analytics_sample": {
+    "completion_rate": 1.0,
+    "confidence_mean": 5.0,
+    "ease_mean": 5.0,
+    "ease_median": 5.0,
+    "evidence_completeness": 1.0,
+    "evidence_item_count": 1,
+    "issue_count": 0,
+    "note": "Descriptive only \u2014 does not promote gates.",
+    "opaque_score": null,
+    "satisfaction_mean": 5.0,
+    "severity_counts": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0
+    },
+    "task_failure_count": 0
+  },
+  "collectors": [
+    {
+      "harness": "collect_cups_physical_evidence.sh",
+      "id": "cups",
+      "mime": "application/json"
+    },
+    {
+      "harness": "collect_av_diagnostics.sh",
+      "id": "av",
+      "mime": "application/json"
+    },
+    {
+      "harness": "collect_peripheral_matrix.sh",
+      "id": "peripherals",
+      "mime": "application/json"
+    },
+    {
+      "harness": "collect_a11y_evidence.sh",
+      "id": "a11y",
+      "mime": "application/json"
+    },
+    {
+      "harness": "generate_support_bundle.py",
+      "id": "support_bundle",
+      "mime": "application/json"
+    },
+    {
+      "harness": "firmware_lifecycle_sim.py",
+      "id": "firmware",
+      "mime": "application/json"
+    }
+  ],
+  "edmund": {
+    "CX4_EDMUND_ACTION_PACKET_UI_MAPPED": true,
+    "actions": [
+      {
+        "edmund_action_id": "1",
+        "estimated_time": "6\u20138 hours total (plan).",
+        "exact_evidence": "observation forms, issues, screenshots/logs",
+        "gate_unlocked": "human a11y PASS / J6 class upgrade (only after real sessions)",
+        "prerequisite": "`CX4_HUMAN_A11Y_PACKET_READY`",
+        "required_equipment_or_person": "Execute `HUMAN_A11Y_VALIDATION_PACKET.md` with planned participants; store evidence under `artifacts/complete_experience/cx4_0/human_a11y/`.",
+        "task_ids": [
+          "vc_human_a11y_primary"
+        ],
+        "title": "Human accessibility session",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "2",
+        "estimated_time": "90\u2013120 minutes.",
+        "exact_evidence": "collector bundle + output photos/hashes",
+        "gate_unlocked": "`PHYSICAL_PRINTER_PENDING` clearance",
+        "prerequisite": "real printer hardware",
+        "required_equipment_or_person": "Connect named USB and/or LAN printer; run `PHYSICAL_PRINTER_VALIDATION_PACKET.md`; run cups collector.",
+        "task_ids": [
+          "vc_physical_printer"
+        ],
+        "title": "Physical printer session",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "3",
+        "estimated_time": "~2 hours.",
+        "exact_evidence": "AV diag + quality notes",
+        "gate_unlocked": "`PHYSICAL_CAMERA_MIC_AV_PENDING` clearance",
+        "prerequisite": "physical camera/mic",
+        "required_equipment_or_person": "Execute `CAMERA_MIC_AV_VALIDATION_PACKET.md` on physical devices; capture diagnostics.",
+        "task_ids": [
+          "vc_camera_mic_av"
+        ],
+        "title": "Camera / mic / AV session",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "4",
+        "estimated_time": "2\u20133 hours.",
+        "exact_evidence": "mutation/reconnect logs",
+        "gate_unlocked": "physical peripheral PASS",
+        "prerequisite": "named peripherals",
+        "required_equipment_or_person": "Run peripheral matrix with keyboard/mouse/touch/BT/dock/Ring as available.",
+        "task_ids": [
+          "vc_physical_peripherals"
+        ],
+        "title": "Peripheral matrix session",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "5",
+        "estimated_time": "multi-day to multi-week (plan).",
+        "exact_evidence": "stage reports",
+        "gate_unlocked": "EVT/DVT/PVT pending clearance",
+        "prerequisite": "hardware availability",
+        "required_equipment_or_person": "Follow per-SKU EVT/DVT/PVT packets; do not fabricate hardware.",
+        "task_ids": [
+          "vc_evt_student_14_5",
+          "vc_evt_handheld_hybrid",
+          "vc_evt_ds_xl_coder",
+          "vc_evt_edge_io_rings",
+          "vc_evt_first_party_dock",
+          "vc_dvt_student_14_5",
+          "vc_dvt_handheld_hybrid",
+          "vc_dvt_ds_xl_coder",
+          "vc_dvt_edge_io_rings",
+          "vc_dvt_first_party_dock",
+          "vc_pvt_student_14_5",
+          "vc_pvt_handheld_hybrid",
+          "vc_pvt_ds_xl_coder",
+          "vc_pvt_edge_io_rings",
+          "vc_pvt_first_party_dock"
+        ],
+        "title": "Device Quartet EVT \u2192 DVT \u2192 PVT",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "6",
+        "estimated_time": "~2 hours once credentials exist.",
+        "exact_evidence": "live traces",
+        "gate_unlocked": "external provider integration evidence (may upgrade J4)",
+        "prerequisite": "provider access",
+        "required_equipment_or_person": "Obtain provider account; run live validation against contracts.",
+        "task_ids": [
+          "vc_external_chat_meeting"
+        ],
+        "title": "External chat/meeting provider credentials",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "7",
+        "estimated_time": "multi-day (plan).",
+        "exact_evidence": "trust exchange + verify + revocation",
+        "gate_unlocked": "external issuer evidence (`certification_claimed` stays false unless earned)",
+        "prerequisite": "willing issuer",
+        "required_equipment_or_person": "Follow `CX4_INSTITUTIONAL_ISSUER_ONBOARDING.md` with a real issuer org.",
+        "task_ids": [
+          "vc_institutional_issuer"
+        ],
+        "title": "Institutional issuer engagement",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "8",
+        "estimated_time": "calendar days (plan).",
+        "exact_evidence": "signed review memo",
+        "gate_unlocked": "`legal_approval`",
+        "prerequisite": "registers ready",
+        "required_equipment_or_person": "Submit privacy + rights registers for counsel review.",
+        "task_ids": [
+          "vc_privacy_review",
+          "vc_rights_review"
+        ],
+        "title": "Legal / privacy / rights review",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "9",
+        "estimated_time": "multi-month (plan).",
+        "exact_evidence": "certificates/reports",
+        "gate_unlocked": "`certified` (never from matrix alone)",
+        "prerequisite": "EVT+/DVT hardware",
+        "required_equipment_or_person": "Engage labs per `CERTIFICATION_MATRIX.json` rows when hardware maturity allows.",
+        "task_ids": [
+          "vc_certification_evidence"
+        ],
+        "title": "Certification lab engagement",
+        "ui_visible": true
+      },
+      {
+        "edmund_action_id": "10",
+        "estimated_time": "blocked on release train.",
+        "exact_evidence": "real earned completion artifacts",
+        "gate_unlocked": "`CX3_WAIKE_EARNED_CREDENTIAL_INTEGRATION_PASS`",
+        "note": "WAIKE release dependency \u2014 do not modify release; not a VC executable task.",
+        "prerequisite": "WAIKE release owners",
+        "required_equipment_or_person": "Wait for genuine WAIKE accepted-main earned evidence; then re-verify CX3 earned token.",
+        "status": "pending_external_dependency",
+        "task_ids": [],
+        "title": "WAIKE release dependency (do not modify release)",
+        "ui_visible": true
+      }
+    ],
+    "markdown_preserved": true,
+    "packet_exists": true,
+    "packet_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/docs/complete-experience/cx4_readiness/CX4_EDMUND_ACTION_PACKET.md"
+  },
+  "gate_promotion_denied": {
+    "allowed": false,
+    "gate": "human_a11y_pass",
+    "note": "Promotion is a separate human process; Validation Center never flips gates automatically.",
+    "reasons": [
+      "template_or_fixture_not_real_evidence",
+      "software_only_task"
+    ],
+    "task_id": "vc_software_smoke_walkthrough"
+  },
+  "media_without_consent_blocked": true,
+  "mock_harnesses": [
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/mock_cups.json",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/mock_av.json",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/mock_peripherals.json",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/mock_a11y.json",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/mock_support_bundle.json",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/mock_firmware.json",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-validation-center-human-field-ui/os_build/cx4_linux_lab/harnesses/validation_center_mocks/README.md"
+  ],
+  "packs": [
+    {
+      "active_by_default_count": 0,
+      "pack_id": "human_a11y",
+      "requires_external_provider": false,
+      "requires_physical": false,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_human_a11y_primary"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "physical_printer",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_physical_printer"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "camera_mic_av",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_camera_mic_av"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "physical_peripherals",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_physical_peripherals"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "device_quartet_evt",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "available",
+      "task_count": 5,
+      "task_ids": [
+        "vc_evt_student_14_5",
+        "vc_evt_handheld_hybrid",
+        "vc_evt_ds_xl_coder",
+        "vc_evt_edge_io_rings",
+        "vc_evt_first_party_dock"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "device_quartet_dvt",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "pending_external",
+      "task_count": 5,
+      "task_ids": [
+        "vc_dvt_student_14_5",
+        "vc_dvt_handheld_hybrid",
+        "vc_dvt_ds_xl_coder",
+        "vc_dvt_edge_io_rings",
+        "vc_dvt_first_party_dock"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "device_quartet_pvt",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "pending_external",
+      "task_count": 5,
+      "task_ids": [
+        "vc_pvt_student_14_5",
+        "vc_pvt_handheld_hybrid",
+        "vc_pvt_ds_xl_coder",
+        "vc_pvt_edge_io_rings",
+        "vc_pvt_first_party_dock"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "firmware_lifecycle",
+      "requires_external_provider": false,
+      "requires_physical": true,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_firmware_lifecycle"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "support_repair_rma",
+      "requires_external_provider": false,
+      "requires_physical": false,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_support_care_rma"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "external_chat_meeting",
+      "requires_external_provider": true,
+      "requires_physical": false,
+      "status": "pending_external",
+      "task_count": 1,
+      "task_ids": [
+        "vc_external_chat_meeting"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "institutional_issuer",
+      "requires_external_provider": true,
+      "requires_physical": false,
+      "status": "pending_external",
+      "task_count": 1,
+      "task_ids": [
+        "vc_institutional_issuer"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "privacy_review",
+      "requires_external_provider": false,
+      "requires_physical": false,
+      "status": "pending_external",
+      "task_count": 1,
+      "task_ids": [
+        "vc_privacy_review"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "rights_review",
+      "requires_external_provider": false,
+      "requires_physical": false,
+      "status": "pending_external",
+      "task_count": 1,
+      "task_ids": [
+        "vc_rights_review"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "certification",
+      "requires_external_provider": true,
+      "requires_physical": false,
+      "status": "pending_external",
+      "task_count": 1,
+      "task_ids": [
+        "vc_certification_evidence"
+      ]
+    },
+    {
+      "active_by_default_count": 0,
+      "pack_id": "manufacturing",
+      "requires_external_provider": true,
+      "requires_physical": false,
+      "status": "pending_external",
+      "task_count": 1,
+      "task_ids": [
+        "vc_manufacturing_evidence"
+      ]
+    },
+    {
+      "active_by_default_count": 1,
+      "pack_id": "validation_center_smoke",
+      "requires_external_provider": false,
+      "requires_physical": false,
+      "status": "available",
+      "task_count": 1,
+      "task_ids": [
+        "vc_software_smoke_walkthrough"
+      ]
+    }
+  ],
+  "participant_post_submit_blocked": true,
+  "security": {
+    "arbitrary_execution_blocked": true,
+    "consent_enforced": true,
+    "filename_sanitized": true,
+    "html_escaped": true,
+    "lan_default_loopback": true,
+    "no_hidden_cloud_upload": true,
+    "ok": true,
+    "participant_signoff_forge_blocked": true,
+    "path_traversal_blocked": true,
+    "session_token_entropy_ok": true
+  },
+  "software_drill_session_id": "sess_aa40031eccd6",
+  "software_drill_submission_hash": "2a90b6e7065f67106fa89b3314635d59a57fbec810e08768d6d01e1dccc1c518",
+  "tokens": {
+    "CX4_ALL_AUTOMATABLE_NON_DIGITAL_PREWORK_PASS": true,
+    "CX4_DEVICE_LAB_134_UNALTERED": true,
+    "CX4_EDMUND_ACTION_PACKET_UI_MAPPED": true,
+    "CX4_NO_DEVICE_LAB": true,
+    "CX4_NO_MERGES": true,
+    "CX4_NO_QEMU_DEFAULT": true,
+    "CX4_PORTAL_14_UNALTERED": true,
+    "CX4_PORTAL_15_UNALTERED": true,
+    "CX4_VALIDATION_CENTER_AUTOMATED_A11Y_PASS": true,
+    "CX4_VALIDATION_CENTER_GUI_PASS": true,
+    "CX4_VALIDATION_CENTER_OFFLINE_AUTOSAVE_PASS": true,
+    "CX4_VALIDATION_CENTER_SECURITY_PASS": true,
+    "CX4_VALIDATION_EVIDENCE_CAPTURE_PASS": true,
+    "CX4_VALIDATION_RATING_UI_PASS": true,
+    "CX4_VALIDATION_REVIEWER_SIGNOFF_ENFORCED": true,
+    "CX4_VALIDATION_SUBMISSION_BUNDLE_PASS": true,
+    "CX4_VALIDATION_TASK_LIBRARY_PASS": true,
+    "CX4_WAIKE_RELEASE_UNALTERED": true,
+    "DVT_PENDING": true,
+    "EVT_PENDING": true,
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+    "J6_CLASS": "HUMAN_VALIDATION_PENDING",
+    "MINORS_MODE_DISABLED_BY_DEFAULT": true,
+    "NEXT_CX_ACTION": "BEGIN_REAL_HUMAN_VALIDATION_SESSIONS_IN_VALIDATION_CENTER",
+    "PHYSICAL_CAMERA_MIC_AV_PENDING": true,
+    "PHYSICAL_PRINTER_PENDING": true,
+    "PVT_PENDING": true,
+    "certification_claimed": false,
+    "certified": false,
+    "dvt_pass": false,
+    "evt_pass": false,
+    "external_provider_integration_pass": false,
+    "human_a11y_pass": false,
+    "legal_approval": false,
+    "manufacturing_pass": false,
+    "notes": "",
+    "physical_camera_mic_av_pass": false,
+    "physical_printer_pass": false,
+    "pvt_pass": false,
+    "real_human_sessions_count": 0,
+    "reviewer_signed_sessions_count": 0
+  }
+}
