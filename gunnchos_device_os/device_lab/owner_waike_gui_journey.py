@@ -520,6 +520,14 @@ for line in t.splitlines():
     elif line.startswith('WAIKE_EFFECTIVE_CSP='):
         eff_csp = line.split('=', 1)[1].strip()
 meta_inj = 'WAIKE_CSP_HTML_META_INJECTED=true' in t
+# Do NOT treat WAIKE_EFFECTIVE_CSP* / connect-src allowlist tokens as blocks.
+# Those lines always contain 'csp' + 'connect' when CSP apply succeeds.
+real_csp_block = (
+    'refused to connect' in low
+    or 'content security policy' in low
+    or 'violates the following content security policy' in low
+    or 'csp_violation' in low
+)
 out.update({{
     'ok': True,
     'bytes': len(t),
@@ -538,16 +546,18 @@ out.update({{
     'login_surface_http_bound_hint': bool(
         login_surface and 'school hub not configured' not in low and 'hub:mock' not in low
     ),
-    'csp_connect_blocked_hint': (
-        'refused to connect' in low or 'content security policy' in low
-        or 'csp' in low and 'connect' in low
-    ),
+    'csp_connect_blocked_hint': real_csp_block,
     'effective_csp_connect_src': eff_connect,
     'effective_csp': eff_csp,
     'csp_html_meta_injected': meta_inj,
     'client_diag_hub_login_fetch_start': 'hub_login_fetch_start' in t,
     'client_diag_hub_login_fetch_error': 'hub_login_fetch_error' in t,
     'client_diag_csp_violation': 'csp_violation' in t,
+    'client_diag_hub_resolved': (
+        'WAIKE_CLIENT_DIAG kind=hub_resolved' in t
+        or 'runtimeHub' in t
+        or ('10.0.2.100:8787' in t and 'WAIKE_EFFECTIVE_CSP' in t)
+    ),
     'tail': t[-2200:],
 }})
 Path('/tmp/waike_gui_log_scrape.json').write_text(json.dumps(out) + '\\n')
@@ -1514,12 +1524,67 @@ def _abs_click(session: Any, px: int, py: int, *, screen_w: int = 1280, screen_h
     )
 
 
+def _inject_key(session: Any, key: str, *, mods: list[str] | None = None) -> dict[str, Any]:
+    kwargs: dict[str, Any] = {"kind": "key", "key": key, "timeout_sec": 4.0}
+    if mods:
+        kwargs["mods"] = mods
+    return _agent_call(session, "input_inject", **kwargs)
+
+
+def _inject_text(session: Any, text: str) -> dict[str, Any]:
+    return _agent_call(session, "input_inject", kind="text", text=text, timeout_sec=6.0)
+
+
+def wait_gui_hub_ready_for_login(
+    session: Any,
+    *,
+    journey_tag: str = "A",
+    timeout_s: float = 45.0,
+) -> dict[str, Any]:
+    """Wait until WebView CSP/runtime tokens prove Hub origin is live in-process.
+
+    Login form only mounts after React applies launch-context hub_url
+    (`needsLogin = hubResolution.status === 'http'`). Driving Sign-in before
+    that yields click-ok but zero hub_login_fetch_* / Hub HTTP.
+    """
+    deadline = time.time() + timeout_s
+    last: dict[str, Any] = {"ok": False}
+    polls = 0
+    while time.time() < deadline:
+        polls += 1
+        last = scrape_gui_log_hub_bind(session, journey_tag=journey_tag)
+        csp_ready = bool(
+            last.get("csp_html_meta_injected")
+            or last.get("effective_csp_connect_src")
+            or last.get("effective_csp")
+        )
+        hub_in_csp = "10.0.2.100:8787" in str(last.get("effective_csp_connect_src") or "")
+        if csp_ready and (hub_in_csp or last.get("runtime_hub_url_seen")):
+            # Extra settle so getInitialDeviceOsLaunchContext → setRuntimeHubUrl
+            # mounts the login form (needsLogin requires status==="http").
+            time.sleep(8.0)
+            last = scrape_gui_log_hub_bind(session, journey_tag=journey_tag)
+            last["ok"] = True
+            last["ready"] = True
+            last["polls"] = polls
+            last["waited_s"] = round(timeout_s - max(0.0, deadline - time.time()), 2)
+            return last
+        time.sleep(1.5)
+    last["ok"] = False
+    last["ready"] = False
+    last["polls"] = polls
+    last["waited_s"] = timeout_s
+    last["blocker"] = "gui_hub_runtime_tokens_not_ready_before_login_drive"
+    return last
+
+
 def drive_learner_gui_login_lightweight(
     session: Any,
     *,
     username: str = "learner-alpha",
     password: str = "WaikeTestPass1!",
     site_id: str = "site-alpha",
+    strategy: str = "tab_cycle_then_grid",
 ) -> dict[str, Any]:
     """Drive Sign-in with short agent input injects + optional wtype.
 
@@ -1527,8 +1592,12 @@ def drive_learner_gui_login_lightweight(
     apt installs under restrict=on. Keep virtio roundtrips short.
 
     Guest agent key map uses lowercase names (`tab`, `enter`); `Return` is unmapped
-    and was aborting submit. Site ID defaults to site-alpha in the UI — focus
-    username via absolute click, then username → tab → password → enter → click Submit.
+    and was aborting submit. Site ID defaults to site-alpha in the UI.
+
+    Strategies (authentic GUI only — no API/mock):
+    - tab_cycle_then_grid: focus WebView, Tab through site→user→pass, Enter, then
+      absolute click grid on username/password/submit as fallback.
+    - abs_grid: absolute clicks only (legacy path).
     """
     if not _wait_agent(session, tries=2, sleep_s=0.3):
         return {
@@ -1536,72 +1605,78 @@ def drive_learner_gui_login_lightweight(
             "path": "agent_unhealthy_skip_login_drive",
             "login_form_driven": False,
             "agent_inject": {"ok": False},
+            "strategy": strategy,
         }
     inject_tail: list[str] = []
     inject_ok = True
 
-    # Absolute clicks into login form (1280x800 weston). Site already prefilled.
-    for label, px, py in (
-        ("click_username", 640, 360),
-        ("click_username_retry", 640, 380),
-    ):
-        clk = _abs_click(session, px, py)
-        inject_tail.append(f"{label}:{bool(clk.get('ok'))}")
-        time.sleep(0.15)
+    def _note(label: str, ok: bool) -> None:
+        inject_tail.append(f"{label}:{ok}")
 
-    for kind, val in (
-        ("text", username),
-        ("key", "tab"),
-        ("text", password),
-        ("key", "enter"),
-    ):
-        if kind == "key":
-            inj = _agent_call(
-                session, "input_inject", kind="key", key=val, timeout_sec=4.0
-            )
-        else:
-            inj = _agent_call(
-                session, "input_inject", kind="text", text=val, timeout_sec=6.0
-            )
-        inject_tail.append(f"{kind}:{val if kind=='key' else '…'}:{bool(inj.get('ok'))}")
-        if not inj.get("ok"):
-            inject_ok = False
-            break
-        time.sleep(0.08)
+    # Focus WebView / window chrome roughly at content center.
+    focus = _abs_click(session, 640, 420)
+    _note("focus_webview", bool(focus.get("ok")))
+    time.sleep(0.25)
 
-    # Click Sign-in button even if Enter partially failed.
-    btn = _abs_click(session, 640, 520)
-    inject_tail.append(f"click_submit:{bool(btn.get('ok'))}")
-    if btn.get("ok"):
-        inject_ok = True
-
-    # Optional: re-assert site via one more focused pass if first path looked weak.
-    if not inject_ok:
-        _abs_click(session, 640, 300)
-        time.sleep(0.1)
-        for kind, val in (
-            ("key", "tab"),
-            ("key", "tab"),
-            ("text", username),
-            ("key", "tab"),
-            ("text", password),
-            ("key", "enter"),
+    if strategy in ("tab_cycle_then_grid", "tab_cycle"):
+        # Discard any prior focus; Tab into first form control (Site ID).
+        for i in range(4):
+            inj = _inject_key(session, "tab")
+            _note(f"pre_tab_{i}", bool(inj.get("ok")))
+            time.sleep(0.05)
+        # Site ID → clear → type → Username → Password → Submit via Enter.
+        for label, action in (
+            ("ctrl_a_site", lambda: _inject_key(session, "a", mods=["ctrl"])),
+            ("type_site", lambda: _inject_text(session, site_id)),
+            ("tab_user", lambda: _inject_key(session, "tab")),
+            ("ctrl_a_user", lambda: _inject_key(session, "a", mods=["ctrl"])),
+            ("type_user", lambda: _inject_text(session, username)),
+            ("tab_pass", lambda: _inject_key(session, "tab")),
+            ("ctrl_a_pass", lambda: _inject_key(session, "a", mods=["ctrl"])),
+            ("type_pass", lambda: _inject_text(session, password)),
+            ("key_enter", lambda: _inject_key(session, "enter")),
         ):
-            if kind == "key":
-                inj = _agent_call(
-                    session, "input_inject", kind="key", key=val, timeout_sec=4.0
-                )
-            else:
-                inj = _agent_call(
-                    session, "input_inject", kind="text", text=val, timeout_sec=6.0
-                )
-            inject_tail.append(f"retry_{kind}:{bool(inj.get('ok'))}")
+            inj = action()
+            _note(label, bool(inj.get("ok")))
             if not inj.get("ok"):
+                inject_ok = False
                 break
             time.sleep(0.08)
-        else:
-            inject_ok = True
-        _abs_click(session, 640, 520)
+
+    # Absolute click grid: username / password / submit candidates for 1280x800.
+    # Form sits under brand+tagline; window may not be maximized — sweep Y.
+    user_ys = (300, 340, 360, 380, 400, 420)
+    pass_ys = (380, 420, 440, 460, 480)
+    submit_ys = (480, 500, 520, 540, 560, 600)
+    if strategy in ("tab_cycle_then_grid", "abs_grid"):
+        for py in user_ys:
+            clk = _abs_click(session, 640, py)
+            _note(f"click_user_y{py}", bool(clk.get("ok")))
+            time.sleep(0.05)
+        _inject_key(session, "a", mods=["ctrl"])
+        tu = _inject_text(session, username)
+        _note("grid_type_user", bool(tu.get("ok")))
+        time.sleep(0.08)
+        _inject_key(session, "tab")
+        time.sleep(0.05)
+        for py in pass_ys[:3]:
+            clk = _abs_click(session, 640, py)
+            _note(f"click_pass_y{py}", bool(clk.get("ok")))
+            time.sleep(0.04)
+        _inject_key(session, "a", mods=["ctrl"])
+        tp = _inject_text(session, password)
+        _note("grid_type_pass", bool(tp.get("ok")))
+        if not tp.get("ok"):
+            inject_ok = False
+        time.sleep(0.08)
+        ke = _inject_key(session, "enter")
+        _note("grid_enter", bool(ke.get("ok")))
+        for py in submit_ys:
+            btn = _abs_click(session, 640, py)
+            _note(f"click_submit_y{py}", bool(btn.get("ok")))
+            if btn.get("ok"):
+                inject_ok = True
+            time.sleep(0.04)
 
     # Best-effort wtype echo (may be absent under restrict=on).
     script = f"""
@@ -1612,7 +1687,7 @@ os.environ.setdefault('XDG_RUNTIME_DIR','/run/gunnchos-wayland')
 os.environ.setdefault('WAYLAND_DISPLAY','wayland-0')
 if subprocess.call(['bash','-lc','command -v wtype >/dev/null'], timeout=2)==0:
   out['wtype']=True
-  for kind,val in [('key','Tab'),('type',{username!r}),('key','Tab'),('type',{password!r}),('key','Return')]:
+  for kind,val in [('key','Tab'),('type',{site_id!r}),('key','Tab'),('type',{username!r}),('key','Tab'),('type',{password!r}),('key','Return')]:
     if kind=='key': subprocess.run(['wtype','-k',val],check=False,timeout=3)
     else: subprocess.run(['wtype',val],check=False,timeout=5)
     time.sleep(0.05)
@@ -1631,9 +1706,10 @@ print(json.dumps(out))
     blob = (run.get("stdout") or "") + (run.get("stderr") or "")
     payload: dict[str, Any] = {
         "ok": inject_ok,
-        "path": "agent_abs_click_enter_submit" if inject_ok else "agent_inject_failed",
+        "path": f"agent_{strategy}" if inject_ok else "agent_inject_failed",
         "login_form_driven": inject_ok,
-        "agent_inject": {"ok": inject_ok, "tail": "|".join(inject_tail)[:500]},
+        "strategy": strategy,
+        "agent_inject": {"ok": inject_ok, "tail": "|".join(inject_tail)[:900]},
         "raw_tail": blob[-600:],
         "full_atspi_skipped": True,
     }
@@ -1651,6 +1727,78 @@ print(json.dumps(out))
                 pass
             break
     return payload
+
+
+def drive_learner_gui_login_until_hub_http(
+    session: Any,
+    hub_log: Path,
+    *,
+    username: str = "learner-alpha",
+    password: str = "WaikeTestPass1!",
+    site_id: str = "site-alpha",
+    max_attempts: int = 3,
+) -> dict[str, Any]:
+    """Retry authentic GUI Sign-in until Hub sees non-healthz client HTTP."""
+    attempts: list[dict[str, Any]] = []
+    strategies = ("tab_cycle_then_grid", "abs_grid", "tab_cycle")
+    last_drive: dict[str, Any] = {}
+    hub_access: dict[str, Any] = {"ok": False}
+    gui_log: dict[str, Any] = {"ok": False}
+    for i in range(max_attempts):
+        strat = strategies[i % len(strategies)]
+        last_drive = drive_learner_gui_login_lightweight(
+            session,
+            username=username,
+            password=password,
+            site_id=site_id,
+            strategy=strat,
+        )
+        time.sleep(4.0 + i * 1.5)
+        hub_access = scrape_hub_sidecar_client_bind(hub_log)
+        gui_log = scrape_gui_log_hub_bind(session, journey_tag="A")
+        attempt = {
+            "attempt": i + 1,
+            "strategy": strat,
+            "login_form_driven": bool(last_drive.get("login_form_driven")),
+            "hub_client_http": bool(hub_access.get("client_http_observed")),
+            "auth_login": bool(hub_access.get("auth_login_observed")),
+            "diag_fetch_start": bool(gui_log.get("client_diag_hub_login_fetch_start")),
+            "diag_fetch_error": bool(gui_log.get("client_diag_hub_login_fetch_error")),
+            "csp_block": bool(gui_log.get("csp_connect_blocked_hint")),
+            "hub_unavailable_in_log": bool(gui_log.get("hub_unavailable_in_log")),
+            "inject_tail": (last_drive.get("agent_inject") or {}).get("tail"),
+        }
+        attempts.append(attempt)
+        if hub_access.get("client_http_observed") or gui_log.get(
+            "client_diag_hub_login_fetch_start"
+        ):
+            break
+    return {
+        "ok": bool(
+            hub_access.get("client_http_observed")
+            or gui_log.get("client_diag_hub_login_fetch_start")
+        ),
+        "login_form_driven": bool(last_drive.get("login_form_driven")),
+        "path": last_drive.get("path"),
+        "strategy": last_drive.get("strategy"),
+        "agent_inject": last_drive.get("agent_inject"),
+        "wtype": last_drive.get("wtype"),
+        "full_atspi_skipped": True,
+        "attempts": attempts,
+        "hub_access_final": hub_access,
+        "gui_log_final": {
+            k: gui_log.get(k)
+            for k in (
+                "client_diag_hub_login_fetch_start",
+                "client_diag_hub_login_fetch_error",
+                "client_diag_csp_violation",
+                "csp_connect_blocked_hint",
+                "hub_unavailable_in_log",
+                "hub_http_chip_in_log",
+                "effective_csp_connect_src",
+            )
+        },
+    }
 
 
 def drive_learner_gui_login(
@@ -2746,8 +2894,28 @@ def attempt_waike_gui_hub_journey(
         hub_access_pre = scrape_hub_sidecar_client_bind(hub_log_path)
         out["hub_access_pre_login"] = hub_access_pre
 
+        hub_ready: dict[str, Any] = {"ok": False, "skipped": True}
         if agent_ok:
-            login_for_bind = drive_learner_gui_login_lightweight(session)
+            hub_ready = wait_gui_hub_ready_for_login(session, journey_tag="A", timeout_s=45.0)
+        out["gui_hub_ready_before_login"] = {
+            k: hub_ready.get(k)
+            for k in (
+                "ok",
+                "ready",
+                "polls",
+                "waited_s",
+                "blocker",
+                "csp_html_meta_injected",
+                "effective_csp_connect_src",
+                "runtime_hub_url_seen",
+                "hub_unavailable_in_log",
+            )
+        }
+
+        if agent_ok:
+            login_for_bind = drive_learner_gui_login_until_hub_http(
+                session, hub_log_path
+            )
         else:
             login_for_bind = {
                 "ok": False,
@@ -2760,14 +2928,17 @@ def attempt_waike_gui_hub_journey(
                 "ok",
                 "login_form_driven",
                 "path",
+                "strategy",
                 "wtype",
                 "agent_inject",
                 "full_atspi_skipped",
+                "attempts",
             )
         }
-        # Allow login POST + Hub access-log flush before scrape.
-        time.sleep(5.0)
-        hub_access_post = scrape_hub_sidecar_client_bind(hub_log_path)
+        # Prefer final scrape from retry loop; fall back to fresh scrape.
+        hub_access_post = login_for_bind.get("hub_access_final") or scrape_hub_sidecar_client_bind(
+            hub_log_path
+        )
         out["hub_access_post_login"] = hub_access_post
 
         # Prefer host Hub access + short socket probe. Skip AT-SPI bind probe
@@ -2777,6 +2948,10 @@ def attempt_waike_gui_hub_journey(
         if agent_ok and _wait_agent(session, tries=2, sleep_s=0.3):
             sockets = prove_client_hub_sockets(session)
             gui_log = scrape_gui_log_hub_bind(session, journey_tag="A")
+            # Merge retry-loop gui hints when present.
+            for k, v in (login_for_bind.get("gui_log_final") or {}).items():
+                if v and not gui_log.get(k):
+                    gui_log[k] = v
         early = out.get("early_hub_reachability_retry") or out.get(
             "early_hub_reachability"
         ) or {}
@@ -2816,9 +2991,13 @@ def attempt_waike_gui_hub_journey(
             "csp_connect_blocked_hint": csp_hint,
             "post_login_drive": True,
             "login_drive_summary": out.get("bind_login_drive"),
+            "gui_hub_ready_before_login": out.get("gui_hub_ready_before_login"),
+            "client_diag_hub_login_fetch_start": bool(
+                gui_log.get("client_diag_hub_login_fetch_start")
+            ),
             "note": (
-                "Bind proof prefers Hub-side access log + guest TCP after lightweight "
-                "GUI login drive; AT-SPI skipped post-WebKit to protect virtio-serial."
+                "Bind proof prefers Hub-side access log after wait-for-hub-ready + "
+                "multi-strategy GUI login retries; AT-SPI skipped post-WebKit."
             ),
         }
         if prompt.startswith("17G.5F"):
@@ -2951,40 +3130,66 @@ def attempt_waike_gui_hub_journey(
             and not hub_bound_early
         ):
             csp_hint = bool(bind.get("csp_connect_blocked_hint"))
-            # Also inspect GUI log for CSP if scrape succeeded.
             gui_log = bind.get("gui_log_scrape") or {}
             if gui_log.get("csp_connect_blocked_hint"):
                 csp_hint = True
-            # Socket without Hub-side HTTP after login drive strongly suggests
-            # WebView CSP default-src 'self' blocking connect-src to authorized hub.
+            eff_preview = out.get("effective_webview_csp") or {}
+            eff_pass = bool(eff_preview.get("WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS"))
+            # Only infer CSP when we lack effective-CSP PASS evidence. After
+            # 17G.5F effective CSP PASS, missing Hub HTTP + missing diag means
+            # login submit / fetch path — not another CSP PR.
             if (
                 not csp_hint
+                and not eff_pass
                 and bind.get("socket_only_pending_hub_http")
                 and bool((out.get("bind_login_drive") or {}).get("login_form_driven"))
                 and not bool((bind.get("hub_sidecar_access") or {}).get("client_http_observed"))
             ):
-                # Login drive completed but Hub saw no client HTTP → likely CSP
-                # connect-src block (or fetch never issued). Prefer CSP draft gate.
                 csp_hint = True
                 bind["csp_inferred_from_socket_without_hub_http"] = True
             out["hub_bound"] = False
-            if csp_hint:
+            if prompt.startswith("17G.5F") and eff_pass:
+                diag_start = bool(gui_log.get("client_diag_hub_login_fetch_start"))
+                diag_err = bool(gui_log.get("client_diag_hub_login_fetch_error"))
+                hub_unavail = bool(gui_log.get("hub_unavailable_in_log"))
+                driven = bool((out.get("bind_login_drive") or {}).get("login_form_driven"))
+                if csp_hint:
+                    out["blocker"] = (
+                        "waike_client_http_absent_despite_effective_csp_pass:"
+                        "real_csp_violation_observed"
+                    )
+                elif hub_unavail:
+                    out["blocker"] = (
+                        "waike_hub_unavailable_surface_despite_launch_context_hub_url"
+                    )
+                elif driven and not diag_start and not diag_err:
+                    out["blocker"] = (
+                        "waike_login_submit_not_observed:"
+                        "no_hub_login_fetch_diag_after_gui_drive_retries"
+                    )
+                elif diag_start and not bool(
+                    (bind.get("hub_sidecar_access") or {}).get("client_http_observed")
+                ):
+                    out["blocker"] = (
+                        "waike_login_fetch_started_but_hub_saw_no_client_http:"
+                        "cors_or_path_or_guestfwd"
+                    )
+                else:
+                    out["blocker"] = (
+                        "waike_client_http_absent_despite_effective_csp_pass:"
+                        "diag_or_fetch_path_still_blocked"
+                    )
+                out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN"
+                out["WAIKE_PRODUCT_DEFECT_DRAFT"] = False
+            elif csp_hint:
                 # After accepted-main CSP merge, residual CSP bind failure is a
                 # runtime/apply defect — not the pre-merge draft gate.
                 if prompt.startswith("17G.5F"):
-                    eff = out.get("effective_webview_csp") or {}
-                    if not eff.get("WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS"):
-                        out["blocker"] = (
-                            "waike_effective_webview_csp_unproven_or_incomplete:"
-                            + str(eff.get("blocker") or "tokens_or_origin_missing")
-                        )
-                        out["NEXT_GATE"] = "WAIKE_EFFECTIVE_CSP_RUNTIME_PROOF"
-                    else:
-                        out["blocker"] = (
-                            "waike_client_http_absent_despite_effective_csp_pass:"
-                            "diag_or_fetch_path_still_blocked"
-                        )
-                        out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_CLIENT_HTTP_BIND_REEARN"
+                    out["blocker"] = (
+                        "waike_effective_webview_csp_unproven_or_incomplete:"
+                        + str(eff_preview.get("blocker") or "tokens_or_origin_missing")
+                    )
+                    out["NEXT_GATE"] = "WAIKE_EFFECTIVE_CSP_RUNTIME_PROOF"
                 elif prompt.startswith("17G.5E"):
                     out["blocker"] = (
                         "waike_webview_csp_still_blocks_hub_after_accepted_main_csp:"
@@ -3028,6 +3233,10 @@ def attempt_waike_gui_hub_journey(
                 "hub_sidecar_client_http": bool(
                     (bind.get("hub_sidecar_access") or {}).get("client_http_observed")
                 ),
+                "client_diag_hub_login_fetch_start": bool(
+                    gui_log.get("client_diag_hub_login_fetch_start")
+                ),
+                "gui_hub_ready_before_login": out.get("gui_hub_ready_before_login"),
             }
             (gui_dir / "WAIKE_GUI_HUB_VERDICT.json").write_text(
                 json.dumps(verdict, indent=2) + "\n", encoding="utf-8"

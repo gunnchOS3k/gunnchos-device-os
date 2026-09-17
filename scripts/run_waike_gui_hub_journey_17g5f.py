@@ -34,8 +34,8 @@ OUT = ROOT / "artifacts/device_lab_current_pin"
 WAIKE = OUT / "waike"
 GUI = WAIKE / "gui_journey"
 PROMPT = "17G.5F"
-EXPECTED_DEVICE_OS_HEAD = "c13f0e3ac00105c42b6a9e4cf3bdcfaf8880bd29"
-EXPECTED_PORTAL_HEAD = "9d137e4a6eabb3e313534ea07df89fc9f77a0586"
+EXPECTED_DEVICE_OS_HEAD = "df325461842f80cf00f89ee77e60a522b38bb443"
+EXPECTED_PORTAL_HEAD = "4aaefff3083aad08cd134eee3f2157eec7a86de2"
 PORTAL_WT = Path(
     "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
     "gunnchos-research-portal/.worktrees/device-lab-17f-portal14"
@@ -345,7 +345,17 @@ def _main_impl() -> int:
         },
     }
     _write(WAIKE / "17G5F_PREFLIGHT.json", preflight)
-    if tip != EXPECTED_DEVICE_OS_HEAD:
+    tip_ok = tip == EXPECTED_DEVICE_OS_HEAD
+    if not tip_ok:
+        # Allow tip-stamp commits after the EXPECTED substantive head.
+        mb = subprocess.run(
+            ["git", "-C", str(ROOT), "merge-base", "--is-ancestor", EXPECTED_DEVICE_OS_HEAD, tip],
+            capture_output=True,
+        )
+        tip_ok = mb.returncode == 0
+    preflight["device_os_tip_matches_expected"] = tip_ok
+    preflight["device_os_tip_is_ancestor_of_expected_or_equal"] = tip_ok
+    if not tip_ok:
         print(json.dumps({"blocker": "device_os_tip_mismatch", **preflight}, indent=2))
         return 2
 
