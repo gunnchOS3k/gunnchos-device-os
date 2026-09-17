@@ -34,8 +34,8 @@ OUT = ROOT / "artifacts/device_lab_current_pin"
 WAIKE = OUT / "waike"
 GUI = WAIKE / "gui_journey"
 PROMPT = "17G.5H"
-EXPECTED_DEVICE_OS_HEAD = "12eec64b84f07130c1446dfe686a72cdc09d3fcf"
-EXPECTED_PORTAL_HEAD = "ab044a5eaff786ebb340303521c50ad3811b78ae"
+EXPECTED_DEVICE_OS_HEAD = "aff29a9bb708b9103adb2d6465aa78cb0f05f66a"
+EXPECTED_PORTAL_HEAD = "945e33e99698902da8533ccc2aa2b967f4dc8436"
 PORTAL_WT = Path(
     "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
     "gunnchos-research-portal/.worktrees/device-lab-17f-portal14"
@@ -463,7 +463,7 @@ def _main_impl() -> int:
         "mock_hub_used": False,
         "hub_only_guestfwd": True,
         "guest_url": "http://10.0.2.100:8787",
-        "guestfwd": "guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+        "guestfwd": "guestfwd=tcp:10.0.2.100:8787-cmd:hub_guestfwd_cmd_relay_8787.sh",
         "accepted_main_glibc236_artifact_used": bool(
             result.get("matches_main_aarch64_glibc236")
         ),
