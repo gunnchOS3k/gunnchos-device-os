@@ -16,6 +16,7 @@ from typing import Any
 
 from gunnchos_device_os.device_lab.interactive_guest_proofs import (
     _agent_call,
+    _pull_guest_file,
     _recover_guest_agent,
     _wait_agent,
     boot_interactive_guest,
@@ -1508,8 +1509,21 @@ def prove_hub_policy_rejects(session: Any, out_dir: Path) -> dict[str, Any]:
     return doc
 
 
-def _abs_click(session: Any, px: int, py: int, *, screen_w: int = 1280, screen_h: int = 800) -> dict[str, Any]:
-    """Absolute tablet click in framebuffer pixels (virtio tablet 0..32767)."""
+def _abs_click(
+    session: Any,
+    px: int,
+    py: int,
+    *,
+    screen_w: int = 2560,
+    screen_h: int = 800,
+) -> dict[str, Any]:
+    """Absolute tablet click in framebuffer pixels (virtio tablet 0..32767).
+
+    Interactive Guest weston uses dual 1280x800 outputs side-by-side (Virtual-1
+    at x=0, Virtual-2 at x=1280). Mapping with screen_w=1280 places x=640 at the
+    seam (tablet mid = desktop x=1280) and misses the WAIKE window on Virtual-1.
+    Default screen_w=2560 so px=640 hits Virtual-1 content center.
+    """
     ax = max(0, min(32767, int(px * 32767 / max(screen_w, 1))))
     ay = max(0, min(32767, int(py * 32767 / max(screen_h, 1))))
     return _agent_call(
@@ -1613,9 +1627,15 @@ def drive_learner_gui_login_lightweight(
     def _note(label: str, ok: bool) -> None:
         inject_tail.append(f"{label}:{ok}")
 
-    # Focus WebView / window chrome roughly at content center.
+    # Focus WebView on Virtual-1 (primary). Also nudge Virtual-2 in case the
+    # window landed on the secondary scanout.
     focus = _abs_click(session, 640, 420)
-    _note("focus_webview", bool(focus.get("ok")))
+    _note("focus_v1", bool(focus.get("ok")))
+    time.sleep(0.15)
+    focus2 = _abs_click(session, 1920, 420)
+    _note("focus_v2", bool(focus2.get("ok")))
+    # Return focus to Virtual-1 content before typing.
+    _abs_click(session, 640, 400)
     time.sleep(0.25)
 
     if strategy in ("tab_cycle_then_grid", "tab_cycle"):
@@ -2884,10 +2904,24 @@ def attempt_waike_gui_hub_journey(
         fb_a = {"ok": False}
         if agent_ok:
             fb_a = _agent_call(session, "framebuffer_capture", timeout_sec=30.0)
+            guest_fb = str(fb_a.get("path") or "")
+            if guest_fb:
+                try:
+                    raw = _pull_guest_file(session, guest_fb)
+                    if raw and len(raw) > 100:
+                        host_fb = gui_dir / "WAIKE_GUI_FRAMEBUFFER_PRE_LOGIN.png"
+                        host_fb.write_bytes(raw)
+                        fb_a["host_path"] = str(host_fb)
+                        fb_a["host_bytes"] = len(raw)
+                        fb_a["pulled"] = True
+                except Exception as exc:  # noqa: BLE001
+                    fb_a["pull_error"] = repr(exc)
         out["framebuffer_a"] = {
             "ok": bool(fb_a.get("ok")),
-            "bytes": fb_a.get("bytes") or fb_a.get("size"),
+            "bytes": fb_a.get("bytes") or fb_a.get("size") or fb_a.get("host_bytes"),
             "path": fb_a.get("path"),
+            "host_path": fb_a.get("host_path"),
+            "pulled": bool(fb_a.get("pulled")),
         }
         hub_log_path = hub_work / "hub_sidecar.log"
         # Host-side Hub scrape needs no guest agent — do it first for baseline.
@@ -2952,6 +2986,22 @@ def attempt_waike_gui_hub_journey(
             for k, v in (login_for_bind.get("gui_log_final") or {}).items():
                 if v and not gui_log.get(k):
                     gui_log[k] = v
+            fb_post = _agent_call(session, "framebuffer_capture", timeout_sec=30.0)
+            guest_fb2 = str(fb_post.get("path") or "")
+            if guest_fb2:
+                try:
+                    raw2 = _pull_guest_file(session, guest_fb2)
+                    if raw2 and len(raw2) > 100:
+                        host_fb2 = gui_dir / "WAIKE_GUI_FRAMEBUFFER_POST_LOGIN.png"
+                        host_fb2.write_bytes(raw2)
+                        out["framebuffer_post_login"] = {
+                            "ok": True,
+                            "host_path": str(host_fb2),
+                            "bytes": len(raw2),
+                            "guest_path": guest_fb2,
+                        }
+                except Exception as exc:  # noqa: BLE001
+                    out["framebuffer_post_login"] = {"ok": False, "error": repr(exc)}
         early = out.get("early_hub_reachability_retry") or out.get(
             "early_hub_reachability"
         ) or {}
