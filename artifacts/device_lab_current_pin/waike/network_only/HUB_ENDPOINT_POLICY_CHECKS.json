@@ -1,0 +1,19 @@
+{
+  "authorized_hub_base_url": "http://10.0.2.100:8787",
+  "allow_insecure_local": true,
+  "mockHub_disabled": true,
+  "rejects": [
+    {
+      "url": "http://10.0.2.2:8787",
+      "rejected": true,
+      "reason": "not_equal_to_authorized_hub_base_url"
+    },
+    {
+      "url": "https://evil.example",
+      "rejected": true,
+      "reason": "not_equal_to_authorized_hub_base_url"
+    }
+  ],
+  "all_rejects_ok": true,
+  "authorized_is_guestfwd_url": true
+}

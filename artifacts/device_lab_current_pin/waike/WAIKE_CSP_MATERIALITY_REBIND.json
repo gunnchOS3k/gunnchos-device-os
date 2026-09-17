@@ -1,0 +1,24 @@
+{
+  "schema": "gunnchos.device_lab.waike_csp_materiality_rebind.v1",
+  "generated_at_utc": "2026-09-17T03:51:47Z",
+  "prompt": "17G.5E",
+  "reason": "WAIKE_RUNTIME_CSP_EXACT_HUB_ORIGIN_ACCEPTED_MAIN",
+  "materiality": "waike_runtime_csp_exact_hub_origin_only_not_live_dsxl_ring_four_game_sources",
+  "old_pin_manifest_sha256": "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15",
+  "new_pin_manifest_sha256": "56f3ec29ad5b90219165a3bded3261605a3e7e5bb0ec9760cafb6fe3e5e4d936",
+  "method": "compact_revalidate_under_new_manifest",
+  "note": "WAIKE #14 adds exact-origin Runtime Hub connect-src CSP; LIVE/DSXL/Ring/Four-Game product sources unchanged. Historical PASS retained; rebound to new pin manifest without full re-earn.",
+  "gates": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "historical_evidence": {
+    "LIVE": "artifacts/device_lab_current_pin/LIVE_GUNNCHOS_VISUAL_PASS.json",
+    "DSXL": "artifacts/device_lab_current_pin/DSXL_DUAL_COMPOSITOR_UX_PASS.json",
+    "RING": "artifacts/device_lab_current_pin/RING_TO_REAL_APP_STATE_MUTATION_PASS.json",
+    "FOUR_GAME": "artifacts/device_lab_current_pin/FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS.json"
+  },
+  "WAIKE_CSP_MATERIALITY_REBIND": true
+}

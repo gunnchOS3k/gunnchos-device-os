@@ -1,0 +1,253 @@
+{
+  "schema": "gunnchos.device_lab.waike_gui_hub_journey_attempt.v1",
+  "started_at_utc": "2026-09-16T00:04:01Z",
+  "prompt": "17G.5",
+  "pin_manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b",
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "claim_boundary": "WAIKE real runtime requires authentic Platform Tauri Learning OS inside Interactive Development Guest via Device OS launch/package path. SILICON_EXACT_EMULATION=false. SHIPPING_IMAGE=false.",
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "prefer_fail_over_false_pass": true,
+  "gui_evidence_dir": "artifacts/device_lab_current_pin/waike/gui_journey",
+  "capability_map": {
+    "path": "artifacts/device_lab_current_pin/waike/gui_journey/WAIKE_GUI_HUB_CAPABILITY_MAP.json",
+    "accepted_main_defect_if_runtime_override_absent": true
+  },
+  "bundle": {
+    "ok": true,
+    "pin_ok": true,
+    "arch_gap": false,
+    "binary": {
+      "bundle_id": "com.gunnchos.waike.learning",
+      "version": "0.1.0",
+      "artifact_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
+      "source_sha256": "2af9eed985bcdd4a8a358385ef9113921e84d524f7d241266e2897034b6a0926",
+      "source_arch": "aarch64",
+      "platform_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+      "curriculum_ops_sha": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+      "gate_d_artifact_id": "10041457013",
+      "main_aarch64_artifact_id": "10422300001",
+      "workflow_run_id": "35031879671",
+      "artifact_source_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+      "compatibility_label": "linux-aarch64-glibc236",
+      "matches_main_aarch64_glibc236_sha256": true,
+      "x86_64_retained": true,
+      "ubuntu_arm_retained_not_for_debian12": true,
+      "fixture": false,
+      "system_of_record": "platform_tauri_learning_os"
+    }
+  },
+  "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+  "FREE_GIB_BEFORE_QEMU": 25.3,
+  "real_hub": {
+    "ok": true,
+    "mock": false,
+    "stub": false,
+    "static_fixture": false,
+    "pid": 7522,
+    "port": 8787,
+    "bind": "0.0.0.0",
+    "guest_url": "http://10.0.2.2:8787",
+    "db_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_device_lab.sqlite",
+    "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_sidecar.log",
+    "source_sha": "b1c3ab5d4faa4d2613569e474013ccf0976d346e",
+    "entrypoint": "services/hub app.main.create_app seed=True production_auth",
+    "health": {
+      "status": 200,
+      "body": "{\"status\":\"ok\"}"
+    },
+    "last_err": "[Errno 61] Connection refused"
+  },
+  "httpd": {
+    "ok": true,
+    "error": null,
+    "port": 8767
+  },
+  "boot": {
+    "ok": true,
+    "error": null,
+    "pid": null,
+    "arch": null
+  },
+  "ping": {
+    "pong": true,
+    "transport": "virtio_serial",
+    "ok": true
+  },
+  "tauri_aarch64_runtime": {
+    "ok": true,
+    "packages_requested": [
+      "libwebkit2gtk-4.1-0",
+      "libgtk-3-0",
+      "libgdk-pixbuf-2.0-0",
+      "libsoup-3.0-0",
+      "libjavascriptcoregtk-4.1-0",
+      "librsvg2-2",
+      "libayatana-appindicator3-1",
+      "xvfb",
+      "at-spi2-core",
+      "dbus-x11"
+    ]
+  },
+  "atspi_setup": {
+    "ok": true,
+    "tail": "ATSPI_SETUP_DONE\n"
+  },
+  "runtime_target_preflight": {
+    "pass": true,
+    "blockers": [],
+    "guest_summary": {
+      "architecture": "aarch64",
+      "glibc_version": "2.36",
+      "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+      "distro": "debian",
+      "distro_version": "12",
+      "has_libwebkit2gtk_4_1": true,
+      "has_libgtk_3": true,
+      "has_libsoup_3": true,
+      "probe_source": "live_guest_agent"
+    }
+  },
+  "gui_session": {
+    "ok": true,
+    "primary_display": "interactive_guest_weston_wayland",
+    "xvfb_used_as_primary_pass_surface": false
+  },
+  "fetch": {
+    "ok": true,
+    "via": "9p"
+  },
+  "qemu_wrapper": {
+    "ok": true,
+    "wrapper_enabled": false,
+    "reason": "no_arch_gap"
+  },
+  "native_elf_ready": {
+    "ok": false
+  },
+  "binary_probe": {
+    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=e6d4ce2722b32746bec84b19782e370fca400a09, for GNU/Linux 3.7.0, not stripped\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=e6d4ce2722b32746bec84b19782e370fca400a09, for GNU/Linux 3.7.0, not stripped\ntotal 15444\ndrwxr-xr-x 2 root root       4096 Sep 16 00:04 .\ndrwxr-xr-x 6 root root       4096 Sep 16 00:04 ..\n-rw-r--r-- 1  501 dialout     840 Sep 16 00:04 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 16 00:04 VERSION\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 16 00:04 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 7893936 Sep 16  2026 waike-learning-os.real\nWAIKE Learning OS verify key error: KEY\nPROBE_DONE\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\n+ ls -la /var/lib/gunnchos/waike-learning-os/bin\n+ /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help\n+ head -20\n+ echo PROBE_DONE\n",
+    "returncode": 0
+  },
+  "matches_main_aarch64_glibc236": true,
+  "journey_a_gui": {
+    "path": "gui_direct_no_headless",
+    "headless": false,
+    "xvfb_primary": false,
+    "process_started": true,
+    "pid": 853,
+    "returncode_immediate": null,
+    "acknowledged": true,
+    "ack": {
+      "app_version": "0.1.0",
+      "bundle_id": "com.gunnchos.waike.learning",
+      "deep_link": "waike://learn/home",
+      "message_type": "ack",
+      "protocol": "gunnchos.learning_os.ipc.v1",
+      "request_id": "f5b653fb-4630-4229-bc49-8082de903908",
+      "status": "ok"
+    },
+    "alive_beyond_ipc_ack": true,
+    "alive_after_3s": true,
+    "ps_tail": "    PID     ELAPSED CMD\n    853       00:03 /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://learn/home --ipc-dir /tmp/waike-los-gui-jA --request-id f5b653fb-4630-4229-bc49-8082de903908\n853 /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://learn/home --ipc-dir /tmp/waike-los-gui-jA --request-id f5b653fb-4630-4229-bc49-8082de903908\n865 /usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 14\n868 /usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 11 17\n",
+    "atspi_tail": "\n(process:925): dbind-ERROR **: 00:04:35.879: AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?\nbash: line 17:   925 Trace/breakpoint trap   python3 - <<'PY'\nimport json\ntry:\n import gi\n gi.require_version(\"Atspi\", \"2.0\")\n from gi.repository import Atspi\n Atspi.init()\n desk = Atspi.get_desktop(0)\n names=[]\n for i in range(desk.get_child_count()):\n  c=desk.get_child_at_index(i)\n  try: names.append(c.get_name() or \"\")\n  except Exception: pass\n print(\"ATSPI_NAMES\", json.dumps(names))\nexcept Exception as e:\n print(\"ATSPI_ERR\", e)\nPY\n\n",
+    "window_title_expected": "WAIKE Learning OS",
+    "wayland_display": "wayland-0",
+    "hub_url_env_set": true,
+    "hub_url": "http://10.0.2.2:8787",
+    "executable": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
+    "fixture_rejected": true,
+    "journey_tag": "A",
+    "platform_role": "learner",
+    "deep_link": "waike://learn/home",
+    "log_path": "/tmp/waike_gui_A.log",
+    "webview_or_window_title_observed": true,
+    "launched_gui": true
+  },
+  "framebuffer_a": {
+    "ok": true,
+    "bytes": 24041,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-09-16_00-04-52.png"
+  },
+  "hub_bind": {
+    "hub_reachable_from_guest": false,
+    "reach_tail": "",
+    "atspi_tail": "",
+    "client_hub_http_chip_observed": false,
+    "client_hub_mock_chip_observed": false,
+    "client_hub_unavailable_observed": false,
+    "brand_observed": false,
+    "mock_mode_used": false,
+    "note": "Accepted-main resolves Hub via compile-time VITE_HUB_URL only; WAIKE_HUB_URL env / launch-context hub_url are not honored yet."
+  },
+  "instructor_gui": {
+    "launched_gui": null,
+    "platform_role": "instructor",
+    "alive_beyond_ipc_ack": null
+  },
+  "journey_b_gui": {
+    "launched_gui": null,
+    "alive_beyond_ipc_ack": null
+  },
+  "headless_contrast_a": {
+    "ok": false,
+    "raw_stdout_tail": "",
+    "put": {
+      "ok": true,
+      "protocol": "gunnchos.guest_agent.v1",
+      "cmd": "process_run",
+      "transport": "virtio_serial",
+      "agent_path_label": "virtio-serial",
+      "SILICON_EXACT_EMULATION": false,
+      "production_keys": false,
+      "measurement_class": "GUEST_OBSERVED",
+      "argv": [
+        "bash",
+        "-lc",
+        "PID=$(cat /tmp/waike_gui_A.pid 2>/dev/null || true); if [ -n \"$PID\" ]; then kill \"$PID\" 2>/dev/null || true; sleep 1; kill -9 \"$PID\" 2>/dev/null || true; fi; pkill -f waike-learning-os 2>/dev/null || true; echo STOPPED"
+      ],
+      "returncode": -15,
+      "stdout": "",
+      "stderr": ""
+    },
+    "guest_returncode": -15,
+    "journey_tag": "H",
+    "deep_link": "waike://learn/home",
+    "platform_role": "learner"
+  },
+  "role_boundary_headless_contrast": {
+    "ok": false,
+    "learner_launch": {
+      "launched": false,
+      "path": null,
+      "platform_role": "learner",
+      "profile": "student"
+    },
+    "instructor_launch": {
+      "launched": false,
+      "path": null,
+      "platform_role": "instructor",
+      "profile": "educator"
+    },
+    "frontend_only_role_fake": false,
+    "note": "Role boundary exercised via Device OS launch context platform_role; not a CSS/UI-only toggle."
+  },
+  "blocker": "accepted_main_no_runtime_hub_url_override;real_hub_sidecar_ok_but_client_cannot_bind;need_draft_waike_product_pr_then_owner_merge_refreeze",
+  "verdict": {
+    "generated_at_utc": "2026-09-16T00:06:34Z",
+    "prompt": "17G.5",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "verdict": "FAIL",
+    "blocker": "accepted_main_no_runtime_hub_url_override;real_hub_sidecar_ok_but_client_cannot_bind;need_draft_waike_product_pr_then_owner_merge_refreeze",
+    "gui_window_alive": false,
+    "real_hub_running": true,
+    "client_bound_real_hub": false,
+    "mock_hub_used": false,
+    "xvfb_primary_pass": false,
+    "headless_ack_only_pass": false,
+    "defect_decision": "DRAFT_WAIKE_PRODUCT_PR",
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true
+  },
+  "finished_at_utc": "2026-09-16T00:06:34Z"
+}

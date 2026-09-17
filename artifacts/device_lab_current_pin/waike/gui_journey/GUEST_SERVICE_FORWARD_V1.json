@@ -1,0 +1,17 @@
+{
+  "schema": "gunnchos.device_lab.guest_service_forward.v1",
+  "restrict": true,
+  "rules": [
+    {
+      "name": "device_lab_hub",
+      "guest_addr": "10.0.2.100",
+      "guest_port": 8787,
+      "host_addr": "127.0.0.1",
+      "host_port": 8787,
+      "protocol": "tcp",
+      "cmd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+    }
+  ],
+  "notes": "restrict=on isolation; explicit guestfwd only; Hub/httpd bind host loopback.",
+  "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+}

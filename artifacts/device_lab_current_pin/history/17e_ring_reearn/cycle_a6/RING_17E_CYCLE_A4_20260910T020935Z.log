@@ -1,0 +1,67 @@
+RING_ONLY worker_pid=33631 wall_clock=1200s
+RING_ONLY boot
+RING_ONLY hot_patch skipped file_get present
+RING_ONLY weston {'ok': True, 'protocol': 'gunnchos.guest_agent.v1', 'cmd': 'process_run', 'transport': 'virtio_serial', 'agent_path_label': 'virtio-serial', 'SILICON_EXACT_EMULATION': False, 'production_keys': False, 'measurement_class': 'GUEST_OBSERVED', 'argv': ['bash', '-lc', "printf '%s' 'W2NvcmVdCmJhY2tlbmQ9ZHJtLWJhY2tlbmQuc28Kc2hlbGw9ZGVza3RvcC1zaGVsbC5zbwojIFN1cGVyIChub3QgQ3RybCkgc28gQ3RybCtTIHJlYWNoZXMgYXBwcyAobW91c2VwYWQvTGlicmVPZmZpY2Ugc2F2ZSkgd2hpbGUKIyB3ZXN0b24gZGVza3RvcC1zaGVsbCBNb2QrcyBzdGlsbCBvd25zIHRoZSBjb21wb3NpdG9yIHNjcmVlbnNob290ZXIuCm1vZGlmaWVyPXN1cGVyCmlkbGUtdGltZT0wCgpbc2hlbGxdCnBhbmVsLXBvc2l0aW9uPXRvcApsb2NraW5nPWZhbHNlCmJhY2tncm91bmQtY29sb3I9MHhmZjIyNDQ4OAoKW3NjcmVlbnNhdmVyXQpwYXRoPQpkdXJhdGlvbj0wCgojIFNpbmdsZSB2aXJ0aW8tZ3B1IG1heF9vdXRwdXRzPTIgZXhwb3NlcyBWaXJ0dWFsLTEgKyBWaXJ0dWFsLTIgb24gb25lIERSTSBjYXJkLgojIER1YWwgUENJIEdQVXMgbWFrZSB3ZXN0b24gYmluZCBvbmx5IGNhcmQwIChvbmUgd2xfb3V0cHV0KSDigJQgZG8gbm90IHVzZSB0aGF0IHBhdGguCltvdXRwdXRdCm5hbWU9VmlydHVhbC0xCm1vZGU9MTI4MHg4MDAKcG9zaXRpb249MCwwCgpbb3V0cHV0XQpuYW1lPVZpcnR1YWwtMgptb2RlPTEyODB4ODAwCnBvc2l0aW9uPTEyODAsMAo=' | base64 -d > /etc/xdg/weston/weston.ini; cp /etc/xdg/weston/weston.ini /etc/gunnchos-weston/weston.ini; systemctl restart gunnchos-weston.service || true; sleep 5; pgrep -x weston && echo weston_ok"], 'returncode': 0, 'stdout': '442\nweston_ok\n', 'stderr': ''}
+RING_ONLY baseline_ping {'ping_ok': True, 'transport': 'virtio_serial', 'error': None, 'error_class': None, 't_utc': '2026-09-10T02:10:12Z'}
+RING_ONLY attempt deadline=1200s
+RING_ONLY result False godot_alive_mutation_not_committed
+{
+  "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
+  "started_at_utc": "2026-09-10T02:09:35Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "worker_pid": 33631,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "boot": {
+    "ok": true
+  },
+  "qemu_pid": null,
+  "guest_agent_sock": "/tmp/gdli-33631-8604f9/ga.sock",
+  "pre_mutation_baseline": {
+    "ping_ok": true,
+    "transport": "virtio_serial",
+    "error": null,
+    "error_class": null,
+    "t_utc": "2026-09-10T02:10:12Z"
+  },
+  "ring": {
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "note": "Not earned \u2014 need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)",
+    "blocker": "godot_alive_mutation_not_committed",
+    "mutation_marker": "RINGMUTATION1789006212",
+    "correlation_id": "ring-1789006212-33631"
+  },
+  "correlation_id": "ring-1789006212-33631",
+  "blocker": "godot_alive_mutation_not_committed",
+  "elapsed_sec": 301.0,
+  "finished_at_utc": "2026-09-10T02:14:36Z"
+}
+{
+  "schema": "gunnchos.device_lab.current_pin.ring_reearn.v1",
+  "started_at_utc": "2026-09-10T02:09:35Z",
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+  "worker_pid": 33631,
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "boot": {
+    "ok": true
+  },
+  "qemu_pid": null,
+  "guest_agent_sock": "/tmp/gdli-33631-8604f9/ga.sock",
+  "pre_mutation_baseline": {
+    "ping_ok": true,
+    "transport": "virtio_serial",
+    "error": null,
+    "error_class": null,
+    "t_utc": "2026-09-10T02:10:12Z"
+  },
+  "ring": {
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": false,
+    "note": "Not earned \u2014 need honest LibreOffice ODT + RingMemo marker + Pedestrian input-driven save (lab collector / migration-alone rejected)",
+    "blocker": "godot_alive_mutation_not_committed",
+    "mutation_marker": "RINGMUTATION1789006212",
+    "correlation_id": "ring-1789006212-33631"
+  },
+  "correlation_id": "ring-1789006212-33631",
+  "blocker": "godot_alive_mutation_not_committed",
+  "elapsed_sec": 301.0,
+  "finished_at_utc": "2026-09-10T02:14:36Z"
+}

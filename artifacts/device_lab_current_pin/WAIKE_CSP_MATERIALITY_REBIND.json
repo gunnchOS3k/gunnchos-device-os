@@ -1,0 +1,24 @@
+{
+  "schema": "gunnchos.device_lab.waike_csp_materiality_rebind.v1",
+  "generated_at_utc": "2026-09-17T14:00:28Z",
+  "prompt": "17G.5F",
+  "reason": "WAIKE_RUNTIME_CSP_WEBKITGTK_APPLY_ACCEPTED_MAIN",
+  "materiality": "waike_runtime_csp_webkitgtk_apply_only_not_live_dsxl_ring_four_game_sources",
+  "old_pin_manifest_sha256": "56f3ec29ad5b90219165a3bded3261605a3e7e5bb0ec9760cafb6fe3e5e4d936",
+  "new_pin_manifest_sha256": "456cd0277f777076bfaa001a7e0b97a5c35313627f142d57b989355847f81e42",
+  "method": "compact_revalidate_under_new_manifest",
+  "note": "WAIKE #15 adds effective WebView CSP (DirectiveMap + HTML meta) for Runtime Hub; LIVE/DSXL/Ring/Four-Game product sources unchanged. Historical PASS retained; rebound to new pin manifest without full re-earn.",
+  "gates": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "historical_evidence": {
+    "LIVE": "artifacts/device_lab_current_pin/LIVE_GUNNCHOS_VISUAL_PASS.json",
+    "DSXL": "artifacts/device_lab_current_pin/DSXL_DUAL_COMPOSITOR_UX_PASS.json",
+    "RING": "artifacts/device_lab_current_pin/RING_TO_REAL_APP_STATE_MUTATION_PASS.json",
+    "FOUR_GAME": "artifacts/device_lab_current_pin/FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS.json"
+  },
+  "WAIKE_CSP_MATERIALITY_REBIND": true
+}

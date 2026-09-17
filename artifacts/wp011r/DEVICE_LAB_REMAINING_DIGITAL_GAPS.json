@@ -33,7 +33,7 @@
     "RING_HYBRID_LAB_SURFACE_MUTATION_PASS": true,
     "RING_GUEST_OBSERVE_WITH_LAB_MUTATION": true,
     "RING_GUEST_UINPUT_MOUSEPAD_MUTATION": true,
-    "ECO010_SOAK_PASS": true,
+    "ECO010_SOAK_PASS": false,
     "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false
   },
   "gaps": [
@@ -75,7 +75,7 @@
       "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
       "status": "EARNED",
       "earned": true,
-      "summary": "EARNED: ODT RINGMUTATION + browser delta + Godot save_version; diagnostic HTML/game_state LAB_DIAGNOSTIC_ONLY",
+      "summary": "EARNED: current-pin Ring re-earn on Interactive Guest",
       "evidence": "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
       "pass": true,
       "digital_earned": true,
@@ -114,7 +114,7 @@
     "RING Lab SurfaceRegistry mutation labeled as in-guest app mutation",
     "stale DEVICE_LAB_SCORE_INDEPENDENT tokens_observed=true after demotion"
   ],
-  "updated_at_utc": "2026-08-13T12:34:11Z",
+  "updated_at_utc": "2026-09-15T05:16:05Z",
   "cycle3b_continue": {
     "LIVE": false,
     "DSXL": true,
@@ -128,7 +128,7 @@
     "FOUR_GAME owner-artifact Interactive Guest PASS"
   ],
   "remaining": [],
-  "five_gate_digital_and": true,
+  "five_gate_digital_and": false,
   "shipping_master": false,
   "independent_must_reverify": [
     "DSXL_DUAL_COMPOSITOR_UX_PASS",
@@ -137,10 +137,11 @@
   "shipping_gaps_remain": true,
   "complete_false": true,
   "assessed_tip": "wp011r2-owner-four-game",
-  "INDEPENDENT_PASS": true,
+  "INDEPENDENT_PASS": false,
   "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
   "independent": {
-    "INDEPENDENT_PASS": true,
-    "reason": "five_gate_digital_and true after FOUR_GAME owner-artifact re-earn"
-  }
+    "INDEPENDENT_PASS": false,
+    "reason": "five_gate_digital_and false until FOUR_GAME + retained gates"
+  },
+  "ECO010_REEARN_REQUIRED_AFTER_RING_FIX": true
 }

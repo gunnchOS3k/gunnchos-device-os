@@ -1,0 +1,66 @@
+{
+  "schema": "gunnchos.device_lab.waike_tauri_login_401_root_cause.v1",
+  "generated_at_utc": "2026-09-17T19:50:00Z",
+  "prompt": "17G.5H-learner-depth-reearn",
+  "named_gate": "DEVICE_OS_134_WAIKE_GUI_LEARNER_DEPTH_REEARN",
+  "verdict": "ROOT_CAUSE_FIXED_LOGIN_PASS_DEPTH_REMAINS",
+  "summary": "Real Tauri POST /api/v1/auth/login 401 was not CORS/Origin/proxy mutation. Guest-agent kind=text uinput path silently skipped non-alnum characters, so GUI-typed demo credentials lost '-' and '!'.",
+  "evidence": {
+    "mimic_origin": "http://ipc.localhost",
+    "mimic_clen": 85,
+    "mimic_body": "{\"username\": \"learner-alpha\", \"password\": \"WaikeTestPass1!\", \"site_id\": \"site-alpha\"}",
+    "mimic_status": 200,
+    "tauri_origin": "tauri://localhost",
+    "tauri_clen": 77,
+    "tauri_body_from_pcap": "{\"username\":\"learneralpha\",\"password\":\"WaikeTestPass1\",\"site_id\":\"sitealpha\"}",
+    "tauri_status": 401,
+    "options_preflight_both_origins": 204,
+    "content_type": "application/json",
+    "cors_proxy_mutates_body": false,
+    "hub_auth_path": "/api/v1/auth/login",
+    "demo_credentials_expected": {
+      "username": "learner-alpha",
+      "password": "WaikeTestPass1!",
+      "site_id": "site-alpha"
+    },
+    "chars_stripped_by_uinput_text": [
+      "-",
+      "!"
+    ],
+    "pcap": "artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/guestfwd_8787_bind_reearn.pcap",
+    "proxy_log_lines": [
+      "POST ... origin='http://ipc.localhost' clen=85 \u2192 200",
+      "POST ... origin='tauri://localhost' clen=77 \u2192 401"
+    ]
+  },
+  "root_cause": {
+    "component": "os_build/device_lab_interactive_guest/debian_cloud/guest_agent/gunnchos_guest_agent.py::cmd_input_inject(kind=text)",
+    "bug": "else: continue dropped punctuation; '-' and '!' never emitted to WebView form fields",
+    "not_root_cause": [
+      "CORS / Access-Control-Allow-Origin for tauri://localhost",
+      "guestfwd cmd-relay delivery",
+      "Hub demo user bootstrap / FIXTURE_PASSWORD",
+      "CSP connect-src",
+      "proxy body rewriting"
+    ]
+  },
+  "fix": {
+    "additive": true,
+    "guest_agent": "US QWERTY punctuation map for kind=text (-, !, etc.)",
+    "host_harness": "owner_waike_gui_journey._inject_text per-char key inject so '-'/'!' work even before agent hot-patch",
+    "portal_pr14": "no change required for this 401",
+    "waike_pr17": "no change required for this 401 (CORS path already proven)"
+  },
+  "do_not_merge": true,
+  "reearn_after_fix": {
+    "generated_at_utc": "2026-09-17T20:04:05Z",
+    "device_os_tip": "38adc1f371543ea53fb673c909e1df93970b3f66",
+    "tauri_clen": 80,
+    "tauri_status": 200,
+    "tauri_body_inferred": "{\"username\":\"learner-alpha\",\"password\":\"WaikeTestPass1!\",\"site_id\":\"site-alpha\"}",
+    "learner_home_status": 200,
+    "proxy_log": "artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_guestfwd_cors_proxy.log",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "note": "Inject fix restored hyphens and bang; real GUI login PASS; course/assessment/offline depth still FAIL."
+  }
+}

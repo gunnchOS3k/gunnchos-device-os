@@ -1,0 +1,52 @@
+{
+  "schema": "gunnchos.device_lab.waike_minimal_real_hub_bind.v1",
+  "generated_at_utc": "2026-09-16T15:47:53Z",
+  "hub_url": "http://10.0.2.100:8787",
+  "policy": {
+    "schema_version": "hub_endpoint_policy.v1",
+    "authorized_hub_base_url": "http://10.0.2.100:8787",
+    "deployment_id": "device-lab-qemu-guest",
+    "site_id": "device-lab",
+    "require_https": false,
+    "allow_insecure_local": true,
+    "provenance": "device_lab_fixture",
+    "expires_at": null
+  },
+  "fetch": {
+    "ok": true,
+    "via": "9p",
+    "stdout_tail": "START_WAIKE9P_1789573652\ntotal 7792\ndrwxr-xr-x 6 501 dialout     192 Sep 16 15:38 .\ndrwxr-xr-x 8 501 dialout     256 Sep 16 15:38 ..\n-rw-r--r-- 1 501 dialout     840 Sep 16 15:38 INSTALLED.json\n-rw-r--r-- 1 501 dialout       6 Sep 16 15:38 VERSION\n-rwxr-xr-x 1 501 dialout 7963784 Sep 16 02:45 waike-learning-os\n-rwxr-xr-x 1 501 dialout     276 Sep 16 15:38 waike-learning-os.qemu-x86_64-wrapper.sh\ntotal 7800\ndrwxr-xr-x 2 501 dialout    4096 Sep 16 15:38 .\ndrwxr-xr-x 6 501 dialout    4096 Sep 16 15:38 ..\n-rw-r--r-- 1 501 dialout     840 Sep 16 15:38 INSTALLED.json\n-rw-r--r-- 1 501 dialout       6 Sep 16 15:38 VERSION\n-rwxr-xr-x 1 501 dialout 7963784 Sep 16 02:45 waike-learning-os\n-rwxr-xr-x 1 501 dialout     276 Sep 16 15:38 waike-learning-os.qemu-x86_64-wrapper.sh\nFETCH_OK_WAIKE9P_1789573652\n"
+  },
+  "launch": {
+    "acknowledged": true,
+    "alive_beyond_ipc_ack": true,
+    "alive_after_3s": true,
+    "launched_gui": true,
+    "hub_url": "http://10.0.2.100:8787",
+    "nack_reason": null,
+    "pid": 465,
+    "fixture_rejected": true,
+    "headless": false,
+    "xvfb_primary": false
+  },
+  "client_sockets": {
+    "ok": false,
+    "established_to_hub": null,
+    "procs": null,
+    "ss_tail": null,
+    "errors": null
+  },
+  "gui_log_bind": {
+    "ok": true,
+    "hub_http_chip_in_log": false,
+    "hub_mock_in_log": false,
+    "hub_unavailable_in_log": false,
+    "runtime_hub_url_seen": false,
+    "tail": "libEGL warning: egl: failed to create dri2 screen\nlibEGL warning: egl: failed to create dri2 screen\n"
+  },
+  "hub_log_tail": "INFO:     Started server process [49563]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)\nINFO:     127.0.0.1:59902 - \"GET /healthz HTTP/1.1\" 200 OK\n",
+  "mockHub": false,
+  "atspi_used": false,
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+  "guestfwd_note": "hub-only guestfwd; host listener required at QEMU start"
+}

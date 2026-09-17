@@ -356,8 +356,8 @@ print("OVERLAY_PATCHED", name in index.read_text(encoding="utf-8"))
 # mutation after Ring-authorized /drive arm (not migration-alone / not harness).
 PEDESTRIAN_OVERLAY_REL = "device_lab_ring_input_overlay.gd"
 PEDESTRIAN_OVERLAY_AUTOLOAD = "DeviceLabRingInputOverlay"
-PEDESTRIAN_RING_DRIVE = "/var/lib/gunnchos/rings/ring_game_drive.json"
-PEDESTRIAN_OVERLAY_STATUS = "/var/lib/gunnchos/rings/pedestrian_overlay_status.json"
+PEDESTRIAN_RING_DRIVE = "/tmp/gunnchos_ring_game_drive.json"
+PEDESTRIAN_OVERLAY_STATUS = "/tmp/gunnchos_pedestrian_overlay_status.json"
 
 PEDESTRIAN_OVERLAY_GD = r'''extends Node
 
@@ -366,8 +366,8 @@ PEDESTRIAN_OVERLAY_GD = r'''extends Node
 ## Input.parse_input_event and maps to ProgressionSave.add_xp/unlock+save.
 ## Not ProductionGateHarness. Not --quit-after. Not migration-alone.
 
-const DRIVE_PATH := "/var/lib/gunnchos/rings/ring_game_drive.json"
-const STATUS_PATH := "/var/lib/gunnchos/rings/pedestrian_overlay_status.json"
+const DRIVE_PATH := "/tmp/gunnchos_ring_game_drive.json"
+const STATUS_PATH := "/tmp/gunnchos_pedestrian_overlay_status.json"
 
 var _applied: bool = false
 var _status: Dictionary = {
@@ -381,12 +381,12 @@ var _status: Dictionary = {
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_write_status()
 	var t := Timer.new()
 	t.wait_time = 0.4
 	t.autostart = true
 	t.timeout.connect(_poll)
 	add_child(t)
-	_write_status()
 
 
 func _write_status() -> void:
@@ -395,6 +395,8 @@ func _write_status() -> void:
 	if f:
 		f.store_string(JSON.stringify(_status))
 		f.close()
+	else:
+		_status["write_error"] = str(FileAccess.get_open_error())
 
 
 func _tap(action: String) -> void:
@@ -457,39 +459,33 @@ func _poll() -> void:
 	_key(KEY_A)
 	_tap("accelerate")
 	# Action mapping → ProgressionSave mutation (app state).
-	if typeof(ProgressionSave) != TYPE_NIL:
-		ProgressionSave.add_xp(17)
-		ProgressionSave.unlock("ring:mutation")
-		ProgressionSave.unlock("ring:%s" % marker.substr(0, mini(24, marker.length())))
-		ProgressionSave.save()
-		_status["phase"] = "mutated"
-		_status["xp"] = ProgressionSave.xp
-		_status["level"] = ProgressionSave.level
-	else:
+	var ps = get_node_or_null("/root/ProgressionSave")
+	if ps == null:
 		_status["phase"] = "progression_save_missing"
+		_write_status()
+		return
+	if ps.has_method("add_xp"):
+		ps.call("add_xp", 17)
+	if ps.has_method("unlock"):
+		ps.call("unlock", "ring:mutation")
+		ps.call("unlock", "ring:%s" % marker.substr(0, mini(24, marker.length())))
+	if ps.has_method("save"):
+		ps.call("save")
+	# Durable Ring receipt beside ProgressionSave (read-back even if cfg format drifts).
+	var receipt := FileAccess.open("user://ring_mutation_receipt.txt", FileAccess.WRITE)
+	if receipt:
+		receipt.store_string("ring:mutation\nmarker=%s\nxp=%s\n" % [marker, str(ps.xp)])
+		receipt.close()
+		_status["receipt"] = "user://ring_mutation_receipt.txt"
+	_status["phase"] = "mutated"
+	if "xp" in ps:
+		_status["xp"] = ps.get("xp")
+	if "level" in ps:
+		_status["level"] = ps.get("level")
 	_write_status()
 '''
 
-PEDESTRIAN_PATCH_PY = r'''
-from pathlib import Path
-import sys
-p = Path(sys.argv[1]) / "project.godot"
-t = p.read_text(encoding="utf-8")
-line = 'DeviceLabRingInputOverlay="*res://device_lab_ring_input_overlay.gd"'
-if "DeviceLabRingInputOverlay=" not in t:
-    if "[autoload]" not in t:
-        t = t.rstrip() + "\n\n[autoload]\n" + line + "\n"
-    else:
-        i = t.index("[autoload]")
-        n = t.find("\n[", i + len("[autoload]"))
-        body, suffix = (t, "") if n < 0 else (t[:n], t[n:])
-        if not body.endswith("\n"):
-            body += "\n"
-        t = body + line + "\n" + suffix
-    p.write_text(t, encoding="utf-8")
-print("OVERLAY_PATCHED", "DeviceLabRingInputOverlay=" in p.read_text(encoding="utf-8"))
-'''
-
+PEDESTRIAN_PATCH_PY = 'from pathlib import Path\nimport sys\n\np = Path(sys.argv[1]) / "project.godot"\nt = p.read_text(encoding="utf-8")\nif "config/name" not in t or "config_version" not in t or len(t) < 200:\n    raise SystemExit("project.godot_truncated_or_invalid_refusing_overlay_patch")\nline = \'DeviceLabRingInputOverlay="*res://device_lab_ring_input_overlay.gd"\'\nif "DeviceLabRingInputOverlay=" not in t:\n    if "[autoload]" not in t:\n        t = t.rstrip() + "\\n\\n[autoload]\\n" + line + "\\n"\n    else:\n        i = t.index("[autoload]")\n        n = t.find("\\n[", i + len("[autoload]"))\n        body, suffix = (t, "") if n < 0 else (t[:n], t[n:])\n        if not body.endswith("\\n"):\n            body += "\\n"\n        t = body + line + "\\n" + suffix\n    p.write_text(t, encoding="utf-8")\nprint("OVERLAY_PATCHED", "DeviceLabRingInputOverlay=" in p.read_text(encoding="utf-8"))\n'
 
 def overlay_is_honest(script: str, *, kind: str) -> dict[str, bool]:
     """Unit-testable honesty contract for overlay payloads."""

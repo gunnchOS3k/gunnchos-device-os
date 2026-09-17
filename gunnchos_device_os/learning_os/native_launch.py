@@ -217,19 +217,25 @@ class NativeLaunchAdapter:
             stdout_f = subprocess.DEVNULL
             stderr_f = subprocess.DEVNULL
 
+        argv = [
+            result.executable,
+            "--bundle-id",
+            LEARNING_OS_BUNDLE_ID,
+            "--deep-link",
+            deep_uri,
+            "--ipc-dir",
+            str(self.ipc_dir),
+            "--request-id",
+            request_id,
+        ]
+        # Additive: pass explicit CLI flag when CI/headless env is set so Platform
+        # ack path does not require a webview (env alone is also honored by Platform).
+        if env.get("WAIKE_CI_HEADLESS_UI") or env.get("CI_HEADLESS_UI"):
+            argv.append("--ci-headless-ui")
+
         try:
             proc = subprocess.Popen(
-                [
-                    result.executable,
-                    "--bundle-id",
-                    LEARNING_OS_BUNDLE_ID,
-                    "--deep-link",
-                    deep_uri,
-                    "--ipc-dir",
-                    str(self.ipc_dir),
-                    "--request-id",
-                    request_id,
-                ],
+                argv,
                 env=env,
                 stdout=stdout_f,
                 stderr=stderr_f,

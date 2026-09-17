@@ -72,6 +72,158 @@ def _sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+# Official Godot 4.5-stable linux.arm64 (godot-builds 4.5-stable zip extract).
+# Verified 17F via download+cmp; reject spoof/fake/wrong-engine binaries.
+GODOT45_OFFICIAL_LINUX_ARM64_SHA256 = (
+    "2ec9ae0ff0702f9e1248c27708a08eaf7df639907650505a486ff7b1be005291"
+)
+GODOT45_OFFICIAL_SIZE_BYTES = 126_265_544
+GODOT45_BIN_NAME = "Godot_v4.5-stable_linux.arm64"
+GODOT45_OFFICIAL_ZIP_URL = (
+    "https://github.com/godotengine/godot-builds/releases/download/"
+    "4.5-stable/Godot_v4.5-stable_linux.arm64.zip"
+)
+
+
+def godot45_cache_path(repo_root: Path) -> Path:
+    return repo_root / "artifacts" / "wp011r" / "cache" / GODOT45_BIN_NAME
+
+
+def godot45_fallback_candidates(repo_root: Path) -> list[Path]:
+    """Ring-proven discovery order when worktree cache is empty (17E/17F)."""
+    parents = list(repo_root.parents)
+    device_os_checkout = None
+    for p in parents:
+        if p.name == "repos" or (p / "gunnchos-device-os").is_dir():
+            cand = p / "gunnchos-device-os"
+            if cand.is_dir():
+                device_os_checkout = cand
+                break
+    hard = Path(
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
+        "gunnchos-device-os"
+    )
+    out: list[Path] = [
+        repo_root / "artifacts" / "wp011r" / "owner_games_guest_bundle" / GODOT45_BIN_NAME,
+    ]
+    if device_os_checkout is not None:
+        out.extend(
+            [
+                device_os_checkout
+                / "artifacts"
+                / "wp011r"
+                / "owner_games_guest_bundle"
+                / GODOT45_BIN_NAME,
+                device_os_checkout / "artifacts" / "wp011r" / "cache" / GODOT45_BIN_NAME,
+            ]
+        )
+    out.append(hard / "artifacts" / "wp011r" / "owner_games_guest_bundle" / GODOT45_BIN_NAME)
+    out.append(hard / "artifacts" / "wp011r" / "cache" / GODOT45_BIN_NAME)
+    # de-dupe while preserving order
+    seen: set[str] = set()
+    uniq: list[Path] = []
+    for p in out:
+        key = str(p)
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq.append(p)
+    return uniq
+
+
+def verify_godot45_host_binary(path: Path) -> dict[str, Any]:
+    """Authenticity gate: official size + SHA-256; no fake/spoof PASS."""
+    if not path.is_file():
+        return {"ok": False, "error": "missing", "path": str(path)}
+    size = path.stat().st_size
+    if size != GODOT45_OFFICIAL_SIZE_BYTES:
+        return {
+            "ok": False,
+            "error": "godot45_size_mismatch",
+            "path": str(path),
+            "size_bytes": size,
+            "expected_size_bytes": GODOT45_OFFICIAL_SIZE_BYTES,
+        }
+    digest = _sha256_file(path)
+    if digest != GODOT45_OFFICIAL_LINUX_ARM64_SHA256:
+        return {
+            "ok": False,
+            "error": "godot45_sha256_mismatch",
+            "path": str(path),
+            "sha256": digest,
+            "expected_sha256": GODOT45_OFFICIAL_LINUX_ARM64_SHA256,
+        }
+    return {
+        "ok": True,
+        "path": str(path),
+        "sha256": digest,
+        "size_bytes": size,
+        "arch": "linux.arm64",
+        "engine": "Godot",
+        "version_pin": "4.5-stable",
+        "official_source_url": GODOT45_OFFICIAL_ZIP_URL,
+        "byte_identical_to_official_extracted": True,
+    }
+
+
+def resolve_godot45_host_binary(repo_root: Path) -> dict[str, Any]:
+    """Locate authentic Godot 4.5 linux.arm64; seed worktree cache from Ring fallbacks.
+
+    Four-Game 17E failed with godot45_host_cache_missing while Ring succeeded via
+    parent-repo / already_present_on_guest. This resolver closes that gap without
+    accepting fake/spoof/unverified binaries.
+    """
+    cache = godot45_cache_path(repo_root)
+    checked: list[dict[str, Any]] = []
+    if cache.is_file():
+        ver = verify_godot45_host_binary(cache)
+        checked.append({"candidate": str(cache), **ver})
+        if ver.get("ok"):
+            return {
+                "ok": True,
+                "path": str(cache),
+                "via": "worktree_cache",
+                "provenance": ver,
+                "checked": checked,
+            }
+    for alt in godot45_fallback_candidates(repo_root):
+        if not alt.is_file() or alt.stat().st_size < 1_000_000:
+            checked.append({"candidate": str(alt), "ok": False, "error": "absent_or_tiny"})
+            continue
+        ver = verify_godot45_host_binary(alt)
+        checked.append({"candidate": str(alt), **ver})
+        if not ver.get("ok"):
+            continue
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        if not cache.is_file() or cache.stat().st_size != alt.stat().st_size:
+            shutil.copy2(alt, cache)
+        # re-verify after copy
+        post = verify_godot45_host_binary(cache)
+        if not post.get("ok"):
+            return {
+                "ok": False,
+                "error": "godot45_cache_seed_failed_verify",
+                "source": str(alt),
+                "post": post,
+                "checked": checked,
+            }
+        return {
+            "ok": True,
+            "path": str(cache),
+            "via": "fallback_seed_to_cache",
+            "source": str(alt),
+            "provenance": post,
+            "checked": checked,
+        }
+    return {
+        "ok": False,
+        "error": "godot45_host_cache_missing",
+        "cache": str(cache),
+        "checked": checked,
+        "hint": "Place official Godot_v4.5-stable_linux.arm64 in artifacts/wp011r/cache",
+    }
+
+
 def _hoist_pnpm_node_modules(node_modules: Path) -> int:
     """Copy pnpm isolated packages to top-level node_modules so Node can resolve them.
 
@@ -151,17 +303,40 @@ def _sha256_tree(path: Path) -> str:
     return h.hexdigest()
 
 
+def _prefer_current_pin_worktree(sibling: Path) -> Path:
+    """Prefer repos/<name>/.worktrees/current-pin-* when present (dirty HEAD safe)."""
+    wt_root = sibling / ".worktrees"
+    if not wt_root.is_dir():
+        return sibling
+    matches = sorted(p for p in wt_root.glob("current-pin-*") if p.is_dir())
+    return matches[0] if matches else sibling
+
+
 def _discover_sibling(repo_root: Path, name: str) -> Path | None:
     parents = [repo_root.parent, repo_root.parent.parent]
     # Worktree layout: gate-worktrees/X → repos/
     if repo_root.parent.name == "gate-worktrees":
         parents.insert(0, repo_root.parent.parent)
+    # Worktree layout: <repo>/.worktrees/<name> → sibling repos live under repos/
+    if repo_root.parent.name == ".worktrees":
+        parents.insert(0, repo_root.parent.parent.parent)
     for parent in parents:
         cand = parent / name
         if cand.is_dir():
-            return cand
+            return _prefer_current_pin_worktree(cand)
     absolute = Path("/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos") / name
-    return absolute if absolute.is_dir() else None
+    return _prefer_current_pin_worktree(absolute) if absolute.is_dir() else None
+
+
+def apply_current_pin_accepted_mains(repo_root: Path) -> dict[str, Any]:
+    """Overlay ACCEPTED_MAINS SHAs from frozen pin manifest (authority)."""
+    from gunnchos_device_os.device_lab.current_pin_manifest import (
+        load_pin_manifest,
+        overlay_accepted_mains_from_pin,
+    )
+
+    doc = load_pin_manifest(repo_root)
+    return overlay_accepted_mains_from_pin(ACCEPTED_MAINS, doc)
 
 
 def _git_sha(path: Path) -> str | None:
@@ -571,17 +746,42 @@ if __name__ == "__main__":
     (staging / "OWNER_BUNDLE_MANIFEST.json").write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
     )
-    # Godot 4.5 binary for guest (Anime features=4.5); optional if absent.
-    godot45 = repo_root / "artifacts" / "wp011r" / "cache" / "Godot_v4.5-stable_linux.arm64"
-    if godot45.is_file():
-        shutil.copy2(godot45, staging / "Godot_v4.5-stable_linux.arm64")
+    # Godot 4.5 binary for guest (Anime/Pedestrian features=4.5). Resolve with
+    # Ring-aligned fallbacks; refuse unverified binaries.
+    resolved = resolve_godot45_host_binary(repo_root)
+    manifest["godot45_resolve"] = {
+        k: resolved.get(k)
+        for k in ("ok", "via", "error", "path", "source")
+        if k in resolved
+    }
+    if resolved.get("ok"):
+        godot45 = Path(str(resolved["path"]))
+        shutil.copy2(godot45, staging / GODOT45_BIN_NAME)
+        staged = staging / GODOT45_BIN_NAME
+        stage_ver = verify_godot45_host_binary(staged)
         manifest["godot45"] = {
-            "path": "Godot_v4.5-stable_linux.arm64",
-            "sha256": _sha256_file(staging / "Godot_v4.5-stable_linux.arm64"),
+            "path": GODOT45_BIN_NAME,
+            "sha256": stage_ver.get("sha256") or _sha256_file(staged),
+            "size_bytes": stage_ver.get("size_bytes"),
+            "arch": "linux.arm64",
+            "official_source_url": GODOT45_OFFICIAL_ZIP_URL,
+            "byte_identical_to_official_extracted": bool(
+                stage_ver.get("byte_identical_to_official_extracted")
+            ),
+            "verify_ok": bool(stage_ver.get("ok")),
+            "via": resolved.get("via"),
         }
-        (staging / "OWNER_BUNDLE_MANIFEST.json").write_text(
-            json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
-        )
+        if not stage_ver.get("ok"):
+            manifest["godot45"]["error"] = stage_ver.get("error")
+    else:
+        manifest["godot45"] = {
+            "path": GODOT45_BIN_NAME,
+            "ok": False,
+            "error": resolved.get("error") or "godot45_host_cache_missing",
+        }
+    (staging / "OWNER_BUNDLE_MANIFEST.json").write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+    )
     return manifest
 
 

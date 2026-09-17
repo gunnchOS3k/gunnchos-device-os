@@ -1,0 +1,323 @@
+{
+  "schema": "gunnchos.device_lab.waike_gui_window_and_bind.v1",
+  "generated_at_utc": "2026-09-17T21:27:48Z",
+  "prompt": "17G.5D",
+  "window_alive": true,
+  "headless": false,
+  "hub_url": "http://10.0.2.100:8787",
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+  "client_bound_http": true,
+  "bind_via": "hub_sidecar_client_http",
+  "mock_observed": false,
+  "hub_reachable_from_guest": true,
+  "socket_only_pending_hub_http": false,
+  "detail": {
+    "hub_reachable_from_guest": true,
+    "reach_detail": {
+      "hub_reachable_from_guest": true,
+      "tcp_hub": true,
+      "tcp_httpd": false,
+      "tcp_gateway_hub": false,
+      "http_hub_status": 200,
+      "http_hub_body": "{\"status\":\"ok\"}",
+      "http_httpd_status": null,
+      "http_gateway_hub_status": null,
+      "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK": true,
+      "errors": [
+        "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+        "tcp:10.0.2.2:8787:[Errno 111] Connection refused"
+      ],
+      "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86392sec preferred_lft 86392sec\n"
+    },
+    "hub_sidecar_access": {
+      "ok": true,
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_sidecar.log",
+      "proxy_log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_guestfwd_cors_proxy.log",
+      "client_http_observed": true,
+      "auth_login_observed": true,
+      "healthz_only": false,
+      "request_lines": [
+        "INFO:     127.0.0.1:65502 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:65513 - \"GET /healthz HTTP/1.0\" 200 OK",
+        "INFO:     127.0.0.1:65521 - \"GET /healthz HTTP/1.0\" 200 OK",
+        "INFO:     127.0.0.1:65533 - \"GET /healthz HTTP/1.0\" 200 OK",
+        "INFO:     127.0.0.1:49158 - \"POST /api/v1/auth/login HTTP/1.0\" 200 OK",
+        "INFO:     127.0.0.1:49164 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:49171 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:49184 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:49191 - \"GET /api/v1/learner/home HTTP/1.1\" 200 OK",
+        "2026-09-17T21:23:28Z INFO:     127.0.0.1:65501 - \"GET /healthz HTTP/1.1\" PROXY origin=None clen=0",
+        "2026-09-17T21:23:28Z INFO:     127.0.0.1:65501 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "2026-09-17T21:23:40Z INFO:     127.0.0.1:65512 - \"GET /healthz HTTP/1.0\" PROXY origin=None clen=0",
+        "2026-09-17T21:23:40Z INFO:     127.0.0.1:65512 - \"GET /healthz HTTP/1.0\" 200 OK",
+        "2026-09-17T21:23:49Z INFO:     127.0.0.1:65520 - \"GET /healthz HTTP/1.0\" PROXY origin=None clen=0",
+        "2026-09-17T21:23:49Z INFO:     127.0.0.1:65520 - \"GET /healthz HTTP/1.0\" 200 OK",
+        "2026-09-17T21:24:25Z INFO:     127.0.0.1:65532 - \"GET /healthz HTTP/1.0\" PROXY origin='http://ipc.localhost' clen=0",
+        "2026-09-17T21:24:25Z INFO:     127.0.0.1:65532 - \"GET /healthz HTTP/1.0\" 200 OK",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - \"OPTIONS /api/v1/auth/login HTTP/1.0\" PROXY origin='http://ipc.localhost' clen=0",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - \"OPTIONS /api/v1/auth/login HTTP/1.0\" 204 CORS_LOCAL",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - \"POST /api/v1/auth/login HTTP/1.0\" PROXY origin='http://ipc.localhost' clen=85",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - \"POST /api/v1/auth/login HTTP/1.0\" 200 OK",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - \"GET /healthz HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=0",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=0",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" 204 CORS_LOCAL",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=85",
+        "2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=0",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" 204 CORS_LOCAL",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=80",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - \"OPTIONS /api/v1/learner/home HTTP/1.1\" PROXY origin='tauri://localhost' clen=0",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - \"OPTIONS /api/v1/learner/home HTTP/1.1\" 204 CORS_LOCAL",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - \"GET /api/v1/learner/home HTTP/1.1\" PROXY origin='tauri://localhost' clen=0",
+        "2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - \"GET /api/v1/learner/home HTTP/1.1\" 200 OK"
+      ],
+      "tail": "OK\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - ACCEPT\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - \"OPTIONS /api/v1/auth/login HTTP/1.0\" PROXY origin='http://ipc.localhost' clen=0\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49152 - \"OPTIONS /api/v1/auth/login HTTP/1.0\" 204 CORS_LOCAL\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - ACCEPT\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - \"POST /api/v1/auth/login HTTP/1.0\" PROXY origin='http://ipc.localhost' clen=85\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49157 - \"POST /api/v1/auth/login HTTP/1.0\" 200 OK\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - ACCEPT\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - \"GET /healthz HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=0\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49163 - \"GET /healthz HTTP/1.1\" 200 OK\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - ACCEPT\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=0\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49167 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" 204 CORS_LOCAL\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - ACCEPT\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=85\n2026-09-17T21:24:26Z INFO:     127.0.0.1:49170 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - ACCEPT\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=0\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49180 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" 204 CORS_LOCAL\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - ACCEPT\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=80\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49183 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - ACCEPT\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - \"OPTIONS /api/v1/learner/home HTTP/1.1\" PROXY origin='tauri://localhost' clen=0\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49187 - \"OPTIONS /api/v1/learner/home HTTP/1.1\" 204 CORS_LOCAL\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - ACCEPT\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - \"GET /api/v1/learner/home HTTP/1.1\" PROXY origin='tauri://localhost' clen=0\n2026-09-17T21:24:49Z INFO:     127.0.0.1:49190 - \"GET /api/v1/learner/home HTTP/1.1\" 200 OK\n",
+      "options_observed": true,
+      "proxy_client_http_observed": true,
+      "counts": {
+        "access_lines": 35,
+        "non_healthz": 20,
+        "api_v1": 20,
+        "auth": 15,
+        "options": 8,
+        "proxy_client": 12
+      }
+    },
+    "client_hub_sockets": {
+      "ok": true,
+      "put_ok": true,
+      "raw_tail": "\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"588\", \"remote\": \"6402000A:2253\", \"state\": \"06\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}]}\n",
+      "hub_port": 8787,
+      "established_to_hub": true,
+      "procs": [],
+      "ss_tail": "State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\n",
+      "errors": [
+        "CalledProcessError(1, ['bash', '-lc', 'pgrep -a waike-learning; pgrep -a WebKit; pgrep -a webkit'])"
+      ],
+      "proc_net_hits": [
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "576",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://as"
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "588",
+          "remote": "6402000A:2253",
+          "state": "06",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        }
+      ]
+    },
+    "gui_log_scrape": {
+      "ok": true,
+      "raw_tail": "WAIKE_CSP_HTML_META_INJECTED=true\\nUnknown logging channel: Network\\nUnknown logging channel: Network\\nUnknown logging channel: Network\\nlibEGL warning: egl: failed to create dri2 screen\\nUnknown logging channel: Network\\nlibEGL warning: egl: failed to create dri2 screen\\nWAIKE_CLIENT_DIAG kind=csp_violation detail=style-src-elem|style-src-elem|https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap|tauri://localhost\\nWAIKE_CLIENT_DIAG kind=csp_violation detail=style-src-elem|style-src-elem|https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap|tauri://localhost\\nWAIKE_CLIENT_DIAG kind=hub_login_fetch_start detail=http://10.0.2.100:8787\\n\"}\n",
+      "path": "/tmp/waike_gui_A.log",
+      "bytes": 1148,
+      "hub_http_chip_in_log": false,
+      "hub_mock_in_log": false,
+      "hub_unavailable_in_log": false,
+      "runtime_hub_url_seen": true,
+      "login_surface_hint": false,
+      "login_surface_http_bound_hint": false,
+      "csp_connect_blocked_hint": true,
+      "effective_csp_connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
+      "effective_csp": "font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787; default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
+      "csp_html_meta_injected": true,
+      "client_diag_hub_login_fetch_start": true,
+      "client_diag_hub_login_fetch_error": false,
+      "client_diag_csp_violation": true,
+      "client_diag_hub_resolved": true,
+      "tail": "WAIKE_EFFECTIVE_CSP_CONNECT_SRC='self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787\nWAIKE_EFFECTIVE_CSP=font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787; default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:\nWAIKE_CSP_HTML_META_INJECTED=true\nUnknown logging channel: Network\nUnknown logging channel: Network\nUnknown logging channel: Network\nlibEGL warning: egl: failed to create dri2 screen\nUnknown logging channel: Network\nlibEGL warning: egl: failed to create dri2 screen\nWAIKE_CLIENT_DIAG kind=csp_violation detail=style-src-elem|style-src-elem|https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap|tauri://localhost\nWAIKE_CLIENT_DIAG kind=csp_violation detail=style-src-elem|style-src-elem|https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap|tauri://localhost\nWAIKE_CLIENT_DIAG kind=hub_login_fetch_start detail=http://10.0.2.100:8787\n"
+    },
+    "atspi_doc": {
+      "skipped": "post_webkit_atspi_destabilizes_virtio"
+    },
+    "client_hub_http_chip_observed": true,
+    "client_hub_http_chip_via": "hub_sidecar_client_http",
+    "guest_tcp_socket_observed": true,
+    "client_hub_mock_chip_observed": false,
+    "client_hub_unavailable_observed": false,
+    "login_surface_http_bound": false,
+    "mock_mode_used": false,
+    "csp_connect_blocked_hint": true,
+    "post_login_drive": true,
+    "login_drive_summary": {
+      "ok": true,
+      "login_form_driven": true,
+      "path": "agent_tab_cycle_then_grid",
+      "strategy": "tab_cycle_then_grid",
+      "wtype": false,
+      "agent_inject": {
+        "ok": true,
+        "tail": "focus_v1:True|focus_v2:True|pre_tab_0:True|pre_tab_1:True|pre_tab_2:True|pre_tab_3:True|ctrl_a_site:True|type_site:True|tab_user:True|ctrl_a_user:True|type_user:True|tab_pass:True|ctrl_a_pass:True|type_pass:True|key_enter:True|click_user_y300:True|click_user_y340:True|click_user_y360:True|click_user_y380:True|click_user_y400:True|click_user_y420:True|grid_type_user:True|click_pass_y380:True|click_pass_y420:True|click_pass_y440:True|grid_type_pass:True|grid_enter:True|click_submit_y480:True|click_submit_y500:True|click_submit_y520:True|click_submit_y540:True|click_submit_y560:True|click_submit_y600:True"
+      },
+      "full_atspi_skipped": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "strategy": "tab_cycle_then_grid",
+          "login_form_driven": true,
+          "hub_client_http": true,
+          "auth_login": true,
+          "options_observed": true,
+          "diag_fetch_start": true,
+          "diag_fetch_error": false,
+          "csp_block": true,
+          "hub_unavailable_in_log": false,
+          "inject_tail": "focus_v1:True|focus_v2:True|pre_tab_0:True|pre_tab_1:True|pre_tab_2:True|pre_tab_3:True|ctrl_a_site:True|type_site:True|tab_user:True|ctrl_a_user:True|type_user:True|tab_pass:True|ctrl_a_pass:True|type_pass:True|key_enter:True|click_user_y300:True|click_user_y340:True|click_user_y360:True|click_user_y380:True|click_user_y400:True|click_user_y420:True|grid_type_user:True|click_pass_y380:True|click_pass_y420:True|click_pass_y440:True|grid_type_pass:True|grid_enter:True|click_submit_y480:True|click_submit_y500:True|click_submit_y520:True|click_submit_y540:True|click_submit_y560:True|click_submit_y600:True"
+        }
+      ]
+    },
+    "gui_hub_ready_before_login": {
+      "ok": true,
+      "ready": true,
+      "polls": 1,
+      "waited_s": 8.75,
+      "blocker": null,
+      "csp_html_meta_injected": true,
+      "effective_csp_connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
+      "runtime_hub_url_seen": true,
+      "hub_unavailable_in_log": false
+    },
+    "client_diag_hub_login_fetch_start": true,
+    "note": "Bind proof prefers Hub-side access log after wait-for-hub-ready + multi-strategy GUI login retries; AT-SPI skipped post-WebKit.",
+    "effective_webview_csp": {
+      "schema": "gunnchos.device_lab.waike_effective_webview_csp.v1",
+      "generated_at_utc": "2026-09-17T21:25:17Z",
+      "authorized_hub_origin": "http://10.0.2.100:8787",
+      "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+      "source_construction_alone_insufficient": true,
+      "exact_runtime_csp": {
+        "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+        "no_scheme_wide_tokens": true
+      },
+      "directive_map_apply": true,
+      "html_meta_injection_source": true,
+      "stderr_effective_tokens_source": true,
+      "fold_launch_authorized_hub": true,
+      "runtime_effective_csp_connect_src": "'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787",
+      "runtime_effective_csp": "font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost https://ipc.localhost http://10.0.2.100:8787 ws://10.0.2.100:8787; default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
+      "runtime_csp_html_meta_injected": true,
+      "runtime_tokens_observed": true,
+      "authorized_hub_origin_in_effective_connect_src": true,
+      "scheme_wide_tokens_in_effective": [],
+      "no_scheme_wide_in_effective": true
+    }
+  },
+  "journey_a": {
+    "acknowledged": true,
+    "alive_beyond_ipc_ack": true,
+    "pid": 576
+  }
+}

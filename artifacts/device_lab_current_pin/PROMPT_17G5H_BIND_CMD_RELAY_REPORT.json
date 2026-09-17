@@ -1,0 +1,27 @@
+{
+  "schema": "gunnchos.device_lab.prompt_17g5h_bind_cmd_relay_report.v1",
+  "generated_at_utc": "2026-09-17T19:29:02Z",
+  "prompt": "17G.5H-unsandbox-bind-reearn-cmd-relay",
+  "device_os_pr": 134,
+  "branch": "cursor/device-lab-current-pin-revalidation",
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+  "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+  "verdict": "BIND_PASS_RUNTIME_FAIL",
+  "blocker": "gui_learner_depth_incomplete_after_hub_bind:gui_learner_depth_incomplete_after_hub_bind:course/assessment/receipt/offline/recovery not authoritatively proven;failed=course_activity,assessment_receipt,role_denial,instructor_workflow,feedback_readback,offline_reconnect,controlled_recovery",
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_EFFECTIVE_CSP_GUI_HUB_REEARN",
+  "root_cause_class": "qemu_tcp_guestfwd_dropped_non_get_payloads_fixed_by_cmd_relay",
+  "additive_fix": [
+    "guestfwd=tcp:\u2026-cmd:hub_guestfwd_cmd_relay_8787.sh per-connection stdin/stdout relay",
+    "parse_guestfwd_env preserves cmd (avoid tcp:tcp boot fallback)",
+    "hub_guestfwd_cors_proxy ACCEPT logging + HTTP/1.0/1.1 mimic matrix"
+  ],
+  "evidence": "artifacts/device_lab_current_pin/waike/PROMPT_17G5H_UNSANDBOX_BIND_REEARN.json",
+  "do_not_merge": true,
+  "cursor_never_merges": true
+}

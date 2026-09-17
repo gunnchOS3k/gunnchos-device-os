@@ -1,0 +1,36 @@
+{
+  "schema": "gunnchos.device_lab.waike_guest_hub_reachability.v1",
+  "generated_at_utc": "2026-09-17T21:27:48Z",
+  "prompt": "17G.5D",
+  "guest_url": "http://10.0.2.100:8787",
+  "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+  "tcp_hub": true,
+  "tcp_gateway_hub": false,
+  "http_hub_status": 200,
+  "http_hub_body": "{\"status\":\"ok\"}",
+  "http_gateway_hub_status": null,
+  "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86392sec preferred_lft 86392sec\n",
+  "errors": [
+    "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+    "tcp:10.0.2.2:8787:[Errno 111] Connection refused"
+  ],
+  "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK": true,
+  "guest_service_forward": {
+    "schema": "gunnchos.device_lab.guest_service_forward.v1",
+    "restrict": true,
+    "rules": [
+      {
+        "name": "device_lab_hub",
+        "guest_addr": "10.0.2.100",
+        "guest_port": 8787,
+        "host_addr": "127.0.0.1",
+        "host_port": 8787,
+        "protocol": "tcp",
+        "cmd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+      }
+    ],
+    "notes": "restrict=on isolation; explicit guestfwd only; Hub/httpd bind host loopback.",
+    "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+  },
+  "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+}

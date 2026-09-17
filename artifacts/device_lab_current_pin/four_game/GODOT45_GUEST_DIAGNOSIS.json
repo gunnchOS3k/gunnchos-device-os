@@ -1,0 +1,56 @@
+{
+  "schema": "gunnchos.device_lab.godot45_guest_diagnosis.v1",
+  "prompt": "17F",
+  "recorded_at_utc": "2026-09-15T04:55:00Z",
+  "prior_blocker": "godot45_unavailable_in_guest",
+  "prior_godot45": {
+    "ok": false,
+    "error": "godot45_host_cache_missing"
+  },
+  "prior_godot4": {
+    "ok": true,
+    "via": "guest_curl_10.0.2.2:8765"
+  },
+  "ring_17e_path": {
+    "ok": true,
+    "via": "already_present_on_guest",
+    "version_stdout": "4.5.stable.official.876b29033",
+    "also_had": [
+      "parent_repo_fallback_seed_to_cache",
+      "http_ensure",
+      "virtio_file_put_optional"
+    ]
+  },
+  "root_cause": {
+    "summary": "Four-Game _ensure_godot45_in_guest only checked worktree artifacts/wp011r/cache and returned godot45_host_cache_missing with no already_present probe and no parent-repo fallback. Ring path (interactive_guest_proofs) probed already_present_on_guest first and seeded cache from parent owner_games_guest_bundle.",
+    "why_ring_worked": "Pedestrian/Ring used already_present_on_guest after prior install onto persistent guest overlay, plus fallback copy from parent device-os bundle into worktree cache.",
+    "why_four_game_failed": "At 2026-09-09T18:13Z worktree cache lacked Godot_v4.5-stable_linux.arm64 (only 4.3 present). prepare_owner_guest_staging therefore did not stage Godot into 9p bundle; _install_godot45_from_9p failed; _ensure_godot45_in_guest returned godot45_host_cache_missing.",
+    "cache_now_present": true,
+    "cache_mtime_note": "2026-09-09T16:18 local — populated during/after 17E Ring work (after prior Four-Game fail UTC 18:13)"
+  },
+  "authenticity": {
+    "path": "artifacts/wp011r/cache/Godot_v4.5-stable_linux.arm64",
+    "sha256": "2ec9ae0ff0702f9e1248c27708a08eaf7df639907650505a486ff7b1be005291",
+    "size_bytes": 126265544,
+    "arch": "linux.arm64",
+    "engine": "Godot",
+    "version_pin": "4.5-stable",
+    "official_source_url": "https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.arm64.zip",
+    "byte_identical_to_official_extracted": true,
+    "verification": "17F downloaded official zip, extracted, cmp + sha256 identical"
+  },
+  "fix_applied": [
+    "resolve_godot45_host_binary with parent-repo fallbacks + official SHA/size gate",
+    "_probe_godot45_already_in_guest before 9p/HTTP",
+    "prepare_owner_guest_staging stages verified Godot into 9p bundle",
+    "tests for provenance mismatch, missing cache, strict AND, process-alive-alone rejection"
+  ],
+  "forbidden_rejected": [
+    "fake_godot",
+    "spoof",
+    "unverified_binary",
+    "host_for_guest",
+    "wrong_engine",
+    "process_alive_alone_as_pass"
+  ]
+}

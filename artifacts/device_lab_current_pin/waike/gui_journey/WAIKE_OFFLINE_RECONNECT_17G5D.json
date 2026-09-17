@@ -1,0 +1,59 @@
+{
+  "generated_at_utc": "2026-09-17T21:27:48Z",
+  "prompt": "17G.5D",
+  "pass": true,
+  "native_architecture_present_on_accepted_main": true,
+  "gui_session": true,
+  "lease": {
+    "status": 200,
+    "body": {
+      "lease_id": "lease_4bb0e31245934d5d",
+      "user_id": "learner-alpha",
+      "site_id": "site-alpha",
+      "section_id": "sec_alpha_dc_w01",
+      "device_id": "device-lab-gui-7033794e",
+      "issued_at": "2026-09-17T21:26:57Z",
+      "expires_at": "2026-09-17T23:26:57Z",
+      "revoked": false,
+      "revoke_reason": null,
+      "capabilities": [
+        "lesson_progress",
+        "assignment_draft",
+        "quiz_attempt",
+        "discussion_draft",
+        "lab_local",
+        "attachment_queue"
+      ]
+    }
+  },
+  "mutation": {
+    "status": 200,
+    "body_head": "{'client_mutation_id': 'mut_gui_7c300d94482f4f0f', 'sync_status': 'acknowledged', 'idempotent_replay': False, 'server_revision': 1, 'result': {'sync_status': 'acknowledged', 'entity_id': 'prog_df158aa583f24404', 'revision': 1, 'lesson_id': 'DIGITAL_CONFIDENCE.W01', 'pack_id': 'DIGITAL_CONFIDENCE.learner.v1'}, 'receipt': {'receipt_id': 'syncr_88ae2ca40a8442c9', 'client_mutation_id': 'mut_gui_7c300d"
+  },
+  "receipt": {
+    "status": 200,
+    "body": {
+      "receipt_id": "syncr_88ae2ca40a8442c9",
+      "client_mutation_id": "mut_gui_7c300d94482f4f0f",
+      "actor_id": "learner-alpha",
+      "site_id": "site-alpha",
+      "section_id": "sec_alpha_dc_w01",
+      "entity_type": "lesson_progress",
+      "entity_id": "prog_df158aa583f24404",
+      "authoritative_revision": 1,
+      "result": "ok",
+      "payload_hash": "a37840aa38bf970569e87710e6edf37c35317784ece5c7ac5d46515b9f4e0413",
+      "server_timestamp": "2026-09-17T21:26:57Z",
+      "detail": {
+        "sync_status": "acknowledged",
+        "entity_id": "prog_df158aa583f24404",
+        "revision": 1,
+        "lesson_id": "DIGITAL_CONFIDENCE.W01",
+        "pack_id": "DIGITAL_CONFIDENCE.learner.v1"
+      }
+    }
+  },
+  "blocker": null,
+  "client_mutation_id": "mut_gui_7c300d94482f4f0f",
+  "lease_id": "lease_4bb0e31245934d5d"
+}

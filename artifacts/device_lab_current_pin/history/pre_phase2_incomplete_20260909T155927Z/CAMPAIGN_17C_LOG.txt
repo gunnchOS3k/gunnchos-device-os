@@ -1,0 +1,15 @@
+2026-09-09T14:21:15Z campaign start free_gib=31.0 pin=40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575 tip=b94e949
+2026-09-09T14:21:15Z RUN timeout=1500s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_ring_only.py
+2026-09-09T14:24:02Z campaign start free_gib=31.0 pin=40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575 tip=b94e949
+2026-09-09T14:24:02Z RUN timeout=1500s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_ring_only.py
+2026-09-09T14:29:53Z RUN timeout=2400s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/build_owner_four_game_packages.py
+2026-09-09T14:30:06Z campaign start free_gib=31.0 pin=40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575 tip=b94e949
+2026-09-09T14:30:06Z RUN timeout=1500s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_ring_only.py
+2026-09-09T14:30:17Z RUN timeout=3600s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_wp011r2_four_game_owner_reearn.py
+2026-09-09T14:30:33Z RUN timeout=3600s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/product_use_rc_002.py
+2026-09-09T14:30:41Z RUN timeout=2400s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/product_use_finish_rc002_legs.py
+2026-09-09T14:30:41Z RUN timeout=600s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/verify_gunnchai_sibling_contract.py
+2026-09-09T14:30:41Z RUN timeout=900s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_current_pin_lifecycle_matrix.py
+2026-09-09T14:30:41Z RUN timeout=2400s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/run_eco010_full_soak.py --duration-sec 1800
+2026-09-09T14:30:42Z RUN timeout=900s cmd=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11 scripts/device_lab_score_independent.py
+2026-09-09T14:30:43Z campaign done results={'ring': False, 'four_games': False, 'waike': False, 'gunnchai': False, 'lifecycle': False, 'eco010': False, 'independent': False} digital=False blocker=RING_TO_REAL_APP_STATE_MUTATION_PASS

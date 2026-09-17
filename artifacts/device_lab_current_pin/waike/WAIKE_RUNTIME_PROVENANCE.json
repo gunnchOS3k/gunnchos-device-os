@@ -1,0 +1,83 @@
+{
+  "schema": "gunnchos.device_lab.waike_runtime_provenance.v1",
+  "generated_at_utc": "2026-09-17T21:23:23Z",
+  "pin_manifest_sha256": "8da7a6f9688e88b8fa31ad61c6f0f4229a8cbf83cbc0ad0711a81557643df36b",
+  "system_of_record": "platform_tauri_learning_os",
+  "bundle_id": "com.gunnchos.waike.learning",
+  "app_version": "0.1.0",
+  "accepted_main": {
+    "repository": "gunnchOS3k/gunnchos-waike-learning-platform",
+    "sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "curriculum_ops_sha": "fbf7685bc5686201ccaa0128ee83346d59b3d584"
+  },
+  "rejected_surrogates": [
+    "apps/waike_learning/index.html seed companion",
+    "fixtures/learning_os/waike-learning-os protocol stub",
+    "product_use waike_guest_pack static HTML collector",
+    "research-ops curriculum alone",
+    "screenshots / API-only / process-alive alone"
+  ],
+  "pin_verification": {
+    "ok": true,
+    "learning_platform": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/.deps/current-pin-waike-lp",
+      "head": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "origin_main": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "expected": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "match": true,
+      "dirty": false
+    },
+    "research_ops": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/waike-research-ops",
+      "head": "0c627ab700cf72a89a9aad06369e5dedb8fb9b82",
+      "origin_main": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+      "expected": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+      "match": true,
+      "dirty": true
+    },
+    "note": "Dirty research-ops allowed only if origin/main pin matches; learning-platform must be clean accepted-main for PASS evidence."
+  },
+  "authentic_linux_ci_artifact": {
+    "ok": true,
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/main-aarch64-glibc236/apps/client/src-tauri/target/release/waike-learning-client",
+    "sha256": "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8",
+    "size_bytes": 8033008,
+    "file_probe": "ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=ad80a70e3d946ec6245addf67e72fdcca8ecd11f, for GNU/Linux 3.7.0, not stripped",
+    "arch": "aarch64",
+    "fixture_rejected": true,
+    "matches_gate_d_linux_sha256": false,
+    "matches_main_aarch64_sha256": false,
+    "matches_main_aarch64_glibc236_sha256": true,
+    "compatibility_label": "linux-aarch64-glibc236",
+    "artifact_id": "10520470972",
+    "workflow_run_id": "35274733231",
+    "artifact_source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "x86_64_retained": true,
+    "ubuntu_arm_retained_not_for_debian12": true,
+    "staged_variants": [
+      {
+        "arch": "aarch64",
+        "sha256": "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/main-aarch64-glibc236/apps/client/src-tauri/target/release/waike-learning-client"
+      },
+      {
+        "arch": "aarch64",
+        "sha256": "1725b2122c36ee8c008fc583569470496082763b6491a01be1b3b43a2d371c8b",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/main-aarch64-linux/apps/client/src-tauri/target/release/waike-learning-client"
+      },
+      {
+        "arch": "x86_64",
+        "sha256": "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef",
+        "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/gate-d-linux/apps/client/src-tauri/target/release/waike-learning-client"
+      }
+    ]
+  },
+  "guest_arch_expectation": "aarch64",
+  "ci_linux_artifact_arch": "aarch64",
+  "arch_gap": false,
+  "compatibility_label": "linux-aarch64-glibc236",
+  "matches_main_aarch64_glibc236_sha256": true,
+  "compatibility_plan": "Device OS Interactive Guest is Debian 12 / glibc 2.36 aarch64. Prefer accepted-main linux-aarch64-glibc236 artifact; retain Ubuntu aarch64-current and x86_64 Gate D but never exec Ubuntu GLIBC_2.39 ELF on Debian 12 guest. RuntimeTarget preflight must PASS before journey.",
+  "launcher_contract": "gunnchos_device_os.learning_os_launcher + NativeLaunchAdapter",
+  "claim_boundary": "SoR is Platform Tauri Learning OS. Device OS is thin launcher / package lifecycle / permissions / continuity only."
+}

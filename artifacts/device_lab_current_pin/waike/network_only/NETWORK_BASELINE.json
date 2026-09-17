@@ -1,0 +1,17 @@
+{
+  "schema": "gunnchos.device_lab.network_baseline.v1",
+  "generated_at_utc": "2026-09-16T15:38:01Z",
+  "prompt": "17G.5C1",
+  "device_os_tip": "364275208602d726e3f4f7fd6c8f66b2357faf04",
+  "source_path": "gunnchos_device_os/device_lab/virtualization/qemu_guest.py",
+  "function": "QemuGuestSession._start_interactive_uefi",
+  "committed_head_netdev_default": "user,id=n0,restrict=on",
+  "committed_restrict_default": true,
+  "committed_nic_device": "virtio-net-pci,netdev=n0",
+  "committed_guestfwd_present": false,
+  "committed_host_visible": "host loopback services not reachable under restrict=on",
+  "committed_guest_visible_gateway": "10.0.2.2 (slirp gateway; blocked to host under restrict=on)",
+  "current_tree_uses_guest_service_forward": true,
+  "current_default_without_env_guestfwd": "user,id=n0,restrict=on",
+  "notes": "NETWORK_BASELINE captured against #134 tip before treating GuestServiceForward as the production path. Default with empty rules remains user,id=n0,restrict=on."
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "gunnchos.device_lab.guestfwd_test_pass.v1",
+  "generated_at_utc": "2026-09-16T15:38:26Z",
+  "guestfwd_rule": "guestfwd=tcp:10.0.2.100:18787-tcp:127.0.0.1:18787",
+  "netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:18787-tcp:127.0.0.1:18787",
+  "qemu_usernet": {
+    "restrict": true,
+    "guestfwd_rule_count": 1,
+    "rules": [
+      {
+        "name": "guestfwd_test_service",
+        "guest_addr": "10.0.2.100",
+        "guest_port": 18787,
+        "host_addr": "127.0.0.1",
+        "host_port": 18787,
+        "protocol": "tcp"
+      }
+    ],
+    "netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:18787-tcp:127.0.0.1:18787",
+    "unrestricted_usernet": false,
+    "schema": "gunnchos.device_lab.guest_service_forward.v1"
+  },
+  "restrict_on": true,
+  "probe": {
+    "agent_ok": true,
+    "put_note": {
+      "ok": true,
+      "returncode": 0
+    },
+    "raw_tail": "PROBE_OK\n{\"ip_addr\": \"1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\\n    inet 127.0.0.1/8 scope host lo\\n       valid_lft forever preferred_lft forever\\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\\n       valid_lft 86397sec preferred_lft 86397sec\\n\", \"ip_route\": \"10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \\n\", \"probes\": [{\"url\": \"http://10.0.2.100:18787/healthz\", \"tcp_ok\": true, \"http_status\": 200, \"body\": \"GUNNCHOS_GUESTFWD_OK\", \"error\": null, \"body_sha256\": \"11d23e1e339e04ee4d52fa19473a192e7c6385ac76d68f5b12a0370325378bf5\"}, {\"url\": \"http://10.0.2.2:18787/healthz\", \"tcp_ok\": false, \"http_status\": null, \"body\": \"\", \"error\": \"tcp:[Errno 111] Connection refused\"}, {\"url\": \"http://10.0.2.100:19999/healthz\", \"tcp_ok\": false, \"http_status\": null, \"body\": \"\", \"error\": \"tcp:[Errno 111] Connection refused\"}, {\"url\": \"http://10.0.2.2:19999/healthz\", \"tcp_ok\": false, \"http_status\": null, \"body\": \"\", \"error\": \"tcp:[Errno 111] Connection refused\"}]}\n",
+    "ip_addr": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86397sec preferred_lft 86397sec\n",
+    "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n",
+    "probes": [
+      {
+        "url": "http://10.0.2.100:18787/healthz",
+        "tcp_ok": true,
+        "http_status": 200,
+        "body": "GUNNCHOS_GUESTFWD_OK",
+        "error": null,
+        "body_sha256": "11d23e1e339e04ee4d52fa19473a192e7c6385ac76d68f5b12a0370325378bf5"
+      },
+      {
+        "url": "http://10.0.2.2:18787/healthz",
+        "tcp_ok": false,
+        "http_status": null,
+        "body": "",
+        "error": "tcp:[Errno 111] Connection refused"
+      },
+      {
+        "url": "http://10.0.2.100:19999/healthz",
+        "tcp_ok": false,
+        "http_status": null,
+        "body": "",
+        "error": "tcp:[Errno 111] Connection refused"
+      },
+      {
+        "url": "http://10.0.2.2:19999/healthz",
+        "tcp_ok": false,
+        "http_status": null,
+        "body": "",
+        "error": "tcp:[Errno 111] Connection refused"
+      }
+    ]
+  },
+  "host_access_log_tail": "127.0.0.1 - \"GET /healthz HTTP/1.1\" 200 -\n127.0.0.1 - \"GET /healthz HTTP/1.1\" 200 -\n",
+  "QEMU_SCOPED_GUESTFWD_PASS": true,
+  "QEMU_GUEST_ISOLATION_RETAINED": true,
+  "unrestricted_usernet_used": false
+}

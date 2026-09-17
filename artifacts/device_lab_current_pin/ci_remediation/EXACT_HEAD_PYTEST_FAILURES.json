@@ -1,0 +1,52 @@
+{
+  "schema": "gunnchos.device_lab.ci_remediation.exact_head_pytest_failures.v1",
+  "generated_at_utc": "2026-09-09T20:05:19Z",
+  "device_os_pr": 134,
+  "exact_head": "0638dd64760ae85253f02e41ee7f5f0787ac246d",
+  "ci_starting_status": {
+    "reality": "SUCCESS",
+    "qemu-guest-path": "SUCCESS",
+    "test": "FAILURE",
+    "gate1": "FAILURE"
+  },
+  "shared_root_cause": true,
+  "root_cause": "Phase2 current-pin Ring FAIL evidence overwritten artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json (RING=false hung) while DEVICE_LAB_REMAINING_DIGITAL_GAPS.json pass_tokens.RING remained true; consistency tests assert equality.",
+  "failures": [
+    {
+      "node_id": "tests/device_lab/test_wp011r_acceptance.py::test_master_and_silicon_tokens_remain_false",
+      "assertion": "tokens[RING_TO_REAL_APP_STATE_MUTATION_PASS] == bool(evidence.RING...)",
+      "left": true,
+      "right": false,
+      "error": "AssertionError: assert True == False",
+      "traceback_summary": "test_wp011r_acceptance.py:74 comparing gaps.pass_tokens to RING_APP_MUTATION_EVIDENCE.json",
+      "affected_source_files": [
+        "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+        "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json",
+        "scripts/run_current_pin_ring_only.py"
+      ],
+      "predated_phase_1_2_harness": false,
+      "introduced_by": "Phase 2 commit 0638dd6 overwrote wp011r ring evidence without syncing gaps tokens",
+      "remediation_ownership": "device-os harness/evidence consistency on #134"
+    },
+    {
+      "node_id": "tests/device_lab/test_wp011r_tokens.py::test_master_complete_false",
+      "assertion": "same RING token/evidence equality",
+      "left": true,
+      "right": false,
+      "error": "AssertionError: assert True == False",
+      "traceback_summary": "test_wp011r_tokens.py:40",
+      "affected_source_files": [
+        "artifacts/wp011r/DEVICE_LAB_REMAINING_DIGITAL_GAPS.json",
+        "artifacts/wp011r/ring/RING_APP_MUTATION_EVIDENCE.json"
+      ],
+      "predated_phase_1_2_harness": false,
+      "shares_root_cause_with": "test_wp011r_acceptance.py::test_master_and_silicon_tokens_remain_false",
+      "remediation_ownership": "device-os harness/evidence consistency on #134"
+    }
+  ],
+  "runtime_blocker_separate": {
+    "token": "RING_TO_REAL_APP_STATE_MUTATION_PASS",
+    "blocker": "ring_mutation_hung_virtio_serial_wall_clock_killed",
+    "note": "CI pytest failure is evidence/token desync; Ring hang is separate runtime gate to fix after CI consistency."
+  }
+}

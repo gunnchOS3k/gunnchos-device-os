@@ -1,6 +1,10 @@
 """Unit tests for honest FOUR_GAME earn criteria (no guest required)."""
 from __future__ import annotations
 
+from pathlib import Path
+
+import pytest
+
 from gunnchos_device_os.device_lab.four_game_honest import (
     anime_cfg_mutated,
     anime_default_career_save,
@@ -223,3 +227,145 @@ def test_verify_accepted_shas_uses_honest_entry(tmp_path, monkeypatch):
     beat = out["games"]["beatlink-party"]
     assert beat["observed_sha"] == art.ACCEPTED_MAINS["beatlink-party"]["accepted_main_sha"]
     assert beat["successor_draft_not_accepted_main"] is True
+
+
+def test_godot45_official_sha_and_size_constants():
+    from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
+        GODOT45_OFFICIAL_LINUX_ARM64_SHA256,
+        GODOT45_OFFICIAL_SIZE_BYTES,
+    )
+
+    assert GODOT45_OFFICIAL_SIZE_BYTES == 126_265_544
+    assert len(GODOT45_OFFICIAL_LINUX_ARM64_SHA256) == 64
+    assert GODOT45_OFFICIAL_LINUX_ARM64_SHA256.startswith("2ec9ae0f")
+
+
+def test_verify_godot45_rejects_wrong_size_and_sha(tmp_path: Path):
+    from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
+        GODOT45_OFFICIAL_LINUX_ARM64_SHA256,
+        GODOT45_OFFICIAL_SIZE_BYTES,
+        verify_godot45_host_binary,
+    )
+
+    tiny = tmp_path / "Godot_v4.5-stable_linux.arm64"
+    tiny.write_bytes(b"FAKE_GODOT")
+    bad = verify_godot45_host_binary(tiny)
+    assert bad["ok"] is False
+    assert bad["error"] == "godot45_size_mismatch"
+
+    spoof = tmp_path / "spoof"
+    spoof.write_bytes(b"x" * GODOT45_OFFICIAL_SIZE_BYTES)
+    bad2 = verify_godot45_host_binary(spoof)
+    assert bad2["ok"] is False
+    assert bad2["error"] == "godot45_sha256_mismatch"
+    assert bad2["sha256"] != GODOT45_OFFICIAL_LINUX_ARM64_SHA256
+
+
+def test_resolve_godot45_seeds_cache_from_fallback(tmp_path: Path, monkeypatch):
+    from gunnchos_device_os.device_lab import owner_four_game_artifacts as art
+
+    # Authentic-sized payload with official digest is expensive; monkeypatch verify.
+    cache = tmp_path / "artifacts/wp011r/cache"
+    cache.mkdir(parents=True)
+    fallback = tmp_path / "fallback_bin"
+    # Resolver rejects candidates under 1 MiB as absent_or_tiny.
+    fallback.write_bytes(b"official-godot-bytes" + (b"\0" * (1_000_001)))
+
+    monkeypatch.setattr(
+        art,
+        "godot45_fallback_candidates",
+        lambda _root: [fallback],
+    )
+
+    def fake_verify(path):
+        if Path(path) == fallback or Path(path).name == "Godot_v4.5-stable_linux.arm64":
+            return {
+                "ok": True,
+                "path": str(path),
+                "sha256": art.GODOT45_OFFICIAL_LINUX_ARM64_SHA256,
+                "size_bytes": art.GODOT45_OFFICIAL_SIZE_BYTES,
+                "arch": "linux.arm64",
+                "engine": "Godot",
+                "version_pin": "4.5-stable",
+                "official_source_url": art.GODOT45_OFFICIAL_ZIP_URL,
+                "byte_identical_to_official_extracted": True,
+            }
+        return {"ok": False, "error": "missing", "path": str(path)}
+
+    monkeypatch.setattr(art, "verify_godot45_host_binary", fake_verify)
+    out = art.resolve_godot45_host_binary(tmp_path)
+    assert out["ok"] is True
+    assert out["via"] == "fallback_seed_to_cache"
+    seeded = tmp_path / "artifacts/wp011r/cache" / art.GODOT45_BIN_NAME
+    assert seeded.is_file()
+    assert seeded.read_bytes()[:20] == b"official-godot-bytes"
+
+
+def test_resolve_godot45_missing_is_honest_fail(tmp_path: Path, monkeypatch):
+    from gunnchos_device_os.device_lab import owner_four_game_artifacts as art
+
+    monkeypatch.setattr(art, "godot45_fallback_candidates", lambda _root: [])
+    out = art.resolve_godot45_host_binary(tmp_path)
+    assert out["ok"] is False
+    assert out["error"] == "godot45_host_cache_missing"
+
+
+def test_ensure_godot45_source_probes_already_present_and_resolve():
+    from gunnchos_device_os.device_lab import owner_four_game_guest as guest
+
+    src = Path(guest.__file__).read_text(encoding="utf-8")
+    assert "_probe_godot45_already_in_guest" in src
+    assert "resolve_godot45_host_binary" in src
+    assert "already_present_on_guest" in src
+    assert "godot45_host_cache_missing" in src
+    # Must not accept process-alive alone as PASS for games.
+    assert "launched_pid_alive_non_zombie" in src
+    assert "FOUR_GAME_REAL_RUNTIME_EARNED" in src
+
+
+def test_process_alive_alone_is_not_four_game_pass():
+    """Alive non-zombie PID without mutation/save must not earn FOUR_GAME."""
+    from gunnchos_device_os.device_lab.four_game_honest import (
+        launched_pid_alive_non_zombie,
+        parse_ps_pid_stat_args,
+        pedestrian_cfg_mutated,
+    )
+
+    rows = parse_ps_pid_stat_args(
+        "1556 Ssl  /opt/gunnchos/bin/godot --path /root/pedestrian-pursuit\n"
+    )
+    assert launched_pid_alive_non_zombie(1556, rows) is True
+    # Default save create is not mutation — process alive alone is insufficient.
+    mut = pedestrian_cfg_mutated(
+        "",
+        "[meta]\nsave_version=2\n[career]\nxp=0\ntutorial_completed=false\nfirst_run_complete=false\n",
+    )
+    assert mut["ok"] is False
+    # Strict AND requires earned tokens, not process liveness.
+    assert five_gate_and(four=False, live=True, dsxl=True, ring=True, eco010=False) is False
+
+
+def test_strict_four_game_and_requires_all_titles():
+    """Aggregate PASS is AND across all four lab ids."""
+    games = {
+        "anime-aggressors": {"FOUR_GAME_REAL_RUNTIME_EARNED": True},
+        "beatlink-party": {"FOUR_GAME_REAL_RUNTIME_EARNED": True},
+        "earth-species": {"FOUR_GAME_REAL_RUNTIME_EARNED": True},
+        "foot-racing": {"FOUR_GAME_REAL_RUNTIME_EARNED": False},
+    }
+    all_ok = all(bool((games.get(g) or {}).get("FOUR_GAME_REAL_RUNTIME_EARNED")) for g in games)
+    assert all_ok is False
+    games["foot-racing"]["FOUR_GAME_REAL_RUNTIME_EARNED"] = True
+    all_ok = all(bool((games.get(g) or {}).get("FOUR_GAME_REAL_RUNTIME_EARNED")) for g in games)
+    assert all_ok is True
+
+
+def test_pin_mismatch_and_stale_sha_fail_closed(tmp_path: Path):
+    from gunnchos_device_os.device_lab import current_pin_manifest as cpm
+
+    with pytest.raises(cpm.PinManifestError, match="build_sha_mismatch"):
+        cpm.require_build_sha_matches_pin(
+            repository="anime-aggressors",
+            build_sha="stale" + ("0" * 35),
+            pin_sha="258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+        )

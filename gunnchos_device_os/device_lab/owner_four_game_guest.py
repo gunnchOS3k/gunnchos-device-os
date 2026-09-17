@@ -52,9 +52,12 @@ from gunnchos_device_os.device_lab.guest_agent_overlays import (
 )
 from gunnchos_device_os.device_lab.owner_four_game_artifacts import (
     ACCEPTED_MAINS,
+    GODOT45_BIN_NAME,
     LAB_TO_OWNER,
     prepare_owner_guest_staging,
+    resolve_godot45_host_binary,
     start_host_artifact_httpd,
+    verify_godot45_host_binary,
     wait_host_artifact_httpd,
     verify_accepted_shas,
 )
@@ -230,27 +233,88 @@ def _wayland_socket(session: Any) -> str:
     return ((sock.get("stdout") or "").strip().splitlines() or ["wayland-0"])[0] or "wayland-0"
 
 
+def _probe_godot45_already_in_guest(session: Any) -> dict[str, Any]:
+    """Ring-proven path: persistent guest overlay may already have Godot 4.5."""
+    already = _agent_call(
+        session,
+        "process_run",
+        argv=[
+            "bash",
+            "-lc",
+            "set +e; "
+            "if [ -x /opt/gunnchos/bin/godot ]; then "
+            "timeout 8 /opt/gunnchos/bin/godot --version 2>/dev/null; fi; "
+            "if command -v godot >/dev/null; then timeout 8 godot --version 2>/dev/null; fi; "
+            "true",
+        ],
+        timeout_sec=25.0,
+    )
+    ver = already.get("stdout") or ""
+    if "4.5" in ver:
+        return {
+            "ok": True,
+            "via": "already_present_on_guest",
+            "version_stdout": ver[:200],
+        }
+    return {
+        "ok": False,
+        "via": "not_present_or_wrong_version",
+        "version_stdout": ver[:200],
+    }
+
+
 def _ensure_godot45_in_guest(session: Any, repo_root: Path, httpd_port: int = 8766) -> dict[str, Any]:
-    """Install Godot 4.5+ into the guest (Anime features=4.5; 4.3 is insufficient)."""
-    cache = repo_root / "artifacts" / "wp011r" / "cache"
-    src = cache / "Godot_v4.5-stable_linux.arm64"
-    if not src.is_file():
-        return {"ok": False, "error": "godot45_host_cache_missing"}
+    """Install Godot 4.5+ into the guest (Anime features=4.5; 4.3 is insufficient).
+
+    Discovery order (aligned with Ring 17E):
+    1) already_present_on_guest
+    2) resolve authentic host cache (with parent-repo fallbacks)
+    3) stage into owner_games_guest_bundle + guest HTTP fetch
+    """
+    present = _probe_godot45_already_in_guest(session)
+    if present.get("ok"):
+        return present
+
+    resolved = resolve_godot45_host_binary(repo_root)
+    if not resolved.get("ok"):
+        return {
+            "ok": False,
+            "error": resolved.get("error") or "godot45_host_cache_missing",
+            "resolve": {
+                k: resolved.get(k) for k in ("via", "error", "cache", "checked") if k in resolved
+            },
+            "prior_probe": present,
+        }
+    src = Path(str(resolved["path"]))
+    prov = verify_godot45_host_binary(src)
+    if not prov.get("ok"):
+        return {
+            "ok": False,
+            "error": prov.get("error") or "godot45_unverified_binary",
+            "provenance": prov,
+        }
     staging = repo_root / "artifacts" / "wp011r" / "owner_games_guest_bundle"
     staging.mkdir(parents=True, exist_ok=True)
-    dst = staging / "Godot_v4.5-stable_linux.arm64"
+    dst = staging / GODOT45_BIN_NAME
     if not dst.is_file() or dst.stat().st_size != src.stat().st_size:
         import shutil
 
         shutil.copy2(src, dst)
+    staged_ver = verify_godot45_host_binary(dst)
+    if not staged_ver.get("ok"):
+        return {
+            "ok": False,
+            "error": staged_ver.get("error") or "godot45_staged_unverified",
+            "provenance": staged_ver,
+        }
     http = _guest_bash(
         session,
         "set +e; mkdir -p /opt/gunnchos/bin; "
         f"curl -fsSL --connect-timeout 5 --retry 5 -o /opt/gunnchos/bin/godot "
-        f"http://10.0.2.2:{httpd_port}/Godot_v4.5-stable_linux.arm64 && "
+        f"http://10.0.2.2:{httpd_port}/{GODOT45_BIN_NAME} && "
         "chmod +x /opt/gunnchos/bin/godot && ln -sf /opt/gunnchos/bin/godot /usr/local/bin/godot && "
         "/opt/gunnchos/bin/godot --version",
-        timeout_sec=600,
+        timeout_sec=180,
         name="godot45-http",
     )
     ver = http.get("stdout") or ""
@@ -261,6 +325,13 @@ def _ensure_godot45_in_guest(session: Any, repo_root: Path, httpd_port: int = 87
         "version_stdout": ver[:200],
         "returncode": http.get("returncode"),
         "stderr": (http.get("stderr") or "")[:300],
+        "host_resolve_via": resolved.get("via"),
+        "provenance": {
+            "sha256": staged_ver.get("sha256"),
+            "size_bytes": staged_ver.get("size_bytes"),
+            "arch": "linux.arm64",
+            "official_source_url": staged_ver.get("official_source_url"),
+        },
     }
 
 
@@ -1866,13 +1937,29 @@ def attempt_owner_four_game_in_guest_pass(
             (evidence_dir / "four_games_in_guest.json").write_text(json.dumps(result, indent=2) + "\n")
             return result
         result["lab_observe_server"] = _ensure_lab_observe_server(session, restart=True)
-        # Confirm Godot 4.5 after deploy.
-        ver = _guest_bash(session, "/opt/gunnchos/bin/godot --version || true", timeout_sec=20)
-        result["godot45"] = {
-            "ok": any(x in (ver.get("stdout") or "") for x in ("4.5", "4.4", "4.6", "4.7")),
-            "version_stdout": (ver.get("stdout") or "")[:200],
-            "via": deploy.get("via"),
+        # Confirm Godot 4.5 after deploy — prefer already-present (Ring path),
+        # then 9p from staged authentic binary, then HTTP.
+        host_resolve = resolve_godot45_host_binary(repo_root)
+        result["godot45_host_resolve"] = {
+            k: host_resolve.get(k)
+            for k in ("ok", "via", "error", "path", "source")
+            if k in host_resolve
         }
+        if host_resolve.get("ok") and host_resolve.get("provenance"):
+            result["godot45_host_resolve"]["provenance"] = {
+                k: host_resolve["provenance"].get(k)
+                for k in (
+                    "sha256",
+                    "size_bytes",
+                    "arch",
+                    "version_pin",
+                    "official_source_url",
+                    "byte_identical_to_official_extracted",
+                )
+                if k in host_resolve["provenance"]
+            }
+        present = _probe_godot45_already_in_guest(session)
+        result["godot45"] = present
         if not result["godot45"]["ok"]:
             godot45 = _install_godot45_from_9p(session)
             if not godot45.get("ok"):

@@ -1,0 +1,23 @@
+{
+  "schema": "gunnchos.device_lab.waike_real_hub_provenance.v1",
+  "generated_at_utc": "2026-09-17T21:27:48Z",
+  "prompt": "17G.5D",
+  "ok": true,
+  "mock": false,
+  "stub": false,
+  "static_fixture": false,
+  "pid": 7468,
+  "port": 8787,
+  "bind": "127.0.0.1",
+  "guest_url": "http://10.0.2.100:8787",
+  "db_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_device_lab.sqlite",
+  "log_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_sidecar.log",
+  "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+  "entrypoint": "services/hub app.main.create_app seed=True production_auth + guestfwd_cors_proxy",
+  "health": {
+    "status": 200,
+    "body": "{\"status\":\"ok\"}"
+  },
+  "bind_loopback_only": true,
+  "mockHub_disabled": true
+}

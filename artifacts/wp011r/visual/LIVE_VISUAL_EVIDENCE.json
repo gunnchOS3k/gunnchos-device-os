@@ -45,7 +45,7 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "app": "mousepad",
-    "pid": 609,
+    "pid": 606,
     "started": true,
     "alive_after_500ms": true,
     "argv": [
@@ -62,10 +62,10 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_15-10-41.png",
-    "bytes": 27424,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-09-09_16-02-50.png",
+    "bytes": 27488,
     "format": "png",
-    "sha256": "b61f92dd951b49facef719fbc67c7b4898dfc03ccefc8e011fb5624f4c3a1fe5",
+    "sha256": "d57981ad708d4d357e652fbfd3a7bcb5d1c745393afe22e23a254fd7a0fc07b1",
     "synthetic": false,
     "via": "weston_screenshooter_super_s_uinput",
     "png_complete": true,
@@ -133,19 +133,19 @@
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
     "kind": "text",
-    "text": "LIVEPROOF1786547491",
+    "text": "LIVEPROOF1788969838",
     "injected_via": "uinput"
   },
   "document_after": {
     "ok": true,
     "via": "process_run_cat",
-    "stdout": "aLIVEPROOF1786547491LIVEPROOF1786547491\n39 /root/gunnchos-lab-document.txt\n"
+    "stdout": "aLIVEPROOF1788969838LIVEPROOF1788969838\n39 /root/gunnchos-lab-document.txt\n"
   },
   "input_visible_app_state": {
-    "marker": "LIVEPROOF1786547491",
+    "marker": "LIVEPROOF1788969838",
     "found_in_document": true,
     "document_read_ok": true,
-    "document_excerpt": "aLIVEPROOF1786547491LIVEPROOF1786547491\n39 /root/gunnchos-lab-document.txt\n"
+    "document_excerpt": "aLIVEPROOF1788969838LIVEPROOF1788969838\n39 /root/gunnchos-lab-document.txt\n"
   },
   "framebuffer_after": {
     "ok": true,
@@ -156,10 +156,10 @@
     "SILICON_EXACT_EMULATION": false,
     "production_keys": false,
     "measurement_class": "GUEST_OBSERVED",
-    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-08-12_15-11-59.png",
-    "bytes": 30041,
+    "path": "/var/lib/gunnchos/screenshots/wayland-screenshot-2026-09-09_16-04-27.png",
+    "bytes": 29688,
     "format": "png",
-    "sha256": "2a7993eb7996ef06f47a3e6a2800b8126c12c80daa5fcd953ad72cd836302602",
+    "sha256": "6b8bc3ddae5c232a171ceeb69972823840c64aaf8c6f805340aa8409f7971feb",
     "synthetic": false,
     "via": "weston_screenshooter_super_s_uinput",
     "png_complete": true,
@@ -172,8 +172,8 @@
     "after_exists": true,
     "before_nonblank": true,
     "after_nonblank": true,
-    "before_sha256": "43aab258ab11e863cfe98292991fcce4e0abccae8ef8d2b9ae597de7ba9cd971",
-    "after_sha256": "3bb7338a28ea6f9a25d94b70b7858cd0f0035c592a24f632649f1c14fc605813",
+    "before_sha256": "f889920f4719ed4a3982d1fd740bd0e124bf98e55e2ecba03260e53019a24a1b",
+    "after_sha256": "e8ab3bcd4fe53388be7068f47e410e389e807802a11f2c86dffdcfbb28ca14a0",
     "changed": true,
     "measurement_class": "HOST_OBSERVED",
     "committed_paths": [
@@ -189,10 +189,10 @@
     "after_nonblank": true,
     "before_png_complete": true,
     "after_png_complete": true,
-    "before_bytes": 27424,
-    "after_bytes": 30041,
-    "before_sha256": "b61f92dd951b49facef719fbc67c7b4898dfc03ccefc8e011fb5624f4c3a1fe5",
-    "after_sha256": "2a7993eb7996ef06f47a3e6a2800b8126c12c80daa5fcd953ad72cd836302602",
+    "before_bytes": 27488,
+    "after_bytes": 29688,
+    "before_sha256": "d57981ad708d4d357e652fbfd3a7bcb5d1c745393afe22e23a254fd7a0fc07b1",
+    "after_sha256": "6b8bc3ddae5c232a171ceeb69972823840c64aaf8c6f805340aa8409f7971feb",
     "changed": true,
     "before_path": "shell_app_before.png",
     "after_path": "shell_app_after.png",
@@ -202,20 +202,8 @@
     "pulled_via_after": null
   },
   "non_blank_capture": true,
-  "diff_bytes": 2617,
+  "diff_bytes": 2200,
   "before_after_changed": true,
   "missing": [],
-  "note": "Independent PASS: guest FB IEND+delta + OCR-visible LIVEPROOF + document marker",
-  "INDEPENDENT_ACCEPT": {
-    "at_utc": "2026-08-12T16:20:00Z",
-    "tip": "7fe1022e48e15387a0e1ba7ab2736ceb5e3cf706",
-    "verdict": "PASS",
-    "checks": {
-      "iend_complete_before_after": true,
-      "pngs_differ": true,
-      "liveproof_ocr_visible": true,
-      "document_marker": true,
-      "not_host_fb_only": true
-    }
-  }
+  "note": "Guest FB before/after non-blank+changed, mousepad alive, typed marker in document"
 }

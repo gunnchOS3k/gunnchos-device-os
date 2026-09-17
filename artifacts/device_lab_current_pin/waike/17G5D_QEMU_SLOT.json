@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "qemu_processes": [
+    "93708 /opt/homebrew/bin/qemu-system-aarch64 -machine virt,accel=hvf -cpu host -smp 4 -m 4096 -drive if=pflash,format=raw,readonly=on,file=/opt/homebrew/share/qemu/edk2-aarch64-code.fd -drive if=pflash,format=raw,file=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/work/edk2-aarch64-vars.fd -drive if=none,id=cx2g_disk,file=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2,format=qcow2 -device virtio-blk-pci,drive=cx2g_disk,bootindex=1 -netdev user,id=n0,hostfwd=tcp:127.0.0.1:2229-:22 -device virtio-net-pci,netdev=n0 -device virtio-rng-pci -device virtio-gpu-pci,id=gpu0,max_outputs=1 -device virtio-keyboard-pci -device virtio-tablet-pci -serial file:/tmp/cx2h-graphical/qemu_boot.log -display vnc=127.0.0.1:1 -pidfile /tmp/cx2h-graphical/qemu.pid -monitor unix:/tmp/cx2h-graphical/monitor.sock,server,nowait -daemonize"
+  ],
+  "ignored_foreign_qemu": [
+    "93708 /opt/homebrew/bin/qemu-system-aarch64 -machine virt,accel=hvf -cpu host -smp 4 -m 4096 -drive if=pflash,format=raw,readonly=on,file=/opt/homebrew/share/qemu/edk2-aarch64-code.fd -drive if=pflash,format=raw,file=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/work/edk2-aarch64-vars.fd -drive if=none,id=cx2g_disk,file=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2,format=qcow2 -device virtio-blk-pci,drive=cx2g_disk,bootindex=1 -netdev user,id=n0,hostfwd=tcp:127.0.0.1:2229-:22 -device virtio-net-pci,netdev=n0 -device virtio-rng-pci -device virtio-gpu-pci,id=gpu0,max_outputs=1 -device virtio-keyboard-pci -device virtio-tablet-pci -serial file:/tmp/cx2h-graphical/qemu_boot.log -display vnc=127.0.0.1:1 -pidfile /tmp/cx2h-graphical/qemu.pid -monitor unix:/tmp/cx2h-graphical/monitor.sock,server,nowait -daemonize"
+  ],
+  "waited_s": 0.0,
+  "local_cleanup": {
+    "stopped": [],
+    "refused": []
+  },
+  "note": "cx_and_unrelated_qemu_ignored"
+}

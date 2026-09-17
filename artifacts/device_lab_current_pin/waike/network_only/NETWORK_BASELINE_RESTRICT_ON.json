@@ -1,0 +1,44 @@
+{
+  "schema": "gunnchos.device_lab.network_baseline_restrict_on.v1",
+  "generated_at_utc": "2026-09-16T15:38:16Z",
+  "restrict": true,
+  "guestfwd_rules": [],
+  "netdev": "user,id=n0,restrict=on",
+  "qemu_usernet": {
+    "restrict": true,
+    "guestfwd_rule_count": 0,
+    "rules": [],
+    "netdev": "user,id=n0,restrict=on",
+    "unrestricted_usernet": false,
+    "schema": "gunnchos.device_lab.guest_service_forward.v1"
+  },
+  "probe": {
+    "agent_ok": true,
+    "put_note": {
+      "ok": true,
+      "returncode": 0
+    },
+    "raw_tail": "PROBE_OK\n{\"ip_addr\": \"1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\\n    inet 127.0.0.1/8 scope host lo\\n       valid_lft forever preferred_lft forever\\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\\n       valid_lft 86397sec preferred_lft 86397sec\\n\", \"ip_route\": \"10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \\n\", \"probes\": [{\"url\": \"http://10.0.2.2:18787/healthz\", \"tcp_ok\": false, \"http_status\": null, \"body\": \"\", \"error\": \"tcp:[Errno 111] Connection refused\"}, {\"url\": \"http://10.0.2.100:18787/healthz\", \"tcp_ok\": false, \"http_status\": null, \"body\": \"\", \"error\": \"tcp:timed out\"}]}\n",
+    "ip_addr": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86397sec preferred_lft 86397sec\n",
+    "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n",
+    "probes": [
+      {
+        "url": "http://10.0.2.2:18787/healthz",
+        "tcp_ok": false,
+        "http_status": null,
+        "body": "",
+        "error": "tcp:[Errno 111] Connection refused"
+      },
+      {
+        "url": "http://10.0.2.100:18787/healthz",
+        "tcp_ok": false,
+        "http_status": null,
+        "body": "",
+        "error": "tcp:timed out"
+      }
+    ]
+  },
+  "expected": "host_service_unreachable",
+  "host_reachable": false,
+  "baseline_unreachable_as_expected": true
+}

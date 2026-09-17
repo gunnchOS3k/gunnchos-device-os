@@ -104,6 +104,17 @@ REQUIRED_APT_PACKAGES: tuple[str, ...] = (
     "grim",
     "libreoffice-writer",
     "libreoffice-gtk3",
+    # Additive WAIKE Learning OS / Tauri native aarch64 runtime (Prompt 17G.2).
+    "libwebkit2gtk-4.1-0",
+    "libgtk-3-0",
+    "libgdk-pixbuf-2.0-0",
+    "libsoup-3.0-0",
+    "libjavascriptcoregtk-4.1-0",
+    "librsvg2-2",
+    "libayatana-appindicator3-1",
+    "xvfb",
+    "at-spi2-core",
+    "dbus-x11",
 )
 # Best-effort only — Pedestrian Pursuit needs Godot 4.x (bundled separately);
 # Debian godot3 remains optional legacy, never enough for FOUR_GAME alone.

@@ -648,19 +648,38 @@ def _ensure_godot4_in_guest(session: Any, repo_root: Path) -> dict[str, Any]:
 
 def _deploy_pedestrian_pursuit(session: Any, repo_root: Path) -> dict[str, Any]:
     """Tar Pedestrian Pursuit project and push into guest /root/pedestrian-pursuit."""
-    # Fast path: host HTTP :8765/pedestrian-pursuit.tar.gz via usernet 10.0.2.2
+    # Fast path: host HTTP (8766 owner bundle, then 8765 cache) via usernet 10.0.2.2.
+    # Never fall through to multi-MB virtio base64 unless both HTTP ports fail quickly.
     http = _guest_bash(
         session,
-        "set +e; if [ -f /root/pedestrian-pursuit/project.godot ]; then echo already; exit 0; fi; "
-        "curl -fsSL --connect-timeout 3 --retry 2 -o /tmp/pp.tar.gz "
-        "http://10.0.2.2:8765/pedestrian-pursuit.tar.gz || exit 11; "
-        "rm -rf /root/pedestrian-pursuit; tar -xzf /tmp/pp.tar.gz -C /root; "
-        "test -f /root/pedestrian-pursuit/project.godot && echo http_ok",
+        "set +e; "
+        "if [ -f /root/pedestrian-pursuit/project.godot ] && "
+        "grep -q 'config/name' /root/pedestrian-pursuit/project.godot && "
+        "test $(wc -c </root/pedestrian-pursuit/project.godot) -gt 200; then "
+        "echo already; exit 0; fi; "
+        "curl -fsSL --connect-timeout 3 --max-time 120 --retry 2 -o /tmp/pp.tar.gz "
+        "http://10.0.2.2:8766/pedestrian-pursuit.tar.gz && "
+        "rm -rf /root/pedestrian-pursuit && tar -xzf /tmp/pp.tar.gz -C /root && "
+        "test -f /root/pedestrian-pursuit/project.godot && grep -q config/name /root/pedestrian-pursuit/project.godot && "
+        "echo http_ok && echo via=8766 && exit 0; "
+        "curl -fsSL --connect-timeout 3 --max-time 120 --retry 2 -o /tmp/pp.tar.gz "
+        "http://10.0.2.2:8765/pedestrian-pursuit.tar.gz && "
+        "rm -rf /root/pedestrian-pursuit && tar -xzf /tmp/pp.tar.gz -C /root && "
+        "test -f /root/pedestrian-pursuit/project.godot && grep -q config/name /root/pedestrian-pursuit/project.godot && "
+        "echo http_ok && echo via=8765 && exit 0; "
+        "exit 11",
         timeout_sec=180,
         name="pp-http",
     )
     if http.get("ok") and ("http_ok" in (http.get("stdout") or "") or "already" in (http.get("stdout") or "")):
-        return {"ok": True, "via": "guest_curl_10.0.2.2:8765", "extract": http}
+        via = "guest_curl_10.0.2.2:8766" if "8766" in (http.get("stdout") or "") else (
+            "guest_curl_10.0.2.2:8765" if "8765" in (http.get("stdout") or "") else "guest_curl_10.0.2.2"
+        )
+        return {"ok": True, "via": via, "extract": http}
+
+    import os
+    if os.environ.get("GUNNCH_RING_SKIP_VIRTIO_PP_PUT", "").lower() in {"1", "true", "yes"}:
+        return {"ok": False, "error": "pp_http_failed_virtio_put_skipped"}
     import tarfile
     import tempfile
     import base64

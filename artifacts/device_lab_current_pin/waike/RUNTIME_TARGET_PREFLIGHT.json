@@ -1,0 +1,93 @@
+{
+  "schema": "gunnchos.device_lab.runtime_target_preflight.v1",
+  "generated_at_utc": "2026-09-17T21:23:46Z",
+  "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+  "preferred_label": "linux-aarch64-glibc236",
+  "selected_label": "linux-aarch64-glibc236",
+  "checks": [
+    {
+      "name": "architecture_match",
+      "ok": true,
+      "detail": {
+        "artifact": "aarch64",
+        "guest": "aarch64"
+      }
+    },
+    {
+      "name": "elf_interpreter_match",
+      "ok": true,
+      "detail": {
+        "artifact": "/lib/ld-linux-aarch64.so.1",
+        "guest": "/lib/ld-linux-aarch64.so.1"
+      }
+    },
+    {
+      "name": "measured_max_glibc_within_guest",
+      "ok": true,
+      "detail": {
+        "measured_max_glibc": "2.34",
+        "guest_glibc": "2.36",
+        "ceiling": "2.36"
+      }
+    },
+    {
+      "name": "glibc_baseline_compatible_with_debian12_ceiling",
+      "ok": true,
+      "detail": {
+        "glibc_baseline": "2.36",
+        "guest_ceiling": "2.36"
+      }
+    },
+    {
+      "name": "preferred_compatibility_label",
+      "ok": true,
+      "detail": {
+        "compatibility_label": "linux-aarch64-glibc236",
+        "required": "linux-aarch64-glibc236"
+      }
+    },
+    {
+      "name": "guest_has_libwebkit2gtk_4_1",
+      "ok": true,
+      "detail": "has_libwebkit2gtk_4_1"
+    },
+    {
+      "name": "guest_has_libgtk_3",
+      "ok": true,
+      "detail": "has_libgtk_3"
+    },
+    {
+      "name": "guest_has_libsoup_3_0",
+      "ok": true,
+      "detail": "has_libsoup_3"
+    }
+  ],
+  "blockers": [],
+  "runtime_target_summary": {
+    "compatibility_label": "linux-aarch64-glibc236",
+    "target_id": "aarch64-glibc236",
+    "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "artifact_sha256": "071cce1383561e14cf957cdcd5e932e04884a2d2a5bba35cdbbce08e137e58f8",
+    "architecture": "aarch64",
+    "measured_max_glibc": "2.34",
+    "glibc_baseline": "2.36",
+    "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+    "workflow_run_id": "35274733231"
+  },
+  "guest_summary": {
+    "architecture": "aarch64",
+    "glibc_version": "2.36",
+    "elf_interpreter": "/lib/ld-linux-aarch64.so.1",
+    "distro": "debian",
+    "distro_version": "12",
+    "has_libwebkit2gtk_4_1": true,
+    "has_libgtk_3": true,
+    "has_libsoup_3": true,
+    "probe_source": "tauri_runtime_session_evidence"
+  },
+  "selection": {
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/owner_build/main-aarch64-glibc236/reports/RUNTIME_TARGET.json",
+    "preferred_label": "linux-aarch64-glibc236"
+  },
+  "reconciled_from_tauri_runtime": true
+}

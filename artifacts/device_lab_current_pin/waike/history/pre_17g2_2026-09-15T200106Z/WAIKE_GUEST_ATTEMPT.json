@@ -1,0 +1,158 @@
+{
+  "schema": "gunnchos.device_lab.waike_real_runtime_attempt.v1",
+  "started_at_utc": "2026-09-15T17:38:00Z",
+  "pin_manifest_sha256": "40f7c8c3d7c77b1af06f4778f7d1ffd50735cb54b30ba9acb3dcbc5b824f5575",
+  "DEVICE_LAB_INTERACTIVE_DEVELOPMENT_GUEST": true,
+  "SHIPPING_IMAGE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "GUNNCH_GUEST_AGENT_HOST_STUB": "0",
+  "claim_boundary": "WAIKE real runtime requires authentic Platform Tauri Learning OS inside Interactive Development Guest via Device OS launch/package path. SILICON_EXACT_EMULATION=false. SHIPPING_IMAGE=false.",
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "prefer_fail_over_false_pass": true,
+  "bundle": {
+    "schema": "gunnchos.device_lab.owner_waike_bundle.v1",
+    "generated_at_utc": "2026-09-15T17:38:01Z",
+    "ok": true,
+    "bundle_id": "com.gunnchos.waike.learning",
+    "install_layout": "bin/waike-learning-os",
+    "binary": {
+      "bundle_id": "com.gunnchos.waike.learning",
+      "version": "0.1.0",
+      "artifact_sha256": "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef",
+      "source_sha256": "8689a422404800ef6ef6442864e08228c69ccb0e705b15f8e1d1d94eee98bdef",
+      "source_arch": "x86_64",
+      "platform_sha": "8610018a62e07548405a58384773d96a7be7950b",
+      "curriculum_ops_sha": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+      "gate_d_artifact_id": "10041457013",
+      "fixture": false,
+      "system_of_record": "platform_tauri_learning_os"
+    },
+    "provenance_path": "WAIKE_RUNTIME_PROVENANCE.json",
+    "arch_gap": true,
+    "pin_ok": true
+  },
+  "FREE_GIB_BEFORE_QEMU": 26.96,
+  "httpd": {
+    "ok": true,
+    "error": null,
+    "port": 8767
+  },
+  "boot": {
+    "ok": true,
+    "error": null,
+    "pid": null,
+    "arch": null
+  },
+  "ping": {
+    "ok": true,
+    "protocol": "gunnchos.guest_agent.v1",
+    "cmd": "ping",
+    "transport": "virtio_serial",
+    "agent_path_label": "virtio-serial",
+    "SILICON_EXACT_EMULATION": false,
+    "production_keys": false,
+    "measurement_class": "GUEST_OBSERVED",
+    "pong": true,
+    "boot_complete": true
+  },
+  "guest_uname": "Linux gunnchos-interactive-guest 6.1.0-52-arm64 #1 SMP Debian 6.1.180-1 (2026-08-03) aarch64 GNU/Linux",
+  "qemu_user_x86_64": {
+    "ok": true,
+    "already_present": true,
+    "probe": "aarch64\n/usr/bin/qemu-x86_64-static\nii  qemu-user-static 1:7.2+dfsg-7+deb12u18+b3 arm64        QEMU user mode emulation binaries (static version)\n"
+  },
+  "fetch": {
+    "ok": true,
+    "via": "9p",
+    "remote_root": "/var/lib/gunnchos/waike-learning-os",
+    "stdout_tail": "START_WAIKE_FETCH_1789493894\nVIA_9P_WAIKE_FETCH_1789493894 src=/mnt/gdlgames\n/var/lib/gunnchos/waike-learning-os.partial/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=4ac1d3ef865638552e1159cfa3cb15ef6cc04cae, not stripped\n8384224 /var/lib/gunnchos/waike-learning-os.partial/bin/waike-learning-os.real\nFETCH_OK_WAIKE_FETCH_1789493894\ntotal 16396\ndrwxr-xr-x 2 root root       4096 Sep 15 17:38 .\ndrwxr-xr-x 3 root root       4096 Sep 15 17:38 ..\n-rw-r--r-- 1  501 dialout     515 Sep 15 17:38 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 17:38 VERSION\n-rwxr-xr-x 1  501 dialout 8384224 Sep  8 09:57 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 17:38 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 8384224 Sep  8 09:57 waike-learning-os.real\n",
+    "returncode": 0,
+    "marker": "WAIKE_FETCH_1789493894"
+  },
+  "qemu_wrapper": {
+    "ok": true,
+    "wrapper_enabled": true,
+    "stdout_tail": "WRAPPER_ON\n",
+    "returncode": 0
+  },
+  "binary_probe": {
+    "stdout_tail": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os: Bourne-Again shell script, ASCII text executable\n/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=4ac1d3ef865638552e1159cfa3cb15ef6cc04cae, not stripped\ntotal 8212\ndrwxr-xr-x 2 root root       4096 Sep 15 17:38 .\ndrwxr-xr-x 3 root root       4096 Sep 15 17:38 ..\n-rw-r--r-- 1  501 dialout     515 Sep 15 17:38 INSTALLED.json\n-rw-r--r-- 1  501 dialout       6 Sep 15 17:38 VERSION\n-rwxr-xr-x 1  501 dialout     276 Sep 15 17:38 waike-learning-os\n-rwxr-xr-x 1  501 dialout     276 Sep 15 17:38 waike-learning-os.qemu-x86_64-wrapper.sh\n-rwxr-xr-x 1  501 dialout 8384224 Sep  8 09:57 waike-learning-os.real\nqemu-x86_64-static: Could not open '/lib64/ld-linux-x86-64.so.2': No such file or directory\nPROBE_DONE\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os\n+ file /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os.real\n+ ls -la /var/lib/gunnchos/waike-learning-os/bin\n+ /var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --help\n+ head -20\n+ echo PROBE_DONE\n",
+    "returncode": 0
+  },
+  "journey_a_launch": {
+    "path": "fallback_direct",
+    "launcher_error": "ModuleNotFoundError(\"No module named 'gunnchos_device_os'\")",
+    "process_started": true,
+    "pid": 487,
+    "returncode": 255,
+    "acknowledged": false,
+    "ack": null,
+    "stdout_tail": "",
+    "stderr_tail": "qemu-x86_64-static: Could not open '/lib64/ld-linux-x86-64.so.2': No such file or directory\n",
+    "launched": false,
+    "executable": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
+    "fixture_rejected": true,
+    "guest_returncode": 0,
+    "journey_tag": "A",
+    "deep_link": "waike://learn/home",
+    "platform_role": "learner"
+  },
+  "role_boundary": {
+    "ok": true,
+    "learner_launch": {
+      "launched": false,
+      "path": "fallback_direct",
+      "platform_role": "learner",
+      "profile": "student"
+    },
+    "instructor_launch": {
+      "launched": false,
+      "path": "fallback_direct",
+      "platform_role": "instructor",
+      "profile": "educator"
+    },
+    "frontend_only_role_fake": false,
+    "note": "Role boundary exercised via Device OS launch context platform_role; not a CSS/UI-only toggle."
+  },
+  "journey_b_launch": {
+    "path": "fallback_direct",
+    "launcher_error": "ModuleNotFoundError(\"No module named 'gunnchos_device_os'\")",
+    "process_started": true,
+    "pid": 514,
+    "returncode": 255,
+    "acknowledged": false,
+    "ack": null,
+    "stdout_tail": "",
+    "stderr_tail": "qemu-x86_64-static: Could not open '/lib64/ld-linux-x86-64.so.2': No such file or directory\n",
+    "launched": false,
+    "executable": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os",
+    "fixture_rejected": true,
+    "guest_returncode": 0,
+    "journey_tag": "B",
+    "deep_link": "waike://learn/home",
+    "platform_role": "learner"
+  },
+  "capability_classification": {
+    "device_os_native_launch_ipc": false,
+    "authentic_platform_binary": true,
+    "learner_course_lesson_interaction": false,
+    "assessment_submission_mutation": false,
+    "offline_sync_outbox": "supported_in_product_not_exercised_this_run",
+    "reason": "Accepted-main WAIKE_CI_HEADLESS_UI acknowledges Device OS IPC then returns before Tauri invoke surface (install/lesson/quiz/outbox). Full GUI/webview journey on aarch64 guest requires aarch64 linux artifact or native in-guest build; x86_64 under qemu-user is launch-path compatibility only unless GUI stack also works."
+  },
+  "learner_journey": {
+    "launch": false,
+    "identity_role_context": true,
+    "course": false,
+    "lesson": false,
+    "interaction": false,
+    "assessed_or_submission_mutation": false,
+    "persist_readback": false,
+    "close_relaunch_restore": false,
+    "complete": false
+  },
+  "blocker": "ci_linux_x86_64_elf_on_aarch64_guest_missing_amd64_loader_or_libs;qemu_user_static_insufficient_for_dynamic_tauri;need_aarch64_linux_ci_artifact_or_in_guest_native_build",
+  "finished_at_utc": "2026-09-15T17:38:17Z",
+  "arch_runtime_gap": true,
+  "product_fix_pr_needed": "DRAFT gunnchos-waike-learning-platform aarch64 linux CI workflow"
+}

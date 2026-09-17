@@ -1,0 +1,23 @@
+{
+  "schema": "gunnchos.device_lab.compact_gate_rebind.v1",
+  "generated_at_utc": "2026-09-16T02:49:06Z",
+  "reason": "WAIKE_RUNTIME_HUB_POLICY_ACCEPTED_MAIN",
+  "materiality": "waike_runtime_hub_policy_only_not_live_dsxl_ring_four_game_sources",
+  "old_pin_manifest_sha256": "a5a252ad7790c7f45eb1838a8dc26a2b407c1d75d830961d6dd62813bfadcb3b",
+  "new_pin_manifest_sha256": "47fe0c86856c4eec795a7b28c582532d612175475a83f91ad315720326a5ce15",
+  "device_os_tip_at_rebind": "471855907cb33a67d4a4cf0260816db0029943d7",
+  "method": "compact_revalidate_under_new_manifest",
+  "note": "WAIKE #12 adds HubEndpointPolicy + runtime hub_url authorize path; LIVE/DSXL/Ring/Four-Game product sources unchanged. Historical PASS retained; rebound to new pin manifest without full re-earn.",
+  "gates": {
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "historical_evidence": {
+    "LIVE": "artifacts/device_lab_current_pin/LIVE_GUNNCHOS_VISUAL_PASS.json",
+    "DSXL": "artifacts/device_lab_current_pin/DSXL_DUAL_COMPOSITOR_UX_PASS.json",
+    "RING": "artifacts/device_lab_current_pin/RING_TO_REAL_APP_STATE_MUTATION_PASS.json",
+    "FOUR_GAME": "artifacts/device_lab_current_pin/FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS.json"
+  }
+}

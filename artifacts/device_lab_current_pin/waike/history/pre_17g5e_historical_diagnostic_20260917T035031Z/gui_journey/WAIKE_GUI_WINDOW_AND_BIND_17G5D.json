@@ -1,0 +1,230 @@
+{
+  "schema": "gunnchos.device_lab.waike_gui_window_and_bind.v1",
+  "generated_at_utc": "2026-09-17T01:30:42Z",
+  "prompt": "17G.5D",
+  "window_alive": true,
+  "headless": false,
+  "hub_url": "http://10.0.2.100:8787",
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+  "client_bound_http": false,
+  "bind_via": "guest_tcp_to_authorized_hub",
+  "mock_observed": false,
+  "hub_reachable_from_guest": true,
+  "socket_only_pending_hub_http": true,
+  "detail": {
+    "hub_reachable_from_guest": true,
+    "reach_detail": {
+      "hub_reachable_from_guest": true,
+      "tcp_hub": true,
+      "tcp_httpd": false,
+      "tcp_gateway_hub": false,
+      "http_hub_status": 200,
+      "http_hub_body": "{\"status\":\"ok\"}",
+      "http_httpd_status": null,
+      "http_gateway_hub_status": null,
+      "QEMU_USERNET_RESTRICT_CAUSES_HOST_HUB_BLOCK": true,
+      "errors": [
+        "tcp:10.0.2.100:8767:[Errno 111] Connection refused",
+        "tcp:10.0.2.2:8787:[Errno 111] Connection refused"
+      ],
+      "ip_route": "10.0.2.0/24 dev enp0s1 proto kernel scope link src 10.0.2.15 metric 100 \n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 10.0.2.15/24 metric 100 brd 10.0.2.255 scope global dynamic enp0s1\n       valid_lft 86392sec preferred_lft 86392sec\n"
+    },
+    "hub_sidecar_access": {
+      "ok": false,
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_sidecar.log",
+      "client_http_observed": false,
+      "auth_login_observed": false,
+      "healthz_only": true,
+      "request_lines": [
+        "INFO:     127.0.0.1:54543 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:54544 - \"GET /healthz HTTP/1.0\" 200 OK"
+      ],
+      "tail": "INFO:     Started server process [94145]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)\nINFO:     127.0.0.1:54543 - \"GET /healthz HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:54544 - \"GET /healthz HTTP/1.0\" 200 OK\n",
+      "counts": {
+        "access_lines": 2,
+        "non_healthz": 0,
+        "api_v1": 0,
+        "auth": 0
+      }
+    },
+    "client_hub_sockets": {
+      "ok": true,
+      "put_ok": true,
+      "raw_tail": "inux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"626\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}, {\"pid\": \"704\", \"remote\": \"6402000A:2253\", \"state\": \"05\", \"cmd\": \"bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json \"}]}\n",
+      "hub_port": 8787,
+      "established_to_hub": true,
+      "procs": [],
+      "ss_tail": "State      Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\nFIN-WAIT-2 0      0          10.0.2.15:54034   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:53922   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:54018   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:54046   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:33676   10.0.2.100:8787       \nFIN-WAIT-2 0      0          10.0.2.15:53936   10.0.2.100:8787       \n",
+      "errors": [
+        "CalledProcessError(1, ['bash', '-lc', 'pgrep -a waike-learning; pgrep -a WebKit; pgrep -a webkit'])"
+      ],
+      "proc_net_hits": [
+        {
+          "pid": "611",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
+        },
+        {
+          "pid": "611",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
+        },
+        {
+          "pid": "611",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
+        },
+        {
+          "pid": "611",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
+        },
+        {
+          "pid": "611",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
+        },
+        {
+          "pid": "611",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/var/lib/gunnchos/waike-learning-os/bin/waike-learning-os --bundle-id com.gunnchos.waike.learning --deep-link waike://le"
+        },
+        {
+          "pid": "623",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "623",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "623",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "623",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "623",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "623",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess 1 11 13 "
+        },
+        {
+          "pid": "626",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+        },
+        {
+          "pid": "626",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+        },
+        {
+          "pid": "626",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+        },
+        {
+          "pid": "626",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+        },
+        {
+          "pid": "626",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+        },
+        {
+          "pid": "626",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "/usr/lib/aarch64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 13 17 "
+        },
+        {
+          "pid": "704",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json "
+        },
+        {
+          "pid": "704",
+          "remote": "6402000A:2253",
+          "state": "05",
+          "cmd": "bash -lc python3 /var/tmp/waike_client_hub_sockets.py; cat /tmp/waike_client_hub_sockets.json "
+        }
+      ]
+    },
+    "gui_log_scrape": {
+      "ok": true,
+      "raw_tail": "GUI_LOG_SCRAPE_OK\n{\"ok\": true, \"path\": \"/tmp/waike_gui_A.log\", \"bytes\": 232, \"hub_http_chip_in_log\": false, \"hub_mock_in_log\": false, \"hub_unavailable_in_log\": false, \"runtime_hub_url_seen\": false, \"login_surface_hint\": false, \"login_surface_http_bound_hint\": false, \"csp_connect_blocked_hint\": false, \"tail\": \"Unknown logging channel: Network\\nUnknown logging channel: Network\\nUnknown logging channel: Network\\nlibEGL warning: egl: failed to create dri2 screen\\nUnknown logging channel: Network\\nlibEGL warning: egl: failed to create dri2 screen\\n\"}\n",
+      "path": "/tmp/waike_gui_A.log",
+      "bytes": 232,
+      "hub_http_chip_in_log": false,
+      "hub_mock_in_log": false,
+      "hub_unavailable_in_log": false,
+      "runtime_hub_url_seen": false,
+      "login_surface_hint": false,
+      "login_surface_http_bound_hint": false,
+      "csp_connect_blocked_hint": false,
+      "tail": "Unknown logging channel: Network\nUnknown logging channel: Network\nUnknown logging channel: Network\nlibEGL warning: egl: failed to create dri2 screen\nUnknown logging channel: Network\nlibEGL warning: egl: failed to create dri2 screen\n"
+    },
+    "atspi_doc": {
+      "skipped": "post_webkit_atspi_destabilizes_virtio"
+    },
+    "client_hub_http_chip_observed": false,
+    "client_hub_http_chip_via": "guest_tcp_to_authorized_hub",
+    "guest_tcp_socket_observed": true,
+    "client_hub_mock_chip_observed": false,
+    "client_hub_unavailable_observed": false,
+    "login_surface_http_bound": false,
+    "mock_mode_used": false,
+    "csp_connect_blocked_hint": false,
+    "post_login_drive": true,
+    "login_drive_summary": {
+      "ok": true,
+      "login_form_driven": true,
+      "path": "agent_abs_click_enter_submit",
+      "wtype": false,
+      "agent_inject": {
+        "ok": true,
+        "tail": "click_username:True|click_username_retry:True|text:\u2026:True|key:tab:True|text:\u2026:True|key:enter:True|click_submit:True"
+      },
+      "full_atspi_skipped": true
+    },
+    "note": "Bind proof prefers Hub-side access log + guest TCP after lightweight GUI login drive; AT-SPI skipped post-WebKit to protect virtio-serial.",
+    "socket_only_pending_hub_http": true,
+    "csp_inferred_from_socket_without_hub_http": true
+  },
+  "journey_a": {
+    "acknowledged": true,
+    "alive_beyond_ipc_ack": true,
+    "pid": 611
+  }
+}

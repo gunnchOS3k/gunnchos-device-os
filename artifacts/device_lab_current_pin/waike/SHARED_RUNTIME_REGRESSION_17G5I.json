@@ -1,0 +1,38 @@
+{
+  "schema": "gunnchos.device_lab.shared_runtime_regression_17g5i.v1",
+  "generated_at_utc": "2026-09-17T21:28:29Z",
+  "prompt": "17G.5I",
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+  "default_usernet_restrict_on": true,
+  "default_netdev": "user,id=n0,restrict=on",
+  "waike_service_forward_opt_in": true,
+  "hub_only_guestfwd_contract": {
+    "schema": "gunnchos.device_lab.guest_service_forward.v1",
+    "restrict": true,
+    "rules": [
+      {
+        "name": "device_lab_hub",
+        "guest_addr": "10.0.2.100",
+        "guest_port": 8787,
+        "host_addr": "127.0.0.1",
+        "host_port": 8787,
+        "protocol": "tcp",
+        "cmd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+      }
+    ],
+    "notes": "restrict=on isolation; explicit guestfwd only; Hub/httpd bind host loopback.",
+    "qemu_netdev": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh"
+  },
+  "no_global_network_relaxation": true,
+  "ECO010_SOAK_PASS": false,
+  "ECO010_deferred": true,
+  "material_invalidation_reearn_required": false,
+  "note": "Retained after compact rebind PASS; no game regression observed.",
+  "compact_provenance_ok": true,
+  "full_game_rerun": false
+}

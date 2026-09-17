@@ -1,0 +1,118 @@
+{
+  "schema": "gunnchos.device_lab.prompt_17g5h_unsandbox_bind_reearn.v1",
+  "generated_at_utc": "2026-09-17T19:22:55Z",
+  "prompt": "17G.5H-unsandbox-bind-reearn-cmd-relay",
+  "RUN_CONDITION_MET": true,
+  "qemu_hvf": true,
+  "device_os_tip": "ddc7788b68b2b0467268ba144175e4047a21a6c3",
+  "portal_pr14_tip": "906c592ef2bd568635c34c1c14db08ade5f05432",
+  "waike_draft_pr": {
+    "number": 17,
+    "url": "https://github.com/gunnchOS3k/gunnchos-waike-learning-platform/pull/17",
+    "is_draft": true,
+    "state": "OPEN",
+    "head": "b2c2f2338edbd38301b2362d49b29c7508459b32",
+    "branch": "cursor/waike-hub-device-lab-cors",
+    "merged": false
+  },
+  "prs_unmerged": {
+    "device_os_134": {
+      "state": "OPEN",
+      "is_draft": true,
+      "merged": false
+    },
+    "portal_14": {
+      "state": "OPEN",
+      "is_draft": true,
+      "merged": false
+    },
+    "waike_17": {
+      "state": "OPEN",
+      "is_draft": true,
+      "merged": false
+    }
+  },
+  "truth_tokens": {
+    "WAIKE_REAL_HUB_CLIENT_BIND_PASS": true,
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+    "WAIKE_GUEST_HUB_REACHABILITY_PASS": true,
+    "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+    "WAIKE_EFFECTIVE_WEBVIEW_CSP_PASS": true,
+    "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+    "LIVE_GUNNCHOS_VISUAL_PASS": true,
+    "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+    "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true
+  },
+  "verdict": "BIND_PASS_RUNTIME_FAIL",
+  "blocker": "gui_learner_depth_incomplete_after_hub_bind:gui_learner_depth_incomplete_after_hub_bind:course/assessment/receipt/offline/recovery not authoritatively proven;failed=course_activity,assessment_receipt,role_denial,instructor_workflow,feedback_readback,offline_reconnect,controlled_recovery",
+  "NEXT_GATE": "DEVICE_OS_134_WAIKE_EFFECTIVE_CSP_GUI_HUB_REEARN",
+  "root_cause": {
+    "class": "qemu_tcp_guestfwd_dropped_non_get_payloads_fixed_by_cmd_relay",
+    "summary": "Host CORS proxy OPTIONS/POST already worked. Prior FAIL was QEMU usernet guestfwd=tcp:\u2026-tcp:\u2026 accepting guest SYNs for OPTIONS/POST but not delivering request bytes to the host proxy (empty_http_response; healthz-only logs). Additive fix: per-connection -cmd: stdin/stdout relay + preserve cmd across GUNNCHDEVICE_LAB_GUESTFWD env round-trip. Unsandboxed HVF re-earn: mimic OPTIONS/POST HTTP/1.0+1.1 PASS; real Tauri Origin tauri://localhost OPTIONS+POST visible on proxy; WAIKE_REAL_HUB_CLIENT_BIND_PASS=true. Runtime still FAIL on journey A+B learner depth (not bind).",
+    "host_proxy_proof": "artifacts/.../host_proxy_diag/HOST_PROXY_OPTIONS_POST_PROOF.json",
+    "guest_webkit_mimic_login": {
+      "ok": true,
+      "options_status": 204,
+      "post_status": 200,
+      "matrix": {
+        "HTTP/1.0": {
+          "get_healthz": 200,
+          "options": 204,
+          "options_acao": "http://ipc.localhost",
+          "post": 200,
+          "post_acao": "http://ipc.localhost",
+          "post_body_head": "{\"session_id\":\"sess_be838357897bf5de\",\"token\":\"88AXo0hAH7h6YcMChFgHw8urtBHxvHUrLdl-aNB6fHc\",\"expires_at\":\"2026-09-18T07:20:38Z\",\"user\":{\"user_id\":\"learner-alpha\",\"username\":\"learner-alpha\",\"display_na"
+        },
+        "HTTP/1.1": {
+          "get_healthz": 200,
+          "options": 204,
+          "options_acao": "http://ipc.localhost",
+          "post": 200,
+          "post_acao": "http://ipc.localhost",
+          "post_body_head": "{\"session_id\":\"sess_7c96fe9d511e0663\",\"token\":\"f30DwINkNp6iVK2uc9rabp4-ES3LmDVSOJkk7wWOINk\",\"expires_at\":\"2026-09-18T07:20:38Z\",\"user\":{\"user_id\":\"learner-alpha\",\"username\":\"learner-alpha\",\"display_na"
+        }
+      }
+    },
+    "hub_access": {
+      "options_observed": true,
+      "post_observed": true,
+      "tauri_client_post_observed": true,
+      "proxy_options_tail": [
+        "2026-09-17T19:20:38Z INFO:     127.0.0.1:61144 - \"OPTIONS /api/v1/auth/login HTTP/1.0\" PROXY origin='http://ipc.localhost' clen=0",
+        "2026-09-17T19:20:38Z INFO:     127.0.0.1:61144 - \"OPTIONS /api/v1/auth/login HTTP/1.0\" 204 CORS_LOCAL",
+        "2026-09-17T19:20:38Z INFO:     127.0.0.1:61155 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=0",
+        "2026-09-17T19:20:38Z INFO:     127.0.0.1:61155 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" 204 CORS_LOCAL",
+        "2026-09-17T19:20:53Z INFO:     127.0.0.1:61186 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=0",
+        "2026-09-17T19:20:53Z INFO:     127.0.0.1:61186 - \"OPTIONS /api/v1/auth/login HTTP/1.1\" 204 CORS_LOCAL"
+      ],
+      "proxy_post_tail": [
+        "2026-09-17T19:20:38Z INFO:     127.0.0.1:61158 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='http://ipc.localhost' clen=85",
+        "2026-09-17T19:20:38Z INFO:     127.0.0.1:61158 - \"POST /api/v1/auth/login HTTP/1.1\" 200 OK",
+        "2026-09-17T19:20:53Z INFO:     127.0.0.1:61189 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=77",
+        "2026-09-17T19:20:53Z INFO:     127.0.0.1:61189 - \"POST /api/v1/auth/login HTTP/1.1\" 401 OK",
+        "2026-09-17T19:20:58Z INFO:     127.0.0.1:61195 - \"POST /api/v1/auth/login HTTP/1.1\" PROXY origin='tauri://localhost' clen=77",
+        "2026-09-17T19:20:58Z INFO:     127.0.0.1:61195 - \"POST /api/v1/auth/login HTTP/1.1\" 401 OK"
+      ]
+    },
+    "guest_post_finally_hits_hub": true,
+    "bind_via": "hub_sidecar_client_http"
+  },
+  "harness": {
+    "accel": "hvf",
+    "guestfwd_boot": "user,id=n0,restrict=on,guestfwd=tcp:10.0.2.100:8787-cmd:/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/gunnchos_device_os/device_lab/hub_guestfwd_cmd_relay_8787.sh",
+    "guestfwd_cmd_relay": true,
+    "cors_proxy": true,
+    "hub_upstream": "127.0.0.1:8788",
+    "tcpdump_pcap": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/guestfwd_8787_bind_reearn.pcap"
+  },
+  "journey_a_b": {
+    "continued": true,
+    "bind_pass": true,
+    "runtime_pass": false,
+    "reason": "bind earned; learner depth gates still incomplete"
+  },
+  "cx_firewall_untouched": true,
+  "no_merge_performed": true,
+  "prefer_fail_over_false_pass": true
+}

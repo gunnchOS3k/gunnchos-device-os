@@ -1,0 +1,24 @@
+{
+  "schema": "gunnchos.device_lab.shared_runtime_regression_17g5e.v1",
+  "generated_at_utc": "2026-09-17T04:02:23Z",
+  "prompt": "17G.5E",
+  "LIVE_GUNNCHOS_VISUAL_PASS": true,
+  "DSXL_DUAL_COMPOSITOR_UX_PASS": true,
+  "RING_TO_REAL_APP_STATE_MUTATION_PASS": true,
+  "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS": true,
+  "WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS": false,
+  "RUNTIME_TARGET_PREFLIGHT_PASS": true,
+  "WAIKE_EXACT_RUNTIME_CSP_PASS": true,
+  "default_usernet_restrict_on": true,
+  "waike_service_forward_opt_in": true,
+  "hub_only_guestfwd_contract": {
+    "guestfwd": "guestfwd=tcp:10.0.2.100:8787-tcp:127.0.0.1:8787",
+    "restrict": "on"
+  },
+  "no_global_network_relaxation": true,
+  "ECO010_SOAK_PASS": false,
+  "ECO010_deferred": true,
+  "material_invalidation_reearn_required": false,
+  "materiality_rebind": "WAIKE_CSP_MATERIALITY_REBIND.json",
+  "note": "17G.5E focused shared-runtime regression after CSP accepted-main re-freeze; LIVE/DSXL/RING/FOUR_GAME retained; ECO010 deferred; gunnchAI not started."
+}

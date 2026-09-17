@@ -1,0 +1,16 @@
+{
+  "schema": "gunnchos.device_lab.accepted_main_runtime_target_pin_drift.v1",
+  "generated_at_utc": "2026-09-17T21:18:44Z",
+  "prompt": "17G.5I",
+  "class": "ACCEPTED_MAIN_RUNTIME_TARGET_PIN_DRIFT",
+  "failing_test": "tests/device_lab/test_runtime_target_preflight.py::test_select_prefers_linux_aarch64_glibc236",
+  "ci_run": "35273681585",
+  "observed": {
+    "ACCEPTED_WAIKE_LP_SHA_at_failure": "34fb050ccabec813cef4811d64581b32453e1ec2",
+    "runtime_target_source_sha_selected": "5037df0c2dd1a966fcb07422a27366b14fe56b2f",
+    "assertion": "rt['source_sha'] == ACCEPTED_WAIKE_LP_SHA"
+  },
+  "root_cause": "Preferred main-aarch64-glibc236/reports/RUNTIME_TARGET.json still stamped with pre-#16 source_sha 5037df0c2dd1a966fcb07422a27366b14fe56b2f while ACCEPTED_WAIKE_LP_SHA advanced to #16 34fb050ccabec813cef4811d64581b32453e1ec2; after #17 merge, expected pin is 7ccb64459df088d41655af51c959a7bbbac849a3.",
+  "repair": "Refresh ACCEPTED_WAIKE_LP_SHA + preferred RuntimeTarget/artifact provenance to accepted-main #17",
+  "do_not_just_rerun": true
+}
