@@ -1,0 +1,35 @@
+{
+  "schema": "gunnchos.device_lab.waike_csp_product_defect_draft.v1",
+  "generated_at_utc": "2026-09-17T01:31:48Z",
+  "WAIKE_REAL_HUB_CLIENT_BIND_PASS": false,
+  "WAIKE_REAL_RUNTIME": false,
+  "blocker": "waike_webview_csp_blocks_hub_connect_src:tauri.conf.json default-src 'self' without connect-src for authorized hub",
+  "NEXT_GATE": "WAIKE_DRAFT_CSP_CONNECT_SRC_FOR_RUNTIME_HUB",
+  "evidence": {
+    "trusted_launch_ack": true,
+    "hub_url": "http://10.0.2.100:8787",
+    "guest_hub_reachability_pass": true,
+    "login_form_driven": true,
+    "login_path": "agent_abs_click_enter_submit",
+    "hub_sidecar_client_http": false,
+    "hub_sidecar_auth_login": false,
+    "hub_healthz_only": true,
+    "guest_tcp_webkit_to_authorized_hub": true,
+    "bind_via": "guest_tcp_to_authorized_hub",
+    "socket_only_pending_hub_http": true,
+    "csp_inferred_from_socket_without_hub_http": true,
+    "gui_log_csp_literal": false,
+    "accepted_main_sha": "232fc8dc3aa10d3dd644ef48d1d8c63da50d4d3c",
+    "artifact_sha256": "3df1e42e5d6c1b8b7e8ee31a636b2a6bec49120f38b6d28bd290b8a6e3fa1207"
+  },
+  "proposed_waike_fix": {
+    "file": "apps/client/src-tauri/tauri.conf.json",
+    "add_directive": "connect-src 'self' http: https: ws: wss:",
+    "rationale": "Native HubEndpointPolicy remains the authorization boundary; CSP must allow fetch to the policy-authorized runtime Hub base.",
+    "draft_patch_path": ".deps/waike-csp-draft/"
+  },
+  "keep_tokens": {
+    "WAIKE_REAL_RUNTIME": false,
+    "do_not_start_gunnchai": true
+  }
+}

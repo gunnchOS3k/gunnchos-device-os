@@ -1,24 +1,52 @@
 {
   "schema": "gunnchos.device_lab.waike_atspi_session.v1",
-  "generated_at_utc": "2026-09-17T00:14:49Z",
+  "generated_at_utc": "2026-09-17T01:30:42Z",
   "prompt": "17G.5D",
-  "WAIKE_ATSPI_WINDOW_PASS": true,
+  "WAIKE_ATSPI_WINDOW_PASS": false,
   "a11y_bus": {
-    "ok": true,
-    "bus_ok": true,
-    "launcher_missing": false,
-    "deferred": false,
-    "tail": "ATSPI_BUS_OK 0\nA11Y_SETUP_DONE\n{\"bus_ok\": true, \"child_count\": 0}\n{\"bus_ok\": true, \"child_count\": 0}\n"
+    "ok": false,
+    "bus_ok": false,
+    "deferred": true,
+    "tail": "skipped_post_webkit_to_protect_virtio_serial"
   },
   "atspi_setup": {
-    "ok": true,
-    "deferred": false,
-    "tail": "ATSPI_ALREADY_PRESENT\nATSPI_SETUP_DONE\n"
+    "ok": false,
+    "deferred": true,
+    "tail": "skipped_post_webkit_to_protect_virtio_serial"
   },
   "session": {
     "window_pass": false,
-    "bus_ok": true,
-    "note": "stopped_before_full_atspi_drive_due_to_bind_regression"
+    "bus_ok": false,
+    "note": "stopped_before_full_atspi_drive_due_to_bind_regression",
+    "bind_login_drive": {
+      "ok": true,
+      "login_form_driven": true,
+      "path": "agent_abs_click_enter_submit",
+      "wtype": false,
+      "agent_inject": {
+        "ok": true,
+        "tail": "click_username:True|click_username_retry:True|text:\u2026:True|key:tab:True|text:\u2026:True|key:enter:True|click_submit:True"
+      },
+      "full_atspi_skipped": true
+    },
+    "hub_access_post_login": {
+      "ok": false,
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-current-pin-revalidation/artifacts/device_lab_current_pin/waike/gui_journey/hub_sidecar/hub_sidecar.log",
+      "client_http_observed": false,
+      "auth_login_observed": false,
+      "healthz_only": true,
+      "request_lines": [
+        "INFO:     127.0.0.1:54543 - \"GET /healthz HTTP/1.1\" 200 OK",
+        "INFO:     127.0.0.1:54544 - \"GET /healthz HTTP/1.0\" 200 OK"
+      ],
+      "tail": "INFO:     Started server process [94145]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)\nINFO:     127.0.0.1:54543 - \"GET /healthz HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:54544 - \"GET /healthz HTTP/1.0\" 200 OK\n",
+      "counts": {
+        "access_lines": 2,
+        "non_healthz": 0,
+        "api_v1": 0,
+        "auth": 0
+      }
+    }
   },
   "note": "AT-SPI preferred but not sole GUI truth; compositor input + authoritative read-back permitted when WebKit a11y incomplete."
 }

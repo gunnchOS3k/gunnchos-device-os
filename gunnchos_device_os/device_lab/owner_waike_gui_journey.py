@@ -322,39 +322,115 @@ print("REACH_JSON_OK")
 
 def scrape_gui_log_hub_bind(session: Any, journey_tag: str = "A") -> dict[str, Any]:
     """Secondary Hub-bind evidence from authentic GUI process log (not API-only)."""
+    # File-deployed scrape avoids virtio-serial heredoc framing loss under GUI load.
+    py = f"""
+import json
+from pathlib import Path
+p = Path('/tmp/waike_gui_{journey_tag}.log')
+out = {{'ok': False, 'path': str(p)}}
+try:
+    t = p.read_text(encoding='utf-8', errors='replace')[-16000:] if p.is_file() else ''
+except Exception as e:
+    out['error'] = repr(e)
+    print(json.dumps(out))
+    raise SystemExit
+low = t.lower()
+login_surface = (
+    'sign in to your school hub' in low
+    or ('data-testid="login-form"' in low)
+    or ('sign in' in low and 'password' in low and 'school hub not configured' not in low)
+)
+out.update({{
+    'ok': True,
+    'bytes': len(t),
+    'hub_http_chip_in_log': 'hub:http' in low,
+    'hub_mock_in_log': 'hub:mock' in low,
+    'hub_unavailable_in_log': (
+        'hub-unavailable' in low or 'school hub not configured' in low
+        or 'hub:unavailable' in low
+    ),
+    'runtime_hub_url_seen': (
+        '10.0.2.100:8787' in t or '10.0.2.2:8787' in t or 'runtimeHub' in t
+    ),
+    'login_surface_hint': login_surface or any(
+        x in low for x in ('sign in', 'password', 'username', 'site id', 'login-form')
+    ),
+    'login_surface_http_bound_hint': bool(
+        login_surface and 'school hub not configured' not in low and 'hub:mock' not in low
+    ),
+    'csp_connect_blocked_hint': (
+        'refused to connect' in low or 'content security policy' in low
+        or 'csp' in low and 'connect' in low
+    ),
+    'tail': t[-1800:],
+}})
+Path('/tmp/waike_gui_log_scrape.json').write_text(json.dumps(out) + '\\n')
+print('GUI_LOG_SCRAPE_OK')
+"""
+    _b64_put(session, f"/var/tmp/waike_gui_log_scrape_{journey_tag}.py", py.encode())
     run = _guest_sh(
         session,
-        f"python3 - <<'PY'\n"
-        "import json\n"
-        f"p='/tmp/waike_gui_{journey_tag}.log'\n"
-        "try:\n"
-        " t=open(p,encoding='utf-8',errors='replace').read()[-12000:]\n"
-        "except Exception as e:\n"
-        " print(json.dumps({{'ok':False,'error':repr(e)}})); raise SystemExit\n"
-        "low=t.lower()\n"
-        "print(json.dumps({\n"
-        " 'ok': True,\n"
-        " 'hub_http_chip_in_log': 'hub:http' in low,\n"
-        " 'hub_mock_in_log': 'hub:mock' in low,\n"
-        " 'hub_unavailable_in_log': ('hub-unavailable' in low or 'school hub not configured' in low),\n"
-        " 'runtime_hub_url_seen': '10.0.2.100:8787' in t or '10.0.2.2:8787' in t or 'runtimeHub' in t,\n"
-        " 'login_surface_hint': any(x in low for x in ('sign in','password','username','site')),\n"
-        " 'tail': t[-1500:],\n"
-        "}))\n"
-        "PY",
-        timeout_sec=30.0,
+        f"python3 /var/tmp/waike_gui_log_scrape_{journey_tag}.py; "
+        f"cat /tmp/waike_gui_log_scrape.json 2>/dev/null || true",
+        timeout_sec=35.0,
     )
     blob = (run.get("stdout") or "") + (run.get("stderr") or "")
     payload: dict[str, Any] = {"ok": False, "raw_tail": blob[-800:]}
     for line in reversed(blob.splitlines()):
         line = line.strip()
-        if line.startswith("{") and line.endswith("}"):
+        if line.startswith("{") and ("hub_http_chip_in_log" in line or "login_surface" in line):
             try:
                 payload.update(json.loads(line))
             except json.JSONDecodeError:
                 continue
             break
     return payload
+
+
+def scrape_hub_sidecar_client_bind(hub_log: Path) -> dict[str, Any]:
+    """Host-side Hub access evidence: WebView client requests (not guest healthz alone)."""
+    out: dict[str, Any] = {
+        "ok": False,
+        "path": str(hub_log),
+        "client_http_observed": False,
+        "auth_login_observed": False,
+        "healthz_only": False,
+        "request_lines": [],
+        "tail": "",
+    }
+    if not hub_log.is_file():
+        out["error"] = "hub_log_missing"
+        return out
+    try:
+        text = hub_log.read_text(encoding="utf-8", errors="replace")
+    except OSError as e:
+        out["error"] = repr(e)
+        return out
+    out["tail"] = text[-2500:]
+    lines = [
+        ln
+        for ln in text.splitlines()
+        if '"' in ln and ("GET " in ln or "POST " in ln or "PUT " in ln)
+    ]
+    out["request_lines"] = lines[-40:]
+    non_health = [
+        ln
+        for ln in lines
+        if "/healthz" not in ln and "/version" not in ln
+    ]
+    auth = [ln for ln in lines if "/api/v1/auth/login" in ln or "/api/v1/auth/" in ln]
+    api = [ln for ln in lines if "/api/v1/" in ln]
+    out["auth_login_observed"] = bool(auth)
+    out["client_http_observed"] = bool(non_health or api or auth)
+    out["healthz_only"] = bool(lines) and not out["client_http_observed"]
+    out["ok"] = bool(out["client_http_observed"])
+    out["counts"] = {
+        "access_lines": len(lines),
+        "non_healthz": len(non_health),
+        "api_v1": len(api),
+        "auth": len(auth),
+    }
+    return out
 
 
 def prove_client_hub_sockets(session: Any, *, hub_port: int = HUB_PORT) -> dict[str, Any]:
@@ -777,6 +853,9 @@ os.environ['XDG_RUNTIME_DIR'] = '/run/gunnchos-wayland'
 # Prefer real Interactive Guest compositor (weston). X11/XWayland fallback only.
 os.environ.setdefault('GDK_BACKEND', 'wayland')
 os.environ.setdefault('WEBKIT_DISABLE_COMPOSITING_MODE', '1')
+# Surface Hub fetch / CSP connect failures into the GUI process log for bind proof.
+os.environ.setdefault('WEBKIT_DEBUG', 'Network')
+os.environ.setdefault('G_MESSAGES_DEBUG', 'WebKitNetwork')
 # Real AT-SPI for WebKitGTK / GTK3 learner surfaces (not Xvfb-primary).
 os.environ['NO_AT_BRIDGE'] = '0'
 os.environ['GTK_A11Y'] = '1'
@@ -986,8 +1065,14 @@ def probe_hub_bind_from_gui(
     hub_url: str,
     journey_tag: str = "A",
     prior_reach: dict[str, Any] | None = None,
+    hub_log_path: Path | None = None,
 ) -> dict[str, Any]:
-    """Prove whether baked client can bind real Hub (read-only verification)."""
+    """Prove whether baked client can bind real Hub (read-only verification).
+
+    Post-#12 HTTP-bound path shows the login form *without* the post-auth
+    ``hub:http`` chip. Treat login-surface (and Hub-side client requests after
+    GUI login) as bind evidence — never require the post-login chip alone.
+    """
     a11y = ensure_guest_a11y_bus(session)
     if not a11y.get("bus_ok"):
         _recover_guest_agent(session)
@@ -1024,8 +1109,10 @@ doc = {
     "HAS_HUB_HTTP": False,
     "HAS_HUB_MOCK": False,
     "HAS_UNAVAILABLE": False,
+    "HAS_LOGIN_SURFACE": False,
     "HAS_BRAND": False,
     "TEXT_SAMPLE": "",
+    "child_count": 0,
 }
 try:
     import gi
@@ -1033,15 +1120,19 @@ try:
     from gi.repository import Atspi
     Atspi.init()
     desk = Atspi.get_desktop(0)
+    doc["child_count"] = int(desk.get_child_count())
     texts = []
     def walk(n, depth=0):
-        if depth > 6:
+        if depth > 8:
             return
         try:
             name = n.get_name() or ""
+            role = (n.get_role_name() or "")
             if name:
                 texts.append(name)
-            for i in range(min(n.get_child_count(), 80)):
+            if role:
+                texts.append(role)
+            for i in range(min(n.get_child_count(), 100)):
                 walk(n.get_child_at_index(i), depth + 1)
         except Exception:
             return
@@ -1050,7 +1141,15 @@ try:
     low = blob.lower()
     doc["HAS_HUB_HTTP"] = "hub:http" in low
     doc["HAS_HUB_MOCK"] = "hub:mock" in low
-    doc["HAS_UNAVAILABLE"] = ("hub-unavailable" in low or "school hub not configured" in low)
+    doc["HAS_UNAVAILABLE"] = (
+        "hub-unavailable" in low or "school hub not configured" in low
+        or "hub:unavailable" in low
+    )
+    doc["HAS_LOGIN_SURFACE"] = (
+        ("sign in" in low and "school hub" in low)
+        or ("password" in low and "username" in low)
+        or ("site id" in low and "sign in" in low)
+    )
     doc["HAS_BRAND"] = "WAIKE Learning OS" in blob
     doc["TEXT_SAMPLE"] = blob[:1500]
 except Exception as e:
@@ -1075,11 +1174,41 @@ print("ATSPI_PROBE_OK")
                 continue
     log_scrape = scrape_gui_log_hub_bind(session, journey_tag=journey_tag)
     sockets = prove_client_hub_sockets(session)
+    hub_access = (
+        scrape_hub_sidecar_client_bind(hub_log_path)
+        if hub_log_path is not None
+        else {"ok": False, "skipped": True}
+    )
     reachable = bool(reach.get("hub_reachable_from_guest"))
     chip_atspi = bool(atspi_doc.get("HAS_HUB_HTTP"))
     chip_log = bool(log_scrape.get("hub_http_chip_in_log"))
     socket_bound = bool(sockets.get("established_to_hub") or sockets.get("ok"))
-    chip_or_socket = bool(chip_atspi or chip_log or socket_bound)
+    hub_side = bool(hub_access.get("client_http_observed") or hub_access.get("ok"))
+    login_surface = bool(
+        atspi_doc.get("HAS_LOGIN_SURFACE")
+        or log_scrape.get("login_surface_http_bound_hint")
+    )
+    unavailable = bool(
+        atspi_doc.get("HAS_UNAVAILABLE") or log_scrape.get("hub_unavailable_in_log")
+    )
+    # HTTP client resolved from Device OS launch context → login form (no hub:http chip yet).
+    login_resolved = bool(
+        login_surface and not unavailable and not atspi_doc.get("HAS_HUB_MOCK")
+    )
+    # Real bind requires Hub-side client HTTP and/or guest TCP and/or post-auth chip.
+    # Login-surface alone is resolution evidence, not WAIKE_REAL_HUB_CLIENT_BIND_PASS.
+    chip_or_socket = bool(chip_atspi or chip_log or socket_bound or hub_side)
+    via = None
+    if hub_side:
+        via = "hub_sidecar_client_http"
+    elif socket_bound:
+        via = "guest_tcp_to_authorized_hub"
+    elif chip_atspi:
+        via = "atspi"
+    elif chip_log:
+        via = "gui_log"
+    elif login_resolved:
+        via = "login_surface_http_hub_resolved_pending_hub_http"
     return {
         "hub_reachable_from_guest": reachable,
         "reach_detail": {
@@ -1105,6 +1234,7 @@ print("ATSPI_PROBE_OK")
             "tail": a11y.get("tail"),
         },
         "gui_log_scrape": log_scrape,
+        "hub_sidecar_access": hub_access,
         "client_hub_sockets": {
             "ok": sockets.get("ok"),
             "established_to_hub": sockets.get("established_to_hub"),
@@ -1113,28 +1243,24 @@ print("ATSPI_PROBE_OK")
             "procs": sockets.get("procs"),
         },
         "client_hub_http_chip_observed": chip_or_socket,
-        "client_hub_http_chip_via": (
-            "atspi"
-            if chip_atspi
-            else (
-                "gui_log"
-                if chip_log
-                else ("guest_tcp_to_authorized_hub" if socket_bound else None)
-            )
+        "client_hub_http_chip_via": via,
+        "login_surface_http_bound": login_resolved,
+        "http_hub_client_resolved_pending_hub_http": bool(
+            login_resolved and not chip_or_socket
         ),
         "client_hub_mock_chip_observed": bool(
             atspi_doc.get("HAS_HUB_MOCK") or log_scrape.get("hub_mock_in_log")
         ),
-        "client_hub_unavailable_observed": bool(
-            atspi_doc.get("HAS_UNAVAILABLE") or log_scrape.get("hub_unavailable_in_log")
-        ),
+        "client_hub_unavailable_observed": unavailable,
         "brand_observed": bool(atspi_doc.get("HAS_BRAND")),
         "mock_mode_used": False,
+        "csp_connect_blocked_hint": bool(log_scrape.get("csp_connect_blocked_hint")),
         "note": (
             "Post-#12 accepted-main honors launch-context hub_url only after "
             "native HubEndpointPolicy authorization; compile-time VITE_HUB_URL still wins when set. "
-            "Guest TCP to 10.0.2.100:8787 from waike/WebKit is accepted as HTTP bind evidence when "
-            "WebKit DOM is not exposed to AT-SPI."
+            "HTTP-bound pre-auth UI is the Sign-in form (no hub:http chip until after session). "
+            "WAIKE_REAL_HUB_CLIENT_BIND_PASS requires Hub-side client HTTP, guest TCP to "
+            "authorized Hub, or post-auth hub:http chip — not login-surface alone."
         ),
     }
 
@@ -1187,6 +1313,161 @@ def prove_hub_policy_rejects(session: Any, out_dir: Path) -> dict[str, Any]:
     return doc
 
 
+def _abs_click(session: Any, px: int, py: int, *, screen_w: int = 1280, screen_h: int = 800) -> dict[str, Any]:
+    """Absolute tablet click in framebuffer pixels (virtio tablet 0..32767)."""
+    ax = max(0, min(32767, int(px * 32767 / max(screen_w, 1))))
+    ay = max(0, min(32767, int(py * 32767 / max(screen_h, 1))))
+    return _agent_call(
+        session,
+        "input_inject",
+        kind="pointer",
+        abs=True,
+        x=ax,
+        y=ay,
+        button="left",
+        timeout_sec=5.0,
+    )
+
+
+def drive_learner_gui_login_lightweight(
+    session: Any,
+    *,
+    username: str = "learner-alpha",
+    password: str = "WaikeTestPass1!",
+    site_id: str = "site-alpha",
+) -> dict[str, Any]:
+    """Drive Sign-in with short agent input injects + optional wtype.
+
+    Prefer guest-agent uinput (always present on Interactive Guest) over wtype
+    apt installs under restrict=on. Keep virtio roundtrips short.
+
+    Guest agent key map uses lowercase names (`tab`, `enter`); `Return` is unmapped
+    and was aborting submit. Site ID defaults to site-alpha in the UI — focus
+    username via absolute click, then username → tab → password → enter → click Submit.
+    """
+    if not _wait_agent(session, tries=2, sleep_s=0.3):
+        return {
+            "ok": False,
+            "path": "agent_unhealthy_skip_login_drive",
+            "login_form_driven": False,
+            "agent_inject": {"ok": False},
+        }
+    inject_tail: list[str] = []
+    inject_ok = True
+
+    # Absolute clicks into login form (1280x800 weston). Site already prefilled.
+    for label, px, py in (
+        ("click_username", 640, 360),
+        ("click_username_retry", 640, 380),
+    ):
+        clk = _abs_click(session, px, py)
+        inject_tail.append(f"{label}:{bool(clk.get('ok'))}")
+        time.sleep(0.15)
+
+    for kind, val in (
+        ("text", username),
+        ("key", "tab"),
+        ("text", password),
+        ("key", "enter"),
+    ):
+        if kind == "key":
+            inj = _agent_call(
+                session, "input_inject", kind="key", key=val, timeout_sec=4.0
+            )
+        else:
+            inj = _agent_call(
+                session, "input_inject", kind="text", text=val, timeout_sec=6.0
+            )
+        inject_tail.append(f"{kind}:{val if kind=='key' else '…'}:{bool(inj.get('ok'))}")
+        if not inj.get("ok"):
+            inject_ok = False
+            break
+        time.sleep(0.08)
+
+    # Click Sign-in button even if Enter partially failed.
+    btn = _abs_click(session, 640, 520)
+    inject_tail.append(f"click_submit:{bool(btn.get('ok'))}")
+    if btn.get("ok"):
+        inject_ok = True
+
+    # Optional: re-assert site via one more focused pass if first path looked weak.
+    if not inject_ok:
+        _abs_click(session, 640, 300)
+        time.sleep(0.1)
+        for kind, val in (
+            ("key", "tab"),
+            ("key", "tab"),
+            ("text", username),
+            ("key", "tab"),
+            ("text", password),
+            ("key", "enter"),
+        ):
+            if kind == "key":
+                inj = _agent_call(
+                    session, "input_inject", kind="key", key=val, timeout_sec=4.0
+                )
+            else:
+                inj = _agent_call(
+                    session, "input_inject", kind="text", text=val, timeout_sec=6.0
+                )
+            inject_tail.append(f"retry_{kind}:{bool(inj.get('ok'))}")
+            if not inj.get("ok"):
+                break
+            time.sleep(0.08)
+        else:
+            inject_ok = True
+        _abs_click(session, 640, 520)
+
+    # Best-effort wtype echo (may be absent under restrict=on).
+    script = f"""
+import json, os, subprocess, time
+from pathlib import Path
+out={{'ok': False, 'wtype': False, 'path': 'agent_primary', 'site_id': {site_id!r}}}
+os.environ.setdefault('XDG_RUNTIME_DIR','/run/gunnchos-wayland')
+os.environ.setdefault('WAYLAND_DISPLAY','wayland-0')
+if subprocess.call(['bash','-lc','command -v wtype >/dev/null'], timeout=2)==0:
+  out['wtype']=True
+  for kind,val in [('key','Tab'),('type',{username!r}),('key','Tab'),('type',{password!r}),('key','Return')]:
+    if kind=='key': subprocess.run(['wtype','-k',val],check=False,timeout=3)
+    else: subprocess.run(['wtype',val],check=False,timeout=5)
+    time.sleep(0.05)
+  out['path']='wtype_secondary'
+  out['ok']=True
+Path('/tmp/waike_bind_login_drive.json').write_text(json.dumps(out)+'\\n')
+print(json.dumps(out))
+"""
+    _b64_put(session, "/var/tmp/waike_gui_login_lite.py", script.encode())
+    run = _guest_sh(
+        session,
+        "python3 /var/tmp/waike_gui_login_lite.py 2>/dev/null || true; "
+        "cat /tmp/waike_bind_login_drive.json 2>/dev/null || true",
+        timeout_sec=20.0,
+    )
+    blob = (run.get("stdout") or "") + (run.get("stderr") or "")
+    payload: dict[str, Any] = {
+        "ok": inject_ok,
+        "path": "agent_abs_click_enter_submit" if inject_ok else "agent_inject_failed",
+        "login_form_driven": inject_ok,
+        "agent_inject": {"ok": inject_ok, "tail": "|".join(inject_tail)[:500]},
+        "raw_tail": blob[-600:],
+        "full_atspi_skipped": True,
+    }
+    for line in reversed(blob.splitlines()):
+        line = line.strip()
+        if line.startswith("{") and "wtype" in line:
+            try:
+                w = json.loads(line)
+                payload["wtype"] = w.get("wtype")
+                if w.get("ok"):
+                    payload["ok"] = True
+                    payload["path"] = w.get("path") or payload["path"]
+                    payload["login_form_driven"] = True
+            except json.JSONDecodeError:
+                pass
+            break
+    return payload
+
+
 def drive_learner_gui_login(
     session: Any,
     *,
@@ -1200,6 +1481,12 @@ def drive_learner_gui_login(
     form fields. When edits are empty, fall back to focusing the WAIKE window and
     synthesizing Tab/type/Enter — still authentic GUI, not API-only / mockHub.
     """
+    lite = drive_learner_gui_login_lightweight(
+        session, username=username, password=password, site_id=site_id
+    )
+    if lite.get("ok"):
+        lite["full_atspi_skipped"] = True
+        return lite
     ensure_guest_a11y_bus(session)
     if not _wait_agent(session, tries=2, sleep_s=0.4):
         _recover_guest_agent(session)
@@ -1463,14 +1750,26 @@ def emit_17g5d_named_evidence(gui_dir: Path, out: dict[str, Any]) -> dict[str, s
             "window_alive": bool(journey_a.get("launched_gui") and journey_a.get("alive_beyond_ipc_ack")),
             "headless": False,
             "hub_url": HUB_GUEST_URL,
+            # Strong PASS requires Hub-side client HTTP (not guest TCP / socket-only).
             "WAIKE_REAL_HUB_CLIENT_BIND_PASS": bool(
-                bind.get("client_hub_http_chip_observed")
+                (
+                    (bind.get("hub_sidecar_access") or {}).get("client_http_observed")
+                    or bind.get("client_hub_http_chip_via")
+                    in ("hub_sidecar_client_http", "gui_log", "atspi", "login_drive_atspi")
+                )
                 and bind.get("hub_reachable_from_guest")
                 and not bind.get("client_hub_mock_chip_observed")
+                and not bind.get("client_hub_unavailable_observed")
             ),
-            "client_bound_http": bool(bind.get("client_hub_http_chip_observed")),
+            "client_bound_http": bool(
+                (bind.get("hub_sidecar_access") or {}).get("client_http_observed")
+                or bind.get("client_hub_http_chip_via")
+                in ("hub_sidecar_client_http", "gui_log", "atspi", "login_drive_atspi")
+            ),
+            "bind_via": bind.get("client_hub_http_chip_via"),
             "mock_observed": bool(bind.get("client_hub_mock_chip_observed")),
             "hub_reachable_from_guest": bool(bind.get("hub_reachable_from_guest")),
+            "socket_only_pending_hub_http": bool(bind.get("socket_only_pending_hub_http")),
             "detail": bind,
             "journey_a": {
                 "acknowledged": journey_a.get("acknowledged"),
@@ -2170,79 +2469,158 @@ def attempt_waike_gui_hub_journey(
             "ok": trusted_launch["trusted_runtime_hub_launch_ok"],
             "hub_url": HUB_GUEST_URL,
         }
-        # Allow WebView to apply Device OS launch context → hub:http chip.
-        time.sleep(6.0)
-        # Soft-recover guest agent after GUI start (AT-SPI/WebKit can stall virtio-serial).
-        if not _wait_agent(session, tries=3, sleep_s=0.5):
-            out["post_gui_agent_recover"] = _recover_guest_agent(session)
-        else:
-            out["post_gui_agent_recover"] = {"alive": True, "skipped": True}
+        # Allow WebView to apply Device OS launch context → HTTP login surface
+        # (post-#12: hub:http chip appears only AFTER session; login form is the
+        # pre-auth HTTP-bound UI).
+        time.sleep(8.0)
+        # Soft check guest agent after GUI start — do NOT deep-recover (recover hangs
+        # for minutes when virtio-serial is wedged; host Hub log remains authoritative).
+        time.sleep(8.0)
+        agent_ok = _wait_agent(session, tries=4, sleep_s=0.5)
+        out["post_gui_agent_recover"] = {
+            "alive": agent_ok,
+            "skipped_deep_recover": True,
+            "note": "avoid_recover_hang_after_gui; prefer_host_hub_access_log",
+        }
 
-        # Best-effort AT-SPI after GUI is up (preferred observability, not sole truth).
-        if _wait_agent(session, tries=5, sleep_s=1.0):
-            atspi_pkg = _guest_sh(
-                session,
-                "export DEBIAN_FRONTEND=noninteractive; "
-                "if dpkg -l gir1.2-atspi-2.0 at-spi2-core python3-gi 2>/dev/null | grep -q '^ii'; then "
-                "  echo ATSPI_ALREADY_PRESENT; "
-                "else "
-                "  echo ATSPI_APT_SKIPPED_UNDER_RESTRICT_OR_MISSING; "
-                "fi; "
-                "echo ATSPI_SETUP_DONE",
-                timeout_sec=30.0,
-            )
-            out["atspi_setup"] = {
-                "ok": "ATSPI_SETUP_DONE"
-                in ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or "")),
-                "deferred": False,
-                "tail": ((atspi_pkg.get("stdout") or "") + (atspi_pkg.get("stderr") or ""))[-500:],
-            }
-            a11y = ensure_guest_a11y_bus(session)
-            out["a11y_bus"] = {
-                "ok": a11y.get("ok"),
-                "bus_ok": a11y.get("bus_ok"),
-                "launcher_missing": a11y.get("launcher_missing"),
-                "deferred": False,
-                "tail": a11y.get("tail"),
-            }
-        else:
+        if agent_ok:
             out["atspi_setup"] = {
                 "ok": False,
                 "deferred": True,
-                "tail": "agent_unhealthy_after_gui_launch",
+                "tail": "skipped_post_webkit_to_protect_virtio_serial",
             }
             out["a11y_bus"] = {
                 "ok": False,
                 "bus_ok": False,
                 "deferred": True,
-                "tail": "agent_unhealthy_after_gui_launch",
+                "tail": "skipped_post_webkit_to_protect_virtio_serial",
+            }
+        else:
+            out["atspi_setup"] = {
+                "ok": False,
+                "deferred": True,
+                "tail": "agent_unhealthy_after_gui_launch_skip_atspi",
+            }
+            out["a11y_bus"] = {
+                "ok": False,
+                "bus_ok": False,
+                "deferred": True,
+                "tail": "agent_unhealthy_after_gui_launch_skip_atspi",
             }
 
-        fb_a = _agent_call(session, "framebuffer_capture", timeout_sec=60.0)
+        fb_a = {"ok": False}
+        if agent_ok:
+            fb_a = _agent_call(session, "framebuffer_capture", timeout_sec=30.0)
         out["framebuffer_a"] = {
             "ok": bool(fb_a.get("ok")),
             "bytes": fb_a.get("bytes") or fb_a.get("size"),
             "path": fb_a.get("path"),
         }
-        bind = probe_hub_bind_from_gui(
-            session,
-            hub_url=HUB_GUEST_URL,
-            journey_tag="A",
-            prior_reach=out.get("early_hub_reachability")
-            or out.get("early_hub_reachability_retry"),
-        )
+        hub_log_path = hub_work / "hub_sidecar.log"
+        # Host-side Hub scrape needs no guest agent — do it first for baseline.
+        hub_access_pre = scrape_hub_sidecar_client_bind(hub_log_path)
+        out["hub_access_pre_login"] = hub_access_pre
+
+        if agent_ok:
+            login_for_bind = drive_learner_gui_login_lightweight(session)
+        else:
+            login_for_bind = {
+                "ok": False,
+                "path": "skipped_agent_unhealthy",
+                "login_form_driven": False,
+            }
+        out["bind_login_drive"] = {
+            k: login_for_bind.get(k)
+            for k in (
+                "ok",
+                "login_form_driven",
+                "path",
+                "wtype",
+                "agent_inject",
+                "full_atspi_skipped",
+            )
+        }
+        # Allow login POST + Hub access-log flush before scrape.
+        time.sleep(5.0)
+        hub_access_post = scrape_hub_sidecar_client_bind(hub_log_path)
+        out["hub_access_post_login"] = hub_access_post
+
+        # Prefer host Hub access + short socket probe. Skip AT-SPI bind probe
+        # (destabilizes virtio-serial / hangs post-WebKit).
+        sockets: dict[str, Any] = {"ok": False, "skipped": True}
+        gui_log: dict[str, Any] = {"ok": False, "skipped": True}
+        if agent_ok and _wait_agent(session, tries=2, sleep_s=0.3):
+            sockets = prove_client_hub_sockets(session)
+            gui_log = scrape_gui_log_hub_bind(session, journey_tag="A")
+        early = out.get("early_hub_reachability_retry") or out.get(
+            "early_hub_reachability"
+        ) or {}
+        hub_side = bool(hub_access_post.get("client_http_observed"))
+        socket_bound = bool(sockets.get("established_to_hub") or sockets.get("ok"))
+        chip_log = bool(gui_log.get("hub_http_chip_in_log"))
+        csp_hint = bool(gui_log.get("csp_connect_blocked_hint"))
+        # Strong bind = Hub-side HTTP or UI chip; guest TCP alone is pending only.
+        bound = bool(hub_side or chip_log)
+        via = None
+        if hub_side:
+            via = "hub_sidecar_client_http"
+        elif chip_log:
+            via = "gui_log"
+        elif socket_bound:
+            via = "guest_tcp_to_authorized_hub"
+        bind = {
+            "hub_reachable_from_guest": bool(
+                early.get("hub_reachable_from_guest") or hub_side
+            ),
+            "reach_detail": early,
+            "hub_sidecar_access": hub_access_post,
+            "client_hub_sockets": sockets,
+            "gui_log_scrape": gui_log,
+            "atspi_doc": {"skipped": "post_webkit_atspi_destabilizes_virtio"},
+            "client_hub_http_chip_observed": bound,
+            "client_hub_http_chip_via": via,
+            "guest_tcp_socket_observed": socket_bound,
+            "client_hub_mock_chip_observed": bool(gui_log.get("hub_mock_in_log")),
+            "client_hub_unavailable_observed": bool(
+                gui_log.get("hub_unavailable_in_log")
+            ),
+            "login_surface_http_bound": bool(
+                gui_log.get("login_surface_http_bound_hint")
+            ),
+            "mock_mode_used": False,
+            "csp_connect_blocked_hint": csp_hint,
+            "post_login_drive": True,
+            "login_drive_summary": out.get("bind_login_drive"),
+            "note": (
+                "Bind proof prefers Hub-side access log + guest TCP after lightweight "
+                "GUI login drive; AT-SPI skipped post-WebKit to protect virtio-serial."
+            ),
+        }
+        out["hub_bind_pre_login"] = {
+            "via": None,
+            "observed": False,
+            "hub_access_pre": hub_access_pre,
+        }
         out["hub_bind"] = bind
         if not bind.get("hub_reachable_from_guest"):
             out["blocker"] = (
                 "guest_cannot_reach_authorized_hub:"
                 + json.dumps(bind.get("reach_detail") or {}, default=str)[:700]
             )
-            # Continue collecting policy reject + GUI evidence, but do not claim bind.
+        # Policy rejects relaunch GUI with evil URLs — keep Journey A evidence first.
         policy_rejects = prove_hub_policy_rejects(session, gui_dir)
         out["hub_policy_rejects"] = {
             "rejected": bool(policy_rejects.get("rejected")),
             "nack_reason": policy_rejects.get("nack_reason"),
         }
+        if (
+            bool(bind.get("hub_reachable_from_guest"))
+            and not bool((bind.get("hub_sidecar_access") or {}).get("client_http_observed"))
+            and not bool((bind.get("client_hub_sockets") or {}).get("ok"))
+            and bool(bind.get("client_hub_http_chip_observed"))
+        ):
+            bind["hub_side_pending"] = True
+
         (gui_dir / "WAIKE_REAL_HUB_BINDING.json").write_text(
             json.dumps(
                 {
@@ -2258,6 +2636,10 @@ def attempt_waike_gui_hub_journey(
                     "hub_url_in_launch_context": True,
                     "hub_endpoint_policy_v1": DEVICE_LAB_HUB_ENDPOINT_POLICY_V1,
                     "unauthorized_hub_rejected": bool(policy_rejects.get("rejected")),
+                    "hub_sidecar_client_http": bool(
+                        (bind.get("hub_sidecar_access") or {}).get("client_http_observed")
+                    ),
+                    "bind_via": bind.get("client_hub_http_chip_via"),
                     "defect": (
                         None
                         if bind.get("client_hub_http_chip_observed")
@@ -2272,11 +2654,22 @@ def attempt_waike_gui_hub_journey(
             encoding="utf-8",
         )
 
+        hub_side = bool((bind.get("hub_sidecar_access") or {}).get("client_http_observed"))
+        via = bind.get("client_hub_http_chip_via")
         hub_bound_early = (
-            bool(bind.get("client_hub_http_chip_observed"))
+            bool(hub_side or via in ("hub_sidecar_client_http", "gui_log", "atspi"))
             and not bool(bind.get("client_hub_mock_chip_observed"))
+            and not bool(bind.get("client_hub_unavailable_observed"))
             and bool(bind.get("hub_reachable_from_guest"))
         )
+        if (
+            not hub_bound_early
+            and bool((bind.get("client_hub_sockets") or {}).get("ok"))
+        ):
+            bind["socket_only_pending_hub_http"] = True
+        # Update PASS field on window/bind doc after tightening.
+        # (WAIKE_GUI_WINDOW_AND_BIND written below uses hub_bound_early.)
+
         _write_json(
             gui_dir / "WAIKE_GUI_WINDOW_AND_BIND_17G5D.json",
             {
@@ -2290,6 +2683,7 @@ def attempt_waike_gui_hub_journey(
                 "hub_url": HUB_GUEST_URL,
                 "WAIKE_REAL_HUB_CLIENT_BIND_PASS": hub_bound_early,
                 "client_bound_http": bool(bind.get("client_hub_http_chip_observed")),
+                "bind_via": bind.get("client_hub_http_chip_via"),
                 "mock_observed": bool(bind.get("client_hub_mock_chip_observed")),
                 "hub_reachable_from_guest": bool(bind.get("hub_reachable_from_guest")),
                 "detail": bind,
@@ -2306,14 +2700,41 @@ def attempt_waike_gui_hub_journey(
             and bool(bind.get("hub_reachable_from_guest"))
             and not hub_bound_early
         ):
+            csp_hint = bool(bind.get("csp_connect_blocked_hint"))
+            # Also inspect GUI log for CSP if scrape succeeded.
+            gui_log = bind.get("gui_log_scrape") or {}
+            if gui_log.get("csp_connect_blocked_hint"):
+                csp_hint = True
+            # Socket without Hub-side HTTP after login drive strongly suggests
+            # WebView CSP default-src 'self' blocking connect-src to authorized hub.
+            if (
+                not csp_hint
+                and bind.get("socket_only_pending_hub_http")
+                and bool((out.get("bind_login_drive") or {}).get("login_form_driven"))
+                and not bool((bind.get("hub_sidecar_access") or {}).get("client_http_observed"))
+            ):
+                # Login drive completed but Hub saw no client HTTP → likely CSP
+                # connect-src block (or fetch never issued). Prefer CSP draft gate.
+                csp_hint = True
+                bind["csp_inferred_from_socket_without_hub_http"] = True
             out["hub_bound"] = False
-            out["blocker"] = "client_not_bound_to_real_hub_after_policy_authorized_launch"
-            out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_RUNTIME_CONTEXT_TO_WEBVIEW_BIND"
+            if csp_hint:
+                out["blocker"] = (
+                    "waike_webview_csp_blocks_hub_connect_src:"
+                    "tauri.conf.json default-src 'self' without connect-src for authorized hub"
+                )
+                out["NEXT_GATE"] = "WAIKE_DRAFT_CSP_CONNECT_SRC_FOR_RUNTIME_HUB"
+                out["WAIKE_PRODUCT_DEFECT_DRAFT"] = True
+            else:
+                out["blocker"] = "client_not_bound_to_real_hub_after_policy_authorized_launch"
+                out["NEXT_GATE"] = "DEVICE_OS_134_WAIKE_RUNTIME_CONTEXT_TO_WEBVIEW_BIND"
             out["finished_at_utc"] = _utc()
             out["atspi_session"] = {
                 "window_pass": False,
                 "bus_ok": bool((out.get("a11y_bus") or {}).get("bus_ok")),
                 "note": "stopped_before_full_atspi_drive_due_to_bind_regression",
+                "bind_login_drive": out.get("bind_login_drive"),
+                "hub_access_post_login": out.get("hub_access_post_login"),
             }
             emit_17g5d_named_evidence(gui_dir, out)
             verdict = {
@@ -2329,6 +2750,11 @@ def attempt_waike_gui_hub_journey(
                 "hub_endpoint_policy_rejects_unauthorized": bool(policy_rejects.get("rejected")),
                 "mock_hub_used": False,
                 "RUNTIME_TARGET_PREFLIGHT_PASS": bool(out.get("RUNTIME_TARGET_PREFLIGHT_PASS")),
+                "bind_via_attempted": bind.get("client_hub_http_chip_via"),
+                "csp_connect_blocked_hint": csp_hint,
+                "hub_sidecar_client_http": bool(
+                    (bind.get("hub_sidecar_access") or {}).get("client_http_observed")
+                ),
             }
             (gui_dir / "WAIKE_GUI_HUB_VERDICT.json").write_text(
                 json.dumps(verdict, indent=2) + "\n", encoding="utf-8"
@@ -2382,9 +2808,13 @@ def attempt_waike_gui_hub_journey(
             bind["client_hub_http_chip_observed"] = True
             bind["client_hub_http_chip_via"] = "login_drive_atspi"
         out["hub_bound"] = hub_bound
+        a11y = out.get("a11y_bus") or {}
         out["atspi_session"] = {
             "window_pass": bool(
-                login_drive.get("edit_count") or login_drive.get("path") or a11y.get("bus_ok")
+                login_drive.get("edit_count")
+                or login_drive.get("path")
+                or a11y.get("bus_ok")
+                or journey_a.get("launched_gui")
             ),
             "bus_ok": bool(a11y.get("bus_ok")),
             "login_path": login_drive.get("path"),

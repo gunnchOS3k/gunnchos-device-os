@@ -112,7 +112,8 @@ def _recover_guest_agent(session: Any) -> dict[str, Any]:
         timeout_sec=15.0,
     )
     time.sleep(4.0)
-    alive = _wait_agent(session, tries=40, sleep_s=0.8)
+    # Cap recover waits: each ping may take ~5s; 40 tries hung post-GUI runs for minutes.
+    alive = _wait_agent(session, tries=6, sleep_s=0.5)
     return {"scheduled": sched, "alive": alive}
 
 

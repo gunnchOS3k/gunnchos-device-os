@@ -1,6 +1,6 @@
 {
   "schema": "gunnchos.device_lab.waike_hub_endpoint_policy.v1",
-  "generated_at_utc": "2026-09-17T00:14:49Z",
+  "generated_at_utc": "2026-09-17T01:30:42Z",
   "prompt": "17G.5D",
   "authorized_hub_base_url": "http://10.0.2.100:8787",
   "policy": {
@@ -15,7 +15,7 @@
   },
   "allow_insecure_local": true,
   "mockHub_disabled": true,
-  "unauthorized_rejected": false,
+  "unauthorized_rejected": true,
   "rejects": [
     {
       "url": "http://10.0.2.2:8787",
@@ -24,8 +24,8 @@
     {
       "url": "https://evil.example",
       "expected": "reject",
-      "observed_rejected": false
+      "observed_rejected": true
     }
   ],
-  "nack_reason": null
+  "nack_reason": "hub_url_not_in_policy"
 }

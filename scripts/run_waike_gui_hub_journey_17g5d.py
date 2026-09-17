@@ -34,8 +34,8 @@ OUT = ROOT / "artifacts/device_lab_current_pin"
 WAIKE = OUT / "waike"
 GUI = WAIKE / "gui_journey"
 PROMPT = "17G.5D"
-EXPECTED_DEVICE_OS_HEAD = "317171f86ec4dc907e0044a04fe2b2046c3d1070"
-EXPECTED_PORTAL_HEAD = "b1a70cdca9a3aebcf150bfbfe9650be8df49dea4"
+EXPECTED_DEVICE_OS_HEAD = "9e986afb18ebfbf0e75bd582b3ca001d32b940fa"
+EXPECTED_PORTAL_HEAD = "757ab8b6bc9c385fff09644222359bf941732deb"
 PORTAL_WT = Path(
     "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/"
     "gunnchos-research-portal/.worktrees/device-lab-17f-portal14"
@@ -121,10 +121,37 @@ def _stop_worktree_local_qemu() -> dict:
 
 
 def wait_qemu_slot(*, timeout_s: float = 120.0) -> dict:
-    """Bounded wait for Interactive Guest QEMU slot; never kill foreign QEMU."""
+    """Bounded wait for this worktree's Interactive Guest WAIKE QEMU slot.
+
+    Never kill foreign QEMU. CX / other lab guests (cx2h, cx2g, etc.) are ignored —
+    "one guest" means one WAIKE interactive guest for this journey, not host-wide
+    single-QEMU exclusivity.
+    """
     local_cleanup = _stop_worktree_local_qemu()
     deadline = time.time() + timeout_s
     waited = 0.0
+    ignore_markers = (
+        "cx2h_linux_lab",
+        "cx2g_linux_lab",
+        "cx2f_linux_lab",
+        "/tmp/cx2h-",
+        "/tmp/cx2g-",
+    )
+
+    def _is_ignored(ln: str) -> bool:
+        return any(m in ln for m in ignore_markers)
+
+    def _is_conflicting_foreign(ln: str) -> bool:
+        # Other device-lab interactive guests (not this worktree) contend for the
+        # same artifact/hub patterns; CX labs do not.
+        if _is_ignored(ln):
+            return False
+        if "interactive_guest_session" in ln and str(ROOT) not in ln:
+            return True
+        if "device_lab_interactive_guest" in ln and str(ROOT) not in ln:
+            return True
+        return False
+
     while True:
         proc = subprocess.run(
             ["bash", "-lc", "ps -ax -o pid= -o command= | grep qemu-system | grep -v grep || true"],
@@ -137,33 +164,44 @@ def wait_qemu_slot(*, timeout_s: float = 120.0) -> dict:
             for ln in (proc.stdout or "").splitlines()
             if "qemu-system" in ln and "grep" not in ln
         ]
-        foreign = []
+        foreign_conflict = []
+        ignored = []
         local = []
         for ln in lines:
-            if "interactive_guest_session_waike" in ln or str(ROOT) in ln:
+            if "interactive_guest_session_waike" in ln or (
+                str(ROOT) in ln and "qemu-system" in ln
+            ):
                 local.append(ln)
                 continue
-            foreign.append(ln)
+            if _is_ignored(ln):
+                ignored.append(ln)
+                continue
+            if _is_conflicting_foreign(ln):
+                foreign_conflict.append(ln)
         if local:
             local_cleanup = _stop_worktree_local_qemu()
             time.sleep(1.0)
+            waited = timeout_s - max(0.0, deadline - time.time())
             continue
-        if not foreign and not lines:
+        if not foreign_conflict:
             return {
                 "ok": True,
-                "qemu_processes": [],
+                "qemu_processes": lines,
+                "ignored_foreign_qemu": ignored,
                 "waited_s": waited,
                 "local_cleanup": local_cleanup,
+                "note": "cx_and_unrelated_qemu_ignored",
             }
         if time.time() >= deadline:
             return {
                 "ok": False,
                 "blocker": "17G5D_QEMU_SLOT_BUSY",
-                "qemu_processes": foreign,
-                "waited_s": waited,
+                "qemu_processes": foreign_conflict,
+                "ignored_foreign_qemu": ignored,
+                "waited_s": timeout_s,
                 "local_cleanup": local_cleanup,
             }
-        time.sleep(5.0)
+        time.sleep(2.0)
         waited = timeout_s - max(0.0, deadline - time.time())
 
 

@@ -447,6 +447,7 @@ def _get_uinput_tablet():
 _KEYNAME_MAP = {
     "ret": "KEY_ENTER",
     "enter": "KEY_ENTER",
+    "return": "KEY_ENTER",
     "kpenter": "KEY_KPENTER",
     "spc": "KEY_SPACE",
     "space": "KEY_SPACE",
