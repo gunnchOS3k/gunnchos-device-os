@@ -1,0 +1,260 @@
+{
+  "schema": "gunnchos.cx3_3.cx_stack_merge_readiness.v1",
+  "generated_at_utc": "2026-09-17T19:50:07Z",
+  "plan_only": true,
+  "merges_executed": false,
+  "device_os_stack": [
+    {
+      "pr": 145,
+      "branch": "eng/cx2h-journey-digital-pass-closure",
+      "role": "CX2H",
+      "draft": true,
+      "mergeable": false,
+      "dependency": null,
+      "required_rebase_after_predecessor_merge": false,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 146,
+      "branch": "eng/cx2h2-document-print-recovery-j1-j7",
+      "role": "CX2H.2",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "eng/cx2h-journey-digital-pass-closure",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 147,
+      "branch": "eng/cx2h3-browser-mail-offline-j2-j5",
+      "role": "CX2H.3",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "eng/cx2h2-document-print-recovery-j1-j7",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 148,
+      "branch": "eng/cx2h4-p0-digital-closure-audit",
+      "role": "CX2H.4",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "eng/cx2h3-browser-mail-offline-j2-j5",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 149,
+      "branch": "eng/cx3-credential-wallet-portfolio-foundation",
+      "role": "CX3.1",
+      "head": "33673b4c6bfde858df526bd4b0cddf36d450336f",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "eng/cx2h4-p0-digital-closure-audit",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 150,
+      "branch": "eng/cx3-waike-career-sharing-verifier-campaign",
+      "role": "CX3.2",
+      "head": "47c860c97f6deae2bf83633863530da8dea94af8",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "eng/cx3-credential-wallet-portfolio-foundation",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    },
+    {
+      "pr": null,
+      "branch": "eng/cx3-education-career-digital-closure",
+      "role": "CX3.3",
+      "head": "47c860c97f6deae2bf83633863530da8dea94af8",
+      "base": "eng/cx3-waike-career-sharing-verifier-campaign",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "eng/cx3-waike-career-sharing-verifier-campaign",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "device_os",
+      "no_merge_executed": true
+    }
+  ],
+  "portal_stack": [
+    {
+      "pr": 24,
+      "branch": "docs/cx2h-journey-digital-pass-control",
+      "role": "CX2H",
+      "draft": true,
+      "mergeable": false,
+      "dependency": null,
+      "required_rebase_after_predecessor_merge": false,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 25,
+      "branch": "docs/cx2h2-document-print-recovery-control",
+      "role": "CX2H.2",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "docs/cx2h-journey-digital-pass-control",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 26,
+      "branch": "docs/cx2h3-browser-mail-offline-control",
+      "role": "CX2H.3",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "docs/cx2h2-document-print-recovery-control",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 27,
+      "branch": "docs/cx2h4-p0-digital-closure-control",
+      "role": "CX2H.4",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "docs/cx2h3-browser-mail-offline-control",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 28,
+      "branch": "docs/cx3-credential-wallet-portfolio-control",
+      "role": "CX3.1",
+      "head": "689d19ea5e97bc049978cc3c9c520b11e3700f55",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "docs/cx2h4-p0-digital-closure-control",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    },
+    {
+      "pr": 29,
+      "branch": "docs/cx3-waike-career-sharing-verifier-control",
+      "role": "CX3.2",
+      "head": "19b4b40c414855f12022880e61e78832a9fd2299",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "docs/cx3-credential-wallet-portfolio-control",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    },
+    {
+      "pr": null,
+      "branch": "docs/cx3-education-career-digital-closure-control",
+      "role": "CX3.3",
+      "base": "docs/cx3-waike-career-sharing-verifier-control",
+      "draft": true,
+      "mergeable": false,
+      "dependency": "docs/cx3-waike-career-sharing-verifier-control",
+      "required_rebase_after_predecessor_merge": true,
+      "required_ci": [
+        "unit",
+        "fail_closed_cx_tests"
+      ],
+      "merge_method_recommendation": "merge commit",
+      "evidence_revalidation_required": true,
+      "kind": "portal",
+      "no_merge_executed": true
+    }
+  ],
+  "order": {
+    "device_os": "#145 \u2192 #146 \u2192 #147 \u2192 #148 \u2192 #149 \u2192 #150 \u2192 CX3.3",
+    "portal": "#24 \u2192 #25 \u2192 #26 \u2192 #27 \u2192 #28 \u2192 #29 \u2192 CX3.3"
+  },
+  "certification_claimed": false
+}

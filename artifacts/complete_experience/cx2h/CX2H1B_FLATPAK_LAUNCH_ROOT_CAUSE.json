@@ -1,0 +1,70 @@
+{
+  "schema": "gunnchos.cx2h1b.flatpak_launch_root_cause.v1",
+  "wave": "CX2H.1B",
+  "status": "closed_fail_closed_pass",
+  "diagnosed_at_utc": "2026-09-17T03:15:00Z",
+  "app_id": "org.gunnchos.CX2HTestApp",
+  "prior_evidence_refs": [
+    "artifacts/complete_experience/cx2h/CX2H_J3_APP_CENTER_JOURNEY.json",
+    "artifacts/complete_experience/cx2h/FRAMEBUFFER_DIFF_REPORT.json",
+    "artifacts/complete_experience/cx2h/CX2H1B_PROVIDER_LAUNCH_RESULT.json",
+    "os_build/cx2h_linux_lab/scripts/cx2h_app_center_provider.py::launch"
+  ],
+  "symptoms": {
+    "launch_probe_had_running_app": false,
+    "fb_v1_identical_to_after_install": true,
+    "diff_v1_v2_changed_pixel_pct": 0.0,
+    "provider_launch_success_criterion_was": "flatpak_ps_instance_plus_alive_pid_plus_version",
+    "gtk_reached_gdk": true,
+    "gdk_wayland_error": "Native Windows taller than 65535 pixels / Cairo surface invalid",
+    "dirname_missing_in_stub": true,
+    "flatpak_ps_empty_while_shell_pid_zombie_possible": true
+  },
+  "command_used_prior": "flatpak --user run org.gunnchos.CX2HTestApp (GDK_BACKEND=wayland, host GI)",
+  "exit_code_prior": "app_dies_after_gdk_critical",
+  "stdout_prior": "structured launch ok=false",
+  "stderr_prior": "Gdk-WARNING Native Windows taller than 65535; Gdk-CRITICAL Cairo image surface",
+  "flatpak_ps_prior": "",
+  "pid_alive_after_5s_prior": "shell_pid_kill0_true_but_may_be_zombie; flatpak_ps empty",
+  "version_identity_prior": "1.0.0/2.0.0 from flatpak info \u2014 present but launch ok=false",
+  "window_proof_prior": "absent; FB launch frame identical to after_install",
+  "wayland_env_prior": {
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "WAYLAND_DISPLAY": "wayland-0",
+    "GDK_BACKEND": "wayland"
+  },
+  "test_app_prior": {
+    "kind": "host_python_gi_gtk3_css_window",
+    "runtime": "org.gunnchos.Platform stub + host GI/GTK",
+    "likely_failure_modes": [
+      "host GTK Wayland backend mis-reads output geometry \u2192 65535px surface",
+      "stub PATH lacks dirname/coreutils",
+      "Weston service has no --xwayland; DISPLAY=:0 unavailable without nested Xwayland"
+    ]
+  },
+  "root_cause_class": "HOST_GTK_WAYLAND_GEOMETRY_OVERFLOW",
+  "root_cause": "After shebang/ld-linux/pixbuf fixes, GTK starts but Gdk Wayland creates an absurd surface height (>65535) so the window never maps; flatpak ps stays empty. Fix: nested Xwayland :41 inside launcher (no Weston service change) + DrawingArea fixed-size v1/v2 apps; provider requires flatpak ps PID (not shell $!).",
+  "fix_plan": {
+    "test_app": "Cairo DrawingArea 720x480; v1 green #0B3D2E vs v2 orange #C45C26 + yellow band",
+    "provider_launch": "Require flatpak ps instance_id + flatpak pid alive; shell pid diagnostic only",
+    "launcher": "Nested Xwayland :41 then GDK_BACKEND=x11; Wayland fallback with GDK_SCALE=1; no dirname(1)",
+    "j3_criteria": "Window proof = FB diff vs after_install (>=0.5%) AND (AT-SPI title OR dominant color); v1/v2 FB diff >=0.5%"
+  },
+  "live_guest_followup": "closed_2026-09-17T03:30:00Z",
+  "live_provider_last": {
+    "action": "launch",
+    "version": "2.0.0"
+  },
+  "live_ok": true,
+  "live_instance_id": "297866364",
+  "live_pid": "2813",
+  "live_alive_after_5s": true,
+  "live_version": "2.0.0",
+  "live_error": null,
+  "live_launch_log_tail": "CX2H_BACKEND_WAYLAND_FALLBACK\nCX2H_APP_START version=2.0.0 gdk_backend=wayland display=None wayland=wayland-0\nCX2H_WINDOW_MAPPED",
+  "live_flatpak_ps": "297866364\torg.gunnchos.CX2HTestApp\t2813",
+  "window_proof_v1_changed_pixel_pct": 63.97,
+  "window_proof_v2_changed_pixel_pct": 48.88,
+  "final_J3_CLASS": "REAL_USER_JOURNEY_DIGITAL_PASS",
+  "final_LAUNCH": true
+}

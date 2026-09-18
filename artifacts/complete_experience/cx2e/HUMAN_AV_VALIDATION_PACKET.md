@@ -1,0 +1,4 @@
+# CX2E Human AV Validation Packet
+
+`CX2E_HUMAN_AV_QUALITY_PENDING=true`
+`CX2E_PHYSICAL_CAMERA_MIC_PENDING=true`

@@ -20,9 +20,10 @@ export type SystemMode = 'campus' | 'game' | 'media'
 interface GunnchOSShellProps {
   devMode?: boolean
   onOpenDevTools?: () => void
+  onOpenCx2?: () => void
 }
 
-export default function GunnchOSShell({ devMode, onOpenDevTools }: GunnchOSShellProps) {
+export default function GunnchOSShell({ devMode, onOpenDevTools, onOpenCx2 }: GunnchOSShellProps) {
   const [profile, setProfile] = useLocalStorage<StudentProfile>('gunnchos-profile', DEFAULT_PROFILE)
   const [systemMode, setSystemMode] = useState<SystemMode>('campus')
   const [deploymentMode, setDeploymentMode] = useState<DeploymentMode>(() =>
@@ -96,6 +97,28 @@ export default function GunnchOSShell({ devMode, onOpenDevTools }: GunnchOSShell
         onEnterMediaMode={() => setSystemMode('media')}
         onResetOnboarding={resetOnboarding}
       />
+      {onOpenCx2 && (
+        <button
+          type="button"
+          onClick={onOpenCx2}
+          aria-label="Open Complete Experience"
+          style={{
+            position: 'fixed',
+            bottom: 120,
+            right: 12,
+            zIndex: 200,
+            padding: '8px 12px',
+            fontSize: 12,
+            borderRadius: 8,
+            border: '1px solid #3d8bfd',
+            background: '#132033',
+            color: '#e7eef5',
+            cursor: 'pointer',
+          }}
+        >
+          Complete Experience
+        </button>
+      )}
       {devMode && onOpenDevTools && (
         <button
           type="button"

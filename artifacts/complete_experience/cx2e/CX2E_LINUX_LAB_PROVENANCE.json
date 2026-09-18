@@ -1,0 +1,25 @@
+{
+  "schema": "gunnchos.cx2e.linux_lab_provenance.v1",
+  "generated_at_utc": "2026-09-16T04:15:24Z",
+  "distro": "debian",
+  "version": "12 (bookworm) genericcloud",
+  "architecture": "aarch64",
+  "compositor": "weston",
+  "image_base_sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
+  "overlay_sha256": "a47ca058ad21e625a38899e912afcfeee91d2b2c590e4343e3559a31e8782ea7",
+  "cloud_init_user_data_sha256": null,
+  "accel": {
+    "accel": "hvf",
+    "cpu": "host",
+    "accel_note": "HVF preferred on Apple Silicon"
+  },
+  "host": {
+    "host_os": "Darwin",
+    "host_machine": "arm64",
+    "qemu_system_aarch64": "/opt/homebrew/bin/qemu-system-aarch64",
+    "free_disk_gb": 23.11
+  },
+  "graphical_truth": false,
+  "claim_boundary": "CX2E expansion lab; not Device Lab #134 evidence.",
+  "package_versions_path_in_guest": "/var/lib/cx2e/key-packages.txt"
+}

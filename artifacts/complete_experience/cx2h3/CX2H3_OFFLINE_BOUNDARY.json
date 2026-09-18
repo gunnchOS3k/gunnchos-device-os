@@ -1,0 +1,40 @@
+{
+  "https_endpoint": "https://cx2h3.test:18443/",
+  "smtp_endpoint": "10.0.2.2:1587",
+  "imap_endpoint": "10.0.2.2:1143",
+  "routing": "QEMU SLIRP 10.0.2.2 \u2192 host loopback services",
+  "offline_action": "stop host HTTPS + SMTP/IMAP processes",
+  "local_retained": [
+    "gunnch_shell",
+    "Vault",
+    "Writer",
+    "Thunderbird profile",
+    "mail_queue"
+  ],
+  "not_used": [
+    "navigator.onLine_only",
+    "css_offline_indicator_only",
+    "full_vm_disable"
+  ],
+  "stop_https": {
+    "ok": true,
+    "label": "https",
+    "stopped_pid": 57339
+  },
+  "stop_mail": {
+    "ok": true,
+    "label": "mail",
+    "stopped_pid": 58202
+  },
+  "guest_probe_offline": {
+    "https": false,
+    "smtp": false,
+    "imap": false
+  },
+  "host_ports": {
+    "https": false,
+    "smtp": false,
+    "imap": false
+  },
+  "genuine_unreachable": true
+}

@@ -1,0 +1,113 @@
+{
+  "schema": "gunnchos.cx1.device_profile_qualification.v1",
+  "profiles": [
+    "student_14_5",
+    "handheld_hybrid",
+    "ds_xl_coder",
+    "edge_io_rings",
+    "docked",
+    "generic_ci_qemu"
+  ],
+  "domains": [
+    "identity",
+    "vault",
+    "app_center",
+    "permissions",
+    "browser",
+    "productivity",
+    "connect",
+    "printing",
+    "assist",
+    "offline",
+    "security",
+    "care"
+  ],
+  "matrix": {
+    "student_14_5": {
+      "identity": "SUPPORTED",
+      "vault": "SUPPORTED",
+      "app_center": "SUPPORTED",
+      "permissions": "DEGRADED_SUPPORTED",
+      "browser": "DEGRADED_SUPPORTED",
+      "productivity": "DEGRADED_SUPPORTED",
+      "connect": "DEGRADED_SUPPORTED",
+      "printing": "DEGRADED_SUPPORTED",
+      "assist": "DEGRADED_SUPPORTED",
+      "offline": "SUPPORTED",
+      "security": "DEGRADED_SUPPORTED",
+      "care": "SUPPORTED"
+    },
+    "handheld_hybrid": {
+      "identity": "SUPPORTED",
+      "vault": "SUPPORTED",
+      "app_center": "SUPPORTED",
+      "permissions": "DEGRADED_SUPPORTED",
+      "browser": "DEGRADED_SUPPORTED",
+      "productivity": "DEGRADED_SUPPORTED",
+      "connect": "DEGRADED_SUPPORTED",
+      "printing": "DEGRADED_SUPPORTED",
+      "assist": "DEGRADED_SUPPORTED",
+      "offline": "SUPPORTED",
+      "security": "DEGRADED_SUPPORTED",
+      "care": "SUPPORTED"
+    },
+    "ds_xl_coder": {
+      "identity": "SUPPORTED",
+      "vault": "SUPPORTED",
+      "app_center": "SUPPORTED",
+      "permissions": "DEGRADED_SUPPORTED",
+      "browser": "DEGRADED_SUPPORTED",
+      "productivity": "DEGRADED_SUPPORTED",
+      "connect": "DEGRADED_SUPPORTED",
+      "printing": "DEGRADED_SUPPORTED",
+      "assist": "DEGRADED_SUPPORTED",
+      "offline": "SUPPORTED",
+      "security": "DEGRADED_SUPPORTED",
+      "care": "SUPPORTED"
+    },
+    "edge_io_rings": {
+      "identity": "SUPPORTED",
+      "vault": "SUPPORTED",
+      "app_center": "SUPPORTED",
+      "permissions": "DEGRADED_SUPPORTED",
+      "browser": "DEGRADED_SUPPORTED",
+      "productivity": "DEGRADED_SUPPORTED",
+      "connect": "DEGRADED_SUPPORTED",
+      "printing": "PHYSICAL_PENDING",
+      "assist": "DEGRADED_SUPPORTED",
+      "offline": "SUPPORTED",
+      "security": "DEGRADED_SUPPORTED",
+      "care": "SUPPORTED"
+    },
+    "docked": {
+      "identity": "SUPPORTED",
+      "vault": "SUPPORTED",
+      "app_center": "SUPPORTED",
+      "permissions": "DEGRADED_SUPPORTED",
+      "browser": "DEGRADED_SUPPORTED",
+      "productivity": "DEGRADED_SUPPORTED",
+      "connect": "DEGRADED_SUPPORTED",
+      "printing": "DEGRADED_SUPPORTED",
+      "assist": "DEGRADED_SUPPORTED",
+      "offline": "SUPPORTED",
+      "security": "DEGRADED_SUPPORTED",
+      "care": "SUPPORTED"
+    },
+    "generic_ci_qemu": {
+      "identity": "SUPPORTED",
+      "vault": "SUPPORTED",
+      "app_center": "SUPPORTED",
+      "permissions": "DEGRADED_SUPPORTED",
+      "browser": "PROVIDER_REQUIRED",
+      "productivity": "PROVIDER_REQUIRED",
+      "connect": "DEGRADED_SUPPORTED",
+      "printing": "DEGRADED_SUPPORTED",
+      "assist": "DEGRADED_SUPPORTED",
+      "offline": "SUPPORTED",
+      "security": "DEGRADED_SUPPORTED",
+      "care": "SUPPORTED"
+    }
+  },
+  "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+  "claim_boundary": "cx1_digital_qualification_not_device_lab_gate"
+}

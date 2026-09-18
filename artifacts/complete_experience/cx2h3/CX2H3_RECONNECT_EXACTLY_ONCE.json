@@ -1,0 +1,98 @@
+{
+  "https_restore": {
+    "ok": true,
+    "pid": 58454,
+    "port": 18443,
+    "bind": "0.0.0.0",
+    "guest_url": "https://cx2h3.test:18443/",
+    "guest_host": "10.0.2.2",
+    "hostname": "cx2h3.test",
+    "tls": {
+      "ok": true,
+      "ca_crt": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx2h3-browser-mail-offline/os_build/cx2h3_linux_lab/https/ca.crt",
+      "server_crt": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx2h3-browser-mail-offline/os_build/cx2h3_linux_lab/https/server.crt",
+      "ca_fingerprint": "sha256 Fingerprint=73:D8:BD:12:63:F4:18:EB:A5:A7:D8:9F:2B:E2:A9:0B:57:72:62:6A:60:59:24:28:53:D0:DF:0F:F4:FE:AB:67"
+    },
+    "manifest": {
+      "title": "CX2H3 Deterministic HTTPS Document Source",
+      "document": "cx2h3_j2_source.odt",
+      "sha256": "a1556ac9c93b56e3afe9a1ea8ae88ce48c6ddfc6aaeba156e549f608419a7ffa",
+      "marker": "CX2H3-J2-HTTPS-SOURCE-alpha-7gc",
+      "size": 910
+    },
+    "ignore_certificate_errors": false,
+    "blocker": null
+  },
+  "mail_restore": {
+    "ok": true,
+    "pid": 58455,
+    "smtp_port": 1587,
+    "imap_port": 1143,
+    "guest_host": "10.0.2.2",
+    "accounts": {
+      "sender": {
+        "email": "sender@cx2h3.test",
+        "password": "cx2h3-sender-pass"
+      },
+      "recipient": {
+        "email": "recipient@cx2h3.test",
+        "password": "cx2h3-recipient-pass"
+      }
+    },
+    "json_fixture": false,
+    "blocker": null
+  },
+  "flush": {
+    "ok": true,
+    "results": [
+      {
+        "queue_id": "q-2afc51aebbe9",
+        "ok": true,
+        "state": "sent",
+        "message_id": "<q-2afc51aebbe9@cx2h3.test>"
+      }
+    ]
+  },
+  "flush_replay": {
+    "ok": true,
+    "results": [
+      {
+        "queue_id": "q-2afc51aebbe9",
+        "skipped": true,
+        "state": "sent"
+      }
+    ]
+  },
+  "new_accepts": [],
+  "j5_message_count": 1,
+  "attachment_hash_match": true,
+  "queue_final": {
+    "ok": true,
+    "items": [
+      {
+        "queue_id": "q-2afc51aebbe9",
+        "to": "recipient@cx2h3.test",
+        "from": "sender@cx2h3.test",
+        "subject": "CX2H3-J5-OFFLINE-QUEUE-alpha-7gc",
+        "body": "CX2H3 J5 offline queued mail body",
+        "attachment": "/var/lib/cx2h2/vault/files/cx2h3_j2_source_edited_edited.odt",
+        "attachment_sha256": "3a2a6933c4c637c5f1d07d0b47388f311d30de3782846072d7e401570d9ce847",
+        "created_at": 1789662454.775856,
+        "state": "sent",
+        "idempotency_key": "q-2afc51aebbe9",
+        "gui_compose_launched": true,
+        "send_later": true,
+        "last_error": "[Errno 111] Connection refused",
+        "sent_at": 1789662477.3009603,
+        "smtp_accepts": 1
+      }
+    ]
+  },
+  "tb_resync": {
+    "ok": true,
+    "pid": 40598,
+    "alive_after_6s": true,
+    "profile": "/var/lib/cx2h3/thunderbird-profile"
+  },
+  "j5_after_resync": 1
+}

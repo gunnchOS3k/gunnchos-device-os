@@ -1,0 +1,18 @@
+{
+  "schema": "gunnchos.cx2h1b.j3_evidence_review.v1",
+  "wave": "CX2H.1B",
+  "reviewed_at_utc": "2026-09-17T03:30:00Z",
+  "starting_reclassification": "REAL_PROVIDER_GUI_PARTIAL",
+  "ending_j3_class": "REAL_USER_JOURNEY_DIGITAL_PASS",
+  "rationale_start": "Prior CX2H.1 J3 PASS used shell $! / pgrep and App Center FB churn; not Flatpak window proof.",
+  "rationale_end": "Provider launch returns flatpak ps instance_id + surviving pid + version; CX2H_WINDOW_MAPPED; dual-channel window proof (FB diff >=0.5% + dominant color v1 green / v2 orange); update 1.0.0→2.0.0 visually distinct; install/rollback/uninstall/persistence preserved.",
+  "forbidden_evidence_rejected": [
+    "shell_pid_as_window",
+    "app_center_fb_as_app_window",
+    "pgrep_pattern_substring_cheat",
+    "gtk_bail_out_with_zombie_flatpak_ps"
+  ],
+  "window_proof_v1_changed_pixel_pct": 63.97,
+  "window_proof_v2_changed_pixel_pct": 48.88,
+  "NEXT_CX_GATE": "CX2H2_DOCUMENT_PRINT_RECOVERY_J1_J7"
+}

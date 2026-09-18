@@ -1,0 +1,72 @@
+{
+  "restart": {
+    "stdout": "DEBUG_OK\nSTATE_FAIL\n",
+    "ok": true
+  },
+  "queue": {
+    "ok": true,
+    "items": [
+      {
+        "queue_id": "q-2afc51aebbe9",
+        "to": "recipient@cx2h3.test",
+        "from": "sender@cx2h3.test",
+        "subject": "CX2H3-J5-OFFLINE-QUEUE-alpha-7gc",
+        "body": "CX2H3 J5 offline queued mail body",
+        "attachment": "/var/lib/cx2h2/vault/files/cx2h3_j2_source_edited_edited.odt",
+        "attachment_sha256": "3a2a6933c4c637c5f1d07d0b47388f311d30de3782846072d7e401570d9ce847",
+        "created_at": 1789662454.775856,
+        "state": "pending",
+        "idempotency_key": "q-2afc51aebbe9",
+        "gui_compose_launched": true,
+        "send_later": true
+      }
+    ]
+  },
+  "vault": {
+    "ok": true,
+    "files": [
+      {
+        "path": "cx2h2_corrupt_copy.odt",
+        "sha256": "791391ba2e963525e42026662137d8411c56b2cbc39844d4a1d3b2c62de73573",
+        "size": 10026
+      },
+      {
+        "path": "cx2h2_j1_essay.odt",
+        "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+        "size": 10027
+      },
+      {
+        "path": "cx2h2_j1_essay.pdf",
+        "sha256": "cf9f02fa3476db35e7d4ed30d88a66773d0b989c1686697c323600d2665e22a1",
+        "size": 1124
+      },
+      {
+        "path": "cx2h3_j2_received_attachment.odt",
+        "sha256": "cb0213ebed1f9f83e9ac15a75acd2870bc8882a61d43425e2aa04fc562ecea4f",
+        "size": 944
+      },
+      {
+        "path": "cx2h3_j2_source.odt",
+        "sha256": "a1556ac9c93b56e3afe9a1ea8ae88ce48c6ddfc6aaeba156e549f608419a7ffa",
+        "size": 910
+      },
+      {
+        "path": "cx2h3_j2_source_edited.odt",
+        "sha256": "cb0213ebed1f9f83e9ac15a75acd2870bc8882a61d43425e2aa04fc562ecea4f",
+        "size": 944
+      },
+      {
+        "path": "cx2h3_j2_source_edited_edited.odt",
+        "sha256": "3a2a6933c4c637c5f1d07d0b47388f311d30de3782846072d7e401570d9ce847",
+        "size": 957
+      }
+    ]
+  },
+  "probe": {
+    "https": false,
+    "smtp": false,
+    "imap": false
+  },
+  "queue_survived": true,
+  "doc_survived": true
+}

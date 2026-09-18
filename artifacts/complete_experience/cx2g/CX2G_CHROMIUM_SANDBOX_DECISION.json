@@ -1,0 +1,12 @@
+{
+  "schema": "gunnchos.cx2g.chromium_sandbox_decision.v1",
+  "used_no_sandbox": true,
+  "decision": "required",
+  "evidence": [
+    "nested QEMU aarch64 guest",
+    "CX2F prior launch also required --no-sandbox",
+    "USED_NO_SANDBOX=true observed in launch transcript"
+  ],
+  "reason": "nested QEMU aarch64 guest Chromium user-namespace/sandbox constraints require --no-sandbox",
+  "sandbox_on_preferred": false
+}

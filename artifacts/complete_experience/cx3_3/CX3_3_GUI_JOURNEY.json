@@ -1,0 +1,823 @@
+{
+  "certification_claimed": false,
+  "ok": true,
+  "health": {
+    "ok": true,
+    "provider": "cx3_3-digital-closure",
+    "certification_claimed": false,
+    "port": 8773
+  },
+  "education": {
+    "ok": true,
+    "timeline": {
+      "timeline_id": "edu:a684526c6cbd",
+      "owner_id": "profile:lab-student",
+      "authority": "Education & Achievements",
+      "entries": [
+        {
+          "entry_id": "edu_entry:3aa3103866",
+          "label": "Vault-bound learning evidence assertion",
+          "kind": "achievement",
+          "occurred_at": "2026-09-17T19:50:06Z",
+          "source": "credential_wallet",
+          "verified": true,
+          "status_badge": "credential_linked_active",
+          "skills": [
+            "evidence binding",
+            "portfolio authorship"
+          ],
+          "evidence_refs": [],
+          "credential_id": "cred:25bee3ebdf184272a09530d965b20047",
+          "provenance": {
+            "source": "credential_wallet",
+            "verified": true,
+            "credential_id": "cred:25bee3ebdf184272a09530d965b20047",
+            "gui_action": true,
+            "updated_at": "2026-09-17T19:50:06Z",
+            "accreditation_claimed": false
+          },
+          "certification_claimed": false
+        },
+        {
+          "entry_id": "edu_entry:c668f19016",
+          "label": "Community college coursework (self-reported)",
+          "kind": "education",
+          "occurred_at": "2026-09-17T19:50:06Z",
+          "source": "user_entered",
+          "verified": false,
+          "status_badge": "user_entered",
+          "skills": [
+            "self study"
+          ],
+          "evidence_refs": [],
+          "credential_id": null,
+          "provenance": {
+            "source": "user_entered",
+            "verified": false,
+            "gui_action": true,
+            "updated_at": "2026-09-17T19:50:06Z"
+          },
+          "certification_claimed": false
+        },
+        {
+          "entry_id": "edu_entry:978ecbff47",
+          "label": "Active assertion post skill-graph revocation demo",
+          "kind": "achievement",
+          "occurred_at": "2026-09-17T19:50:07Z",
+          "source": "credential_wallet",
+          "verified": true,
+          "status_badge": "credential_linked_active",
+          "skills": [],
+          "evidence_refs": [],
+          "credential_id": "cred:3dd88840d925420ebbdedc90eb6f3f94",
+          "provenance": {
+            "source": "credential_wallet",
+            "verified": true,
+            "credential_id": "cred:3dd88840d925420ebbdedc90eb6f3f94",
+            "gui_action": true,
+            "updated_at": "2026-09-17T19:50:07Z",
+            "accreditation_claimed": false
+          },
+          "certification_claimed": false
+        },
+        {
+          "entry_id": "edu_entry:cf8795250e",
+          "label": "Self-reported education",
+          "kind": "education",
+          "occurred_at": "2026-09-17T19:50:07Z",
+          "source": "user_entered",
+          "verified": false,
+          "status_badge": "user_entered",
+          "skills": [],
+          "evidence_refs": [],
+          "credential_id": null,
+          "provenance": {
+            "source": "user_entered",
+            "verified": false,
+            "gui_action": true,
+            "updated_at": "2026-09-17T19:50:07Z"
+          },
+          "certification_claimed": false
+        }
+      ],
+      "created_at": "2026-09-17T19:50:06Z",
+      "updated_at": "2026-09-17T19:50:07Z",
+      "certification_claimed": false,
+      "offline_viewable": true
+    },
+    "certification_claimed": false
+  },
+  "skill_graph": {
+    "ok": true,
+    "graph": {
+      "schema": "SkillEvidenceGraph v1",
+      "graph_id": "seg:ea96b47277f8",
+      "generated_at_utc": "2026-09-17T19:50:07Z",
+      "skills": [
+        {
+          "skill_id": "skill:c437faf9f3",
+          "label": "evidence binding",
+          "evidence_backed": true,
+          "self_declared": true,
+          "verified": true,
+          "credential_ids": [
+            "cred:25bee3ebdf184272a09530d965b20047"
+          ],
+          "artifact_ids": [
+            "pa:e816a0d06411"
+          ],
+          "waike_evidence_ids": [],
+          "user_claims": [
+            {
+              "text": "evidence binding",
+              "source": "user_entered",
+              "verified": false
+            }
+          ],
+          "why": [
+            "backed by active credential cred:25bee3ebdf184272a09530d965b20047",
+            "linked portfolio artifact pa:e816a0d06411"
+          ],
+          "status": "evidence_backed"
+        },
+        {
+          "skill_id": "skill:63c07a1384",
+          "label": "offline verify",
+          "evidence_backed": true,
+          "self_declared": true,
+          "verified": true,
+          "credential_ids": [
+            "cred:3dd88840d925420ebbdedc90eb6f3f94",
+            "cred:9bcb533e57ee4501b2ab553d06c45f22"
+          ],
+          "artifact_ids": [],
+          "waike_evidence_ids": [],
+          "user_claims": [
+            {
+              "text": "offline verify",
+              "source": "user_entered",
+              "verified": false
+            }
+          ],
+          "why": [
+            "backed by active credential cred:3dd88840d925420ebbdedc90eb6f3f94",
+            "backed by active credential cred:9bcb533e57ee4501b2ab553d06c45f22"
+          ],
+          "status": "evidence_backed"
+        },
+        {
+          "skill_id": "skill:dc80075226",
+          "label": "portfolio authorship",
+          "evidence_backed": false,
+          "self_declared": true,
+          "verified": false,
+          "credential_ids": [],
+          "artifact_ids": [
+            "pa:6aa907e455a6"
+          ],
+          "waike_evidence_ids": [],
+          "user_claims": [
+            {
+              "text": "portfolio authorship",
+              "source": "user_entered",
+              "verified": false
+            }
+          ],
+          "why": [
+            "linked portfolio artifact pa:6aa907e455a6",
+            "self-declared text entry \u2014 not verified"
+          ],
+          "status": "self_declared"
+        },
+        {
+          "skill_id": "skill:ccacecd2eb",
+          "label": "self study",
+          "evidence_backed": false,
+          "self_declared": true,
+          "verified": false,
+          "credential_ids": [],
+          "artifact_ids": [],
+          "waike_evidence_ids": [],
+          "user_claims": [
+            {
+              "text": "self study",
+              "source": "user_entered",
+              "verified": false
+            }
+          ],
+          "why": [
+            "self-declared text entry \u2014 not verified"
+          ],
+          "status": "self_declared"
+        }
+      ],
+      "certification_claimed": false,
+      "rules": [
+        "evidence_backed_and_self_declared_visibly_distinct",
+        "text_entry_alone_cannot_verify",
+        "revocation_propagates",
+        "missing_evidence_reflected"
+      ]
+    },
+    "explain": {
+      "ok": true,
+      "skill": {
+        "skill_id": "skill:c437faf9f3",
+        "label": "evidence binding",
+        "evidence_backed": true,
+        "self_declared": true,
+        "verified": true,
+        "credential_ids": [
+          "cred:25bee3ebdf184272a09530d965b20047"
+        ],
+        "artifact_ids": [
+          "pa:e816a0d06411"
+        ],
+        "waike_evidence_ids": [],
+        "user_claims": [
+          {
+            "text": "evidence binding",
+            "source": "user_entered",
+            "verified": false
+          }
+        ],
+        "why": [
+          "backed by active credential cred:25bee3ebdf184272a09530d965b20047",
+          "linked portfolio artifact pa:e816a0d06411"
+        ],
+        "status": "evidence_backed"
+      },
+      "why": [
+        "backed by active credential cred:25bee3ebdf184272a09530d965b20047",
+        "linked portfolio artifact pa:e816a0d06411"
+      ],
+      "verified": true,
+      "self_declared": true,
+      "evidence_backed": true
+    },
+    "certification_claimed": false
+  },
+  "career": {
+    "ok": true,
+    "profile": {
+      "profile_id": "career:28e743787b9f",
+      "owner_id": "profile:lab-student",
+      "display_name": "Lab Student",
+      "headline": "CX3.3 career profile",
+      "summary": "Education/career digital closure journey",
+      "skills": [
+        "evidence binding",
+        "self study"
+      ],
+      "credential_refs": [
+        "cred:25bee3ebdf184272a09530d965b20047"
+      ],
+      "portfolio_collection_refs": [
+        "pc:aacb83d2864d"
+      ],
+      "artifact_refs": [
+        "pa:6aa907e455a6",
+        "pa:e816a0d06411"
+      ],
+      "projects": [
+        {
+          "title": "CX3.3 closure",
+          "summary": "User-authored",
+          "source": "user_entered",
+          "verified": false
+        }
+      ],
+      "education": [
+        {
+          "label": "Self-directed lab learning",
+          "source": "user_entered",
+          "verified": false,
+          "certification_claimed": false
+        }
+      ],
+      "experience": [],
+      "contact": {
+        "email": "private-lab-student@example.invalid",
+        "phone": "+1-555-0100"
+      },
+      "links": {},
+      "visibility": {
+        "contact": "private",
+        "display_name": "public_local",
+        "headline": "public_local",
+        "summary": "public_local",
+        "skills": "public_local"
+      },
+      "provenance": {
+        "display_name": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "headline": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "summary": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "skills": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "projects": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "education": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:06Z"
+        },
+        "experience": {
+          "source": "user_entered",
+          "verified": false,
+          "gui_action": true,
+          "updated_at": "2026-09-17T19:50:06Z"
+        },
+        "credential_refs": {
+          "source": "composed_refs",
+          "verified": false,
+          "note": "refs only; independent verifier checks signatures",
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "artifact_refs": {
+          "source": "composed_refs",
+          "verified": false,
+          "note": "refs only; independent verifier checks signatures",
+          "updated_at": "2026-09-17T19:50:07Z"
+        },
+        "portfolio_collection_refs": {
+          "source": "composed_refs",
+          "verified": false,
+          "note": "refs only; independent verifier checks signatures",
+          "updated_at": "2026-09-17T19:50:07Z"
+        }
+      },
+      "created_at": "2026-09-17T19:50:06Z",
+      "updated_at": "2026-09-17T19:50:07Z",
+      "certification_claimed": false
+    },
+    "certification_claimed": false
+  },
+  "career_package": {
+    "ok": true,
+    "package_id": "ccp_6d2c8fbc4878",
+    "package_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-education-career-digital-closure/os_build/cx3_3_linux_lab/work/career_package/ccp_6d2c8fbc4878",
+    "manifest": {
+      "schema": "CareerPackage v1",
+      "package_id": "ccp_6d2c8fbc4878",
+      "generated_at_utc": "2026-09-17T19:50:07Z",
+      "career_profile": {
+        "profile_id": "career:28e743787b9f",
+        "owner_id": "profile:lab-student",
+        "certification_claimed": false,
+        "display_name": "Lab Student",
+        "headline": "CX3.3 career profile",
+        "summary": "Education/career digital closure journey",
+        "skills": [
+          "evidence binding",
+          "self study"
+        ],
+        "projects": [
+          {
+            "title": "CX3.3 closure",
+            "summary": "User-authored",
+            "source": "user_entered",
+            "verified": false
+          }
+        ],
+        "credential_refs": [
+          "cred:25bee3ebdf184272a09530d965b20047"
+        ],
+        "artifact_refs": [
+          "pa:6aa907e455a6",
+          "pa:e816a0d06411"
+        ]
+      },
+      "resume": {
+        "export_sha256": "9fb6643efccaf0e414d2e07361804d989cae4a093e2fa21745f4411cafc4e8f9",
+        "formats": [
+          "html",
+          "text"
+        ],
+        "ats_certified": false
+      },
+      "credentials": [
+        {
+          "credential_id": "cred:25bee3ebdf184272a09530d965b20047",
+          "type": "local_assertion",
+          "subject_profile_id": "profile:lab-student",
+          "issued_at": "2026-09-17T19:50:06Z",
+          "issuer_id": "issuer:lab:9f3682f63de4",
+          "evidence_refs": [
+            "ev:vault:d0b4f3f59742"
+          ],
+          "evidence": {
+            "evidence_id": "ev:vault:d0b4f3f59742",
+            "artifact_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "artifact_path": "cx2h2_j1_essay.odt",
+            "source": "vault"
+          },
+          "name": "Vault-bound learning evidence assertion",
+          "description": "Lab assertion for education/career closure \u2014 not WAIKE-earned; certification_claimed=false",
+          "certification_claimed": false,
+          "status": "active",
+          "nonce": "d2b11b81e2255b24",
+          "signature": {
+            "algorithm": "Ed25519",
+            "public_key_b64": "ZHJQRsN0sRo0t3W0oPewVGqXNCphTjfFyBdh7GYfnP0=",
+            "signature_b64": "iBXiAwGFI13q9MeafNvEn3/p5FJfMwOzzJtTCWQZlkupruRKHqfeN+OMdS3SCV2rCJjwptQrl/6E/nbiAkxcCA==",
+            "payload_sha256": "9394877856ebbbb1ae21d5b9a740c7def07a5790ab36ff3fd4f47a7fddc135ed"
+          }
+        },
+        {
+          "credential_id": "cred:3dd88840d925420ebbdedc90eb6f3f94",
+          "type": "local_assertion",
+          "subject_profile_id": "profile:lab-student",
+          "issued_at": "2026-09-17T19:50:06Z",
+          "issuer_id": "issuer:lab:9f3682f63de4",
+          "evidence_refs": [
+            "ev:vault:d0b4f3f59742"
+          ],
+          "evidence": {
+            "evidence_id": "ev:vault:d0b4f3f59742",
+            "artifact_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "artifact_path": "cx2h2_j1_essay.odt",
+            "source": "vault"
+          },
+          "name": "Active assertion post skill-graph revocation demo",
+          "description": "Local lab assertion bound to Vault artifact. Not a certification.",
+          "certification_claimed": false,
+          "status": "active",
+          "nonce": "354f6e43a711d2f8",
+          "signature": {
+            "algorithm": "Ed25519",
+            "public_key_b64": "ZHJQRsN0sRo0t3W0oPewVGqXNCphTjfFyBdh7GYfnP0=",
+            "signature_b64": "JRgFKjq5XI14TGk9DkzY5zVWxwdlGn5DpApl6UyEn2Nrd8FVPjBaRcMktnmXzg0TDzNA9PIB9hsZs6S7OSu2Dw==",
+            "payload_sha256": "a8f151754fdbc7308e92d3ed6aaf7c8f8408ab3889202ec838a32934ea9b5ec1"
+          }
+        },
+        {
+          "credential_id": "cred:9bcb533e57ee4501b2ab553d06c45f22",
+          "type": "local_assertion",
+          "subject_profile_id": "profile:lab-student",
+          "issued_at": "2026-09-17T19:50:06Z",
+          "issuer_id": "issuer:lab:9f3682f63de4",
+          "evidence_refs": [
+            "ev:vault:d0b4f3f59742"
+          ],
+          "evidence": {
+            "evidence_id": "ev:vault:d0b4f3f59742",
+            "artifact_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "artifact_path": "cx2h2_j1_essay.odt",
+            "source": "vault"
+          },
+          "name": "Secondary assertion for selective disclosure",
+          "description": "Local lab assertion bound to Vault artifact. Not a certification.",
+          "certification_claimed": false,
+          "status": "active",
+          "nonce": "215110226a0e1969",
+          "signature": {
+            "algorithm": "Ed25519",
+            "public_key_b64": "ZHJQRsN0sRo0t3W0oPewVGqXNCphTjfFyBdh7GYfnP0=",
+            "signature_b64": "K1E5V+K6J+FVx3nGqIU3lEeCY3Io6TuHnsW2JjVf4mtulFQupU1sOb7bhFvZF4b/2JPBtNGXxXV1FHu+dTr7DQ==",
+            "payload_sha256": "0dbd150990ad277d0d0545dd5ee3b02f62da86c90cf13356977ba5710e8d9aea"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "title": "Connect session notes",
+          "visibility": "selective",
+          "linked_credential_ids": [],
+          "summary": "Second portfolio artifact.",
+          "skills": [
+            "portfolio authorship"
+          ],
+          "content_sha256": "def",
+          "artifact_id": "pa:6aa907e455a6",
+          "evidence_refs": [],
+          "certification_claimed": false
+        }
+      ],
+      "education_timeline": {
+        "timeline_id": "edu:a684526c6cbd",
+        "owner_id": "profile:lab-student",
+        "authority": "Education & Achievements",
+        "entries": [
+          {
+            "entry_id": "edu_entry:3aa3103866",
+            "label": "Vault-bound learning evidence assertion",
+            "kind": "achievement",
+            "occurred_at": "2026-09-17T19:50:06Z",
+            "source": "credential_wallet",
+            "verified": true,
+            "status_badge": "credential_linked_active",
+            "skills": [
+              "evidence binding",
+              "portfolio authorship"
+            ],
+            "evidence_refs": [],
+            "credential_id": "cred:25bee3ebdf184272a09530d965b20047",
+            "provenance": {
+              "source": "credential_wallet",
+              "verified": true,
+              "credential_id": "cred:25bee3ebdf184272a09530d965b20047",
+              "gui_action": true,
+              "updated_at": "2026-09-17T19:50:06Z",
+              "accreditation_claimed": false
+            },
+            "certification_claimed": false
+          },
+          {
+            "entry_id": "edu_entry:c668f19016",
+            "label": "Community college coursework (self-reported)",
+            "kind": "education",
+            "occurred_at": "2026-09-17T19:50:06Z",
+            "source": "user_entered",
+            "verified": false,
+            "status_badge": "user_entered",
+            "skills": [
+              "self study"
+            ],
+            "evidence_refs": [],
+            "credential_id": null,
+            "provenance": {
+              "source": "user_entered",
+              "verified": false,
+              "gui_action": true,
+              "updated_at": "2026-09-17T19:50:06Z"
+            },
+            "certification_claimed": false
+          },
+          {
+            "entry_id": "edu_entry:978ecbff47",
+            "label": "Active assertion post skill-graph revocation demo",
+            "kind": "achievement",
+            "occurred_at": "2026-09-17T19:50:07Z",
+            "source": "credential_wallet",
+            "verified": true,
+            "status_badge": "credential_linked_active",
+            "skills": [],
+            "evidence_refs": [],
+            "credential_id": "cred:3dd88840d925420ebbdedc90eb6f3f94",
+            "provenance": {
+              "source": "credential_wallet",
+              "verified": true,
+              "credential_id": "cred:3dd88840d925420ebbdedc90eb6f3f94",
+              "gui_action": true,
+              "updated_at": "2026-09-17T19:50:07Z",
+              "accreditation_claimed": false
+            },
+            "certification_claimed": false
+          },
+          {
+            "entry_id": "edu_entry:cf8795250e",
+            "label": "Self-reported education",
+            "kind": "education",
+            "occurred_at": "2026-09-17T19:50:07Z",
+            "source": "user_entered",
+            "verified": false,
+            "status_badge": "user_entered",
+            "skills": [],
+            "evidence_refs": [],
+            "credential_id": null,
+            "provenance": {
+              "source": "user_entered",
+              "verified": false,
+              "gui_action": true,
+              "updated_at": "2026-09-17T19:50:07Z"
+            },
+            "certification_claimed": false
+          }
+        ],
+        "created_at": "2026-09-17T19:50:06Z",
+        "updated_at": "2026-09-17T19:50:07Z",
+        "certification_claimed": false,
+        "offline_viewable": true
+      },
+      "skill_evidence_graph": {
+        "schema": "SkillEvidenceGraph v1",
+        "graph_id": "seg:ea96b47277f8",
+        "generated_at_utc": "2026-09-17T19:50:07Z",
+        "skills": [
+          {
+            "skill_id": "skill:c437faf9f3",
+            "label": "evidence binding",
+            "evidence_backed": true,
+            "self_declared": true,
+            "verified": true,
+            "credential_ids": [
+              "cred:25bee3ebdf184272a09530d965b20047"
+            ],
+            "artifact_ids": [
+              "pa:e816a0d06411"
+            ],
+            "waike_evidence_ids": [],
+            "user_claims": [
+              {
+                "text": "evidence binding",
+                "source": "user_entered",
+                "verified": false
+              }
+            ],
+            "why": [
+              "backed by active credential cred:25bee3ebdf184272a09530d965b20047",
+              "linked portfolio artifact pa:e816a0d06411"
+            ],
+            "status": "evidence_backed"
+          },
+          {
+            "skill_id": "skill:63c07a1384",
+            "label": "offline verify",
+            "evidence_backed": true,
+            "self_declared": true,
+            "verified": true,
+            "credential_ids": [
+              "cred:3dd88840d925420ebbdedc90eb6f3f94",
+              "cred:9bcb533e57ee4501b2ab553d06c45f22"
+            ],
+            "artifact_ids": [],
+            "waike_evidence_ids": [],
+            "user_claims": [
+              {
+                "text": "offline verify",
+                "source": "user_entered",
+                "verified": false
+              }
+            ],
+            "why": [
+              "backed by active credential cred:3dd88840d925420ebbdedc90eb6f3f94",
+              "backed by active credential cred:9bcb533e57ee4501b2ab553d06c45f22"
+            ],
+            "status": "evidence_backed"
+          },
+          {
+            "skill_id": "skill:dc80075226",
+            "label": "portfolio authorship",
+            "evidence_backed": false,
+            "self_declared": true,
+            "verified": false,
+            "credential_ids": [],
+            "artifact_ids": [
+              "pa:6aa907e455a6"
+            ],
+            "waike_evidence_ids": [],
+            "user_claims": [
+              {
+                "text": "portfolio authorship",
+                "source": "user_entered",
+                "verified": false
+              }
+            ],
+            "why": [
+              "linked portfolio artifact pa:6aa907e455a6",
+              "self-declared text entry \u2014 not verified"
+            ],
+            "status": "self_declared"
+          },
+          {
+            "skill_id": "skill:ccacecd2eb",
+            "label": "self study",
+            "evidence_backed": false,
+            "self_declared": true,
+            "verified": false,
+            "credential_ids": [],
+            "artifact_ids": [],
+            "waike_evidence_ids": [],
+            "user_claims": [
+              {
+                "text": "self study",
+                "source": "user_entered",
+                "verified": false
+              }
+            ],
+            "why": [
+              "self-declared text entry \u2014 not verified"
+            ],
+            "status": "self_declared"
+          }
+        ],
+        "certification_claimed": false,
+        "rules": [
+          "evidence_backed_and_self_declared_visibly_distinct",
+          "text_entry_alone_cannot_verify",
+          "revocation_propagates",
+          "missing_evidence_reflected"
+        ]
+      },
+      "verifier_metadata": {
+        "independent": true,
+        "wallet_db_used": false
+      },
+      "privacy_manifest": {
+        "excluded_fields": [
+          "contact"
+        ],
+        "no_hidden_private_fields": true,
+        "no_local_path_leakage": true,
+        "certification_claimed": false
+      },
+      "certification_claimed": false,
+      "portable_offline": true,
+      "content_sha256": "f5747782c1462f03f51a90e5b13d6334553c9b3e0e639025390cce4df9c19363"
+    },
+    "content_sha256": "f5747782c1462f03f51a90e5b13d6334553c9b3e0e639025390cce4df9c19363",
+    "privacy_leak": false,
+    "certification_claimed": false
+  },
+  "recovery": {
+    "ok": true,
+    "CX3_CAREER_PACKAGE_RECOVERY_PASS": true,
+    "package_id": "ccp_6d2c8fbc4878",
+    "restored_credentials": [
+      "cred:25bee3ebdf184272a09530d965b20047",
+      "cred:3dd88840d925420ebbdedc90eb6f3f94",
+      "cred:9bcb533e57ee4501b2ab553d06c45f22"
+    ],
+    "restored_artifacts": [
+      "pa:6aa907e455a6"
+    ],
+    "career_profile_id": "career:74ba3455ab33",
+    "education_timeline_id": "edu:f3de837862d3",
+    "skill_graph_id": "seg:e845f94d884d",
+    "verifier": {
+      "wallet_db_used": false,
+      "valid": true,
+      "ok": true
+    },
+    "db_copy_used": false,
+    "privacy_manifest": {
+      "excluded_fields": [
+        "contact"
+      ],
+      "no_hidden_private_fields": true,
+      "no_local_path_leakage": true,
+      "certification_claimed": false
+    },
+    "certification_claimed": false,
+    "restart_persisted": true
+  },
+  "verifier": {
+    "ok": true,
+    "valid": false,
+    "tampered": false,
+    "credentials": [
+      {
+        "credential_id": "cred:25bee3ebdf184272a09530d965b20047",
+        "signature_verified": true,
+        "status": "revoked",
+        "freshness": "stale",
+        "revoked": true,
+        "valid": false,
+        "evidence": {
+          "evidence_id": "ev:vault:d0b4f3f59742",
+          "artifact_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+          "artifact_path": "cx2h2_j1_essay.odt",
+          "source": "vault"
+        },
+        "issuer_id": "issuer:lab:9f3682f63de4",
+        "certification_claimed": false
+      }
+    ],
+    "artifact_integrity_ok": true,
+    "privacy_manifest": {
+      "excluded_fields": [
+        "contact"
+      ],
+      "excluded_credential_ids": [],
+      "excluded_artifact_ids": [],
+      "private_contact_excluded": true,
+      "certification_claimed": false
+    },
+    "wallet_db_used": false,
+    "wallet_db_refusal": {
+      "ok": true,
+      "wallet_db_used": false,
+      "refused_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx3-education-career-digital-closure/os_build/cx3_3_linux_lab/work/wallet",
+      "note": "Independent verifier does not read Wallet DB as authority"
+    },
+    "status_online": true,
+    "verified_at": "2026-09-17T19:50:07Z",
+    "certification_claimed": false
+  },
+  "surfaces_present": true,
+  "CX3_NO_SECOND_COMPUTER_FINAL_PASS": true
+}

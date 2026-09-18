@@ -1,0 +1,163 @@
+#cloud-config
+hostname: cx2e-linux-lab
+manage_etc_hosts: true
+ssh_pwauth: false
+users:
+  - name: gunnchos
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: [sudo, video, render, audio, seat]
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAj9fzWe3jAvuAyWxvBquRXYFQSqEAcRMD9K4Z/JarTK cx2e-lab
+package_update: true
+package_upgrade: false
+packages:
+  - linux-image-arm64
+  - weston
+  - seatd
+  - libseat1
+  - kbd
+  - dbus-user-session
+  - dbus-x11
+  - libgl1-mesa-dri
+  - mesa-utils
+  - xwayland
+  - fonts-dejavu
+  - xdg-desktop-portal
+  - xdg-desktop-portal-gtk
+  - flatpak
+  - cups
+  - cups-bsd
+  - cups-client
+  - chromium
+  - libreoffice
+  - libreoffice-gtk3
+  - thunderbird
+  - ffmpeg
+  - at-spi2-core
+  - orca
+  - python3
+  - python3-gi
+  - gir1.2-atspi-2.0
+  - openssh-server
+  - curl
+  - ca-certificates
+  - pipewire
+  - wireplumber
+  - wayland-utils
+  - libinput-tools
+  - evtest
+  - python3-evdev
+write_files:
+  - path: /etc/xdg/weston/weston.ini
+    permissions: '0644'
+    content: |
+      [core]
+      backend=drm-backend.so
+      shell=desktop-shell.so
+      modifier=super
+      idle-time=0
+      require-input=false
+
+      [shell]
+      panel-position=top
+      locking=false
+      background-color=0xff1a3a5c
+
+      [screensaver]
+      path=
+      duration=0
+
+      [output]
+      name=Virtual-1
+      mode=1280x800
+      position=0,0
+  - path: /etc/cx2e-weston/weston.ini
+    permissions: '0644'
+    content: |
+      [core]
+      backend=drm-backend.so
+      shell=desktop-shell.so
+      modifier=super
+      idle-time=0
+      require-input=false
+
+      [shell]
+      panel-position=top
+      locking=false
+      background-color=0xff1a3a5c
+
+      [screensaver]
+      path=
+      duration=0
+
+      [output]
+      name=Virtual-1
+      mode=1280x800
+      position=0,0
+  - path: /etc/systemd/system/cx2e-weston.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=CX2E Weston compositor (DRM/virtio-gpu)
+      After=seatd.service systemd-user-sessions.service local-fs.target
+      Wants=seatd.service
+      Conflicts=getty@tty1.service
+
+      [Service]
+      Type=simple
+      Environment=XDG_RUNTIME_DIR=/run/cx2e-wayland
+      Environment=WAYLAND_DISPLAY=wayland-0
+      Environment=XDG_CONFIG_HOME=/etc/cx2e-weston
+      Environment=LIBSEAT_BACKEND=seatd
+      Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/cx2e-wayland/bus
+      WorkingDirectory=/var/lib/cx2e
+      ExecStartPre=/bin/mkdir -p /run/cx2e-wayland /var/lib/cx2e /var/log /etc/cx2e-weston
+      ExecStartPre=/bin/chmod 700 /run/cx2e-wayland
+      ExecStartPre=-/sbin/modprobe uinput
+      ExecStartPre=-/bin/systemctl stop getty@tty1.service
+      ExecStartPre=/bin/bash -c 'if [ ! -S /run/cx2e-wayland/bus ]; then dbus-daemon --session --address=unix:path=/run/cx2e-wayland/bus --nofork --nopidfile & sleep 0.5; fi'
+      ExecStart=/usr/bin/openvt -c 1 -f -s -w -- /usr/bin/weston --backend=drm-backend.so --socket=wayland-0 --log=/var/log/cx2e-weston.log
+      Restart=on-failure
+      RestartSec=2
+      User=root
+      StandardInput=null
+      StandardOutput=journal
+      StandardError=journal
+
+      [Install]
+      WantedBy=multi-user.target
+  - path: /usr/local/bin/cx2e-verify-provision.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+      mkdir -p /var/lib/cx2e
+      missing=""
+      for p in weston seatd chromium libreoffice flatpak cups xdg-desktop-portal; do
+        if ! dpkg -s "$p" >/dev/null 2>&1; then missing="$missing $p"; fi
+      done
+      if [ -n "$missing" ]; then
+        echo CX2E_LINUX_LAB_PROVISION_FAILED missing:$missing
+        exit 1
+      fi
+      echo CX2E_LINUX_LAB_PROVISION_OK > /var/lib/cx2e/PROVISIONED
+      echo CX2E_LINUX_LAB_PROVISION_OK
+  - path: /etc/ssh/sshd_config.d/99-cx2e.conf
+    permissions: '0644'
+    content: |
+      PasswordAuthentication no
+      PermitRootLogin prohibit-password
+runcmd:
+  - [ bash, -c, "mkdir -p /run/cx2e-wayland /var/lib/cx2e /opt/cx2e /var/log && chmod 700 /run/cx2e-wayland" ]
+  - [ bash, -c, "groupadd -f seat || true; usermod -aG seat,video,render gunnchos || true" ]
+  - [ bash, -c, "dpkg -l > /var/lib/cx2e/dpkg-versions.txt 2>&1 || true" ]
+  - [ bash, -c, "dpkg-query -W -f='${Package}\t${Version}\n' weston seatd chromium libreoffice flatpak cups xdg-desktop-portal xdg-desktop-portal-gtk at-spi2-core orca thunderbird ffmpeg > /var/lib/cx2e/key-packages.txt 2>&1 || true" ]
+  - [ systemctl, enable, cx2e-weston.service ]
+  - [ systemctl, enable, ssh ]
+  - [ /usr/local/bin/cx2e-verify-provision.sh ]
+  - [ bash, -c, "touch /etc/cloud/cloud-init.disabled" ]
+power_state:
+  mode: poweroff
+  timeout: 60
+  condition: true

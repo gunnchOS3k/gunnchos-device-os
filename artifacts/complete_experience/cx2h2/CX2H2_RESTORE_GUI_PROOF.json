@@ -1,0 +1,157 @@
+{
+  "ok": true,
+  "steps": {
+    "select": {
+      "ok": true,
+      "result": {
+        "result": {
+          "type": "object",
+          "value": {
+            "ok": true,
+            "path": "cx2h2_j1_essay.odt"
+          }
+        }
+      },
+      "target": "http://127.0.0.1:8765/"
+    },
+    "backup_btn": {
+      "ok": true,
+      "result": {
+        "result": {
+          "type": "object",
+          "value": {
+            "ok": true,
+            "clicked": "Backup",
+            "dataAction": "backup"
+          }
+        }
+      },
+      "target": "http://127.0.0.1:8765/"
+    },
+    "backup": {
+      "backup_id": "bak_3109f1bf1572",
+      "path": "cx2h2_j1_essay.odt",
+      "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+      "size": 10027,
+      "created_at": 1789658462.0039873,
+      "source": "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt",
+      "backup_path": "/var/lib/cx2h2/vault/backups/bak_3109f1bf1572/cx2h2_j1_essay.odt"
+    },
+    "shell_restart_after_backup": {
+      "ok": true,
+      "blocker": null
+    },
+    "backups_after_restart": {
+      "ok": true,
+      "backups": [
+        {
+          "backup_id": "bak_3109f1bf1572",
+          "path": "cx2h2_j1_essay.odt",
+          "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+          "size": 10027,
+          "created_at": 1789658462.0039873,
+          "source": "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt",
+          "backup_path": "/var/lib/cx2h2/vault/backups/bak_3109f1bf1572/cx2h2_j1_essay.odt"
+        },
+        {
+          "backup_id": "bak_bca1bb07104c",
+          "path": ".~lock.cx2h2_j1_essay.odt#",
+          "sha256": "be8f0ea90480b5643a134c8fe687b6051065c68aeb998926d1d576000ab86bf2",
+          "size": 82,
+          "created_at": 1789657202.285326,
+          "source": "/var/lib/cx2h2/vault/files/.~lock.cx2h2_j1_essay.odt#",
+          "backup_path": "/var/lib/cx2h2/vault/backups/bak_bca1bb07104c/.~lock.cx2h2_j1_essay.odt#"
+        },
+        {
+          "backup_id": "bak_ce2748ccfeda",
+          "path": "cx2h2_j1_essay.odt",
+          "sha256": "ea44b3be517269c26955cf43cb615941ba594b70bef66d47aaf0340e5fbf2116",
+          "size": 10026,
+          "created_at": 1789658069.5557077,
+          "source": "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt",
+          "backup_path": "/var/lib/cx2h2/vault/backups/bak_ce2748ccfeda/cx2h2_j1_essay.odt"
+        }
+      ]
+    },
+    "delete": {
+      "ok": true,
+      "result": {
+        "result": {
+          "type": "object",
+          "value": {
+            "ok": true,
+            "via": "button"
+          }
+        }
+      },
+      "target": "http://127.0.0.1:8765/"
+    },
+    "deleted_on_disk": "0",
+    "restore_click": {
+      "ok": true,
+      "result": {
+        "result": {
+          "type": "object",
+          "value": {
+            "ok": true,
+            "clicked": "Restore from backup",
+            "dataAction": "restore"
+          }
+        }
+      },
+      "target": "http://127.0.0.1:8765/"
+    },
+    "restore": {
+      "ok": true,
+      "result": {
+        "result": {
+          "type": "object",
+          "value": {
+            "ok": true,
+            "backup_id": "bak_3109f1bf1572",
+            "path": "cx2h2_j1_essay.odt",
+            "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "expected_sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+            "match": true
+          }
+        }
+      },
+      "target": "http://127.0.0.1:8765/"
+    },
+    "corrupt": {
+      "ok": true,
+      "path": "cx2h2_corrupt_copy.odt",
+      "sha256_before": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6",
+      "sha256_after": "791391ba2e963525e42026662137d8411c56b2cbc39844d4a1d3b2c62de73573",
+      "integrity_changed": true
+    },
+    "reopen_after_restore": {
+      "ok": true,
+      "pid": 3267,
+      "alive_after_5s": true,
+      "application": "libreoffice-writer",
+      "binary": "/usr/bin/libreoffice",
+      "version": {
+        "binary": "/usr/bin/libreoffice",
+        "version_stdout": "LibreOffice 7.4.7.2 40(Build:2)",
+        "ok": true
+      },
+      "path": "cx2h2_j1_essay.odt",
+      "launch_log": "/var/lib/cx2h2/vault/logs/writer_1789658476.log",
+      "ps": "3267 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658476 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n3326 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658476 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n3348 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+      "headless": false,
+      "error": null
+    },
+    "reopen_atspi": {
+      "ok": false,
+      "found": [],
+      "needle": "LibreOffice"
+    },
+    "reopen_ps": "3326 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658476 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n",
+    "readback": {
+      "ok": true,
+      "text": "CX2H2-J1-DETERMINISTIC-ESSAY-alpha-7gc BOLD_FORMAT_MARK",
+      "sha256": "e72f5b8c2940c253d8dc7d7797318de2a0fa2b394f0d4caca1e6495b87e13fd6"
+    }
+  }
+}

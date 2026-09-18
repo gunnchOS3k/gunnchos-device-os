@@ -1,0 +1,37 @@
+{
+  "skipped": false,
+  "raw": {
+    "browser": {
+      "stdout_tail": "eOzonePlatform --user-data-dir=/var/lib/cx2g/chromium-shell --remote-debugging-address=127.0.0.1 --remote-debugging-port=9222 --no-first-run --disable-extensions --disable-background-networking --force-renderer-accessibility --app=http://127.0.0.1:8765/\n1012 /usr/lib/chromium/chrome_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --database=/home/gunnchos/.config/chromium/Crash Reports --annotation=channel=built on Debian GNU/Linux 12 (bookworm) --annotation=lsb-release=Debian GNU/Linux 12 (bookworm) --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=152.0.7977.82 --initial-client-fd=5 --shared-client-connection\n1014 /usr/lib/chromium/chrome_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/gunnchos/.config/chromium/Crash Reports --annotation=channel=built on Debian GNU/Linux 12 (bookworm) --annotation=lsb-release=Debian GNU/Linux 12 (bookworm) --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=152.0.7977.82 --initial-client-fd=4 --shared-client-connection\nBROWSER_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "libreoffice": {
+      "stdout_tail": "1378 bash -c export XDG_RUNTIME_DIR=/run/cx2g-wayland WAYLAND_DISPLAY=wayland-0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/cx2g-wayland/bus; mkdir -p /var/lib/cx2g/docs; echo cx2g > /var/lib/cx2g/docs/t.txt; nohup libreoffice --writer /var/lib/cx2g/docs/t.txt >/var/lib/cx2g/lo.log 2>&1 & sleep 6; pgrep -af soffice | head -3; pgrep -f soffice >/dev/null && echo PRODUCTIVITY_GUI_PASS\n1440 /usr/lib/libreoffice/program/soffice.bin --writer /var/lib/cx2g/docs/t.txt\nPRODUCTIVITY_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "flatpak": {
+      "stdout_tail": "Flatpak 1.14.10\nAPP_LIFECYCLE_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "mail": {
+      "stdout_tail": "/usr/bin/thunderbird\nMozilla Thunderbird 140.16.0esr\nMAIL_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    },
+    "cups": {
+      "stdout_tail": "IPP_FAIL\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\nlpstat: No destinations added.\n",
+      "pass": false
+    },
+    "offline": {
+      "stdout_tail": "OFFLINE_RECOVERY_GUI_PASS\nWarning: Permanently added '[127.0.0.1]:2229' (ED25519) to the list of known hosts.\n",
+      "pass": true
+    }
+  },
+  "browser_gui": true,
+  "app_lifecycle_gui": true,
+  "productivity_gui": true,
+  "mail_gui": true,
+  "caldav_carddav_gui": false,
+  "ipp_gui_digital": false,
+  "offline_recovery_gui": true,
+  "digital_a11y_pass": false
+}

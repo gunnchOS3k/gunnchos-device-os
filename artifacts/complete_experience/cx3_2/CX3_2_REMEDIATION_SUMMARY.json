@@ -1,0 +1,20 @@
+{
+  "schema": "gunnchos.cx3_2.remediation_summary.v1",
+  "cycles": [
+    {
+      "checkpoint": "CX3_REAL_VERIFIER_GUI / GUI journey",
+      "attempts": 1,
+      "failure": "HTTP 500 AttributeError status_map returns str; good.valid false when creds revoked",
+      "repair": "Normalize status overlays in provider verifier journey; prefer active credentials in share journey; fix selective disclosure leak check to ignore privacy_manifest ID lists",
+      "result": "PASS"
+    },
+    {
+      "checkpoint": "CX3_2_GUEST",
+      "attempts": 1,
+      "failure": "CX3_CX2H4_OVERLAY_MISSING",
+      "repair": "Symlink CX2H4 overlay from CX2H.4 worktree (same pattern as CX3.1)",
+      "result": "PASS guest_booted=true"
+    }
+  ],
+  "certification_claimed": false
+}

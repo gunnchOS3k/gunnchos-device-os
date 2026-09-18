@@ -1,0 +1,67 @@
+{
+  "thunderbird": {
+    "ok": true,
+    "pid": 39290,
+    "alive_after_6s": true,
+    "profile": "/var/lib/cx2h3/thunderbird-profile"
+  },
+  "send": {
+    "ok": true,
+    "mode": "gui_compose_plus_account_smtp",
+    "message_id": "<cx2h3-gui-4ec5f3134b474b54a71534fa71ebe36b@cx2h3.test>",
+    "smtp_ok": true,
+    "smtp_error": null,
+    "attachment_sha256": "cb0213ebed1f9f83e9ac15a75acd2870bc8882a61d43425e2aa04fc562ecea4f",
+    "gui_compose_launched": true,
+    "direct_smtp_without_gui": false,
+    "thunderbird_running": true,
+    "thunderbird_ps": "39290 /usr/lib/thunderbird/thunderbird --name=thunderbird --profile /var/lib/cx2h3/thunderbird-profile\n39404 /usr/lib/thunderbird/thunderbird-bin -contentproc -isForBrowser -prefsHandle 0:3217 -prefMapHandle 1:267858 -jsInitHandle 2:242832 -parentBuildID 20260914195918 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {7e2e5809-93b1-47dc-ac62-bf07514c42dc} -parentPid 39290 -crashReporter 6 -greomni /usr/lib/thunderbird/omni.ja -appDir /usr/lib/thunderbird 1 tab\n39407 /usr/lib/thunderbird/thunderbird-bin -contentproc -parentBuildID 20260914195918 -prefsHandle 0:4206 -prefMapHandle 1:267858 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {e02d9bc6-9d0b-424e-bb67-eec4e63636e4} -parentPid 39290 -crashReporter 5 -appDir /usr/lib/thunderbird 2 rdd\n39491 /usr/lib/thunderbird/thunderbird-bin -contentproc -isForBrowser -prefsHandle 0:3648 -prefMapHandle 1:267858 -jsInitHandle 2:242832 -parentBuildID 20260914195918 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {c3d7332c-3dc3-4f75-b211-408c0ce8f1ca} -parentPid 39290 -crashReporter 6 -greomni /usr/lib/thunderbird/omni.ja -appDir /usr/lib/thunderbird 3 tab\n"
+  },
+  "smtp_accepts_new": [
+    {
+      "ts": 1789662383.2960808,
+      "mailfrom": "sender@cx2h3.test> size=2003",
+      "rcpts": [
+        "recipient@cx2h3.test"
+      ],
+      "message_id": "<cx2h3-gui-4ec5f3134b474b54a71534fa71ebe36b@cx2h3.test>",
+      "subject": "CX2H3-J2-MAIL-ATTACHMENT-alpha-7gc",
+      "sha256": "a685087079fa68fecddd6ff21907ab811a47b19def91d0d9e9f098376a014f38",
+      "stores": [
+        {
+          "uid": 2383283,
+          "path": "/tmp/cx2h3-mail/mailboxes/sender/Sent/new/2383283.cx2h3",
+          "size": 2001,
+          "sha256": "a685087079fa68fecddd6ff21907ab811a47b19def91d0d9e9f098376a014f38",
+          "folder": "Sent",
+          "user": "sender@cx2h3.test",
+          "message_id": "<cx2h3-gui-4ec5f3134b474b54a71534fa71ebe36b@cx2h3.test>",
+          "subject": "CX2H3-J2-MAIL-ATTACHMENT-alpha-7gc",
+          "from": "sender@cx2h3.test",
+          "to": "recipient@cx2h3.test"
+        },
+        {
+          "uid": 2383295,
+          "path": "/tmp/cx2h3-mail/mailboxes/recipient/INBOX/new/2383295.cx2h3",
+          "size": 2001,
+          "sha256": "a685087079fa68fecddd6ff21907ab811a47b19def91d0d9e9f098376a014f38",
+          "folder": "INBOX",
+          "user": "recipient@cx2h3.test",
+          "message_id": "<cx2h3-gui-4ec5f3134b474b54a71534fa71ebe36b@cx2h3.test>",
+          "subject": "CX2H3-J2-MAIL-ATTACHMENT-alpha-7gc",
+          "from": "sender@cx2h3.test",
+          "to": "recipient@cx2h3.test"
+        }
+      ]
+    }
+  ],
+  "inbox_count": 1,
+  "attachment_hash_match": true,
+  "saved_attachment": "cx2h3_j2_received_attachment.odt",
+  "reopen_writer": {
+    "ok": true,
+    "pid": 39551,
+    "path": "/var/lib/cx2h2/vault/files/cx2h3_j2_received_attachment.odt"
+  },
+  "direct_smtp_without_gui": false
+}

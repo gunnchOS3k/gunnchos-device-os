@@ -1,0 +1,315 @@
+{
+  "ok": true,
+  "contracts": [
+    "CredentialExport",
+    "CredentialRecord",
+    "CredentialStatus",
+    "EvidenceRecord",
+    "IssuerProfile",
+    "PortfolioArtifact",
+    "PortfolioCollection",
+    "PortfolioExport"
+  ],
+  "schemas": {
+    "CredentialRecord": {
+      "schema": "gunnchos.cx3.contracts.CredentialRecord.v1",
+      "required": [
+        "credential_id",
+        "type",
+        "subject_profile_id",
+        "issued_at",
+        "issuer_id",
+        "evidence_refs",
+        "signature",
+        "certification_claimed",
+        "status"
+      ],
+      "properties": {
+        "credential_id": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "OpenBadge3",
+            "CLR2",
+            "local_assertion"
+          ]
+        },
+        "subject_profile_id": {
+          "type": "string"
+        },
+        "issued_at": {
+          "type": "string"
+        },
+        "issuer_id": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "type": "array"
+        },
+        "signature": {
+          "type": "object"
+        },
+        "certification_claimed": {
+          "const": false
+        },
+        "status": {
+          "enum": [
+            "active",
+            "revoked",
+            "suspended"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "EvidenceRecord": {
+      "schema": "gunnchos.cx3.contracts.EvidenceRecord.v1",
+      "required": [
+        "evidence_id",
+        "source",
+        "artifact_sha256",
+        "artifact_path",
+        "captured_at",
+        "certification_claimed"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "vault",
+            "learning",
+            "lab",
+            "import"
+          ]
+        },
+        "artifact_sha256": {
+          "type": "string"
+        },
+        "artifact_path": {
+          "type": "string"
+        },
+        "captured_at": {
+          "type": "string"
+        },
+        "mime": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        }
+      }
+    },
+    "IssuerProfile": {
+      "schema": "gunnchos.cx3.contracts.IssuerProfile.v1",
+      "required": [
+        "issuer_id",
+        "name",
+        "algorithm",
+        "public_key_b64",
+        "ephemeral",
+        "certification_claimed"
+      ],
+      "properties": {
+        "issuer_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "algorithm": {
+          "const": "Ed25519"
+        },
+        "public_key_b64": {
+          "type": "string"
+        },
+        "ephemeral": {
+          "type": "boolean"
+        },
+        "certification_claimed": {
+          "const": false
+        },
+        "realm": {
+          "enum": [
+            "lab",
+            "dev",
+            "production_pending"
+          ]
+        }
+      }
+    },
+    "CredentialStatus": {
+      "schema": "gunnchos.cx3.contracts.CredentialStatus.v1",
+      "required": [
+        "credential_id",
+        "status",
+        "updated_at",
+        "certification_claimed"
+      ],
+      "properties": {
+        "credential_id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "revoked",
+            "suspended"
+          ]
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        }
+      }
+    },
+    "PortfolioArtifact": {
+      "schema": "gunnchos.cx3.contracts.PortfolioArtifact.v1",
+      "required": [
+        "artifact_id",
+        "title",
+        "visibility",
+        "linked_credential_ids",
+        "certification_claimed"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "visibility": {
+          "enum": [
+            "private",
+            "selective",
+            "public_local"
+          ]
+        },
+        "linked_credential_ids": {
+          "type": "array"
+        },
+        "evidence_refs": {
+          "type": "array"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        }
+      }
+    },
+    "PortfolioCollection": {
+      "schema": "gunnchos.cx3.contracts.PortfolioCollection.v1",
+      "required": [
+        "collection_id",
+        "owner_profile_id",
+        "artifact_ids",
+        "certification_claimed"
+      ],
+      "properties": {
+        "collection_id": {
+          "type": "string"
+        },
+        "owner_profile_id": {
+          "type": "string"
+        },
+        "artifact_ids": {
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        }
+      }
+    },
+    "CredentialExport": {
+      "schema": "gunnchos.cx3.contracts.CredentialExport.v1",
+      "required": [
+        "export_id",
+        "format",
+        "credentials",
+        "exported_at",
+        "certification_claimed"
+      ],
+      "properties": {
+        "export_id": {
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "gunnchos.credential_export.v1",
+            "ob3_inspired",
+            "clr_inspired"
+          ]
+        },
+        "credentials": {
+          "type": "array"
+        },
+        "exported_at": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        },
+        "include_private_keys": {
+          "const": false
+        }
+      }
+    },
+    "PortfolioExport": {
+      "schema": "gunnchos.cx3.contracts.PortfolioExport.v1",
+      "required": [
+        "export_id",
+        "format",
+        "selected_artifact_ids",
+        "manifest",
+        "exported_at",
+        "certification_claimed"
+      ],
+      "properties": {
+        "export_id": {
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "portable_html_manifest.v1"
+          ]
+        },
+        "selected_artifact_ids": {
+          "type": "array"
+        },
+        "manifest": {
+          "type": "object"
+        },
+        "exported_at": {
+          "type": "string"
+        },
+        "certification_claimed": {
+          "const": false
+        },
+        "privacy_mode": {
+          "enum": [
+            "selective",
+            "all_private_excluded"
+          ]
+        }
+      }
+    }
+  }
+}
