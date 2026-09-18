@@ -1,0 +1,19 @@
+{
+  "captured_at": "2026-09-18T22:52:00Z",
+  "probe": "LinuxGuestProvider.probeAvf + QemuGuestController",
+  "avf": {
+    "safePublicApi": false,
+    "reason": "No VirtualMachineManager dependency in pilot; hypervisor props deferred to adb baseline when device attached"
+  },
+  "qemu_tcg": {
+    "on_device_binary": false,
+    "recommended_ram_mb": "1024_or_1536_by_pressure",
+    "vcpus": 2,
+    "networking": "user",
+    "display": "headless_first",
+    "boot_pass": false
+  },
+  "selected_backend": "NONE",
+  "CAPSULE_QEMU_GUEST_BOOT_PASS": false,
+  "CAPSULE_LINUX_DESKTOP_PROVIDER_PASS": false
+}

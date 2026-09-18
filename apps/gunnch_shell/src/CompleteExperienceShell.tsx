@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState, KeyboardEvent } from 'react'
-import { theme } from './styles/gunnchosTheme'
+import { useEffect, useMemo, useState } from 'react'
 import HomeSurface from './surfaces/HomeSurface'
 import VaultSurface from './surfaces/VaultSurface'
 import AppCenterSurface from './surfaces/AppCenterSurface'
@@ -10,6 +9,7 @@ import WalletSurface from './surfaces/WalletSurface'
 import PortfolioSurface from './surfaces/PortfolioSurface'
 import CareerProfileSurface from './surfaces/CareerProfileSurface'
 import VerifierSurface from './surfaces/VerifierSurface'
+import type { HostKind } from './platform/hostRuntime'
 import './cx2.css'
 
 export type Cx2Surface =
@@ -43,31 +43,59 @@ interface Props {
   profile?: DeviceProfile
   offline?: boolean
   onExit?: () => void
+  initialSurface?: Cx2Surface
+  onSessionChange?: (partial: {
+    surface: string
+    history: string[]
+    highContrast: boolean
+    reduceMotion: boolean
+    scale: number
+  }) => void
+  hostKind?: HostKind
 }
 
 export default function CompleteExperienceShell({
   profile = 'student_14_5',
   offline = false,
   onExit,
+  initialSurface = 'home',
+  onSessionChange,
+  hostKind,
 }: Props) {
-  const [surface, setSurface] = useState<Cx2Surface>('home')
-  const [history, setHistory] = useState<Cx2Surface[]>(['home'])
+  const [surface, setSurface] = useState<Cx2Surface>(initialSurface)
+  const [history, setHistory] = useState<Cx2Surface[]>([initialSurface])
   const [error, setError] = useState<string | null>(null)
   const [highContrast, setHighContrast] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
   const [scale, setScale] = useState(1)
 
+  const emitSession = (nextSurface: Cx2Surface, nextHistory: Cx2Surface[]) => {
+    onSessionChange?.({
+      surface: nextSurface,
+      history: nextHistory,
+      highContrast,
+      reduceMotion,
+      scale,
+    })
+  }
+
   const go = (id: Cx2Surface) => {
     setError(null)
     setSurface(id)
-    setHistory((h) => [...h, id])
+    setHistory((h) => {
+      const next = [...h, id]
+      emitSession(id, next)
+      return next
+    })
   }
 
   const back = () => {
     setHistory((h) => {
       if (h.length <= 1) return h
       const next = h.slice(0, -1)
-      setSurface(next[next.length - 1])
+      const s = next[next.length - 1]
+      setSurface(s)
+      emitSession(s, next)
       return next
     })
   }
@@ -76,7 +104,20 @@ export default function CompleteExperienceShell({
     setHistory(['home'])
     setSurface('home')
     setError(null)
+    emitSession('home', ['home'])
   }
+
+  useEffect(() => {
+    onSessionChange?.({
+      surface,
+      history,
+      highContrast,
+      reduceMotion,
+      scale,
+    })
+    // Intentional: persist assist prefs when they change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [highContrast, reduceMotion, scale])
 
   useEffect(() => {
     const onKey = (e: globalThis.KeyboardEvent) => {
@@ -188,7 +229,8 @@ export default function CompleteExperienceShell({
         {body}
       </main>
       <footer className="cx2-footer" role="contentinfo">
-        Profile {profile.replace(/_/g, ' ')} · keyboard Alt+1..8 · Escape back
+        Profile {profile.replace(/_/g, ' ')}
+        {hostKind ? ` · host ${hostKind}` : ''} · keyboard Alt+1..0 · Escape back
       </footer>
     </div>
   )

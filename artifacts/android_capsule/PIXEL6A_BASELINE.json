@@ -1,0 +1,32 @@
+{
+  "captured_at": "2026-09-18T22:33:07.833404Z",
+  "adb_devices_l": "List of devices attached",
+  "device_present": false,
+  "adb_authorized": false,
+  "status": "NO_DEVICE",
+  "props": {},
+  "owner_approval_steps_if_unauthorized": [
+    "Unlock Pixel and keep screen on",
+    "Connect USB (File Transfer / MTP mode)",
+    "When prompted 'Allow USB debugging?', tap Allow and optionally Always allow from this computer",
+    "If no prompt: Developer options \u2192 Revoke USB debugging authorizations, unplug/replug, re-approve",
+    "Confirm with: adb devices -l (must show 'device', not 'unauthorized')",
+    "Do NOT factory reset, unlock bootloader, or wipe the Pixel for Capsule-1"
+  ],
+  "constraints": {
+    "NO_PIXEL_WIPE_REQUIRED": true,
+    "NO_ROOT_REQUIRED": true,
+    "NO_BOOTLOADER_UNLOCK_REQUIRED": true
+  },
+  "commands_attempted": [
+    "adb devices -l",
+    "getprop manufacturer/model/release/sdk/fingerprint",
+    "hypervisor props",
+    "wm size/density",
+    "meminfo",
+    "df /data",
+    "dumpsys battery",
+    "dumpsys thermalservice"
+  ],
+  "result": "NO_DEVICE \u2014 physical validation deferred; scaffolding continued"
+}

@@ -1,0 +1,17 @@
+workflow,priority,android_host,shell_surface,provider,status,evidence,notes
+Capsule cold launch,P0,pass,pass,ANDROID_BRIDGE,host_pass,APK+WebView load,device hands-on pending
+Home brand + nav,P0,pass,pass,LOCAL,host_pass,shell.test.tsx,physical confirm pending
+Vault create/edit/reopen,P0,pass,pass,ANDROID_BRIDGE,host_pass,VaultProvider APP_PRIVATE+SAF,SAF picker UX pending on device
+App Center list (no silent install),P0,pass,pass,ANDROID_BRIDGE,host_pass,AppCenterProvider catalog,physical confirm pending
+Connect share/open_url,P0,pass,pass,ANDROID_BRIDGE,host_pass,ConnectProvider intents,physical confirm pending
+Assist font/contrast/motion,P0,pass,pass,ANDROID_BRIDGE,host_pass,AssistProvider mechanics,human validation false
+Care snapshot/support,P0,pass,pass,ANDROID_BRIDGE,host_pass,CareProvider no-root,physical confirm pending
+Session restore after pause,P0,pass,pass,ANDROID_BRIDGE,host_pass,SessionStore+sessionStore.ts,physical confirm pending
+Exit to Android home,P0,pass,pass,ANDROID_BRIDGE,host_pass,exit_capsule,physical confirm pending
+WAIKE launch,P1,pass,pass,WEB_PWA,host_pass,WaikeProvider,hub URL owner-config
+gunnchAI launch,P1,pass,pass,LOCAL,host_pass,GunnchAiProvider Kirby flag off,—
+Four-game matrix,P1,pass,pass,CAPSULE_WEB,host_pass,GamesProvider matrix complete,bundled game assets optional
+Linux guest boot,P2,n/a,n/a,QEMU_TCG,fail,LinuxGuestProvider,CAPSULE_QEMU_GUEST_BOOT_PASS=false
+Linux desktop-in-app,P2,n/a,n/a,NONE,fail,provider surface stub,CAPSULE_LINUX_DESKTOP_PROVIDER_PASS=false
+Pixel performance profile,P1,fail,n/a,n/a,fail,no ADB device,CAPSULE_PIXEL6A_PERFORMANCE_PROFILE_CAPTURED=false
+Human a11y validation,P1,n/a,n/a,n/a,fail,owner gate,CAPSULE_HUMAN_ACCESSIBILITY_VALIDATION=false
