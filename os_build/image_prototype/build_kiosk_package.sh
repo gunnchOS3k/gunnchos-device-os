@@ -11,6 +11,14 @@ python3 scripts/export_launcher_contract.py
 
 mkdir -p "$OUT/launcher" "$OUT/policy"
 cp -r "$LAUNCHER/src" "$OUT/launcher/src"
+# CX2D Path B: launcher_mock adapters import apps/gunnch_shell via ../../../gunnch_shell
+# From artifact/launcher/src/cx2 that resolves to artifact/gunnch_shell.
+SHELL_APP="$ROOT/apps/gunnch_shell"
+rm -rf "$OUT/gunnch_shell"
+mkdir -p "$OUT/gunnch_shell"
+cp -r "$SHELL_APP/src" "$OUT/gunnch_shell/src"
+cp "$SHELL_APP/package.json" "$OUT/gunnch_shell/" 2>/dev/null || true
+cp "$SHELL_APP/tsconfig.json" "$OUT/gunnch_shell/" 2>/dev/null || true
 cp "$LAUNCHER/package.json" "$LAUNCHER/index.html" "$OUT/launcher/" 
 cp "$LAUNCHER/package-lock.json" "$OUT/launcher/" 2>/dev/null || true
 cp "$LAUNCHER/vite.config.ts" "$OUT/launcher/" 2>/dev/null || true
