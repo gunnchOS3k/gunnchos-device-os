@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/scripts/build_bootable_reference_image.py", line 36, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/scripts/build_bootable_reference_image.py", line 26, in main
+    result = BootableReferenceBuilder().build(fetch=not args.no_fetch)
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/gunnchos_device_os/bootable_image/builder.py", line 386, in build
+    rootfs = self.assemble_rootfs()
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/gunnchos_device_os/bootable_image/builder.py", line 285, in assemble_rootfs
+    tar.extractall(rootfs)
+    ~~~~~~~~~~~~~~^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tarfile.py", line 2471, in extractall
+    tarinfo, unfiltered = self._get_extract_tarinfo(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        member, filter_function, path)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tarfile.py", line 2561, in _get_extract_tarinfo
+    self._handle_fatal_error(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tarfile.py", line 2559, in _get_extract_tarinfo
+    filtered = filter_function(unfiltered, path)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tarfile.py", line 893, in data_filter
+    new_attrs = _get_filtered_attrs(member, dest_path, True)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tarfile.py", line 860, in _get_filtered_attrs
+    raise AbsoluteLinkError(member)
+tarfile.AbsoluteLinkError: './usr/bin/yes' is a link to an absolute path

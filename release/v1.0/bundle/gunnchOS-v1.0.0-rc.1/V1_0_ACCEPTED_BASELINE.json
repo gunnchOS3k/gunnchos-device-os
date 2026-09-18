@@ -1,0 +1,58 @@
+{
+  "schema": "V1_0_ACCEPTED_BASELINE/v1",
+  "campaign": "gunnchOS_v1.0_open_pr_hygiene_rc1",
+  "generated_at_utc": "2026-09-18T15:20:00Z",
+  "live_verified": true,
+  "product": "gunnchOS Software v1.0",
+  "accepted_pins": {
+    "gunnchos-device-os": {
+      "sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "ref": "origin/main",
+      "evidence": "Merge pull request #156 (consolidated Complete Experience)",
+      "live_origin_main_match": true
+    },
+    "gunnchos-research-portal": {
+      "sha": "6467551bbd68732d4681d763c35cc3b5da410879",
+      "ref": "origin/main",
+      "evidence": "Merge pull request #34 (consolidated CE control)",
+      "live_origin_main_match": true
+    },
+    "gunnchos-waike-learning-platform": {
+      "sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "ref": "origin/main",
+      "live_origin_main_match": true
+    },
+    "gunnchAI3k": {
+      "sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "ref": "origin/main",
+      "live_origin_main_match": true
+    },
+    "four_games": {
+      "anime-aggressors": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "pedestrian-pursuit": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "archive-of-life-artifact-world": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "beatlink-party": "06b4a6f74159ee933984be913e269eab64246efb"
+    }
+  },
+  "human_validation_state": {
+    "CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE": true,
+    "CX5_REAL_HUMAN_SESSION_LAUNCH_READY": true,
+    "J6_CLASS": "HUMAN_VALIDATION_PENDING",
+    "freeze_manifest_sha256": "c7a62a4566ec3485e14d0c8c58e03475bac824faa0da7783e9de991544f497c5",
+    "source_tokens": "CX5_2_TOKENS.json / FINAL_HUMAN_VALIDATION_FREEZE_MANIFEST.json"
+  },
+  "physical_truth": {
+    "PHYSICAL_PRINTER_PENDING": true,
+    "PHYSICAL_CAMERA_MIC_AV_PENDING": true,
+    "EVT_PENDING": true,
+    "DVT_PENDING": true,
+    "PVT_PENDING": true,
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false
+  },
+  "doctrine": {
+    "cursor_may_close_superseded_or_deferred_prs": true,
+    "cursor_must_not_merge_product_prs": true,
+    "cursor_must_not_publish_final_v1_0_0": true,
+    "cursor_may_create_draft_prerelease_rc1_if_gates_pass": true
+  }
+}

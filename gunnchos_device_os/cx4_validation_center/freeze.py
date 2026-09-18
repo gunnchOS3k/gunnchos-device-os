@@ -78,6 +78,25 @@ def _pack_hashes() -> Dict[str, str]:
     return out
 
 
+# Accepted-main pins for Stream A / CX5.1 Complete Experience (live-verified 2026-09-18).
+ACCEPTED_MAIN_DEVICE_OS = "438aaf2b54d3365d681dd6eeeb73f6ac58663acc"
+ACCEPTED_MAIN_PORTAL = "6467551bbd68732d4681d763c35cc3b5da410879"
+
+
+def _is_ancestor(repo: Path, maybe_ancestor: str, tip: str) -> bool:
+    if not maybe_ancestor or not tip:
+        return False
+    try:
+        subprocess.check_call(
+            ["git", "-C", str(repo), "merge-base", "--is-ancestor", maybe_ancestor, tip],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        return True
+    except Exception:
+        return False
+
+
 def build_freeze_manifest(
     repo_root: Path,
     *,
@@ -85,21 +104,47 @@ def build_freeze_manifest(
     device_sku: str = "",
     os_build_version: str = "",
     hardware_serial_alias: str = "",
+    freeze_build: bool = False,
+    target_release_or_main_commit: str = "",
+    hardware_prerequisites_real: bool = False,
 ) -> HumanValidationFreezeManifest:
     repo_root = Path(repo_root)
     commit = _git(repo_root, "rev-parse", "HEAD")
     branch = _git(repo_root, "rev-parse", "--abbrev-ref", "HEAD")
     dirty = bool(_git(repo_root, "status", "--porcelain"))
+    origin_main = _git(repo_root, "rev-parse", "origin/main") or _git(repo_root, "rev-parse", "main")
     from gunnchos_device_os.cx4_validation_center.collectors import list_collectors
 
     collectors = {c["id"]: c.get("version", "v1") for c in list_collectors()}
     packs = packs_summary()
+
+    portal = (portal_control_commit or "").strip() or ACCEPTED_MAIN_PORTAL
+    # CX stack is accepted when HEAD contains the accepted-main merge (or equals it).
+    cx_accepted = bool(
+        commit
+        and (
+            commit == ACCEPTED_MAIN_DEVICE_OS
+            or commit == origin_main
+            or _is_ancestor(repo_root, ACCEPTED_MAIN_DEVICE_OS, commit)
+        )
+    )
+    target = (target_release_or_main_commit or "").strip()
+    if not target and cx_accepted:
+        target = origin_main or ACCEPTED_MAIN_DEVICE_OS or commit
+
+    branch_status = "accepted_main" if cx_accepted and branch in {"main", "HEAD"} else (
+        "accepted_main_descendant" if cx_accepted else "draft_unmerged"
+    )
+    # Freeze identity may be recorded when explicitly requested on a clean tree
+    # bound to the accepted target. Hardware prerequisites remain separately gated.
+    build_frozen = bool(freeze_build and cx_accepted and (not dirty) and target)
+
     manifest = HumanValidationFreezeManifest(
         device_os_commit=commit,
-        portal_control_commit=portal_control_commit,
-        target_release_or_main_commit="",  # unknown until accepted RC
+        portal_control_commit=portal,
+        target_release_or_main_commit=target,
         branch=branch,
-        branch_status="draft_unmerged",
+        branch_status=branch_status,
         dirty_worktree=dirty,
         task_pack_hashes=_pack_hashes(),
         collector_versions=collectors,
@@ -108,15 +153,17 @@ def build_freeze_manifest(
         hardware_serial_alias=hardware_serial_alias,
         evidence_eligibility=ValidationEvidenceEligibility.PILOT_NON_GATING.value,
         freeze_timestamp=_now(),
-        build_frozen=False,
+        build_frozen=build_frozen,
         application_provenance={
             "validation_center_version": VALIDATION_CENTER_VERSION,
             "packs": [p["pack_id"] for p in packs],
             "commit": commit,
             "branch": branch,
+            "accepted_main_device_os": ACCEPTED_MAIN_DEVICE_OS,
+            "accepted_main_portal": ACCEPTED_MAIN_PORTAL,
         },
-        hardware_prerequisites_real=False,
-        cx_stack_draft_unmerged=True,
+        hardware_prerequisites_real=bool(hardware_prerequisites_real),
+        cx_stack_draft_unmerged=not cx_accepted,
         material_drift_detected=False,
     )
     freeze_dict = manifest.to_dict()
@@ -125,10 +172,21 @@ def build_freeze_manifest(
     manifest.final_gating_eligible = cx4_final_human_validation_eligible(freeze_dict) and len(missing) == 0
     if not manifest.final_gating_eligible:
         manifest.evidence_eligibility = ValidationEvidenceEligibility.PILOT_NON_GATING.value
+        if not cx_accepted:
+            reason = "CX stack is still DRAFT/unmerged"
+        elif not build_frozen:
+            reason = "accepted main is known but build is not yet owner-frozen for final gating"
+        else:
+            reason = "required freeze conditions are not satisfied"
         manifest.notes = (
-            "FINAL_GATING_ELIGIBLE=false because the CX stack is still DRAFT/unmerged "
-            "and required freeze conditions are not satisfied. "
+            f"FINAL_GATING_ELIGIBLE=false because {reason}. "
             "Missing: " + ", ".join(missing)
+        )
+    else:
+        manifest.evidence_eligibility = ValidationEvidenceEligibility.FINAL_GATING_ELIGIBLE.value
+        manifest.notes = (
+            "FINAL_GATING_ELIGIBLE=true for software freeze identity only. "
+            "Human/physical gate PASS still requires real sessions and non-mock evidence."
         )
     return manifest
 

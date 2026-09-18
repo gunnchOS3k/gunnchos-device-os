@@ -1,0 +1,89 @@
+{
+  "CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE": false,
+  "CX4_HUMAN_VALIDATION_FREEZE_CHECK_PASS": true,
+  "FINAL_GATING_ELIGIBLE": false,
+  "explanation": "FINAL_GATING_ELIGIBLE=false because accepted main is known but build is not yet owner-frozen for final gating. Missing: tested_build_commit_frozen, required_hardware_provider_prerequisites_real",
+  "manifest": {
+    "application_provenance": {
+      "accepted_main_device_os": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "accepted_main_portal": "6467551bbd68732d4681d763c35cc3b5da410879",
+      "branch": "eng/stream-a-digital-engineering-exhaustion",
+      "commit": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "packs": [
+        "human_a11y",
+        "physical_printer",
+        "camera_mic_av",
+        "physical_peripherals",
+        "device_quartet_evt",
+        "device_quartet_dvt",
+        "device_quartet_pvt",
+        "firmware_lifecycle",
+        "support_repair_rma",
+        "external_chat_meeting",
+        "institutional_issuer",
+        "privacy_review",
+        "rights_review",
+        "certification",
+        "manufacturing",
+        "validation_center_smoke"
+      ],
+      "validation_center_version": "cx4.2-pilot-readiness"
+    },
+    "branch": "eng/stream-a-digital-engineering-exhaustion",
+    "branch_status": "accepted_main_descendant",
+    "build_frozen": false,
+    "collector_versions": {
+      "a11y": "v1",
+      "av": "v1",
+      "cups": "v1",
+      "firmware": "v1",
+      "peripherals": "v1",
+      "support_bundle": "v1"
+    },
+    "cx_stack_draft_unmerged": false,
+    "device_os_commit": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+    "device_sku": "",
+    "dirty_worktree": true,
+    "evidence_eligibility": "PILOT_NON_GATING",
+    "final_gating_eligible": false,
+    "freeze_timestamp": "2026-09-18T18:42:35Z",
+    "hardware_prerequisites_real": false,
+    "hardware_serial_alias": "",
+    "material_drift_detected": false,
+    "materiality_policy": "material_ui_a11y_task_logic_evidence_pipeline_device_behavior",
+    "missing_conditions": [
+      "tested_build_commit_frozen",
+      "required_hardware_provider_prerequisites_real"
+    ],
+    "notes": "FINAL_GATING_ELIGIBLE=false because accepted main is known but build is not yet owner-frozen for final gating. Missing: tested_build_commit_frozen, required_hardware_provider_prerequisites_real",
+    "os_build_version": "cx4.2-pilot-readiness",
+    "portal_control_commit": "6467551bbd68732d4681d763c35cc3b5da410879",
+    "schema": "HumanValidationFreezeManifest/v1",
+    "target_release_or_main_commit": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+    "task_pack_hashes": {
+      "camera_mic_av": "179d19e9988069fb3daa197c1fd34c09b04944aa61831211a79881810f40e748",
+      "certification": "2b4ed1f1072ad357b50a134e28a10655418bfa909aac8e49198ce30e2376ebc7",
+      "device_quartet_dvt": "4a3c6bb3dcef112a956ebcbcb37258f8de4eaeb8185ceb237fe974f256429667",
+      "device_quartet_evt": "3dc16f2f019d91e60ede6a3ae0863347df6b3c7fdb6d410351cecd86c2e0081f",
+      "device_quartet_pvt": "f1768647b496b647b8598e852c9be29fe7b9ed17ffa0f9326e6ae22d982ca9f6",
+      "external_chat_meeting": "a7d35ff9bc587bc724ab7e7045ed962852cc6bdf2c055ad2816c431c979e93c4",
+      "firmware_lifecycle": "399fd983bb4a3b75966752e3ff9f351a4bc72897bbfd9fc96223b42b3500fa36",
+      "human_a11y": "688980db29c855044f427e50cd092a282300adc41c57497cc67703161a8efff0",
+      "institutional_issuer": "d23e9248b3be12d26ba005771762c4ac5ae2e5763161988ae51c56173d3f4d6b",
+      "manufacturing": "34c03e9bfc78193c55f6b7c928357adf6213f48997a90bf0e25c56defa4951a1",
+      "physical_peripherals": "867344be514762aac2fa02c3cfe2583271a563ceef9d23996484cc0e179fe5c7",
+      "physical_printer": "3ace41a644b03a6190c31e27771d7b14f5062dd925e5fbe1a8ebfc33bff01b48",
+      "privacy_review": "5e7bd62cfa03118facdd45720cdaa23fe772eee8e811bc9a4c7da5788ccb5e6b",
+      "rights_review": "e239546d771f5f1cf63710fb9895885228686881b699957ff8b370ca902f8341",
+      "support_repair_rma": "65c644943565ec77a3c17fc4229fa7389eac00bf8644df76e375407e490a3ca7",
+      "validation_center_smoke": "de9a0c178d1e518d4b95e1a4c76da42b45a6a5c7a4bfd580526fe3df7a5069f9"
+    },
+    "validation_center_version": "cx4.2-pilot-readiness",
+    "validation_task_schema_version": "v1"
+  },
+  "missing_conditions": [
+    "tested_build_commit_frozen",
+    "required_hardware_provider_prerequisites_real"
+  ],
+  "ok": true
+}

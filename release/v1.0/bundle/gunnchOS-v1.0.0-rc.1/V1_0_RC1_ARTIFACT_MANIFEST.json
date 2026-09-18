@@ -1,0 +1,429 @@
+{
+  "schema": "V1_0_RC1_ARTIFACT_MANIFEST/v1",
+  "generated_at_utc": "2026-09-18T15:25:47.029161Z",
+  "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+  "toolchain": {
+    "python": "3.14.7",
+    "node": "24.9.0",
+    "host": "macOS-arm64"
+  },
+  "builds": [
+    {
+      "name": "cont_viii_package",
+      "command": "make package",
+      "status": "PASS",
+      "notes": "release_readiness_scorecard ok"
+    },
+    {
+      "name": "validation_center_src_tarball",
+      "command": "tar -czf apps/validation_center",
+      "status": "PASS"
+    },
+    {
+      "name": "sbom_generate",
+      "command": "python3 scripts/generate_sbom.py + lock enrichment",
+      "status": "PASS"
+    },
+    {
+      "name": "bootable_reference",
+      "command": "scripts/build_bootable_reference_image.py --build-only",
+      "status": "FAIL_UNSUPPORTED_HOST",
+      "notes": "Python 3.14 tar AbsoluteLinkError"
+    },
+    {
+      "name": "cx_canonical_immutable_qcow2",
+      "command": "checksum_only",
+      "status": "PASS_CHECKSUM_ONLY",
+      "notes": "not rebuilt"
+    }
+  ],
+  "artifacts": [
+    {
+      "filename": "INDEX.json",
+      "relpath": "artifacts/canonical_image_checksums/INDEX.json",
+      "bytes": 1348,
+      "sha256": "26ce921c141fced94e3fbdee4a1afbc995a39f92bef74f11697bee27562ba8d3",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "cx2h2-aarch64.qcow2.sha256",
+      "relpath": "artifacts/canonical_image_checksums/cx2h2-aarch64.qcow2.sha256",
+      "bytes": 65,
+      "sha256": "a151c3e67d3eb4f8b1e49e8721bd3853942082e1a9cf082e8342bf340b13851c",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "cx2h3-aarch64.qcow2.sha256",
+      "relpath": "artifacts/canonical_image_checksums/cx2h3-aarch64.qcow2.sha256",
+      "bytes": 65,
+      "sha256": "1823019cf2611ebf4e93416087df3c0a0827b36139398b40e45533d3e547adaa",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "cx2h4-aarch64.qcow2.sha256",
+      "relpath": "artifacts/canonical_image_checksums/cx2h4-aarch64.qcow2.sha256",
+      "bytes": 65,
+      "sha256": "09ae2c59da289ca7187b389397f5567a7cd6f57d46213b57db2e6799f30cc354",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "dock_host_SIM-DOCK_HOST-27d22663_c79f18afdf22720e.json",
+      "relpath": "artifacts/cont_viii/factory/dock_host_SIM-DOCK_HOST-27d22663_c79f18afdf22720e.json",
+      "bytes": 1673,
+      "sha256": "44b8bd64d457069ffd8ba946aa4bf9d0b527f38278a4d6c1457dc7a88280647d",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "dock_host_SIM-DOCK_HOST-3b319fdb_8f6046956abe00f4.json",
+      "relpath": "artifacts/cont_viii/factory/dock_host_SIM-DOCK_HOST-3b319fdb_8f6046956abe00f4.json",
+      "bytes": 1674,
+      "sha256": "7398934bac1cc45f72a8b568713c4ec08ee0cfbc14441a07bbf3d5cc6f0e2e39",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "dock_host_SIM-DOCK_HOST-512bc781_27688dfaea7f7d77.json",
+      "relpath": "artifacts/cont_viii/factory/dock_host_SIM-DOCK_HOST-512bc781_27688dfaea7f7d77.json",
+      "bytes": 1673,
+      "sha256": "ca87089eeb5e3ce439a9798902aa2b1ceb0de6b04cbac8dbc2f49dcba8eb6fd8",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "dock_host_SIM-DOCK_HOST-6944b19b_e3a53d85a5af4737.json",
+      "relpath": "artifacts/cont_viii/factory/dock_host_SIM-DOCK_HOST-6944b19b_e3a53d85a5af4737.json",
+      "bytes": 1673,
+      "sha256": "211d2eb6d55240702fdabe71607342f6c666d0cb9fd5159b7e8e7bb8f294415b",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "dock_host_SIM-DOCK_HOST-bba90753_200c811ae2ba06e3.json",
+      "relpath": "artifacts/cont_viii/factory/dock_host_SIM-DOCK_HOST-bba90753_200c811ae2ba06e3.json",
+      "bytes": 1674,
+      "sha256": "9bbc4ff5ec1526b6735153d8fa6c39b62ea8350532db2d47d951066a770d14db",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "dock_host_SIM-DOCK_HOST-c08a4772_bedd41bdbfa8c6bc.json",
+      "relpath": "artifacts/cont_viii/factory/dock_host_SIM-DOCK_HOST-c08a4772_bedd41bdbfa8c6bc.json",
+      "bytes": 1673,
+      "sha256": "e8921e21f96f0b49d7fce87b20fdab747933837c2b4e0ce1c284211dac545039",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "ds_xl_SIM-DS_XL-175f573c_4cdd6ee033a032d3.json",
+      "relpath": "artifacts/cont_viii/factory/ds_xl_SIM-DS_XL-175f573c_4cdd6ee033a032d3.json",
+      "bytes": 1491,
+      "sha256": "0d594af216eb491d4b7db6d45ac6cd46739d26fbd8d92266fcea277a27db5758",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "ds_xl_SIM-DS_XL-3530d295_dfa67a495d3a6838.json",
+      "relpath": "artifacts/cont_viii/factory/ds_xl_SIM-DS_XL-3530d295_dfa67a495d3a6838.json",
+      "bytes": 1490,
+      "sha256": "1f9ee8ceb13ee5f78fd4d5a1a19acaf018bf874aa9f4ee153279ae61fd0f89f7",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "ds_xl_SIM-DS_XL-3abb375d_b46a08aeb6b0b2c9.json",
+      "relpath": "artifacts/cont_viii/factory/ds_xl_SIM-DS_XL-3abb375d_b46a08aeb6b0b2c9.json",
+      "bytes": 1490,
+      "sha256": "6d61def12a8fd2f9f2b67785b52d9e3b7cb0819b8cbd4c5304afcd92374332be",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "ds_xl_SIM-DS_XL-5a264cda_7dfe74fb8794a1bc.json",
+      "relpath": "artifacts/cont_viii/factory/ds_xl_SIM-DS_XL-5a264cda_7dfe74fb8794a1bc.json",
+      "bytes": 1491,
+      "sha256": "7a4341b61c9153e162c9864456c7574e7c69cb51b6696b809f211fb23256bf7e",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "ds_xl_SIM-DS_XL-89cba8e4_6e28d48f0578d605.json",
+      "relpath": "artifacts/cont_viii/factory/ds_xl_SIM-DS_XL-89cba8e4_6e28d48f0578d605.json",
+      "bytes": 1490,
+      "sha256": "b1ebd3d35e48fd3b65acf49ad8b2ea5a32cdd0b2c0363ead522e160a1e956ccf",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "ds_xl_SIM-DS_XL-ac7260dd_50a9df814d5fa583.json",
+      "relpath": "artifacts/cont_viii/factory/ds_xl_SIM-DS_XL-ac7260dd_50a9df814d5fa583.json",
+      "bytes": 1491,
+      "sha256": "5aefe419de54cc980e7cba63ffb3ccf04d684f1d58d0d67fc88d5a32ea44c3e0",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "factory_station_report.json",
+      "relpath": "artifacts/cont_viii/factory/factory_station_report.json",
+      "bytes": 7719,
+      "sha256": "82b06b64c577234590076d4e5146aabc8d01bbe8a98f1ce3314af62c47e0f25e",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "handheld_SIM-HANDHELD-092e3b4f_8f315076a0e199c4.json",
+      "relpath": "artifacts/cont_viii/factory/handheld_SIM-HANDHELD-092e3b4f_8f315076a0e199c4.json",
+      "bytes": 1497,
+      "sha256": "37953047c55782c3f5871b1d34e61badadb31f7161c49872e11a70868f64a2a5",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "handheld_SIM-HANDHELD-483fb293_08902423123b3b27.json",
+      "relpath": "artifacts/cont_viii/factory/handheld_SIM-HANDHELD-483fb293_08902423123b3b27.json",
+      "bytes": 1497,
+      "sha256": "e7b4f513059ff41ed57aa2f779575e1ee6f9795903bf638c298f8e0a42dfa6f5",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "handheld_SIM-HANDHELD-5810ea14_cabb22541477948a.json",
+      "relpath": "artifacts/cont_viii/factory/handheld_SIM-HANDHELD-5810ea14_cabb22541477948a.json",
+      "bytes": 1497,
+      "sha256": "39e64da6f1d3ac7fc8aa468468b3faca72d6983671a7616feda5cb3e23db7882",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "handheld_SIM-HANDHELD-5d07a0b3_734c87e84f9385f1.json",
+      "relpath": "artifacts/cont_viii/factory/handheld_SIM-HANDHELD-5d07a0b3_734c87e84f9385f1.json",
+      "bytes": 1497,
+      "sha256": "e4890eaaa4c218e0e83e4eaec47587b3ee2482e11d661cdc3f095b209dc8719d",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "handheld_SIM-HANDHELD-a97a10ee_8a3af60a95e53f02.json",
+      "relpath": "artifacts/cont_viii/factory/handheld_SIM-HANDHELD-a97a10ee_8a3af60a95e53f02.json",
+      "bytes": 1497,
+      "sha256": "c30e873081052c6d4f89987afd2d944e575cd5ef59b8a07625ebc70445fa17b8",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "handheld_SIM-HANDHELD-c34160ef_0effae7b2b25b977.json",
+      "relpath": "artifacts/cont_viii/factory/handheld_SIM-HANDHELD-c34160ef_0effae7b2b25b977.json",
+      "bytes": 1497,
+      "sha256": "8c3943802d96f483f81c65185245fe1bfc8ee88c98f718262617776555f5c8d7",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "student_SIM-STUDENT-1d76ac40_9c8c0b2e59457615.json",
+      "relpath": "artifacts/cont_viii/factory/student_SIM-STUDENT-1d76ac40_9c8c0b2e59457615.json",
+      "bytes": 1333,
+      "sha256": "44ba59126d93735faeb9b87a5d93a956a6ccf0266adecffdbb3614e3569148fc",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "student_SIM-STUDENT-791de346_81536590b95f166b.json",
+      "relpath": "artifacts/cont_viii/factory/student_SIM-STUDENT-791de346_81536590b95f166b.json",
+      "bytes": 1333,
+      "sha256": "50b914eb6036bf52c22d00e15adee451ab8d21b16b648c5f710b4807e9283bf4",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "student_SIM-STUDENT-84b4b577_1c96a360746467cd.json",
+      "relpath": "artifacts/cont_viii/factory/student_SIM-STUDENT-84b4b577_1c96a360746467cd.json",
+      "bytes": 1333,
+      "sha256": "d550fc29a7f96fc581c6f9c201f4fdfd736f999d3b3fd55005929476a44c4bb4",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "student_SIM-STUDENT-d758889f_0a932b762868150a.json",
+      "relpath": "artifacts/cont_viii/factory/student_SIM-STUDENT-d758889f_0a932b762868150a.json",
+      "bytes": 1333,
+      "sha256": "70c0ff029364d6fbf4593edaf85a4fb74f2b7ebb9d79575453bf63adcb95bae5",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "student_SIM-STUDENT-db0461ab_b446caecff5144de.json",
+      "relpath": "artifacts/cont_viii/factory/student_SIM-STUDENT-db0461ab_b446caecff5144de.json",
+      "bytes": 1334,
+      "sha256": "d27801fdd4c4443d1290cccdd0dccad8268fb95a4f9f4788c5e51c89bc8b60aa",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "student_SIM-STUDENT-e1e62e4e_721032130d467a1a.json",
+      "relpath": "artifacts/cont_viii/factory/student_SIM-STUDENT-e1e62e4e_721032130d467a1a.json",
+      "bytes": 1333,
+      "sha256": "bd7c94ca8191cb61156f44eaa6add100711f68eb7f263652a399771f2502242e",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "REPRODUCIBILITY_MANIFEST.yaml",
+      "relpath": "artifacts/cont_viii/package/REPRODUCIBILITY_MANIFEST.yaml",
+      "bytes": 696,
+      "sha256": "9305e611ccbb533ae48b0d1f5d21d055fb4c2f2d26e2424fdc657b7925117107",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "release_readiness_scorecard.json",
+      "relpath": "artifacts/cont_viii/release_readiness_scorecard.json",
+      "bytes": 5349,
+      "sha256": "ed306778999832bc01cbfad62a43dafcffed682fd79f215ebde92f9e7eab56f8",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "gunnchos_device_os.cyclonedx.json",
+      "relpath": "artifacts/sbom/gunnchos_device_os.cyclonedx.json",
+      "bytes": 75,
+      "sha256": "1075067bc166ef0c165ee4c1b77c064f817522dd3c600bc690a49a9411f30410",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "gunnchos_device_os.spdx.json",
+      "relpath": "artifacts/sbom/gunnchos_device_os.spdx.json",
+      "bytes": 58,
+      "sha256": "24319d701f5132b5debe5d4acd2a8d6bcb08a5e21e22dbd0badadc643ff5d40f",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "sbom_report.md",
+      "relpath": "artifacts/sbom/sbom_report.md",
+      "bytes": 81,
+      "sha256": "7056c859febba590e4ad75a3d230a15247878dd7ee5aab45fca83501925dd758",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    },
+    {
+      "filename": "validation_center-src-438aaf2b54d3.tgz",
+      "relpath": "artifacts/validation_center/validation_center-src-438aaf2b54d3.tgz",
+      "bytes": 42663,
+      "sha256": "d6376e265a76bb660d9b78923cad3d14a60c14273a092e6725a8b98e24ef0024",
+      "source_sha": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+      "target_os": "mixed",
+      "architecture": "arm64/aarch64",
+      "signing_notarization": "unsigned",
+      "build_timestamp": "2026-09-18T15:25:47.029161Z"
+    }
+  ],
+  "V1_0_RC1_ARTIFACT_BUILD_PASS": true,
+  "caveat": "PASS covers supported digital package + VC + SBOM + preexisting image checksums; bootable-reference rebuild failed on this host and is not claimed."
+}

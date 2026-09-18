@@ -1,0 +1,133 @@
+{
+  "HUMAN_REFINEMENT_LOOP_READY": true,
+  "completeness": [
+    {
+      "errors": [
+        "consent_not_accepted",
+        "task_incomplete:vc_software_smoke_walkthrough:in_progress",
+        "evidence_refs_missing:vc_software_smoke_walkthrough"
+      ],
+      "evidence_eligibility": null,
+      "note": "Incomplete evidence is refused. Human/physical gate PASS is never auto-asserted.",
+      "ok": false,
+      "refused": true,
+      "session_id": "stream-a-fixture-incomplete",
+      "warnings": [
+        "template_or_fixture_not_final_evidence"
+      ]
+    },
+    {
+      "errors": [],
+      "evidence_eligibility": null,
+      "note": "Incomplete evidence is refused. Human/physical gate PASS is never auto-asserted.",
+      "ok": true,
+      "refused": false,
+      "session_id": "stream-a-fixture-friction",
+      "warnings": [
+        "template_or_fixture_not_final_evidence"
+      ]
+    }
+  ],
+  "counts": {
+    "awaiting_authentic_blocker": 0,
+    "defects_total": 2,
+    "digital_fix_ready": 2,
+    "incomplete_sessions_refused": 1
+  },
+  "defects": [
+    {
+      "blocker_class": null,
+      "created_at": "2026-09-18T18:42:35Z",
+      "defect_id": "ui-1",
+      "description": "UI label missing on submit",
+      "evidence_refs": [],
+      "notes": "",
+      "revalidation_required": true,
+      "severity": "P2",
+      "source_session_id": "stream-a-fixture-friction",
+      "status": "digital_fix_ready",
+      "task_id": "vc_software_smoke_walkthrough",
+      "title": "Button unlabeled",
+      "track": "DIGITAL",
+      "updated_at": "2026-09-18T18:42:35Z"
+    },
+    {
+      "blocker_class": null,
+      "created_at": "2026-09-18T18:42:35Z",
+      "defect_id": "def_8ca5315b392c",
+      "description": "completion=completed_with_difficulty; a11y=minor_friction",
+      "evidence_refs": [
+        "e1"
+      ],
+      "notes": "",
+      "revalidation_required": true,
+      "severity": "P2",
+      "source_session_id": "stream-a-fixture-friction",
+      "status": "digital_fix_ready",
+      "task_id": "vc_software_smoke_walkthrough",
+      "title": "Participant friction on vc_software_smoke_walkthrough",
+      "track": "DIGITAL",
+      "updated_at": "2026-09-18T18:42:35Z"
+    }
+  ],
+  "generated_at": "2026-09-18T18:42:35Z",
+  "note": "Refinement loop automation is ready. It refuses incomplete evidence and never auto-promotes human/physical gates.",
+  "promotion_probes": [
+    {
+      "allowed": false,
+      "gate": "unspecified",
+      "note": "Promotion is a separate human process; Validation Center never flips gates automatically.",
+      "reasons": [
+        "eligibility_not_final_gating:PILOT_NON_GATING",
+        "template_or_fixture_not_real_evidence",
+        "consent_missing",
+        "software_only_task",
+        "reviewer_signoff_required",
+        "required_evidence_missing_or_mock_only"
+      ],
+      "task_id": "vc_software_smoke_walkthrough"
+    },
+    {
+      "allowed": false,
+      "gate": "unspecified",
+      "note": "Promotion is a separate human process; Validation Center never flips gates automatically.",
+      "reasons": [
+        "eligibility_not_final_gating:PILOT_NON_GATING",
+        "template_or_fixture_not_real_evidence",
+        "software_only_task",
+        "reviewer_signoff_required"
+      ],
+      "task_id": "vc_software_smoke_walkthrough"
+    }
+  ],
+  "revalidation_plans": [
+    {
+      "blocker_class": null,
+      "commands": [
+        "PYTHONPATH=.:src python3 -m gunnchos_device_os.cx4_validation_center qualify-pilot",
+        "PYTHONPATH=.:src pytest -q tests/cx4_validation_center/"
+      ],
+      "defect_id": "ui-1",
+      "gate_promotion_allowed_by_software": false,
+      "gate_unlocked_if_human_passes": null,
+      "note": "Software may only clear DIGITAL track items. Human/physical gates remain pending until real evidence.",
+      "revalidation_mode": "automated_digital_harness",
+      "task_id": "vc_software_smoke_walkthrough"
+    },
+    {
+      "blocker_class": null,
+      "commands": [
+        "PYTHONPATH=.:src python3 -m gunnchos_device_os.cx4_validation_center qualify-pilot",
+        "PYTHONPATH=.:src pytest -q tests/cx4_validation_center/"
+      ],
+      "defect_id": "def_8ca5315b392c",
+      "gate_promotion_allowed_by_software": false,
+      "gate_unlocked_if_human_passes": null,
+      "note": "Software may only clear DIGITAL track items. Human/physical gates remain pending until real evidence.",
+      "revalidation_mode": "automated_digital_harness",
+      "task_id": "vc_software_smoke_walkthrough"
+    }
+  ],
+  "schema": "HUMAN_REFINEMENT_LOOP/v1",
+  "sessions_processed": 2
+}

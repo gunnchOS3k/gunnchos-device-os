@@ -1,0 +1,54 @@
+{
+  "schema": "V1_0_RC1_MANIFEST/v1",
+  "product_name": "gunnchOS",
+  "semantic_version": "1.0.0-rc.1",
+  "release_channel": "RC",
+  "generated_at_utc": "2026-09-18T15:25:47.029161Z",
+  "pins": {
+    "device_os": "438aaf2b54d3365d681dd6eeeb73f6ac58663acc",
+    "portal": "6467551bbd68732d4681d763c35cc3b5da410879",
+    "waike": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "gunnchai": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+    "anime-aggressors": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+    "pedestrian-pursuit": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+    "archive-of-life-artifact-world": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+    "beatlink-party": "06b4a6f74159ee933984be913e269eab64246efb"
+  },
+  "RuntimeTarget": "linux-aarch64-qemu-cx-lab + validation-center-host",
+  "release_freeze_hash": "c7a62a4566ec3485e14d0c8c58e03475bac824faa0da7783e9de991544f497c5",
+  "final_HumanValidationFreezeManifest_hash": "c7a62a4566ec3485e14d0c8c58e03475bac824faa0da7783e9de991544f497c5",
+  "supported_architecture_platform_matrix": [
+    {
+      "os": "linux",
+      "arch": "aarch64",
+      "runtime": "QEMU CX lab / immutable qcow2 overlays",
+      "status": "supported_accepted"
+    },
+    {
+      "os": "macos",
+      "arch": "arm64",
+      "runtime": "Validation Center host + Cont VIII digital package",
+      "status": "supported_host_tooling"
+    },
+    {
+      "os": "linux",
+      "arch": "x86_64",
+      "runtime": "not rebuilt this campaign",
+      "status": "unsupported_claim_not_made"
+    }
+  ],
+  "known_pending_human_gates": [
+    "J6_CLASS=HUMAN_VALIDATION_PENDING",
+    "real human sessions",
+    "reviewer signoff"
+  ],
+  "physical_claim_boundary": {
+    "PHYSICAL_PRINTER_PENDING": true,
+    "PHYSICAL_CAMERA_MIC_AV_PENDING": true,
+    "EVT_PENDING": true,
+    "DVT_PENDING": true,
+    "PVT_PENDING": true,
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false
+  },
+  "V1_0_RC1_MANIFEST_PASS": true
+}

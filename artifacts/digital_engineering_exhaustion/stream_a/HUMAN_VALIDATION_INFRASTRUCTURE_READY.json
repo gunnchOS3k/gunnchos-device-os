@@ -1,0 +1,23 @@
+{
+  "CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE": false,
+  "HUMAN_VALIDATION_INFRASTRUCTURE_READY": true,
+  "cli": [
+    "python3 -m gunnchos_device_os.cx4_validation_center qualify-pilot",
+    "python3 -m gunnchos_device_os.cx4_validation_center freeze-check",
+    "python3 -m gunnchos_device_os.cx4_validation_center validate-session <session.json>",
+    "python3 -m gunnchos_device_os.cx4_validation_center refinement-loop <sessions...>",
+    "./scripts/start-validation-center"
+  ],
+  "docs": [
+    "docs/complete-experience/cx4_validation_center/QUICK_START_HUMAN_VALIDATION.md",
+    "docs/complete-experience/cx4_validation_center/HUMAN_VALIDATION_DAY_RUNBOOK.md",
+    "docs/complete-experience/cx4_validation_center/PARTICIPANT_GUIDE.md"
+  ],
+  "forms_ui": "apps/validation_center",
+  "generated_at_utc": "2026-09-18T18:42:35Z",
+  "never_auto_promote_human_physical_gates": true,
+  "pilot_tokens_software_complete": true,
+  "refuse_incomplete_evidence": true,
+  "remaining_blocker_class": "HUMAN_VALIDATION_REQUIRED",
+  "schema": "HUMAN_VALIDATION_INFRASTRUCTURE/v1"
+}

@@ -1,0 +1,156 @@
+{
+  "schema": "gunnchos.release_readiness_scorecard.v1",
+  "ok": true,
+  "token": "GUNNCHOS_RELEASE_SCORECARD_DIGITAL_PASS",
+  "lanes": {
+    "productivity_stack": {
+      "ok": true,
+      "token": "GUNNCHOS_PRODUCTIVITY_STACK_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_PRODUCTIVITY_STACK_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.productivity_stack.v1"
+    },
+    "student_e2e": {
+      "ok": true,
+      "token": "GUNNCHOS_STUDENT_E2E_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_STUDENT_E2E_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.student_e2e.v1"
+    },
+    "office_e2e": {
+      "ok": true,
+      "token": "GUNNCHOS_OFFICE_E2E_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_OFFICE_E2E_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.office_e2e.v1"
+    },
+    "office_file_compat": {
+      "ok": true,
+      "token": "GUNNCHOS_OFFICE_FILE_COMPAT_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_OFFICE_FILE_COMPAT_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.office_file_compat.v1"
+    },
+    "adopter_sdk": {
+      "ok": true,
+      "token": "GUNNCHOS_ADOPTER_SDK_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_ADOPTER_SDK_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.adopter_sdk.v1"
+    },
+    "api_abi": {
+      "ok": true,
+      "token": "GUNNCHOS_API_ABI_POLICY_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_API_ABI_POLICY_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.api_abi_policy.v1"
+    },
+    "reproducibility": {
+      "ok": true,
+      "token": "GUNNCHOS_REPRODUCIBILITY_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_REPRODUCIBILITY_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.reproducibility.v1"
+    },
+    "factory_station": {
+      "ok": true,
+      "token": "GUNNCHOS_FACTORY_STATION_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_FACTORY_STATION_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.factory_station.v1"
+    },
+    "device_management": {
+      "ok": true,
+      "token": "GUNNCHOS_DEVICE_MGMT_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_DEVICE_MGMT_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.device_management_plane.v1"
+    },
+    "baselines": {
+      "ok": true,
+      "token": "GUNNCHOS_SEC_A11Y_OFFLINE_NET_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_SEC_A11Y_OFFLINE_NET_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.sec_a11y_offline_net_baselines.v1"
+    },
+    "media": {
+      "ok": true,
+      "token": "GUNNCHOS_MEDIA_BASELINE_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_MEDIA_BASELINE_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.media_baseline.v1"
+    },
+    "dock_daily": {
+      "ok": true,
+      "token": "GUNNCHOS_DOCK_DAILY_WORKFLOW_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_DOCK_DAILY_WORKFLOW_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.dock_daily_workflow.v1"
+    },
+    "performance_models": {
+      "ok": true,
+      "token": "GUNNCHOS_PERF_MODELS_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_PERF_MODELS_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.performance_models.v1"
+    },
+    "audience_docs": {
+      "ok": true,
+      "token": "GUNNCHOS_AUDIENCE_DOCS_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_AUDIENCE_DOCS_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.audience_docs.v1"
+    },
+    "recreation_reprove": {
+      "ok": true,
+      "token": "GUNNCHOS_RECREATION_REPROVE_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_RECREATION_REPROVE_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.recreation_reprove.v1"
+    }
+  },
+  "earned_tokens": [
+    "GUNNCHOS_ADOPTER_SDK_DIGITAL_PASS",
+    "GUNNCHOS_API_ABI_POLICY_DIGITAL_PASS",
+    "GUNNCHOS_AUDIENCE_DOCS_DIGITAL_PASS",
+    "GUNNCHOS_DEVICE_MGMT_DIGITAL_PASS",
+    "GUNNCHOS_DOCK_DAILY_WORKFLOW_DIGITAL_PASS",
+    "GUNNCHOS_FACTORY_STATION_DIGITAL_PASS",
+    "GUNNCHOS_MEDIA_BASELINE_DIGITAL_PASS",
+    "GUNNCHOS_OFFICE_E2E_DIGITAL_PASS",
+    "GUNNCHOS_OFFICE_FILE_COMPAT_DIGITAL_PASS",
+    "GUNNCHOS_PERF_MODELS_DIGITAL_PASS",
+    "GUNNCHOS_PRODUCTIVITY_STACK_DIGITAL_PASS",
+    "GUNNCHOS_RECREATION_REPROVE_DIGITAL_PASS",
+    "GUNNCHOS_REPRODUCIBILITY_DIGITAL_PASS",
+    "GUNNCHOS_SEC_A11Y_OFFLINE_NET_DIGITAL_PASS",
+    "GUNNCHOS_STUDENT_E2E_DIGITAL_PASS"
+  ],
+  "missing_lanes": [],
+  "firewall": {
+    "ok": true,
+    "violations": []
+  },
+  "blockers": {
+    "DIGITAL": [],
+    "PHYSICAL": [
+      "PHYSICAL_EXECUTION_FREEZE",
+      "physical_boot_on_EVT_hardware",
+      "physical_printer_CUPS",
+      "physical_BT_audio_lab",
+      "physical_dock_display_lab",
+      "battery_lab_measurements"
+    ],
+    "EXTERNAL": [
+      "MS_Office_perfect_fidelity_not_claimed",
+      "carrier_certification",
+      "store_submission_HSM_signing",
+      "production_cloud_credentials"
+    ]
+  },
+  "generated_at": 1789744951.9773839,
+  "mock": false,
+  "claim_boundary": "Continuation VIII digital release-readiness only. No physical EVT/DVT/PVT, no production HSM keys, no MS Office fidelity claims, no carrier certification, no store submission.",
+  "physical_execution_freeze": true,
+  "merge_forbidden": true
+}

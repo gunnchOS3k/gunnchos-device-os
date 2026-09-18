@@ -113,7 +113,13 @@ def final_gating_missing_conditions(
         missing.append("tested_build_commit_frozen")
     if not freeze.get("application_provenance"):
         missing.append("exact_application_provenance_recorded")
-    if not freeze.get("target_release_or_rc"):
+    # Accept either legacy key or HumanValidationFreezeManifest field.
+    target = (
+        freeze.get("target_release_or_rc")
+        or freeze.get("target_release_or_main_commit")
+        or ""
+    )
+    if not str(target).strip():
         missing.append("final_target_branch_or_rc_known")
     if freeze.get("material_drift_detected"):
         missing.append("no_material_code_change_after_freeze")
