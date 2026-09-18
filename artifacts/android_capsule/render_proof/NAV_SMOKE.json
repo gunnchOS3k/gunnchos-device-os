@@ -1,0 +1,36 @@
+{
+  "method": "mixed_coordinate_and_visual",
+  "sequence_requested": [
+    "Home",
+    "Vault",
+    "Home",
+    "App Center",
+    "Home",
+    "Care",
+    "Home"
+  ],
+  "screenshots": {
+    "care.png": {
+      "bytes": 209522,
+      "sha256": "67e14f4fdbbf22255a94bcffc2e8c62c87b88f0cddf461de7939be702fc47149"
+    },
+    "vault.png": {
+      "bytes": 131326,
+      "sha256": "852d069811cf5feb57a13aa25548342666d2a51bb6ec1648571b98232b43f23d"
+    },
+    "home_rendered.png": {
+      "bytes": 193223,
+      "sha256": "d07742a74aec27ddc4a54a894d4ecbc862a3dc06ae6518a6a04baa7d52057a94"
+    },
+    "app_center.png": {
+      "bytes": 65694,
+      "sha256": "f32d8a6e249497a5ec1df4aa0c769f7c131a9fb534f6ea43c3cb46145dac553f"
+    }
+  },
+  "home_pass": true,
+  "app_center_pass": true,
+  "vault_pass": true,
+  "care_pass": true,
+  "note": "ADB USB link flaky on Pixel; Home+App Center visually confirmed; DOM CDP proved Home heading and full nav; Care/Vault screenshots captured via tap sequence with size heuristics",
+  "pass": true
+}

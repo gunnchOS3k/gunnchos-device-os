@@ -400,3 +400,15 @@ wave009:
 # CX4.2 one-click Validation Center (loopback default; pass LAN=1 for --lan)
 validation-center:
 	./scripts/start-validation-center $(if $(LAN),--lan,) $(if $(PORT),--port $(PORT),)
+
+# --- gunnchOS Capsule-1 (stock Android experience host) ---
+.PHONY: android-capsule android-capsule-install android-capsule-test
+
+android-capsule:
+	bash tools/android_capsule/build_capsule.sh
+
+android-capsule-install:
+	bash tools/android_capsule/install_capsule.sh
+
+android-capsule-test:
+	bash tools/android_capsule/test_capsule.sh

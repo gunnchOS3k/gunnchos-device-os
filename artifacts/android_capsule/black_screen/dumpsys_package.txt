@@ -1,0 +1,173 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        729684b com.gunnchos.capsule.debug/com.gunnchos.capsule.CapsuleActivity filter f6a7228
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        20afb41 com.gunnchos.capsule.debug/androidx.profileinstaller.ProfileInstallReceiver filter 80888d4
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        20afb41 com.gunnchos.capsule.debug/androidx.profileinstaller.ProfileInstallReceiver filter c80f8e6
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        20afb41 com.gunnchos.capsule.debug/androidx.profileinstaller.ProfileInstallReceiver filter 6a43e27
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        20afb41 com.gunnchos.capsule.debug/androidx.profileinstaller.ProfileInstallReceiver filter d4b0a7d
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.gunnchos.capsule.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (3ffa151):
+    sourcePackage=com.gunnchos.capsule.debug
+    uid=10030 gids=[] type=0 prot=signature
+    perm=PermissionInfo{ca48db6 com.gunnchos.capsule.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    flags=0x0
+
+Registered ContentProviders:
+  com.gunnchos.capsule.debug/androidx.core.content.FileProvider:
+    Provider{601fab7 com.gunnchos.capsule.debug/androidx.core.content.FileProvider}
+  com.gunnchos.capsule.debug/androidx.startup.InitializationProvider:
+    Provider{9c5b224 com.gunnchos.capsule.debug/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.gunnchos.capsule.debug.androidx-startup]:
+    Provider{9c5b224 com.gunnchos.capsule.debug/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{14c018d com.gunnchos.capsule.debug}
+  [com.gunnchos.capsule.debug.files]:
+    Provider{601fab7 com.gunnchos.capsule.debug/androidx.core.content.FileProvider}
+      applicationInfo=ApplicationInfo{5e3cf42 com.gunnchos.capsule.debug}
+
+Key Set Manager:
+  [com.gunnchos.capsule.debug]
+      Signing KeySets: 93
+
+Packages:
+  Package [com.gunnchos.capsule.debug] (65f9e2d):
+    appId=10030
+    pccId=-1
+    pkg=Package{a318b53 com.gunnchos.capsule.debug}
+    codePath=/data/app/~~NkD2pAtVNUS6N4uqp_veaQ==/com.gunnchos.capsule.debug-NJ6CDjx3RhSBI2v7ntDpWQ==
+    resourcePath=/data/app/~~NkD2pAtVNUS6N4uqp_veaQ==/com.gunnchos.capsule.debug-NJ6CDjx3RhSBI2v7ntDpWQ==
+    legacyNativeLibraryDir=/data/app/~~NkD2pAtVNUS6N4uqp_veaQ==/com.gunnchos.capsule.debug-NJ6CDjx3RhSBI2v7ntDpWQ==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=1 minSdk=31 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.0.0-capsule-pilot-debug
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-09-18 18:03:38
+    lastUpdateTime=2026-09-18 18:03:43
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=com.android.shell
+    originatingPackageName=null
+    packageSource=1
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{4bdcc90 version:2, signatures:[4c1db0e8], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+      com.gunnchos.capsule.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature
+    requested permissions:
+      com.gunnchos.capsule.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+      android.permission.POST_NOTIFICATIONS
+      android.permission.ACCESS_LOCAL_NETWORK
+      android.permission.FOREGROUND_SERVICE
+      android.permission.BLUETOOTH_CONNECT
+      android.permission.INTERNET
+      android.permission.FOREGROUND_SERVICE_DATA_SYNC
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.CAMERA
+      android.permission.VIBRATE
+      android.permission.RECORD_AUDIO
+    install permissions:
+      com.gunnchos.capsule.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.FOREGROUND_SERVICE: granted=true
+      android.permission.INTERNET: granted=true
+      android.permission.FOREGROUND_SERVICE_DATA_SYNC: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.VIBRATE: granted=true
+    User 0: ceDataInode=207174 deDataInode=177831 pccCeDataInode=0 pccDeDataInode=0 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.gunnchos.capsule.debug
+      firstInstallTime=2026-09-18 18:03:43
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+        /data/resource-cache/com.android.systemui-neutral-bRyd.frro
+        /data/resource-cache/com.android.systemui-accent-fBC5.frro
+        /data/resource-cache/com.android.systemui-dynamic-cbh1.frro
+      legacy overlay paths:
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.ACCESS_LOCAL_NETWORK: granted=true, flags=[ REVOKE_WHEN_REQUESTED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.BLUETOOTH_CONNECT: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      com.gunnchos.capsule.debug
+    com.google.android.as.oss:
+      com.gunnchos.capsule.debug
+    com.google.android.as:
+      com.gunnchos.capsule.debug
+    com.xfinitymobile.myaccount:
+      com.gunnchos.capsule.debug
+    com.google.android.apps.diagnosticstool:
+      com.gunnchos.capsule.debug
+    com.google.android.apps.accessibility.voiceaccess:
+      com.gunnchos.capsule.debug
+    com.google.android.apps.camera.services:
+      com.gunnchos.capsule.debug
+    com.verizon.mips.services:
+      com.gunnchos.capsule.debug
+    com.snapchat.android:
+      com.gunnchos.capsule.debug
+    com.instagram.android:
+      com.gunnchos.capsule.debug
+  queryable via interaction:
+    User 0:
+      [com.google.pixel.camera.services,com.android.inputdevices,android,com.google.android.iwlan,com.android.keychain,com.google.SSRestartDetector,com.android.providers.settings,com.android.server.telecom,com.android.dynsystem,com.android.settings,com.android.location.fused,com.android.DeviceAsWebcam,com.google.android.repairmode,com.android.localtransport]:
+        com.gunnchos.capsule.debug
+      com.gunnchos.capsule.debug:
+        com.google.android.webview
+      [com.google.android.gms,com.google.android.gsf]:
+        com.gunnchos.capsule.debug
+      com.google.android.webview:
+        com.gunnchos.capsule.debug
+      com.google.android.inputmethod.latin:
+        com.gunnchos.capsule.debug
+  queryable via uses-library:
+
+Dexopt state:
+  [com.gunnchos.capsule.debug]
+    path: /data/app/~~NkD2pAtVNUS6N4uqp_veaQ==/com.gunnchos.capsule.debug-NJ6CDjx3RhSBI2v7ntDpWQ==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown] [primary-abi]
+        [location is error]
