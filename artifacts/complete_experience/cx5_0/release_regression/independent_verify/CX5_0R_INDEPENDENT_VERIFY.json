@@ -1,0 +1,88 @@
+{
+  "schema": "CX5_0R_INDEPENDENT_VERIFY/v1",
+  "generated_at_utc": "2026-09-18T03:05:58Z",
+  "exact_integration_head": "3d74d4bd4cc933e9a8636b4eb7d74273f1d7dba4",
+  "authoritative": {
+    "checks": {
+      "lifecycle_pass": true,
+      "lifecycle_mandatory_apps_present": true,
+      "lifecycle_all_apps_ok": true,
+      "lifecycle_head_matches": true,
+      "eco010_soak_body": true,
+      "eco010_pass_token": true,
+      "eco010_head_matches": true,
+      "LIVE": true,
+      "DSXL": true,
+      "RING": true,
+      "FOUR_GAME": true,
+      "WAIKE": true,
+      "GUNNCHAI": true
+    },
+    "missing": [],
+    "PASS": true
+  },
+  "adversarial": {
+    "cases": [
+      {
+        "case": "forged_pass_token_short_duration",
+        "must_fail": true,
+        "failed": true,
+        "missing": [
+          "eco010_pass_token"
+        ]
+      },
+      {
+        "case": "lifecycle_row_removed",
+        "must_fail": true,
+        "failed": true,
+        "missing": [
+          "lifecycle_mandatory_apps_present",
+          "lifecycle_all_apps_ok"
+        ]
+      },
+      {
+        "case": "shortened_soak",
+        "must_fail": true,
+        "failed": true,
+        "missing": [
+          "eco010_soak_body",
+          "eco010_pass_token"
+        ]
+      },
+      {
+        "case": "stale_sha",
+        "must_fail": true,
+        "failed": true,
+        "missing": [
+          "lifecycle_head_matches:0000000000000000000000000000000000000000!=3d74d4bd4cc933e9a8636b4eb7d74273f1d7dba4"
+        ]
+      },
+      {
+        "case": "modified_shortened_flag",
+        "must_fail": true,
+        "failed": true,
+        "missing": [
+          "eco010_soak_body",
+          "eco010_pass_token"
+        ]
+      },
+      {
+        "case": "draft_accepted_identity_substitution",
+        "must_fail": true,
+        "failed": true,
+        "missing": [
+          "eco010_soak_body",
+          "eco010_pass_token"
+        ]
+      }
+    ],
+    "all_fail_closed": true
+  },
+  "hashes": {
+    "lifecycle": "c963c51aa8e63be664340d0d79f40b3f56b46a3b4f1a7cb91d1f58c1b7cb5153",
+    "eco010": "e1b22c9e3c16f36a4cbaa12eea8ae39d350fd35d9c306f9d02fee2d32b47280b",
+    "eco010_pass": "00974319be2f79487acde55a6536c9888bf3bf301af24dc3b52d78884fd3c40d"
+  },
+  "DEVICE_LAB_CURRENT_PIN_INDEPENDENT_DIGITAL_VERIFY_PASS": true,
+  "prefer_fail_over_false_pass": true
+}

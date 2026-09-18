@@ -91,7 +91,19 @@ def verify_bundle(life: dict, eco: dict, eco_pass: dict, gates: dict[str, dict],
     checks["eco010_soak_body"] = eco_ok
     if not eco_ok:
         missing.append("eco010_soak_body")
-    checks["eco010_pass_token"] = eco_pass.get("ECO010_SOAK_PASS") is True
+    # Pass token must itself be internally consistent — never trust ECO010_SOAK_PASS alone.
+    eco_pass_integrity = (
+        eco_pass.get("ECO010_SOAK_PASS") is True
+        and eco_pass.get("forged") is not True
+        and float(eco_pass.get("duration_sec_ran") or 0) >= 1800
+        and int(eco_pass.get("duration_sec_requested") or 0) >= 1800
+        and eco_pass.get("simultaneous_soak_complete") is True
+        and eco_pass.get("repo_soak_ok") is True
+        and eco_pass.get("duration_shortened_to_pass") is not True
+        and eco_pass.get("dry_check") is not True
+        and eco_ok  # body must also pass
+    )
+    checks["eco010_pass_token"] = eco_pass_integrity
     if not checks["eco010_pass_token"]:
         missing.append("eco010_pass_token")
     checks["eco010_head_matches"] = (eco_pass.get("exact_integration_head") or eco.get("exact_integration_head")) == expected_head

@@ -1,103 +1,57 @@
 {
   "cases": [
     {
-      "case": "modified_pin_sha",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
+      "case": "forged_pass_token_short_duration",
+      "must_fail": true,
+      "failed": true,
       "missing": [
-        "gunnchai_sha_is_accepted_main"
-      ]
-    },
-    {
-      "case": "modified_artifact_hash_forged_token",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "GUNNCHAI",
-        "gunnchai_requirements_all_true"
-      ]
-    },
-    {
-      "case": "stale_waike_sha",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "waike_sha_is_17_merge"
-      ]
-    },
-    {
-      "case": "stale_gunnchai_sha",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "gunnchai_sha_is_accepted_main"
-      ]
-    },
-    {
-      "case": "deleted_evidence",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "LIFECYCLE",
-        "lifecycle_mandatory_apps_present",
-        "lifecycle_app_identity_exact"
-      ]
-    },
-    {
-      "case": "forged_pass_token",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "ECO010",
-        "eco010_duration_ge_1800"
+        "eco010_pass_token"
       ]
     },
     {
       "case": "lifecycle_row_removed",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
+      "must_fail": true,
+      "failed": true,
       "missing": [
-        "LIFECYCLE",
-        "lifecycle_mandatory_apps_present"
-      ]
-    },
-    {
-      "case": "shortened_fake_soak",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "ECO010",
-        "eco010_duration_ge_1800"
-      ]
-    },
-    {
-      "case": "wrong_app_identity",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
-      "missing": [
-        "LIFECYCLE",
         "lifecycle_mandatory_apps_present",
-        "lifecycle_app_identity_exact"
+        "lifecycle_all_apps_ok"
       ]
     },
     {
-      "case": "draft_pr_head_as_accepted_main",
-      "verifier_pass": false,
-      "expected_fail": true,
-      "ok": true,
+      "case": "shortened_soak",
+      "must_fail": true,
+      "failed": true,
       "missing": [
-        "gunnchai_sha_is_accepted_main"
+        "eco010_soak_body",
+        "eco010_pass_token"
+      ]
+    },
+    {
+      "case": "stale_sha",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "lifecycle_head_matches:0000000000000000000000000000000000000000!=3d74d4bd4cc933e9a8636b4eb7d74273f1d7dba4"
+      ]
+    },
+    {
+      "case": "modified_shortened_flag",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "eco010_soak_body",
+        "eco010_pass_token"
+      ]
+    },
+    {
+      "case": "draft_accepted_identity_substitution",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "eco010_soak_body",
+        "eco010_pass_token"
       ]
     }
   ],
-  "PASS": true
+  "all_fail_closed": true
 }
