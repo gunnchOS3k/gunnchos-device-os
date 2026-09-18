@@ -1,7 +1,7 @@
 {
   "schema": "CX5_0R_INDEPENDENT_VERIFY/v1",
-  "generated_at_utc": "2026-09-18T03:08:29Z",
-  "exact_integration_head": "6e708e9217d95cba1d6a45befff2f96cffad0cb5",
+  "generated_at_utc": "2026-09-18T03:09:13Z",
+  "exact_integration_head": "22edff8eabc927ef1b97e6f3799fed1a61d6678a",
   "authoritative": {
     "checks": {
       "lifecycle_pass": true,
@@ -10,7 +10,7 @@
       "lifecycle_head_matches": true,
       "eco010_soak_body": true,
       "eco010_pass_token": true,
-      "eco010_head_matches": false,
+      "eco010_head_matches": true,
       "LIVE": true,
       "DSXL": true,
       "RING": true,
@@ -18,10 +18,8 @@
       "WAIKE": true,
       "GUNNCHAI": true
     },
-    "missing": [
-      "eco010_head_matches"
-    ],
-    "PASS": false
+    "missing": [],
+    "PASS": true
   },
   "adversarial": {
     "cases": [
@@ -30,8 +28,7 @@
         "must_fail": true,
         "failed": true,
         "missing": [
-          "eco010_pass_token",
-          "eco010_head_matches"
+          "eco010_pass_token"
         ]
       },
       {
@@ -40,8 +37,7 @@
         "failed": true,
         "missing": [
           "lifecycle_mandatory_apps_present",
-          "lifecycle_all_apps_ok",
-          "eco010_head_matches"
+          "lifecycle_all_apps_ok"
         ]
       },
       {
@@ -50,8 +46,7 @@
         "failed": true,
         "missing": [
           "eco010_soak_body",
-          "eco010_pass_token",
-          "eco010_head_matches"
+          "eco010_pass_token"
         ]
       },
       {
@@ -59,8 +54,7 @@
         "must_fail": true,
         "failed": true,
         "missing": [
-          "lifecycle_head_matches:0000000000000000000000000000000000000000!=6e708e9217d95cba1d6a45befff2f96cffad0cb5",
-          "eco010_head_matches"
+          "lifecycle_head_matches:0000000000000000000000000000000000000000!=22edff8eabc927ef1b97e6f3799fed1a61d6678a"
         ]
       },
       {
@@ -69,8 +63,7 @@
         "failed": true,
         "missing": [
           "eco010_soak_body",
-          "eco010_pass_token",
-          "eco010_head_matches"
+          "eco010_pass_token"
         ]
       },
       {
@@ -86,10 +79,10 @@
     "all_fail_closed": true
   },
   "hashes": {
-    "lifecycle": "7b6d5ddf5d91d144c997a01d7f8d58fe92087986800dad4606f8ed11469f63cc",
-    "eco010": "e1b22c9e3c16f36a4cbaa12eea8ae39d350fd35d9c306f9d02fee2d32b47280b",
-    "eco010_pass": "00974319be2f79487acde55a6536c9888bf3bf301af24dc3b52d78884fd3c40d"
+    "lifecycle": "23df5892e1cc37e43a88a35f28c9c0e56eaeb104569fa56165726a8ce6296721",
+    "eco010": "1356653eb77a624a9927658baff8653673ba88662d76d8b27f68a914f8e75924",
+    "eco010_pass": "c7c0d8cb7734632b5acf50a2134ef67e40b756b0a02be14419189bee1024b7aa"
   },
-  "DEVICE_LAB_CURRENT_PIN_INDEPENDENT_DIGITAL_VERIFY_PASS": false,
+  "DEVICE_LAB_CURRENT_PIN_INDEPENDENT_DIGITAL_VERIFY_PASS": true,
   "prefer_fail_over_false_pass": true
 }
