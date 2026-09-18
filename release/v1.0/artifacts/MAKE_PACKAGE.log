@@ -1,0 +1,62 @@
+PYTHONPATH=src:. python3 -c "from gunnchos_device_os.cont_viii.factory_station import run_factory_station; run_factory_station()"
+PYTHONPATH=src:. python3 -c "from gunnchos_device_os.cont_viii.release_readiness import evaluate_release_readiness; import json; print(json.dumps(evaluate_release_readiness(write=True), indent=2)[:2000])"
+{
+  "schema": "gunnchos.release_readiness_scorecard.v1",
+  "ok": true,
+  "token": "GUNNCHOS_RELEASE_SCORECARD_DIGITAL_PASS",
+  "lanes": {
+    "productivity_stack": {
+      "ok": true,
+      "token": "GUNNCHOS_PRODUCTIVITY_STACK_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_PRODUCTIVITY_STACK_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.productivity_stack.v1"
+    },
+    "student_e2e": {
+      "ok": true,
+      "token": "GUNNCHOS_STUDENT_E2E_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_STUDENT_E2E_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.student_e2e.v1"
+    },
+    "office_e2e": {
+      "ok": true,
+      "token": "GUNNCHOS_OFFICE_E2E_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_OFFICE_E2E_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.office_e2e.v1"
+    },
+    "office_file_compat": {
+      "ok": true,
+      "token": "GUNNCHOS_OFFICE_FILE_COMPAT_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_OFFICE_FILE_COMPAT_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.office_file_compat.v1"
+    },
+    "adopter_sdk": {
+      "ok": true,
+      "token": "GUNNCHOS_ADOPTER_SDK_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_ADOPTER_SDK_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.adopter_sdk.v1"
+    },
+    "api_abi": {
+      "ok": true,
+      "token": "GUNNCHOS_API_ABI_POLICY_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_API_ABI_POLICY_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.api_abi_policy.v1"
+    },
+    "reproducibility": {
+      "ok": true,
+      "token": "GUNNCHOS_REPRODUCIBILITY_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_REPRODUCIBILITY_DIGITAL_PASS",
+      "earned": true,
+      "report_schema": "gunnchos.reproducibility.v1"
+    },
+    "factory_station": {
+      "ok": true,
+      "token": "GUNNCHOS_FACTORY_STATION_DIGITAL_PASS",
+      "expected_token": "GUNNCHOS_FACTORY_STATION_DIGITAL_PASS",
+      "earned":
+package artifacts under results/cont_viii/

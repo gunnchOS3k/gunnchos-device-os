@@ -1,0 +1,14 @@
+PYTHONPATH=src:. python3 -c "from gunnchos_device_os.cont_viii.factory_station import run_factory_station; run_factory_station()"
+PYTHONPATH=src:. python3 -c "from gunnchos_device_os.cont_viii.release_readiness import evaluate_release_readiness; import json; print(json.dumps(evaluate_release_readiness(write=True), indent=2)[:2000])"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from gunnchos_device_os.cont_viii.release_readiness import evaluate_release_readiness; import json; print(json.dumps(evaluate_release_readiness(write=True), indent=2)[:2000])
+                                                                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/gunnchos_device_os/cont_viii/release_readiness.py", line 126, in evaluate_release_readiness
+    lanes = _collect()
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/gunnchos_device_os/cont_viii/release_readiness.py", line 39, in _collect
+    from gunnchos_device_os.cont_viii.reproducibility import evaluate_reproducibility
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/v1-0-rc1-build/gunnchos_device_os/cont_viii/reproducibility.py", line 8, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'
+make: *** [package] Error 1

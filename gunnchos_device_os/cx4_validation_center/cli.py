@@ -35,6 +35,17 @@ def main(argv: list[str] | None = None) -> int:
 
     p_freeze = sub.add_parser("freeze-check", help="Emit HumanValidationFreezeManifest / eligibility")
     p_freeze.add_argument("--portal-commit", default="")
+    p_freeze.add_argument(
+        "--freeze-build",
+        action="store_true",
+        help="Record build as frozen when HEAD is on accepted main and the worktree is clean",
+    )
+    p_freeze.add_argument("--target-commit", default="", help="Explicit RC/main target SHA")
+    p_freeze.add_argument(
+        "--hardware-prerequisites-real",
+        action="store_true",
+        help="Owner attestation that real hardware prerequisites exist (never invent)",
+    )
 
     p_cmp = sub.add_parser("compare-freeze", help="Compare submission freeze vs current build")
     p_cmp.add_argument("submission", type=Path)
@@ -42,6 +53,13 @@ def main(argv: list[str] | None = None) -> int:
 
     p_reh = sub.add_parser("rehearsal", help="Run REHEARSAL_NON_GATING automated flow")
     p_reh.add_argument("--reset", action="store_true")
+
+    p_val = sub.add_parser("validate-session", help="Refuse incomplete human-validation evidence")
+    p_val.add_argument("session", type=Path)
+
+    p_loop = sub.add_parser("refinement-loop", help="Defect intake/triage/revalidation automation")
+    p_loop.add_argument("sessions", nargs="+", type=Path, help="Session JSON paths")
+    p_loop.add_argument("--out", type=Path, default=None)
 
     args = parser.parse_args(argv)
     repo = repo_root_from_here()
@@ -92,7 +110,13 @@ def main(argv: list[str] | None = None) -> int:
             httpd.serve_forever()
         return 0
     if args.cmd == "freeze-check":
-        report = freeze_check(repo, portal_control_commit=args.portal_commit)
+        report = freeze_check(
+            repo,
+            portal_control_commit=args.portal_commit,
+            freeze_build=bool(args.freeze_build),
+            target_release_or_main_commit=args.target_commit,
+            hardware_prerequisites_real=bool(args.hardware_prerequisites_real),
+        )
         print(json.dumps(report, indent=2, sort_keys=True))
         return 0 if report.get("CX4_HUMAN_VALIDATION_FREEZE_CHECK_PASS") else 2
     if args.cmd == "compare-freeze":
@@ -116,6 +140,23 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         print(json.dumps(report, indent=2, sort_keys=True))
         return 0 if report.get("CX4_VALIDATION_REHEARSAL_FLOW_PASS") else 2
+    if args.cmd == "validate-session":
+        from gunnchos_device_os.cx4_validation_center.evidence_validator import (
+            validate_submission_bundle,
+        )
+
+        session = json.loads(Path(args.session).read_text(encoding="utf-8"))
+        report = validate_submission_bundle(session)
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return 0 if report.get("ok") else 2
+    if args.cmd == "refinement-loop":
+        from gunnchos_device_os.cx4_validation_center.refinement_loop import run_refinement_loop
+
+        sessions = [json.loads(p.read_text(encoding="utf-8")) for p in args.sessions]
+        out = args.out or (evidence_42 / "refinement_loop")
+        report = run_refinement_loop(sessions, out_dir=out)
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return 0 if report.get("HUMAN_REFINEMENT_LOOP_READY") else 2
     if args.cmd == "qualify":
         report = vc.qualify_software()
         out = args.out or evidence_41
