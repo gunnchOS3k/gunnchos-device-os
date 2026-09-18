@@ -1,0 +1,56 @@
+{
+  "schema": "CX5_RELEASE_BASELINE_TOPOLOGY/v1",
+  "campaign": "CX5.0",
+  "generated_at": "2026-09-18T01:56:11Z",
+  "run_condition": "MET",
+  "device_os": {
+    "main_head": "1c20c264d27bc8daf3a7d5b3280256f871ae1a06",
+    "pr_134_merge": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+    "pr_134_in_main": true,
+    "pr_155_merge": "1c20c264d27bc8daf3a7d5b3280256f871ae1a06",
+    "pr_155_in_main": true,
+    "advanced_beyond_155": false,
+    "intervening_commits_after_155": [],
+    "cx_tip": {
+      "pr": 154,
+      "branch": "eng/cx4-validation-center-pilot-readiness",
+      "sha": "e1573081f09e9fb701feeeda018cadf5d973c8f3",
+      "in_main": false,
+      "merge_base_with_main": "898e44cfa8b7574c0de7b8312b0996816799eca4"
+    }
+  },
+  "portal": {
+    "main_head": "722d85fce4cd66e26e0abef1f56b34bc3bcf81a8",
+    "pr_14_merge": "7ad4ce84ab61037d140f2185de14b191ecf7ec28",
+    "pr_14_in_main": true,
+    "pr_15_merged": true,
+    "pr_15_merge": "722d85fce4cd66e26e0abef1f56b34bc3bcf81a8",
+    "pr_15_in_main": true,
+    "cx_tip": {
+      "pr": 33,
+      "branch": "docs/cx4-validation-center-pilot-readiness-control",
+      "sha": "e4f0e86ac7451ec0102de7e206f3226084a9dd21",
+      "in_main": false,
+      "merge_base_with_main": "c8ed133a656fec5985e0870106ecc433e15ca1e2"
+    }
+  },
+  "waike": {
+    "main_head": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "required": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "required_in_main": true
+  },
+  "gunnchai": {
+    "main_head": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+    "expected_baseline": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+    "expected_in_main": true,
+    "cx_pr_48_is_release_truth": false,
+    "cx_pr_48_state": "OPEN",
+    "note": "Do not treat CX #48 as release truth"
+  },
+  "firewalls": {
+    "no_merges": true,
+    "no_human_validation": true,
+    "no_delete_historical_cx_prs": true,
+    "no_weaken_release_evidence": true
+  }
+}

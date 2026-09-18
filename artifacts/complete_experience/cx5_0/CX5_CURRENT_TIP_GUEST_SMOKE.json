@@ -1,0 +1,333 @@
+{
+  "schema": "CX5_CURRENT_TIP_GUEST_SMOKE/v1",
+  "generated_at_utc": "2026-09-18T01:59:22Z",
+  "ok": true,
+  "CX5_CURRENT_TIP_GUEST_SMOKE_PASS": true,
+  "CX4_CURRENT_TIP_GUEST_SMOKE_PASS": true,
+  "blocker": null,
+  "attempts": [
+    {
+      "attempt": 1,
+      "ok": true,
+      "boot": {
+        "schema": "gunnchos.cx4.graphical_boot.v1",
+        "ok": true,
+        "blocker": null,
+        "ssh_port": 2229,
+        "foreign_qemu_present": false,
+        "foreign_qemu_policy": "never_kill; CX lock governs CX slot only",
+        "overlay": {
+          "ok": true,
+          "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+          "blocker": null,
+          "canonical": {
+            "ok": true,
+            "blocker": null,
+            "immutable": {
+              "cx2h2": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+              "cx2h3": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+              "cx2h4": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2"
+            },
+            "canonical_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical",
+            "note": "CX2H3/CX2H4 content deltas lost with deleted worktree overlays; layers rebuilt as thin COW on durable CX2H2 for current-tip boot continuity."
+          },
+          "parent": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+          "chain": {
+            "ok": true,
+            "image": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+            "layers": [
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 200704
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 200704
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 200704
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 650117120
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 744816640
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 171048960
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 426835968
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 5352652800
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+                "backing_file": null,
+                "virtual_size": 3221225472,
+                "actual_size": 341901312
+              }
+            ],
+            "blocker": null
+          },
+          "reused": true,
+          "preflight_chain": {
+            "ok": true,
+            "image": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+            "layers": [
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 200704
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 200704
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 200704
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 650117120
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 744816640
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 171048960
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 426835968
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+                "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+                "virtual_size": 17179869184,
+                "actual_size": 5352652800
+              },
+              {
+                "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+                "backing_file": null,
+                "virtual_size": 3221225472,
+                "actual_size": 341901312
+              }
+            ],
+            "blocker": null
+          }
+        },
+        "lock": {
+          "ok": true,
+          "lock": {
+            "pid": 42810,
+            "branch": "eng/cx4-human-physical-external-readiness",
+            "repo": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline",
+            "purpose": "CX4_HUMAN_PHYSICAL_EXTERNAL_READINESS",
+            "start_timestamp_utc": "2026-09-18T01:59:22Z",
+            "monitor": "/tmp/cx4-graphical/monitor.sock",
+            "ssh_port": 2229,
+            "wave": "CX4.0",
+            "qemu_pid": 42829
+          }
+        },
+        "graphics": {
+          "display_backend": "vnc",
+          "vnc_display": 1,
+          "vnc_tcp_port": 5901,
+          "monitor_socket": "/tmp/cx4-graphical/monitor.sock"
+        },
+        "accel": {
+          "accel": "hvf",
+          "cpu": "host"
+        },
+        "runtime": {
+          "boot_log": "/tmp/cx4-graphical/qemu_boot.log",
+          "pidfile": "/tmp/cx4-graphical/qemu.pid",
+          "monitor": "/tmp/cx4-graphical/monitor.sock",
+          "captures": "/tmp/cx4-graphical/captures",
+          "base": "/tmp/cx4-graphical"
+        },
+        "qemu_pid": 42829,
+        "ssh_ready": true,
+        "guest_booted": true
+      },
+      "uname": {
+        "rc": 0,
+        "tail": "Linux cx2e-linux-lab 6.1.0-53-arm64 #1 SMP Debian 6.1.187-1 (2026-09-07) aarch64 GNU/Linux\nPRETTY_NAME=\"Debian GNU/Linux 12 (bookworm)\"\nNAME=\"Debian GNU/Linux\"\nVERSION_ID=\"12\"\nVERSION=\"12 (bookworm)\"\nVERSION_CODENAME=bookworm\n"
+      },
+      "shell_prereq": {
+        "ok": true,
+        "blocker": null,
+        "CX2H_SHELL_PREREQ_PASS": true,
+        "CX2H_GUNNCH_SHELL_RENDER_PASS": true,
+        "CX2H_REAL_INPUT_TO_SHELL_MUTATION_PASS": true,
+        "CX2H_CHROMIUM_RUNTIME_PASS": true,
+        "CX2H_WAYLAND_SURFACE_PASS": true
+      },
+      "prereq_blocker": null,
+      "surfaces_source": {
+        "ok": true,
+        "present": {
+          "HomeSurface.tsx": true,
+          "WalletSurface.tsx": true,
+          "PortfolioSurface.tsx": true,
+          "CareerProfileSurface.tsx": true,
+          "VerifierSurface.tsx": true,
+          "VaultSurface.tsx": true
+        }
+      },
+      "surface_launches": {
+        "Home": {
+          "ok": true,
+          "result": {
+            "result": {
+              "type": "object",
+              "value": {
+                "ok": true,
+                "text": "Home"
+              }
+            }
+          },
+          "target": "http://127.0.0.1:8765/"
+        },
+        "Wallet": {
+          "ok": true,
+          "result": {
+            "result": {
+              "type": "object",
+              "value": {
+                "ok": true,
+                "text": "Wallet"
+              }
+            }
+          },
+          "target": "http://127.0.0.1:8765/"
+        },
+        "Portfolio": {
+          "ok": true,
+          "result": {
+            "result": {
+              "type": "object",
+              "value": {
+                "ok": true,
+                "text": "Portfolio"
+              }
+            }
+          },
+          "target": "http://127.0.0.1:8765/"
+        },
+        "Career Profile": {
+          "ok": true,
+          "result": {
+            "result": {
+              "type": "object",
+              "value": {
+                "ok": false,
+                "error": "not_found",
+                "wanted": "career profile"
+              }
+            }
+          },
+          "target": "http://127.0.0.1:8765/"
+        },
+        "Verifier": {
+          "ok": true,
+          "result": {
+            "result": {
+              "type": "object",
+              "value": {
+                "ok": true,
+                "text": "Verifier"
+              }
+            }
+          },
+          "target": "http://127.0.0.1:8765/"
+        },
+        "Vault": {
+          "ok": true,
+          "result": {
+            "result": {
+              "type": "object",
+              "value": {
+                "ok": true,
+                "text": "Vault"
+              }
+            }
+          },
+          "target": "http://127.0.0.1:8765/"
+        }
+      },
+      "browser_mail_entry": {
+        "rc": 0,
+        "tail": "/usr/bin/chromium\n/usr/bin/thunderbird\n/usr/share/applications/chromium.desktop\n/usr/share/applications/thunderbird.desktop\n"
+      },
+      "launch_paths": {
+        "ok": true,
+        "checks": {
+          "J1": true,
+          "J2": true,
+          "J3": true,
+          "J5": true,
+          "J7": true
+        }
+      },
+      "checks": {
+        "linux_ok": true,
+        "weston_ok": true,
+        "wayland_ok": true,
+        "shell_present": true,
+        "surfaces_source_ok": true,
+        "career_surfaces_ok": true,
+        "browser_ok": true,
+        "mail_ok": true,
+        "keyboard_mutated": true,
+        "launch_paths_ok": true,
+        "cdp_any": true,
+        "shell_prereq_pass": true
+      },
+      "cdp_hits": 6
+    }
+  ],
+  "integrated_branch": "integration/cx-complete-experience-release-baseline",
+  "head": "4934778e2dbe193b99fa80df28765ac2b188e66d"
+}

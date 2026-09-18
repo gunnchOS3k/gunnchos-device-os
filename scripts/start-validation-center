@@ -94,8 +94,9 @@ if [[ "$LAN" -eq 1 ]]; then
   echo "WARNING: Do not list sessions anonymously. Revoke access when done."
 fi
 
-# Start only intended local service
-python3 -m gunnchos_device_os.cx4_validation_center serve-static --port "$PORT" "${LAN_ARGS[@]}" \
+# Start only intended local service.
+# Use ${arr[@]+"${arr[@]}"} so empty LAN_ARGS is safe under `set -u` (bash 3.2/macOS).
+python3 -m gunnchos_device_os.cx4_validation_center serve-static --port "$PORT" ${LAN_ARGS[@]+"${LAN_ARGS[@]}"} \
   >"$LOG_FILE" 2>&1 &
 pid=$!
 echo "$pid" >"$PID_FILE"

@@ -1,0 +1,86 @@
+{
+  "schema": "CX_RELEASE_EVIDENCE_IMMUTABILITY_AUDIT/v1",
+  "generated_at": "2026-09-18T01:58:09Z",
+  "policy": "Historical accepted release evidence immutable; CX5 writes only under artifacts/complete_experience/cx5_0/",
+  "checks": [
+    {
+      "path": "artifacts/device_lab_current_pin/ECO010_SOAK_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/ECO010_SOAK.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/DEVICE_LAB_CURRENT_PIN_INDEPENDENT_DIGITAL_VERIFY_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/LIVE_GUNNCHOS_VISUAL_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/DSXL_DUAL_COMPOSITOR_UX_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/RING_TO_REAL_APP_STATE_MUTATION_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/FOUR_GAME_REAL_RUNTIME_DEVICE_LAB_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/DIGITAL_DEVICE_LAB_CURRENT_PIN_PASS.json",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/post_155_merge",
+      "unchanged_vs_main": true,
+      "diff": []
+    },
+    {
+      "path": "artifacts/device_lab_current_pin/post_134_merge",
+      "unchanged_vs_main": true,
+      "diff": []
+    }
+  ],
+  "CX_RELEASE_EVIDENCE_IMMUTABILITY_PASS": true,
+  "incident": {
+    "at": "2026-09-18T02:13:13Z",
+    "description": "Lifecycle/independent-verify runners briefly wrote into artifacts/device_lab_current_pin despite OUT redirect intent (module-level path binding).",
+    "action": "git checkout -- restored mutated files; removed lifecycle_work/",
+    "restored_paths": [
+      "artifacts/device_lab_current_pin/CURRENT_PIN_APP_LIFECYCLE_MATRIX.json",
+      "artifacts/device_lab_current_pin/CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json",
+      "artifacts/device_lab_current_pin/DEVICE_LAB_CURRENT_PIN_INDEPENDENT_DIGITAL_VERIFY_PASS.json",
+      "artifacts/device_lab_current_pin/LIFECYCLE_MATRIX.json"
+    ],
+    "post_restore_clean": true
+  },
+  "note": "Historical accepted release evidence restored to HEAD; CX5 evidence remains under artifacts/complete_experience/cx5_0/ only."
+}

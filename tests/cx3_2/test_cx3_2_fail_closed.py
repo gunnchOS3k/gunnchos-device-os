@@ -148,10 +148,15 @@ def test_waike_adapter_rejects_mutation_and_no_fake_pass():
         adapter.mutate("create_completion")
     status = adapter.adapter_status()
     assert status["CX3_WAIKE_READ_ONLY_PROVIDER_PASS"] is True
-    # Earn PASS only with genuine evidence — currently release-blocked
-    assert status["WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE"] is False
+    # Availability must match honest discovery (may be True after accepted-main
+    # WAIKE/Device Lab release evidence lands). Never fabricate True.
+    available = bool(status["WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE"])
+    assert available is bool(discovery.get("WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE") or discovery.get("can_expose_real_completed_learning_evidence_readonly"))
+    if available:
+        assert discovery.get("waike_mutated") is False
+        assert discovery.get("fabricated") is not True
     journey_gate = adapter.evidence_availability_gate()
-    assert journey_gate["WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE"] is False
+    assert journey_gate["WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE"] is available
 
 
 def test_mismatch_detection_on_fixture():
