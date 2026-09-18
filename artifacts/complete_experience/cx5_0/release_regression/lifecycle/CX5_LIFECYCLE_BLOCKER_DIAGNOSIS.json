@@ -1,0 +1,101 @@
+{
+  "schema": "CX5_LIFECYCLE_BLOCKER_DIAGNOSIS/v1",
+  "prompt": "CX5.0R",
+  "generated_at_utc": "2026-09-18T02:30:49Z",
+  "exact_integration_head_pre_remediation": "20f11ccfcc9279efa217458e83befea7a9b739dd",
+  "blockers": [
+    {
+      "app_id": "vault",
+      "expected_lifecycle_contract": "VaultSurface launch + visible surface + workspace persistence via shell/workspace tests + guest Vault",
+      "observed_behavior": "vitest workspace.shell failed (npx vitest@5); launch/visible steps false",
+      "root_cause": "lifecycle_harness_environment_vitest_resolution",
+      "detail": "CX5 tip lacked apps/launcher_mock/node_modules; run_17g6_lifecycle_matrix used bare `npx vitest` which floated to vitest@5 with broken rolldown native bindings, fail-closing vault/app_center/browser/mail. Product surfaces and tests PASS with project vitest@2.1.x + guest smoke already earned Vault/browser/mail.",
+      "repository_module": "gunnchos-device-os/scripts/run_17g6_lifecycle_matrix.py + apps/launcher_mock + apps/gunnch_shell",
+      "remediation_class": "harness_adapter_additive",
+      "runtime_product_behavior_changed": false,
+      "materiality_expands": false,
+      "guest_vs_host_mismatch": "host vitest failed while CX5 guest smoke already showed Vault CDP + chromium/thunderbird",
+      "evidence": [
+        "artifacts/complete_experience/cx5_0/release_regression/lifecycle/CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json (pre-remediation false)",
+        "artifacts/complete_experience/cx5_0/CX5_CURRENT_TIP_GUEST_SMOKE.json",
+        "apps/gunnch_shell/src/shell.test.tsx",
+        "apps/launcher_mock/src/shell/workspace.shell.test.tsx",
+        "apps/launcher_mock/src/shell/browser.shell.test.tsx"
+      ]
+    },
+    {
+      "app_id": "app_center",
+      "expected_lifecycle_contract": "AppCenterSurface catalog launch + shell nav + guest shell present",
+      "observed_behavior": "launch gated on vault_exec_ok|browser_exec which were false due to vitest failure",
+      "root_cause": "lifecycle_harness_environment_vitest_resolution",
+      "detail": "CX5 tip lacked apps/launcher_mock/node_modules; run_17g6_lifecycle_matrix used bare `npx vitest` which floated to vitest@5 with broken rolldown native bindings, fail-closing vault/app_center/browser/mail. Product surfaces and tests PASS with project vitest@2.1.x + guest smoke already earned Vault/browser/mail.",
+      "repository_module": "gunnchos-device-os/scripts/run_17g6_lifecycle_matrix.py + apps/launcher_mock + apps/gunnch_shell",
+      "remediation_class": "harness_adapter_additive",
+      "runtime_product_behavior_changed": false,
+      "materiality_expands": false,
+      "guest_vs_host_mismatch": "host vitest failed while CX5 guest smoke already showed Vault CDP + chromium/thunderbird",
+      "evidence": [
+        "artifacts/complete_experience/cx5_0/release_regression/lifecycle/CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json (pre-remediation false)",
+        "artifacts/complete_experience/cx5_0/CX5_CURRENT_TIP_GUEST_SMOKE.json",
+        "apps/gunnch_shell/src/shell.test.tsx",
+        "apps/launcher_mock/src/shell/workspace.shell.test.tsx",
+        "apps/launcher_mock/src/shell/browser.shell.test.tsx"
+      ]
+    },
+    {
+      "app_id": "browser",
+      "expected_lifecycle_contract": "BrowserPwaHub launch + guest chromium entry",
+      "observed_behavior": "browser.shell vitest failed via npx vitest@5; guest browser_ok already true",
+      "root_cause": "lifecycle_harness_environment_vitest_resolution",
+      "detail": "CX5 tip lacked apps/launcher_mock/node_modules; run_17g6_lifecycle_matrix used bare `npx vitest` which floated to vitest@5 with broken rolldown native bindings, fail-closing vault/app_center/browser/mail. Product surfaces and tests PASS with project vitest@2.1.x + guest smoke already earned Vault/browser/mail.",
+      "repository_module": "gunnchos-device-os/scripts/run_17g6_lifecycle_matrix.py + apps/launcher_mock + apps/gunnch_shell",
+      "remediation_class": "harness_adapter_additive",
+      "runtime_product_behavior_changed": false,
+      "materiality_expands": false,
+      "guest_vs_host_mismatch": "host vitest failed while CX5 guest smoke already showed Vault CDP + chromium/thunderbird",
+      "evidence": [
+        "artifacts/complete_experience/cx5_0/release_regression/lifecycle/CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json (pre-remediation false)",
+        "artifacts/complete_experience/cx5_0/CX5_CURRENT_TIP_GUEST_SMOKE.json",
+        "apps/gunnch_shell/src/shell.test.tsx",
+        "apps/launcher_mock/src/shell/workspace.shell.test.tsx",
+        "apps/launcher_mock/src/shell/browser.shell.test.tsx"
+      ]
+    },
+    {
+      "app_id": "mail",
+      "expected_lifecycle_contract": "email app identity + guest thunderbird/mail_ok; truthful provider state",
+      "observed_behavior": "mail launch gated on browser_exec which failed; guest mail_ok already true",
+      "root_cause": "lifecycle_harness_environment_vitest_resolution",
+      "detail": "CX5 tip lacked apps/launcher_mock/node_modules; run_17g6_lifecycle_matrix used bare `npx vitest` which floated to vitest@5 with broken rolldown native bindings, fail-closing vault/app_center/browser/mail. Product surfaces and tests PASS with project vitest@2.1.x + guest smoke already earned Vault/browser/mail.",
+      "repository_module": "gunnchos-device-os/scripts/run_17g6_lifecycle_matrix.py + apps/launcher_mock + apps/gunnch_shell",
+      "remediation_class": "harness_adapter_additive",
+      "runtime_product_behavior_changed": false,
+      "materiality_expands": false,
+      "guest_vs_host_mismatch": "host vitest failed while CX5 guest smoke already showed Vault CDP + chromium/thunderbird",
+      "evidence": [
+        "artifacts/complete_experience/cx5_0/release_regression/lifecycle/CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json (pre-remediation false)",
+        "artifacts/complete_experience/cx5_0/CX5_CURRENT_TIP_GUEST_SMOKE.json",
+        "apps/gunnch_shell/src/shell.test.tsx",
+        "apps/launcher_mock/src/shell/workspace.shell.test.tsx",
+        "apps/launcher_mock/src/shell/browser.shell.test.tsx"
+      ]
+    }
+  ],
+  "shared_root_cause": {
+    "root_cause": "lifecycle_harness_environment_vitest_resolution",
+    "detail": "CX5 tip lacked apps/launcher_mock/node_modules; run_17g6_lifecycle_matrix used bare `npx vitest` which floated to vitest@5 with broken rolldown native bindings, fail-closing vault/app_center/browser/mail. Product surfaces and tests PASS with project vitest@2.1.x + guest smoke already earned Vault/browser/mail.",
+    "repository_module": "gunnchos-device-os/scripts/run_17g6_lifecycle_matrix.py + apps/launcher_mock + apps/gunnch_shell",
+    "remediation_class": "harness_adapter_additive",
+    "runtime_product_behavior_changed": false,
+    "materiality_expands": false,
+    "guest_vs_host_mismatch": "host vitest failed while CX5 guest smoke already showed Vault CDP + chromium/thunderbird"
+  },
+  "remediation_plan": [
+    "Install project node_modules for launcher_mock and gunnch_shell",
+    "Replace bare npx vitest with local node_modules/.bin/vitest / npm exec --no",
+    "Require gunnch_shell Vault/App Center shell tests + guest smoke for vault/browser/mail",
+    "Re-run full CURRENT_PIN_APP_LIFECYCLE_MATRIX on exact #156 head"
+  ],
+  "prefer_fail_over_false_pass": true,
+  "process_existence_alone_insufficient": true
+}
