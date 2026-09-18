@@ -1,12 +1,14 @@
 {
   "artifact": "artifacts/android_capsule/release/gunnchOS-Capsule-Pixel6a-pilot.apk",
-  "sha256": "8165cfa1bfd82d1da7d666027dcdeb0fd2c670df94ae90c32857780152caa643",
-  "git_sha": "c214b1e4f9253158ab32a049b00c60c1f19398da",
+  "sha256": "218ce1cf9883f773234b6f94a8888e0cf14e45461e7f703d54d231a6b82dbf7f",
+  "git_sha": "8f218eb73f179dc14787bfb4dd47baa2bf2d91ac",
   "accepted_main_baseline": "55f63da0f4555c2f235caeae7d6bc20ab1b15638",
   "shell_reused": true,
   "signing": "debug_pilot",
   "install": "adb install -r",
   "no_wipe": true,
   "no_bootloader": true,
-  "no_root": true
+  "no_root": true,
+  "shell_load_url": "https://appassets.androidplatform.net/assets/shell/index.html",
+  "black_screen_fix": "webview_asset_loader"
 }

@@ -3,7 +3,15 @@ import { createRoot } from 'react-dom/client'
 import CompleteExperienceShell, { type Cx2Surface, type DeviceProfile } from './CompleteExperienceShell'
 import { resolveHostRuntime } from './platform/hostRuntime'
 import { loadSession, saveSession, type CapsuleSession } from './platform/sessionStore'
-import { capsuleInvoke } from './platform/capsuleBridge'
+import {
+  capsuleInvoke,
+  installFatalHandlers,
+  reportBootStage,
+  reportShellReady,
+} from './platform/capsuleBridge'
+
+installFatalHandlers()
+reportBootStage('JS_BUNDLE_STARTED')
 
 function CapsuleRoot() {
   const runtime = resolveHostRuntime()
@@ -13,6 +21,7 @@ function CapsuleRoot() {
   const [sessionSeed, setSessionSeed] = useState<Partial<CapsuleSession> | null>(null)
 
   useEffect(() => {
+    reportBootStage('SESSION_LOADING')
     let cancelled = false
     ;(async () => {
       const session = await loadSession()
@@ -41,6 +50,16 @@ function CapsuleRoot() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!ready) return
+    reportBootStage('REACT_ROOT_MOUNTED')
+    // Defer SHELL_READY one frame so Home paint can commit
+    requestAnimationFrame(() => {
+      reportBootStage('SHELL_READY')
+      reportShellReady()
+    })
+  }, [ready])
+
   const persist = useCallback(
     (partial: Partial<CapsuleSession>) => {
       const next: CapsuleSession = {
@@ -65,7 +84,18 @@ function CapsuleRoot() {
 
   if (!ready) {
     return (
-      <div role="status" aria-label="Loading gunnchOS" style={{ padding: 24, fontFamily: 'system-ui' }}>
+      <div
+        role="status"
+        aria-label="Loading gunnchOS"
+        style={{
+          minHeight: '100vh',
+          margin: 0,
+          padding: 24,
+          fontFamily: 'system-ui, sans-serif',
+          backgroundColor: '#0B1220',
+          color: '#E8EEF7',
+        }}
+      >
         Loading gunnchOS…
       </div>
     )
@@ -86,13 +116,18 @@ function CapsuleRoot() {
   )
 }
 
-// Mark host for bridge detection before first paint when injected by Android
 if (typeof window !== 'undefined' && window.AndroidCapsuleBridge) {
   window.__GUNNCH_HOST__ = 'ANDROID_CAPSULE'
   window.__GUNNCH_CAPSULE_BRIDGE__ = true
 }
 
-createRoot(document.getElementById('root')!).render(
+const rootEl = document.getElementById('root')
+if (!rootEl) {
+  reportBootStage('FATAL_NO_ROOT')
+  throw new Error('gunnchOS root element missing')
+}
+
+createRoot(rootEl).render(
   <React.StrictMode>
     <CapsuleRoot />
   </React.StrictMode>,

@@ -5,6 +5,8 @@ package com.gunnchos.capsule.bridge
  * Arbitrary method invocation is forbidden.
  */
 object BridgeSchemas {
+    const val APPASSETS_ORIGIN = "https://appassets.androidplatform.net"
+
     val ALLOWED_CAPABILITIES = setOf(
         "files",
         "share",
@@ -39,20 +41,18 @@ object BridgeSchemas {
         "connect_action",
         "assist_settings",
         "exit_capsule",
+        "shell_boot_stage",
+        "shell_ready",
+        "shell_fatal",
     )
 
+    /** Exact origins only — no wildcards, no prefix matches. */
     val ALLOWED_ORIGINS = setOf(
-        "file://",
-        "file://capsule",
-        "null",
-        "file:///android_asset/shell/index.html",
-        "https://gunnchos.local",
+        APPASSETS_ORIGIN,
     )
 
     fun isOriginAllowed(origin: String?): Boolean {
         if (origin.isNullOrBlank()) return false
-        if (origin in ALLOWED_ORIGINS) return true
-        if (origin.startsWith("file:///android_asset/")) return true
-        return false
+        return origin in ALLOWED_ORIGINS
     }
 }

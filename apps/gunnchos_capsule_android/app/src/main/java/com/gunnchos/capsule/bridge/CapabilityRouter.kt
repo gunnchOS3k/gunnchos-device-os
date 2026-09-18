@@ -70,6 +70,20 @@ class CapabilityRouter(private val activity: CapsuleActivity) {
             "app_center_list" -> appCenter.list(payload)
             "connect_action" -> connect.action(payload)
             "assist_settings" -> assist.settings(payload)
+            "shell_boot_stage" -> {
+                val stage = payload?.optString("stage").orEmpty()
+                activity.runOnUiThread { activity.onShellBootStage(stage) }
+                JSONObject().put("stage", stage).put("acked", true)
+            }
+            "shell_ready" -> {
+                activity.runOnUiThread { activity.onShellReady() }
+                JSONObject().put("ready", true)
+            }
+            "shell_fatal" -> {
+                val message = payload?.optString("message").orEmpty().ifBlank { "shell_fatal" }
+                activity.runOnUiThread { activity.onShellFatal(message) }
+                JSONObject().put("fatal", true).put("message", message)
+            }
             "exit_capsule" -> {
                 activity.runOnUiThread { activity.exitCapsuleToAndroid() }
                 JSONObject().put("exited", true)

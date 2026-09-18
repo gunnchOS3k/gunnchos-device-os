@@ -23,7 +23,51 @@ rm -rf "$ASSET_DIR"
 mkdir -p "$ASSET_DIR"
 cp -R "$SHELL_DIST"/. "$ASSET_DIR"/
 test -f "$ASSET_DIR/index.html"
+
+echo "==> Validating bundled shell assets"
+python3 - <<'PY'
+import hashlib, json, sys
+from pathlib import Path
+asset_dir = Path('apps/gunnchos_capsule_android/app/src/main/assets/shell')
+files = []
+errors = []
+for p in sorted(asset_dir.rglob('*')):
+    if not p.is_file():
+        continue
+    data = p.read_bytes()
+    if len(data) == 0:
+        errors.append(f'zero_byte:{p}')
+    files.append({
+        'path': str(p.relative_to(asset_dir)),
+        'bytes': len(data),
+        'sha256': hashlib.sha256(data).hexdigest(),
+    })
+required = ['index.html']
+for req in required:
+    if not (asset_dir / req).is_file():
+        errors.append(f'missing:{req}')
+js = [f for f in files if f['path'].startswith('assets/') and f['path'].endswith('.js')]
+css = [f for f in files if f['path'].startswith('assets/') and f['path'].endswith('.css')]
+if not js:
+    errors.append('missing:bundled_js')
+if not css:
+    errors.append('missing:bundled_css')
+manifest = {
+    'valid': len(errors) == 0,
+    'errors': errors,
+    'file_count': len(files),
+    'files': files,
+    'CAPSULE_BUNDLED_SHELL_ASSETS_VALID': len(errors) == 0,
+}
+out = Path('artifacts/android_capsule/SHELL_ASSET_MANIFEST.json')
+out.parent.mkdir(parents=True, exist_ok=True)
+out.write_text(json.dumps(manifest, indent=2) + '\n')
+print(json.dumps({'valid': manifest['valid'], 'file_count': len(files), 'errors': errors}, indent=2))
+if errors:
+    sys.exit(1)
+PY
 echo "CAPSULE_PRODUCTION_SHELL_REUSED=true"
+echo "CAPSULE_BUNDLED_SHELL_ASSETS_VALID=true"
 
 echo "==> Ensuring local.properties"
 PROP="apps/gunnchos_capsule_android/local.properties"
