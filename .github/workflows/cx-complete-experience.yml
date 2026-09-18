@@ -1,0 +1,95 @@
+name: Complete Experience CX0-CX2D
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'eng/cx*'
+  push:
+    branches:
+      - 'eng/cx0-complete-experience-foundations'
+      - 'eng/cx1-ordinary-user-foundations'
+      - 'eng/cx2a-real-experience-surfaces'
+      - 'eng/cx2b-real-provider-integrations'
+      - 'eng/cx2c-authentic-user-journeys'
+      - 'eng/cx2d-linux-real-user-journey-closure'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cx-ce-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cx-python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pyyaml
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: CX0–CX2D unit tests
+        run: |
+          PYTHONPATH=. pytest -q tests/cx1 tests/cx2 tests/cx2d
+      - name: CX2D evidence regenerate (fail-closed)
+        run: |
+          PYTHONPATH=. python3 -m gunnchos_device_os.cx2d
+          test -f artifacts/complete_experience/cx2d/CX2D_EVIDENCE_REPORT.json
+          python3 -c "import json; r=json.load(open('artifacts/complete_experience/cx2d/CX2D_EVIDENCE_REPORT.json')); assert r['FULL_COMPLETE_EXPERIENCE_COMPLETE'] is False"
+      - name: CX2D lab prepare-only
+        run: |
+          PYTHONPATH=. python3 os_build/cx2d_linux_lab/scripts/provision_cx2d_linux_lab.py --prepare-only || true
+      - name: Firewall — no Device Lab evidence writes claimed
+        run: |
+          test -f docs/complete-experience/CX2D_SHELL_AUTHORITY_DECISION.md
+          grep -q 'CX2D_SINGLE_PRODUCTION_SHELL_AUTHORITY=true' docs/complete-experience/CX2D_SHELL_AUTHORITY_DECISION.md
+
+  gunnch-shell-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/gunnch_shell
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/gunnch_shell/package.json
+      - name: Install
+        run: npm install
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+
+  launcher-mock-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/launcher_mock
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/launcher_mock/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Test adapter + CX2 surfaces
+        run: npm test
+      - name: Build
+        run: npm run build

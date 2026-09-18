@@ -25,6 +25,13 @@ python3 scripts/export_launcher_contract.py
 mkdir -p "$STAGING/launcher" "$STAGING/policy" "$STAGING/install"
 
 cp -r "$LAUNCHER/src" "$STAGING/launcher/src"
+# CX2D Path B authority package for adapter imports (../../../gunnch_shell from launcher/src/cx2)
+SHELL_APP="$ROOT/apps/gunnch_shell"
+rm -rf "$STAGING/gunnch_shell"
+mkdir -p "$STAGING/gunnch_shell"
+cp -r "$SHELL_APP/src" "$STAGING/gunnch_shell/src"
+cp "$SHELL_APP/package.json" "$STAGING/gunnch_shell/" 2>/dev/null || true
+cp "$SHELL_APP/tsconfig.json" "$STAGING/gunnch_shell/" 2>/dev/null || true
 cp "$LAUNCHER/package.json" "$LAUNCHER/index.html" "$STAGING/launcher/"
 cp "$LAUNCHER/package-lock.json" "$STAGING/launcher/" 2>/dev/null || true
 cp "$LAUNCHER/vite.config.ts" "$STAGING/launcher/" 2>/dev/null || true

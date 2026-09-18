@@ -1,0 +1,99 @@
+{
+  "schema": "gunnchos.cx2f.journey_upgrade.v1",
+  "graphical_truth": false,
+  "journeys": {
+    "J1": {
+      "id": "J1",
+      "prior_cx2e_class": "BLOCKED",
+      "cx2f_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, Writer\u2192PDF\u2192CUPS\u2192Vault backup/restore GUI read-back",
+      "blocker": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, Writer\u2192PDF\u2192CUPS\u2192Vault backup/restore GUI read-back",
+      "evidence": []
+    },
+    "J2": {
+      "id": "J2",
+      "prior_cx2e_class": "BLOCKED",
+      "cx2f_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, browser download\u2192Vault\u2192mail attach/send/receive persistence",
+      "blocker": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, browser download\u2192Vault\u2192mail attach/send/receive persistence",
+      "evidence": []
+    },
+    "J3": {
+      "id": "J3",
+      "prior_cx2e_class": "BLOCKED",
+      "cx2f_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, App Center Flatpak discover/install/launch/update/uninstall GUI",
+      "blocker": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, App Center Flatpak discover/install/launch/update/uninstall GUI",
+      "evidence": []
+    },
+    "J4": {
+      "id": "J4",
+      "prior_cx2e_class": "BLOCKED",
+      "cx2f_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, CalDAV/CardDAV/chat GUI; may remain partial",
+      "blocker": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, CalDAV/CardDAV/chat GUI; may remain partial",
+      "evidence": []
+    },
+    "J5": {
+      "id": "J5",
+      "prior_cx2e_class": "BLOCKED",
+      "cx2f_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, offline edit/outbox/reconnect exactly-once GUI evidence",
+      "blocker": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, offline edit/outbox/reconnect exactly-once GUI evidence",
+      "evidence": []
+    },
+    "J6": {
+      "id": "J6",
+      "prior_cx2e_class": "HUMAN_VALIDATION_PENDING",
+      "cx2f_class": "HUMAN_VALIDATION_PENDING",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "HUMAN_A11Y_PENDING \u2014 AT-SPI/Orca human validation required",
+      "blocker": "HUMAN_A11Y_PENDING \u2014 AT-SPI/Orca human validation required",
+      "evidence": []
+    },
+    "J7": {
+      "id": "J7",
+      "prior_cx2e_class": "BLOCKED",
+      "cx2f_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, Care/Vault backup\u2192corrupt\u2192restore\u2192Writer reopen GUI",
+      "blocker": "missing: non_cloud_kernel, weston_drm, shell_render, framebuffer_capture, input_to_shell_mutation, Care/Vault backup\u2192corrupt\u2192restore\u2192Writer reopen GUI",
+      "evidence": []
+    }
+  },
+  "any_real_user_journey_digital_pass": false,
+  "desired_before_cx3_pass": false,
+  "desired_ids": [
+    "J1",
+    "J2",
+    "J3",
+    "J5",
+    "J7"
+  ]
+}

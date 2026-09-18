@@ -1,4 +1,4 @@
-.PHONY: test validate-configs generate-device-states generate-sbom \
+.PHONY: validation-center test validate-configs generate-device-states generate-sbom \
 	reproduce uml supervisor-ready \
 	generate-update-report build-launcher generate-campus-modes generate-contracts \
 	export-launcher-contract check-launcher-contract validate-full diagrams e2e smoke gate6-dry-run gate1-boot gate1-dock gate1-test gate1-toolchain \
@@ -395,3 +395,8 @@ wave009:
 	@test -f artifacts/engineering_wave009/CLAIM_BOUNDARIES.json
 	@$(WAVE009_PY) -c "import json,os; r=json.load(open('artifacts/engineering_wave009/WAVE009_RESULT.json')); b=json.load(open('artifacts/engineering_wave009/BEHAVIORAL_NEGATIVE_CONTROL_RESULT.json')); s=json.load(open('artifacts/engineering_wave009/SANDBOX_ENFORCEMENT_RESULT.json')); assert r.get('TARGET_REQUIREMENTS')==1; assert r.get('PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX') is False; assert r.get('BASELINE_COUNTS_UPDATED') is False; assert b.get('BEHAVIORAL_NEGATIVE_CONTROL_COUNT')>=12; assert b.get('BEHAVIORAL_NEGATIVE_CONTROLS_PASS') is True; assert s.get('SANDBOX_EXECUTED_AS_ROOT') is False; assert s.get('BWRAP_INVOKED_WITH_SUDO') is False; assert r.get('UNCONDITIONAL_TRUE_CLASSIFIERS')==0; req=os.environ.get('WAVE009_REQUIRE_SANDBOX_VALIDATED')=='1'; assert (not req) or (r.get('ENGINEERING_WAVE_009')=='PASS' and s.get('KERNEL_SANDBOX') is True)"
 
+
+
+# CX4.2 one-click Validation Center (loopback default; pass LAN=1 for --lan)
+validation-center:
+	./scripts/start-validation-center $(if $(LAN),--lan,) $(if $(PORT),--port $(PORT),)

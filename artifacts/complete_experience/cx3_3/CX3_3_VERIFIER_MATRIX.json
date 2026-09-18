@@ -1,0 +1,125 @@
+{
+  "schema": "gunnchos.cx3_3.verifier_matrix.v1",
+  "CX3_VERIFIER_MATRIX_PASS": true,
+  "cases": [
+    {
+      "case": "valid_credential",
+      "expect_valid": true,
+      "actual_valid": true,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": false,
+        "ok": true
+      }
+    },
+    {
+      "case": "revoked_credential",
+      "expect_valid": false,
+      "actual_valid": false,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": false,
+        "ok": true
+      }
+    },
+    {
+      "case": "valid_after_reissue",
+      "expect_valid": true,
+      "actual_valid": true,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": false,
+        "ok": true
+      }
+    },
+    {
+      "case": "expired_credential",
+      "expect_valid": false,
+      "actual_valid": false,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": false,
+        "ok": true
+      }
+    },
+    {
+      "case": "tampered_credential",
+      "expect_valid": false,
+      "actual_valid": false,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": true,
+        "ok": true
+      }
+    },
+    {
+      "case": "unknown_issuer",
+      "expect_valid": false,
+      "actual_valid": false,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": true,
+        "ok": true
+      }
+    },
+    {
+      "case": "stale_offline_status",
+      "expect_valid": null,
+      "actual_valid": true,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "stale_labeled": true
+      }
+    },
+    {
+      "case": "missing_evidence",
+      "expect_valid": false,
+      "actual_valid": false,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "missing_evidence": true
+      }
+    },
+    {
+      "case": "mismatched_artifact_hash",
+      "expect_valid": false,
+      "actual_valid": false,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "artifact_hash_mismatch": true
+      }
+    },
+    {
+      "case": "valid_career_package",
+      "expect_valid": true,
+      "actual_valid": true,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "tampered": false,
+        "ok": true
+      }
+    },
+    {
+      "case": "selectively_disclosed_package",
+      "expect_valid": true,
+      "actual_valid": true,
+      "pass": true,
+      "wallet_db_used": false,
+      "detail": {
+        "private_excluded": true
+      }
+    }
+  ],
+  "case_count": 11,
+  "certification_claimed": false
+}

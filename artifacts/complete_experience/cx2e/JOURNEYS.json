@@ -1,0 +1,92 @@
+{
+  "schema": "gunnchos.cx2e.journey_upgrade.v1",
+  "graphical_truth": false,
+  "journeys": {
+    "J1": {
+      "id": "J1",
+      "prior_cx2d_class": "BLOCKED",
+      "cx2e_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": true,
+      "persistence": false,
+      "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, Writer/print GUI provider evidence",
+      "blocker": "missing: shell_window_rendered, real_screen_capture_pass, Writer/print GUI provider evidence"
+    },
+    "J2": {
+      "id": "J2",
+      "prior_cx2d_class": "BLOCKED",
+      "cx2e_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, browser+mail GUI evidence",
+      "blocker": "missing: shell_window_rendered, real_screen_capture_pass, browser+mail GUI evidence"
+    },
+    "J3": {
+      "id": "J3",
+      "prior_cx2d_class": "BLOCKED",
+      "cx2e_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": true,
+      "persistence": false,
+      "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, Flatpak/App Center GUI evidence",
+      "blocker": "missing: shell_window_rendered, real_screen_capture_pass, Flatpak/App Center GUI evidence"
+    },
+    "J4": {
+      "id": "J4",
+      "prior_cx2d_class": "BLOCKED",
+      "cx2e_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, CalDAV/CardDAV/chat GUI; chat may remain partial",
+      "blocker": "missing: shell_window_rendered, real_screen_capture_pass, CalDAV/CardDAV/chat GUI; chat may remain partial"
+    },
+    "J5": {
+      "id": "J5",
+      "prior_cx2d_class": "BLOCKED",
+      "cx2e_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, offline recovery GUI evidence",
+      "blocker": "missing: shell_window_rendered, real_screen_capture_pass, offline recovery GUI evidence"
+    },
+    "J6": {
+      "id": "J6",
+      "prior_cx2d_class": "HUMAN_VALIDATION_PENDING",
+      "cx2e_class": "HUMAN_VALIDATION_PENDING",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": true,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "HUMAN_A11Y_PENDING \u2014 AT-SPI/Orca human validation required",
+      "blocker": "HUMAN_A11Y_PENDING \u2014 AT-SPI/Orca human validation required"
+    },
+    "J7": {
+      "id": "J7",
+      "prior_cx2d_class": "BLOCKED",
+      "cx2e_class": "BLOCKED",
+      "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+      "real_ui": false,
+      "real_provider": false,
+      "persistence": false,
+      "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, recovery GUI evidence",
+      "blocker": "missing: shell_window_rendered, real_screen_capture_pass, recovery GUI evidence"
+    }
+  },
+  "any_real_user_journey_digital_pass": false,
+  "desired_before_cx3_pass": false,
+  "desired_ids": [
+    "J1",
+    "J2",
+    "J3",
+    "J5",
+    "J7"
+  ]
+}

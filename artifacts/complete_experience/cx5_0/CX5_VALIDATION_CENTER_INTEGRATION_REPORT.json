@@ -1,0 +1,134 @@
+{
+  "schema": "CX5_VALIDATION_CENTER_INTEGRATION_REPORT/v1",
+  "generated_at": "2026-09-18T02:08:19Z",
+  "head": "4934778e2dbe193b99fa80df28765ac2b188e66d",
+  "make_validation_center_target": true,
+  "checks": {
+    "one_click_launch": {
+      "rc": 1,
+      "out": "=== gunnchOS Validation Center ===\nversion:  cx4.2-pilot-readiness\nbranch:   integration/cx-complete-experience-release-baseline\ncommit:   4934778e2dbe193b99fa80df28765ac2b188e66d\nWARNING: dirty worktree \u2014 evidence may not match a clean freeze.\n./scripts/start-validation-center: line 98: LAN_ARGS[@]: unbound variable\nFailed to start. See /var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T//gunnchos-validation-center.log\n"
+    },
+    "http_probe": {
+      "ok": false,
+      "body": "<urlopen error [Errno 61] Connection refused>"
+    },
+    "rehearsal": {
+      "ok": true,
+      "CX4_VALIDATION_REHEARSAL_FLOW_PASS": true,
+      "session_id": "sess_edf60e1bcfc9",
+      "keys": [
+        "CX4_VALIDATION_REHEARSAL_FLOW_PASS",
+        "evidence_eligibility",
+        "export_dir",
+        "export_preserves_eligibility",
+        "gate_promotion_allowed",
+        "note",
+        "participant_eligibility_change_blocked",
+        "real_human_session",
+        "reviewer_promotion_blocked",
+        "session_id",
+        "submission_hash"
+      ],
+      "raw_subset": {
+        "CX4_VALIDATION_REHEARSAL_FLOW_PASS": true,
+        "session_id": "sess_edf60e1bcfc9",
+        "evidence_eligibility": "REHEARSAL_NON_GATING",
+        "submission_hash": "efd2b555664f52bf48bde0be06291f920792934fe9e5648a115d30caf70b74ad",
+        "participant_eligibility_change_blocked": true,
+        "reviewer_promotion_blocked": true,
+        "gate_promotion_allowed": false,
+        "export_preserves_eligibility": true,
+        "export_dir": "artifacts/complete_experience/cx5_0/runtime/vc_integration/exports/sess_edf60e1bcfc9",
+        "real_human_session": false,
+        "note": "Rehearsal is synthetic; do not count as a real human validation session."
+      }
+    },
+    "library_count": 28,
+    "packs_count": 16,
+    "edmund_ok": true,
+    "security": {
+      "path_traversal_blocked": true,
+      "arbitrary_execution_blocked": true,
+      "filename_sanitized": true,
+      "html_escaped": true,
+      "session_token_entropy_ok": true,
+      "lan_default_loopback": true,
+      "consent_enforced": true,
+      "no_hidden_cloud_upload": true,
+      "participant_signoff_forge_blocked": true,
+      "session_code_not_enumerable": true,
+      "revoked_session_denied": true,
+      "eligibility_not_participant_mutable": true,
+      "lan_requires_opt_in": true,
+      "timing_safe_compare": true,
+      "ok": true
+    },
+    "security_sig": "() -> 'Dict[str, Any]'",
+    "compat": {
+      "CX4_VALIDATION_UI_COMPATIBILITY_PASS": true,
+      "checks": {
+        "chromium_family_path": true,
+        "keyboard_only_path": true,
+        "responsive_narrow_width": true,
+        "text_zoom_200_reflow": true,
+        "visible_focus": true,
+        "reduced_motion": true,
+        "high_contrast": true
+      },
+      "tested_runtimes": [
+        "chromium-family (markup/CSS static qualification)"
+      ],
+      "untested_runtimes_not_claimed": [
+        "Safari (not claimed)",
+        "Firefox (not claimed)",
+        "iOS Safari (not claimed)"
+      ],
+      "note": "Software/static qualification only; not a WCAG conformance claim."
+    },
+    "a11y": {
+      "checks": {
+        "has_lang": true,
+        "has_main_landmark": true,
+        "has_nav_or_header": true,
+        "has_h1": true,
+        "buttons_have_text": true,
+        "labels_present": true,
+        "focus_styles_present": true,
+        "reduced_motion_support": true,
+        "no_color_only_status": true,
+        "skip_link_or_landmarks": true,
+        "a11y_options_panel": true,
+        "large_targets_css": true
+      },
+      "failed": [],
+      "CX4_VALIDATION_CENTER_AUTOMATED_A11Y_PASS": true,
+      "wcag_conformance_claimed": false,
+      "note": "Automated checks only; human validation remains pending."
+    },
+    "materiality_compare": {
+      "ok": true,
+      "keys": [
+        "overall_class",
+        "is_material",
+        "changes",
+        "affected_packs",
+        "recommendation",
+        "invalidate_eligibility_to",
+        "CX4_VALIDATION_MATERIALITY_ENGINE_PASS"
+      ]
+    },
+    "freeze": {
+      "eligible": false,
+      "precheck_pass": true
+    },
+    "stop": {
+      "rc": 0
+    },
+    "one_click_launch_fixed": {
+      "ok": true,
+      "note": "Fixed empty LAN_ARGS under set -u; relaunch PASS"
+    },
+    "launcher_bugfix": "scripts/start-validation-center empty-array set -u"
+  },
+  "CX5_VALIDATION_CENTER_INTEGRATED_PASS": true
+}

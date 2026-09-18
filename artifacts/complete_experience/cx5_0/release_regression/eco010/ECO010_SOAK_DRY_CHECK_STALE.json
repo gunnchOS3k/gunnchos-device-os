@@ -1,0 +1,139 @@
+{
+  "ok": false,
+  "scenario_id": "ECO-010",
+  "status": "PARTIAL",
+  "simultaneous_soak_complete": false,
+  "duration_sec_requested": 1800,
+  "duration_sec_ran": 15.01,
+  "duration_shortened_to_pass": false,
+  "dry_check": true,
+  "health_polls": [
+    {
+      "t_rel": 0.74,
+      "members_alive": 6,
+      "alive": {
+        "student_14_5": true,
+        "dsxl_coder": true,
+        "handheld_hybrid": true,
+        "dock": true,
+        "edge_io_rings": true,
+        "handheld_docked": true
+      },
+      "telemetry": {
+        "ts": 1789697593.925846,
+        "rss_mb": 26.83,
+        "loadavg": [
+          2.255859375,
+          2.95751953125,
+          3.7353515625
+        ]
+      },
+      "ai_ok": true
+    },
+    {
+      "t_rel": 10.75,
+      "members_alive": 6,
+      "alive": {
+        "student_14_5": true,
+        "dsxl_coder": true,
+        "handheld_hybrid": true,
+        "dock": true,
+        "edge_io_rings": true,
+        "handheld_docked": true
+      },
+      "telemetry": {
+        "ts": 1789697603.935321,
+        "rss_mb": 26.83,
+        "loadavg": [
+          2.2900390625,
+          2.94189453125,
+          3.720703125
+        ]
+      },
+      "ai_ok": true
+    }
+  ],
+  "inject_recover": [
+    {
+      "fault": "network.packet_loss",
+      "inject": {
+        "ok": true,
+        "fault_id": null
+      },
+      "recover": {
+        "ok": true
+      },
+      "t_rel": 0.74
+    },
+    {
+      "fault": "process.sigterm_lab_echo",
+      "inject": {
+        "ok": true,
+        "fault_id": null
+      },
+      "recover": {
+        "ok": true
+      },
+      "t_rel": 11.27
+    }
+  ],
+  "inject_ok_count": 2,
+  "recover_ok_count": 2,
+  "min_injects_required": 5,
+  "final_members_alive": 6,
+  "cleanup": {
+    "ok": true,
+    "eco_id": "eco-8a2d1d95",
+    "stopped": {
+      "student_14_5": {
+        "ok": true,
+        "instance_id": "dev-6c6633ae",
+        "stopped": true,
+        "qemu": null
+      },
+      "dsxl_coder": {
+        "ok": true,
+        "instance_id": "dev-f37e5f3c",
+        "stopped": true,
+        "qemu": null
+      },
+      "handheld_hybrid": {
+        "ok": true,
+        "instance_id": "dev-07f06fc7",
+        "stopped": true,
+        "qemu": null
+      },
+      "dock": {
+        "ok": true,
+        "instance_id": "dev-c60cbe6f",
+        "stopped": true,
+        "qemu": null
+      },
+      "edge_io_rings": {
+        "ok": true,
+        "instance_id": "dev-44794a1a",
+        "stopped": true,
+        "qemu": null
+      },
+      "handheld_docked": {
+        "ok": true,
+        "instance_id": "dev-8ea38bdd",
+        "stopped": true,
+        "qemu": null
+      }
+    },
+    "vnet_cleanup": {
+      "ok": true,
+      "cleaned": true,
+      "fault": null
+    }
+  },
+  "ai": {
+    "ok": true,
+    "process_proof": true
+  },
+  "errors": [],
+  "GUNNCHDEVICE_LAB_FULL_ECOSYSTEM_DIGITAL_COMPLETE": false,
+  "SILICON_EXACT_EMULATION": false,
+  "note": "PARTIAL \u2014 full multi-guest continuous soak not earned. Duration was not shortened to pass after failures. dry_check=true (not a PASS path)."
+}

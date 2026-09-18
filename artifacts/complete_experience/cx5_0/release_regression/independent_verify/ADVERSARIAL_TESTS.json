@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "case": "forged_pass_token_short_duration",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "eco010_pass_token"
+      ]
+    },
+    {
+      "case": "lifecycle_row_removed",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "lifecycle_mandatory_apps_present",
+        "lifecycle_all_apps_ok"
+      ]
+    },
+    {
+      "case": "shortened_soak",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "eco010_soak_body",
+        "eco010_pass_token"
+      ]
+    },
+    {
+      "case": "stale_sha",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "lifecycle_head_matches:0000000000000000000000000000000000000000!=22edff8eabc927ef1b97e6f3799fed1a61d6678a"
+      ]
+    },
+    {
+      "case": "modified_shortened_flag",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "eco010_soak_body",
+        "eco010_pass_token"
+      ]
+    },
+    {
+      "case": "draft_accepted_identity_substitution",
+      "must_fail": true,
+      "failed": true,
+      "missing": [
+        "eco010_soak_body",
+        "eco010_pass_token"
+      ]
+    }
+  ],
+  "all_fail_closed": true
+}

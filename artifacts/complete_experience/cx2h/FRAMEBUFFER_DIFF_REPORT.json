@@ -1,0 +1,66 @@
+{
+  "v1": {
+    "ok": true,
+    "min_changed_pct_threshold": 0.5,
+    "a": {
+      "path": "/tmp/cx2h-graphical/captures/j3_02_after_install.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "a1ab07f422da1a412f38a4b2d1ae875d6bcd7ea17165296a0d351846d1454af4",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
+      "size": 3072016
+    },
+    "changed_pixels": 655031,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 63.9679,
+    "bbox": {
+      "min_x": 49,
+      "min_y": 35,
+      "max_x": 1176,
+      "max_y": 799
+    },
+    "mean_abs_channel_diff": 23.8614,
+    "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+  },
+  "v1_v2": {
+    "ok": true,
+    "min_changed_pct_threshold": 0.5,
+    "a": {
+      "path": "/tmp/cx2h-graphical/captures/j3_03_launch_v1.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "062f0732e0f990e2055120d1c2fd0d5243790a803cd686b424bc02f6b8325ff5",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2h-graphical/captures/j3_04_launch_v2.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "90989eab232bc52b33528973054ef1ad092659d01cf9a5538e48c3a0ffc59940",
+      "size": 3072016
+    },
+    "changed_pixels": 500542,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 48.8811,
+    "bbox": {
+      "min_x": 76,
+      "min_y": 12,
+      "max_x": 1241,
+      "max_y": 670
+    },
+    "mean_abs_channel_diff": 90.3557,
+    "rationale": "Require >= 0.5% changed pixels so cursor blink alone cannot prove shell render"
+  },
+  "noise_calibration": {
+    "v1_min_changed_pct": 0.5,
+    "v1_v2_min_changed_pct": 0.5,
+    "baseline_pair": "after_install_vs_launch_v1 (not app_center_vs_launch)",
+    "note": "Thresholds not lowered; compare against same App Center chrome so install UI churn cannot fake a window"
+  }
+}

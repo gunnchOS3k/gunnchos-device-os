@@ -1,0 +1,39 @@
+{
+  "schema": "gunnchos.cx2e.linux_lab_status.v1",
+  "generated_at_utc": "2026-09-16T04:15:24Z",
+  "overlay_prep": {
+    "ok": true,
+    "blocker": null,
+    "base_sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
+    "overlay_sha256": "a47ca058ad21e625a38899e912afcfeee91d2b2c590e4343e3559a31e8782ea7",
+    "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2"
+  },
+  "provision": {
+    "ok": true,
+    "blocker": null,
+    "sentinel_ok": true,
+    "qemu_pid": null,
+    "accel": {
+      "accel": "hvf",
+      "cpu": "host"
+    }
+  },
+  "graphical_boot": {
+    "ok": true,
+    "blocker": null,
+    "ssh_ready": true,
+    "qemu_pid": 39897,
+    "guest_booted": true
+  },
+  "guest_facts": {
+    "guest_booted": true,
+    "guest_is_linux": true,
+    "compositor_running": true,
+    "wayland_socket_alive": true,
+    "shell_window_rendered": false,
+    "graphical_truth": false
+  },
+  "device_lab_paths_untouched": true,
+  "evidence_namespace": "artifacts/complete_experience/cx2e",
+  "blocker": "CX2E_SHELL_RENDER_OR_CAPTURE_NOT_PROVEN: shell_window_rendered,real_screen_capture_pass; cloud kernel 6.1.0-53-cloud-arm64 lacks /dev/dri; Weston headless-backend session proven (WAYLAND+DBUS); gunnch_shell Chromium render empty; weston-screenshooter/grim unavailable under headless"
+}

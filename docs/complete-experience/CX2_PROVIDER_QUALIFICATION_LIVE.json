@@ -1,0 +1,60 @@
+{
+  "schema": "gunnchos.cx2.provider_qualification_live.v1",
+  "browser": {
+    "name": "google-chrome",
+    "binary": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "version": "Google Chrome 152.0.7977.84",
+    "evidence_class": "REAL_PROVIDER_CLI_PASS",
+    "standardized_default": false
+  },
+  "app_center": {
+    "provider": "local_package_repo",
+    "flatpak_available": false,
+    "repo": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/cx2/fixtures/local_repo",
+    "evidence_class": "REAL_PROVIDER_CLI_PASS"
+  },
+  "productivity": {
+    "libreoffice_available": true,
+    "binary": "/opt/homebrew/bin/soffice",
+    "evidence": {
+      "create_writer": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home/providers/productivity/docs/evidence_doc.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "pid_probe": true,
+        "odf_valid_zip": true,
+        "content_verified": true,
+        "sha256": "29c1bd851b99485783dd95301cfc19301144400ef9acb78dd5223e85526ed491",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "export_pdf": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home/providers/productivity/docs/evidence_doc.pdf",
+        "via": "libreoffice",
+        "sha256": "e7d95dc4b4d6c8275123e33fa111b234b42ab2ab8f96442acd62f18b250d0fbc",
+        "reopen_verified": true,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      }
+    }
+  },
+  "printing": {
+    "evidence_class": "REAL_PROVIDER_CLI_PASS",
+    "PHYSICAL_PRINTER_VALIDATION_PENDING": true
+  },
+  "portals": {
+    "evidence_class": "NOT_APPLICABLE",
+    "backend": "gdbus"
+  },
+  "connect": {
+    "mail": "REAL_PROVIDER_CLI_PASS",
+    "calendar": "REAL_PROVIDER_CLI_PASS",
+    "contacts": "REAL_PROVIDER_CLI_PASS",
+    "chat_video": "EXTERNAL_PROVIDER_PENDING"
+  },
+  "capture": {
+    "screenshot": "REAL_PROVIDER_GUI_PASS",
+    "screencast": "REAL_PROVIDER_CLI_PASS"
+  },
+  "FULL_COMPLETE_EXPERIENCE_COMPLETE": false
+}

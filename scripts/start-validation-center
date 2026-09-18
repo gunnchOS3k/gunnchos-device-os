@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# One-click Validation Center launcher (CX4.2).
+# Default: loopback only. Pass --lan for explicit LAN bind.
+# Never kills unrelated processes.
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+LAN=0
+PORT=8765
+PID_FILE="${TMPDIR:-/tmp}/gunnchos-validation-center.pid"
+LOG_FILE="${TMPDIR:-/tmp}/gunnchos-validation-center.log"
+
+usage() {
+  cat <<'EOF'
+Usage: ./scripts/start-validation-center [--lan] [--port N] [--stop] [--status]
+
+  (default)   Bind 127.0.0.1 only
+  --lan       Explicit LAN bind (prints warning + IPs)
+  --port N    Port (default 8765)
+  --stop      Stop only the Validation Center process started by this script
+  --status    Show launcher status
+
+Does not kill unrelated processes.
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --lan) LAN=1; shift ;;
+    --port) PORT="${2:?}"; shift 2 ;;
+    --stop)
+      if [[ -f "$PID_FILE" ]]; then
+        pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+        if [[ -n "${pid:-}" ]] && kill -0 "$pid" 2>/dev/null; then
+          # Verify command line looks like our server before signaling
+          cmd="$(ps -p "$pid" -o command= 2>/dev/null || true)"
+          if echo "$cmd" | grep -q "cx4_validation_center"; then
+            kill "$pid" 2>/dev/null || true
+            echo "Stopped Validation Center pid=$pid"
+          else
+            echo "Refusing to kill pid=$pid (not Validation Center): $cmd" >&2
+            exit 2
+          fi
+        else
+          echo "No running Validation Center (stale pid file)."
+        fi
+        rm -f "$PID_FILE"
+      else
+        echo "No pid file; nothing to stop."
+      fi
+      exit 0
+      ;;
+    --status)
+      if [[ -f "$PID_FILE" ]]; then
+        pid="$(cat "$PID_FILE")"
+        if kill -0 "$pid" 2>/dev/null; then
+          echo "running pid=$pid"
+          exit 0
+        fi
+      fi
+      echo "stopped"
+      exit 1
+      ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown arg: $1" >&2; usage; exit 2 ;;
+  esac
+done
+
+# Dependency check
+python3 -c "import json, pathlib" >/dev/null
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+COMMIT="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
+DIRTY="$(git status --porcelain 2>/dev/null || true)"
+VC_VERSION="cx4.2-pilot-readiness"
+
+echo "=== gunnchOS Validation Center ==="
+echo "version:  $VC_VERSION"
+echo "branch:   $BRANCH"
+echo "commit:   $COMMIT"
+if [[ -n "$DIRTY" ]]; then
+  echo "WARNING: dirty worktree — evidence may not match a clean freeze."
+fi
+
+export PYTHONPATH="${ROOT}:${ROOT}/src:${PYTHONPATH:-}"
+
+LAN_ARGS=()
+if [[ "$LAN" -eq 1 ]]; then
+  LAN_ARGS+=(--lan)
+  echo "WARNING: LAN mode enabled. Session codes use high-entropy tokens."
+  echo "WARNING: Do not list sessions anonymously. Revoke access when done."
+fi
+
+# Start only intended local service.
+# Use ${arr[@]+"${arr[@]}"} so empty LAN_ARGS is safe under `set -u` (bash 3.2/macOS).
+python3 -m gunnchos_device_os.cx4_validation_center serve-static --port "$PORT" ${LAN_ARGS[@]+"${LAN_ARGS[@]}"} \
+  >"$LOG_FILE" 2>&1 &
+pid=$!
+echo "$pid" >"$PID_FILE"
+
+# Give it a moment; confirm still alive
+sleep 0.4
+if ! kill -0 "$pid" 2>/dev/null; then
+  echo "Failed to start. See $LOG_FILE" >&2
+  rm -f "$PID_FILE"
+  exit 1
+fi
+
+HOST_DISPLAY="127.0.0.1"
+echo
+echo "Participant:  http://${HOST_DISPLAY}:${PORT}/#participant"
+echo "Moderator:    http://${HOST_DISPLAY}:${PORT}/#moderator"
+echo "Reviewer:     http://${HOST_DISPLAY}:${PORT}/#reviewer"
+echo "Entry:        http://${HOST_DISPLAY}:${PORT}/#entry"
+echo
+echo "Shutdown:     ./scripts/start-validation-center --stop"
+echo "Log:          $LOG_FILE"
+echo "PID:          $pid"
+echo
+echo "CX4_VALIDATION_CENTER_ONE_CLICK_LAUNCH_PASS=true (launcher started)"

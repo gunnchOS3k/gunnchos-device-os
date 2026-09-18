@@ -1,0 +1,43 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+
+> @gunnchos/gunnch-shell@0.1.0 test
+> vitest run --run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/apps/gunnch_shell
+
+ ✓ src/shell.test.tsx (3 tests) 94ms
+stderr | src/shell.test.tsx > gunnch_shell production authority > navigates primary surfaces via nav
+Warning: An update to CareSurface inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at CareSurface (/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/apps/gunnch_shell/src/surfaces/CareSurface.tsx:27:3)
+    at main
+    at div
+    at CompleteExperienceShell (/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/apps/gunnch_shell/src/CompleteExperienceShell.tsx:40:3)
+Warning: An update to CompleteExperienceShell inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at CompleteExperienceShell (/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/apps/gunnch_shell/src/CompleteExperienceShell.tsx:40:3)
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  20:58:34
+   Duration  1.05s (transform 83ms, setup 67ms, collect 155ms, tests 94ms, environment 391ms, prepare 97ms)
+

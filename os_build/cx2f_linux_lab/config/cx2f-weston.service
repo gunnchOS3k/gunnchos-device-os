@@ -1,0 +1,34 @@
+[Unit]
+Description=CX2F Weston compositor (DRM/virtio-gpu ONLY — no headless success path)
+After=seatd.service systemd-user-sessions.service local-fs.target
+Wants=seatd.service
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+# DRM launcher requires a VT; openvt provides tty1. Runtime dir owned by root; sockets opened for session user.
+Environment=XDG_RUNTIME_DIR=/run/cx2f-wayland
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_CONFIG_HOME=/etc/cx2f-weston
+Environment=LIBSEAT_BACKEND=seatd
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/cx2f-wayland/bus
+WorkingDirectory=/var/lib/cx2f
+ExecStartPre=/bin/mkdir -p /run/cx2f-wayland /var/lib/cx2f /var/log /etc/cx2f-weston
+ExecStartPre=/bin/chmod 700 /run/cx2f-wayland
+ExecStartPre=-/sbin/modprobe uinput
+ExecStartPre=-/sbin/modprobe virtio_gpu
+ExecStartPre=-/bin/systemctl stop getty@tty1.service
+ExecStartPre=/bin/bash -c 'test -e /dev/dri/card0 || test -e /dev/dri/card1'
+ExecStartPre=/bin/bash -c 'if [ ! -S /run/cx2f-wayland/bus ]; then dbus-daemon --session --address=unix:path=/run/cx2f-wayland/bus --nofork --nopidfile & sleep 0.5; fi'
+# DRM backend ONLY via openvt — headless-backend.so forbidden on success path
+ExecStart=/usr/bin/openvt -c 1 -f -s -- /usr/bin/weston --backend=drm-backend.so --socket=wayland-0 --log=/var/log/cx2f-weston.log --idle-time=0
+ExecStartPost=/bin/bash -c 'sleep 1; chmod 777 /run/cx2f-wayland/wayland-0 /run/cx2f-wayland/bus 2>/dev/null || true; chmod 755 /run/cx2f-wayland'
+Restart=on-failure
+RestartSec=2
+User=root
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

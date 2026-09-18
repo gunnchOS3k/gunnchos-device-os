@@ -97,6 +97,83 @@ def http_bytes(url: str, timeout: float = 15.0) -> tuple[int, bytes, str | None]
         return 0, b"", str(exc)
 
 
+
+def resolve_vitest(app_dir: Path) -> list[str] | None:
+    """Prefer project-local vitest; never let bare npx float to vitest@latest."""
+    local = app_dir / "node_modules" / ".bin" / "vitest"
+    if local.is_file():
+        return [str(local)]
+    npm = shutil.which("npm")
+    if npm and (app_dir / "package.json").is_file():
+        return [npm, "exec", "--no", "--", "vitest"]
+    return None
+
+
+def run_vitest(app_dir: Path, pattern: str, log_path: Path, env: dict) -> tuple[bool, str]:
+    cmd_base = resolve_vitest(app_dir)
+    if not cmd_base:
+        return False, "vitest_binary_missing"
+    cmd = [*cmd_base, "run", pattern]
+    try:
+        r = subprocess.run(
+            cmd,
+            cwd=str(app_dir),
+            capture_output=True,
+            text=True,
+            timeout=180,
+            env=env,
+        )
+    except Exception as exc:  # noqa: BLE001
+        log_path.write_text(f"exc:{type(exc).__name__}:{exc}\n", encoding="utf-8")
+        return False, f"vitest_exc:{type(exc).__name__}"
+    log_path.write_text((r.stdout or "") + "\n" + (r.stderr or ""), encoding="utf-8")
+    return r.returncode == 0, f"rc={r.returncode}"
+
+
+def load_guest_smoke(root: Path) -> dict:
+    candidates = [
+        root / "artifacts" / "complete_experience" / "cx5_0" / "CX5_CURRENT_TIP_GUEST_SMOKE.json",
+        root / "artifacts" / "complete_experience" / "cx5_0" / "release_regression" / "CX5_CURRENT_TIP_GUEST_SMOKE.json",
+    ]
+    for p in candidates:
+        if p.is_file():
+            try:
+                return json.loads(p.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                return {}
+    return {}
+
+
+def guest_surface_ok(smoke: dict, *keys: str) -> bool:
+    if not smoke:
+        return False
+    if not bool(smoke.get("CX5_CURRENT_TIP_GUEST_SMOKE_PASS") or smoke.get("ok")):
+        return False
+    attempts = smoke.get("attempts") or smoke.get("runs") or []
+    for attempt in attempts:
+        if not isinstance(attempt, dict):
+            continue
+        checks = attempt.get("checks") or {}
+        if all(bool(checks.get(k)) for k in keys if k.endswith("_ok")):
+            # also accept CDP / surface launch evidence for Vault
+            surfaces = attempt.get("surface_launches") or {}
+            if "Vault" in keys and isinstance(surfaces.get("Vault"), dict):
+                if surfaces["Vault"].get("ok") is False:
+                    continue
+            if keys and all(
+                (k in checks and checks.get(k))
+                or (k == "Vault" and isinstance(surfaces.get("Vault"), dict) and surfaces["Vault"].get("ok") is not False)
+                or (k == "AppCenter" and (surfaces.get("App Center") or surfaces.get("AppCenter")))
+                for k in keys
+            ):
+                return True
+        # simpler path: browser_ok/mail_ok
+        if keys and all(bool(checks.get(k, False)) for k in keys):
+            return True
+    return False
+
+
+
 def row(app: str, step: str, ok: bool, **extra: Any) -> dict[str, Any]:
     return {"app": app, "step": step, "ok": bool(ok), **extra}
 
@@ -453,34 +530,60 @@ while True: time.sleep(3600)
             )
             app_summaries[app_id] = {"ok": all(gres.values()), "token_ok": token_ok, "authentic": authentic}
 
-        # ---- Vault (encrypted workspace panel) ----
-        vault_files = list((ROOT / "apps" / "launcher_mock" / "src").rglob("*Encrypted*"))
+        # ---- Vault / App Center / Browser / Mail (CX5.0R) ----
+        # Harness: local vitest only (never bare npx vitest@latest). Guest smoke
+        # strengthens surface truth; host vitest alone without guest is insufficient
+        # when CX5 guest evidence exists.
+        smoke = load_guest_smoke(ROOT)
+        guest_pass = bool(smoke.get("CX5_CURRENT_TIP_GUEST_SMOKE_PASS") or smoke.get("ok"))
+        guest_vault = False
+        guest_browser = False
+        guest_mail = False
+        guest_app_center = False
+        for attempt in smoke.get("attempts") or []:
+            if not isinstance(attempt, dict):
+                continue
+            checks = attempt.get("checks") or {}
+            surfaces = attempt.get("surface_launches") or {}
+            if isinstance(surfaces.get("Vault"), dict) and surfaces["Vault"].get("ok") is not False:
+                guest_vault = True
+            if checks.get("browser_ok"):
+                guest_browser = True
+            if checks.get("mail_ok"):
+                guest_mail = True
+            if surfaces.get("App Center") or surfaces.get("AppCenter") or checks.get("shell_present"):
+                # App Center is a primary shell surface; shell_present + catalog identity
+                guest_app_center = bool(checks.get("shell_present") or surfaces.get("App Center") or surfaces.get("AppCenter"))
+        guest_vault = guest_vault or guest_surface_ok(smoke, "Vault")
+        guest_browser = guest_browser or guest_surface_ok(smoke, "browser_ok")
+        guest_mail = guest_mail or guest_surface_ok(smoke, "mail_ok")
+
         vault_store = ROOT / "apps" / "launcher_mock" / "src" / "services" / "encryptedWorkspaceStore.ts"
-        # Digital lifecycle via importing store semantics is insufficient; exercise via node test if present
+        vault_surface = ROOT / "apps" / "gunnch_shell" / "src" / "surfaces" / "VaultSurface.tsx"
         vault_test = ROOT / "apps" / "launcher_mock" / "src" / "shell" / "workspace.shell.test.tsx"
-        vault_ok = vault_store.is_file() and vault_test.is_file()
-        # Run unit test for vault/workspace if npm available
-        vault_exec_ok = False
-        if (ROOT / "apps" / "launcher_mock" / "package.json").is_file():
-            r = subprocess.run(
-                ["npx", "vitest", "run", "workspace.shell"],
-                cwd=str(ROOT / "apps" / "launcher_mock"),
-                capture_output=True,
-                text=True,
-                timeout=180,
-                env=env,
+        shell_pkg = ROOT / "apps" / "gunnch_shell"
+        launcher_pkg = ROOT / "apps" / "launcher_mock"
+        vault_ok = vault_store.is_file() and vault_surface.is_file() and vault_test.is_file()
+
+        vault_workspace_ok, vault_workspace_detail = False, "not_run"
+        if (launcher_pkg / "package.json").is_file():
+            vault_workspace_ok, vault_workspace_detail = run_vitest(
+                launcher_pkg, "workspace.shell", work / "vault_workspace_test.log", env
             )
-            vault_exec_ok = r.returncode == 0
-            (work / "vault_test.log").write_text(r.stdout + "\n" + r.stderr, encoding="utf-8")
+        vault_shell_ok, vault_shell_detail = False, "not_run"
+        if (shell_pkg / "package.json").is_file():
+            vault_shell_ok, vault_shell_detail = run_vitest(
+                shell_pkg, "shell", work / "vault_shell_test.log", env
+            )
+        # Require real UI test + guest Vault surface when guest smoke is present
+        vault_exec_ok = vault_workspace_ok and vault_shell_ok and (guest_vault if guest_pass else True)
         vres = {s: False for s in STEPS}
-        v_pass = vault_ok and (vault_exec_ok or vault_store.is_file())
-        # Fail closed: package file alone is not launch — require test execution
         vres.update(
             {
                 "package_install_identity": vault_ok,
                 "install_available": vault_ok,
                 "launch": vault_exec_ok,
-                "visible_window_surface": vault_exec_ok,
+                "visible_window_surface": vault_exec_ok and (guest_vault if guest_pass else vault_shell_ok),
                 "foreground_background": vault_exec_ok,
                 "terminate": vault_exec_ok,
                 "relaunch": vault_exec_ok,
@@ -494,34 +597,60 @@ while True: time.sleep(3600)
             fill_steps(
                 "vault",
                 shas.get("gunnchos-device-os", ""),
-                "launcher_mock encryptedWorkspace + workspace.shell.test",
+                "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
                 vres,
-                {"test_rc_ok": vault_exec_ok},
+                {
+                    "workspace_test": vault_workspace_detail,
+                    "shell_test": vault_shell_detail,
+                    "guest_vault": guest_vault,
+                    "guest_smoke_required": guest_pass,
+                },
             )
         )
-        app_summaries["vault"] = {"ok": all(vres.values()), "test_ok": vault_exec_ok}
+        app_summaries["vault"] = {
+            "ok": all(vres.values()),
+            "test_ok": vault_exec_ok,
+            "guest_vault": guest_vault,
+        }
 
-        # ---- App Center / browser / mail ----
-        browser_test = ROOT / "apps" / "launcher_mock" / "src" / "shell" / "browser.shell.test.tsx"
+        # App Center: shell navigation + catalog identity + guest shell
+        app_center_surface = ROOT / "apps" / "gunnch_shell" / "src" / "surfaces" / "AppCenterSurface.tsx"
         apps_ts = ROOT / "apps" / "launcher_mock" / "src" / "data" / "gunnchApps.ts"
         apps_txt = apps_ts.read_text(encoding="utf-8") if apps_ts.is_file() else ""
-        browser_exec = False
-        if browser_test.is_file() and (ROOT / "apps" / "launcher_mock" / "package.json").is_file():
-            r = subprocess.run(
-                ["npx", "vitest", "run", "browser.shell"],
-                cwd=str(ROOT / "apps" / "launcher_mock"),
-                capture_output=True,
-                text=True,
-                timeout=180,
-                env=env,
-            )
-            browser_exec = r.returncode == 0
-            (work / "browser_test.log").write_text(r.stdout + "\n" + r.stderr, encoding="utf-8")
+        app_center_present = app_center_surface.is_file() and apps_ts.is_file() and launcher.is_dir()
+        app_center_launch = vault_shell_ok and app_center_present and (guest_app_center if guest_pass else True)
 
-        for app_id, present, launched in [
-            ("app_center", launcher.is_dir() and apps_ts.is_file(), vault_exec_ok or browser_exec),
-            ("browser", ("id: 'browser'" in apps_txt) or ('id: "browser"' in apps_txt), browser_exec),
-            ("mail", ("id: 'email'" in apps_txt) or ('id: "email"' in apps_txt), browser_exec and ("email" in apps_txt)),
+        browser_test = ROOT / "apps" / "launcher_mock" / "src" / "shell" / "browser.shell.test.tsx"
+        browser_exec, browser_detail = False, "not_run"
+        if browser_test.is_file() and (launcher_pkg / "package.json").is_file():
+            browser_exec, browser_detail = run_vitest(
+                launcher_pkg, "browser.shell", work / "browser_test.log", env
+            )
+        browser_present = ("id: 'browser'" in apps_txt) or ('id: "browser"' in apps_txt)
+        mail_present = ("id: 'email'" in apps_txt) or ('id: "email"' in apps_txt)
+        # Browser/Mail: host hub test + guest chromium/thunderbird when smoke present
+        browser_launch = browser_exec and browser_present and (guest_browser if guest_pass else True)
+        mail_launch = browser_exec and mail_present and (guest_mail if guest_pass else True)
+
+        for app_id, present, launched, detail in [
+            (
+                "app_center",
+                app_center_present,
+                app_center_launch,
+                {"shell_test": vault_shell_detail, "guest_app_center": guest_app_center},
+            ),
+            (
+                "browser",
+                browser_present,
+                browser_launch,
+                {"browser_test": browser_detail, "guest_browser": guest_browser},
+            ),
+            (
+                "mail",
+                mail_present,
+                mail_launch,
+                {"browser_test": browser_detail, "guest_mail": guest_mail, "provider": "thunderbird_or_email_pwa"},
+            ),
         ]:
             res = {s: False for s in STEPS}
             launch = bool(launched)
@@ -544,12 +673,12 @@ while True: time.sleep(3600)
                 fill_steps(
                     app_id,
                     shas.get("gunnchos-device-os", ""),
-                    "launcher_mock gunnchApps + shell tests",
+                    "gunnch_shell/launcher_mock + CX5 guest smoke",
                     res,
-                    {"present": present, "launched": launch},
+                    {"present": present, "launched": launch, **detail},
                 )
             )
-            app_summaries[app_id] = {"ok": all(res.values()), "launch": launch}
+            app_summaries[app_id] = {"ok": all(res.values()), "launch": launch, **detail}
 
         # ---- device_management + creator_studio first-party ----
         from gunnchos_device_os.first_party_apps.device_management import run_device_management
@@ -629,18 +758,43 @@ while True: time.sleep(3600)
             a[0] for a in MANDATORY_APPS if not app_summaries.get(a[0], {}).get("ok")
         ],
     }
+    # Record exact integration head for CX5.0R
+    tip = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()
+    matrix["exact_integration_head"] = tip
+    matrix["prompt"] = "CX5.0R/17G.6"
     write_json(MATRIX_PATH, matrix)
     write_json(
         PASS_PATH,
         {
             "generated_at_utc": utc(),
             "pin_manifest_sha256": pin_sha,
+            "exact_integration_head": tip,
             "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS": passed,
             "blocker": matrix["blocker"],
         },
     )
     # Alias expected by campaign
     write_json(OUT / "LIFECYCLE_MATRIX.json", matrix)
+    # CX5 release_regression mirror (does not mutate accepted-main history)
+    cx5_life = ROOT / "artifacts" / "complete_experience" / "cx5_0" / "release_regression" / "lifecycle"
+    cx5_life.mkdir(parents=True, exist_ok=True)
+    write_json(cx5_life / "CURRENT_PIN_APP_LIFECYCLE_MATRIX.json", matrix)
+    write_json(
+        cx5_life / "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json",
+        {
+            "generated_at_utc": utc(),
+            "exact_integration_head": tip,
+            "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS": passed,
+            "blocker": matrix["blocker"],
+            "out_dir": "artifacts/complete_experience/cx5_0/release_regression/lifecycle",
+        },
+    )
+    write_json(ROOT / "artifacts" / "complete_experience" / "cx5_0" / "release_regression" / "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS.json", {
+        "generated_at_utc": utc(),
+        "exact_integration_head": tip,
+        "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS": passed,
+        "blocker": matrix["blocker"],
+    })
     print(json.dumps({"CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS": passed, "blocker": matrix["blocker"]}, indent=2))
     return 0 if passed else 2
 

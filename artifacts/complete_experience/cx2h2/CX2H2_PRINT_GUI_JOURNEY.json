@@ -1,0 +1,271 @@
+{
+  "ok": true,
+  "ipp_ok": true,
+  "print_ok": true,
+  "has_job_after_gui": true,
+  "blocker": null,
+  "steps": {
+    "provenance": {
+      "ok": true,
+      "printer": "CX2H2_Digital_IPP",
+      "requested_printer": "CX2H2_Digital_IPP",
+      "created": false,
+      "printers": [
+        "CX2H2_Digital_IPP",
+        "PDF"
+      ],
+      "spool": "/var/spool/cx2h2-print/jobs",
+      "lpstat_a": {
+        "cmd": [
+          "lpstat",
+          "-a"
+        ],
+        "returncode": 0,
+        "stdout": "CX2H2_Digital_IPP accepting requests since Thu Sep 17 15:14:23 2026\nPDF accepting requests since Thu Sep 17 04:42:26 2026\n",
+        "stderr": ""
+      },
+      "lpstat_v": {
+        "cmd": [
+          "lpstat",
+          "-v"
+        ],
+        "returncode": 0,
+        "stdout": "device for CX2H2_Digital_IPP: cups-pdf:/\ndevice for PDF: cups-pdf:/\n",
+        "stderr": ""
+      },
+      "ipp_probe": {
+        "cmd": [
+          "bash",
+          "-lc",
+          "lpstat -p CX2H2_Digital_IPP -l 2>&1 | head -40; echo ---; lpoptions -p CX2H2_Digital_IPP 2>&1 | head -20"
+        ],
+        "returncode": 0,
+        "stdout": "printer CX2H2_Digital_IPP is idle.  enabled since Thu Sep 17 15:14:23 2026\n---\ncopies=1 device-uri=cups-pdf:/ finishings=3 job-cancel-after=10800 job-hold-until=no-hold job-priority=50 job-sheets=none,none marker-change-time=0 number-up=1 print-color-mode=monochrome printer-info=CX2H2_Digital_IPP printer-is-accepting-jobs=true printer-is-shared=false printer-is-temporary=false printer-location printer-make-and-model='Local Raw Printer' printer-state=3 printer-state-change-time=1789658063 printer-state-reasons=none printer-type=2097156 printer-uri-supported=ipp://localhost/printers/CX2H2_Digital_IPP\n",
+        "stderr": ""
+      },
+      "create_log": [],
+      "PHYSICAL_PRINTER_PENDING": true,
+      "not_cp_marker": true,
+      "discovery_api": "lpstat/cups",
+      "backend": "cups-pdf"
+    },
+    "writer_for_print": {
+      "ok": true,
+      "pid": 2641,
+      "alive_after_5s": true,
+      "application": "libreoffice-writer",
+      "binary": "/usr/bin/libreoffice",
+      "version": {
+        "binary": "/usr/bin/libreoffice",
+        "version_stdout": "LibreOffice 7.4.7.2 40(Build:2)",
+        "ok": true
+      },
+      "path": "cx2h2_j1_essay.odt",
+      "launch_log": "/var/lib/cx2h2/vault/logs/writer_1789658416.log",
+      "ps": "2641 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658416 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n2698 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h2-lo-profile-1789658416 --norestore --nologo --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager --writer /var/lib/cx2h2/vault/files/cx2h2_j1_essay.odt\n2719 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+      "headless": false,
+      "error": null
+    },
+    "focus_writer": {
+      "ok": false,
+      "found": []
+    },
+    "uno_print_dialog": {
+      "ok": true,
+      "error": "no_current_document",
+      "before_jobs": "CX2H2_Digital_IPP-6     gunnchos          2048   Thu Sep 17 15:14:23 2026\nCX2H2_Digital_IPP-5     gunnchos          2048   Thu Sep 17 15:14:18 2026\nCX2H2_Digital_IPP-4     gunnchos          2048   Thu Sep 17 14:59:56 2026\nCX2H2_Digital_IPP-3     gunnchos          2048   Thu Sep 17 14:59:51 2026\nCX2H2_Digital_IPP-2     gunnchos          2048   Thu Sep 17 14:50:26 2026\nCX2H2_Digital_IPP-1     gunnchos          2048   Thu Sep 17 14:50:23 2026",
+      "after_jobs": "CX2H2_Digital_IPP-6     gunnchos          2048   Thu Sep 17 15:14:23 2026\nCX2H2_Digital_IPP-5     gunnchos          2048   Thu Sep 17 15:14:18 2026\nCX2H2_Digital_IPP-4     gunnchos          2048   Thu Sep 17 14:59:56 2026\nCX2H2_Digital_IPP-3     gunnchos          2048   Thu Sep 17 14:59:51 2026\nCX2H2_Digital_IPP-2     gunnchos          2048   Thu Sep 17 14:50:26 2026\nCX2H2_Digital_IPP-1     gunnchos          2048   Thu Sep 17 14:50:23 2026",
+      "job_delta": false,
+      "cups_job_seen": true
+    },
+    "print_dialog_fb": {
+      "ok": true,
+      "sha256": "a141cfbce3658e18909badfd4407a84527eae55af2ea605e633be8ffdf8178e5"
+    },
+    "print_dialog_diff": {
+      "ok": false,
+      "min_changed_pct_threshold": 0.2,
+      "a": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_before_print.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "a141cfbce3658e18909badfd4407a84527eae55af2ea605e633be8ffdf8178e5",
+        "size": 3072016
+      },
+      "b": {
+        "path": "/tmp/cx2h2-graphical/captures/j1_print_dialog.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "a141cfbce3658e18909badfd4407a84527eae55af2ea605e633be8ffdf8178e5",
+        "size": 3072016
+      },
+      "changed_pixels": 0,
+      "total_pixels": 1024000,
+      "changed_pixel_pct": 0.0,
+      "bbox": null,
+      "mean_abs_channel_diff": 0.0,
+      "rationale": "Require >= 0.2% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "lpstat_after_gui": "CX2H2_Digital_IPP-6     gunnchos          2048   Thu Sep 17 15:14:23 2026\nCX2H2_Digital_IPP-5     gunnchos          2048   Thu Sep 17 15:14:18 2026\nCX2H2_Digital_IPP-4     gunnchos          2048   Thu Sep 17 14:59:56 2026\nCX2H2_Digital_IPP-3     gunnchos          2048   Thu Sep 17 14:59:51 2026\nCX2H2_Digital_IPP-2     gunnchos          2048   Thu Sep 17 14:50:26 2026\nCX2H2_Digital_IPP-1     gunnchos          2048   Thu Sep 17 14:50:23 2026\nCX2H2_Digital_IPP-6     gunnchos          2048   Thu Sep 17 15:14:23 2026\nCX2H2_Digital_IPP-5     gunnchos          2048   Thu Sep 17 15:14:18 2026\nCX2H2_Digital_IPP-4     gunnchos          2048   Thu Sep 17 14:59:56 2026\nCX2H2_Digital_IPP-3     gunnchos          2048   Thu Sep 17 14:59:51 2026\nCX2H2_Digital_IPP-2     gunnchos          2048   Thu Sep 17 14:50:26 2026\nCX2H2_Digital_IPP-1     gunnchos          2048   Thu Sep 17 14:50:23 2026\n",
+    "job1": {
+      "ok": true,
+      "job_id": "CX2H2_Digital_IPP-7",
+      "held": false,
+      "lp": {
+        "cmd": [
+          "lp",
+          "-d",
+          "CX2H2_Digital_IPP",
+          "-t",
+          "cx2h2-job1",
+          "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf"
+        ],
+        "returncode": 0,
+        "stdout": "request id is CX2H2_Digital_IPP-7 (1 file(s))\n",
+        "stderr": ""
+      },
+      "jobs_active": {
+        "cmd": [
+          "lpstat",
+          "-o",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "jobs_completed": {
+        "cmd": [
+          "lpstat",
+          "-W",
+          "completed",
+          "-o",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "CX2H2_Digital_IPP-7     gunnchos          2048   Thu Sep 17 15:20:51 2026\nCX2H2_Digital_IPP-6     gunnchos          2048   Thu Sep 17 15:14:23 2026\nCX2H2_Digital_IPP-5     gunnchos          2048   Thu Sep 17 15:14:18 2026\nCX2H2_Digital_IPP-4     gunnchos          2048   Thu Sep 17 14:59:56 2026\nCX2H2_Digital_IPP-3     gunnchos          2048   Thu Sep 17 14:59:51 2026\nCX2H2_Digital_IPP-2     gunnchos          2048   Thu Sep 17 14:50:26 2026\nCX2H2_Digital_IPP-1     gunnchos          2048   Thu Sep 17 14:50:23 2026\n",
+        "stderr": ""
+      },
+      "backend_outputs": [],
+      "document": "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf",
+      "printer": "CX2H2_Digital_IPP",
+      "error": null
+    },
+    "job2": {
+      "ok": true,
+      "job_id": "CX2H2_Digital_IPP-8",
+      "held": true,
+      "lp": {
+        "cmd": [
+          "lp",
+          "-d",
+          "CX2H2_Digital_IPP",
+          "-t",
+          "cx2h2-job2-cancel",
+          "-H",
+          "hold",
+          "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf"
+        ],
+        "returncode": 0,
+        "stdout": "request id is CX2H2_Digital_IPP-8 (1 file(s))\n",
+        "stderr": ""
+      },
+      "jobs_active": {
+        "cmd": [
+          "lpstat",
+          "-o",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "CX2H2_Digital_IPP-8     gunnchos          2048   Thu Sep 17 15:20:53 2026\n",
+        "stderr": ""
+      },
+      "jobs_completed": {
+        "cmd": [
+          "lpstat",
+          "-W",
+          "completed",
+          "-o",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "CX2H2_Digital_IPP-7     gunnchos          2048   Thu Sep 17 15:20:51 2026\nCX2H2_Digital_IPP-6     gunnchos          2048   Thu Sep 17 15:14:23 2026\nCX2H2_Digital_IPP-5     gunnchos          2048   Thu Sep 17 15:14:18 2026\nCX2H2_Digital_IPP-4     gunnchos          2048   Thu Sep 17 14:59:56 2026\nCX2H2_Digital_IPP-3     gunnchos          2048   Thu Sep 17 14:59:51 2026\nCX2H2_Digital_IPP-2     gunnchos          2048   Thu Sep 17 14:50:26 2026\nCX2H2_Digital_IPP-1     gunnchos          2048   Thu Sep 17 14:50:23 2026\n",
+        "stderr": ""
+      },
+      "backend_outputs": [],
+      "document": "/var/lib/cx2h2/vault/files/cx2h2_j1_essay.pdf",
+      "printer": "CX2H2_Digital_IPP",
+      "error": null
+    },
+    "cancel": {
+      "ok": true,
+      "job_id": "CX2H2_Digital_IPP-8",
+      "cancel": {
+        "cmd": [
+          "cancel",
+          "CX2H2_Digital_IPP-8"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "error_inject": {
+      "ok": true,
+      "error_injected": true,
+      "reject": {
+        "cmd": [
+          "sudo",
+          "cupsreject",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "disable": {
+        "cmd": [
+          "sudo",
+          "cupsdisable",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "user_visible_error": "Printer CX2H2_Digital_IPP rejected/disabled"
+    },
+    "error_submit": {
+      "ok": false,
+      "error": "printer_error_injected",
+      "user_visible_error": "Printer CX2H2_Digital_IPP is stopped (injected error)"
+    },
+    "recover": {
+      "ok": true,
+      "error_injected": false,
+      "enable": {
+        "cmd": [
+          "sudo",
+          "cupsenable",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "accept": {
+        "cmd": [
+          "sudo",
+          "cupsaccept",
+          "CX2H2_Digital_IPP"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  },
+  "CX2H2_REAL_IPP_PROVIDER_PASS": true,
+  "CX2H2_REAL_IPP_PRINT_GUI_PASS": true,
+  "CX2H2_PHYSICAL_PRINTER_PENDING": true
+}

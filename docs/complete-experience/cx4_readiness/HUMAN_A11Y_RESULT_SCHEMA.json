@@ -1,0 +1,17 @@
+{
+  "schema": "gunnchos.cx4.human_a11y_result.v1",
+  "human_a11y_pass": false,
+  "J6_CLASS": "HUMAN_VALIDATION_PENDING",
+  "note": "Result schema for future human sessions \u2014 preparation must not set pass true.",
+  "required_fields": [
+    "participant_id",
+    "modality",
+    "surface",
+    "tasks",
+    "severity",
+    "issues",
+    "evidence_paths",
+    "facilitator_attestation"
+  ],
+  "pass_rule": "planned_participants_complete AND severity1_open==0 AND attestation==true"
+}

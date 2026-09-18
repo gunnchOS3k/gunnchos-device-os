@@ -1,0 +1,978 @@
+{
+  "schema": "gunnchos.cx2.evidence_report.v1",
+  "generated_at_utc": "2026-09-16T02:38:10Z",
+  "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+  "surfaces": {
+    "home": "gunnch Home",
+    "vault": "Vault",
+    "app_center": "App Center",
+    "connect": "Connect",
+    "assist": "Assist",
+    "care": "Care"
+  },
+  "restart_home": {
+    "ok": true,
+    "surface": "home",
+    "profile_persisted": true,
+    "session_persisted": true,
+    "evidence_class": "HARNESS_PASS"
+  },
+  "domains": {
+    "browser": {
+      "browser_name": "google-chrome",
+      "browser_binary": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "version": "Google Chrome 152.0.7977.84",
+      "arch": "arm64",
+      "args_template": [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "--user-data-dir={profile}",
+        "--no-first-run",
+        "--disable-default-apps",
+        "{url}"
+      ],
+      "checks": {
+        "detect": {
+          "pass": true,
+          "name": "google-chrome",
+          "path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        },
+        "version": {
+          "pass": true,
+          "version": "Google Chrome 152.0.7977.84"
+        },
+        "https_local_tls": {
+          "pass": true,
+          "cli_pass": true,
+          "gui_pass": false,
+          "url": "http://127.0.0.1:50929/",
+          "pid": null,
+          "notes": "http_fallback_no_cryptography_module",
+          "evidence_class": "HARNESS_PASS"
+        },
+        "download_via_browser": {
+          "pass": false,
+          "evidence_class": "HUMAN_VALIDATION_PENDING",
+          "notes": "browser_ui_download_requires_gui_automation_or_human"
+        },
+        "upload_file_chooser": {
+          "pass": false,
+          "evidence_class": "HUMAN_VALIDATION_PENDING",
+          "notes": "native_file_chooser_or_xdg_portal_not_auto_passed"
+        },
+        "pdf_open": {
+          "pass": false,
+          "path": "/tmp/cx2_evidence_home2/providers/browser/sample.pdf",
+          "evidence_class": "HUMAN_VALIDATION_PENDING",
+          "notes": "pdf_open_in_browser_gui_pending"
+        },
+        "profile_separation": {
+          "pass": true,
+          "profiles": [
+            "work",
+            "personal"
+          ],
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "clear_data": {
+          "pass": true,
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "offline_local_page": {
+          "pass": true,
+          "path": "/tmp/cx2_evidence_home2/providers/browser/offline/index.html",
+          "evidence_class": "HARNESS_PASS",
+          "notes": "local_page_file_without_browser_render_proof"
+        },
+        "camera_mic_portal": {
+          "pass": false,
+          "evidence_class": "PHYSICAL_VALIDATION_PENDING",
+          "notes": "virtual_or_physical_av_requires_human_validation"
+        },
+        "pwa": {
+          "pass": false,
+          "evidence_class": "EXTERNAL_PROVIDER_PENDING",
+          "notes": "pwa_install_not_claimed_without_runtime_proof"
+        }
+      },
+      "standardized_default": false,
+      "evidence_class": "REAL_PROVIDER_CLI_PASS",
+      "claim_boundary": "do_not_standardize_until_matrix_green"
+    },
+    "productivity": {
+      "create": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/evidence_doc.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "pid_probe": true,
+        "odf_valid_zip": true,
+        "content_verified": true,
+        "sha256": "8ff77df1ab76e98a6a3da0aa21af6a3af98c5c11967902d5104827c3987f7ac0",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "edit": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/evidence_doc.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "pid_probe": true,
+        "odf_valid_zip": true,
+        "content_verified": true,
+        "sha256": "f6d659278fcb21b2e287ea013a87b2f06e9043fcb265c1bd47c98d38906a83e4",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "pdf": {
+        "ok": true,
+        "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/evidence_doc.pdf",
+        "via": "libreoffice",
+        "sha256": "82281beb1173238198256d187402e03046c962625426ff950662f605d8493f04",
+        "reopen_verified": true,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "status": {
+        "libreoffice_available": true,
+        "binary": "/opt/homebrew/bin/soffice",
+        "evidence": {
+          "create_writer": {
+            "ok": true,
+            "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/evidence_doc.odt",
+            "kind": "writer",
+            "via": "libreoffice",
+            "pid_probe": true,
+            "odf_valid_zip": true,
+            "content_verified": true,
+            "sha256": "f6d659278fcb21b2e287ea013a87b2f06e9043fcb265c1bd47c98d38906a83e4",
+            "evidence_class": "REAL_PROVIDER_CLI_PASS"
+          },
+          "export_pdf": {
+            "ok": true,
+            "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/evidence_doc.pdf",
+            "via": "libreoffice",
+            "sha256": "82281beb1173238198256d187402e03046c962625426ff950662f605d8493f04",
+            "reopen_verified": true,
+            "evidence_class": "REAL_PROVIDER_CLI_PASS"
+          }
+        }
+      }
+    },
+    "app_center": {
+      "install": {
+        "installed": true,
+        "app": {
+          "app_id": "org.gunnchos.cx2.testapp",
+          "name": "CX2 Test App",
+          "lane": "LOCAL_PACKAGE_REPO",
+          "version": "1.0.0",
+          "provenance": "cx2_local_test_repo",
+          "permissions": [
+            "files.read",
+            "notifications"
+          ],
+          "installed": true,
+          "storage_path": "/tmp/cx2_evidence_home2/providers/app_center/installed/org.gunnchos.cx2.testapp",
+          "files_deployed": [
+            "manifest.json",
+            "run.py"
+          ],
+          "source": "local_repo"
+        },
+        "evidence_class": "HARNESS_ONLY",
+        "deploy_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "launch": {
+        "launched": true,
+        "app_id": "org.gunnchos.cx2.testapp",
+        "pid": 27557,
+        "version": "1.0.0",
+        "process_evidence": {
+          "app_id": "org.gunnchos.cx2.testapp",
+          "version": "1.0.0",
+          "pid": 27557,
+          "argv": [
+            "/tmp/cx2_evidence_home2/providers/app_center/installed/org.gunnchos.cx2.testapp/run.py"
+          ],
+          "started_at": 1789526283.420001
+        },
+        "returncode": 0,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS",
+        "gui_window": false,
+        "claim_boundary": "process_evidence_without_compositor_window_on_this_host"
+      },
+      "update": {
+        "updated": true,
+        "from": "1.0.0",
+        "to": "2.0.0",
+        "rollback_available": true,
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "uninstall": {
+        "uninstalled": true,
+        "cleanup_complete": true,
+        "app_id": "org.gunnchos.cx2.testapp",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "info": {
+        "provider": "local_package_repo",
+        "flatpak_available": false,
+        "repo": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/gunnchos_device_os/cx2/fixtures/local_repo",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      }
+    },
+    "connect": {
+      "mail": {
+        "ok": true,
+        "smtp_stored": 1,
+        "imap_fetched": 1,
+        "vault_eml": "mail/sent_1789526283960.eml",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "calendar": {
+        "ok": true,
+        "created": {
+          "uid": "cx2-evt-1",
+          "ok": true
+        },
+        "synced_body_len": 85,
+        "edited": {
+          "uid": "cx2-evt-1",
+          "ok": true
+        },
+        "deleted": {
+          "ok": true
+        },
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "contacts": {
+        "ok": true,
+        "created": {
+          "uid": "cx2-c1",
+          "ok": true
+        },
+        "synced": "BEGIN:VCARD\nFN:CX2 Peer\nEMAIL:peer@localhost\nUID:cx2-c1\nEND:VCARD\n",
+        "edited": {
+          "uid": "cx2-c1",
+          "ok": true
+        },
+        "evidence_class": "REAL_PROVIDER_CLI_PASS"
+      },
+      "chat_video": {
+        "candidates": {
+          "jitsi_meet_browser": "EXTERNAL_PROVIDER_PENDING",
+          "matrix_element": "EXTERNAL_PROVIDER_PENDING",
+          "first_party_webrtc": "EXTERNAL_PROVIDER_PENDING"
+        },
+        "HUMAN_AV_QUALITY_PENDING": true,
+        "PHYSICAL_CAMERA_MIC_PENDING": true,
+        "qualified_path": null,
+        "evidence_class": "EXTERNAL_PROVIDER_PENDING"
+      }
+    },
+    "capture": {
+      "screenshot": {
+        "ok": true,
+        "path": "captures/evidence.png",
+        "bytes": 505044,
+        "sha256": "2e71263b05cb0ff0e2f329a06fa3106eae134c2961267b563c1099b3c25d4c2e",
+        "via": "screencapture",
+        "evidence_class": "REAL_PROVIDER_GUI_PASS"
+      },
+      "screencast": {
+        "ok": true,
+        "path": "captures/evidence.mp4",
+        "bytes": 2319,
+        "sha256": "5e9c9490b3f3b988f8b84959f369483d6673783b94c060133e5980b64a71f655",
+        "via": "ffmpeg_lavfi",
+        "evidence_class": "REAL_PROVIDER_CLI_PASS",
+        "claim_boundary": "container_real_but_not_compositor_portal_capture; portal_screencast=HUMAN_VALIDATION_PENDING"
+      }
+    },
+    "printing": {
+      "cups_client": true,
+      "ipptool": true,
+      "printers": [
+        "EPSON_XP_4200_Series",
+        "HP_ENVY_Photo_7800_series",
+        "HP_ENVY_Photo_7800_series___Fax"
+      ],
+      "PHYSICAL_PRINTER_VALIDATION_PENDING": true,
+      "evidence_class": "REAL_PROVIDER_CLI_PASS",
+      "si_packet": "/tmp/cx2_evidence_home2/providers/printing/PHYSICAL_PRINTER_SI_PACKET.json"
+    },
+    "portals": {
+      "backend": "gdbus",
+      "portal_bus_available": false,
+      "portals": {
+        "org.freedesktop.portal.FileChooser": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        },
+        "org.freedesktop.portal.OpenURI": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        },
+        "org.freedesktop.portal.Notification": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        },
+        "org.freedesktop.portal.Settings": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        },
+        "org.freedesktop.portal.Screenshot": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        },
+        "org.freedesktop.portal.ScreenCast": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        },
+        "org.freedesktop.portal.Camera": {
+          "available": false,
+          "exercised": false,
+          "user_response": null,
+          "revoked": null,
+          "evidence_class": "NOT_APPLICABLE",
+          "notes": "host_without_xdg_desktop_portal"
+        }
+      },
+      "evidence_class": "NOT_APPLICABLE",
+      "claim_boundary": "no_fabricated_portal_success_on_unsupported_hosts"
+    },
+    "assist": {
+      "title": "Assist",
+      "settings": {
+        "high_contrast": false,
+        "reduce_motion": false,
+        "ui_scale": 1.0,
+        "keyboard_only": true
+      },
+      "focus_order": [
+        {
+          "id": "home",
+          "role": "landmark",
+          "label": "gunnch Home",
+          "order": 1
+        },
+        {
+          "id": "vault",
+          "role": "button",
+          "label": "Vault",
+          "order": 2
+        },
+        {
+          "id": "app_center",
+          "role": "button",
+          "label": "App Center",
+          "order": 3
+        },
+        {
+          "id": "connect",
+          "role": "button",
+          "label": "Connect",
+          "order": 4
+        },
+        {
+          "id": "assist",
+          "role": "button",
+          "label": "Assist",
+          "order": 5
+        },
+        {
+          "id": "care",
+          "role": "button",
+          "label": "Care",
+          "order": 6
+        }
+      ],
+      "human_validation": "HUMAN_VALIDATION_PENDING",
+      "evidence_class": "HARNESS_PASS",
+      "claim_boundary": "rendered_ui_a11y_requires_gui_harness_plus_human_packet"
+    },
+    "care": {
+      "title": "Care",
+      "diagnostics_available": true,
+      "offline_help": "# Care\n\nExport a support bundle, restore from Vault backup, or repair an app.\nWarranty/RMA readiness is NOT granted by software alone.\n",
+      "actions": [
+        "support_bundle",
+        "backup",
+        "restore",
+        "update",
+        "recovery",
+        "redaction"
+      ],
+      "evidence_class": "CONTRACT_PASS"
+    }
+  },
+  "journeys": {
+    "J1": {
+      "name": "J1_school_office_paper",
+      "ok": true,
+      "steps": {
+        "doc": {
+          "ok": true,
+          "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/j1_essay.odt",
+          "kind": "writer",
+          "via": "libreoffice",
+          "pid_probe": true,
+          "odf_valid_zip": true,
+          "content_verified": true,
+          "sha256": "cbf8bd76116f2b772d4006ad6e352329aa705f93d618bda0dd31b98324ff3326",
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "edited": {
+          "ok": true,
+          "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/j1_essay.odt",
+          "kind": "writer",
+          "via": "libreoffice",
+          "pid_probe": true,
+          "odf_valid_zip": true,
+          "content_verified": true,
+          "sha256": "cb5efcd1807a482094eed9dffc2d6c31a76fb889764f9bb93443b4d3667f8d09",
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "pdf": {
+          "ok": true,
+          "path": "/tmp/cx2_evidence_home2/providers/productivity/docs/j1_essay.pdf",
+          "via": "libreoffice",
+          "sha256": "a67f61eb44e25f0ef08b4fbc55cfc9e18616890d20016def84d4426b18cb9512",
+          "reopen_verified": true,
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "printed": {
+          "ok": true,
+          "job": {
+            "job_id": "job_1789526288387",
+            "printer": "EPSON_XP_4200_Series",
+            "document": "/tmp/cx2_evidence_home2/providers/productivity/docs/j1_essay.pdf",
+            "state": "submitted_cups",
+            "cups_stdout": "request id is EPSON_XP_4200_Series-126 (1 file(s))\n"
+          },
+          "output": "/tmp/cx2_evidence_home2/providers/printing/output/job_1789526288387.pdf",
+          "sha256": "a67f61eb44e25f0ef08b4fbc55cfc9e18616890d20016def84d4426b18cb9512",
+          "PHYSICAL_PRINTER_VALIDATION_PENDING": true,
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "ui": "Vault"
+      },
+      "PHYSICAL_PRINTER_VALIDATION_PENDING": true,
+      "evidence_class": "REAL_PROVIDER_CLI_PASS"
+    },
+    "J2": {
+      "name": "J2_research_web_mail",
+      "ok": true,
+      "steps": {
+        "browser": "REAL_PROVIDER_CLI_PASS",
+        "mail": {
+          "ok": true,
+          "smtp_stored": 1,
+          "imap_fetched": 1,
+          "vault_eml": "mail/sent_1789526289066.eml",
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "ui": "Connect"
+      },
+      "evidence_class": "REAL_PROVIDER_PARTIAL"
+    },
+    "J3": {
+      "name": "J3_app_lifecycle",
+      "ok": true,
+      "steps": {
+        "install": {
+          "installed": true,
+          "app": {
+            "app_id": "org.gunnchos.cx2.testapp",
+            "name": "CX2 Test App",
+            "lane": "LOCAL_PACKAGE_REPO",
+            "version": "1.0.0",
+            "provenance": "cx2_local_test_repo",
+            "permissions": [
+              "files.read",
+              "notifications"
+            ],
+            "installed": true,
+            "storage_path": "/tmp/cx2_evidence_home2/providers/app_center/installed/org.gunnchos.cx2.testapp",
+            "files_deployed": [
+              "manifest.json",
+              "run.py"
+            ],
+            "source": "local_repo"
+          },
+          "evidence_class": "HARNESS_ONLY",
+          "deploy_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "launch": {
+          "launched": true,
+          "app_id": "org.gunnchos.cx2.testapp",
+          "pid": 27574,
+          "version": "1.0.0",
+          "process_evidence": {
+            "app_id": "org.gunnchos.cx2.testapp",
+            "version": "1.0.0",
+            "pid": 27574,
+            "argv": [
+              "/tmp/cx2_evidence_home2/providers/app_center/installed/org.gunnchos.cx2.testapp/run.py"
+            ],
+            "started_at": 1789526289.106433
+          },
+          "returncode": 0,
+          "evidence_class": "REAL_PROVIDER_CLI_PASS",
+          "gui_window": false,
+          "claim_boundary": "process_evidence_without_compositor_window_on_this_host"
+        },
+        "update": {
+          "updated": true,
+          "from": "1.0.0",
+          "to": "2.0.0",
+          "rollback_available": true,
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "rollback": {
+          "rolled_back": true,
+          "version": "1.0.0",
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "uninstall": {
+          "uninstalled": true,
+          "cleanup_complete": true,
+          "app_id": "org.gunnchos.cx2.testapp",
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        }
+      },
+      "evidence_class": "REAL_PROVIDER_CLI_PASS"
+    },
+    "J4": {
+      "name": "J4_calendar_collaboration",
+      "ok": true,
+      "steps": {
+        "calendar": {
+          "ok": true,
+          "created": {
+            "uid": "cx2-evt-1",
+            "ok": true
+          },
+          "synced_body_len": 85,
+          "edited": {
+            "uid": "cx2-evt-1",
+            "ok": true
+          },
+          "deleted": {
+            "ok": true
+          },
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "contacts": {
+          "ok": true,
+          "created": {
+            "uid": "cx2-c1",
+            "ok": true
+          },
+          "synced": "BEGIN:VCARD\nFN:CX2 Peer\nEMAIL:peer@localhost\nUID:cx2-c1\nEND:VCARD\n",
+          "edited": {
+            "uid": "cx2-c1",
+            "ok": true
+          },
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        },
+        "chat_video": {
+          "candidates": {
+            "jitsi_meet_browser": "EXTERNAL_PROVIDER_PENDING",
+            "matrix_element": "EXTERNAL_PROVIDER_PENDING",
+            "first_party_webrtc": "EXTERNAL_PROVIDER_PENDING"
+          },
+          "HUMAN_AV_QUALITY_PENDING": true,
+          "PHYSICAL_CAMERA_MIC_PENDING": true,
+          "qualified_path": null,
+          "evidence_class": "EXTERNAL_PROVIDER_PENDING"
+        },
+        "ui": "Connect"
+      },
+      "evidence_class": "REAL_PROVIDER_CLI_PASS",
+      "HUMAN_AV_QUALITY_PENDING": true,
+      "PHYSICAL_CAMERA_MIC_PENDING": true
+    },
+    "J5": {
+      "name": "J5_offline_reconnect",
+      "ok": true,
+      "steps": {
+        "queue": {
+          "ok": true,
+          "queue": [
+            {
+              "id": "q_1789526289",
+              "state": "sent",
+              "subject": "offline"
+            }
+          ],
+          "send": {
+            "ok": true,
+            "smtp_stored": 1,
+            "imap_fetched": 1,
+            "vault_eml": "mail/sent_1789526290099.eml",
+            "evidence_class": "REAL_PROVIDER_CLI_PASS"
+          },
+          "duplicates": 1,
+          "evidence_class": "REAL_PROVIDER_CLI_PASS"
+        }
+      },
+      "evidence_class": "REAL_PROVIDER_CLI_PASS"
+    },
+    "J6": {
+      "name": "J6_accessibility",
+      "ok": true,
+      "steps": {
+        "traverse": {
+          "ok": true,
+          "visited": [
+            "home",
+            "vault",
+            "app_center",
+            "connect",
+            "assist",
+            "care"
+          ],
+          "focus_visible": true,
+          "keyboard_traps": false,
+          "accessible_names": [
+            true
+          ],
+          "evidence_class": "HARNESS_PASS",
+          "human_validation": "HUMAN_VALIDATION_PENDING"
+        },
+        "assist": "Assist"
+      },
+      "HUMAN_A11Y_PENDING": true,
+      "HUMAN_VALIDATION_PENDING": true,
+      "evidence_class": "HARNESS_PASS",
+      "human_validation_packet": "artifacts/complete_experience/cx2/HUMAN_A11Y_VALIDATION_PACKET.md"
+    },
+    "J7": {
+      "name": "J7_recovery",
+      "ok": true,
+      "steps": {
+        "backup": "j7_backup",
+        "restored": {
+          "provider_id": "gunnchos.cx0.backup_provider.v1",
+          "encryption": "none",
+          "restore_verified": true,
+          "files": [
+            {
+              "path": "captures/evidence.mp4",
+              "sha256": "5e9c9490b3f3b988f8b84959f369483d6673783b94c060133e5980b64a71f655"
+            },
+            {
+              "path": "captures/evidence.png",
+              "sha256": "2e71263b05cb0ff0e2f329a06fa3106eae134c2961267b563c1099b3c25d4c2e"
+            },
+            {
+              "path": "critical/data.bin",
+              "sha256": "e10d38686b814aaa765e1a9aa6bf3298d7ac8df07a12f441647b2eb455609aeb"
+            },
+            {
+              "path": "docs/evidence_doc.odt",
+              "sha256": "f6d659278fcb21b2e287ea013a87b2f06e9043fcb265c1bd47c98d38906a83e4"
+            },
+            {
+              "path": "docs/evidence_doc.pdf",
+              "sha256": "82281beb1173238198256d187402e03046c962625426ff950662f605d8493f04"
+            },
+            {
+              "path": "docs/j1_essay.odt",
+              "sha256": "cb5efcd1807a482094eed9dffc2d6c31a76fb889764f9bb93443b4d3667f8d09"
+            },
+            {
+              "path": "docs/j1_essay.pdf",
+              "sha256": "a67f61eb44e25f0ef08b4fbc55cfc9e18616890d20016def84d4426b18cb9512"
+            },
+            {
+              "path": "mail/sent_1789526283960.eml",
+              "sha256": "c50aeb1b5d14f68f756ab87f325784c10d4319d44788d8c4ee6cf12760ba16a6"
+            },
+            {
+              "path": "mail/sent_1789526289066.eml",
+              "sha256": "470299cb8eed4594c13fddb91aae759b1e3d71dd1e18f9dd4b8c3b18baad055a"
+            },
+            {
+              "path": "mail/sent_1789526290099.eml",
+              "sha256": "e7e80d7c4d559e2c0a585dc64f1dc14460a8344cd36783f1d5cb6cce78a52955"
+            },
+            {
+              "path": "offline/draft.txt",
+              "sha256": "a34c97976a6c9bd7004bd608027712ee1460a9f40241bf68996d76240495ca7e"
+            },
+            {
+              "path": "research/note.txt",
+              "sha256": "0b1853b941f3d4b80fde987b2b9abbd6f5a6df15d1afe42f718983dbb0bcfde8"
+            }
+          ],
+          "claim_boundary": "local_versioned_backup_with_integrity_manifest",
+          "backup_id": "j7_backup",
+          "versioned": true,
+          "integrity_manifest": true
+        },
+        "care_ui": "Care"
+      },
+      "evidence_class": "REAL_PROVIDER_CLI_PASS"
+    }
+  },
+  "device_profiles": {
+    "schema": "gunnchos.cx2.device_profile_matrix.v1",
+    "matrix": {
+      "student_14_5": {
+        "display": "14.5-inch student",
+        "input": [
+          "keyboard",
+          "trackpad",
+          "touch"
+        ],
+        "shell_layout": "laptop",
+        "product": {
+          "home": true,
+          "vault": true,
+          "app_center": true,
+          "connect": true,
+          "assist": true,
+          "care": true
+        },
+        "provider": {
+          "browser_gui": false,
+          "libreoffice_cli": true,
+          "flatpak": false,
+          "cups": false,
+          "portals": false
+        },
+        "edge_io_rings": "accessory_not_desktop"
+      },
+      "handheld_hybrid": {
+        "display": "handheld hybrid",
+        "input": [
+          "touch",
+          "gamepad",
+          "rings"
+        ],
+        "shell_layout": "handheld",
+        "product": {
+          "home": true,
+          "vault": true,
+          "app_center": true,
+          "connect": true,
+          "assist": true,
+          "care": true
+        },
+        "provider": {
+          "browser_gui": false,
+          "libreoffice_cli": true,
+          "flatpak": false,
+          "cups": false,
+          "portals": false
+        },
+        "edge_io_rings": "accessory_not_desktop"
+      },
+      "ds_xl": {
+        "display": "DS-XL dual",
+        "input": [
+          "keyboard",
+          "mouse",
+          "touch"
+        ],
+        "shell_layout": "ds_xl",
+        "product": {
+          "home": true,
+          "vault": true,
+          "app_center": true,
+          "connect": true,
+          "assist": true,
+          "care": true
+        },
+        "provider": {
+          "browser_gui": false,
+          "libreoffice_cli": true,
+          "flatpak": false,
+          "cups": false,
+          "portals": false
+        },
+        "edge_io_rings": "accessory_not_desktop"
+      },
+      "docked": {
+        "display": "docked external",
+        "input": [
+          "keyboard",
+          "mouse"
+        ],
+        "shell_layout": "docked",
+        "product": {
+          "home": true,
+          "vault": true,
+          "app_center": true,
+          "connect": true,
+          "assist": true,
+          "care": true
+        },
+        "provider": {
+          "browser_gui": false,
+          "libreoffice_cli": true,
+          "flatpak": false,
+          "cups": false,
+          "portals": false
+        },
+        "edge_io_rings": "accessory_not_desktop"
+      },
+      "ci_qemu": {
+        "display": "CI/QEMU headless",
+        "input": [
+          "virtual"
+        ],
+        "shell_layout": "ci",
+        "product": {
+          "home": true,
+          "vault": true,
+          "app_center": true,
+          "connect": true,
+          "assist": true,
+          "care": true
+        },
+        "provider": {
+          "browser_gui": false,
+          "libreoffice_cli": true,
+          "flatpak": false,
+          "cups": false,
+          "portals": false
+        },
+        "edge_io_rings": "accessory_not_desktop"
+      }
+    },
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+    "claim_boundary": "product_surface_booleans_separate_from_provider_booleans"
+  },
+  "cx1_reclassification": {
+    "schema": "gunnchos.cx2.evidence_reclassification.v1",
+    "hierarchy": [
+      "CONTRACT_PASS",
+      "HARNESS_PASS",
+      "REAL_PROVIDER_CLI_PASS",
+      "REAL_PROVIDER_GUI_PASS",
+      "REAL_USER_JOURNEY_DIGITAL_PASS",
+      "HUMAN_VALIDATION_PENDING",
+      "PHYSICAL_VALIDATION_PENDING",
+      "EXTERNAL_PROVIDER_PENDING",
+      "NOT_APPLICABLE",
+      "REAL_PROVIDER_PARTIAL",
+      "HARNESS_ONLY",
+      "BLOCKED"
+    ],
+    "policy": "downgrade_overstated_cx1_without_falsifying_cx1_history",
+    "cx1_artifacts_retained": "artifacts/complete_experience/cx1/",
+    "cx2_artifacts_root": "artifacts/complete_experience/cx2/",
+    "reclassifications": [
+      {
+        "cx1_claim": "App Center install via INSTALLED.json marker",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "marker_file_not_real_package_deploy"
+      },
+      {
+        "cx1_claim": "App launch via LAST_LAUNCH.json",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "no_process_or_window_evidence"
+      },
+      {
+        "cx1_claim": "Browser HTTPS via Python ssl.create_default_context",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "not_browser_tls_navigation"
+      },
+      {
+        "cx1_claim": "Browser download via write_bytes fixture",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "not_browser_ui_download"
+      },
+      {
+        "cx1_claim": "Upload file chooser via JSON adapter",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "not_real_portal_or_native_chooser"
+      },
+      {
+        "cx1_claim": "PWA via manifest-only JSON",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "manifest_without_installable_runtime"
+      },
+      {
+        "cx1_claim": "Writer edit via ODF byte append",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "not_odf_aware_edit_or_libreoffice_reopen"
+      },
+      {
+        "cx1_claim": "Screenshot/screencast static fixture bytes",
+        "cx1_class": "DIGITAL_PARTIAL",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "fixture_not_compositor_capture"
+      },
+      {
+        "cx1_claim": "Conference URL-to-JSON",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "no_webrtc_or_meeting_client"
+      },
+      {
+        "cx1_claim": "CalDAV/CardDAV JSON store without protocol",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "json_fixture_not_caldav_carddav"
+      },
+      {
+        "cx1_claim": "Virtual printer byte-copy output",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "not_cups_ipp_spool"
+      },
+      {
+        "cx1_claim": "Assist a11y without rendered UI",
+        "cx1_class": "DIGITAL_A11Y_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "semantics_model_not_rendered_ui"
+      },
+      {
+        "cx1_claim": "LibreOffice headless convert create/export",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "REAL_PROVIDER_CLI_PASS",
+        "reason": "real_soffice_process_when_binary_present"
+      },
+      {
+        "cx1_claim": "Identity/Vault/Care harness contracts",
+        "cx1_class": "DIGITAL_PASS",
+        "cx2_class": "HARNESS_PASS",
+        "reason": "valuable_harness_retained_not_real_gui_journey"
+      }
+    ],
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false
+  },
+  "claim_boundary": "CX2 evidence under artifacts/complete_experience/cx2/. Does not mutate Device Lab gate tokens, #134, Portal #14/#15, or WAIKE/gunnchAI."
+}

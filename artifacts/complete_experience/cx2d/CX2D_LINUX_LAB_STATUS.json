@@ -1,0 +1,51 @@
+{
+  "schema": "gunnchos.cx2d.linux_lab_status.v1",
+  "generated_at_utc": "2026-09-16T02:58:55Z",
+  "lab_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2d_linux_lab",
+  "overlay_prep": {
+    "ok": true,
+    "arch": "aarch64",
+    "distro": "debian",
+    "version": "12 (bookworm) genericcloud",
+    "compositor_target": "weston",
+    "base_source_ro": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/device_lab_interactive_guest/cache/debian-12-genericcloud-arm64.qcow2",
+    "base_copy": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2d_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+    "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2d_linux_lab/overlays/cx2d-aarch64.qcow2",
+    "host": {
+      "host_os": "Darwin",
+      "host_machine": "arm64",
+      "host_release": "25.6.0",
+      "qemu_system_aarch64": "/opt/homebrew/bin/qemu-system-aarch64",
+      "qemu_system_x86_64": "/opt/homebrew/bin/qemu-system-x86_64",
+      "weston_on_host": null,
+      "flatpak_on_host": null,
+      "display": null,
+      "xdg_runtime_dir": null
+    },
+    "blocker": null,
+    "base_sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
+    "overlay_sha256": "bfb8811904e791ae4eccb37eb04ba04462f8a962e739e3485fda3cade04a9eaa"
+  },
+  "cloud_init": {
+    "user_data": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2d_linux_lab/cloud-init/user-data",
+    "meta_data": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2d_linux_lab/cloud-init/meta-data",
+    "user_data_sha256": "0707cdddfa673094f5ac640ef6781ede4ab13f310b73402c9b7cac1795d2432e",
+    "meta_data_sha256": "739a8ff2c8cdb04f750ecf19c96f2b6090b32cd9cb21863d6e35c0da63d71867"
+  },
+  "host": {
+    "host_os": "Darwin",
+    "host_machine": "arm64",
+    "host_release": "25.6.0",
+    "qemu_system_aarch64": "/opt/homebrew/bin/qemu-system-aarch64",
+    "qemu_system_x86_64": "/opt/homebrew/bin/qemu-system-x86_64",
+    "weston_on_host": null,
+    "flatpak_on_host": null,
+    "display": null,
+    "xdg_runtime_dir": null
+  },
+  "graphical_session_proven": false,
+  "provision_script_sha256": "af1e76a1b09acc2f05e342adba9e0937c96bcf7b48644699c68f9e1550b1c625",
+  "blocker": "CX2D_LINUX_GUI_SESSION_NOT_PROVEN_ON_HOST: agent host is Darwin/arm64; CX2D overlay/cloud-init scaffolding is ready under os_build/cx2d_linux_lab/, but a real Weston/Wayland + DBus + portal session inside the guest was not completed/captured as rendered journey evidence in this run. Fail closed on REAL_USER_JOURNEY_DIGITAL_PASS and CX2D_REAL_*_WINDOW.",
+  "device_lab_paths_untouched": true,
+  "evidence_namespace": "artifacts/complete_experience/cx2d"
+}

@@ -1,0 +1,713 @@
+{
+  "schema": "gunnchos.cx1.evidence_report.v1",
+  "generated_at_utc": "2026-09-16T02:04:26Z",
+  "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+  "domains": {
+    "identity": {
+      "IdentitySession_v1": true,
+      "UserProfile_v1": true,
+      "no_plaintext_passwords": true,
+      "cloud_mandatory": false,
+      "work_school_personal_separated": true,
+      "evidence_class": "DIGITAL_PASS",
+      "claim_boundary": "local_identity_conformance_not_idp_certification"
+    },
+    "browser": {
+      "browser_name": null,
+      "browser_binary": null,
+      "checks": {
+        "launch": {
+          "pass": true,
+          "mode": "digital_webview_equivalent",
+          "notes": "no_system_browser_using_local_page_engine"
+        },
+        "https": {
+          "pass": true,
+          "tls": 16,
+          "notes": "ssl_context_available"
+        },
+        "download": {
+          "pass": true,
+          "path": "/tmp/cx1_evidence_home/browser/downloads/sample.bin",
+          "sha256": "a4fe3558043893b9f95a4896b120d09f9cf77803991d4b23dbc931bdbdc09f8b"
+        },
+        "upload_file_chooser": {
+          "pass": true,
+          "adapter": "permissions.file_chooser"
+        },
+        "pdf": {
+          "pass": true,
+          "path": "/tmp/cx1_evidence_home/browser/sample.pdf",
+          "notes": "local_pdf_fixture"
+        },
+        "camera_mic": {
+          "pass": false,
+          "evidence_class": "PHYSICAL_PENDING",
+          "notes": "camera_mic_requires_permissioned_hardware_path"
+        },
+        "pwa_or_equivalent": {
+          "pass": true,
+          "mode": "pwa_or_equivalent_manifest"
+        },
+        "profile_separation": {
+          "pass": true,
+          "profiles": [
+            "work",
+            "personal"
+          ]
+        },
+        "clear_data": {
+          "pass": true
+        },
+        "offline_local_page": {
+          "pass": true,
+          "path": "/tmp/cx1_evidence_home/browser/offline/index.html"
+        }
+      },
+      "passed": 9,
+      "total": 10,
+      "core_ok": true,
+      "standardized_default": false,
+      "evidence_class": "DIGITAL_PASS",
+      "claim_boundary": "qualification_probe_not_default_standardization"
+    },
+    "productivity": {
+      "create_writer": {
+        "ok": true,
+        "path": "/tmp/cx1_evidence_home/productivity/docs/evidence_doc.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "sha256": "7c844fe29d78417fce6c94565b7112de59a999233b826520ed5764988ffa3c12",
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "export_pdf": {
+        "ok": true,
+        "path": "/tmp/cx1_evidence_home/productivity/docs/evidence_doc.pdf",
+        "via": "libreoffice",
+        "sha256": "2dd00a2bfbab0a931b77eb5f19674a242c3481498b38d8d2176a65663aaf1f0c",
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "status": {
+        "libreoffice_available": true,
+        "binary": "/opt/homebrew/bin/soffice",
+        "evidence": {
+          "create_writer": {
+            "ok": true,
+            "path": "/tmp/cx1_evidence_home/productivity/docs/evidence_doc.odt",
+            "kind": "writer",
+            "via": "libreoffice",
+            "sha256": "7c844fe29d78417fce6c94565b7112de59a999233b826520ed5764988ffa3c12",
+            "evidence_class": "DIGITAL_PASS"
+          },
+          "export_pdf": {
+            "ok": true,
+            "path": "/tmp/cx1_evidence_home/productivity/docs/evidence_doc.pdf",
+            "via": "libreoffice",
+            "sha256": "2dd00a2bfbab0a931b77eb5f19674a242c3481498b38d8d2176a65663aaf1f0c",
+            "evidence_class": "DIGITAL_PASS"
+          }
+        }
+      }
+    },
+    "app_center": {
+      "installed": true,
+      "app": {
+        "app_id": "org.gunnchos.cx1.testapp",
+        "name": "CX1 Test App",
+        "lane": "GUNNCH_NATIVE",
+        "version": "1.0.0",
+        "provenance": "local_test_repo",
+        "permissions": [
+          "files.read",
+          "notifications"
+        ],
+        "installed": true,
+        "storage_path": "/tmp/cx1_evidence_home/app_center/installed/org.gunnchos.cx1.testapp",
+        "offline_metadata": {
+          "summary": "Deterministic CI test application"
+        }
+      },
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "permissions": {
+      "xdg-desktop-portal": {
+        "name": "xdg-desktop-portal",
+        "available": false,
+        "notes": "xdg_desktop_portal_absent"
+      },
+      "file-chooser": {
+        "name": "file-chooser",
+        "available": true,
+        "notes": "vault_file_chooser_adapter"
+      },
+      "camera": {
+        "name": "camera",
+        "available": false,
+        "notes": "hardware_or_portal_absent_fail_closed"
+      },
+      "microphone": {
+        "name": "microphone",
+        "available": false,
+        "notes": "hardware_or_portal_absent_fail_closed"
+      },
+      "screencast": {
+        "name": "screencast",
+        "available": false,
+        "notes": "hardware_or_portal_absent_fail_closed"
+      },
+      "openuri": {
+        "name": "openuri",
+        "available": true,
+        "notes": "digital_adapter_available"
+      },
+      "notifications": {
+        "name": "notifications",
+        "available": true,
+        "notes": "digital_adapter_available"
+      },
+      "settings": {
+        "name": "settings",
+        "available": true,
+        "notes": "digital_adapter_available"
+      }
+    },
+    "printing": {
+      "printers": [
+        {
+          "name": "CX1_Virtual_PDF",
+          "type": "virtual_pdf",
+          "available": true
+        },
+        {
+          "name": "EPSON_XP_4200_Series",
+          "type": "cups",
+          "available": true
+        },
+        {
+          "name": "HP_ENVY_Photo_7800_series",
+          "type": "cups",
+          "available": true
+        },
+        {
+          "name": "HP_ENVY_Photo_7800_series___Fax",
+          "type": "cups",
+          "available": true
+        }
+      ],
+      "cups_client": true,
+      "ipptool": true,
+      "cups_printers": [
+        "EPSON_XP_4200_Series",
+        "HP_ENVY_Photo_7800_series",
+        "HP_ENVY_Photo_7800_series___Fax"
+      ],
+      "physical_print": "PHYSICAL_PENDING",
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "peripherals": {
+      "peripherals": [
+        {
+          "type": "storage",
+          "detected": true,
+          "validated": false,
+          "notes": "local_disk_present"
+        },
+        {
+          "type": "keyboard",
+          "detected": true,
+          "validated": false,
+          "notes": "assumed_host_input_digital"
+        },
+        {
+          "type": "mouse",
+          "detected": true,
+          "validated": false,
+          "notes": "assumed_host_input_digital"
+        },
+        {
+          "type": "audio",
+          "detected": false,
+          "validated": false,
+          "notes": "hardware_not_validated"
+        },
+        {
+          "type": "camera",
+          "detected": false,
+          "validated": false,
+          "notes": "hardware_not_validated"
+        },
+        {
+          "type": "gamepad",
+          "detected": false,
+          "validated": false,
+          "notes": "hardware_not_validated"
+        },
+        {
+          "type": "bluetooth",
+          "detected": false,
+          "validated": false,
+          "notes": "hardware_not_validated"
+        },
+        {
+          "type": "display",
+          "detected": true,
+          "validated": false,
+          "notes": "host_display_assumed"
+        },
+        {
+          "type": "ring",
+          "detected": false,
+          "validated": false,
+          "notes": "hardware_not_validated"
+        },
+        {
+          "type": "midi",
+          "detected": false,
+          "validated": false,
+          "notes": "hardware_not_validated"
+        }
+      ],
+      "claim_boundary": "detection_not_full_validation",
+      "evidence_class": "DIGITAL_PARTIAL"
+    },
+    "assist": {
+      "device_profile": "handheld_student",
+      "features": [
+        {
+          "name": "screen_reader_hook",
+          "supported_digitally": true,
+          "human_verified": false
+        },
+        {
+          "name": "magnifier",
+          "supported_digitally": true,
+          "human_verified": false
+        },
+        {
+          "name": "high_contrast",
+          "supported_digitally": true,
+          "human_verified": false
+        },
+        {
+          "name": "large_text",
+          "supported_digitally": true,
+          "human_verified": false
+        },
+        {
+          "name": "keyboard_only",
+          "supported_digitally": true,
+          "human_verified": false
+        },
+        {
+          "name": "captions",
+          "supported_digitally": true,
+          "human_verified": false
+        },
+        {
+          "name": "reduce_motion",
+          "supported_digitally": true,
+          "human_verified": false
+        }
+      ],
+      "atspi_available": false,
+      "evidence_tier": "digital",
+      "claim_boundary": "inventory_scaffold_not_human_a11y_pass",
+      "cx1": {
+        "keyboard_only": true,
+        "high_contrast": false,
+        "reduce_motion": false,
+        "ui_scale": 1.0,
+        "focus_order": [
+          {
+            "id": "home",
+            "role": "landmark",
+            "label": "gunnch Home",
+            "order": 1
+          },
+          {
+            "id": "vault",
+            "role": "button",
+            "label": "Vault",
+            "order": 2
+          },
+          {
+            "id": "app_center",
+            "role": "button",
+            "label": "App Center",
+            "order": 3
+          },
+          {
+            "id": "connect",
+            "role": "button",
+            "label": "Connect",
+            "order": 4
+          },
+          {
+            "id": "assist",
+            "role": "button",
+            "label": "Assist",
+            "order": 5
+          },
+          {
+            "id": "care",
+            "role": "button",
+            "label": "Care",
+            "order": 6
+          }
+        ],
+        "atspi": {
+          "atspi_available": false,
+          "binary": null,
+          "evidence_class": "DIGITAL_PARTIAL",
+          "human_verification": "HUMAN_A11Y_PENDING"
+        },
+        "tts_stt": {
+          "tts": {
+            "available": true,
+            "binary": "/usr/bin/say"
+          },
+          "stt": {
+            "available": false,
+            "binary": null
+          },
+          "evidence_class": "DIGITAL_PARTIAL",
+          "human_verification": "HUMAN_A11Y_PENDING"
+        },
+        "switch_adaptive": {
+          "switch_control": {
+            "discovered": false,
+            "notes": "hardware_pending"
+          },
+          "adaptive": {
+            "discovered": false,
+            "notes": "hardware_pending"
+          },
+          "evidence_class": "DIGITAL_PARTIAL",
+          "human_verification": "HUMAN_A11Y_PENDING"
+        },
+        "captions": {
+          "captions_hook": true,
+          "wired": false,
+          "notes": "hook_present_media_pipeline_HUMAN_PENDING",
+          "evidence_class": "DIGITAL_PARTIAL"
+        }
+      },
+      "human_verification": "HUMAN_A11Y_PENDING"
+    },
+    "security": {
+      "summary": "dashboard_exported",
+      "secure_boot_tpm_se": {
+        "secure_boot": {
+          "tooling": false,
+          "verified": false,
+          "notes": "discovery_only"
+        },
+        "tpm": {
+          "tooling": false,
+          "verified": false,
+          "notes": "discovery_only"
+        },
+        "secure_element": {
+          "discovered": false,
+          "verified": false,
+          "notes": "no_fake_hardware_security_claims"
+        },
+        "evidence_class": "DIGITAL_PARTIAL",
+        "claim_boundary": "discovery_only_no_hardware_security_pass"
+      }
+    },
+    "offline": {
+      "online": true,
+      "low_bandwidth": false,
+      "mode": "online"
+    },
+    "care": {
+      "bundle_id": "2576536e-8979-47aa-b192-5e13c75e78ce",
+      "evidence_class": "DIGITAL_PASS"
+    }
+  },
+  "journeys": {
+    "journey_1": {
+      "name": "journey_1_docs_print_backup",
+      "ok": true,
+      "steps": {
+        "doc": {
+          "ok": true,
+          "path": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.odt",
+          "kind": "writer",
+          "via": "libreoffice",
+          "sha256": "45293a03012a00d31a984345fab806c92010c86e7ae0953721d2a1e38f7d0dfa",
+          "evidence_class": "DIGITAL_PASS"
+        },
+        "edited": {
+          "ok": true,
+          "path": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.odt",
+          "size": 8303,
+          "evidence_class": "DIGITAL_PASS"
+        },
+        "pdf": {
+          "ok": true,
+          "path": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.pdf",
+          "via": "libreoffice",
+          "sha256": "2cad1263f039bfa8be81b1054566ee1c0703ba5be834d00133bb332be8c8270f",
+          "evidence_class": "DIGITAL_PASS"
+        },
+        "printed": {
+          "ok": true,
+          "job": {
+            "job_id": "job_1789524266260",
+            "printer": "CX1_Virtual_PDF",
+            "document": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.pdf",
+            "state": "completed",
+            "created_at": 1789524266.260566
+          },
+          "output": "/tmp/cx1_evidence_home/printing/output/job_1789524266260.printed",
+          "physical_print": "PHYSICAL_PENDING",
+          "evidence_class": "DIGITAL_PASS"
+        },
+        "backup_id": "j1_backup",
+        "restored": true,
+        "physical_print": "PHYSICAL_PENDING"
+      },
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "journey_2": {
+      "name": "journey_2_browser_mail_attach",
+      "ok": true,
+      "steps": {
+        "browser_core_ok": true,
+        "mail_id": "mail_1789524266266",
+        "eml": "/tmp/cx1_evidence_home/connect/mail/mail_1789524266266.eml"
+      },
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "journey_3": {
+      "name": "journey_3_app_lifecycle",
+      "ok": true,
+      "steps": {
+        "installed": true,
+        "permission_state": "ask",
+        "launched": true,
+        "updated_to": "1.1.0",
+        "uninstalled": true
+      },
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "journey_4": {
+      "name": "journey_4_offline_reconcile",
+      "ok": true,
+      "steps": {
+        "ok": true,
+        "steps": [
+          {
+            "cut": {
+              "online": false,
+              "low_bandwidth": false,
+              "mode": "offline"
+            }
+          },
+          {
+            "local_work": true
+          },
+          {
+            "queued": true
+          },
+          {
+            "survived_restart": true
+          },
+          {
+            "reconnect": {
+              "online": true,
+              "low_bandwidth": false,
+              "mode": "online"
+            }
+          },
+          {
+            "reconcile": {
+              "reconciled": 9,
+              "pending": 0
+            }
+          }
+        ],
+        "connect_outbox_queued": 1,
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "journey_5": {
+      "name": "journey_5_backup_corrupt_restore",
+      "ok": true,
+      "steps": {
+        "backup_id": "j5_backup",
+        "corruption_detected": true,
+        "restore_verified": true,
+        "checksum_match": true
+      },
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "journey_6": {
+      "name": "journey_6_keyboard_a11y",
+      "ok": true,
+      "steps": {
+        "ok": true,
+        "visited": [
+          "home",
+          "vault",
+          "app_center",
+          "care"
+        ],
+        "semantics": [
+          {
+            "id": "home",
+            "role": "landmark",
+            "label": "gunnch Home",
+            "order": 1
+          },
+          {
+            "id": "vault",
+            "role": "button",
+            "label": "Vault",
+            "order": 2
+          },
+          {
+            "id": "app_center",
+            "role": "button",
+            "label": "App Center",
+            "order": 3
+          },
+          {
+            "id": "care",
+            "role": "button",
+            "label": "Care",
+            "order": 6
+          }
+        ],
+        "evidence_class": "DIGITAL_A11Y_PASS",
+        "human_verification": "HUMAN_A11Y_PENDING",
+        "claim_boundary": "digital_semantics_not_human_a11y_pass"
+      },
+      "evidence_class": "DIGITAL_A11Y_PASS",
+      "human_verification": "HUMAN_A11Y_PENDING"
+    }
+  },
+  "device_profiles": {
+    "schema": "gunnchos.cx1.device_profile_qualification.v1",
+    "profiles": [
+      "student_14_5",
+      "handheld_hybrid",
+      "ds_xl_coder",
+      "edge_io_rings",
+      "docked",
+      "generic_ci_qemu"
+    ],
+    "domains": [
+      "identity",
+      "vault",
+      "app_center",
+      "permissions",
+      "browser",
+      "productivity",
+      "connect",
+      "printing",
+      "assist",
+      "offline",
+      "security",
+      "care"
+    ],
+    "matrix": {
+      "student_14_5": {
+        "identity": "SUPPORTED",
+        "vault": "SUPPORTED",
+        "app_center": "SUPPORTED",
+        "permissions": "DEGRADED_SUPPORTED",
+        "browser": "DEGRADED_SUPPORTED",
+        "productivity": "DEGRADED_SUPPORTED",
+        "connect": "DEGRADED_SUPPORTED",
+        "printing": "DEGRADED_SUPPORTED",
+        "assist": "DEGRADED_SUPPORTED",
+        "offline": "SUPPORTED",
+        "security": "DEGRADED_SUPPORTED",
+        "care": "SUPPORTED"
+      },
+      "handheld_hybrid": {
+        "identity": "SUPPORTED",
+        "vault": "SUPPORTED",
+        "app_center": "SUPPORTED",
+        "permissions": "DEGRADED_SUPPORTED",
+        "browser": "DEGRADED_SUPPORTED",
+        "productivity": "DEGRADED_SUPPORTED",
+        "connect": "DEGRADED_SUPPORTED",
+        "printing": "DEGRADED_SUPPORTED",
+        "assist": "DEGRADED_SUPPORTED",
+        "offline": "SUPPORTED",
+        "security": "DEGRADED_SUPPORTED",
+        "care": "SUPPORTED"
+      },
+      "ds_xl_coder": {
+        "identity": "SUPPORTED",
+        "vault": "SUPPORTED",
+        "app_center": "SUPPORTED",
+        "permissions": "DEGRADED_SUPPORTED",
+        "browser": "DEGRADED_SUPPORTED",
+        "productivity": "DEGRADED_SUPPORTED",
+        "connect": "DEGRADED_SUPPORTED",
+        "printing": "DEGRADED_SUPPORTED",
+        "assist": "DEGRADED_SUPPORTED",
+        "offline": "SUPPORTED",
+        "security": "DEGRADED_SUPPORTED",
+        "care": "SUPPORTED"
+      },
+      "edge_io_rings": {
+        "identity": "SUPPORTED",
+        "vault": "SUPPORTED",
+        "app_center": "SUPPORTED",
+        "permissions": "DEGRADED_SUPPORTED",
+        "browser": "DEGRADED_SUPPORTED",
+        "productivity": "DEGRADED_SUPPORTED",
+        "connect": "DEGRADED_SUPPORTED",
+        "printing": "PHYSICAL_PENDING",
+        "assist": "DEGRADED_SUPPORTED",
+        "offline": "SUPPORTED",
+        "security": "DEGRADED_SUPPORTED",
+        "care": "SUPPORTED"
+      },
+      "docked": {
+        "identity": "SUPPORTED",
+        "vault": "SUPPORTED",
+        "app_center": "SUPPORTED",
+        "permissions": "DEGRADED_SUPPORTED",
+        "browser": "DEGRADED_SUPPORTED",
+        "productivity": "DEGRADED_SUPPORTED",
+        "connect": "DEGRADED_SUPPORTED",
+        "printing": "DEGRADED_SUPPORTED",
+        "assist": "DEGRADED_SUPPORTED",
+        "offline": "SUPPORTED",
+        "security": "DEGRADED_SUPPORTED",
+        "care": "SUPPORTED"
+      },
+      "generic_ci_qemu": {
+        "identity": "SUPPORTED",
+        "vault": "SUPPORTED",
+        "app_center": "SUPPORTED",
+        "permissions": "DEGRADED_SUPPORTED",
+        "browser": "PROVIDER_REQUIRED",
+        "productivity": "PROVIDER_REQUIRED",
+        "connect": "DEGRADED_SUPPORTED",
+        "printing": "DEGRADED_SUPPORTED",
+        "assist": "DEGRADED_SUPPORTED",
+        "offline": "SUPPORTED",
+        "security": "DEGRADED_SUPPORTED",
+        "care": "SUPPORTED"
+      }
+    },
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+    "claim_boundary": "cx1_digital_qualification_not_device_lab_gate"
+  },
+  "evidence_classes_used": [
+    "DIGITAL_A11Y_PASS",
+    "DIGITAL_PASS",
+    "HUMAN_PENDING",
+    "PHYSICAL_PENDING"
+  ],
+  "claim_boundary": "CX1 ordinary-user digital foundations evidence. Does not mutate Device Lab gate tokens or release manifests."
+}

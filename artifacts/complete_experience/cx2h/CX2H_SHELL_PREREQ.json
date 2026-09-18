@@ -1,0 +1,116 @@
+{
+  "kernel_uname": "6.1.0-53-arm64\nBOOT_IMAGE=/boot/vmlinuz-6.1.0-53-arm64 root=PARTUUID=758b905b-0f56-4fb4-bd7c-adc1342f1dea ro\n",
+  "non_cloud_already": true,
+  "drm": {
+    "stdout": "00:00.0 Host bridge [0600]: Red Hat, Inc. QEMU PCIe Host bridge [1b36:0008]\n\tSubsystem: Red Hat, Inc. QEMU PCIe Host bridge [1af4:1100]\n00:01.0 SCSI storage controller [0100]: Red Hat, Inc. Virtio block device [1af4:1001]\n\tSubsystem: Red Hat, Inc. Virtio block device [1af4:0002]\n\tKernel driver in use: virtio-pci\n\tKernel modules: virtio_pci\n00:02.0 Ethernet controller [0200]: Red Hat, Inc. Virtio network device [1af4:1000]\n\tSubsystem: Red Hat, Inc. Virtio network device [1af4:0001]\n\tKernel driver in use: virtio-pci\n\tKernel modules: virtio_pci\n00:03.0 Unclassified device [00ff]: Red Hat, Inc. Virtio RNG [1af4:1005]\n\tSubsystem: Red Hat, Inc. Virtio RNG [1af4:0004]\n\tKernel driver in use: virtio-pci\n\tKernel modules: virtio_pci\n00:04.0 Display controller [0380]: Red Hat, Inc. Virtio 1.0 GPU [1af4:1050] (rev 01)\n\tSubsystem: Red Hat, Inc. Virtio 1.0 GPU [1af4:1100]\n\tKernel driver in use: virtio-pci\n\tKernel modules: virtio_pci\n00:05.0 Keyboard controller [0900]: Red Hat, Inc. Virtio 1.0 input [1af4:1052] (rev 01)\n\tSubsystem: Red Hat, Inc. Virtio 1.0 input [1af4:1100]\n\tKernel driver in use: virtio-pci\n\tKernel modules: virtio_pci\n00:06.0 Input device controller [0980]: Red Hat, Inc. Virtio 1.0 input [1af4:1052] (rev 01)\n\tSubsystem: Red Hat, Inc. Virtio 1.0 input [1af4:1100]\n\tKernel driver in use: virtio-pci\n\tKernel modules: virtio_pci\n---DMESG---\n---LSMOD---\nvirtio_gpu             73728  0\nvirtio_dma_buf         16384  1 virtio_gpu\ndrm_shmem_helper       20480  1 virtio_gpu\ndrm_kms_helper        143360  3 virtio_gpu\ndrm                   442368  4 drm_kms_helper,drm_shmem_helper,virtio_gpu\n---MODINFO---\n---DRI---\ntotal 0\ndrwxr-xr-x  3 root root        100 Sep 17 03:24 .\ndrwxr-xr-x 15 root root       3080 Sep 17 03:24 ..\ndrwxr-xr-x  2 root root         80 Sep 17 03:24 by-path\ncrw-rw----  1 root video  226,   0 Sep 17 03:24 card0\ncrw-rw----  1 root render 226, 128 Sep 17 03:24 renderD128\ntotal 0\ndrwxr-xr-x  2 root root    0 Sep 17 03:24 .\ndrwxr-xr-x 49 root root    0 Sep 17 03:24 ..\nlrwxrwxrwx  1 root root    0 Sep 17 03:24 card0 -> ../../devices/pci0000:00/0000:00:04.0/drm/card0\nlrwxrwxrwx  1 root root    0 Sep 17 03:24 card0-Virtual-1 -> ../../devices/pci0000:00/0000:00:04.0/drm/card0/card0-Virtual-1\nlrwxrwxrwx  1 root root    0 Sep 17 03:24 renderD128 -> ../../devices/pci0000:00/0000:00:04.0/drm/renderD128\n-r--r--r--  1 root root 4096 Sep 17 03:24 version\nDRIVER=virtio-pci\nSTATUS=connected\nDRM_CARD_OK\n/dev/dri/renderD128\nRENDER_NODE_OK\n00:04.0 Display controller [0380]: Red Hat, Inc. Virtio 1.0 GPU [1af4:1050] (rev 01)\nVIRTIO_GPU_PCI_OK\n",
+    "CX2G_VIRTIO_GPU_ENUMERATION_PASS": true,
+    "CX2G_DRM_CARD_PASS": true,
+    "CX2G_DRM_RENDER_NODE_PASS": true,
+    "blocker": null
+  },
+  "weston": {
+    "CX2G_WESTON_DRM_PASS": true,
+    "CX2G_WESTON_HEADLESS_FALLBACK_USED": false,
+    "CX2G_WAYLAND_SOCKET_PASS": true,
+    "CX2G_DBUS_SESSION_PASS": true,
+    "blocker": null
+  },
+  "weston_tail": "               1440x900@59.9, 106.5 MHz\n               1280x960@60.0, 108.0 MHz\n               1360x768@60.0, 85.5 MHz\n               1280x768@59.9, 79.5 MHz\n               1024x768@60.0, 65.0 MHz\n               800x600@60.3, 40.0 MHz\n               640x480@60.0 4:3, 25.2 MHz\n               640x480@59.9, 25.2 MHz\n[03:24:54.415] associating input device event0 with output Virtual-1 (none by udev)\n[03:24:54.415] associating input device event1 with output Virtual-1 (none by udev)\n[03:24:54.415] associating input device event2 with output Virtual-1 (none by udev)\n[03:24:54.415] Output 'Virtual-1' enabled with head(s) Virtual-1\n[03:24:54.415] Compositor capabilities:\n               arbitrary surface rotation: yes\n               screen capture uses y-flip: yes\n               cursor planes: yes\n               arbitrary resolutions: no\n               view mask clipping: yes\n               explicit sync: no\n               color operations: yes\n               presentation clock: CLOCK_MONOTONIC, id 1\n               presentation clock resolution: 0.000000001 s\n[03:24:54.415] Loading module '/usr/lib/aarch64-linux-gnu/weston/desktop-shell.so'\n[03:24:54.416] launching '/usr/lib/aarch64-linux-gnu/weston-keyboard'\n[03:24:54.417] Note: support for the deprecated wl_shell interface is disabled. If a legacy client still needs it, it can be re-enabled by passing -Ddeprecated-wl-shell=true to Meson when building Weston.\n[03:24:54.417] launching '/usr/lib/aarch64-linux-gnu/weston-desktop-shell'\n",
+  "baseline": {
+    "ok": true,
+    "sha256": "b61651a8bd0b2b0fbdb5d4d346de9bd0d09b65076847cf4cca77abce294fecc5",
+    "width": 1280,
+    "height": 800
+  },
+  "delivery": {
+    "ok": true,
+    "hash": "13687bed5804cb5940ccc234e90009382cd20c259d34e3df05aa1d7ef541b1eb",
+    "blocker": null
+  },
+  "chromium": {
+    "process_alive": true,
+    "debug_json_ok": true,
+    "CX2G_CHROMIUM_RUNTIME_PASS": true,
+    "used_no_sandbox": true
+  },
+  "home_diff": {
+    "ok": true,
+    "min_changed_pct_threshold": 0.2,
+    "a": {
+      "path": "/tmp/cx2h-graphical/captures/01_weston_baseline.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "b61651a8bd0b2b0fbdb5d4d346de9bd0d09b65076847cf4cca77abce294fecc5",
+      "size": 3072016
+    },
+    "b": {
+      "path": "/tmp/cx2h-graphical/captures/02_shell_home.ppm",
+      "w": 1280,
+      "h": 800,
+      "sha256": "87d31561a148ceabbffd9e471777a35bae89af1effe32604b57453eabc72c7bf",
+      "size": 3072016
+    },
+    "changed_pixels": 798273,
+    "total_pixels": 1024000,
+    "changed_pixel_pct": 77.9563,
+    "bbox": {
+      "min_x": 106,
+      "min_y": 12,
+      "max_x": 1241,
+      "max_y": 799
+    },
+    "mean_abs_channel_diff": 55.7898,
+    "rationale": "Require >= 0.2% changed pixels so cursor blink alone cannot prove shell render"
+  },
+  "frames": {
+    "01_weston_baseline": true,
+    "02_shell_home": true,
+    "03_shell_vault": true,
+    "04_shell_app_center": true,
+    "05_shell_connect": true,
+    "06_shell_assist": true,
+    "07_shell_care": true
+  },
+  "input": {
+    "pass": true,
+    "diff": {
+      "ok": true,
+      "min_changed_pct_threshold": 0.05,
+      "a": {
+        "path": "/tmp/cx2h-graphical/captures/08_pre_input.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "76983f0bb7cd06753c7947758a2459b4f4bf344c5d9df64c3be79eb05372e539",
+        "size": 3072016
+      },
+      "b": {
+        "path": "/tmp/cx2h-graphical/captures/09_post_input_vault.ppm",
+        "w": 1280,
+        "h": 800,
+        "sha256": "f30d45c6bca3a1fe7b3a485a70ba0d21ab2827985e38f1c5d0f9231d99fb2b0f",
+        "size": 3072016
+      },
+      "changed_pixels": 247312,
+      "total_pixels": 1024000,
+      "changed_pixel_pct": 24.1516,
+      "bbox": {
+        "min_x": 151,
+        "min_y": 155,
+        "max_x": 1115,
+        "max_y": 631
+      },
+      "mean_abs_channel_diff": 17.5934,
+      "rationale": "Require >= 0.05% changed pixels so cursor blink alone cannot prove shell render"
+    },
+    "blocker": null
+  },
+  "ok": true,
+  "CX2H_CHROMIUM_RUNTIME_PASS": true,
+  "CX2H_WAYLAND_SURFACE_PASS": true,
+  "CX2H_GUNNCH_SHELL_RENDER_PASS": true,
+  "CX2H_QEMU_FRAMEBUFFER_CAPTURE_PASS": true,
+  "CX2H_REAL_INPUT_TO_SHELL_MUTATION_PASS": true,
+  "CX2H_REAL_APP_CENTER_WINDOW": true,
+  "CX2H_SHELL_PREREQ_PASS": true,
+  "blocker": null
+}

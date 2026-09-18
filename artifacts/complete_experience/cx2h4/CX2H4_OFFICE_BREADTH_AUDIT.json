@@ -1,0 +1,198 @@
+{
+  "schema": "gunnchos.cx2h4.office_breadth.v1",
+  "CX2H4_SPREADSHEET_P0_PASS": true,
+  "CX2H4_PRESENTATION_P0_PASS": true,
+  "writer_prior": true,
+  "calc": {
+    "ok": true,
+    "provider": "libreoffice-calc",
+    "ui_surface": "LibreOffice Calc GUI + formula entry + save/reopen",
+    "steps": {
+      "before": {
+        "ok": true,
+        "sha256": "631a5642bae3e7fb0795cd166005968633dfeb6ede91ca8161fc1d4e11c52b16"
+      },
+      "launch": {
+        "ok": true,
+        "pid": 1711,
+        "alive_after_5s": true,
+        "application": "libreoffice-calc",
+        "binary": "/usr/bin/libreoffice",
+        "headless": false,
+        "path": null,
+        "ps": "1711 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h4-lo-profile-calc-1789668364 --norestore --nologo --accept=socket,host=127.0.0.1,port=2004;urp;StarOffice.ServiceManager --calc\n1769 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h4-lo-profile-calc-1789668364 --norestore --nologo --accept=socket,host=127.0.0.1,port=2004;urp;StarOffice.ServiceManager --calc\n1795 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+        "launch_log": "/var/lib/cx2h4/logs/calc_1789668364.log",
+        "error": null
+      },
+      "after": {
+        "ok": true,
+        "sha256": "abeb9a71992f12fc74d8ecd4aeacaac70b285968c80580945c8183ee1ff09e24"
+      },
+      "fb_diff": {
+        "ok": true,
+        "min_changed_pct_threshold": 0.3,
+        "a": {
+          "path": "/tmp/cx2h4-graphical/captures/calc_before.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "631a5642bae3e7fb0795cd166005968633dfeb6ede91ca8161fc1d4e11c52b16",
+          "size": 3072016
+        },
+        "b": {
+          "path": "/tmp/cx2h4-graphical/captures/calc_launched.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "abeb9a71992f12fc74d8ecd4aeacaac70b285968c80580945c8183ee1ff09e24",
+          "size": 3072016
+        },
+        "changed_pixels": 933574,
+        "total_pixels": 1024000,
+        "changed_pixel_pct": 91.1693,
+        "bbox": {
+          "min_x": 0,
+          "min_y": 32,
+          "max_x": 1279,
+          "max_y": 799
+        },
+        "mean_abs_channel_diff": 196.8177,
+        "rationale": "Require >= 0.3% changed pixels so cursor blink alone cannot prove shell render"
+      },
+      "atspi": {
+        "ok": true,
+        "found": [
+          {
+            "name": "Untitled 1 - LibreOffice Calc",
+            "role": "frame",
+            "depth": 2
+          }
+        ],
+        "needle": "Calc"
+      },
+      "formula": {
+        "ok": true,
+        "create": {
+          "ok": true,
+          "formula": "=2+3",
+          "value": 5.0,
+          "string": "5",
+          "path": "cx2h4_sheet.ods",
+          "expected": "5"
+        },
+        "reopen_launch": {
+          "ok": true,
+          "alive_after_5s": true,
+          "application": "libreoffice-calc",
+          "error": null
+        },
+        "readback": {
+          "ok": false,
+          "error": "'NoneType' object has no attribute 'Sheets'"
+        },
+        "zip_has_formula": true,
+        "file_exists": true,
+        "file_size": 7635,
+        "expected": "5"
+      }
+    },
+    "evidence_class": "REAL_PROVIDER_GUI_PASS"
+  },
+  "impress": {
+    "ok": true,
+    "provider": "libreoffice-impress",
+    "ui_surface": "LibreOffice Impress GUI + keyboard title + Save As + reopen",
+    "steps": {
+      "before": {
+        "ok": true,
+        "sha256": "952b948087e4cd1e7de5357ee6a88132aeb6773a9734995228d18d45eb3e0a32"
+      },
+      "launch": {
+        "ok": true,
+        "pid": 1971,
+        "alive_after_5s": true,
+        "application": "libreoffice-impress",
+        "binary": "/usr/bin/libreoffice",
+        "headless": false,
+        "path": null,
+        "ps": "1971 /usr/lib/libreoffice/program/oosplash -env:UserInstallation=file:///tmp/cx2h4-lo-profile-impress-1789668384 --norestore --nologo --accept=socket,host=127.0.0.1,port=2004;urp;StarOffice.ServiceManager --impress\n2027 /usr/lib/libreoffice/program/soffice.bin -env:UserInstallation=file:///tmp/cx2h4-lo-profile-impress-1789668384 --norestore --nologo --accept=socket,host=127.0.0.1,port=2004;urp;StarOffice.ServiceManager --impress\n2061 bash -lc pgrep -af 'soffice|libreoffice' | head -20\n",
+        "launch_log": "/var/lib/cx2h4/logs/impress_1789668384.log",
+        "error": null
+      },
+      "after": {
+        "ok": true,
+        "sha256": "2cef89b9a5a8598dc7d12e3e8533fa2247c3286915f97c1735f307c9c7b63c7a"
+      },
+      "fb_diff": {
+        "ok": true,
+        "min_changed_pct_threshold": 0.3,
+        "a": {
+          "path": "/tmp/cx2h4-graphical/captures/impress_before.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "952b948087e4cd1e7de5357ee6a88132aeb6773a9734995228d18d45eb3e0a32",
+          "size": 3072016
+        },
+        "b": {
+          "path": "/tmp/cx2h4-graphical/captures/impress_launched.ppm",
+          "w": 1280,
+          "h": 800,
+          "sha256": "2cef89b9a5a8598dc7d12e3e8533fa2247c3286915f97c1735f307c9c7b63c7a",
+          "size": 3072016
+        },
+        "changed_pixels": 960003,
+        "total_pixels": 1024000,
+        "changed_pixel_pct": 93.7503,
+        "bbox": {
+          "min_x": 0,
+          "min_y": 32,
+          "max_x": 1279,
+          "max_y": 799
+        },
+        "mean_abs_channel_diff": 165.925,
+        "rationale": "Require >= 0.3% changed pixels so cursor blink alone cannot prove shell render"
+      },
+      "atspi": {
+        "ok": true,
+        "found": [
+          {
+            "name": "Untitled 1 - LibreOffice Impress",
+            "role": "frame",
+            "depth": 2
+          }
+        ],
+        "needle": "Impress"
+      },
+      "typed": {
+        "ok": true,
+        "sha256": "ce186689bebf92ee21bdace65a8994a497cca03ac65b15f84c0d957357fab02f"
+      },
+      "deck": {
+        "ok": true,
+        "file": {
+          "ok": true,
+          "size": 12212,
+          "has_title": true
+        },
+        "reopen_launch": {
+          "ok": true,
+          "alive_after_5s": true,
+          "application": "libreoffice-impress",
+          "error": null
+        },
+        "reopen_atspi": {
+          "ok": false,
+          "found": [],
+          "needle": "Impress"
+        },
+        "method": "gui_keyboard_type_save_as_reopen"
+      }
+    },
+    "evidence_class": "REAL_PROVIDER_GUI_PASS"
+  },
+  "writer": {
+    "ok": true,
+    "provider": "libreoffice-writer",
+    "evidence_class": "REAL_PROVIDER_GUI_PASS",
+    "provenance": "CX2H2_J1 / CX2H3 downloaded-document edit"
+  },
+  "ok": true
+}

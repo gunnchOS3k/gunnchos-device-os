@@ -1,0 +1,1276 @@
+{
+  "schema": "gunnchos.device_lab.current_pin_app_lifecycle_matrix.v1",
+  "generated_at_utc": "2026-09-18T03:09:13Z",
+  "prompt": "CX5.0R/17G.6",
+  "pin_manifest_sha256": "80c37d959b97666abd688334a76611a264cfd3aa21a3ae317f7740f0897977b1",
+  "accepted_mains": {
+    "gunnchos-device-os": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+    "gunnchos-research-portal": "7ad4ce84ab61037d140f2185de14b191ecf7ec28",
+    "gunnchos-waike-learning-platform": "7ccb64459df088d41655af51c959a7bbbac849a3",
+    "gunnchAI3k": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+    "anime-aggressors": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+    "pedestrian-pursuit": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+    "archive-of-life-artifact-world": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+    "beatlink-party": "06b4a6f74159ee933984be913e269eab64246efb",
+    "waike-research-ops": "fbf7685bc5686201ccaa0128ee83346d59b3d584",
+    "gunnchos-hardware-industrial-design": "9ee0ef2f688b2c18428bfabc316b23687a02988d",
+    "edge-io-measurement-node": "af57fbdac857ae386b23b5b747fdc05797621f92"
+  },
+  "CURRENT_PIN_APP_LIFECYCLE_MATRIX_PASS": true,
+  "mandatory_apps": [
+    "gunnchos_shell_home",
+    "waike",
+    "gunnchai",
+    "anime_aggressors",
+    "pedestrian_pursuit",
+    "archive_of_life",
+    "beatlink_party",
+    "vault",
+    "app_center",
+    "browser",
+    "mail",
+    "device_management",
+    "creator_studio"
+  ],
+  "required_steps": [
+    "package_install_identity",
+    "install_available",
+    "launch",
+    "visible_window_surface",
+    "foreground_background",
+    "terminate",
+    "relaunch",
+    "restart_persistence",
+    "update_replace",
+    "uninstall_or_protected_deny",
+    "broken_package_failure_class"
+  ],
+  "app_summaries": {
+    "gunnchos_shell_home": {
+      "ok": true,
+      "health": {
+        "apps": [
+          "creator_studio",
+          "gunnchai_tutor",
+          "waike_learning"
+        ],
+        "claim_boundary": "Local companion bridge wiring HTML shells to first_party gunnchSDK sandbox I/O. Not production CDN hosting, not store distribution, not HUMAN_E6.",
+        "ok": true,
+        "sandbox_data_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/artifacts/device_lab_current_pin/lifecycle_work/sandbox",
+        "service": "companion_bridge",
+        "wired": true
+      }
+    },
+    "waike": {
+      "ok": true,
+      "launch": true,
+      "retained_pass": true
+    },
+    "gunnchai": {
+      "ok": true,
+      "turns": 2
+    },
+    "anime_aggressors": {
+      "ok": true,
+      "token_ok": true,
+      "authentic": true
+    },
+    "pedestrian_pursuit": {
+      "ok": true,
+      "token_ok": true,
+      "authentic": true
+    },
+    "archive_of_life": {
+      "ok": true,
+      "token_ok": true,
+      "authentic": true
+    },
+    "beatlink_party": {
+      "ok": true,
+      "token_ok": true,
+      "authentic": true
+    },
+    "vault": {
+      "ok": true,
+      "test_ok": true,
+      "guest_vault": true
+    },
+    "app_center": {
+      "ok": true,
+      "launch": true,
+      "shell_test": "rc=0",
+      "guest_app_center": true
+    },
+    "browser": {
+      "ok": true,
+      "launch": true,
+      "browser_test": "rc=0",
+      "guest_browser": true
+    },
+    "mail": {
+      "ok": true,
+      "launch": true,
+      "browser_test": "rc=0",
+      "guest_mail": true,
+      "provider": "thunderbird_or_email_pwa"
+    },
+    "device_management": {
+      "ok": true,
+      "launch": true
+    },
+    "creator_studio": {
+      "ok": true,
+      "launch": true
+    }
+  },
+  "rows": [
+    {
+      "app": "gunnchos_shell_home",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "gunnchos_shell_home",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "companion_bridge+/apps",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "waike",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "7ccb64459df088d41655af51c959a7bbbac849a3",
+      "evidence_artifact": "companion_bridge/api/waike + WAIKE_REAL_RUNTIME_DEVICE_LAB_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "gunnchai",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "65b799e21dc1c4979d52b9c8b328f7aa47059bde",
+      "evidence_artifact": "companion_bridge/api/gunnchai + GUNNCHAI_DEVICE_LAB_INTEGRATION_PASS",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "anime_aggressors",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "pedestrian_pursuit",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "ba698e929b573096ef50e0699990f3f0c6d571b6",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "archive_of_life",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "8611d2e30315792c38d7d5062e108b8bb87df2c2",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "beatlink_party",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "06b4a6f74159ee933984be913e269eab64246efb",
+      "evidence_artifact": "FOUR_GAME_CURRENT_PIN.json+four_games_in_guest.json",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "vault",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell VaultSurface + workspace.shell + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "app_center",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "browser",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "mail",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "gunnch_shell/launcher_mock + CX5 guest smoke",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "device_management",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.device_management",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "package_install_identity",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "install_available",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "launch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "visible_window_surface",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "foreground_background",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "terminate",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "relaunch",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "restart_persistence",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "update_replace",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "uninstall_or_protected_deny",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    },
+    {
+      "app": "creator_studio",
+      "step": "broken_package_failure_class",
+      "ok": true,
+      "source_sha": "c3b7a5183aba0c0567cdc3483bbce2c43dd12ebe",
+      "evidence_artifact": "first_party_apps.creator_studio",
+      "detail": null
+    }
+  ],
+  "prefer_fail_over_false_pass": true,
+  "process_existence_alone_insufficient": true,
+  "blocker": null,
+  "exact_integration_head": "22edff8eabc927ef1b97e6f3799fed1a61d6678a"
+}

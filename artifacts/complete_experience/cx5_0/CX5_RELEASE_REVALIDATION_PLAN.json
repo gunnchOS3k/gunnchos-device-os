@@ -1,0 +1,24 @@
+{
+  "schema": "CX5_RELEASE_REVALIDATION_PLAN/v1",
+  "requires_full_eco010": true,
+  "reason": "Integrated CX stack includes MATERIAL_UI, MATERIAL_RUNTIME, MATERIAL_APP_LIFECYCLE, MATERIAL_STORAGE, MATERIAL_WAIKE, MATERIAL_SECURITY changes vs accepted release main.",
+  "always_run_compact_integrity": [
+    "LIVE_GUNNCHOS_VISUAL",
+    "DSXL_DUAL_COMPOSITOR_UX",
+    "RING_TO_REAL_APP_STATE_MUTATION",
+    "FOUR_GAME_REAL_RUNTIME_DEVICE_LAB",
+    "WAIKE_REAL_RUNTIME_DEVICE_LAB",
+    "GUNNCHAI_DEVICE_LAB_INTEGRATION"
+  ],
+  "always_rerun": [
+    "CURRENT_PIN_APP_LIFECYCLE_MATRIX",
+    "DEVICE_LAB_CURRENT_PIN_INDEPENDENT_DIGITAL_VERIFY"
+  ],
+  "eco010": {
+    "mode": "full",
+    "duration_sec": 1800,
+    "waive_forbidden": true
+  },
+  "evidence_root": "artifacts/complete_experience/cx5_0/release_regression/",
+  "do_not_overwrite_accepted_release_evidence": true
+}

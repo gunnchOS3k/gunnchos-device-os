@@ -1,0 +1,164 @@
+{
+  "journey_1": {
+    "name": "journey_1_docs_print_backup",
+    "ok": true,
+    "steps": {
+      "doc": {
+        "ok": true,
+        "path": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.odt",
+        "kind": "writer",
+        "via": "libreoffice",
+        "sha256": "45293a03012a00d31a984345fab806c92010c86e7ae0953721d2a1e38f7d0dfa",
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "edited": {
+        "ok": true,
+        "path": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.odt",
+        "size": 8303,
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "pdf": {
+        "ok": true,
+        "path": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.pdf",
+        "via": "libreoffice",
+        "sha256": "2cad1263f039bfa8be81b1054566ee1c0703ba5be834d00133bb332be8c8270f",
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "printed": {
+        "ok": true,
+        "job": {
+          "job_id": "job_1789524266260",
+          "printer": "CX1_Virtual_PDF",
+          "document": "/tmp/cx1_evidence_home/productivity/docs/j1_essay.pdf",
+          "state": "completed",
+          "created_at": 1789524266.260566
+        },
+        "output": "/tmp/cx1_evidence_home/printing/output/job_1789524266260.printed",
+        "physical_print": "PHYSICAL_PENDING",
+        "evidence_class": "DIGITAL_PASS"
+      },
+      "backup_id": "j1_backup",
+      "restored": true,
+      "physical_print": "PHYSICAL_PENDING"
+    },
+    "evidence_class": "DIGITAL_PASS"
+  },
+  "journey_2": {
+    "name": "journey_2_browser_mail_attach",
+    "ok": true,
+    "steps": {
+      "browser_core_ok": true,
+      "mail_id": "mail_1789524266266",
+      "eml": "/tmp/cx1_evidence_home/connect/mail/mail_1789524266266.eml"
+    },
+    "evidence_class": "DIGITAL_PASS"
+  },
+  "journey_3": {
+    "name": "journey_3_app_lifecycle",
+    "ok": true,
+    "steps": {
+      "installed": true,
+      "permission_state": "ask",
+      "launched": true,
+      "updated_to": "1.1.0",
+      "uninstalled": true
+    },
+    "evidence_class": "DIGITAL_PASS"
+  },
+  "journey_4": {
+    "name": "journey_4_offline_reconcile",
+    "ok": true,
+    "steps": {
+      "ok": true,
+      "steps": [
+        {
+          "cut": {
+            "online": false,
+            "low_bandwidth": false,
+            "mode": "offline"
+          }
+        },
+        {
+          "local_work": true
+        },
+        {
+          "queued": true
+        },
+        {
+          "survived_restart": true
+        },
+        {
+          "reconnect": {
+            "online": true,
+            "low_bandwidth": false,
+            "mode": "online"
+          }
+        },
+        {
+          "reconcile": {
+            "reconciled": 9,
+            "pending": 0
+          }
+        }
+      ],
+      "connect_outbox_queued": 1,
+      "evidence_class": "DIGITAL_PASS"
+    },
+    "evidence_class": "DIGITAL_PASS"
+  },
+  "journey_5": {
+    "name": "journey_5_backup_corrupt_restore",
+    "ok": true,
+    "steps": {
+      "backup_id": "j5_backup",
+      "corruption_detected": true,
+      "restore_verified": true,
+      "checksum_match": true
+    },
+    "evidence_class": "DIGITAL_PASS"
+  },
+  "journey_6": {
+    "name": "journey_6_keyboard_a11y",
+    "ok": true,
+    "steps": {
+      "ok": true,
+      "visited": [
+        "home",
+        "vault",
+        "app_center",
+        "care"
+      ],
+      "semantics": [
+        {
+          "id": "home",
+          "role": "landmark",
+          "label": "gunnch Home",
+          "order": 1
+        },
+        {
+          "id": "vault",
+          "role": "button",
+          "label": "Vault",
+          "order": 2
+        },
+        {
+          "id": "app_center",
+          "role": "button",
+          "label": "App Center",
+          "order": 3
+        },
+        {
+          "id": "care",
+          "role": "button",
+          "label": "Care",
+          "order": 6
+        }
+      ],
+      "evidence_class": "DIGITAL_A11Y_PASS",
+      "human_verification": "HUMAN_A11Y_PENDING",
+      "claim_boundary": "digital_semantics_not_human_a11y_pass"
+    },
+    "evidence_class": "DIGITAL_A11Y_PASS",
+    "human_verification": "HUMAN_A11Y_PENDING"
+  }
+}

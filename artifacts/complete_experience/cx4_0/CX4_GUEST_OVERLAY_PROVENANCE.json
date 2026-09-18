@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+  "blocker": null,
+  "canonical": {
+    "ok": true,
+    "blocker": null,
+    "immutable": {
+      "cx2h2": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+      "cx2h3": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+      "cx2h4": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2"
+    },
+    "canonical_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical",
+    "note": "CX2H3/CX2H4 content deltas lost with deleted worktree overlays; layers rebuilt as thin COW on durable CX2H2 for current-tip boot continuity."
+  },
+  "parent": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+  "chain": {
+    "ok": true,
+    "image": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+    "layers": [
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx4-human-physical-external-readiness/os_build/cx4_linux_lab/overlays/cx4-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 101515264
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h4-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 200704
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h3-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 200704
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx_canonical/immutable/cx2h2-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 650117120
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2h_linux_lab/overlays/cx2h-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 744816640
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2g_linux_lab/overlays/cx2g-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 171048960
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/overlays/cx2f-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 426835968
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2",
+        "backing_file": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+        "virtual_size": 17179869184,
+        "actual_size": 5352652800
+      },
+      {
+        "filename": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/images/debian-12-genericcloud-arm64.qcow2",
+        "backing_file": null,
+        "virtual_size": 3221225472,
+        "actual_size": 341901312
+      }
+    ],
+    "blocker": null
+  },
+  "reused": true
+}

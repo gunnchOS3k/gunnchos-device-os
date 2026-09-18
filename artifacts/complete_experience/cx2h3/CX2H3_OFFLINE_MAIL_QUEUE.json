@@ -1,0 +1,38 @@
+{
+  "thunderbird": {
+    "ok": false,
+    "pid": 40233,
+    "alive_after_6s": false,
+    "profile": "/var/lib/cx2h3/thunderbird-profile"
+  },
+  "queue_send": {
+    "ok": true,
+    "mode": "send_later_queue_adapter",
+    "queue_id": "q-2afc51aebbe9",
+    "gui_compose": true,
+    "smtp_submitted": false,
+    "attachment_sha256": "3a2a6933c4c637c5f1d07d0b47388f311d30de3782846072d7e401570d9ce847",
+    "thunderbird_running": true,
+    "thunderbird_ps": "39839 /usr/lib/thunderbird/thunderbird --name=thunderbird --profile /var/lib/cx2h3/thunderbird-profile\n39940 /usr/lib/thunderbird/thunderbird-bin -contentproc -isForBrowser -prefsHandle 0:3162 -prefMapHandle 1:267858 -jsInitHandle 2:242832 -parentBuildID 20260914195918 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {9506a88d-f15a-4911-aa9e-b88c27b965cb} -parentPid 39839 -crashReporter 6 -greomni /usr/lib/thunderbird/omni.ja -appDir /usr/lib/thunderbird 1 tab\n39946 /usr/lib/thunderbird/thunderbird-bin -contentproc -parentBuildID 20260914195918 -prefsHandle 0:4150 -prefMapHandle 1:267858 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {0950edec-517d-4585-9396-1c88098543d5} -parentPid 39839 -crashReporter 5 -appDir /usr/lib/thunderbird 2 rdd\n39999 /usr/lib/thunderbird/thunderbird-bin -contentproc -isForBrowser -prefsHandle 0:3614 -prefMapHandle 1:267858 -jsInitHandle 2:242832 -parentBuildID 20260914195918 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {1d33574d-b35c-4371-9b26-c78fa60d3050} -parentPid 39839 -crashReporter 6 -greomni /usr/lib/thunderbird/omni.ja -appDir /usr/lib/thunderbird 3 tab\n"
+  },
+  "queue": {
+    "ok": true,
+    "items": [
+      {
+        "queue_id": "q-2afc51aebbe9",
+        "to": "recipient@cx2h3.test",
+        "from": "sender@cx2h3.test",
+        "subject": "CX2H3-J5-OFFLINE-QUEUE-alpha-7gc",
+        "body": "CX2H3 J5 offline queued mail body",
+        "attachment": "/var/lib/cx2h2/vault/files/cx2h3_j2_source_edited_edited.odt",
+        "attachment_sha256": "3a2a6933c4c637c5f1d07d0b47388f311d30de3782846072d7e401570d9ce847",
+        "created_at": 1789662454.775856,
+        "state": "pending",
+        "idempotency_key": "q-2afc51aebbe9",
+        "gui_compose_launched": true,
+        "send_later": true
+      }
+    ]
+  },
+  "smtp_accepts_while_offline_count": 1
+}

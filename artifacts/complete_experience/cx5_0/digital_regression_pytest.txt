@@ -1,0 +1,47 @@
+
+==================================== ERRORS ====================================
+______________ ERROR collecting tests/cx3/test_cx3_fail_closed.py ______________
+ImportError while importing test module '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/tests/cx3/test_cx3_fail_closed.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/cx3/test_cx3_fail_closed.py:13: in <module>
+    from gunnchos_device_os.cx3.issuer import (
+gunnchos_device_os/cx3/issuer.py:16: in <module>
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+E   ModuleNotFoundError: No module named 'cryptography'
+____________ ERROR collecting tests/cx3_2/test_cx3_2_fail_closed.py ____________
+ImportError while importing test module '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/tests/cx3_2/test_cx3_2_fail_closed.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/cx3_2/test_cx3_2_fail_closed.py:10: in <module>
+    from gunnchos_device_os.cx3.issuer import create_ephemeral_issuer, issue_evidence_bound_credential
+gunnchos_device_os/cx3/issuer.py:16: in <module>
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+E   ModuleNotFoundError: No module named 'cryptography'
+____________ ERROR collecting tests/cx3_3/test_cx3_3_fail_closed.py ____________
+ImportError while importing test module '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/cx5-release-baseline/tests/cx3_3/test_cx3_3_fail_closed.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/cx3_3/test_cx3_3_fail_closed.py:10: in <module>
+    from gunnchos_device_os.cx3.issuer import create_ephemeral_issuer, issue_evidence_bound_credential
+gunnchos_device_os/cx3/issuer.py:16: in <module>
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+E   ModuleNotFoundError: No module named 'cryptography'
+=========================== short test summary info ============================
+ERROR tests/cx3/test_cx3_fail_closed.py
+ERROR tests/cx3_2/test_cx3_2_fail_closed.py
+ERROR tests/cx3_3/test_cx3_3_fail_closed.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!!
+3 errors in 0.23s
+........................................................................ [ 61%]
+..............................................                           [100%]
+118 passed in 52.67s

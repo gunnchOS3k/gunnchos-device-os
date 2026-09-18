@@ -1,0 +1,38 @@
+{
+  "fail_stop": {
+    "ok": true,
+    "label": "mail",
+    "stopped_pid": 58455
+  },
+  "fail_flush": {
+    "ok": false,
+    "results": [
+      {
+        "queue_id": "q-2afc51aebbe9",
+        "ok": false,
+        "error": "[Errno 111] Connection refused"
+      }
+    ]
+  },
+  "pending_preserved": true,
+  "mail_recover": {
+    "ok": true,
+    "pid": 58463,
+    "smtp_port": 1587,
+    "imap_port": 1143,
+    "guest_host": "10.0.2.2",
+    "accounts": {
+      "sender": {
+        "email": "sender@cx2h3.test",
+        "password": "cx2h3-sender-pass"
+      },
+      "recipient": {
+        "email": "recipient@cx2h3.test",
+        "password": "cx2h3-recipient-pass"
+      }
+    },
+    "json_fixture": false,
+    "blocker": null
+  },
+  "final_ok": true
+}

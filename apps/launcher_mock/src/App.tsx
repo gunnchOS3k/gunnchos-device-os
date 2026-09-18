@@ -2,8 +2,9 @@ import { useState } from 'react'
 import GunnchOSShell from './shell/GunnchOSShell'
 import UserFocusedView from './user-focused/UserFocusedView'
 import FleetView from './FleetView'
+import CompleteExperienceShell from './cx2/CompleteExperienceShell'
 
-type DevView = 'gunnchos' | 'fleet' | 'user-focused'
+type DevView = 'gunnchos' | 'fleet' | 'user-focused' | 'cx2'
 
 export default function App() {
   const [devView, setDevView] = useState<DevView>('gunnchos')
@@ -13,6 +14,7 @@ export default function App() {
       <GunnchOSShell
         devMode
         onOpenDevTools={() => setDevView('fleet')}
+        onOpenCx2={() => setDevView('cx2')}
       />
     )
   }
@@ -22,6 +24,17 @@ export default function App() {
       <div>
         <DevBar current="user-focused" onSwitch={setDevView} />
         <UserFocusedView />
+      </div>
+    )
+  }
+
+  if (devView === 'cx2') {
+    return (
+      <div>
+        <DevBar current="cx2" onSwitch={setDevView} />
+        <div style={{ paddingTop: 40 }}>
+          <CompleteExperienceShell onExit={() => setDevView('gunnchos')} />
+        </div>
       </div>
     )
   }
@@ -50,7 +63,7 @@ function DevBar({ current, onSwitch }: { current: DevView; onSwitch: (v: DevView
       fontSize: 12,
     }}>
       <span style={{ color: '#888', alignSelf: 'center' }}>Dev views:</span>
-      {(['gunnchos', 'fleet', 'user-focused'] as DevView[]).map(v => (
+      {(['gunnchos', 'fleet', 'user-focused', 'cx2'] as DevView[]).map(v => (
         <button
           key={v}
           type="button"

@@ -1,0 +1,31 @@
+{
+  "schema": "CX_RELEASE_INTEGRATION_CONFLICT_REGISTER/v1",
+  "generated_at": "2026-09-18T01:58:09Z",
+  "device_merge_commit": "4934778e2dbe193b99fa80df28765ac2b188e66d",
+  "portal_merge": "pending_capture",
+  "conflicts": [
+    {
+      "file": "tests/cx3_2/test_cx3_2_fail_closed.py",
+      "release_side_behavior": "Accepted-main WAIKE #17 + Device Lab evidence makes genuine earned evidence discoverable (WAIKE_REAL_EARNED_EVIDENCE_AVAILABLE=true).",
+      "cx_side_behavior": "CX3.2 fail-closed test asserted availability must remain false (release-blocked era).",
+      "conflict_reason": "Semantic assumption conflict after integrating CX tip onto post-WAIKE accepted release main; not a textual merge conflict.",
+      "additive_resolution": "Preserve mutation rejection + read-only provider PASS; assert availability tracks honest discovery (True only when non-fabricated release evidence exists).",
+      "test_added_or_run": "tests/cx3_2/test_cx3_2_fail_closed.py::test_waike_adapter_rejects_mutation_and_no_fake_pass",
+      "materiality_class": "NON_MATERIAL_DOC_OR_CONTROL"
+    },
+    {
+      "file": "scripts/start-validation-center",
+      "release_side_behavior": "N/A (script introduced by CX tip)",
+      "cx_side_behavior": "Launcher used empty LAN_ARGS[@] under set -u; fails on bash 3.2/macOS",
+      "conflict_reason": "Integration-host runtime defect exposed on Darwin after merge onto accepted main",
+      "additive_resolution": "Expand LAN_ARGS with ${LAN_ARGS[@]+\"${LAN_ARGS[@]}\"} for set -u safety; preserve LAN opt-in behavior",
+      "test_added_or_run": "./scripts/start-validation-center --port 8769 + HTTP probe",
+      "materiality_class": "MATERIAL_UI"
+    }
+  ],
+  "CX_RELEASE_INTEGRATION_CONFLICTS_RESOLVED": true,
+  "note": "Device OS merge --no-ff completed with ort strategy; zero conflicted paths. Additive integration required no conflict resolution.",
+  "portal_merge_commit": "4e3da9e1b05a3bb580485100473d65208e94c5c0",
+  "portal_conflicts": [],
+  "updated_at": "2026-09-18T02:08:19Z"
+}

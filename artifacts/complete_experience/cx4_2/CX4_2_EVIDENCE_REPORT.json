@@ -1,0 +1,350 @@
+{
+  "DEFERRED_RELEASE_RESOURCE_CONTENTION": [],
+  "compat": {
+    "CX4_VALIDATION_UI_COMPATIBILITY_PASS": true,
+    "checks": {
+      "chromium_family_path": true,
+      "high_contrast": true,
+      "keyboard_only_path": true,
+      "reduced_motion": true,
+      "responsive_narrow_width": true,
+      "text_zoom_200_reflow": true,
+      "visible_focus": true
+    },
+    "note": "Software/static qualification only; not a WCAG conformance claim.",
+    "tested_runtimes": [
+      "chromium-family (markup/CSS static qualification)"
+    ],
+    "untested_runtimes_not_claimed": [
+      "Safari (not claimed)",
+      "Firefox (not claimed)",
+      "iOS Safari (not claimed)"
+    ]
+  },
+  "cx41_base": {
+    "software_drill_session_id": "sess_d9be8492037d"
+  },
+  "freeze": {
+    "CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE": false,
+    "CX4_HUMAN_VALIDATION_FREEZE_CHECK_PASS": true,
+    "FINAL_GATING_ELIGIBLE": false,
+    "explanation": "FINAL_GATING_ELIGIBLE=false because the CX stack is still DRAFT/unmerged and required freeze conditions are not satisfied. Missing: tested_build_commit_frozen, final_target_branch_or_rc_known, required_hardware_provider_prerequisites_real, cx_stack_accepted_merged_or_release_candidate",
+    "manifest": {
+      "application_provenance": {
+        "branch": "eng/cx4-validation-center-pilot-readiness",
+        "commit": "797872f5d735d668dfbaa681ce9a56312a14af75",
+        "packs": [
+          "human_a11y",
+          "physical_printer",
+          "camera_mic_av",
+          "physical_peripherals",
+          "device_quartet_evt",
+          "device_quartet_dvt",
+          "device_quartet_pvt",
+          "firmware_lifecycle",
+          "support_repair_rma",
+          "external_chat_meeting",
+          "institutional_issuer",
+          "privacy_review",
+          "rights_review",
+          "certification",
+          "manufacturing",
+          "validation_center_smoke"
+        ],
+        "validation_center_version": "cx4.2-pilot-readiness"
+      },
+      "branch": "eng/cx4-validation-center-pilot-readiness",
+      "branch_status": "draft_unmerged",
+      "build_frozen": false,
+      "collector_versions": {
+        "a11y": "v1",
+        "av": "v1",
+        "cups": "v1",
+        "firmware": "v1",
+        "peripherals": "v1",
+        "support_bundle": "v1"
+      },
+      "cx_stack_draft_unmerged": true,
+      "device_os_commit": "797872f5d735d668dfbaa681ce9a56312a14af75",
+      "device_sku": "",
+      "dirty_worktree": true,
+      "evidence_eligibility": "PILOT_NON_GATING",
+      "final_gating_eligible": false,
+      "freeze_timestamp": "2026-09-17T22:27:32Z",
+      "hardware_prerequisites_real": false,
+      "hardware_serial_alias": "",
+      "material_drift_detected": false,
+      "materiality_policy": "material_ui_a11y_task_logic_evidence_pipeline_device_behavior",
+      "missing_conditions": [
+        "tested_build_commit_frozen",
+        "final_target_branch_or_rc_known",
+        "required_hardware_provider_prerequisites_real",
+        "cx_stack_accepted_merged_or_release_candidate"
+      ],
+      "notes": "FINAL_GATING_ELIGIBLE=false because the CX stack is still DRAFT/unmerged and required freeze conditions are not satisfied. Missing: tested_build_commit_frozen, final_target_branch_or_rc_known, required_hardware_provider_prerequisites_real, cx_stack_accepted_merged_or_release_candidate",
+      "os_build_version": "cx4.2-pilot-readiness",
+      "portal_control_commit": "",
+      "schema": "HumanValidationFreezeManifest/v1",
+      "target_release_or_main_commit": "",
+      "task_pack_hashes": {
+        "camera_mic_av": "179d19e9988069fb3daa197c1fd34c09b04944aa61831211a79881810f40e748",
+        "certification": "2b4ed1f1072ad357b50a134e28a10655418bfa909aac8e49198ce30e2376ebc7",
+        "device_quartet_dvt": "4a3c6bb3dcef112a956ebcbcb37258f8de4eaeb8185ceb237fe974f256429667",
+        "device_quartet_evt": "3dc16f2f019d91e60ede6a3ae0863347df6b3c7fdb6d410351cecd86c2e0081f",
+        "device_quartet_pvt": "f1768647b496b647b8598e852c9be29fe7b9ed17ffa0f9326e6ae22d982ca9f6",
+        "external_chat_meeting": "a7d35ff9bc587bc724ab7e7045ed962852cc6bdf2c055ad2816c431c979e93c4",
+        "firmware_lifecycle": "399fd983bb4a3b75966752e3ff9f351a4bc72897bbfd9fc96223b42b3500fa36",
+        "human_a11y": "688980db29c855044f427e50cd092a282300adc41c57497cc67703161a8efff0",
+        "institutional_issuer": "d23e9248b3be12d26ba005771762c4ac5ae2e5763161988ae51c56173d3f4d6b",
+        "manufacturing": "34c03e9bfc78193c55f6b7c928357adf6213f48997a90bf0e25c56defa4951a1",
+        "physical_peripherals": "867344be514762aac2fa02c3cfe2583271a563ceef9d23996484cc0e179fe5c7",
+        "physical_printer": "3ace41a644b03a6190c31e27771d7b14f5062dd925e5fbe1a8ebfc33bff01b48",
+        "privacy_review": "5e7bd62cfa03118facdd45720cdaa23fe772eee8e811bc9a4c7da5788ccb5e6b",
+        "rights_review": "e239546d771f5f1cf63710fb9895885228686881b699957ff8b370ca902f8341",
+        "support_repair_rma": "65c644943565ec77a3c17fc4229fa7389eac00bf8644df76e375407e490a3ca7",
+        "validation_center_smoke": "de9a0c178d1e518d4b95e1a4c76da42b45a6a5c7a4bfd580526fe3df7a5069f9"
+      },
+      "validation_center_version": "cx4.2-pilot-readiness",
+      "validation_task_schema_version": "v1"
+    },
+    "missing_conditions": [
+      "tested_build_commit_frozen",
+      "final_target_branch_or_rc_known",
+      "required_hardware_provider_prerequisites_real",
+      "cx_stack_accepted_merged_or_release_candidate"
+    ],
+    "ok": true
+  },
+  "materiality_sample": {
+    "CX4_VALIDATION_MATERIALITY_ENGINE_PASS": true,
+    "affected_packs": [
+      "camera_mic_av",
+      "certification",
+      "device_quartet_dvt",
+      "device_quartet_evt",
+      "device_quartet_pvt",
+      "external_chat_meeting",
+      "firmware_lifecycle",
+      "human_a11y",
+      "institutional_issuer",
+      "manufacturing",
+      "physical_peripherals",
+      "physical_printer",
+      "privacy_review",
+      "rights_review",
+      "support_repair_rma",
+      "validation_center_smoke"
+    ],
+    "changes": [
+      {
+        "after": "797872f5d735d668dfbaa681ce9a56312a14af75",
+        "before": "deadbeef",
+        "class": "MATERIAL_DEVICE_BEHAVIOR",
+        "key": "device_os_commit"
+      },
+      {
+        "after": "eng/cx4-validation-center-pilot-readiness",
+        "before": "old",
+        "class": "UNKNOWN",
+        "key": "branch"
+      },
+      {
+        "after": "c265cf263af9e62330793f7029fc56227cd4baef0a274ea3a4cefb0fbc7d34c6",
+        "before": "old-ui",
+        "class": "UNKNOWN",
+        "key": "ui_fingerprint"
+      },
+      {
+        "after": "f2cb5737c0d840175fc10e72cbc46a7ee0d07b207f4f167d20d59e3719a038b0",
+        "before": "old-a11y",
+        "class": "MATERIAL_ACCESSIBILITY",
+        "key": "a11y_fingerprint"
+      },
+      {
+        "after": "8edc48312f58cc9e2744481a3dd713b924aca8edc287b8939c4a01d69c6ce84a",
+        "before": "old-pipe",
+        "class": "MATERIAL_EVIDENCE_PIPELINE",
+        "key": "evidence_pipeline_fingerprint"
+      },
+      {
+        "after": "dc5467c26b72c3f260828bb1f592f65590f580a2fd3d9a935c9cca8c6e97e8c8",
+        "before": {
+          "human_a11y": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "class": "UNKNOWN",
+        "key": "task_logic_fingerprint"
+      },
+      {
+        "after": "179d19e9988069fb3daa197c1fd34c09b04944aa61831211a79881810f40e748",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:camera_mic_av"
+      },
+      {
+        "after": "2b4ed1f1072ad357b50a134e28a10655418bfa909aac8e49198ce30e2376ebc7",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:certification"
+      },
+      {
+        "after": "4a3c6bb3dcef112a956ebcbcb37258f8de4eaeb8185ceb237fe974f256429667",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:device_quartet_dvt"
+      },
+      {
+        "after": "3dc16f2f019d91e60ede6a3ae0863347df6b3c7fdb6d410351cecd86c2e0081f",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:device_quartet_evt"
+      },
+      {
+        "after": "f1768647b496b647b8598e852c9be29fe7b9ed17ffa0f9326e6ae22d982ca9f6",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:device_quartet_pvt"
+      },
+      {
+        "after": "a7d35ff9bc587bc724ab7e7045ed962852cc6bdf2c055ad2816c431c979e93c4",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:external_chat_meeting"
+      },
+      {
+        "after": "399fd983bb4a3b75966752e3ff9f351a4bc72897bbfd9fc96223b42b3500fa36",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:firmware_lifecycle"
+      },
+      {
+        "after": "688980db29c855044f427e50cd092a282300adc41c57497cc67703161a8efff0",
+        "before": "0000000000000000000000000000000000000000000000000000000000000000",
+        "class": "MATERIAL_ACCESSIBILITY",
+        "key": "task_pack:human_a11y"
+      },
+      {
+        "after": "d23e9248b3be12d26ba005771762c4ac5ae2e5763161988ae51c56173d3f4d6b",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:institutional_issuer"
+      },
+      {
+        "after": "34c03e9bfc78193c55f6b7c928357adf6213f48997a90bf0e25c56defa4951a1",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:manufacturing"
+      },
+      {
+        "after": "867344be514762aac2fa02c3cfe2583271a563ceef9d23996484cc0e179fe5c7",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:physical_peripherals"
+      },
+      {
+        "after": "3ace41a644b03a6190c31e27771d7b14f5062dd925e5fbe1a8ebfc33bff01b48",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:physical_printer"
+      },
+      {
+        "after": "5e7bd62cfa03118facdd45720cdaa23fe772eee8e811bc9a4c7da5788ccb5e6b",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:privacy_review"
+      },
+      {
+        "after": "e239546d771f5f1cf63710fb9895885228686881b699957ff8b370ca902f8341",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:rights_review"
+      },
+      {
+        "after": "65c644943565ec77a3c17fc4229fa7389eac00bf8644df76e375407e490a3ca7",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:support_repair_rma"
+      },
+      {
+        "after": "de9a0c178d1e518d4b95e1a4c76da42b45a6a5c7a4bfd580526fe3df7a5069f9",
+        "before": null,
+        "class": "MATERIAL_TASK_LOGIC",
+        "key": "task_pack:validation_center_smoke"
+      }
+    ],
+    "invalidate_eligibility_to": "INVALIDATED_BY_MATERIAL_DRIFT",
+    "is_material": true,
+    "overall_class": "MATERIAL_DEVICE_BEHAVIOR",
+    "recommendation": "Material drift detected. Final evidence cannot be reused automatically. Invalidate FINAL_GATING_ACCEPTED/ELIGIBLE submissions and run targeted revalidation for packs: camera_mic_av, certification, device_quartet_dvt, device_quartet_evt, device_quartet_pvt, external_chat_meeting, firmware_lifecycle, human_a11y, institutional_issuer, manufacturing, physical_peripherals, physical_printer, privacy_review, rights_review, support_repair_rma, validation_center_smoke."
+  },
+  "note": "Pilot readiness only. Do not start final human sessions until accepted build exists.",
+  "rehearsal": {
+    "eligibility": "REHEARSAL_NON_GATING",
+    "real_human_session": false,
+    "session_id": "sess_54565eebbc42"
+  },
+  "security_pilot": {
+    "base_ok": true,
+    "enumeration_denied": true,
+    "participant_eligibility_blocked": true,
+    "revoked_denied": true
+  },
+  "tokens": {
+    "CX4_ALL_AUTOMATABLE_NON_DIGITAL_PREWORK_PASS": true,
+    "CX4_DEVICE_LAB_134_UNALTERED": true,
+    "CX4_EDMUND_ACTION_PACKET_UI_MAPPED": true,
+    "CX4_FINAL_HUMAN_VALIDATION_ELIGIBLE": false,
+    "CX4_HUMAN_EVIDENCE_CAPTURE_UX_PASS": true,
+    "CX4_HUMAN_VALIDATION_DAY_PACKET_READY": true,
+    "CX4_HUMAN_VALIDATION_FREEZE_CHECK_PASS": true,
+    "CX4_MODERATOR_SESSION_WIZARD_PASS": true,
+    "CX4_NO_DEVICE_LAB": true,
+    "CX4_NO_MERGES": true,
+    "CX4_NO_QEMU_DEFAULT": true,
+    "CX4_PARTICIPANT_ACCESSIBILITY_RENDERED_PASS": true,
+    "CX4_PARTICIPANT_ENTRY_FLOW_PASS": true,
+    "CX4_PARTICIPANT_RATING_FLOW_PASS": true,
+    "CX4_PORTAL_14_UNALTERED": true,
+    "CX4_PORTAL_15_UNALTERED": true,
+    "CX4_REVIEWER_WORKFLOW_PASS": true,
+    "CX4_VALIDATION_CENTER_AUTOMATED_A11Y_PASS": true,
+    "CX4_VALIDATION_CENTER_GUI_PASS": true,
+    "CX4_VALIDATION_CENTER_OFFLINE_AUTOSAVE_PASS": true,
+    "CX4_VALIDATION_CENTER_ONE_CLICK_LAUNCH_PASS": true,
+    "CX4_VALIDATION_CENTER_SECURITY_PASS": true,
+    "CX4_VALIDATION_EVIDENCE_CAPTURE_PASS": true,
+    "CX4_VALIDATION_EXPORT_RECOVERY_PASS": true,
+    "CX4_VALIDATION_MATERIALITY_ENGINE_PASS": true,
+    "CX4_VALIDATION_PILOT_SECURITY_PASS": true,
+    "CX4_VALIDATION_RATING_UI_PASS": true,
+    "CX4_VALIDATION_REHEARSAL_FLOW_PASS": true,
+    "CX4_VALIDATION_REVIEWER_SIGNOFF_ENFORCED": true,
+    "CX4_VALIDATION_SUBMISSION_BUNDLE_PASS": true,
+    "CX4_VALIDATION_TASK_LIBRARY_PASS": true,
+    "CX4_VALIDATION_UI_COMPATIBILITY_PASS": true,
+    "CX4_WAIKE_RELEASE_UNALTERED": true,
+    "DVT_PENDING": true,
+    "EVT_PENDING": true,
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+    "J6_CLASS": "HUMAN_VALIDATION_PENDING",
+    "MINORS_MODE_DISABLED_BY_DEFAULT": true,
+    "NEXT_CX_ACTION": "WAIT_FOR_FINAL_ACCEPTED_BUILD_THEN_RUN_HUMAN_VALIDATION",
+    "PHYSICAL_CAMERA_MIC_AV_PENDING": true,
+    "PHYSICAL_PRINTER_PENDING": true,
+    "PVT_PENDING": true,
+    "certification_claimed": false,
+    "certified": false,
+    "dvt_pass": false,
+    "evt_pass": false,
+    "external_provider_integration_pass": false,
+    "human_a11y_pass": false,
+    "legal_approval": false,
+    "manufacturing_pass": false,
+    "notes": "",
+    "physical_camera_mic_av_pass": false,
+    "physical_printer_pass": false,
+    "pvt_pass": false,
+    "real_human_sessions_count": 0,
+    "rehearsal_sessions_count": 1,
+    "reviewer_signed_sessions_count": 0
+  }
+}

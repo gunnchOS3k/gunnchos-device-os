@@ -1,0 +1,196 @@
+{
+  "schema": "gunnchos.cx2e.evidence_report.v1",
+  "generated_at_utc": "2026-09-16T04:15:24Z",
+  "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+  "CX2E_SINGLE_PRODUCTION_SHELL_AUTHORITY": true,
+  "production_shell": "apps/gunnch_shell",
+  "shell_runtime_target_ref": "SHELL_RUNTIME_TARGET.json",
+  "linux_lab": {
+    "schema": "gunnchos.cx2e.linux_lab_status.v1",
+    "generated_at_utc": "2026-09-16T04:15:24Z",
+    "overlay_prep": {
+      "ok": true,
+      "blocker": null,
+      "base_sha256": "cf6e3bd70d457c9828eec87358e2cb175e2b82f9ae914c23b2dc6efda2e87478",
+      "overlay_sha256": "a47ca058ad21e625a38899e912afcfeee91d2b2c590e4343e3559a31e8782ea7",
+      "overlay": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2e_linux_lab/overlays/cx2e-aarch64.qcow2"
+    },
+    "provision": {
+      "ok": true,
+      "blocker": null,
+      "sentinel_ok": true,
+      "qemu_pid": null,
+      "accel": {
+        "accel": "hvf",
+        "cpu": "host"
+      }
+    },
+    "graphical_boot": {
+      "ok": true,
+      "blocker": null,
+      "ssh_ready": true,
+      "qemu_pid": 39897,
+      "guest_booted": true
+    },
+    "guest_facts": {
+      "guest_booted": true,
+      "guest_is_linux": true,
+      "compositor_running": true,
+      "wayland_socket_alive": true,
+      "shell_window_rendered": false,
+      "graphical_truth": false
+    },
+    "device_lab_paths_untouched": true,
+    "evidence_namespace": "artifacts/complete_experience/cx2e",
+    "blocker": "CX2E_SHELL_RENDER_OR_CAPTURE_NOT_PROVEN: shell_window_rendered,real_screen_capture_pass; cloud kernel 6.1.0-53-cloud-arm64 lacks /dev/dri; Weston headless-backend session proven (WAYLAND+DBUS); gunnch_shell Chromium render empty; weston-screenshooter/grim unavailable under headless"
+  },
+  "provenance_ref": "CX2E_LINUX_LAB_PROVENANCE.json",
+  "session_facts_ref": "SESSION_FACTS.json",
+  "journeys": {
+    "schema": "gunnchos.cx2e.journey_upgrade.v1",
+    "graphical_truth": false,
+    "journeys": {
+      "J1": {
+        "id": "J1",
+        "prior_cx2d_class": "BLOCKED",
+        "cx2e_class": "BLOCKED",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": false,
+        "real_provider": true,
+        "persistence": false,
+        "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, Writer/print GUI provider evidence",
+        "blocker": "missing: shell_window_rendered, real_screen_capture_pass, Writer/print GUI provider evidence"
+      },
+      "J2": {
+        "id": "J2",
+        "prior_cx2d_class": "BLOCKED",
+        "cx2e_class": "BLOCKED",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": false,
+        "real_provider": false,
+        "persistence": false,
+        "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, browser+mail GUI evidence",
+        "blocker": "missing: shell_window_rendered, real_screen_capture_pass, browser+mail GUI evidence"
+      },
+      "J3": {
+        "id": "J3",
+        "prior_cx2d_class": "BLOCKED",
+        "cx2e_class": "BLOCKED",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": false,
+        "real_provider": true,
+        "persistence": false,
+        "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, Flatpak/App Center GUI evidence",
+        "blocker": "missing: shell_window_rendered, real_screen_capture_pass, Flatpak/App Center GUI evidence"
+      },
+      "J4": {
+        "id": "J4",
+        "prior_cx2d_class": "BLOCKED",
+        "cx2e_class": "BLOCKED",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": false,
+        "real_provider": false,
+        "persistence": false,
+        "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, CalDAV/CardDAV/chat GUI; chat may remain partial",
+        "blocker": "missing: shell_window_rendered, real_screen_capture_pass, CalDAV/CardDAV/chat GUI; chat may remain partial"
+      },
+      "J5": {
+        "id": "J5",
+        "prior_cx2d_class": "BLOCKED",
+        "cx2e_class": "BLOCKED",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": false,
+        "real_provider": false,
+        "persistence": false,
+        "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, offline recovery GUI evidence",
+        "blocker": "missing: shell_window_rendered, real_screen_capture_pass, offline recovery GUI evidence"
+      },
+      "J6": {
+        "id": "J6",
+        "prior_cx2d_class": "HUMAN_VALIDATION_PENDING",
+        "cx2e_class": "HUMAN_VALIDATION_PENDING",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": true,
+        "real_provider": false,
+        "persistence": false,
+        "missing_condition": "HUMAN_A11Y_PENDING \u2014 AT-SPI/Orca human validation required",
+        "blocker": "HUMAN_A11Y_PENDING \u2014 AT-SPI/Orca human validation required"
+      },
+      "J7": {
+        "id": "J7",
+        "prior_cx2d_class": "BLOCKED",
+        "cx2e_class": "BLOCKED",
+        "REAL_USER_JOURNEY_DIGITAL_PASS": false,
+        "real_ui": false,
+        "real_provider": false,
+        "persistence": false,
+        "missing_condition": "missing: shell_window_rendered, real_screen_capture_pass, recovery GUI evidence",
+        "blocker": "missing: shell_window_rendered, real_screen_capture_pass, recovery GUI evidence"
+      }
+    },
+    "any_real_user_journey_digital_pass": false,
+    "desired_before_cx3_pass": false,
+    "desired_ids": [
+      "J1",
+      "J2",
+      "J3",
+      "J5",
+      "J7"
+    ]
+  },
+  "tokens": {
+    "CX2E_QEMU_GUEST_BOOT_PASS": true,
+    "CX2E_GUEST_LINUX_PROVEN": true,
+    "CX2E_WESTON_SESSION_PASS": true,
+    "CX2E_WAYLAND_SOCKET_PASS": true,
+    "CX2E_DBUS_SESSION_PASS": true,
+    "CX2E_XDG_PORTAL_SESSION_PASS": false,
+    "CX2E_GUNNCH_SHELL_RENDER_PASS": false,
+    "CX2E_REAL_INPUT_PATH_PASS": true,
+    "CX2E_RENDER_CAPTURE_PASS": false,
+    "CX2E_REAL_SCREEN_CAPTURE_PASS": false,
+    "CX2E_REAL_HOME_WINDOW": false,
+    "CX2E_REAL_VAULT_WINDOW": false,
+    "CX2E_REAL_APP_CENTER_WINDOW": false,
+    "CX2E_REAL_CONNECT_WINDOW": false,
+    "CX2E_REAL_ASSIST_WINDOW": false,
+    "CX2E_REAL_CARE_WINDOW": false,
+    "CX2E_REAL_BROWSER_GUI_PASS": false,
+    "CX2E_REAL_APP_LIFECYCLE_GUI_PASS": false,
+    "CX2E_REAL_PRODUCTIVITY_GUI_PASS": false,
+    "CX2E_REAL_MAIL_GUI_PASS": false,
+    "CX2E_REAL_CALDAV_CARDDAV_GUI_PASS": false,
+    "CX2E_REAL_IPP_GUI_DIGITAL_PASS": false,
+    "CX2E_REAL_CHAT_VIDEO_GUI_ATTEMPT": true,
+    "CX2E_DIGITAL_RENDERED_A11Y_PASS": false,
+    "CX2E_REAL_OFFLINE_RECOVERY_GUI_PASS": false,
+    "CX2E_SINGLE_PRODUCTION_SHELL_AUTHORITY": true,
+    "CX2E_HUMAN_A11Y_PENDING": true,
+    "CX2E_PHYSICAL_PRINTER_PENDING": true,
+    "CX2E_HUMAN_AV_QUALITY_PENDING": true,
+    "CX2E_PHYSICAL_CAMERA_MIC_PENDING": true,
+    "CX2E_DEVICE_LAB_134_UNALTERED": true,
+    "CX2E_PORTAL_14_UNALTERED": true,
+    "CX2E_PORTAL_15_UNALTERED": true,
+    "CX2E_DEVICE_LAB_MANIFEST_UNALTERED": true,
+    "CX2E_NO_MERGES": true,
+    "FULL_COMPLETE_EXPERIENCE_COMPLETE": false,
+    "guest_booted": true,
+    "guest_is_linux": true,
+    "compositor_running": true,
+    "wayland_socket_alive": true,
+    "shell_window_rendered": false,
+    "lab_blocker": "CX2E_SHELL_RENDER_OR_CAPTURE_NOT_PROVEN: shell_window_rendered,real_screen_capture_pass; cloud kernel 6.1.0-53-cloud-arm64 lacks /dev/dri; Weston headless-backend session proven (WAYLAND+DBUS); gunnch_shell Chromium render empty; weston-screenshooter/grim unavailable under headless",
+    "notes": ""
+  },
+  "firewall": {
+    "device_lab_134_unaltered": true,
+    "portal_14_15_unaltered": true,
+    "device_lab_manifest_unaltered": true,
+    "evidence_path": "artifacts/complete_experience/cx2e",
+    "no_merges": true,
+    "no_macos_provider_fallback": true
+  },
+  "NEXT_CX_GATE": "CX2F_SHELL_RENDER_OR_CAPTURE_NOT_PROVEN",
+  "tip_stack_note": "Device OS CX0\u2013CX2D tips verified at branch creation; CX2E stacked on CX2D #140"
+}

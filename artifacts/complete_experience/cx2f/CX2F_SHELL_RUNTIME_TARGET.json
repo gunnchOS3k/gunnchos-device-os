@@ -1,0 +1,29 @@
+{
+  "schema": "gunnchos.cx2f.shell_runtime_target.v1",
+  "source_sha": "4ca488ef5d0b7083e4b80ba0fe7da87b0293306e",
+  "build_hash": "d4b9ee5fad574d2ca4622a3a1d80e839677ff7347d6cfbda51a4b6efd85d80b1",
+  "arch": "aarch64",
+  "guest_os": "debian-12-bookworm",
+  "renderer": "chromium-app-mode-wayland",
+  "asset_server_implementation": "python3 -m http.server (loopback-only; replaceable)",
+  "content_origin": "http://127.0.0.1:8765/",
+  "production_assets_dir": "/opt/gunnchos/gunnch_shell/d4b9ee5fad574d2ca4622a3a1d80e839677ff7347d6cfbda51a4b6efd85d80b1",
+  "launch_cmd": "chromium --ozone-platform=wayland --enable-features=UseOzonePlatform --user-data-dir=/var/lib/cx2f/chromium-shell --remote-debugging-address=127.0.0.1 --remote-debugging-port=9222 --no-first-run --disable-extensions --app=http://127.0.0.1:8765/",
+  "compositor": "weston",
+  "display_socket": "/run/cx2f-wayland/wayland-0",
+  "dbus_session": "unix:path=/run/cx2f-wayland/bus",
+  "ozone_platform": "wayland",
+  "chromium_profile": "/var/lib/cx2f/chromium-shell",
+  "remote_debugging": "127.0.0.1:9222",
+  "rendering_proof_method": "qemu_hmp_screendump_ppm + framebuffer_diff + atspi/dom",
+  "notes": "Immutable production build served via loopback static HTTP. Vite dev server is NOT production. file:// absolute /assets/ is invalid.",
+  "extras": {
+    "built_at_utc": "2026-09-16T22:08:25Z",
+    "host_staged_dir": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/os_build/cx2f_linux_lab/dist/gunnch_shell/d4b9ee5fad574d2ca4622a3a1d80e839677ff7347d6cfbda51a4b6efd85d80b1",
+    "absolute_assets_detected": true,
+    "asset_delivery": "loopback_http_static",
+    "npm_ci_rc": 0,
+    "build_rc": 0,
+    "sandbox_note": "May add --no-sandbox only if guest constraint requires; prefer sandbox on"
+  }
+}
