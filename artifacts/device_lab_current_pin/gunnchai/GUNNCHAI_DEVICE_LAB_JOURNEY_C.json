@@ -1,0 +1,101 @@
+{
+  "schema": "gunnchos.device_lab.gunnchai.journey_c.v1",
+  "generated_at_utc": "2026-09-17T22:44:00Z",
+  "failure_fallback": {
+    "ok": true,
+    "permission_deny": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "requestId": "1a756650-3474-486d-902f-62a29ad93d9d",
+        "capability": "tutoring",
+        "text": "[llama.cpp REAL local inference]\nCapability: tutoring\nQuery: test\nRespond with concise, actionable local guidance. Do not invent cloud calls.\nI'm here to help you with any local queries you may have. Whether you're looking for advice on a specific area or need help with a particular task, I'm here to assist you. Please feel free to share your query, and I'll do my best to provide helpful and practical guidance.\n\n[structured overlay]\nTUTORING[test]\nConcept: test\nSteps: Define test in one sentence. | Work a small example for test. | Ask a check question about test.\nCheck: What is one property of test?",
+        "structured": {
+          "kind": "tutoring",
+          "summary": "[llama.cpp REAL local inference]\nCapability: tutoring\nQuery: test\nRespond with concise, actionable local guidance. Do not invent cloud calls.\nI'm here to help you with any local queries you may have. Whether you're looking for advice on a specific area or need help with a particular task, I'm here to assist you. Please feel free to share your query, and I'll do my best to provide helpful and pract",
+          "concept": "test",
+          "steps": [
+            "Define test in one sentence.",
+            "Work a small example for test.",
+            "Ask a check question about test."
+          ],
+          "checkQuestion": "What is one property of test?",
+          "rubricFields": [
+            "concept",
+            "steps",
+            "checkQuestion"
+          ],
+          "selectedArchitecture": "llama.cpp",
+          "metricsMode": "measured",
+          "realInference": true,
+          "modelPath": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/models/local/SmolLM2-135M-Instruct-Q4_K_M.gguf",
+          "binary": "/opt/homebrew/bin/llama-cli",
+          "rawModelChars": 381,
+          "llmNarrative": "Capability: tutoring\nQuery: test\nRespond with concise, actionable local guidance. Do not invent cloud calls.\nI'm here to help you with any local queries you may have. Whether you're looking for advice on a specific area or need help with a particular task, I'm here to assist you. Please feel free to share your query, and I'll do my best to provide helpful and practical guidance.",
+          "llamaMetrics": {
+            "promptTokens": null,
+            "outputTokens": 86,
+            "promptTokPerSec": 573.4,
+            "generationTokPerSec": 201.7,
+            "ttftMs": 70,
+            "peakRssBytes": 250347520,
+            "latencyMs": 747,
+            "contextSize": 512,
+            "nPredict": 64,
+            "hardwarePath": "cpu",
+            "quant": "Q4_K_M",
+            "modelPath": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k/models/local/SmolLM2-135M-Instruct-Q4_K_M.gguf",
+            "binary": "/opt/homebrew/bin/llama-cli",
+            "runtimeVersion": ""
+          },
+          "mechanism": "hybrid"
+        },
+        "provenance": {
+          "capability": "tutoring",
+          "modelId": "llama.cpp",
+          "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+          "backend": "llama.cpp",
+          "mechanism": "hybrid",
+          "sources": [],
+          "grounded": false,
+          "realInference": true,
+          "fallbackUsed": false,
+          "fallbackReason": null,
+          "processingMode": "local-only",
+          "offline": true,
+          "integrityNote": "Structured product assist; model-unavailable uses deterministic fallback.",
+          "requestId": "1a756650-3474-486d-902f-62a29ad93d9d",
+          "generatedAt": "2026-09-17T22:43:57.279Z"
+        },
+        "governance": {
+          "purposeDeclared": true,
+          "purpose": "device_lab_fail_closed",
+          "consentGranted": false,
+          "minimizationApplied": false,
+          "disclosure": "DISCLOSURE: LOCAL-ONLY for tutoring. No cloud model call is permitted under current policy (processingMode=local-only; userCloudConsent=false). Data does not leave this device via this router.",
+          "modelVersion": "gunnchAI3k-product-service@0.5.0-continuation-v",
+          "humanOverrideActive": false,
+          "fallbackSafe": true,
+          "evalBaselineRef": "fixtures/system-layer/eval"
+        }
+      },
+      "err": null
+    },
+    "assist_probe": {
+      "status": 200,
+      "fallbackUsed": false,
+      "fallbackReason": null,
+      "realInference": true,
+      "err": null
+    },
+    "evidence_class": "DENIAL|LOCAL_PROVIDER"
+  },
+  "fail_closed": {
+    "ok": true,
+    "fabricated_success": false
+  },
+  "unauthorized": {
+    "ok": true,
+    "evidence_class": "DENIAL"
+  }
+}

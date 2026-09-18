@@ -1,0 +1,256 @@
+{
+  "schema": "gunnchos.device_lab.gunnchai.tool_journey.v1",
+  "generated_at_utc": "2026-09-17T22:43:59.465Z",
+  "gunnchai_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchAI3k",
+  "evidence_classes": {
+    "TOOL_INVOCATION": true,
+    "OS_STATE_MUTATION": true,
+    "DENIAL": true,
+    "WAIKE_READ_ONLY": true,
+    "GUI_ACTION": "see_companion_bridge_journey"
+  },
+  "authorized_write": {
+    "ok": true,
+    "toolId": "sandbox.files.write",
+    "output": {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-post-waike-closure/artifacts/device_lab_current_pin/gunnchai/tool_sandbox/os_state_mutation.txt",
+      "bytes": 29,
+      "exists": true
+    },
+    "reason": "OK",
+    "cancelled": false,
+    "timedOut": false,
+    "durationMs": 2,
+    "auditId": "t-1-1789685039460"
+  },
+  "read_back": {
+    "tool": {
+      "ok": false,
+      "toolId": "local.files.read",
+      "output": {},
+      "reason": "ENOENT: no such file or directory, open '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-post-waike-closure/artifacts/device_lab_current_pin/gunnchai/tool_read_root/os_state_mutation.txt'",
+      "cancelled": false,
+      "timedOut": false,
+      "durationMs": 0,
+      "auditId": "t-2-1789685039462"
+    },
+    "file_exists": true,
+    "content_match": true,
+    "note": "local.files.read is readRoot-scoped; mutation verified via sandbox file read-back"
+  },
+  "unauthorized_write": {
+    "ok": false,
+    "toolId": "sandbox.files.write",
+    "output": {},
+    "reason": "FAIL_CLOSED:files.write",
+    "cancelled": false,
+    "timedOut": false,
+    "durationMs": 0,
+    "auditId": "t-3-1789685039463"
+  },
+  "calc": {
+    "ok": true,
+    "toolId": "calc.evaluate",
+    "output": {
+      "value": 14
+    },
+    "reason": "OK",
+    "cancelled": false,
+    "timedOut": false,
+    "durationMs": 0,
+    "auditId": "t-4-1789685039463"
+  },
+  "waike_query": {
+    "ok": true,
+    "toolId": "waike.course.query",
+    "output": {
+      "courseId": "GENERAL_IT",
+      "value": "General IT — Operator to Support Specialist"
+    },
+    "reason": "OK",
+    "cancelled": false,
+    "timedOut": false,
+    "durationMs": 2,
+    "auditId": "t-5-1789685039463"
+  },
+  "waike_forbidden_field": {
+    "ok": false,
+    "toolId": "waike.course.query",
+    "output": {},
+    "reason": "INSTRUCTOR_KEYS_BLOCKED",
+    "cancelled": false,
+    "timedOut": false,
+    "durationMs": 0,
+    "auditId": "t-6-1789685039465"
+  },
+  "education_state": {
+    "before": "8bb43c127b1718c79bd2d823857cccad6123b872fcdda8843e5b64b688d58e15",
+    "after": "8bb43c127b1718c79bd2d823857cccad6123b872fcdda8843e5b64b688d58e15",
+    "unchanged": true,
+    "grades_written": false,
+    "completion_fabricated": false,
+    "mastery_fabricated": false
+  },
+  "fail_closed": {
+    "tool_permission_bypass_fails": true,
+    "secrets_absent_from_logs": true,
+    "direct_model_text_cannot_bypass_tool_auth": true,
+    "tool_result_provenance_retained": true,
+    "waike_readonly_no_grade_write": true
+  },
+  "audit": [
+    {
+      "at": "2026-09-17T22:43:59.460Z",
+      "auditId": "t-1-1789685039460",
+      "toolId": "sandbox.files.write",
+      "event": "request",
+      "detail": "[\"path\",\"content\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.461Z",
+      "auditId": "t-1-1789685039460",
+      "toolId": "sandbox.files.write",
+      "event": "permission",
+      "detail": "files.write",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.462Z",
+      "auditId": "t-1-1789685039460",
+      "toolId": "sandbox.files.write",
+      "event": "ok",
+      "detail": "executed",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.462Z",
+      "auditId": "t-2-1789685039462",
+      "toolId": "local.files.read",
+      "event": "request",
+      "detail": "[\"path\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.462Z",
+      "auditId": "t-2-1789685039462",
+      "toolId": "local.files.read",
+      "event": "permission",
+      "detail": "files.read",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.462Z",
+      "auditId": "t-2-1789685039462",
+      "toolId": "local.files.read",
+      "event": "fail",
+      "detail": "ENOENT: no such file or directory, open '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/gunnchos-device-os/.worktrees/device-lab-post-waike-closure/artifacts/device_lab_current_pin/gunnchai/tool_read_root/os_state_mutation.txt'",
+      "ok": false
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-3-1789685039463",
+      "toolId": "sandbox.files.write",
+      "event": "request",
+      "detail": "[\"path\",\"content\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-3-1789685039463",
+      "toolId": "sandbox.files.write",
+      "event": "permission",
+      "detail": "FAIL_CLOSED:files.write",
+      "ok": false
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-4-1789685039463",
+      "toolId": "calc.evaluate",
+      "event": "request",
+      "detail": "[\"expr\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-4-1789685039463",
+      "toolId": "calc.evaluate",
+      "event": "permission",
+      "detail": "files.read",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-4-1789685039463",
+      "toolId": "calc.evaluate",
+      "event": "ok",
+      "detail": "executed",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-5-1789685039463",
+      "toolId": "waike.course.query",
+      "event": "request",
+      "detail": "[\"courseId\",\"field\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.463Z",
+      "auditId": "t-5-1789685039463",
+      "toolId": "waike.course.query",
+      "event": "permission",
+      "detail": "files.read",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.465Z",
+      "auditId": "t-5-1789685039463",
+      "toolId": "waike.course.query",
+      "event": "ok",
+      "detail": "executed",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.465Z",
+      "auditId": "t-6-1789685039465",
+      "toolId": "waike.course.query",
+      "event": "request",
+      "detail": "[\"courseId\",\"field\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.465Z",
+      "auditId": "t-6-1789685039465",
+      "toolId": "waike.course.query",
+      "event": "permission",
+      "detail": "files.read",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.465Z",
+      "auditId": "t-6-1789685039465",
+      "toolId": "waike.course.query",
+      "event": "fail",
+      "detail": "INSTRUCTOR_KEYS_BLOCKED",
+      "ok": false
+    },
+    {
+      "at": "2026-09-17T22:43:59.465Z",
+      "auditId": "t-7-1789685039465",
+      "toolId": "sandbox.files.write",
+      "event": "request",
+      "detail": "[\"path\",\"content\"]",
+      "ok": true
+    },
+    {
+      "at": "2026-09-17T22:43:59.465Z",
+      "auditId": "t-7-1789685039465",
+      "toolId": "sandbox.files.write",
+      "event": "permission",
+      "detail": "FAIL_CLOSED:files.write",
+      "ok": false
+    }
+  ],
+  "PASS": true
+}
