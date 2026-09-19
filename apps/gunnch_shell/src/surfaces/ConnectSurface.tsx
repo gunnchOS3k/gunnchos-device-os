@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { EmptyState, SurfaceHeader } from '../design/primitives/SurfaceChrome'
 
 export default function ConnectSurface({
   offline,
@@ -30,9 +31,12 @@ export default function ConnectSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx2-connect-title">
-      <h1 id="cx2-connect-title">Connect</h1>
-      <p className="lead">Mail, calendar, and contacts over local protocols — not Gmail/Outlook completeness.</p>
+    <section className="cx2-panel vxp-surface" aria-labelledby="cx2-connect-title">
+      <SurfaceHeader
+        titleId="cx2-connect-title"
+        title="Connect"
+        lead="Mail, calendar, and contacts over local protocols — not Gmail/Outlook completeness."
+      />
       <div className="cx2-actions" role="group" aria-label="Compose">
         <label htmlFor="mail-to">To</label>
         <input id="mail-to" className="cx2-field" value={to} onChange={(e) => setTo(e.target.value)} />
@@ -52,7 +56,7 @@ export default function ConnectSurface({
         </button>
       </div>
       {inbox.length === 0 ? (
-        <div className="cx2-empty" role="status">Inbox empty — compose or sync when online.</div>
+        <EmptyState title="Inbox empty" detail="Compose a message or sync when online. No sample mail is invented." />
       ) : (
         <ul className="cx2-list" aria-label="Inbox">{inbox.map((m) => <li key={m} className="cx2-row"><span>{m}</span></li>)}</ul>
       )}

@@ -93,7 +93,7 @@ export default function PortfolioSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx3-portfolio-title">
+    <section className="cx2-panel vxp-surface" aria-labelledby="cx3-portfolio-title">
       <h1 id="cx3-portfolio-title">Portfolio</h1>
       <p className="lead">
         Privacy-selective portable package (HTML + manifest). Provider {providerLabel}. No accreditation claims.
