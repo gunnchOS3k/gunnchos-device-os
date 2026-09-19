@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import Icon from '../design/icons/Icon'
+import { EmptyState, SurfaceHeader } from '../design/primitives/SurfaceChrome'
 
 export type AppRow = {
   id: string
@@ -152,41 +154,68 @@ export default function AppCenterSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx2-apps-title">
-      <h1 id="cx2-apps-title">App Center</h1>
-      <p className="lead">
-        Discover, review permissions, install, open, update, and uninstall — with real package provenance.
-      </p>
-      <p data-testid="provider-label" style={{ color: 'var(--cx2-muted)', fontSize: '0.9rem' }}>
-        Provider: {providerLabel}
-        {loading ? ' · refreshing…' : ''}
-      </p>
-      <label htmlFor="app-search">Search apps</label>{' '}
-      <input
-        id="app-search"
-        className="cx2-field"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        aria-label="Search apps"
+    <section className="cx2-panel vxp-apps" aria-labelledby="cx2-apps-title">
+      <SurfaceHeader
+        titleId="cx2-apps-title"
+        title="App Center"
+        lead="Identity, status, and primary action first. Provenance and permissions stay secondary."
+        meta={
+          <p data-testid="provider-label" className="vxp-provider-line">
+            Provider: {providerLabel}
+            {loading ? ' · refreshing…' : ''}
+          </p>
+        }
       />
-      <button type="button" className="cx2-action" onClick={() => void refresh()} style={{ marginLeft: 8 }}>
-        Refresh
-      </button>
-      {filtered.length === 0 ? (
-        <div className="cx2-empty" role="status">
-          No apps match. Try another search.
-        </div>
+
+      <div className="vxp-search-row">
+        <label htmlFor="app-search">Search apps</label>
+        <input
+          id="app-search"
+          className="cx2-field"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search apps"
+        />
+        <button type="button" className="cx2-action" onClick={() => void refresh()}>
+          <Icon name="refresh" size={18} />
+          <span>Refresh</span>
+        </button>
+      </div>
+
+      {providerLabel === 'unavailable' ? (
+        <EmptyState
+          icon="error"
+          title="App Center provider unavailable"
+          detail="We cannot invent a catalog. Start the local provider or retry when connectivity returns."
+        />
+      ) : filtered.length === 0 ? (
+        <EmptyState icon="app_center" title="No apps match" detail="Try another search. Empty results stay empty." />
       ) : (
-        <ul className="cx2-list" aria-label="App catalog">
+        <ul className="cx2-list vxp-app-list" aria-label="App catalog">
           {filtered.map((a) => (
-            <li key={a.id} className="cx2-row" data-app-id={a.id} data-installed={a.installed ? '1' : '0'} data-version={a.version}>
-              <div>
-                <strong>{a.name}</strong>
-                <div style={{ color: 'var(--cx2-muted)', fontSize: '0.9rem' }}>
-                  {a.source} · v{a.version}
-                  {a.provenance ? ` · ${a.provenance}` : ''}
-                  {a.permissions?.length ? ` · ${a.permissions.join(', ')}` : ''}
-                  {a.progress ? ` · ${a.progress}` : ''}
+            <li
+              key={a.id}
+              className="cx2-row vxp-app-row"
+              data-app-id={a.id}
+              data-installed={a.installed ? '1' : '0'}
+              data-version={a.version}
+            >
+              <div className="vxp-app-identity">
+                <span className="vxp-app-glyph" aria-hidden="true">
+                  <Icon name="app_glyph" size={28} />
+                </span>
+                <div>
+                  <strong>{a.name}</strong>
+                  <div className="vxp-app-status">
+                    {a.installed ? 'Installed' : 'Available'}
+                    {a.progress ? ` · ${a.progress}` : ''}
+                    {` · v${a.version}`}
+                  </div>
+                  <div className="vxp-app-meta">
+                    {a.source}
+                    {a.provenance ? ` · ${a.provenance}` : ''}
+                    {a.permissions?.length ? ` · ${a.permissions.join(', ')}` : ''}
+                  </div>
                 </div>
               </div>
               <div className="cx2-actions">
@@ -197,17 +226,30 @@ export default function AppCenterSurface({
                     data-action="install"
                     onClick={() => void install(a.id)}
                   >
-                    Install
+                    <Icon name="install" size={16} />
+                    <span>Install</span>
                   </button>
                 ) : (
                   <>
-                    <button type="button" className="cx2-action primary" data-action="open" onClick={() => void openApp(a.id)}>
-                      Open
+                    <button
+                      type="button"
+                      className="cx2-action primary"
+                      data-action="open"
+                      onClick={() => void openApp(a.id)}
+                    >
+                      <Icon name="open" size={16} />
+                      <span>Open</span>
                     </button>
                     <button type="button" className="cx2-action" data-action="update" onClick={() => void updateApp(a.id)}>
-                      Update
+                      <Icon name="update" size={16} />
+                      <span>Update</span>
                     </button>
-                    <button type="button" className="cx2-action" data-action="rollback" onClick={() => void rollbackApp(a.id)}>
+                    <button
+                      type="button"
+                      className="cx2-action"
+                      data-action="rollback"
+                      onClick={() => void rollbackApp(a.id)}
+                    >
                       Rollback
                     </button>
                     <button
