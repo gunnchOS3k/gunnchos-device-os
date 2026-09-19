@@ -10,6 +10,9 @@ import PortfolioSurface from './surfaces/PortfolioSurface'
 import CareerProfileSurface from './surfaces/CareerProfileSurface'
 import VerifierSurface from './surfaces/VerifierSurface'
 import type { HostKind } from './platform/hostRuntime'
+import Icon from './design/icons/Icon'
+import type { VxpIconName } from './design/tokens'
+import './design/tokens.css'
 import './cx2.css'
 
 export type Cx2Surface =
@@ -24,18 +27,26 @@ export type Cx2Surface =
   | 'career'
   | 'verifier'
 
-const SURFACES: { id: Cx2Surface; label: string; shortcut: string }[] = [
-  { id: 'home', label: 'Home', shortcut: '1' },
-  { id: 'vault', label: 'Vault', shortcut: '2' },
-  { id: 'app_center', label: 'App Center', shortcut: '3' },
-  { id: 'connect', label: 'Connect', shortcut: '4' },
-  { id: 'assist', label: 'Assist', shortcut: '5' },
-  { id: 'care', label: 'Care', shortcut: '6' },
-  { id: 'wallet', label: 'Wallet', shortcut: '7' },
-  { id: 'portfolio', label: 'Portfolio', shortcut: '8' },
-  { id: 'career', label: 'Career', shortcut: '9' },
-  { id: 'verifier', label: 'Verifier', shortcut: '0' },
+type NavItem = { id: Cx2Surface; label: string; shortcut: string; icon: VxpIconName }
+
+const PRIMARY_NAV: NavItem[] = [
+  { id: 'home', label: 'Home', shortcut: '1', icon: 'home' },
+  { id: 'vault', label: 'Vault', shortcut: '2', icon: 'vault' },
+  { id: 'app_center', label: 'App Center', shortcut: '3', icon: 'app_center' },
+  { id: 'connect', label: 'Connect', shortcut: '4', icon: 'connect' },
 ]
+
+const MORE_NAV: NavItem[] = [
+  { id: 'assist', label: 'Assist', shortcut: '5', icon: 'assist' },
+  { id: 'care', label: 'Care', shortcut: '6', icon: 'care' },
+  { id: 'wallet', label: 'Wallet', shortcut: '7', icon: 'wallet' },
+  { id: 'portfolio', label: 'Portfolio', shortcut: '8', icon: 'portfolio' },
+  { id: 'career', label: 'Career', shortcut: '9', icon: 'career' },
+  { id: 'verifier', label: 'Verifier', shortcut: '0', icon: 'verifier' },
+]
+
+/** Full surface catalog for keyboard Alt+1..0 — IDs preserved. */
+const SURFACES: NavItem[] = [...PRIMARY_NAV, ...MORE_NAV]
 
 export type DeviceProfile = 'student_14_5' | 'handheld_hybrid' | 'ds_xl' | 'docked' | 'ci_qemu'
 
@@ -54,6 +65,10 @@ interface Props {
   hostKind?: HostKind
 }
 
+function isMoreSurface(id: Cx2Surface): boolean {
+  return MORE_NAV.some((s) => s.id === id)
+}
+
 export default function CompleteExperienceShell({
   profile = 'student_14_5',
   offline = false,
@@ -68,6 +83,8 @@ export default function CompleteExperienceShell({
   const [highContrast, setHighContrast] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
   const [scale, setScale] = useState(1)
+  const [moreOpen, setMoreOpen] = useState(() => isMoreSurface(initialSurface))
+  const [wideLayout, setWideLayout] = useState(false)
 
   const emitSession = (nextSurface: Cx2Surface, nextHistory: Cx2Surface[]) => {
     onSessionChange?.({
@@ -82,6 +99,7 @@ export default function CompleteExperienceShell({
   const go = (id: Cx2Surface) => {
     setError(null)
     setSurface(id)
+    setMoreOpen(isMoreSurface(id))
     setHistory((h) => {
       const next = [...h, id]
       emitSession(id, next)
@@ -95,6 +113,7 @@ export default function CompleteExperienceShell({
       const next = h.slice(0, -1)
       const s = next[next.length - 1]
       setSurface(s)
+      setMoreOpen(isMoreSurface(s))
       emitSession(s, next)
       return next
     })
@@ -103,6 +122,7 @@ export default function CompleteExperienceShell({
   const home = () => {
     setHistory(['home'])
     setSurface('home')
+    setMoreOpen(false)
     setError(null)
     emitSession('home', ['home'])
   }
@@ -120,31 +140,47 @@ export default function CompleteExperienceShell({
   }, [highContrast, reduceMotion, scale])
 
   useEffect(() => {
+    const mq = window.matchMedia('(min-width: 900px) and (orientation: landscape), (min-width: 1100px)')
+    const apply = () => setWideLayout(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
+  useEffect(() => {
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.altKey && ((e.key >= '1' && e.key <= '9') || e.key === '0')) {
         e.preventDefault()
         const idx = e.key === '0' ? 9 : Number(e.key) - 1
         if (SURFACES[idx]) go(SURFACES[idx].id)
       }
-      if (e.key === 'Escape') back()
+      if (e.key === 'Escape') {
+        if (moreOpen && !isMoreSurface(surface)) {
+          setMoreOpen(false)
+          return
+        }
+        back()
+      }
       if (e.altKey && e.key.toLowerCase() === 'h') home()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  }, [moreOpen, surface])
 
   const layoutClass = useMemo(() => {
-    const parts = ['cx2-shell', `profile-${profile}`]
+    const parts = ['cx2-shell', 'vxp-living', `profile-${profile}`]
     if (highContrast) parts.push('high-contrast')
     if (reduceMotion) parts.push('reduce-motion')
     if (offline) parts.push('offline')
+    if (wideLayout) parts.push('vxp-rail-layout')
+    else parts.push('vxp-dock-layout')
     return parts.join(' ')
-  }, [profile, highContrast, reduceMotion, offline])
+  }, [profile, highContrast, reduceMotion, offline, wideLayout])
 
   const body = (() => {
     switch (surface) {
       case 'home':
-        return <HomeSurface offline={offline} onNavigate={go} />
+        return <HomeSurface offline={offline} onNavigate={go} hostKind={hostKind} />
       case 'vault':
         return <VaultSurface offline={offline} onError={setError} />
       case 'app_center':
@@ -175,6 +211,27 @@ export default function CompleteExperienceShell({
     }
   })()
 
+  const primaryActive = (id: Cx2Surface) => surface === id
+  const moreActive = isMoreSurface(surface) || moreOpen
+
+  const navButtons = (items: NavItem[], ariaLabel: string) => (
+    <nav className="vxp-nav" aria-label={ariaLabel}>
+      {items.map((s) => (
+        <button
+          key={s.id}
+          type="button"
+          className={primaryActive(s.id) ? 'vxp-nav-btn active' : 'vxp-nav-btn'}
+          aria-current={surface === s.id ? 'page' : undefined}
+          aria-keyshortcuts={`Alt+${s.shortcut}`}
+          onClick={() => go(s.id)}
+        >
+          <Icon name={s.icon} size={20} />
+          <span className="vxp-nav-label">{s.label}</span>
+        </button>
+      ))}
+    </nav>
+  )
+
   return (
     <div
       className={layoutClass}
@@ -182,55 +239,121 @@ export default function CompleteExperienceShell({
       role="application"
       aria-label="gunnchOS Complete Experience"
     >
-      <header className="cx2-topbar" role="banner">
+      <header className="cx2-topbar vxp-topbar" role="banner">
         <div className="cx2-brand" aria-label="gunnchOS brand">
           <span className="cx2-brand-mark">gunnchOS</span>
-          <span className="cx2-brand-sub">Complete Experience</span>
+          <span className="cx2-brand-sub">Living Workspace</span>
         </div>
-        <nav className="cx2-nav" aria-label="Primary">
-          {SURFACES.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              className={surface === s.id ? 'cx2-nav-btn active' : 'cx2-nav-btn'}
-              aria-current={surface === s.id ? 'page' : undefined}
-              aria-keyshortcuts={`Alt+${s.shortcut}`}
-              onClick={() => go(s.id)}
-            >
-              {s.label}
-            </button>
-          ))}
-        </nav>
-        <div className="cx2-top-actions">
-          <button type="button" className="cx2-nav-btn" onClick={back} aria-label="Back" disabled={history.length <= 1}>
-            Back
+        <div className="vxp-utility" aria-label="Session controls">
+          <button
+            type="button"
+            className="vxp-util-btn"
+            onClick={back}
+            aria-label="Back"
+            disabled={history.length <= 1}
+          >
+            <Icon name="back" size={18} />
+            <span>Back</span>
           </button>
-          <button type="button" className="cx2-nav-btn" onClick={home} aria-label="Home">
-            Home
+          <button type="button" className="vxp-util-btn" onClick={home} aria-label="Go to Home">
+            <Icon name="home" size={18} />
+            <span>Home</span>
           </button>
           {onExit && (
-            <button type="button" className="cx2-nav-btn" onClick={onExit} aria-label="Exit Complete Experience">
-              Exit
+            <button type="button" className="vxp-util-btn" onClick={onExit} aria-label="Exit Complete Experience">
+              <Icon name="exit" size={18} />
+              <span>Exit</span>
             </button>
           )}
         </div>
       </header>
-      {offline && (
-        <div className="cx2-banner" role="status">
-          Offline — queued actions will sync when connectivity returns.
+
+      <div className="vxp-body">
+        {wideLayout && (
+          <aside className="vxp-rail" aria-label="Primary navigation rail">
+            {navButtons(PRIMARY_NAV, 'Primary')}
+            <button
+              type="button"
+              className={moreActive ? 'vxp-nav-btn active' : 'vxp-nav-btn'}
+              aria-expanded={moreOpen}
+              aria-controls="vxp-more-panel"
+              onClick={() => setMoreOpen((o) => !o)}
+            >
+              <Icon name="more" size={20} />
+              <span className="vxp-nav-label">More</span>
+            </button>
+            {moreOpen && (
+              <div id="vxp-more-panel" className="vxp-more-panel">
+                {navButtons(MORE_NAV, 'More surfaces')}
+              </div>
+            )}
+          </aside>
+        )}
+
+        <div className="vxp-content">
+          {offline && (
+            <div className="cx2-banner vxp-banner" role="status">
+              <Icon name="offline" size={18} />
+              <span>Offline — local work continues; queued actions sync when connectivity returns.</span>
+            </div>
+          )}
+          {error && (
+            <div className="cx2-banner error vxp-banner" role="alert">
+              <Icon name="error" size={18} />
+              <span>{error}</span>
+            </div>
+          )}
+          <main className="cx2-main" id="cx2-main" tabIndex={-1}>
+            {body}
+          </main>
+        </div>
+      </div>
+
+      {!wideLayout && (
+        <nav className="vxp-dock" aria-label="Primary">
+          {PRIMARY_NAV.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              className={primaryActive(s.id) ? 'vxp-dock-btn active' : 'vxp-dock-btn'}
+              aria-current={surface === s.id ? 'page' : undefined}
+              aria-keyshortcuts={`Alt+${s.shortcut}`}
+              onClick={() => go(s.id)}
+            >
+              <Icon name={s.icon} size={22} />
+              <span>{s.label}</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            className={moreActive ? 'vxp-dock-btn active' : 'vxp-dock-btn'}
+            aria-expanded={moreOpen}
+            aria-controls="vxp-more-sheet"
+            onClick={() => setMoreOpen((o) => !o)}
+          >
+            <Icon name="more" size={22} />
+            <span>More</span>
+          </button>
+        </nav>
+      )}
+
+      {!wideLayout && moreOpen && (
+        <div className="vxp-more-sheet" id="vxp-more-sheet" role="dialog" aria-label="More surfaces">
+          <div className="vxp-more-sheet-inner">
+            <header className="vxp-more-sheet-head">
+              <strong>More</strong>
+              <button type="button" className="vxp-util-btn" onClick={() => setMoreOpen(false)} aria-label="Close More">
+                Close
+              </button>
+            </header>
+            {navButtons(MORE_NAV, 'More surfaces')}
+          </div>
         </div>
       )}
-      {error && (
-        <div className="cx2-banner error" role="alert">
-          {error}
-        </div>
-      )}
-      <main className="cx2-main" id="cx2-main" tabIndex={-1}>
-        {body}
-      </main>
+
       <footer className="cx2-footer" role="contentinfo">
         Profile {profile.replace(/_/g, ' ')}
-        {hostKind ? ` · host ${hostKind}` : ''} · keyboard Alt+1..0 · Escape back
+        {hostKind ? ` · host ${hostKind}` : ''} · Alt+1..0 · Escape back
       </footer>
     </div>
   )
