@@ -1,0 +1,36 @@
+{
+  "captured_at": "2026-09-18T23:31:07.231010Z",
+  "package": "com.gunnchos.capsule.debug",
+  "activity": "com.gunnchos.capsule.CapsuleActivity",
+  "load_url": "file:///android_asset/shell/index.html",
+  "symptom": "blank_black_screen",
+  "am_start_W": "Starting: Intent { cmp=com.gunnchos.capsule.debug/com.gunnchos.capsule.CapsuleActivity }\n",
+  "screencap": "artifacts/android_capsule/black_screen/before_fix_screencap.png",
+  "screencap_sha256": "a25c2569955f95a8c07f5aac5b7692729d69508cd7133fc6f5592d11f8a4a4c6",
+  "screencap_bytes": 15585,
+  "first_failing_boot_stage": "JS_BUNDLE_LOAD",
+  "root_cause_hypothesis": "Vite type=module + CSS from file:///android_asset served with opaque origin null; Chromium CORS blocks script/stylesheet",
+  "console_evidence": [
+    "Access to CSS stylesheet at 'file:///android_asset/shell/assets/index-CsIM7fFU.css' from origin 'null' has been blocked by CORS policy",
+    "Access to script at 'file:///android_asset/shell/assets/index-CR8uXzRR.js' from origin 'null' has been blocked by CORS policy"
+  ],
+  "boot_stages": {
+    "NATIVE_ACTIVITY_CREATED": true,
+    "WEBVIEW_ATTACHED": true,
+    "MAIN_DOCUMENT_REQUESTED": true,
+    "MAIN_DOCUMENT_COMMITTED": true,
+    "JS_BUNDLE_STARTED": false,
+    "JS_BUNDLE_LOADED": false,
+    "REACT_ROOT_MOUNTED": false,
+    "SHELL_READY": false
+  },
+  "artifacts": {
+    "logcat_full": "artifacts/android_capsule/black_screen/logcat_full.txt",
+    "logcat_focused": "artifacts/android_capsule/black_screen/logcat_focused.txt",
+    "logcat_cors_proof": "artifacts/android_capsule/black_screen/logcat_cors_proof.txt",
+    "dumpsys_activity_top": "artifacts/android_capsule/black_screen/dumpsys_activity_top.txt",
+    "dumpsys_package": "artifacts/android_capsule/black_screen/dumpsys_package.txt",
+    "uiautomator_dump": "artifacts/android_capsule/black_screen/uiautomator_dump.xml"
+  },
+  "pre_edit": true
+}

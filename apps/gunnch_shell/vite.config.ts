@@ -4,6 +4,13 @@ import path from 'node:path'
 
 export default defineConfig({
   plugins: [react()],
+  // Relative base so Android WebView can load file:///android_asset/shell/
+  base: './',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    assetsDir: 'assets',
+  },
   resolve: {
     alias: {
       '@gunnch-shell': path.resolve(__dirname, 'src'),

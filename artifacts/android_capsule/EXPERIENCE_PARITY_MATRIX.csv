@@ -1,0 +1,16 @@
+workflow,priority,android_path,status,gate,notes
+Launch Capsule / Home shell,P0,WebView production shell,PASS_CODE,CAPSULE_PRODUCTION_SHELL_REUSED,Physical pending
+Fullscreen OS chrome / back-home-exit,P0,CapsuleActivity immersive,PASS_CODE,CAPSULE_FULLSCREEN_OS_EXPERIENCE_PASS,Physical pending
+Vault create/edit/share,P0,VaultProvider app-private+SAF,PASS_CODE,CAPSULE_VAULT_ANDROID_PASS,Physical pending
+App Center catalog (no silent install),P0,AppCenterProvider,PASS_CODE,CAPSULE_APP_CENTER_ANDROID_PASS,Physical pending
+WAIKE launch (PWA preferred),P0,WaikeProvider,PASS_CODE,CAPSULE_WAIKE_LAUNCH_PASS,Physical pending
+gunnchAI open/text help,P0,GunnchAiProvider,PASS_CODE,CAPSULE_GUNNCHAI_LAUNCH_PASS,Physical pending
+Four games matrix,P0,GamesProvider CAPSULE_WEB,PASS_CODE,CAPSULE_FOUR_GAME_LAUNCH_MATRIX_COMPLETE,Physical pending
+Connect intents,P1,ConnectProvider,PASS_CODE,CAPSULE_CONNECT_ANDROID_PASS,Physical pending
+Assist mechanics,P1,AssistProvider,PASS_CODE,CAPSULE_ACCESSIBILITY_MECHANICS_PASS,Human validation false
+Care snapshot,P1,CareProvider,PASS_CODE,CAPSULE_CARE_ANDROID_PASS,Physical pending
+Session restore,P0,SessionStore + shell,PASS_CODE,CAPSULE_SESSION_RECOVERY_PASS,Physical pending
+Bridge security,P0,allowlist/origin tests,PASS,CAPSULE_ANDROID_BRIDGE_SECURITY_PASS,Unit tested
+Linux guest boot,P2,QEMU/AVF,FAIL_UNEarned,CAPSULE_QEMU_GUEST_BOOT_PASS,No on-device binary
+Linux desktop in-app,P2,provider surface,FAIL_UNEARNED,CAPSULE_LINUX_DESKTOP_PROVIDER_PASS,Depends on guest boot
+Pixel performance profile,P1,adb dumpsys,FAIL_UNEARNED,CAPSULE_PIXEL6A_PERFORMANCE_PROFILE_CAPTURED,No device
