@@ -122,7 +122,7 @@ export default function CareerProfileSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx32-career-title">
+    <section className="cx2-panel vxp-surface" aria-labelledby="cx32-career-title">
       <h1 id="cx32-career-title">Career Profile</h1>
       <p className="lead">
         Compose Wallet credentials and Portfolio artifacts into a user-authored career surface.

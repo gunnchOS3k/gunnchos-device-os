@@ -123,7 +123,7 @@ export default function WalletSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx3-wallet-title">
+    <section className="cx2-panel vxp-surface" aria-labelledby="cx3-wallet-title">
       <h1 id="cx3-wallet-title">Credential Wallet</h1>
       <p className="lead">
         Signed learning evidence assertions. Provider {providerLabel}. Always{' '}
