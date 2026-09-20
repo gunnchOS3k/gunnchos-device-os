@@ -1,0 +1,185 @@
+diff --git a/apps/waike_learning/README.md b/apps/waike_learning/README.md
+index 6f48f7a..0892448 100644
+--- a/apps/waike_learning/README.md
++++ b/apps/waike_learning/README.md
+@@ -1,11 +1,13 @@
+-# WAIKE Learning (Device OS companion / seed)
++# WAIKE Learning (Device OS discovery seed)
+ 
+ Eighteen accepted course IDs from `waike-research-ops` programs, each with a
+ distinct executable seed (lesson, assignment, lab, packets).
+ 
++> **Naming note:** “Companion/seed” here means *thin discovery HTML for the Learning OS SoR*. It does **not** mean Android Capsule is a companion app. Capsule identity is governed by `docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md`.
++
+ ## Relationship to Learning OS (canonical)
+ 
+-This tree is a **thin companion / discovery seed** for the full native Learning OS.
++This tree is a **thin discovery / lab seed** for the full native Learning OS.
+ 
+ | Surface | Role |
+ |---------|------|
+diff --git a/artifacts/android_capsule/GATES.json b/artifacts/android_capsule/GATES.json
+index 5dc5c05..241f379 100644
+--- a/artifacts/android_capsule/GATES.json
++++ b/artifacts/android_capsule/GATES.json
+@@ -27,13 +27,19 @@
+   "CAPSULE_QEMU_GUEST_BOOT_PASS": false,
+   "CAPSULE_LINUX_DESKTOP_PROVIDER_PASS": false,
+   "GUNNCHOS_CAPSULE_EXPERIENCE_PARITY": false,
++  "vxp2_universal_parity": {
++    "governing_doc": "docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md",
++    "gates_file": "artifacts/vxp2/reports/GUNNCHOS_UNIVERSAL_PARITY_GATES.json",
++    "identity": "Capsule is Android-hosted gunnchOS — not companion/reduced/launcher-only",
++    "all_human_gates": false
++  },
+   "notes": {
+     "black_screen_root_cause": "file:// opaque origin null blocked Vite module JS/CSS via CORS",
+     "fix": "WebViewAssetLoader https://appassets.androidplatform.net/assets/shell/index.html",
+     "physical": "Home screenshot + CDP DOM proof + shell_ready log chain on Pixel 6a 27211JEGR06194",
+-    "parity": "Aggregate experience parity remains false until owner full usability pass"
++    "parity": "Aggregate experience parity remains false until owner full usability pass; VXP-2 universal gates also false"
+   },
+   "baseline_sha": "55f63da0f4555c2f235caeae7d6bc20ab1b15638",
+   "pre_fix_head": "8f218eb73f179dc14787bfb4dd47baa2bf2d91ac",
+-  "NEXT_GUNNCHOS_ACTION": "OWNER_PIXEL6A_HANDS_ON_CAPSULE_USABILITY_PASS"
++  "NEXT_GUNNCHOS_ACTION": "OWNER_PIXEL6A_HANDS_ON_CAPSULE_USABILITY_PASS_AND_VXP2_UNIVERSAL_CHECKLIST"
+ }
+diff --git a/artifacts/vxp/reports/VXP_GATES.json b/artifacts/vxp/reports/VXP_GATES.json
+index 2a56719..c63886c 100644
+--- a/artifacts/vxp/reports/VXP_GATES.json
++++ b/artifacts/vxp/reports/VXP_GATES.json
+@@ -5,6 +5,11 @@
+   "base_sha": "f460ac7b0e94c98060e7aeafc3ee82fb3c65237d",
+   "main_sha": "55f63da0f4555c2f235caeae7d6bc20ab1b15638",
+   "CANONICAL_LOGO_ASSET_PENDING": true,
++  "vxp2_addendum": {
++    "governing_doc": "docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md",
++    "gates_file": "artifacts/vxp2/reports/GUNNCHOS_UNIVERSAL_PARITY_GATES.json",
++    "note": "VXP-2 universal device parity supersedes companion/reduced/Android-only Capsule interpretations."
++  },
+   "gates": {
+     "VXP0_DOCS_COMPLETE": true,
+     "VXP0_TOKENS_ICONS_HARNESS": true,
+@@ -27,12 +32,31 @@
+     "VXP_HUMAN_A11Y_PASS": false,
+     "VXP_PROVIDER_BLOCKERS_SOLVED": false,
+     "VXP_MERGE_AUTHORIZED": false,
+-    "VXP1_ANDROID_CAPSULE_BUILD": true
++    "VXP1_ANDROID_CAPSULE_BUILD": true,
++    "GUNNCHOS_UNIVERSAL_IDENTITY_PASS": false,
++    "GUNNCHOS_SHARED_NAVIGATION_MODEL_PASS": false,
++    "GUNNCHOS_FORM_FACTOR_ADAPTER_PASS": false,
++    "GUNNCHOS_WAIKE_FULL_ROUTE_PASS": false,
++    "GUNNCHOS_GUNNCHAI_FULL_ROUTE_PASS": false,
++    "GUNNCHOS_GAMING_LIBRARY_ROUTE_PASS": false,
++    "GUNNCHOS_CREATION_ROUTE_PASS": false,
++    "GUNNCHOS_COMMUNICATION_ROUTE_PASS": false,
++    "GUNNCHOS_LEISURE_ROUTE_PASS": false,
++    "GUNNCHOS_VAULT_ROUTE_PASS": false,
++    "GUNNCHOS_APP_CENTER_ROUTE_PASS": false,
++    "GUNNCHOS_CARE_ROUTE_PASS": false,
++    "GUNNCHOS_SEARCH_COMMAND_ROUTE_PASS": false,
++    "GUNNCHOS_PIXEL_FULL_ECOSYSTEM_JOURNEY_PASS": false,
++    "GUNNCHOS_FORM_FACTOR_PARITY_MATRIX_PASS": false,
++    "GUNNCHOS_HUMAN_DEVICE_FAMILY_COHERENCE_PASS": false,
++    "GUNNCHOS_HUMAN_DESIRE_PASS": false,
++    "GUNNCHOS_MERGE_AUTHORIZED": false
+   },
+   "aggregates": {
+     "digital_pass": true,
+     "physical_pass": false,
+-    "note": "Digital unit/typecheck/build + browser fixture screenshots + capsule APK build pass. Pixel visual false \u2014 device attached but VXP-1 not installed for physical capture this run. Human a11y PENDING. Do not convert PENDING to PASS."
++    "vxp2_universal_parity_pass": false,
++    "note": "Digital unit/typecheck/build + browser fixture screenshots + capsule APK build pass. Pixel visual false — device attached but VXP-1 not installed for physical capture this run. Human a11y PENDING. VXP-2 universal parity gates all false pending owner review. Do not convert PENDING to PASS."
+   },
+   "commands": {
+     "npm_test_exit": 0,
+diff --git a/docs/android_capsule/ARCHITECTURE.md b/docs/android_capsule/ARCHITECTURE.md
+index af63d7c..70427ff 100644
+--- a/docs/android_capsule/ARCHITECTURE.md
++++ b/docs/android_capsule/ARCHITECTURE.md
+@@ -1,5 +1,7 @@
+ # Capsule Architecture
+ 
++**Product identity:** Android Capsule is an **Android-hosted expression of the same gunnchOS**, not a companion app, reduced mobile shell, or launcher-only wrapper. Governing contract: [`docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md`](../product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md).
++
+ ```
+ Android Host (stock Pixel)
+   └─ CapsuleActivity + ForegroundService
+@@ -9,7 +11,7 @@ Android Host (stock Pixel)
+                       ├─ Android Bridge providers (files/share/camera/…)
+                       ├─ Local providers (Vault/AppCenter/Games/…)
+                       ├─ Optional Linux Guest (NONE|QEMU_TCG|AVF_EXPERIMENTAL|REMOTE_EDGE)
+-                      └─ Edge / PWA (WAIKE)
++                      └─ Edge / PWA (WAIKE) — adapters, not a separate OS
+ ```
+ 
+-Truth boundary: `GUNNCHOS_CAPSULE_EXPERIENCE_PARITY` — not kernel identity.
++Truth boundary: `GUNNCHOS_CAPSULE_EXPERIENCE_PARITY` — not kernel identity. Universal parity gates: `artifacts/vxp2/reports/GUNNCHOS_UNIVERSAL_PARITY_GATES.json` (human gates remain false until owner review).
+diff --git a/docs/vxp/README.md b/docs/vxp/README.md
+index 1b4a3c2..a6c994f 100644
+--- a/docs/vxp/README.md
++++ b/docs/vxp/README.md
+@@ -3,11 +3,20 @@
+ VXP-0 establishes the visual constitution, baseline inventory, and design system.
+ VXP-1 ships the **Living Workspace** production shell direction on the Android Capsule stack.
+ 
++## VXP-2 override (universal device parity)
++
++**Governing contract:** [`docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md`](../product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md)
++
++VXP-2 is **not** limited to Anime Aggressors branding, Android-only chrome, reduced mobile, or companion-app identity. Android Capsule is an Android-hosted expression of the **same gunnchOS**. Gates: `artifacts/vxp2/reports/GUNNCHOS_UNIVERSAL_PARITY_GATES.json`.
++
++Prior notes that framed the next lane as “VXP-2 Anime Aggressors brand system only” are **superseded** for product identity; game visual audits remain valid as *game* art workstreams under the universal contract.
++
+ ## Stacking
+ 
+ - Base branch for this work: `platform/android-gunnchos-capsule-v1` (PR #158)
+ - Work branch: `vxp/vxp-0-vxp-1-living-workspace`
+ - Do **not** merge this lane until Capsule PR #158 and visual gates agree.
++- Do **not** set `GUNNCHOS_MERGE_AUTHORIZED` until universal parity owner checklist is answered.
+ 
+ ## Flags
+ 
+@@ -17,3 +26,4 @@ VXP-1 ships the **Living Workspace** production shell direction on the Android C
+ ## Tree
+ 
+ See sibling docs in this folder. Experiments under `experiments/` are **EXPERIMENTAL — NOT PRODUCTION UI**.
++Product parity docs live under `docs/product/`.
+diff --git a/docs/vxp/VXP_GAME_VISUAL_AUDITS.md b/docs/vxp/VXP_GAME_VISUAL_AUDITS.md
+index 784374f..1f23064 100644
+--- a/docs/vxp/VXP_GAME_VISUAL_AUDITS.md
++++ b/docs/vxp/VXP_GAME_VISUAL_AUDITS.md
+@@ -37,4 +37,6 @@ Captured LIVE 2026-09-18. Secondary repos were **not** mutated.
+ 
+ ## Shared
+ 
+-All four: `CANONICAL_LOGO_ASSET_PENDING` for full wordmarks. Next single lane after VXP-1: **VXP-2 Anime Aggressors brand system** (do not start in this PR).
++All four: `CANONICAL_LOGO_ASSET_PENDING` for full wordmarks.
++
++**VXP-2 product identity (superseding):** Universal device parity contract — [`docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md`](../product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md). Anime Aggressors brand polish remains a valid *game* visual workstream under that contract; it does **not** redefine VXP-2 as Android-companion or game-only.
+diff --git a/docs/vxp/VXP_INFORMATION_ARCHITECTURE.md b/docs/vxp/VXP_INFORMATION_ARCHITECTURE.md
+index 1149025..d1d61da 100644
+--- a/docs/vxp/VXP_INFORMATION_ARCHITECTURE.md
++++ b/docs/vxp/VXP_INFORMATION_ARCHITECTURE.md
+@@ -1,14 +1,18 @@
+ # Information Architecture
+ 
+-## Primary navigation
++**Contract target (VXP-2):** Shared navigation grammar is Home, Apps, Search/Command, Continuity, Notifications/Status, Settings — see [`docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md`](../product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md). Missing slots below are gaps, not reduced-phone identity.
++
++## Primary navigation (VXP-1 implemented)
+ 
+ Handheld: bottom dock — Home, Vault, App Center, Connect, More.
+ Desktop/landscape (≥900px landscape or ≥1100px): side rail — same five, More expands Assist/Care/Wallet/Portfolio/Career/Verifier.
+ 
+-## Surface IDs (stable)
++## Surface IDs (stable, implemented)
+ 
+ `home`, `vault`, `app_center`, `connect`, `assist`, `care`, `wallet`, `portfolio`, `career`, `verifier`
+ 
++Not yet first-class shell routes (contract gaps): WAIKE, gunnchAI, Games library, Creation, Leisure, Search/Command, Settings, Continuity module.
++
+ ## Utility chrome
+ 
+ Back / Home / Exit are **utility**, not a second equal-weight primary row.
