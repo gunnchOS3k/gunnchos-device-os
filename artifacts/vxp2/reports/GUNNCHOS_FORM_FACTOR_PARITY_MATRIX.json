@@ -6,15 +6,24 @@
   "honesty": "Populated from current implementation evidence only. Unknown or unwired cells use NOT_IMPLEMENTED or UNAVAILABLE_PLATFORM_LIMIT. Physical layout_usable/no_overflow not claimed without viewport capture.",
   "evidence_anchors": [
     "apps/gunnch_shell/src/CompleteExperienceShell.tsx",
-    "apps/gunnch_shell/src/surfaces/HomeSurface.tsx",
     "apps/gunnch_shell/src/platform/capsuleBridge.ts",
+    "apps/gunnch_shell/src/platform/continuityStore.ts",
+    "apps/gunnch_shell/src/surfaces/CreationSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/GamesSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/GunnchAiSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/HomeSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/LeisureSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/SearchCommandSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/SettingsSurface.tsx",
+    "apps/gunnch_shell/src/surfaces/WaikeSurface.tsx",
     "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/bridge/CapabilityRouter.kt",
-    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/WaikeProvider.kt",
-    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/GunnchAiProvider.kt",
-    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/GamesProvider.kt",
     "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/AppCenterProvider.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/GamesProvider.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/GunnchAiProvider.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/WaikeProvider.kt",
     "artifacts/android_capsule/GATES.json",
     "artifacts/vxp/reports/VXP_GATES.json",
+    "artifacts/vxp2/pixel/full_ecosystem/STOP_CONDITION.md",
     "docs/vxp/VXP_INFORMATION_ARCHITECTURE.md"
   ],
   "classification_enum": [
@@ -79,7 +88,9 @@
     "Creation",
     "Connect",
     "Care",
-    "Settings"
+    "Settings",
+    "Search / Command",
+    "Leisure"
   ],
   "cell_fields": [
     "route_exists",
@@ -93,27 +104,27 @@
     "pixel_portrait": {
       "Home": {
         "route_exists": true,
-        "layout_usable": true,
+        "layout_usable": "digital_shell_verified",
         "no_overflow": "unknown_pending_viewport_capture",
-        "capability_status": "shell_surface_present",
+        "capability_status": "continue_modules_from_continuity",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "HomeSurface in CompleteExperienceShell; Capsule WebView host. Continue module honest-empty."
+        "notes": "Continue cards from ContinuityStore only; spaces include domain routes; engineering metadata moved to Settings diagnostics."
       },
       "WAIKE": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "bridge_launch_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "WaikeProvider.launch + App Center catalog; no Cx2Surface id."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_route_plus_waike_adapter",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "WaikeSurface in shell; WaikeProvider FULL_VIA_ADAPTER; offline honesty + return-to-gunnchOS. Pixel physical journey not run this PR."
       },
       "gunnchAI": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "bridge_metadata_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "GunnchAiProvider returns JSON flags; no shell UI."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_conversation_plus_local_deterministic",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GunnchAiSurface with provenance/cancel/retry; runtime labels truthful (never On-device for Nearby Mac)."
       },
       "Vault": {
         "route_exists": true,
@@ -125,35 +136,35 @@
       },
       "App Library": {
         "route_exists": true,
-        "layout_usable": true,
+        "layout_usable": "digital_shell_verified",
         "no_overflow": "unknown_pending_viewport_capture",
-        "capability_status": "app_center_surface",
+        "capability_status": "categorized_first_party_plus_provider",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Mapped to app_center surface + AppCenterProvider catalog."
+        "notes": "Categories: Learning, Intelligence, Games, Creation, Communication, Leisure, Files & Storage, System, Career/Portfolio."
       },
       "Games": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "games_launch_matrix_stub",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "GamesProvider matrix exists; no Games library surface in shell."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "games_library_surface_plus_matrix",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GamesSurface lists four first-party titles; games_list/games_launch bridge; no repo/SHA in UI. Bundled web builds may still be missing."
       },
       "Creation": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "seed_app_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "apps/creator_studio not wired into Living Workspace nav."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "local_note_create_edit_save",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "CreationSurface local note workflow; Continuity records saves. Heavy creator_studio escalation still optional."
       },
       "Connect": {
         "route_exists": true,
-        "layout_usable": true,
+        "layout_usable": "digital_shell_verified",
         "no_overflow": "unknown_pending_viewport_capture",
-        "capability_status": "connect_surface",
+        "capability_status": "connect_surface_telephony_honest",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Local compose/queue; not full messaging stack."
+        "notes": "Connect usable for local mail/calendar; telephony explicitly not claimed."
       },
       "Care": {
         "route_exists": true,
@@ -164,38 +175,54 @@
         "notes": "More sheet on dock layout."
       },
       "Settings": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "assist_a11y_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Assist is contrast/motion/scale; not system Settings."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "searchable_system_settings",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SettingsSurface searchable sections incl. AI/Assist runtime honesty, diagnostics (engineering metadata off Home)."
+      },
+      "Search / Command": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "wired_index_only",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SearchCommandSurface indexes surfaces/library/settings/commands only \u2014 no fabricated sources."
+      },
+      "Leisure": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "rights_safe_leisure_domain",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "LeisureSurface intentional rest; no unlicensed streaming."
       }
     },
     "pixel_landscape": {
       "Home": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_viewport_capture",
+        "layout_usable": "digital_shell_verified",
         "no_overflow": "unknown_pending_viewport_capture",
-        "capability_status": "shell_surface_present",
+        "capability_status": "continue_modules_from_continuity",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Wide matchMedia may switch to rail; Pixel landscape capture not asserted this run."
+        "notes": "Continue cards from ContinuityStore only; spaces include domain routes; engineering metadata moved to Settings diagnostics. Form factor cell=pixel_landscape."
       },
       "WAIKE": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "bridge_launch_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Same as portrait — no shell route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_route_plus_waike_adapter",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "WaikeSurface in shell; WaikeProvider FULL_VIA_ADAPTER; offline honesty + return-to-gunnchOS. Pixel physical journey not run this PR. Form factor cell=pixel_landscape."
       },
       "gunnchAI": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "bridge_metadata_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Same as portrait."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_conversation_plus_local_deterministic",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GunnchAiSurface with provenance/cancel/retry; runtime labels truthful (never On-device for Nearby Mac). Form factor cell=pixel_landscape."
       },
       "Vault": {
         "route_exists": true,
@@ -207,35 +234,35 @@
       },
       "App Library": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_viewport_capture",
+        "layout_usable": "digital_shell_verified",
         "no_overflow": "unknown_pending_viewport_capture",
-        "capability_status": "app_center_surface",
+        "capability_status": "categorized_first_party_plus_provider",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Categories: Learning, Intelligence, Games, Creation, Communication, Leisure, Files & Storage, System, Career/Portfolio. Form factor cell=pixel_landscape."
       },
       "Games": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "games_launch_matrix_stub",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No library surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "games_library_surface_plus_matrix",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GamesSurface lists four first-party titles; games_list/games_launch bridge; no repo/SHA in UI. Bundled web builds may still be missing. Form factor cell=pixel_landscape."
       },
       "Creation": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "seed_app_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Not in shell."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "local_note_create_edit_save",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "CreationSurface local note workflow; Continuity records saves. Heavy creator_studio escalation still optional. Form factor cell=pixel_landscape."
       },
       "Connect": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_viewport_capture",
+        "layout_usable": "digital_shell_verified",
         "no_overflow": "unknown_pending_viewport_capture",
-        "capability_status": "connect_surface",
+        "capability_status": "connect_surface_telephony_honest",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Connect usable for local mail/calendar; telephony explicitly not claimed. Form factor cell=pixel_landscape."
       },
       "Care": {
         "route_exists": true,
@@ -246,38 +273,54 @@
         "notes": "Route exists."
       },
       "Settings": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "assist_a11y_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No Settings surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "searchable_system_settings",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SettingsSurface searchable sections incl. AI/Assist runtime honesty, diagnostics (engineering metadata off Home). Form factor cell=pixel_landscape."
+      },
+      "Search / Command": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "wired_index_only",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SearchCommandSurface indexes surfaces/library/settings/commands only \u2014 no fabricated sources."
+      },
+      "Leisure": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "rights_safe_leisure_domain",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "LeisureSurface intentional rest; no unlicensed streaming."
       }
     },
     "tablet": {
       "Home": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "shell_surface_present",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "continue_modules_from_continuity",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Same shell; tablet SKU not separately instrumented."
+        "notes": "Continue cards from ContinuityStore only; spaces include domain routes; engineering metadata moved to Settings diagnostics. Form factor cell=tablet."
       },
       "WAIKE": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "bridge_launch_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No shell route on any viewport."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_route_plus_waike_adapter",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "WaikeSurface in shell; WaikeProvider FULL_VIA_ADAPTER; offline honesty + return-to-gunnchOS. Pixel physical journey not run this PR. Form factor cell=tablet."
       },
       "gunnchAI": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "bridge_metadata_only",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No shell route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_conversation_plus_local_deterministic",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GunnchAiSurface with provenance/cancel/retry; runtime labels truthful (never On-device for Nearby Mac). Form factor cell=tablet."
       },
       "Vault": {
         "route_exists": true,
@@ -289,35 +332,35 @@
       },
       "App Library": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "app_center_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "categorized_first_party_plus_provider",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Categories: Learning, Intelligence, Games, Creation, Communication, Leisure, Files & Storage, System, Career/Portfolio. Form factor cell=tablet."
       },
       "Games": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No library surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "games_library_surface_plus_matrix",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GamesSurface lists four first-party titles; games_list/games_launch bridge; no repo/SHA in UI. Bundled web builds may still be missing. Form factor cell=tablet."
       },
       "Creation": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Pen enhancement applicable when hardware present — surface still missing."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "local_note_create_edit_save",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "CreationSurface local note workflow; Continuity records saves. Heavy creator_studio escalation still optional. Form factor cell=tablet."
       },
       "Connect": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "connect_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "connect_surface_telephony_honest",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Connect usable for local mail/calendar; telephony explicitly not claimed. Form factor cell=tablet."
       },
       "Care": {
         "route_exists": true,
@@ -328,38 +371,54 @@
         "notes": "Route exists."
       },
       "Settings": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No Settings surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "searchable_system_settings",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SettingsSurface searchable sections incl. AI/Assist runtime honesty, diagnostics (engineering metadata off Home). Form factor cell=tablet."
+      },
+      "Search / Command": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "wired_index_only",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SearchCommandSurface indexes surfaces/library/settings/commands only \u2014 no fabricated sources."
+      },
+      "Leisure": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "rights_safe_leisure_domain",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "LeisureSurface intentional rest; no unlicensed streaming."
       }
     },
     "handheld_landscape": {
       "Home": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "profile_handheld_hybrid_css",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "continue_modules_from_continuity",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "DeviceProfile handheld_hybrid exists; physical handheld unevidenced."
+        "notes": "Continue cards from ContinuityStore only; spaces include domain routes; engineering metadata moved to Settings diagnostics. Form factor cell=handheld_landscape."
       },
       "WAIKE": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No shell route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_route_plus_waike_adapter",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "WaikeSurface in shell; WaikeProvider FULL_VIA_ADAPTER; offline honesty + return-to-gunnchOS. Pixel physical journey not run this PR. Form factor cell=handheld_landscape."
       },
       "gunnchAI": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No shell route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_conversation_plus_local_deterministic",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GunnchAiSurface with provenance/cancel/retry; runtime labels truthful (never On-device for Nearby Mac). Form factor cell=handheld_landscape."
       },
       "Vault": {
         "route_exists": true,
@@ -371,35 +430,35 @@
       },
       "App Library": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "app_center_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "categorized_first_party_plus_provider",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Categories: Learning, Intelligence, Games, Creation, Communication, Leisure, Files & Storage, System, Career/Portfolio. Form factor cell=handheld_landscape."
       },
       "Games": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "gamepad_adapter_missing",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Handheld should enhance with gamepad; library surface absent."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "games_library_surface_plus_matrix",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GamesSurface lists four first-party titles; games_list/games_launch bridge; no repo/SHA in UI. Bundled web builds may still be missing. Form factor cell=handheld_landscape."
       },
       "Creation": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No Creation surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "local_note_create_edit_save",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "CreationSurface local note workflow; Continuity records saves. Heavy creator_studio escalation still optional. Form factor cell=handheld_landscape."
       },
       "Connect": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "connect_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "connect_surface_telephony_honest",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Connect usable for local mail/calendar; telephony explicitly not claimed. Form factor cell=handheld_landscape."
       },
       "Care": {
         "route_exists": true,
@@ -410,38 +469,54 @@
         "notes": "Route exists."
       },
       "Settings": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No Settings surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "searchable_system_settings",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SettingsSurface searchable sections incl. AI/Assist runtime honesty, diagnostics (engineering metadata off Home). Form factor cell=handheld_landscape."
+      },
+      "Search / Command": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "wired_index_only",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SearchCommandSurface indexes surfaces/library/settings/commands only \u2014 no fabricated sources."
+      },
+      "Leisure": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "rights_safe_leisure_domain",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "LeisureSurface intentional rest; no unlicensed streaming."
       }
     },
     "student_14_5": {
       "Home": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "profile_student_14_5",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "continue_modules_from_continuity",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Default DeviceProfile in shell; Linux host path separate from Capsule."
+        "notes": "Continue cards from ContinuityStore only; spaces include domain routes; engineering metadata moved to Settings diagnostics. Form factor cell=student_14_5."
       },
       "WAIKE": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "learning_os_handoff_elsewhere",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Learning OS SoR is external Tauri app; not Living Workspace route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_route_plus_waike_adapter",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "WaikeSurface in shell; WaikeProvider FULL_VIA_ADAPTER; offline honesty + return-to-gunnchOS. Pixel physical journey not run this PR. Form factor cell=student_14_5."
       },
       "gunnchAI": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "tutor_html_seed_elsewhere",
-        "parity_classification": "FALLBACK",
-        "notes": "gunnchai_tutor / companion_bridge exist outside shell nav — not full shell route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_conversation_plus_local_deterministic",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GunnchAiSurface with provenance/cancel/retry; runtime labels truthful (never On-device for Nearby Mac). Form factor cell=student_14_5."
       },
       "Vault": {
         "route_exists": true,
@@ -453,35 +528,35 @@
       },
       "App Library": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "app_center_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "categorized_first_party_plus_provider",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "localhost:8766 provider pattern."
+        "notes": "Categories: Learning, Intelligence, Games, Creation, Communication, Leisure, Files & Storage, System, Career/Portfolio. Form factor cell=student_14_5."
       },
       "Games": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No Games surface."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "games_library_surface_plus_matrix",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GamesSurface lists four first-party titles; games_list/games_launch bridge; no repo/SHA in UI. Bundled web builds may still be missing. Form factor cell=student_14_5."
       },
       "Creation": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "creator_studio_seed",
-        "parity_classification": "FALLBACK",
-        "notes": "creator_studio HTML seed + creator_mode_manager — not shell-integrated."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "local_note_create_edit_save",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "CreationSurface local note workflow; Continuity records saves. Heavy creator_studio escalation still optional. Form factor cell=student_14_5."
       },
       "Connect": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "connect_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "connect_surface_telephony_honest",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Connect usable for local mail/calendar; telephony explicitly not claimed. Form factor cell=student_14_5."
       },
       "Care": {
         "route_exists": true,
@@ -492,38 +567,54 @@
         "notes": "Route exists."
       },
       "Settings": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "launcher_mock_only",
-        "parity_classification": "FALLBACK",
-        "notes": "SettingsPanel in launcher_mock — not production Living Workspace."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "searchable_system_settings",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SettingsSurface searchable sections incl. AI/Assist runtime honesty, diagnostics (engineering metadata off Home). Form factor cell=student_14_5."
+      },
+      "Search / Command": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "wired_index_only",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SearchCommandSurface indexes surfaces/library/settings/commands only \u2014 no fabricated sources."
+      },
+      "Leisure": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "rights_safe_leisure_domain",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "LeisureSurface intentional rest; no unlicensed streaming."
       }
     },
     "coder_desktop": {
       "Home": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "profile_ds_xl",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "continue_modules_from_continuity",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "ds_xl profile class present; freeform windowing NOT_IMPLEMENTED."
+        "notes": "Continue cards from ContinuityStore only; spaces include domain routes; engineering metadata moved to Settings diagnostics. Form factor cell=coder_desktop."
       },
       "WAIKE": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "No shell route."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_route_plus_waike_adapter",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "WaikeSurface in shell; WaikeProvider FULL_VIA_ADAPTER; offline honesty + return-to-gunnchOS. Pixel physical journey not run this PR. Form factor cell=coder_desktop."
       },
       "gunnchAI": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "tutor_elsewhere",
-        "parity_classification": "FALLBACK",
-        "notes": "Same as student — external tutor paths."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_conversation_plus_local_deterministic",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GunnchAiSurface with provenance/cancel/retry; runtime labels truthful (never On-device for Nearby Mac). Form factor cell=coder_desktop."
       },
       "Vault": {
         "route_exists": true,
@@ -535,35 +626,35 @@
       },
       "App Library": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "app_center_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "categorized_first_party_plus_provider",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Categories: Learning, Intelligence, Games, Creation, Communication, Leisure, Files & Storage, System, Career/Portfolio. Form factor cell=coder_desktop."
       },
       "Games": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "linux_guest_optional_uneared",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Guest launch path gated false on Capsule; no library UX."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "games_library_surface_plus_matrix",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "GamesSurface lists four first-party titles; games_list/games_launch bridge; no repo/SHA in UI. Bundled web builds may still be missing. Form factor cell=coder_desktop."
       },
       "Creation": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "creator_modes_doc_only",
-        "parity_classification": "FALLBACK",
-        "notes": "Docs/manager exist; shell route missing."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "local_note_create_edit_save",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "CreationSurface local note workflow; Continuity records saves. Heavy creator_studio escalation still optional. Form factor cell=coder_desktop."
       },
       "Connect": {
         "route_exists": true,
-        "layout_usable": "unknown_pending_device",
-        "no_overflow": "unknown_pending_device",
-        "capability_status": "connect_surface",
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "connect_surface_telephony_honest",
         "parity_classification": "FULL_VIA_ADAPTER",
-        "notes": "Route exists."
+        "notes": "Connect usable for local mail/calendar; telephony explicitly not claimed. Form factor cell=coder_desktop."
       },
       "Care": {
         "route_exists": true,
@@ -574,23 +665,58 @@
         "notes": "Route exists."
       },
       "Settings": {
-        "route_exists": false,
-        "layout_usable": false,
-        "no_overflow": "n/a",
-        "capability_status": "not_wired",
-        "parity_classification": "NOT_IMPLEMENTED",
-        "notes": "Coder needs deep Settings — absent in Living Workspace."
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "searchable_system_settings",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SettingsSurface searchable sections incl. AI/Assist runtime honesty, diagnostics (engineering metadata off Home). Form factor cell=coder_desktop."
+      },
+      "Search / Command": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "wired_index_only",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "SearchCommandSurface indexes surfaces/library/settings/commands only \u2014 no fabricated sources."
+      },
+      "Leisure": {
+        "route_exists": true,
+        "layout_usable": "digital_shell_verified",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "rights_safe_leisure_domain",
+        "parity_classification": "FULL_NATIVE",
+        "notes": "LeisureSurface intentional rest; no unlicensed streaming."
       }
     }
   },
   "pixel_summary": {
-    "FULL_VIA_ADAPTER": ["Home", "Vault", "App Library", "Connect", "Care"],
-    "NOT_IMPLEMENTED": ["WAIKE", "gunnchAI", "Games", "Creation", "Settings"],
+    "FULL_VIA_ADAPTER": [
+      "Home",
+      "Vault",
+      "App Library",
+      "Connect",
+      "Care"
+    ],
+    "NOT_IMPLEMENTED": [
+      "WAIKE",
+      "gunnchAI",
+      "Games",
+      "Creation",
+      "Settings"
+    ],
     "FULL_NATIVE": [],
-    "note": "No Pixel cell earns FULL_NATIVE — Capsule is adapter-hosted. COMPANION intentionally unused for Capsule identity."
+    "note": "No Pixel cell earns FULL_NATIVE \u2014 Capsule is adapter-hosted. COMPANION intentionally unused for Capsule identity."
   },
   "gates_dependent": [
     "GUNNCHOS_FORM_FACTOR_PARITY_MATRIX_PASS",
     "GUNNCHOS_PIXEL_FULL_ECOSYSTEM_JOURNEY_PASS"
-  ]
+  ],
+  "summary": {
+    "full_or_adapter_cells": 72,
+    "not_implemented_cells": 0,
+    "not_implemented_examples": [],
+    "pixel_physical_journey": false,
+    "note": "Digital shell routes implemented; human/physical gates remain false. Do not greenwash layout_usable beyond digital_shell_verified without captures."
+  }
 }
