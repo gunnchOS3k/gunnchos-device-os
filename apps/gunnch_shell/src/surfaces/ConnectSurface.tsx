@@ -31,11 +31,16 @@ export default function ConnectSurface({
   }
 
   return (
-    <section className="cx2-panel vxp-surface" aria-labelledby="cx2-connect-title">
+    <section className="cx2-panel vxp-surface" aria-labelledby="cx2-connect-title" data-testid="connect-surface">
       <SurfaceHeader
         titleId="cx2-connect-title"
         title="Connect"
-        lead="Mail, calendar, and contacts over local protocols — not Gmail/Outlook completeness."
+        lead="Communication place: local mail, calendar, and contacts — not Gmail/Outlook completeness."
+        meta={
+          <p className="vxp-provider-line" data-testid="telephony-status">
+            Telephony: not available in Capsule shell — cellular calling is not claimed here.
+          </p>
+        }
       />
       <div className="cx2-actions" role="group" aria-label="Compose">
         <label htmlFor="mail-to">To</label>

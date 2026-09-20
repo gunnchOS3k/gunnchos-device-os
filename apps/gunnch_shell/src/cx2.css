@@ -381,3 +381,96 @@
 }
 
 /* Experimental preview routes are separate static HTML — not production UI */
+
+/* VXP-2 universal parity surfaces */
+.vxp-settings-layout {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+.vxp-settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vxp-settings-nav-btn {
+  text-align: left;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: var(--vxp-radius-md);
+  border: 1px solid var(--vxp-line);
+  background: var(--vxp-surface);
+  color: var(--vxp-ink);
+  cursor: pointer;
+}
+.vxp-settings-nav-btn.active {
+  border-color: var(--vxp-accent);
+  background: var(--vxp-surface-2, var(--vxp-bg-elevated));
+}
+.vxp-settings-body {
+  padding: 12px 14px;
+  border: 1px solid var(--vxp-line);
+  border-radius: var(--vxp-radius-lg);
+  background: var(--vxp-bg-elevated, var(--vxp-surface));
+}
+.vxp-category-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+.vxp-chip {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--vxp-radius-md);
+  border: 1px solid var(--vxp-line);
+  background: transparent;
+  color: var(--vxp-ink);
+  cursor: pointer;
+}
+.vxp-chip.active {
+  border-color: var(--vxp-accent);
+  background: var(--vxp-surface);
+}
+.vxp-section-title {
+  margin: 18px 0 8px;
+  font-size: 1rem;
+}
+.vxp-continue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.vxp-creation-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  gap: 16px;
+}
+.vxp-search-hits {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.vxp-util-btn.active {
+  border-color: var(--vxp-accent);
+}
+.vxp-chat-turn p { margin: 6px 0; white-space: pre-wrap; }
+.vxp-waike-stub, .vxp-leisure-session, .vxp-ai-runtime, .vxp-diagnostics {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--vxp-line);
+  border-radius: var(--vxp-radius-lg);
+  background: var(--vxp-surface);
+}
+@media (max-width: 700px) {
+  .vxp-settings-layout,
+  .vxp-creation-layout {
+    grid-template-columns: 1fr;
+  }
+}

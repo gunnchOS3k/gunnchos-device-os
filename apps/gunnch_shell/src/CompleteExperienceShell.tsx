@@ -9,44 +9,53 @@ import WalletSurface from './surfaces/WalletSurface'
 import PortfolioSurface from './surfaces/PortfolioSurface'
 import CareerProfileSurface from './surfaces/CareerProfileSurface'
 import VerifierSurface from './surfaces/VerifierSurface'
+import SettingsSurface, { type SettingsSectionId } from './surfaces/SettingsSurface'
+import SearchCommandSurface from './surfaces/SearchCommandSurface'
+import WaikeSurface from './surfaces/WaikeSurface'
+import GunnchAiSurface from './surfaces/GunnchAiSurface'
+import GamesSurface from './surfaces/GamesSurface'
+import CreationSurface from './surfaces/CreationSurface'
+import LeisureSurface from './surfaces/LeisureSurface'
 import type { HostKind } from './platform/hostRuntime'
+import { recordContinuity } from './platform/continuityStore'
 import Icon from './design/icons/Icon'
 import type { VxpIconName } from './design/tokens'
+import type { Cx2Surface } from './shellSurfaces'
 import './design/tokens.css'
 import './cx2.css'
 
-export type Cx2Surface =
-  | 'home'
-  | 'vault'
-  | 'app_center'
-  | 'connect'
-  | 'assist'
-  | 'care'
-  | 'wallet'
-  | 'portfolio'
-  | 'career'
-  | 'verifier'
+export type { Cx2Surface } from './shellSurfaces'
 
 type NavItem = { id: Cx2Surface; label: string; shortcut: string; icon: VxpIconName }
 
 const PRIMARY_NAV: NavItem[] = [
   { id: 'home', label: 'Home', shortcut: '1', icon: 'home' },
   { id: 'vault', label: 'Vault', shortcut: '2', icon: 'vault' },
-  { id: 'app_center', label: 'App Center', shortcut: '3', icon: 'app_center' },
+  { id: 'app_center', label: 'Apps', shortcut: '3', icon: 'app_center' },
   { id: 'connect', label: 'Connect', shortcut: '4', icon: 'connect' },
 ]
 
 const MORE_NAV: NavItem[] = [
-  { id: 'assist', label: 'Assist', shortcut: '5', icon: 'assist' },
-  { id: 'care', label: 'Care', shortcut: '6', icon: 'care' },
-  { id: 'wallet', label: 'Wallet', shortcut: '7', icon: 'wallet' },
-  { id: 'portfolio', label: 'Portfolio', shortcut: '8', icon: 'portfolio' },
-  { id: 'career', label: 'Career', shortcut: '9', icon: 'career' },
-  { id: 'verifier', label: 'Verifier', shortcut: '0', icon: 'verifier' },
+  { id: 'waike', label: 'WAIKE', shortcut: '5', icon: 'career' },
+  { id: 'gunnchai', label: 'gunnchAI', shortcut: '6', icon: 'assist' },
+  { id: 'games', label: 'Games', shortcut: '7', icon: 'app_center' },
+  { id: 'creation', label: 'Creation', shortcut: '8', icon: 'file' },
+  { id: 'leisure', label: 'Leisure', shortcut: '9', icon: 'care' },
+  { id: 'assist', label: 'Assist', shortcut: '0', icon: 'assist' },
+  { id: 'care', label: 'Care', shortcut: '', icon: 'care' },
+  { id: 'wallet', label: 'Wallet', shortcut: '', icon: 'wallet' },
+  { id: 'portfolio', label: 'Portfolio', shortcut: '', icon: 'portfolio' },
+  { id: 'career', label: 'Career', shortcut: '', icon: 'career' },
+  { id: 'verifier', label: 'Verifier', shortcut: '', icon: 'verifier' },
+  { id: 'settings', label: 'Settings', shortcut: '', icon: 'status_ok' },
+  { id: 'search', label: 'Search', shortcut: '', icon: 'search' },
 ]
 
-/** Full surface catalog for keyboard Alt+1..0 — IDs preserved. */
-const SURFACES: NavItem[] = [...PRIMARY_NAV, ...MORE_NAV]
+/** Keyboard Alt catalog — primary + first more items with shortcuts. */
+const SURFACES: NavItem[] = [
+  ...PRIMARY_NAV,
+  ...MORE_NAV.filter((s) => s.shortcut),
+]
 
 export type DeviceProfile = 'student_14_5' | 'handheld_hybrid' | 'ds_xl' | 'docked' | 'ci_qemu'
 
@@ -69,6 +78,17 @@ function isMoreSurface(id: Cx2Surface): boolean {
   return MORE_NAV.some((s) => s.id === id)
 }
 
+const CONTINUITY_SURFACES: Cx2Surface[] = [
+  'waike',
+  'vault',
+  'app_center',
+  'games',
+  'gunnchai',
+  'creation',
+  'connect',
+  'leisure',
+]
+
 export default function CompleteExperienceShell({
   profile = 'student_14_5',
   offline = false,
@@ -85,6 +105,7 @@ export default function CompleteExperienceShell({
   const [scale, setScale] = useState(1)
   const [moreOpen, setMoreOpen] = useState(() => isMoreSurface(initialSurface))
   const [wideLayout, setWideLayout] = useState(false)
+  const [settingsSection, setSettingsSection] = useState<SettingsSectionId | undefined>(undefined)
 
   const emitSession = (nextSurface: Cx2Surface, nextHistory: Cx2Surface[]) => {
     onSessionChange?.({
@@ -99,12 +120,36 @@ export default function CompleteExperienceShell({
   const go = (id: Cx2Surface) => {
     setError(null)
     setSurface(id)
-    setMoreOpen(isMoreSurface(id))
+    setMoreOpen(false)
+    if (id !== 'settings') setSettingsSection(undefined)
     setHistory((h) => {
       const next = [...h, id]
       emitSession(id, next)
       return next
     })
+    if (CONTINUITY_SURFACES.includes(id)) {
+      recordContinuity({
+        id: `surface-${id}`,
+        domain:
+          id === 'app_center'
+            ? 'app'
+            : id === 'vault'
+              ? 'vault'
+              : id === 'waike'
+                ? 'waike'
+                : id === 'games'
+                  ? 'game'
+                  : id === 'gunnchai'
+                    ? 'gunnchai'
+                    : id === 'creation'
+                      ? 'creation'
+                      : id === 'connect'
+                        ? 'connect'
+                        : 'leisure',
+        title: MORE_NAV.find((s) => s.id === id)?.label || PRIMARY_NAV.find((s) => s.id === id)?.label || id,
+        surface: id,
+      })
+    }
   }
 
   const back = () => {
@@ -113,7 +158,7 @@ export default function CompleteExperienceShell({
       const next = h.slice(0, -1)
       const s = next[next.length - 1]
       setSurface(s)
-      setMoreOpen(isMoreSurface(s))
+      setMoreOpen(false)
       emitSession(s, next)
       return next
     })
@@ -125,6 +170,11 @@ export default function CompleteExperienceShell({
     setMoreOpen(false)
     setError(null)
     emitSession('home', ['home'])
+  }
+
+  const openSettings = (section?: SettingsSectionId) => {
+    setSettingsSection(section)
+    go('settings')
   }
 
   useEffect(() => {
@@ -153,6 +203,10 @@ export default function CompleteExperienceShell({
         e.preventDefault()
         const idx = e.key === '0' ? 9 : Number(e.key) - 1
         if (SURFACES[idx]) go(SURFACES[idx].id)
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        go('search')
       }
       if (e.key === 'Escape') {
         if (moreOpen && !isMoreSurface(surface)) {
@@ -184,7 +238,7 @@ export default function CompleteExperienceShell({
       case 'vault':
         return <VaultSurface offline={offline} onError={setError} />
       case 'app_center':
-        return <AppCenterSurface offline={offline} onError={setError} />
+        return <AppCenterSurface offline={offline} onError={setError} onOpenSurface={go} />
       case 'connect':
         return <ConnectSurface offline={offline} onError={setError} />
       case 'assist':
@@ -208,11 +262,43 @@ export default function CompleteExperienceShell({
         return <CareerProfileSurface offline={offline} onError={setError} />
       case 'verifier':
         return <VerifierSurface offline={offline} onError={setError} />
+      case 'settings':
+        return (
+          <SettingsSurface
+            offline={offline}
+            hostKind={hostKind}
+            highContrast={highContrast}
+            reduceMotion={reduceMotion}
+            scale={scale}
+            onHighContrast={setHighContrast}
+            onReduceMotion={setReduceMotion}
+            onScale={setScale}
+            onNavigate={(id) => go(id)}
+            initialSection={settingsSection}
+          />
+        )
+      case 'search':
+        return (
+          <SearchCommandSurface
+            onNavigate={go}
+            onOpenSettingsSection={(section) => openSettings(section)}
+          />
+        )
+      case 'waike':
+        return <WaikeSurface offline={offline} onError={setError} onReturnHome={home} />
+      case 'gunnchai':
+        return <GunnchAiSurface offline={offline} onError={setError} />
+      case 'games':
+        return <GamesSurface onError={setError} />
+      case 'creation':
+        return <CreationSurface onError={setError} />
+      case 'leisure':
+        return <LeisureSurface onNavigateVault={() => go('vault')} />
     }
   })()
 
   const primaryActive = (id: Cx2Surface) => surface === id
-  const moreActive = isMoreSurface(surface) || moreOpen
+  const moreActive = (isMoreSurface(surface) && surface !== 'settings' && surface !== 'search') || moreOpen
 
   const navButtons = (items: NavItem[], ariaLabel: string) => (
     <nav className="vxp-nav" aria-label={ariaLabel}>
@@ -222,7 +308,7 @@ export default function CompleteExperienceShell({
           type="button"
           className={primaryActive(s.id) ? 'vxp-nav-btn active' : 'vxp-nav-btn'}
           aria-current={surface === s.id ? 'page' : undefined}
-          aria-keyshortcuts={`Alt+${s.shortcut}`}
+          aria-keyshortcuts={s.shortcut ? `Alt+${s.shortcut}` : undefined}
           onClick={() => go(s.id)}
         >
           <Icon name={s.icon} size={20} />
@@ -245,6 +331,26 @@ export default function CompleteExperienceShell({
           <span className="cx2-brand-sub">Living Workspace</span>
         </div>
         <div className="vxp-utility" aria-label="Session controls">
+          <button
+            type="button"
+            className={surface === 'search' ? 'vxp-util-btn active' : 'vxp-util-btn'}
+            onClick={() => go('search')}
+            aria-label="Search / Command"
+            data-testid="open-search"
+          >
+            <Icon name="search" size={18} />
+            <span>Search</span>
+          </button>
+          <button
+            type="button"
+            className={surface === 'settings' ? 'vxp-util-btn active' : 'vxp-util-btn'}
+            onClick={() => openSettings()}
+            aria-label="Settings"
+            data-testid="open-settings"
+          >
+            <Icon name="status_ok" size={18} />
+            <span>Settings</span>
+          </button>
           <button
             type="button"
             className="vxp-util-btn"
@@ -353,7 +459,7 @@ export default function CompleteExperienceShell({
 
       <footer className="cx2-footer" role="contentinfo">
         Profile {profile.replace(/_/g, ' ')}
-        {hostKind ? ` · host ${hostKind}` : ''} · Alt+1..0 · Escape back
+        {hostKind ? ` · host ${hostKind}` : ''} · Alt+1..0 · ⌘/Ctrl+K search · Escape back
       </footer>
     </div>
   )

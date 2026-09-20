@@ -1,6 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Icon from '../design/icons/Icon'
 import { EmptyState, SurfaceHeader } from '../design/primitives/SurfaceChrome'
+import {
+  FIRST_PARTY_LIBRARY,
+  LIBRARY_CATEGORY_ORDER,
+  type AppLibraryCategory,
+} from '../platform/appLibraryCatalog'
+import type { Cx2Surface } from '../shellSurfaces'
 
 export type AppRow = {
   id: string
@@ -41,12 +47,15 @@ async function providerFetch(path: string, init?: RequestInit): Promise<any> {
 export default function AppCenterSurface({
   offline,
   onError,
+  onOpenSurface,
 }: {
   offline?: boolean
   onError: (msg: string | null) => void
+  onOpenSurface?: (id: Cx2Surface) => void
 }) {
   const [apps, setApps] = useState<AppRow[]>([])
   const [query, setQuery] = useState('')
+  const [category, setCategory] = useState<AppLibraryCategory | 'All'>('All')
   const [providerLabel, setProviderLabel] = useState('connecting…')
   const [loading, setLoading] = useState(true)
 
@@ -69,6 +78,15 @@ export default function AppCenterSurface({
   useEffect(() => {
     void refresh()
   }, [refresh])
+
+  const firstParty = useMemo(() => {
+    return FIRST_PARTY_LIBRARY.filter((e) => {
+      if (category !== 'All' && e.category !== category) return false
+      const q = query.toLowerCase()
+      if (!q) return true
+      return e.name.toLowerCase().includes(q) || e.purpose.toLowerCase().includes(q) || e.category.toLowerCase().includes(q)
+    })
+  }, [category, query])
 
   const filtered = apps.filter(
     (a) =>
@@ -157,8 +175,8 @@ export default function AppCenterSurface({
     <section className="cx2-panel vxp-apps" aria-labelledby="cx2-apps-title">
       <SurfaceHeader
         titleId="cx2-apps-title"
-        title="App Center"
-        lead="Identity, status, and primary action first. Provenance and permissions stay secondary."
+        title="App Library"
+        lead="First-party categories plus provider-backed installs. Provenance stays secondary — no SHA in primary UI."
         meta={
           <p data-testid="provider-label" className="vxp-provider-line">
             Provider: {providerLabel}
@@ -182,16 +200,77 @@ export default function AppCenterSurface({
         </button>
       </div>
 
+      <div className="vxp-category-row" role="tablist" aria-label="App Library categories" data-testid="app-library-categories">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={category === 'All'}
+          className={category === 'All' ? 'vxp-chip active' : 'vxp-chip'}
+          onClick={() => setCategory('All')}
+        >
+          All
+        </button>
+        {LIBRARY_CATEGORY_ORDER.map((c) => (
+          <button
+            key={c}
+            type="button"
+            role="tab"
+            aria-selected={category === c}
+            className={category === c ? 'vxp-chip active' : 'vxp-chip'}
+            onClick={() => setCategory(c)}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+
+      <h3 className="vxp-section-title">First-party</h3>
+      {firstParty.length === 0 ? (
+        <EmptyState icon="app_center" title="No first-party matches" detail="Try another category or search." />
+      ) : (
+        <ul className="cx2-list vxp-app-list" aria-label="First-party catalog">
+          {firstParty.map((e) => (
+            <li key={e.id} className="cx2-row vxp-app-row" data-app-id={e.id}>
+              <div className="vxp-app-identity">
+                <span className="vxp-app-glyph" aria-hidden="true">
+                  <Icon name="app_glyph" size={28} />
+                </span>
+                <div>
+                  <strong>{e.name}</strong>
+                  <div className="vxp-app-status">
+                    {e.category} · {e.installState}
+                  </div>
+                  <div className="vxp-app-meta">{e.purpose}</div>
+                </div>
+              </div>
+              <div className="cx2-actions">
+                {e.surface && (
+                  <button
+                    type="button"
+                    className="cx2-action primary"
+                    onClick={() => onOpenSurface?.(e.surface!)}
+                  >
+                    <Icon name="open" size={16} />
+                    <span>Open</span>
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h3 className="vxp-section-title">Provider catalog</h3>
       {providerLabel === 'unavailable' ? (
         <EmptyState
           icon="error"
           title="App Center provider unavailable"
-          detail="We cannot invent a catalog. Start the local provider or retry when connectivity returns."
+          detail="First-party library above still works. We will not invent a provider catalog."
         />
       ) : filtered.length === 0 ? (
-        <EmptyState icon="app_center" title="No apps match" detail="Try another search. Empty results stay empty." />
+        <EmptyState icon="app_center" title="No provider apps match" detail="Try another search. Empty results stay empty." />
       ) : (
-        <ul className="cx2-list vxp-app-list" aria-label="App catalog">
+        <ul className="cx2-list vxp-app-list" aria-label="Provider catalog">
           {filtered.map((a) => (
             <li
               key={a.id}

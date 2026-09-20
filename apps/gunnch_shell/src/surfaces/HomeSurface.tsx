@@ -1,18 +1,21 @@
-import type { Cx2Surface } from '../CompleteExperienceShell'
+import { useEffect, useState } from 'react'
 import type { HostKind } from '../platform/hostRuntime'
 import Icon from '../design/icons/Icon'
 import type { VxpIconName } from '../design/tokens'
+import { listContinuity, type ContinuityItem } from '../platform/continuityStore'
+import type { Cx2Surface } from '../shellSurfaces'
 
 const SPACES: { id: Cx2Surface; label: string; purpose: string; icon: VxpIconName }[] = [
-  { id: 'vault', label: 'Vault', purpose: 'Files you keep and recover', icon: 'vault' },
-  { id: 'app_center', label: 'App Center', purpose: 'Install and open tools', icon: 'app_center' },
+  { id: 'waike', label: 'WAIKE', purpose: 'Learning continuity', icon: 'career' },
+  { id: 'gunnchai', label: 'gunnchAI', purpose: 'Ask with truthful runtime', icon: 'assist' },
+  { id: 'games', label: 'Games', purpose: 'First-party library', icon: 'app_center' },
+  { id: 'creation', label: 'Creation', purpose: 'Create and save', icon: 'file' },
   { id: 'connect', label: 'Connect', purpose: 'Mail and calendar locally', icon: 'connect' },
-  { id: 'wallet', label: 'Wallet', purpose: 'Credentials you control', icon: 'wallet' },
-  { id: 'portfolio', label: 'Portfolio', purpose: 'Evidence you can share', icon: 'portfolio' },
-  { id: 'career', label: 'Career', purpose: 'Profile and pathways', icon: 'career' },
-  { id: 'verifier', label: 'Verifier', purpose: 'Check claims honestly', icon: 'verifier' },
-  { id: 'assist', label: 'Assist', purpose: 'Contrast, motion, scale', icon: 'assist' },
-  { id: 'care', label: 'Care', purpose: 'Backups and recovery', icon: 'care' },
+  { id: 'leisure', label: 'Leisure', purpose: 'Rights-safe rest', icon: 'care' },
+  { id: 'vault', label: 'Vault', purpose: 'Files you keep and recover', icon: 'vault' },
+  { id: 'app_center', label: 'App Library', purpose: 'Install and open tools', icon: 'app_center' },
+  { id: 'settings', label: 'Settings', purpose: 'System preferences', icon: 'status_ok' },
+  { id: 'search', label: 'Search', purpose: 'Find wired destinations', icon: 'search' },
 ]
 
 export default function HomeSurface({
@@ -24,6 +27,12 @@ export default function HomeSurface({
   onNavigate: (id: Cx2Surface) => void
   hostKind?: HostKind
 }) {
+  const [recent, setRecent] = useState<ContinuityItem[]>([])
+
+  useEffect(() => {
+    setRecent(listContinuity().slice(0, 6))
+  }, [])
+
   const identityNote =
     hostKind === 'ANDROID_CAPSULE'
       ? 'Running on Capsule'
@@ -37,7 +46,7 @@ export default function HomeSurface({
         <p className="vxp-eyebrow">Living Workspace</p>
         <h1 id="cx2-home-title">gunnchOS</h1>
         <p className="lead">
-          Continue your work, open a space by purpose, and see only status we can prove.
+          Continue real work, open spaces by purpose, and see only status we can prove.
           {offline ? ' Offline mode is on — local work continues.' : ''}
         </p>
         <p className="vxp-identity-meta" data-testid="home-identity-meta">
@@ -47,13 +56,33 @@ export default function HomeSurface({
 
       <section className="vxp-home-section" aria-labelledby="vxp-continue-title">
         <h2 id="vxp-continue-title">Continue</h2>
-        <div className="vxp-continue-empty" role="status">
-          <Icon name="empty" size={24} />
-          <div>
-            <strong>Nothing to resume yet</strong>
-            <p>Open Vault or App Center when you are ready. We will not invent recent activity.</p>
+        {recent.length === 0 ? (
+          <div className="vxp-continue-empty" role="status" data-testid="continue-empty">
+            <Icon name="empty" size={24} />
+            <div>
+              <strong>Nothing to resume yet</strong>
+              <p>Open WAIKE, Vault, Games, or Creation when you are ready. We will not invent recent activity.</p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <ul className="vxp-continue-list" aria-label="Continue cards" data-testid="continue-list">
+            {recent.map((item) => (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  className="vxp-space-card"
+                  onClick={() => onNavigate(item.surface as Cx2Surface)}
+                >
+                  <Icon name="open" size={20} />
+                  <span className="vxp-space-label">{item.title}</span>
+                  <span className="vxp-space-purpose">
+                    {item.subtitle || item.domain} · {new Date(item.updatedAt).toLocaleString()}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className="vxp-home-section" aria-labelledby="vxp-spaces-title">
@@ -76,21 +105,17 @@ export default function HomeSurface({
         <ul className="vxp-status-list" aria-label="Honest system status">
           <li>
             <Icon name={offline ? 'offline' : 'status_ok'} size={18} />
-            <span>{offline ? 'Offline — connectivity not available' : 'Connectivity — browser reports online'}</span>
+            <span>{offline ? 'Offline — connectivity not available' : 'Connectivity — host reports a network path'}</span>
           </li>
           <li>
-            <Icon name="status_warn" size={18} />
-            <span>Canonical logo asset pending intake</span>
+            <Icon name="search" size={18} />
+            <span>Search / Command and Settings are system surfaces in the top bar</span>
           </li>
           <li>
             <Icon name="assist" size={18} />
-            <span>Accessibility: open Assist for contrast, motion, and scale</span>
+            <span>Accessibility and diagnostics live in Settings — not engineering dump on Home</span>
           </li>
         </ul>
-        <p className="vxp-discover">
-          Tip: use the dock (or side rail) for Home, Vault, App Center, and Connect. More holds Assist, Care, Wallet,
-          Portfolio, Career, and Verifier.
-        </p>
       </section>
     </section>
   )
