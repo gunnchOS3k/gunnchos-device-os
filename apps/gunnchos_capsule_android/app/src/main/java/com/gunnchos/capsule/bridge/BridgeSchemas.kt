@@ -33,6 +33,7 @@ object BridgeSchemas {
         "care_snapshot",
         "linux_guest_status",
         "games_launch",
+        "games_list",
         "waike_launch",
         "gunnchai_launch",
         "app_center_list",

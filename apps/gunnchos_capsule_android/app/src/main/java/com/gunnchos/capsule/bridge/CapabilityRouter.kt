@@ -65,6 +65,7 @@ class CapabilityRouter(private val activity: CapsuleActivity) {
             "care_snapshot" -> care.snapshot()
             "linux_guest_status" -> guest.status()
             "games_launch" -> games.launch(payload)
+            "games_list" -> games.matrixSnapshot()
             "waike_launch" -> waike.launch(payload)
             "gunnchai_launch" -> gunnchai.launch(payload)
             "app_center_list" -> appCenter.list(payload)

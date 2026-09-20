@@ -100,7 +100,7 @@ class GamesProvider(private val context: Context) {
                     .put("linuxGuest", e.linuxGuest),
             )
         }
-        return out
+        return JSONObject().put("ok", true).put("result", out)
     }
 
     private data class GameEntry(

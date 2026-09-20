@@ -11,18 +11,23 @@ class WaikeProvider(private val context: Context) {
         val p = payload ?: JSONObject()
         val mode = p.optString("mode", "WEB_PWA")
         val offline = p.optBoolean("offline", false)
+        val prefs = context.getSharedPreferences("capsule", Context.MODE_PRIVATE)
+        val configuredUrl = prefs.getString("WAIKE_HUB_URL", "").orEmpty()
         val result = JSONObject()
             .put("surface", "WAIKE")
-            .put("mode", mode)
+            .put("mode", if (mode == "UNAVAILABLE") "UNAVAILABLE" else "FULL_VIA_ADAPTER")
             .put("uiDuplicated", false)
-            .put("offlineHubProvenance", offline || true)
+            .put("offlineHubProvenance", offline)
             .put("provenance", "capsule-waike-bridge")
+            .put("classification", "FULL_VIA_ADAPTER")
         when (mode) {
             "WEB_PWA", "mobile_web" -> {
                 result.put("launch", "in_capsule_webview_or_custom_tab")
-                result.put("urlHint", "bundled or https hub — owner configures WAIKE_HUB_URL")
-                // Prefer Custom Tab only when explicit https provided
-                val url = p.optString("url", "")
+                result.put(
+                    "urlHint",
+                    configuredUrl.ifBlank { "bundled or https hub — owner configures WAIKE_HUB_URL" },
+                )
+                val url = p.optString("url", configuredUrl)
                 if (url.startsWith("https://")) {
                     context.startActivity(
                         Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
