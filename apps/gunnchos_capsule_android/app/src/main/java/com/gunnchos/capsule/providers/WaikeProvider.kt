@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import org.json.JSONObject
+import java.net.URI
 
 /** WAIKE Capsule surface — prefer mobile web/PWA; do not duplicate UI. */
 class WaikeProvider(private val context: Context) {
@@ -28,7 +29,7 @@ class WaikeProvider(private val context: Context) {
                     configuredUrl.ifBlank { "bundled or https hub — owner configures WAIKE_HUB_URL" },
                 )
                 val url = p.optString("url", configuredUrl)
-                if (url.startsWith("https://")) {
+                if (isAllowedHandoffUrl(url)) {
                     context.startActivity(
                         Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                     )
@@ -38,5 +39,23 @@ class WaikeProvider(private val context: Context) {
             else -> result.put("mode", "UNAVAILABLE")
         }
         return JSONObject().put("ok", true).put("result", result)
+    }
+
+    companion object {
+        /**
+         * Allow https always. For RC1 adb-reverse demos, also allow plain http to
+         * loopback hosts only (127.0.0.1 / localhost) — never arbitrary http.
+         * Uses java.net.URI so JVM unit tests (stub android.net.Uri) stay honest.
+         */
+        fun isAllowedHandoffUrl(url: String): Boolean {
+            if (url.startsWith("https://")) return true
+            if (!url.startsWith("http://")) return false
+            return try {
+                val host = URI(url).host?.lowercase().orEmpty()
+                host == "127.0.0.1" || host == "localhost"
+            } catch (_: Exception) {
+                false
+            }
+        }
     }
 }
