@@ -55,7 +55,7 @@ export default function WaikeSurface({
           opened,
           message: opened
             ? 'Opened WAIKE hub via adapter. Use Back to return to gunnchOS.'
-            : 'WAIKE adapter ready. Configure WAIKE_HUB_URL on the host for https handoff, or use the offline learning stub below.',
+            : 'WAIKE adapter ready. Configure WAIKE_HUB_URL (https or loopback http for adb-reverse demo) for handoff, or use the offline learning stub below.',
         })
         recordContinuity({
           id: 'waike-session',
@@ -124,7 +124,9 @@ export default function WaikeSurface({
           <p>
             {state.offline
               ? 'No remote lesson sync while offline. Local stub keeps the route usable.'
-              : 'Open a course when the hub is configured. We will not invent progress you have not earned.'}
+              : state.opened
+                ? 'Learning client handed off. Sign in if needed, then open a track/lesson.'
+                : 'Open the learning client when the hub URL is configured. We will not invent progress you have not earned.'}
           </p>
           <ul className="cx2-list" aria-label="Local learning actions">
             <li className="cx2-row">
@@ -141,7 +143,16 @@ export default function WaikeSurface({
       </div>
 
       <div className="cx2-actions">
-        <button type="button" className="cx2-action primary" onClick={() => void refresh()}>
+        <button
+          type="button"
+          className="cx2-action primary"
+          data-testid="waike-continue-lesson"
+          onClick={() => void refresh()}
+        >
+          <Icon name="open" size={16} />
+          <span>Continue lesson</span>
+        </button>
+        <button type="button" className="cx2-action" onClick={() => void refresh()}>
           <Icon name="refresh" size={16} />
           <span>Retry adapter</span>
         </button>
