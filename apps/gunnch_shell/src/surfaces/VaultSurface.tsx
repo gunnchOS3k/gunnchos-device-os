@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import Icon from '../design/icons/Icon'
+import { EmptyState, SurfaceHeader } from '../design/primitives/SurfaceChrome'
 
 export type VaultFile = {
   path: string
@@ -9,6 +11,30 @@ export type VaultFile = {
 }
 
 const PROVIDER_BASE = 'http://127.0.0.1:8767'
+
+function formatBytes(n: number): string {
+  if (!Number.isFinite(n) || n < 0) return '—'
+  if (n < 1024) return `${n} B`
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`
+}
+
+function formatModified(ts: number): string {
+  if (!ts) return '—'
+  try {
+    return new Date(ts * (ts < 1e12 ? 1000 : 1)).toLocaleString()
+  } catch {
+    return '—'
+  }
+}
+
+function fileTypeLabel(path: string, mime: string): string {
+  const base = path.split('/').pop() || path
+  const ext = base.includes('.') ? base.split('.').pop()!.toUpperCase() : ''
+  if (ext) return ext
+  if (mime) return mime.split('/').pop() || mime
+  return 'FILE'
+}
 
 async function providerFetch(path: string, init?: RequestInit): Promise<any> {
   const res = await fetch(`${PROVIDER_BASE}${path}`, {
@@ -43,6 +69,7 @@ export default function VaultSurface({
   const [selected, setSelected] = useState<string | null>(null)
   const [providerLabel, setProviderLabel] = useState('connecting…')
   const [lastBackup, setLastBackup] = useState<string | null>(null)
+  const [detailsOpen, setDetailsOpen] = useState(false)
 
   const refresh = useCallback(async () => {
     try {
@@ -62,6 +89,7 @@ export default function VaultSurface({
   }, [refresh])
 
   const visible = files.filter((f) => f.path.toLowerCase().includes(query.toLowerCase()))
+  const selectedFile = files.find((f) => f.path === selected) || null
 
   const backup = async () => {
     if (offline) {
@@ -115,21 +143,27 @@ export default function VaultSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx2-vault-title">
-      <h1 id="cx2-vault-title">Vault</h1>
-      <p className="lead">
-        Provider-backed files with hash, MIME, backup, and open-with Writer.
-      </p>
-      <p data-testid="vault-provider-label" className="lead">
-        Provider: {providerLabel}
-        {lastBackup ? ` · last backup ${lastBackup}` : ''}
-      </p>
+    <section className="cx2-panel vxp-vault" aria-labelledby="cx2-vault-title">
+      <SurfaceHeader
+        titleId="cx2-vault-title"
+        title="Vault"
+        lead="Your files — name, type, size, and modified first. Hashes and provider details stay in the details pane."
+        meta={
+          <p data-testid="vault-provider-label" className="vxp-provider-line">
+            Provider: {providerLabel}
+            {lastBackup ? ` · last backup ${lastBackup}` : ''}
+          </p>
+        }
+      />
+
       <div className="cx2-actions">
         <button type="button" className="cx2-action primary" data-action="refresh" onClick={() => void refresh()}>
-          Refresh
+          <Icon name="refresh" size={18} />
+          <span>Refresh</span>
         </button>
         <button type="button" className="cx2-action" data-action="backup" onClick={() => void backup()}>
-          Backup
+          <Icon name="backup" size={18} />
+          <span>Backup</span>
         </button>
         <button
           type="button"
@@ -138,49 +172,101 @@ export default function VaultSurface({
           disabled={!selected}
           onClick={() => selected && void openWithWriter(selected)}
         >
-          Open with Writer
+          <Icon name="open" size={18} />
+          <span>Open with Writer</span>
         </button>
       </div>
-      <label htmlFor="vault-search">Search Vault</label>{' '}
-      <input
-        id="vault-search"
-        className="cx2-field"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search files"
-      />
-      {visible.length === 0 ? (
-        <div className="cx2-empty" role="status">
-          No files yet — save from Writer into Vault.
-        </div>
+
+      <div className="vxp-search-row">
+        <label htmlFor="vault-search">Search Vault</label>
+        <input
+          id="vault-search"
+          className="cx2-field"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search files"
+        />
+      </div>
+
+      {providerLabel === 'unavailable' ? (
+        <EmptyState
+          icon="error"
+          title="Vault provider unavailable"
+          detail="Start the local Vault provider or work offline with previously cached files when available."
+        />
+      ) : visible.length === 0 ? (
+        <EmptyState
+          icon="vault"
+          title="No files yet"
+          detail="Save from Writer into Vault. We will not show sample documents."
+        />
       ) : (
-        <ul className="cx2-list" aria-label="Vault files">
-          {visible.map((f) => (
-            <li
-              key={f.path}
-              className="cx2-row"
-              data-path={f.path}
-              data-selected={selected === f.path ? 'true' : 'false'}
-              onClick={() => setSelected(f.path)}
-            >
-              <span>
-                {f.path} · {f.size}B · {f.mime} · {f.sha256.slice(0, 12)}
-              </span>
-              <button
-                type="button"
-                className="cx2-action"
-                data-action="delete"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  void remove(f.path)
+        <ul className="cx2-list vxp-file-list" aria-label="Vault files">
+          {visible.map((f) => {
+            const name = f.path.split('/').pop() || f.path
+            return (
+              <li
+                key={f.path}
+                className={selected === f.path ? 'cx2-row vxp-file-row selected' : 'cx2-row vxp-file-row'}
+                data-path={f.path}
+                data-selected={selected === f.path ? 'true' : 'false'}
+                onClick={() => {
+                  setSelected(f.path)
+                  setDetailsOpen(true)
                 }}
-                aria-label={`Move ${f.path} to trash`}
               >
-                Trash
-              </button>
-            </li>
-          ))}
+                <div className="vxp-file-primary">
+                  <Icon name="file" size={20} />
+                  <div>
+                    <strong className="vxp-file-name">{name}</strong>
+                    <div className="vxp-file-meta">
+                      <span>{fileTypeLabel(f.path, f.mime)}</span>
+                      <span>{formatBytes(f.size)}</span>
+                      <span>{formatModified(f.modified_at)}</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="cx2-action"
+                  data-action="delete"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    void remove(f.path)
+                  }}
+                  aria-label={`Move ${f.path} to trash`}
+                >
+                  <Icon name="trash" size={16} />
+                  <span>Trash</span>
+                </button>
+              </li>
+            )
+          })}
         </ul>
+      )}
+
+      {selectedFile && detailsOpen && (
+        <aside className="vxp-details" aria-label="File details">
+          <h2>Details</h2>
+          <dl className="vxp-dl">
+            <div>
+              <dt>Path</dt>
+              <dd>{selectedFile.path}</dd>
+            </div>
+            <div>
+              <dt>MIME</dt>
+              <dd>{selectedFile.mime || '—'}</dd>
+            </div>
+            <div>
+              <dt>SHA-256</dt>
+              <dd className="vxp-mono">{selectedFile.sha256}</dd>
+            </div>
+            <div>
+              <dt>Provider</dt>
+              <dd>{providerLabel}</dd>
+            </div>
+          </dl>
+        </aside>
       )}
     </section>
   )

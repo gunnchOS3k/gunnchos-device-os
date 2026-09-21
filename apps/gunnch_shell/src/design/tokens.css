@@ -1,0 +1,90 @@
+/* gunnchOS Living Workspace design tokens — local fonts only, no network. */
+:root,
+.cx2-shell {
+  /* Surfaces — deep slate, warm paper ink (not purple SaaS, not cream/terracotta) */
+  --vxp-bg: #0c1218;
+  --vxp-bg-elevated: #121a22;
+  --vxp-surface: #162029;
+  --vxp-surface-2: #1c2833;
+  --vxp-ink: #e8eef4;
+  --vxp-ink-strong: #f5f8fb;
+  --vxp-muted: #8fa0b0;
+  --vxp-faint: #6a7b8c;
+  --vxp-line: #2a3846;
+  --vxp-line-strong: #3a4c5c;
+
+  /* Accent — amber brass, not blue SaaS default clone of prior CX alone */
+  --vxp-accent: #d4a017;
+  --vxp-accent-ink: #1a1404;
+  --vxp-accent-soft: color-mix(in srgb, var(--vxp-accent) 18%, transparent);
+  --vxp-info: #5b9fd4;
+  --vxp-ok: #6fbf8a;
+  --vxp-warn: #e0a45a;
+  --vxp-danger: #e07a7a;
+
+  /* Type — system stacks with intentional display/body split; no @font-face network */
+  --vxp-font-display: "Avenir Next Condensed", "Segoe UI Semibold", "Helvetica Neue", system-ui, sans-serif;
+  --vxp-font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+  --vxp-font-mono: "SF Mono", "Cascadia Mono", "Consolas", ui-monospace, monospace;
+
+  --vxp-space-1: 4px;
+  --vxp-space-2: 8px;
+  --vxp-space-3: 12px;
+  --vxp-space-4: 16px;
+  --vxp-space-5: 24px;
+  --vxp-space-6: 32px;
+  --vxp-space-7: 48px;
+
+  --vxp-radius-sm: 6px;
+  --vxp-radius-md: 10px;
+  --vxp-radius-lg: 14px;
+
+  --vxp-touch: 44px;
+  --vxp-dock-h: 64px;
+  --vxp-rail-w: 72px;
+  --vxp-motion-fast: 120ms;
+  --vxp-motion-med: 220ms;
+  --vxp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* CX2 aliases for legacy classnames */
+  --cx2-bg: var(--vxp-bg);
+  --cx2-surface: var(--vxp-surface);
+  --cx2-ink: var(--vxp-ink);
+  --cx2-muted: var(--vxp-muted);
+  --cx2-accent: var(--vxp-accent);
+  --cx2-line: var(--vxp-line);
+  --cx2-danger: var(--vxp-danger);
+  --cx2-ok: var(--vxp-ok);
+}
+
+.cx2-shell.high-contrast {
+  --vxp-bg: #000;
+  --vxp-bg-elevated: #000;
+  --vxp-surface: #000;
+  --vxp-surface-2: #111;
+  --vxp-ink: #fff;
+  --vxp-ink-strong: #fff;
+  --vxp-muted: #fff;
+  --vxp-faint: #ddd;
+  --vxp-line: #fff;
+  --vxp-line-strong: #fff;
+  --vxp-accent: #ffd400;
+  --vxp-accent-ink: #000;
+  --vxp-info: #7ec8ff;
+  --vxp-ok: #7dff9a;
+  --vxp-warn: #ffcc66;
+  --vxp-danger: #ff8888;
+  --cx2-bg: var(--vxp-bg);
+  --cx2-surface: var(--vxp-surface);
+  --cx2-ink: var(--vxp-ink);
+  --cx2-muted: var(--vxp-muted);
+  --cx2-accent: var(--vxp-accent);
+  --cx2-line: var(--vxp-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cx2-shell:not(.force-motion) * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

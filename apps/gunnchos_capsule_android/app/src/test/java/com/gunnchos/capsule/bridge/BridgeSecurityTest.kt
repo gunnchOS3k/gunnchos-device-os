@@ -77,6 +77,14 @@ class BridgeSecurityTest {
     }
 
     @Test
+    fun gamesListCapabilityAllowlisted() {
+        assertTrue("games_list" in BridgeSchemas.ALLOWED_CAPABILITIES)
+        assertTrue("games_launch" in BridgeSchemas.ALLOWED_CAPABILITIES)
+        assertTrue("waike_launch" in BridgeSchemas.ALLOWED_CAPABILITIES)
+        assertTrue("gunnchai_launch" in BridgeSchemas.ALLOWED_CAPABILITIES)
+    }
+
+    @Test
     fun okEnvelope() {
         val out = BridgeSecurity.ok("abc", mapOf("x" to 1).toString())
         assertTrue(out.contains("\"ok\":true"))

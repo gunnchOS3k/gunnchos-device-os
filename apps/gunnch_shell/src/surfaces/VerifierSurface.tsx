@@ -78,7 +78,7 @@ export default function VerifierSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx32-verifier-title">
+    <section className="cx2-panel vxp-surface" aria-labelledby="cx32-verifier-title">
       <h1 id="cx32-verifier-title">Credential / Portfolio Verifier</h1>
       <p className="lead">
         Independent verification of share packages. Does not use Wallet internal DB as authority.

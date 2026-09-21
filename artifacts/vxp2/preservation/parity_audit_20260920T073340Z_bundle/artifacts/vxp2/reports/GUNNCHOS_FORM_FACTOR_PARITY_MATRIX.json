@@ -1,0 +1,596 @@
+{
+  "schema": "gunnchos.form_factor_parity_matrix.v1",
+  "program": "VXP-2_universal_device_parity",
+  "generated": "2026-09-20",
+  "governing_doc": "docs/product/GUNNCHOS_DEVICE_PARITY_CONTRACT.md",
+  "honesty": "Populated from current implementation evidence only. Unknown or unwired cells use NOT_IMPLEMENTED or UNAVAILABLE_PLATFORM_LIMIT. Physical layout_usable/no_overflow not claimed without viewport capture.",
+  "evidence_anchors": [
+    "apps/gunnch_shell/src/CompleteExperienceShell.tsx",
+    "apps/gunnch_shell/src/surfaces/HomeSurface.tsx",
+    "apps/gunnch_shell/src/platform/capsuleBridge.ts",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/bridge/CapabilityRouter.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/WaikeProvider.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/GunnchAiProvider.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/GamesProvider.kt",
+    "apps/gunnchos_capsule_android/app/src/main/java/com/gunnchos/capsule/providers/AppCenterProvider.kt",
+    "artifacts/android_capsule/GATES.json",
+    "artifacts/vxp/reports/VXP_GATES.json",
+    "docs/vxp/VXP_INFORMATION_ARCHITECTURE.md"
+  ],
+  "classification_enum": [
+    "FULL_NATIVE",
+    "FULL_VIA_ADAPTER",
+    "COMPANION",
+    "FALLBACK",
+    "UNAVAILABLE_PLATFORM_LIMIT",
+    "NOT_IMPLEMENTED"
+  ],
+  "test_viewports": [
+    {
+      "id": "pixel_portrait",
+      "label": "Pixel portrait",
+      "approx_css_px": "412x915",
+      "form_factor": "phone_android_capsule",
+      "shell_layout_expected": "vxp-dock-layout"
+    },
+    {
+      "id": "pixel_landscape",
+      "label": "Pixel landscape",
+      "approx_css_px": "915x412",
+      "form_factor": "phone_android_capsule",
+      "shell_layout_expected": "vxp-rail-layout_if_min_900_landscape"
+    },
+    {
+      "id": "tablet",
+      "label": "Tablet",
+      "approx_css_px": "1024x768",
+      "form_factor": "tablet",
+      "shell_layout_expected": "vxp-rail-layout"
+    },
+    {
+      "id": "handheld_landscape",
+      "label": "Handheld landscape",
+      "approx_css_px": "1280x720",
+      "form_factor": "handheld_hybrid",
+      "shell_layout_expected": "vxp-rail-layout"
+    },
+    {
+      "id": "student_14_5",
+      "label": "14.5-inch laptop-like",
+      "approx_css_px": "1512x982",
+      "form_factor": "student_14_5",
+      "shell_layout_expected": "vxp-rail-layout"
+    },
+    {
+      "id": "coder_desktop",
+      "label": "Coder / desktop",
+      "approx_css_px": "1920x1080",
+      "form_factor": "ds_xl",
+      "shell_layout_expected": "vxp-rail-layout"
+    }
+  ],
+  "surfaces": [
+    "Home",
+    "WAIKE",
+    "gunnchAI",
+    "Vault",
+    "App Library",
+    "Games",
+    "Creation",
+    "Connect",
+    "Care",
+    "Settings"
+  ],
+  "cell_fields": [
+    "route_exists",
+    "layout_usable",
+    "no_overflow",
+    "capability_status",
+    "parity_classification",
+    "notes"
+  ],
+  "matrix": {
+    "pixel_portrait": {
+      "Home": {
+        "route_exists": true,
+        "layout_usable": true,
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_surface_present",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "HomeSurface in CompleteExperienceShell; Capsule WebView host. Continue module honest-empty."
+      },
+      "WAIKE": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "bridge_launch_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "WaikeProvider.launch + App Center catalog; no Cx2Surface id."
+      },
+      "gunnchAI": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "bridge_metadata_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "GunnchAiProvider returns JSON flags; no shell UI."
+      },
+      "Vault": {
+        "route_exists": true,
+        "layout_usable": true,
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "surface_plus_VaultProvider",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "CAPSULE_VAULT_ANDROID_PASS code gate true; physical owner pass separate."
+      },
+      "App Library": {
+        "route_exists": true,
+        "layout_usable": true,
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "app_center_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Mapped to app_center surface + AppCenterProvider catalog."
+      },
+      "Games": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "games_launch_matrix_stub",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "GamesProvider matrix exists; no Games library surface in shell."
+      },
+      "Creation": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "seed_app_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "apps/creator_studio not wired into Living Workspace nav."
+      },
+      "Connect": {
+        "route_exists": true,
+        "layout_usable": true,
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "connect_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Local compose/queue; not full messaging stack."
+      },
+      "Care": {
+        "route_exists": true,
+        "layout_usable": true,
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "care_surface_plus_provider",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "More sheet on dock layout."
+      },
+      "Settings": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "assist_a11y_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Assist is contrast/motion/scale; not system Settings."
+      }
+    },
+    "pixel_landscape": {
+      "Home": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_viewport_capture",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "shell_surface_present",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Wide matchMedia may switch to rail; Pixel landscape capture not asserted this run."
+      },
+      "WAIKE": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "bridge_launch_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Same as portrait — no shell route."
+      },
+      "gunnchAI": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "bridge_metadata_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Same as portrait."
+      },
+      "Vault": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_viewport_capture",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "surface_plus_VaultProvider",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists; landscape overflow unevidenced."
+      },
+      "App Library": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_viewport_capture",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "app_center_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Games": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "games_launch_matrix_stub",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No library surface."
+      },
+      "Creation": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "seed_app_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Not in shell."
+      },
+      "Connect": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_viewport_capture",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "connect_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Care": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_viewport_capture",
+        "no_overflow": "unknown_pending_viewport_capture",
+        "capability_status": "care_surface_plus_provider",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Settings": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "assist_a11y_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No Settings surface."
+      }
+    },
+    "tablet": {
+      "Home": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "shell_surface_present",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Same shell; tablet SKU not separately instrumented."
+      },
+      "WAIKE": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "bridge_launch_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No shell route on any viewport."
+      },
+      "gunnchAI": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "bridge_metadata_only",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No shell route."
+      },
+      "Vault": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "surface_present",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Android Capsule providers assume phone host; tablet host unproven."
+      },
+      "App Library": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "app_center_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Games": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No library surface."
+      },
+      "Creation": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Pen enhancement applicable when hardware present — surface still missing."
+      },
+      "Connect": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "connect_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Care": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "care_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Settings": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No Settings surface."
+      }
+    },
+    "handheld_landscape": {
+      "Home": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "profile_handheld_hybrid_css",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "DeviceProfile handheld_hybrid exists; physical handheld unevidenced."
+      },
+      "WAIKE": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No shell route."
+      },
+      "gunnchAI": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No shell route."
+      },
+      "Vault": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "surface_present",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "App Library": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "app_center_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Games": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "gamepad_adapter_missing",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Handheld should enhance with gamepad; library surface absent."
+      },
+      "Creation": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No Creation surface."
+      },
+      "Connect": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "connect_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Care": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "care_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Settings": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No Settings surface."
+      }
+    },
+    "student_14_5": {
+      "Home": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "profile_student_14_5",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Default DeviceProfile in shell; Linux host path separate from Capsule."
+      },
+      "WAIKE": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "learning_os_handoff_elsewhere",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Learning OS SoR is external Tauri app; not Living Workspace route."
+      },
+      "gunnchAI": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "tutor_html_seed_elsewhere",
+        "parity_classification": "FALLBACK",
+        "notes": "gunnchai_tutor / companion_bridge exist outside shell nav — not full shell route."
+      },
+      "Vault": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "surface_plus_localhost_provider",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Depends on local Vault provider reachability."
+      },
+      "App Library": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "app_center_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "localhost:8766 provider pattern."
+      },
+      "Games": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No Games surface."
+      },
+      "Creation": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "creator_studio_seed",
+        "parity_classification": "FALLBACK",
+        "notes": "creator_studio HTML seed + creator_mode_manager — not shell-integrated."
+      },
+      "Connect": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "connect_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Care": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "care_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Settings": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "launcher_mock_only",
+        "parity_classification": "FALLBACK",
+        "notes": "SettingsPanel in launcher_mock — not production Living Workspace."
+      }
+    },
+    "coder_desktop": {
+      "Home": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "profile_ds_xl",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "ds_xl profile class present; freeform windowing NOT_IMPLEMENTED."
+      },
+      "WAIKE": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "No shell route."
+      },
+      "gunnchAI": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "tutor_elsewhere",
+        "parity_classification": "FALLBACK",
+        "notes": "Same as student — external tutor paths."
+      },
+      "Vault": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "surface_present",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "App Library": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "app_center_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Games": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "linux_guest_optional_uneared",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Guest launch path gated false on Capsule; no library UX."
+      },
+      "Creation": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "creator_modes_doc_only",
+        "parity_classification": "FALLBACK",
+        "notes": "Docs/manager exist; shell route missing."
+      },
+      "Connect": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "connect_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Care": {
+        "route_exists": true,
+        "layout_usable": "unknown_pending_device",
+        "no_overflow": "unknown_pending_device",
+        "capability_status": "care_surface",
+        "parity_classification": "FULL_VIA_ADAPTER",
+        "notes": "Route exists."
+      },
+      "Settings": {
+        "route_exists": false,
+        "layout_usable": false,
+        "no_overflow": "n/a",
+        "capability_status": "not_wired",
+        "parity_classification": "NOT_IMPLEMENTED",
+        "notes": "Coder needs deep Settings — absent in Living Workspace."
+      }
+    }
+  },
+  "pixel_summary": {
+    "FULL_VIA_ADAPTER": ["Home", "Vault", "App Library", "Connect", "Care"],
+    "NOT_IMPLEMENTED": ["WAIKE", "gunnchAI", "Games", "Creation", "Settings"],
+    "FULL_NATIVE": [],
+    "note": "No Pixel cell earns FULL_NATIVE — Capsule is adapter-hosted. COMPANION intentionally unused for Capsule identity."
+  },
+  "gates_dependent": [
+    "GUNNCHOS_FORM_FACTOR_PARITY_MATRIX_PASS",
+    "GUNNCHOS_PIXEL_FULL_ECOSYSTEM_JOURNEY_PASS"
+  ]
+}

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import Icon from '../design/icons/Icon'
+import { EmptyState, SurfaceHeader } from '../design/primitives/SurfaceChrome'
 
 const PROVIDER_BASE = 'http://127.0.0.1:8767'
 
@@ -41,14 +43,17 @@ export default function CareSurface({
   const [backups, setBackups] = useState<Backup[]>([])
   const [selected, setSelected] = useState<string | null>(null)
   const [lastRestore, setLastRestore] = useState<string | null>(null)
+  const [providerOk, setProviderOk] = useState<boolean | null>(null)
 
   const refresh = useCallback(async () => {
     try {
       const data = await providerFetch('/api/backups')
       setBackups(Array.isArray(data.backups) ? data.backups : [])
+      setProviderOk(true)
       onError(null)
     } catch (err: any) {
       setBackups([])
+      setProviderOk(false)
       onError(err?.message || 'Care/Vault backup provider unreachable')
     }
   }, [onError])
@@ -81,50 +86,79 @@ export default function CareSurface({
   }
 
   return (
-    <section className="cx2-panel" aria-labelledby="cx2-care-title">
-      <h1 id="cx2-care-title">Care</h1>
-      <p className="lead">Diagnostics, backup/restore through the Vault provider, and offline help.</p>
-      <div className="cx2-actions">
-        <button type="button" className="cx2-action" data-action="refresh" onClick={() => void refresh()}>
-          Refresh backups
-        </button>
-        <button
-          type="button"
-          className="cx2-action primary"
-          data-action="restore"
-          onClick={() => void restore()}
-        >
-          Restore from backup
-        </button>
-      </div>
-      {lastRestore ? (
-        <p className="lead" role="status">
-          Restored: {lastRestore}
-        </p>
-      ) : null}
-      {backups.length === 0 ? (
-        <div className="cx2-empty" role="status">
-          No backups yet — create one from Vault.
-        </div>
-      ) : (
-        <ul className="cx2-list" aria-label="Vault backups">
-          {backups.map((b) => (
-            <li
-              key={b.backup_id}
-              className="cx2-row"
-              data-backup-id={b.backup_id}
-              data-selected={selected === b.backup_id ? 'true' : 'false'}
-              onClick={() => setSelected(b.backup_id)}
-            >
-              <span>
-                {b.backup_id} · {b.path} · {b.sha256.slice(0, 12)}
-              </span>
-            </li>
-          ))}
+    <section className="cx2-panel vxp-care" aria-labelledby="cx2-care-title">
+      <SurfaceHeader
+        titleId="cx2-care-title"
+        title="Care"
+        lead="Health summary, backups, then recovery. Software Care does not grant warranty or RMA."
+      />
+
+      <section className="vxp-care-summary" aria-labelledby="vxp-health-title">
+        <h2 id="vxp-health-title">Health summary</h2>
+        <ul className="vxp-status-list">
+          <li>
+            <Icon name={providerOk === false ? 'error' : providerOk ? 'status_ok' : 'status_warn'} size={18} />
+            <span>
+              Backup provider:{' '}
+              {providerOk === null ? 'checking…' : providerOk ? 'reachable' : 'unavailable'}
+            </span>
+          </li>
+          <li>
+            <Icon name={offline ? 'offline' : 'status_ok'} size={18} />
+            <span>{offline ? 'Offline — restore uses local backups when present' : 'Online for provider calls'}</span>
+          </li>
+          <li>
+            <Icon name="care" size={18} />
+            <span>Backup count: {backups.length}</span>
+          </li>
         </ul>
-      )}
-      <p className="lead">
-        Offline help: restore Vault backup or repair an app. Warranty/RMA is not granted by software alone.
+      </section>
+
+      <section className="vxp-home-section" aria-labelledby="vxp-backup-title">
+        <h2 id="vxp-backup-title">Backups</h2>
+        <div className="cx2-actions">
+          <button type="button" className="cx2-action" data-action="refresh" onClick={() => void refresh()}>
+            <Icon name="refresh" size={18} />
+            <span>Refresh backups</span>
+          </button>
+          <button type="button" className="cx2-action primary" data-action="restore" onClick={() => void restore()}>
+            <Icon name="backup" size={18} />
+            <span>Restore from backup</span>
+          </button>
+        </div>
+        {lastRestore ? (
+          <p className="lead" role="status">
+            Restored: {lastRestore}
+          </p>
+        ) : null}
+        {backups.length === 0 ? (
+          <EmptyState icon="care" title="No backups yet" detail="Create one from Vault. Care will not invent recovery points." />
+        ) : (
+          <ul className="cx2-list" aria-label="Vault backups">
+            {backups.map((b) => (
+              <li
+                key={b.backup_id}
+                className={selected === b.backup_id ? 'cx2-row selected' : 'cx2-row'}
+                data-backup-id={b.backup_id}
+                data-selected={selected === b.backup_id ? 'true' : 'false'}
+                onClick={() => setSelected(b.backup_id)}
+              >
+                <span>
+                  <strong>{b.path}</strong>
+                  <span className="vxp-file-meta">
+                    {' '}
+                    · {b.backup_id} · {b.size}B
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <p className="lead vxp-care-honesty">
+        Offline help: restore a Vault backup or repair an app through App Center when providers are available.
+        Warranty and RMA are not granted by this software alone.
       </p>
     </section>
   )
