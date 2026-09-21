@@ -9,3 +9,8 @@
 ## Reproducibility
 
 See `docs/04_reproducibility_checklist.md` (or repo-specific checklist).
+
+## Feedback & security (RC1)
+
+- Public feedback: portal FEEDBACK.md
+- Security: private advisories only — see SECURITY.md
