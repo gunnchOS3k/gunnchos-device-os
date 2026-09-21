@@ -4,6 +4,7 @@ import { StudentProfile } from '../data/studentProfile'
 import AppIcon from '../components/AppIcon'
 import { useSettings } from '../services/settingsStore'
 import EncryptedWorkspacePanel from './EncryptedWorkspacePanel'
+import { feedbackUrlForComponent, SECURITY_MD_URL } from '../services/feedbackUrls'
 
 interface SettingsPanelProps {
   profile: StudentProfile
@@ -123,6 +124,23 @@ export default function SettingsPanel({ profile, onBack, onResetOnboarding }: Se
               <SettingRow label="Last update" value="System image 0.1.0-prototype" />
               <SettingRow label="Rollback" value="Available after failed update" />
               <button type="button" style={primaryBtn}>Check for updates (mock)</button>
+            </SettingGroup>
+            <SettingGroup title="Help & About">
+              <div style={{ padding: '14px 16px' }}>
+                <a
+                  href={feedbackUrlForComponent('Device OS')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="feedback-suggestions-link"
+                  style={{ color: theme.accent, fontWeight: 600 }}
+                >
+                  Feedback &amp; Suggestions
+                </a>
+                <p style={{ fontSize: 12, color: theme.textMuted, marginTop: 8 }}>
+                  Opens the public gunnchOS feedback hub. Do not include secrets. Security:{' '}
+                  <a href={SECURITY_MD_URL} target="_blank" rel="noopener noreferrer">private path</a>.
+                </p>
+              </div>
             </SettingGroup>
           </>
         )}

@@ -3,6 +3,7 @@ import Icon from '../design/icons/Icon'
 import { SurfaceHeader } from '../design/primitives/SurfaceChrome'
 import { resolveAiRuntime } from '../platform/aiRuntime'
 import type { HostKind } from '../platform/hostRuntime'
+import { feedbackUrlForComponent, SECURITY_MD_URL } from '../platform/feedbackUrls'
 
 const SECTIONS = [
   { id: 'appearance', title: 'Appearance' },
@@ -271,11 +272,29 @@ export default function SettingsSurface({
           )}
 
           {section === 'about' && (
-            <div>
+            <div data-testid="settings-about-feedback">
               <h3>gunnchOS</h3>
               <p className="lead">
                 Android Capsule is an Android-hosted expression of the same OS — not a companion. Form-factor adapters
                 change presentation, not product identity.
+              </p>
+              <p className="lead">
+                <a
+                  href={feedbackUrlForComponent('Device OS')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="feedback-suggestions-link"
+                >
+                  Feedback &amp; Suggestions
+                </a>
+                {' · '}
+                <a href={SECURITY_MD_URL} target="_blank" rel="noopener noreferrer">
+                  Security (private)
+                </a>
+              </p>
+              <p className="lead" role="note">
+                Do not post exploitable security details publicly. Links open the public ecosystem hub — no device
+                serials, IPs, accounts, or tokens are attached.
               </p>
             </div>
           )}
