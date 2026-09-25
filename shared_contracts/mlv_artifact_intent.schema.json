@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.local/shared_contracts/mlv_artifact_intent.schema.json",
+  "title": "GunnchOSArtifactIntent",
+  "description": "Cross-app artifact handoff into 3k MLV. default_visibility is const private — no app may request PUBLIC as default.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "owner_id",
+    "title",
+    "mime_type",
+    "app_id",
+    "default_visibility"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "owner_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "mime_type": { "type": "string", "minLength": 1 },
+    "app_id": { "type": "string", "minLength": 1 },
+    "local_uri": { "type": ["string", "null"] },
+    "cloud_node_id": { "type": ["string", "null"] },
+    "suggested_presentation": {
+      "type": "string",
+      "enum": [
+        "frame",
+        "book",
+        "record",
+        "screen",
+        "terminal",
+        "arcade",
+        "pedestal",
+        "notebook",
+        "lab_console",
+        "parcel"
+      ]
+    },
+    "default_visibility": { "type": "string", "const": "private" }
+  }
+}
