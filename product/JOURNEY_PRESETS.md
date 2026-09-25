@@ -2,6 +2,10 @@
 
 Twelve data-driven workflow presets for the gunnchOS user-focused OS experience layer. Users may switch presets at any time; exit paths define allowed transitions.
 
+**My Little Vicinity** (`mlv_world_workspace`) is recommended in Studio / Arcade / Workshop, available in Car / Laboratory / Spaceship / Offline (cached owner subset), public-ephemeral in Library, and not auto-enabled in Guardian / Classroom / Scooter / Bicycle. See `product/MLV_WORLD_WORKSPACE_REQUIREMENTS.md`.
+
+**My Little Vicinity** (`mlv_world_workspace`) is recommended in Studio / Arcade / Workshop, available in Car / Laboratory / Spaceship / Offline (cached owner subset), public-ephemeral in Library, and not auto-enabled in Guardian / Classroom / Scooter / Bicycle. See `product/MLV_WORLD_WORKSPACE_REQUIREMENTS.md`.
+
 **Status:** device OS alpha · workflow presets — not a finished shipping OS.
 
 ---
