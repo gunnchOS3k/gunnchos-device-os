@@ -1,0 +1,25 @@
+{
+  "kind": "mlv_integration_gates",
+  "pr": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/165",
+  "head": "be31b0b2e5292f518b9fc717b7d58f86f53634cb",
+  "updated_at": "2026-09-25T19:32:00Z",
+  "merge_order": [
+    "3k MLV PR #1",
+    "gunnchOS PR #165"
+  ],
+  "gates": {
+    "MLV_APP_REGISTERED_PASS": true,
+    "MLV_PRIVATE_DEFAULT_SCHEMA_PASS": true,
+    "MLV_SHARE_TOKEN_REDACTION_PASS": true,
+    "MLV_DEEPLINK_VALIDATION_PASS": true,
+    "MLV_JOURNEY_PRESET_POLICY_PASS": true,
+    "MLV_HOSTED_SUPABASE_PASS": false,
+    "MLV_PIXEL_PHYSICAL_PASS": false,
+    "MLV_MERGE_AUTHORIZED": false,
+    "GUNNCHOS_MLV_INTEGRATION_LOCAL_PASS": true,
+    "GUNNCHOS_MLV_HOSTED_JOURNEY_PASS": false,
+    "GUNNCHOS_MLV_PIXEL_PASS": false,
+    "GUNNCHOS_MLV_MERGE_AUTHORIZED": false
+  },
+  "claim_boundary": "Local launcher/registry/schema tests only. Not hosted journey, not Pixel, not production secure OS."
+}

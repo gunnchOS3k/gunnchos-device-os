@@ -13,6 +13,7 @@ APPS = [
     "Arena Platform Fighter",
     "Deploy to Device",
     "Fleet Dashboard",
+    "My Little Vicinity",
 ]
 
 

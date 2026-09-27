@@ -37,6 +37,8 @@ Use these phrases in README, product docs, demos, and PR descriptions:
 | offline-first learning mode | Local lessons/creative with deferred sync |
 | prototype OS package | Research/alpha artifact |
 | research prototype | Aligns with broader gunnchOS3k mission |
+| prototype World Workspace | 3k MLV spatial shell; not a production secure OS |
+| private-by-default contract | Default visibility private; RLS/storage must enforce |
 | mock guardian controls | Placeholder family safety — not production MDM |
 | placeholder app | App slot defined; integration pending |
 

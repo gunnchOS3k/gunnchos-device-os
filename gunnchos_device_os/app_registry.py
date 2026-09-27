@@ -81,6 +81,20 @@ APPS: dict[str, dict[str, Any]] = {
     "edgegesture": {"category": "gaming", "name": "EdgeGesture", "launch_type": "native"},
     "field_measurement": {"category": "research", "name": "Field Measurement", "launch_type": "native"},
     "edge_io": {"category": "research", "name": "Edge-IO Node", "launch_type": "native"},
+    "mlv_world_workspace": {
+        "category": "system",
+        "name": "My Little Vicinity",
+        "launch_type": "browser_pwa",
+        "workspace_backed": True,
+        "offline_supported": True,
+        "default_visibility": "private",
+        "claim_status": "prototype_world_workspace",
+        "route_url": "gunnchos://mlv/home",
+        "claim_boundary": (
+            "Optional spatial world workspace. Privacy is enforced by MLV RLS/storage, "
+            "not by the 3D renderer. Prototype — not a production secure OS."
+        ),
+    },
 }
 
 # Merge structured media app metadata into registry.
