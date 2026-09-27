@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "generated_at": "2026-08-06T20:10:40.667994+00:00",
+  "generated_at": "2026-09-27T01:07:18.901429+00:00",
   "claim_boundary": {
     "drm_circumvention_supported": false,
     "service_certification_claimed": false,
@@ -54,10 +54,31 @@
       "name": "gunnchAI3k",
       "launch_type": "native"
     },
+    "waike_learning_os": {
+      "category": "education",
+      "name": "WAIKE Learning OS",
+      "launch_type": "native",
+      "bundle_id": "com.gunnchos.waike.learning",
+      "sdk_app_id": "gunnchos.waike_learning",
+      "runtime_id": "waike",
+      "role": "canonical_learning_os",
+      "relationship": "thin_launcher_companion",
+      "system_of_record": "platform_tauri_learning_os",
+      "companion_seed_entry": "apps/waike_learning/index.html",
+      "companion_role": "discovery_lab_seed_only",
+      "claim_boundary": "Device OS thin launcher/companion for Platform Learning OS. Seed HTML browser is discovery/lab only \u2014 not the LMS SoR."
+    },
     "waike_offline": {
       "category": "education",
       "name": "WAIKE Offline Lessons",
-      "launch_type": "native"
+      "launch_type": "native",
+      "alias_of": "waike_learning_os",
+      "role": "compatibility_alias",
+      "bundle_id": "com.gunnchos.waike.learning",
+      "sdk_app_id": "gunnchos.waike_learning",
+      "runtime_id": "waike",
+      "relationship": "thin_launcher_companion",
+      "claim_boundary": "Alias of waike_learning_os. Prefer the canonical id for new callers."
     },
     "scaly_wings": {
       "category": "gaming",
@@ -83,6 +104,29 @@
       "category": "research",
       "name": "Edge-IO Node",
       "launch_type": "native"
+    },
+    "mlv_world_workspace": {
+      "category": "system",
+      "name": "My Little Vicinity",
+      "launch_type": "browser_pwa",
+      "workspace_backed": true,
+      "offline_supported": true,
+      "default_visibility": "private",
+      "claim_status": "prototype_world_workspace",
+      "route_url": "gunnchos://mlv/home",
+      "subroute_policy": "one_mlv_app_not_seven_campus_apps",
+      "waike_relationship": "separate_learning_system_of_record",
+      "semantic_routes": [
+        "gunnchos://mlv/home",
+        "gunnchos://mlv/campus",
+        "gunnchos://mlv/campus/<campus_id>",
+        "gunnchos://mlv/campus/network-twin",
+        "gunnchos://mlv/campus/network-twin/<campus_id>",
+        "gunnchos://mlv/campus/network-twin/<campus_id>/run/<run_id>",
+        "gunnchos://mlv/campus/network-twin/<campus_id>/shadow/<run_id>",
+        "gunnchos://mlv/gallery"
+      ],
+      "claim_boundary": "Optional spatial world workspace. Privacy is enforced by MLV RLS/storage, not by the 3D renderer. Prototype \u2014 not a production secure OS. Campus, Gallery, and Network Twin are semantic subroutes of this one app."
     },
     "youtube": {
       "category": "video_streaming",

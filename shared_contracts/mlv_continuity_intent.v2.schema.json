@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gunnchos.local/shared_contracts/mlv_continuity_intent.v2.schema.json",
+  "title": "GunnchOSMlvContinuityIntent",
+  "description": "Versioned gunnchOS shell intent for MLV Home/Campus/Gallery, WAIKE return continuity, and Network Twin educational routes. gunnchOS does not become LMS, twin, or RIC authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intent_version",
+    "target_app",
+    "route_kind"
+  ],
+  "properties": {
+    "intent_version": { "type": "string", "const": "v2" },
+    "target_app": {
+      "type": "string",
+      "enum": ["mlv_world_workspace", "waike_learning_os"]
+    },
+    "route_kind": {
+      "type": "string",
+      "enum": [
+        "home",
+        "campus",
+        "campus_site",
+        "network_twin",
+        "network_twin_campus",
+        "network_twin_run",
+        "digital_shadow",
+        "gallery",
+        "waike",
+        "node",
+        "public",
+        "share"
+      ]
+    },
+    "campus_id": {
+      "type": ["string", "null"],
+      "enum": [
+        "gary",
+        "ghana",
+        "guyana",
+        "geelong",
+        "germany",
+        "gaza",
+        "graham_land",
+        null
+      ]
+    },
+    "waike_kind": {
+      "type": ["string", "null"],
+      "enum": [
+        "home",
+        "course",
+        "module",
+        "lesson",
+        "assignment",
+        "quiz",
+        "lab",
+        "grades",
+        "calendar",
+        "study",
+        "portfolio",
+        null
+      ]
+    },
+    "section_id": { "type": ["string", "null"], "minLength": 1, "maxLength": 128 },
+    "resource_id": { "type": ["string", "null"], "minLength": 1, "maxLength": 128 },
+    "network_twin_run_id": { "type": ["string", "null"], "minLength": 1, "maxLength": 64 },
+    "return_to": { "type": ["string", "null"], "minLength": 1, "maxLength": 256 },
+    "visibility_context": {
+      "type": "string",
+      "enum": [
+        "private",
+        "public",
+        "campus",
+        "gallery_public",
+        "synthetic_educational"
+      ]
+    },
+    "role": {
+      "type": "string",
+      "enum": ["learner", "planner", "admin"]
+    },
+    "actuation_mode": {
+      "type": ["string", "null"],
+      "enum": [
+        "SIMULATION ONLY",
+        "READ ONLY",
+        "RECOMMENDATION ONLY",
+        "SHADOW",
+        null
+      ]
+    }
+  }
+}

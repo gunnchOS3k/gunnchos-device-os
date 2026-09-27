@@ -1,0 +1,353 @@
+{
+  "kind": "mlv_waike_7gc_airan_journey_matrix",
+  "intent_version": "v2",
+  "systems_of_record": {
+    "waike": "learning",
+    "mlv": "home_campus_gallery_network_twin_ux",
+    "field_kit": "airan_contract_authority",
+    "digital_twin": "network_scenario_transformation",
+    "spectrumx": "planning_policy_engine",
+    "edge_io": "measurement_evidence",
+    "gunnchos": "shell_registry_intents_lifecycle_return"
+  },
+  "pins": {
+    "waike_pr25": "f0176c2c45c1c366ad22f46407e6c55c3c5f3e8e",
+    "mlv": {
+      "pr1": {
+        "branch": "revival/gunnchos-world-workspace-v1",
+        "head": "5e99c64673557efe7cbdfbbfb4d4ebcdcabfaab7"
+      },
+      "pr2": {
+        "branch": "world/home-7gc-campus-gallery-v2",
+        "head": "5ce416d25f7821ee5506be1a60fd30315372956c"
+      },
+      "pr3": {
+        "branch": "world/7gc-airan-network-twin-extension-v3",
+        "head": "60fd7173d8e2fbe5dabe7f77cdccd2ba3abdcc78"
+      }
+    },
+    "backend": {
+      "field_kit": {
+        "pr": 120,
+        "head": "f7ca0bacbea33f3a97e550cf3c8c28e5dc6928f9"
+      },
+      "digital_twin": {
+        "pr": 33,
+        "head": "1d3c159ed942bb499a83af0c4e1533bf439a5970"
+      },
+      "spectrumx": {
+        "pr": 104,
+        "head": "bffa5161de5b8f3118e89f210f43f375e6cde717"
+      },
+      "edge_io": {
+        "pr": 41,
+        "head": "1af382b489732d4dfa745f67eef9ee61ec1ba9a4"
+      }
+    },
+    "gunnchos_foundation": "64ce5930024b246f0ac49d7d704c82560fec7f31"
+  },
+  "rows": [
+    {
+      "name": "Home private artifact",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/home",
+      "auth": "owner_session",
+      "privacy_rule": "HOME_PRIVATE",
+      "expected_return": null,
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus landing",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus",
+      "auth": "owner_session",
+      "privacy_rule": "campus_context",
+      "expected_return": "gunnchos://mlv/home",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus gary",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/gary",
+      "auth": "owner_session",
+      "privacy_rule": "campus_context",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus ghana",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/ghana",
+      "auth": "owner_session",
+      "privacy_rule": "campus_context",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus guyana",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/guyana",
+      "auth": "owner_session",
+      "privacy_rule": "campus_context",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus geelong",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/geelong",
+      "auth": "owner_session",
+      "privacy_rule": "campus_context",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus germany",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/germany",
+      "auth": "owner_session",
+      "privacy_rule": "campus_context",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus gaza",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/gaza",
+      "auth": "owner_session",
+      "privacy_rule": "gaza_redaction",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Campus graham_land",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/graham_land",
+      "auth": "owner_session",
+      "privacy_rule": "graham_remote_first",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "WAIKE summary",
+      "source": "WAIKE",
+      "route": "/api/v1/mlv/consumer-summary",
+      "auth": "authenticated_user_scoped",
+      "privacy_rule": "no_answer_keys_no_other_learners",
+      "expected_return": "gunnchos://mlv/campus/gary",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "WAIKE assignment deep link",
+      "source": "WAIKE",
+      "route": "waike://assignment/asg-demo-1",
+      "auth": "authenticated_user_scoped",
+      "privacy_rule": "no_shadow_lms",
+      "expected_return": "gunnchos://mlv/campus/gary",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "WAIKE study deep link",
+      "source": "WAIKE",
+      "route": "waike://study/lesson-demo-1",
+      "auth": "authenticated_user_scoped",
+      "privacy_rule": "no_shadow_lms",
+      "expected_return": "gunnchos://mlv/campus/ghana",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin landing",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin",
+      "auth": "owner_session",
+      "privacy_rule": "synthetic_educational",
+      "expected_return": "gunnchos://mlv/campus",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin gary",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/gary",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/gary",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin ghana",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/ghana",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/ghana",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin guyana",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/guyana",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/guyana",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin geelong",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/geelong",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/geelong",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin germany",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/germany",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/germany",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin gaza",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/gaza",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/gaza",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin graham_land",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/graham_land",
+      "auth": "owner_session",
+      "privacy_rule": "no_physical_ric",
+      "expected_return": "gunnchos://mlv/campus/graham_land",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Network Twin run",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/gary/run/demo-run-01",
+      "auth": "owner_session",
+      "privacy_rule": "SIMULATION_ONLY",
+      "expected_return": "gunnchos://mlv/campus/gary",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Digital shadow recommendation",
+      "source": "3k MLV",
+      "route": "gunnchos://mlv/campus/network-twin/germany/shadow/demo-run-01",
+      "auth": "planner_or_learner_view",
+      "privacy_rule": "SHADOW_not_actuation",
+      "expected_return": "gunnchos://mlv/campus/germany",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Gallery",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/gallery",
+      "auth": "public_or_owner",
+      "privacy_rule": "GALLERY_PUBLIC_ONLY",
+      "expected_return": "gunnchos://mlv/home",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Return WAIKE to campus",
+      "source": "gunnchOS",
+      "route": "waike://assignment/asg-demo-1",
+      "auth": "authenticated_user_scoped",
+      "privacy_rule": "no_secrets_in_return",
+      "expected_return": "gunnchos://mlv/campus/gary",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Return Network Twin to campus",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/network-twin/guyana/run/demo-run-01",
+      "auth": "owner_session",
+      "privacy_rule": "no_secrets_in_return",
+      "expected_return": "gunnchos://mlv/campus/guyana",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Offline WAIKE degraded",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/geelong",
+      "auth": "owner_session",
+      "privacy_rule": "labeled_offline_demo_only",
+      "expected_return": "gunnchos://mlv/campus/geelong",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    },
+    {
+      "name": "Offline Network Twin degraded",
+      "source": "gunnchOS",
+      "route": "gunnchos://mlv/campus/network-twin/gaza",
+      "auth": "owner_session",
+      "privacy_rule": "labeled_synthetic_no_live_ric",
+      "expected_return": "gunnchos://mlv/campus/gaza",
+      "digital_test_status": "pass",
+      "human_status": false,
+      "pixel_status": false
+    }
+  ],
+  "human_pixel_merge": {
+    "HUMAN_CONVERGENCE_USABILITY_PASS": false,
+    "PIXEL_CONVERGENCE_PASS": false,
+    "MERGE_AUTHORIZED": false
+  }
+}

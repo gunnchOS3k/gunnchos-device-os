@@ -17,3 +17,5 @@ def test_mlv_world_workspace_registered():
     assert app["name"] == "My Little Vicinity"
     assert app["default_visibility"] == "private"
     assert app["claim_status"] == "prototype_world_workspace"
+    assert app["subroute_policy"] == "one_mlv_app_not_seven_campus_apps"
+    assert "gunnchos://mlv/campus" in app["semantic_routes"]
