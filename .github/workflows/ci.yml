@@ -2,9 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [main, develop, 'phase-*']
+    branches:
+      - main
+      - develop
+      - 'phase-*'
+      - integration/mlv-campus-waike-airan-continuity-v2
   pull_request:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
+      - integration/3k-mlv-world-workspace-v1
   workflow_dispatch:
 
 permissions:
