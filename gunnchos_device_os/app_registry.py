@@ -90,9 +90,22 @@ APPS: dict[str, dict[str, Any]] = {
         "default_visibility": "private",
         "claim_status": "prototype_world_workspace",
         "route_url": "gunnchos://mlv/home",
+        "subroute_policy": "one_mlv_app_not_seven_campus_apps",
+        "waike_relationship": "separate_learning_system_of_record",
+        "semantic_routes": [
+            "gunnchos://mlv/home",
+            "gunnchos://mlv/campus",
+            "gunnchos://mlv/campus/<campus_id>",
+            "gunnchos://mlv/campus/network-twin",
+            "gunnchos://mlv/campus/network-twin/<campus_id>",
+            "gunnchos://mlv/campus/network-twin/<campus_id>/run/<run_id>",
+            "gunnchos://mlv/campus/network-twin/<campus_id>/shadow/<run_id>",
+            "gunnchos://mlv/gallery",
+        ],
         "claim_boundary": (
             "Optional spatial world workspace. Privacy is enforced by MLV RLS/storage, "
-            "not by the 3D renderer. Prototype — not a production secure OS."
+            "not by the 3D renderer. Prototype — not a production secure OS. "
+            "Campus, Gallery, and Network Twin are semantic subroutes of this one app."
         ),
     },
 }
