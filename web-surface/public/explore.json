@@ -1,0 +1,112 @@
+{
+  "schema": "gunnchos.surfacekit.v2",
+  "measured_topology": false,
+  "diagram_note": "Reading aid built from repository headings. It is not a measured topology and it is not a live system.",
+  "nodes": [
+    {
+      "id": "overview",
+      "label": "Overview"
+    },
+    {
+      "id": "run-gunnchos",
+      "label": "Run GunnchOS"
+    },
+    {
+      "id": "operational-status-honest",
+      "label": "Operational status (honest)"
+    },
+    {
+      "id": "start-here",
+      "label": "Start here"
+    }
+  ],
+  "rows": [
+    {
+      "source": "README.md",
+      "scenario_id": "Overview",
+      "site_id": "Devices",
+      "ethical_framing": "# gunnchos-device-os **GunnchOS** \u2014 an education-first, creator-first, gamer-first operating system for affordable handheld devices. > Phase 4 beta completion train \u2014 **beta_ready: false**. See [Beta Status Dashboard](docs/BETA_STATUS_DASHBOARD.md)."
+    },
+    {
+      "source": "README.md",
+      "scenario_id": "Run GunnchOS",
+      "site_id": "Devices",
+      "ethical_framing": "python3 scripts/export_launcher_contract.py cd apps/launcher_mock && npm install && npm run dev # \u2192 http://localhost:5173 \u2014 onboarding \u2192 Campus \u2192 Media Mode \u2192 Game Mode Tests: make validate-full # or: pytest -q && cd apps/launcher_mock && npm test Linux container prototype: docker compose -f os_build/linux_desktop/docker-compose.yml up --build # \u2192 http://localhost:8080 See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHAS"
+    },
+    {
+      "source": "README.md",
+      "scenario_id": "Operational status (honest)",
+      "site_id": "Devices",
+      "ethical_framing": "**GunnchOS is not a finished shipping OS.** Phase 0\u20131 provide a runnable shell prototype with policy framework and tests. Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) \u00b7 Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) \u00b7 Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md) \u00b7 **Beta status:** [docs/BETA_STATUS_DASHBOARD.md](docs/BETA_STATUS_DASH"
+    },
+    {
+      "source": "README.md",
+      "scenario_id": "Start here",
+      "site_id": "Devices",
+      "ethical_framing": "- [docs/uml/README.md](docs/uml/README.md) \u2014 supervisor-facing UML (current / future / legacy) - [docs/SERVICE_CONTINUITY_PROFILE_MODEL.md](docs/SERVICE_CONTINUITY_PROFILE_MODEL.md) \u2014 RQ1 desk / mobile-docked / local-creation / wearable - [REPRODUCIBILITY.md](REPRODUCIBILITY.md) \u2014 `make reproduce` - [docs/USER_FOCUSED_OS_ARCHITECTURE.md](docs/USER_FOCUSED_OS_ARCHITECTURE.md) - [docs/DEVICE_CLASSES.md](docs/DEVICE_CLA"
+    },
+    {
+      "source": "README.md",
+      "scenario_id": "Run demos",
+      "site_id": "Devices",
+      "ethical_framing": "python scripts/run_user_focused_os_demo.py python scripts/run_mode_policy_demo.py python scripts/run_deploy_contract_demo.py python scripts/run_privacy_security_demo.py python scripts/run_edge_io_contract_demo.py python scripts/run_waike_integration_demo.py python scripts/run_guardian_policy_demo.py python scripts/run_hardware_compatibility_demo.py python scripts/run_hardware_boot_readiness_demo.py python scripts/run"
+    },
+    {
+      "source": "README.md",
+      "scenario_id": "Validations",
+      "site_id": "Devices",
+      "ethical_framing": "python scripts/validate_user_focused_os.py python scripts/validate_issue_closure.py python scripts/validate_shippable_requirements.py python scripts/validate_release_gates.py python scripts/validate_release_artifacts.py python scripts/validate_qa_package.py python scripts/validate_hardware_manifests.py python scripts/validate_hardware_compatibility.py python scripts/validate_hardware_release_evidence.py python script"
+    }
+  ],
+  "sources": [],
+  "sections": [
+    {
+      "id": "overview",
+      "title": "Overview",
+      "body": "# gunnchos-device-os **GunnchOS** \u2014 an education-first, creator-first, gamer-first operating system for affordable handheld devices. > Phase 4 beta completion train \u2014 **beta_ready: false**. See [Beta Status Dashboard](docs/BETA_STATUS_DASHBOARD.md)."
+    },
+    {
+      "id": "run-gunnchos",
+      "title": "Run GunnchOS",
+      "body": "python3 scripts/export_launcher_contract.py cd apps/launcher_mock && npm install && npm run dev # \u2192 http://localhost:5173 \u2014 onboarding \u2192 Campus \u2192 Media Mode \u2192 Game Mode Tests: make validate-full # or: pytest -q && cd apps/launcher_mock && npm test Linux container prototype: docker compose -f os_build/linux_desktop/docker-compose.yml up --build # \u2192 http://localhost:8080 See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHAS"
+    },
+    {
+      "id": "operational-status-honest",
+      "title": "Operational status (honest)",
+      "body": "**GunnchOS is not a finished shipping OS.** Phase 0\u20131 provide a runnable shell prototype with policy framework and tests. Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) \u00b7 Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) \u00b7 Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md) \u00b7 **Beta status:** [docs/BETA_STATUS_DASHBOARD.md](docs/BETA_STATUS_DASH"
+    },
+    {
+      "id": "start-here",
+      "title": "Start here",
+      "body": "- [docs/uml/README.md](docs/uml/README.md) \u2014 supervisor-facing UML (current / future / legacy) - [docs/SERVICE_CONTINUITY_PROFILE_MODEL.md](docs/SERVICE_CONTINUITY_PROFILE_MODEL.md) \u2014 RQ1 desk / mobile-docked / local-creation / wearable - [REPRODUCIBILITY.md](REPRODUCIBILITY.md) \u2014 `make reproduce` - [docs/USER_FOCUSED_OS_ARCHITECTURE.md](docs/USER_FOCUSED_OS_ARCHITECTURE.md) - [docs/DEVICE_CLASSES.md](docs/DEVICE_CLA"
+    },
+    {
+      "id": "run-demos",
+      "title": "Run demos",
+      "body": "python scripts/run_user_focused_os_demo.py python scripts/run_mode_policy_demo.py python scripts/run_deploy_contract_demo.py python scripts/run_privacy_security_demo.py python scripts/run_edge_io_contract_demo.py python scripts/run_waike_integration_demo.py python scripts/run_guardian_policy_demo.py python scripts/run_hardware_compatibility_demo.py python scripts/run_hardware_boot_readiness_demo.py python scripts/run"
+    },
+    {
+      "id": "validations",
+      "title": "Validations",
+      "body": "python scripts/validate_user_focused_os.py python scripts/validate_issue_closure.py python scripts/validate_shippable_requirements.py python scripts/validate_release_gates.py python scripts/validate_release_artifacts.py python scripts/validate_qa_package.py python scripts/validate_hardware_manifests.py python scripts/validate_hardware_compatibility.py python scripts/validate_hardware_release_evidence.py python script"
+    }
+  ],
+  "artifacts": [
+    "results/e2e/device_os_e2e_report.json",
+    "results/e2e/device_os_e2e_report.md",
+    "results/e2e/seven_gc_device_export.json",
+    "paper/CONFERENCE_READINESS_TODOS.md",
+    "paper/README.md",
+    "docs/00_START_HERE.md",
+    "docs/00_os_vision.md",
+    "docs/01_OS_VISION.md",
+    "docs/01_TEMP.md",
+    "docs/01_device_classes.md",
+    "docs/02_6G_URLLC_ALIGNMENT.md",
+    "docs/02_TEMP.md"
+  ],
+  "methods": "# Reproducibility \u2014 gunnchos Device OS Paper I infrastructure for *Resilience-Aware Service Continuity in Heterogeneous 6G Networks*. Not a shipping OS. Not physical boot. ## Clone / setup / run ```bash git clone https://github.com/gunnchOS3k/gunnchos-device-os.git cd gunnchos-device-os python3 -m venv .venv source .venv/bin/activate # Windows: .venv\\Scripts\\activate python3 -m pip install pytest pyyaml python3 -m pip install -r requirements.txt make reproduce ``` Canonical independent path is **`make reproduce`**. Full `pytest -q` is the CI suite (longer; requires the jobs in `.github/workflows/ci.yml`). Launcher UI prototype (optional): ```bash cd apps/launcher_mock && npm ci && npm test `",
+  "cards": [],
+  "runtime_mode": "PRECOMPUTED",
+  "runtime_boot": false
+}

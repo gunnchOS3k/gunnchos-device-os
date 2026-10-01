@@ -7,45 +7,76 @@
   <title>gunnchOS Device OS · gunnchOS</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body style="--accent:#e0a15a">
+<body data-surfacekit="v2" data-theme="dark">
   <a class="skip" href="#content">Skip to content</a>
   <header class="top">
     <p class="mark">gunnchOS</p>
-    <a id="portal-return" href="#return" aria-label="Return to gunnchOS">← gunnchOS</a>
+    <nav class="tools" aria-label="Surface">
+      <button type="button" id="theme-toggle">Light theme</button>
+      <a id="portal-return" href="#return" aria-label="Return to gunnchOS">← gunnchOS</a>
+    </nav>
   </header>
   <main id="content">
-    <p class="kicker">Devices</p>
+    <p class="kicker">Devices · STAGING_WORKER</p>
     <h1>gunnchOS Device OS</h1>
-    <p class="badge">STAGING_WORKER</p>
     <p class="lead">Product and readiness surface for the gunnchOS device operating environment.</p>
-    <section aria-labelledby="what">
-      <h2 id="what">What is this?</h2>
-      <p>Product and readiness surface for the gunnchOS device operating environment.</p>
-      <p>The product runtime is not this browser Worker. This is a product surface.</p>
+    
+    <p><a class="cta" id="primary-action" href="#explore">Explore device</a></p>
+    <section id="explore" aria-labelledby="explore-title">
+      <h2 id="explore-title">Explore device</h2>
+      <p id="diagram-note"></p>
+      <div class="layout">
+        <div>
+          <svg id="diagram" role="img" aria-labelledby="diagram-note" viewBox="0 0 640 160"></svg>
+          <label for="row-select">Repository record</label>
+          <select id="row-select"></select>
+          <label for="row-filter">Filter records</label>
+          <input id="row-filter" type="search" placeholder="Filter by text in the repository records">
+        </div>
+        <div id="detail" tabindex="0" aria-live="polite"></div>
+      </div>
+      <div id="directory"></div>
+      <table id="evidence">
+        <caption>Records copied from this repository</caption>
+        <thead><tr id="evidence-head"></tr></thead>
+        <tbody id="evidence-body"></tbody>
+      </table>
     </section>
-    <section aria-labelledby="why">
-      <h2 id="why">Why does it exist?</h2>
-      <p>It gives this repository a public web surface inside the gunnchOS ecosystem without pretending the original runtime runs on Cloudflare Workers.</p>
+    <section id="overview" aria-labelledby="overview-title">
+      <h2 id="overview-title">Overview</h2>
+      <div class="cards"><article><h3>Overview</h3><p># gunnchos-device-os **GunnchOS** — an education-first, creator-first, gamer-first operating system for affordable handheld devices. &gt; Phase 4 beta completion train — **beta_ready: false**. See [Beta Status Dashboard](docs/BETA_STATUS_DASHBOARD.md).</p></article><article><h3>Run GunnchOS</h3><p>python3 scripts/export_launcher_contract.py cd apps/launcher_mock &amp;&amp; npm install &amp;&amp; npm run dev # → http://localhost:5173 — onboarding → Campus → Media Mode → Game Mode Tests: make validate-full # or: pytest -q &amp;&amp; cd apps/launcher_mock &amp;&amp; npm test Linux container prototype: docker compose -f os_build/linux_desktop/docker-compose.yml up --build # → http://localhost:8080 See [docs/PHASE0.md](docs/PHASE0.md), [docs/PHAS</p></article><article><h3>Operational status (honest)</h3><p>**GunnchOS is not a finished shipping OS.** Phase 0–1 provide a runnable shell prototype with policy framework and tests. Full matrix: [docs/FULL_OPERATIONAL_GAP_MATRIX.md](docs/FULL_OPERATIONAL_GAP_MATRIX.md) · Mocks: [docs/MOCK_RETIREMENT_PLAN.md](docs/MOCK_RETIREMENT_PLAN.md) · Beta gate: [docs/BETA_RELEASE_GATE.md](docs/BETA_RELEASE_GATE.md) · **Beta status:** [docs/BETA_STATUS_DASHBOARD.md](docs/BETA_STATUS_DASH</p></article></div>
     </section>
-    <section aria-labelledby="today">
-      <h2 id="today">What can I actually do with it today?</h2>
-      <ul><li>Read platform intent, build status, and limitations</li><li>Open the source repository</li></ul>
+    <section id="methods" aria-labelledby="methods-title">
+      <h2 id="methods-title">Methods</h2>
+      <p># Reproducibility — gunnchos Device OS Paper I infrastructure for *Resilience-Aware Service Continuity in Heterogeneous 6G Networks*. Not a shipping OS. Not physical boot. ## Clone / setup / run ```bash git clone https://github.com/gunnchOS3k/gunnchos-device-os.git cd gunnchos-device-os python3 -m venv .venv source .venv/bin/activate # Windows: .venv\Scripts\activate python3 -m pip install pytest pyyaml python3 -m pip install -r requirements.txt make reproduce ``` Canonical independent path is **`make reproduce`**. Full `pytest -q` is the CI suite (longer; requires the jobs in `.github/workflows/ci.yml`). Launcher UI prototype (optional): ```bash cd apps/launcher_mock &amp;&amp; npm ci &amp;&amp; npm test `</p>
+      <p>Native research runtimes stay on a local checkout. This page shows repository records only.</p>
     </section>
-    <section aria-labelledby="tech">
-      <h2 id="tech">What technology is inside it?</h2>
-      <p>Classification STATIC_PRODUCT_SURFACE_WORKER. Accepted source <code>2ae070fd8b050c3520ed8dac211e0d607bf9f63f</code>.</p>
+    <section id="artifacts" aria-labelledby="artifacts-title">
+      <h2 id="artifacts-title">Artifacts</h2>
+      <ul><li><code>results/e2e/device_os_e2e_report.json</code></li><li><code>results/e2e/device_os_e2e_report.md</code></li><li><code>results/e2e/seven_gc_device_export.json</code></li><li><code>paper/CONFERENCE_READINESS_TODOS.md</code></li><li><code>paper/README.md</code></li><li><code>docs/00_START_HERE.md</code></li><li><code>docs/00_os_vision.md</code></li><li><code>docs/01_OS_VISION.md</code></li><li><code>docs/01_TEMP.md</code></li><li><code>docs/01_device_classes.md</code></li><li><code>docs/02_6G_URLLC_ALIGNMENT.md</code></li><li><code>docs/02_TEMP.md</code></li></ul>
     </section>
-    <section aria-labelledby="evidence">
-      <h2 id="evidence">What evidence exists?</h2>
-      <p><a href="https://github.com/gunnchOS3k/gunnchos-device-os">Source repository</a>. Read the repository for methods, results, and status. This page does not add new experimental claims.</p>
+    <section id="source" aria-labelledby="source-title">
+      <h2 id="source-title">Source</h2>
+      <p><a href="https://github.com/gunnchOS3k/gunnchos-device-os">Source repository</a></p>
+      <p>Pinned source <code>2ae070fd8b050c3520ed8dac211e0d607bf9f63f</code></p>
     </section>
-    <section aria-labelledby="limits">
-      <h2 id="limits">What is not finished?</h2>
+    <section id="limits" aria-labelledby="limits-title">
+      <h2 id="limits-title">Limitations</h2>
       <ul><li>The device OS does not execute in this browser Worker</li><li>Install links are omitted until a real public installer exists</li><li>This page is staging, not a device launch</li></ul>
     </section>
-    <section aria-labelledby="fit">
-      <h2 id="fit">Where does it fit in gunnchOS?</h2>
-      <p>Family: Devices. Return with the gunnchOS link in the header.</p>
+    <section id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About / Build status / Evidence</h2>
+      <h2 id="what">What is this?</h2>
+      <p>Product and readiness surface for the gunnchOS device operating environment.</p>
+      <p>The research code is not executing here. This is a research surface.</p>
+      <h2 id="why">Why does it exist?</h2>
+      <p>It gives this repository a public web surface inside the gunnchOS ecosystem without pretending the original runtime runs on Cloudflare Workers.</p>
+      <h2 id="today">What can I actually do with it today?</h2>
+      <p>Use the primary action to inspect repository records, then open the source for the local toolchain.</p>
+      <h2 id="unfinished">What is not finished?</h2>
+      <ul><li>The device OS does not execute in this browser Worker</li><li>Install links are omitted until a real public installer exists</li><li>This page is staging, not a device launch</li></ul>
+      <p class="badge">STAGING_WORKER</p>
+      <p>Runtime mode on this page: PRECOMPUTED. No remote model call is made.</p>
     </section>
   </main>
   <script src="/app.js"></script>
