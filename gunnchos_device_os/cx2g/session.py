@@ -310,11 +310,11 @@ def start_weston_drm(repo: Path) -> Dict[str, Any]:
             "systemctl reset-failed cx2g-weston.service || true; "
             "systemctl restart cx2g-weston.service; sleep 5; "
             "chmod 755 /run/cx2g-wayland; "
-            "chmod 777 /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; "
+            "chown gunnchos:gunnchos /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; chmod 600 /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; "
             "test -S /run/cx2g-wayland/wayland-0 && echo WAYLAND_SOCKET_OK || echo WAYLAND_SOCKET_MISSING; "
             "test -S /run/cx2g-wayland/bus && echo DBUS_SOCKET_OK || ("
             "  dbus-daemon --session --address=unix:path=/run/cx2g-wayland/bus --fork; sleep 1; "
-            "  chmod 777 /run/cx2g-wayland/bus; test -S /run/cx2g-wayland/bus && echo DBUS_SOCKET_OK); "
+            "  chown gunnchos:gunnchos /run/cx2g-wayland/bus 2>/dev/null || true; chmod 600 /run/cx2g-wayland/bus; test -S /run/cx2g-wayland/bus && echo DBUS_SOCKET_OK); "
             "pgrep -a weston || true; "
             "systemctl is-active cx2g-weston.service || true; "
             "tail -60 /var/log/cx2g-weston.log; "
@@ -339,7 +339,7 @@ def start_weston_drm(repo: Path) -> Dict[str, Any]:
                 "nohup openvt -c 1 -f -s -- weston --backend=drm-backend.so --socket=wayland-0 "
                 "--log=/var/log/cx2g-weston.log --idle-time=0 >/var/log/cx2g-weston-openvt.log 2>&1 & "
                 "sleep 4; "
-                "chmod 777 /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; "
+                "chown gunnchos:gunnchos /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; chmod 600 /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; "
                 "test -S /run/cx2g-wayland/wayland-0 && echo WAYLAND_SOCKET_OK; "
                 "pgrep -a weston; tail -40 /var/log/cx2g-weston.log'",
                 timeout=120,
@@ -660,7 +660,7 @@ set -e
 echo CX2G_LAUNCH_BEGIN
 sudo mkdir -p /var/lib/cx2g/chromium-shell /run/cx2g-wayland /var/log
 sudo chmod 755 /run/cx2g-wayland || true
-sudo chmod 777 /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true
+sudo chown gunnchos:gunnchos /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true; sudo chmod 600 /run/cx2g-wayland/wayland-0 /run/cx2g-wayland/bus 2>/dev/null || true
 sudo chown -R gunnchos:gunnchos /var/lib/cx2g/chromium-shell
 # Session ownership probe
 echo GRAPHICAL_SESSION_PROBE
