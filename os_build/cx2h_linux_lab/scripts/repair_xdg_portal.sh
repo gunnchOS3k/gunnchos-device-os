@@ -20,8 +20,9 @@ P
 [preferred]
 default=gtk;
 C
-  chmod 777 /run/cx2g-wayland/wayland-0 2>/dev/null || true
-  chmod 1777 /run/cx2g-wayland 2>/dev/null || true
+  chown gunnchos:gunnchos /run/cx2g-wayland /run/cx2g-wayland/wayland-0 2>/dev/null || true
+  chmod 700 /run/cx2g-wayland 2>/dev/null || true
+  chmod 600 /run/cx2g-wayland/wayland-0 2>/dev/null || true
   # Expose Weston socket into the real user runtime
   mkdir -p /run/user/1000
   chown gunnchos:gunnchos /run/user/1000
@@ -35,8 +36,8 @@ C
     echo LINKED_USER_BUS_TO_CX_PATH
   else
     runuser -u gunnchos -- dbus-daemon --session --address=unix:path=/run/cx2g-wayland/bus --fork
-    chmod 777 /run/cx2g-wayland/bus
     chown gunnchos:gunnchos /run/cx2g-wayland/bus
+    chmod 600 /run/cx2g-wayland/bus
   fi
   ls -la /run/user/1000/bus /run/user/1000/wayland-0 /run/cx2g-wayland/bus /run/cx2g-wayland/wayland-0 2>/dev/null || true
   # Patch Chromium shell unit to use user bus + GNOME desktop hint
