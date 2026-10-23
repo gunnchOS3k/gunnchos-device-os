@@ -9,12 +9,14 @@ from pathlib import Path
 import pytest
 
 from gunnchos_device_os.release_engineering.apk_source_identity import (
+    DEBUG_PILOT_CERT_SHA256,
     HISTORICAL_APK_SHA256,
     HISTORICAL_APK_SOURCE_COMMIT,
     PUBLISHED_TAG_COMMIT,
     SUPERSEDED_CAPSULE_COMMIT,
     ApkSourceIdentityError,
     check_capsule_apk_identity,
+    debug_pilot_cert_sha256,
     verify_historical_commits,
 )
 
@@ -48,3 +50,22 @@ def test_published_tag_is_not_the_capsule_apk_source() -> None:
     stale["git_sha"] = SUPERSEDED_CAPSULE_COMMIT
     with pytest.raises(ApkSourceIdentityError, match="apk_source_commit_mismatch"):
         check_capsule_apk_identity(stale)
+
+
+def test_debug_pilot_cert_fingerprint_is_bound_to_apk_bytes() -> None:
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    apk = APK_PATH.read_bytes()
+    derived = debug_pilot_cert_sha256(apk)
+
+    assert derived == DEBUG_PILOT_CERT_SHA256
+    assert manifest["debug_pilot_cert_sha256"] == derived
+    assert manifest["signing"] == "debug_pilot"
+    report = check_capsule_apk_identity(manifest, apk_bytes=apk)
+    assert report["debug_pilot_cert_sha256"] == derived
+    assert report["debug_pilot_cert_cn"] == "Android Debug"
+    assert report["physical_acceptance"] is False
+
+    swapped = dict(manifest)
+    swapped["debug_pilot_cert_sha256"] = "0" * 64
+    with pytest.raises(ApkSourceIdentityError, match="debug_pilot_cert_sha256_mismatch"):
+        check_capsule_apk_identity(swapped, apk_bytes=apk)

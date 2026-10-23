@@ -22,6 +22,13 @@ HISTORICAL_APK_SHA256 = "8863d83acba11be6bb3ce7a5767499ac2031c564006aceb950f312d
 SUPERSEDED_CAPSULE_COMMIT = "f460ac7b0e94c98060e7aeafc3ee82fb3c65237d"
 SUPERSEDED_CAPSULE_APK_SHA256 = "218ce1cf9883f773234b6f94a8888e0cf14e45461e7f703d54d231a6b82dbf7f"
 CAPSULE_APK_RELPATH = "artifacts/android_capsule/release/gunnchOS-Capsule-Pixel6a-pilot.apk"
+# SHA-256 of the single v2 signer certificate inside the checked-in APK.
+# Subject and issuer are CN=Android Debug, O=Android, C=US. Not a production key.
+DEBUG_PILOT_CERT_SHA256 = "b637ea5f982aa1d3027e346fbfe9f672fdc5dee95407b1608b50b6f1631bd59a"
+DEBUG_PILOT_CERT_CN = "Android Debug"
+_APK_SIG_MAGIC = b"APK Sig Block 42"
+_V2_BLOCK_ID = 0x7109871A
+_EOCD_SIG = b"PK\x05\x06"
 
 
 class ApkSourceIdentityError(ValueError):
@@ -38,11 +45,86 @@ def discrepancy_record() -> dict[str, Any]:
         "superseded_git_sha": SUPERSEDED_CAPSULE_COMMIT,
         "superseded_git_sha_apk_sha256": SUPERSEDED_CAPSULE_APK_SHA256,
         "signing": "debug_pilot",
+        "debug_pilot_cert_sha256": DEBUG_PILOT_CERT_SHA256,
+        "debug_pilot_cert_cn": DEBUG_PILOT_CERT_CN,
         "physical_acceptance": False,
     }
 
 
-def check_capsule_apk_identity(manifest: dict[str, Any]) -> dict[str, Any]:
+def _u32_prefixed(buf: bytes, offset: int) -> tuple[bytes, int]:
+    if offset + 4 > len(buf):
+        raise ApkSourceIdentityError("apk_signing_block_truncated")
+    length = int.from_bytes(buf[offset : offset + 4], "little")
+    offset += 4
+    end = offset + length
+    if length < 0 or end > len(buf):
+        raise ApkSourceIdentityError("apk_signing_block_truncated")
+    return buf[offset:end], end
+
+
+def _signing_block_pairs(apk: bytes) -> list[tuple[int, bytes]]:
+    eocd = apk.rfind(_EOCD_SIG)
+    if eocd < 0 or eocd + 22 > len(apk):
+        raise ApkSourceIdentityError("apk_eocd_missing")
+    central_dir = int.from_bytes(apk[eocd + 16 : eocd + 20], "little")
+    if central_dir < 32 or central_dir > len(apk) or apk[central_dir - 16 : central_dir] != _APK_SIG_MAGIC:
+        raise ApkSourceIdentityError("apk_signing_block_missing")
+    size = int.from_bytes(apk[central_dir - 24 : central_dir - 16], "little")
+    start = central_dir - (size + 8)
+    if start < 0 or int.from_bytes(apk[start : start + 8], "little") != size:
+        raise ApkSourceIdentityError("apk_signing_block_size_mismatch")
+    pairs = apk[start + 8 : central_dir - 24]
+    offset = 0
+    found: list[tuple[int, bytes]] = []
+    while offset < len(pairs):
+        if offset + 12 > len(pairs):
+            raise ApkSourceIdentityError("apk_signing_block_truncated")
+        pair_len = int.from_bytes(pairs[offset : offset + 8], "little")
+        ident = int.from_bytes(pairs[offset + 8 : offset + 12], "little")
+        value_end = offset + 8 + pair_len
+        if pair_len < 4 or value_end > len(pairs):
+            raise ApkSourceIdentityError("apk_signing_block_truncated")
+        found.append((ident, pairs[offset + 12 : value_end]))
+        offset = value_end
+    return found
+
+
+def v2_signer_certificates(apk: bytes) -> list[bytes]:
+    """Return DER certificates from the APK Signature Scheme v2 block."""
+    value = next((blob for ident, blob in _signing_block_pairs(apk) if ident == _V2_BLOCK_ID), None)
+    if value is None:
+        raise ApkSourceIdentityError("apk_v2_signer_missing")
+    signers, _ = _u32_prefixed(value, 0)
+    certificates: list[bytes] = []
+    offset = 0
+    while offset < len(signers):
+        signer, offset = _u32_prefixed(signers, offset)
+        signed, _ = _u32_prefixed(signer, 0)
+        _digests, signed_offset = _u32_prefixed(signed, 0)
+        cert_seq, _ = _u32_prefixed(signed, signed_offset)
+        cert_offset = 0
+        while cert_offset < len(cert_seq):
+            cert, cert_offset = _u32_prefixed(cert_seq, cert_offset)
+            if not cert.startswith(b"\x30"):
+                raise ApkSourceIdentityError("signer_cert_not_der")
+            certificates.append(cert)
+    if not certificates:
+        raise ApkSourceIdentityError("apk_v2_signer_cert_missing")
+    return certificates
+
+
+def debug_pilot_cert_sha256(apk: bytes) -> str:
+    """SHA-256 fingerprint of the single debug-pilot v2 signer certificate."""
+    certificates = v2_signer_certificates(apk)
+    if len(certificates) != 1:
+        raise ApkSourceIdentityError("apk_v2_signer_cert_count")
+    cert = certificates[0]
+    if cert.count(DEBUG_PILOT_CERT_CN.encode("ascii")) != 2:
+        raise ApkSourceIdentityError("debug_pilot_cert_cn_mismatch")
+    return hashlib.sha256(cert).hexdigest()
+
+
+def check_capsule_apk_identity(manifest: dict[str, Any], apk_bytes: bytes | None = None) -> dict[str, Any]:
     """Accept a manifest that records the historical split. Reject conflation."""
     errors: list[str] = []
     git_sha = str(manifest.get("git_sha") or "")
@@ -74,6 +156,18 @@ def check_capsule_apk_identity(manifest: dict[str, Any]) -> dict[str, Any]:
         errors.append("superseded_apk_sha256_not_recorded")
     if manifest.get("signing") != "debug_pilot":
         errors.append("signing_claim_changed")
+    if manifest.get("debug_pilot_cert_sha256") != DEBUG_PILOT_CERT_SHA256:
+        errors.append("debug_pilot_cert_sha256_mismatch")
+    if manifest.get("debug_pilot_cert_cn") != DEBUG_PILOT_CERT_CN:
+        errors.append("debug_pilot_cert_cn_mismatch")
+    if apk_bytes is not None:
+        try:
+            derived = debug_pilot_cert_sha256(apk_bytes)
+        except ApkSourceIdentityError as exc:
+            errors.append(str(exc))
+            derived = ""
+        if derived != DEBUG_PILOT_CERT_SHA256:
+            errors.append("debug_pilot_cert_bytes_mismatch")
     if same_identity or manifest.get("tag_identity_is_apk_source") is not False:
         errors.append("tag_identity_is_apk_source_must_be_false")
 
