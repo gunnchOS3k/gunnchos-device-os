@@ -32,21 +32,74 @@ SECCOMP_LAUNCHER = r'''
 import runpy
 import sys
 
+def _load_seccomp_ctypes() -> bool:
+    import ctypes
+    import platform
+    machine = platform.machine()
+    if machine in ("x86_64", "amd64"):
+        audit_arch = 0xC000003E
+        denied = (59, 322, 42, 44, 41)  # execve, execveat, connect, sendto, socket
+    elif machine in ("aarch64", "arm64"):
+        audit_arch = 0xC00000B7
+        denied = (221, 281, 203, 206, 198)
+    else:
+        return False
+
+    class SockFilter(ctypes.Structure):
+        _fields_ = [
+            ("code", ctypes.c_uint16),
+            ("jt", ctypes.c_uint8),
+            ("jf", ctypes.c_uint8),
+            ("k", ctypes.c_uint32),
+        ]
+
+    class SockFprog(ctypes.Structure):
+        _fields_ = [("len", ctypes.c_uint16), ("filter", ctypes.POINTER(SockFilter))]
+
+    BPF_LD, BPF_W, BPF_ABS = 0x00, 0x00, 0x20
+    BPF_JMP, BPF_JEQ, BPF_K, BPF_RET = 0x05, 0x10, 0x00, 0x06
+    RET_KILL, RET_ERRNO, RET_ALLOW = 0x80000000, 0x00050000, 0x7FFF0000
+    filters = [
+        SockFilter(BPF_LD | BPF_W | BPF_ABS, 0, 0, 4),
+        SockFilter(BPF_JMP | BPF_JEQ | BPF_K, 1, 0, audit_arch),
+        SockFilter(BPF_RET | BPF_K, 0, 0, RET_KILL),
+        SockFilter(BPF_LD | BPF_W | BPF_ABS, 0, 0, 0),
+    ]
+    for number in denied:
+        filters.append(SockFilter(BPF_JMP | BPF_JEQ | BPF_K, 0, 1, number))
+        filters.append(SockFilter(BPF_RET | BPF_K, 0, 0, RET_ERRNO | 1))
+    filters.append(SockFilter(BPF_RET | BPF_K, 0, 0, RET_ALLOW))
+    array = (SockFilter * len(filters))(*filters)
+    prog = SockFprog(len(filters), ctypes.cast(array, ctypes.POINTER(SockFilter)))
+    libc = ctypes.CDLL(None, use_errno=True)
+    if libc.prctl(38, 1, 0, 0, 0) != 0:
+        return False
+    return libc.prctl(22, 2, ctypes.byref(prog), 0, 0) == 0
+
 def _load_seccomp() -> None:
+    Path = __import__("pathlib").Path
     try:
         import seccomp  # type: ignore
+        filt = seccomp.SyscallFilter(defaction=seccomp.ALLOW)
+        # Deny child exec and network connect (GHA cannot always RTM_NEWADDR for --unshare-net).
+        filt.add_rule(seccomp.ERRNO(1), "execve")
+        filt.add_rule(seccomp.ERRNO(1), "execveat")
+        filt.add_rule(seccomp.ERRNO(1), "connect")
+        filt.add_rule(seccomp.ERRNO(1), "sendto")
+        filt.add_rule(seccomp.ERRNO(1), "socket")
+        filt.load()
+        Path("seccomp_status.txt").write_text("loaded\n", encoding="utf-8")
+        return
+    except Exception:
+        pass
+    try:
+        if _load_seccomp_ctypes():
+            Path("seccomp_status.txt").write_text("loaded\n", encoding="utf-8")
+            return
     except Exception as exc:
-        Path = __import__("pathlib").Path
         Path("seccomp_status.txt").write_text(f"unavailable:{exc}\n", encoding="utf-8")
         return
-    filt = seccomp.SyscallFilter(defaction=seccomp.ALLOW)
-    # Deny child exec and network connect (GHA cannot always RTM_NEWADDR for --unshare-net).
-    filt.add_rule(seccomp.ERRNO(1), "execve")
-    filt.add_rule(seccomp.ERRNO(1), "execveat")
-    filt.add_rule(seccomp.ERRNO(1), "connect")
-    filt.add_rule(seccomp.ERRNO(1), "sendto")
-    filt.load()
-    __import__("pathlib").Path("seccomp_status.txt").write_text("loaded\n", encoding="utf-8")
+    Path("seccomp_status.txt").write_text("unavailable:seccomp\n", encoding="utf-8")
 
 if __name__ == "__main__":
     target = sys.argv[1]
@@ -362,8 +415,9 @@ class SandboxExecutor:
         profile = (
             '(version 1)'
             '(deny default)'
-            '(allow process-fork)'
-            '(allow process-exec)'
+            '(deny network*)'
+            '(deny process-fork)'
+            '(deny process-exec)'
             '(allow sysctl-read)'
             '(allow file-read* (subpath "/usr"))'
             '(allow file-read* (subpath "/System"))'

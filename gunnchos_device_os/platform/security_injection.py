@@ -229,10 +229,18 @@ def _sync_queue_replay_idempotency(coord: "Wave004PlatformCoordinator") -> dict[
 
 
 def _sandbox_fail_closed(suite: dict[str, Any], field: str) -> bool:
-    """Genuine probe blocked, or fail-closed when no backend (never treat subprocess as pass)."""
+    """A ran probe must deny this attack. Missing backends stay fail-closed.
+
+    Plain subprocess never counts. A blocked field does not require every other
+    probe in the suite to be validated, and an unrun fixture is not a pass.
+    """
+    if suite.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is not False:
+        return False
     if suite.get("LOCAL_SANDBOX_VALIDATION") == "BLOCKED_ENVIRONMENT":
-        return suite.get("PLAIN_SUBPROCESS_COUNTS_AS_SANDBOX") is False and suite.get("ok") is False
-    return suite.get(field) is True and suite.get("SANDBOX_EXECUTION_VALIDATED") is True
+        return suite.get("ok") is False and suite.get("SANDBOX_EXECUTION_VALIDATED") is False
+    if suite.get("fixture_ran") is not True:
+        return False
+    return suite.get(field) is True
 
 
 def _sandbox_host_escape_script(coord: "Wave004PlatformCoordinator") -> dict[str, Any]:
