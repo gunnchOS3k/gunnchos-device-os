@@ -28,6 +28,13 @@ def test_no_paid_cloud_inference_honesty_stamp():
     assert doc["V1"] is False
     assert doc["gates"]["NO_PAID_CLOUD_INFERENCE"] is True
     assert doc["gates"]["NO_PRODUCTION_DEPLOY_CLAIM"] is True
+    assert doc["gates"]["ABSENT_SIBLING_NEQ_PAID_INFERENCE"] is True
+    assert doc["gates"]["ABSENT_SIBLING_NEQ_PRODUCT_COMPLETE"] is True
+    sibling = doc["absent_sibling_gunnchai"]
+    assert sibling["compat_bridge_authorizes_paid_inference"] is False
+    assert sibling["compat_bridge_claims_product_complete"] is False
+    assert sibling["sandbox_network_unrestricted"] is False
+    assert sibling["lane_c_tip_floor"] == "b6860a6"
 
 
 def test_nano_fallback_companion_stays_incomplete():
