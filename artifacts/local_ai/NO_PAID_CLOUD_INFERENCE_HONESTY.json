@@ -1,0 +1,29 @@
+{
+  "schema": "gunnchos.device_os.no_paid_cloud_inference_honesty_v1",
+  "prepared_at": "2026-11-02T02:42:00Z",
+  "tip_floor": "b6860a6",
+  "branch": "eng/cursor-device-os-smoke-20261030",
+  "note": "Digital deepen on isolated tip: Device OS local-AI path refuses paid/cloud inference and production deploy claims. Nano/fallback or deterministic micro only. Does not run paid APIs.",
+  "paid_cloud_inference_invoked": false,
+  "openai_api_called": false,
+  "anthropic_api_called": false,
+  "cloud_endpoint_called": false,
+  "production_deploy_claimed": false,
+  "local_only": true,
+  "nano_fallback_only_allowed": true,
+  "local_fast_claimed": false,
+  "local_pro_claimed": false,
+  "GUNNCHAI_APP_PRODUCT_COMPLETE": false,
+  "HUMAN": false,
+  "HUMAN_E6": false,
+  "RC2": false,
+  "V1": false,
+  "gates": {
+    "NO_PAID_CLOUD_INFERENCE": true,
+    "NO_PRODUCTION_DEPLOY_CLAIM": true,
+    "LOCAL_AI_HONESTY_PASS": true
+  },
+  "companions": [
+    "artifacts/local_ai/VP_LOCAL_AI_NANO_FALLBACK.json"
+  ]
+}
