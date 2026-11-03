@@ -33,6 +33,12 @@ CLAIM_BOUNDARY = (
 DEFAULT_PRODUCT_SERVICE_URL = "http://127.0.0.1:8791"
 
 
+def _honesty_envelope() -> dict[str, Any]:
+    from gunnchos_device_os.local_ai.no_paid_inference_honesty import runtime_envelope
+
+    return runtime_envelope()
+
+
 def product_service_base_url() -> str:
     return (
         os.environ.get("GUNNCHAI_PRODUCT_SERVICE_URL")
@@ -51,6 +57,7 @@ def tutor_session_start(profile: str, topic: str) -> dict:
         "runtime": "local_template",
         "mock": False,
         "claim_boundary": CLAIM_BOUNDARY,
+        "honesty": _honesty_envelope(),
     }
 
 
@@ -292,9 +299,14 @@ def tutor_assist_prefer_live(
             "claim_boundary": CLAIM_BOUNDARY,
         }
     template = tutor_local_reply(topic=topic, prompt=prompt, waike_lesson=waike_lesson)
+    envelope = _honesty_envelope()
     return {
         **template,
         "provider_path": "LOCAL_TEMPLATE_OFFLINE",
         "health": health,
         "offline": True,
+        "honesty": envelope,
+        "absent_sibling_compat_bridge_authorizes_paid_inference": envelope[
+            "absent_sibling_compat_bridge_authorizes_paid_inference"
+        ],
     }

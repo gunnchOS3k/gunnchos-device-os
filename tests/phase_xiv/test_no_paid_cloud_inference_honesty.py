@@ -44,3 +44,37 @@ def test_nano_fallback_companion_stays_incomplete():
     assert nano["intelligence"]["fast"]["present"] is False
     assert nano["intelligence"]["pro"]["present"] is False
     assert nano["mislabel_rejected"] is True
+
+
+def test_runtime_refuses_cloud_consent_under_no_paid_gate():
+    from gunnchos_device_os.local_ai.no_paid_inference_honesty import refuse_cloud_consent
+
+    refused = refuse_cloud_consent(cloud_consent=True)
+    assert refused is not None
+    assert refused["error"] == "paid_cloud_inference_refused"
+    assert refused["NO_PAID_CLOUD_INFERENCE"] is True
+    assert refused["V1"] is False
+    assert refuse_cloud_consent(cloud_consent=False) is None
+
+
+def test_os_ai_system_api_refuses_cloud_consent():
+    from gunnchos_device_os.phase_xiv.ai_system import AiRequest, OsAiSystemApi
+
+    api = OsAiSystemApi(local_runtime=None, gunnchai_base=None)
+    resp = api.invoke(
+        AiRequest("tutor", "hello", user_id="u_test", cloud_consent=True),
+    )
+    assert resp.ok is False
+    assert resp.route.get("error") == "paid_cloud_inference_refused"
+    assert resp.route["honesty"]["GUNNCHAI_APP_PRODUCT_COMPLETE"] is False
+
+
+def test_gunnchai_tutor_offline_path_carries_honesty_envelope():
+    from gunnchos_device_os.gunnchai_integration import tutor_assist_prefer_live
+
+    out = tutor_assist_prefer_live(topic="wireless", prompt="What is OFDM?")
+    assert out.get("provider_path") == "LOCAL_TEMPLATE_OFFLINE"
+    honesty = out.get("honesty") or {}
+    assert honesty.get("NO_PAID_CLOUD_INFERENCE") is True
+    assert honesty.get("absent_sibling_compat_bridge_authorizes_paid_inference") is False
+    assert out.get("absent_sibling_compat_bridge_authorizes_paid_inference") is False
