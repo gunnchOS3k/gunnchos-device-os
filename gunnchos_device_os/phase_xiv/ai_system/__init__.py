@@ -85,6 +85,20 @@ class OsAiSystemApi:
                 text=f"unknown capability: {req.capability}",
                 route={"error": "unknown_capability"},
             )
+        from gunnchos_device_os.local_ai.no_paid_inference_honesty import (
+            refuse_cloud_consent,
+            runtime_envelope,
+        )
+
+        refused = refuse_cloud_consent(cloud_consent=req.cloud_consent)
+        if refused is not None:
+            return AiResponse(
+                ok=False,
+                capability=req.capability,
+                user_id=req.user_id,
+                text=str(refused["detail"]),
+                route={"error": refused["error"], "honesty": runtime_envelope()},
+            )
         # Prefer local OS runtime; optionally forward to gunnchAI router.
         if self.local_runtime is not None:
             result = self.local_runtime.run_capability(

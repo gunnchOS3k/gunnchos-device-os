@@ -1,6 +1,8 @@
 """Pinned gunnchAI ↔ device-os compatibility contract tests."""
 from __future__ import annotations
 
+from pathlib import Path
+
 from gunnchos_device_os.cross_repo_gunnchai.contract import (
     CONTRACT_PATH,
     load_contract,
@@ -44,7 +46,19 @@ def test_api_surface_lists_stage2_capabilities():
 
 
 def test_sibling_verify_without_repo_is_non_fatal():
-    result = verify_owner_artifacts(gunnchai_root=None)
+    missing = Path(__file__).resolve().parent / "_absent_gunnchai_checkout"
+    assert missing.exists() is False
+    result = verify_owner_artifacts(gunnchai_root=missing)
+    assert result["sibling_present"] is False
+    assert result["ok"] is False
+    assert "note" in result
+
+
+def test_sibling_verify_without_package_json_is_non_fatal(tmp_path: Path):
+    empty = tmp_path / "empty-gunnchai"
+    empty.mkdir()
+    assert (empty / "package.json").is_file() is False
+    result = verify_owner_artifacts(gunnchai_root=empty)
     assert result["sibling_present"] is False
     assert result["ok"] is False
     assert "note" in result

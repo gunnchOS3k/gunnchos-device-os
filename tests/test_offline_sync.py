@@ -123,3 +123,21 @@ def test_delete_tombstone():
     eng.delete("gone")
     assert eng.get("gone") is None
     assert eng.store["gone"].tombstone is True
+
+
+def test_concurrent_remote_does_not_resurrect_tombstone():
+    eng = OfflineSyncEngine(replica_id="A", policy=ConflictPolicy.VECTOR_CLOCK, now_ms=lambda: 1000)
+    eng.put("note", "private")
+    eng.delete("note")
+    result = eng.apply_remote({
+        "key": "note",
+        "value": "resurrected",
+        "replica_id": "B",
+        "wall_time_ms": 5000,
+        "vector": {"B": 1},
+        "version": 1,
+        "tombstone": False,
+    })
+    assert result["conflict"]["reason"] == "concurrent_delete_not_resurrected"
+    assert eng.get("note") is None
+    assert eng.store["note"].tombstone is True

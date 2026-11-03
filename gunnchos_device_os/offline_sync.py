@@ -182,6 +182,26 @@ class OfflineSyncEngine:
             return local, None
         if local.vector.happens_before(remote.vector):
             return remote, None
+        if local.tombstone != remote.tombstone:
+            kept = local if local.tombstone else remote
+            merged = SyncRecord(
+                key=kept.key,
+                value=None,
+                replica_id=kept.replica_id,
+                wall_time_ms=kept.wall_time_ms,
+                vector=local.vector.merge(remote.vector).tick(self.replica_id),
+                version=max(local.version, remote.version) + 1,
+                tombstone=True,
+            )
+            info = ConflictInfo(
+                key=local.key,
+                local=local.to_dict(),
+                remote=remote.to_dict(),
+                policy=ConflictPolicy.VECTOR_CLOCK.value,
+                winner="tombstone_kept",
+                reason="concurrent_delete_not_resurrected",
+            )
+            return merged, info
         chosen, info = self._resolve_lww(local, remote)
         info.policy = ConflictPolicy.VECTOR_CLOCK.value
         info.reason = f"concurrent_then_{info.reason}"

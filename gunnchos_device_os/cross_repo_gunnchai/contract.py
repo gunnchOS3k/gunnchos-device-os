@@ -52,6 +52,15 @@ def discover_gunnchai_sibling(device_os_root: Path | None = None) -> Path | None
     return None
 
 
+def _gunnchai_checkout(path: Path | None) -> Path | None:
+    if path is None:
+        return None
+    candidate = Path(path)
+    if (candidate / "package.json").is_file():
+        return candidate
+    return None
+
+
 def verify_owner_artifacts(
     device_os_root: Path | None = None,
     gunnchai_root: Path | None = None,
@@ -59,7 +68,10 @@ def verify_owner_artifacts(
     """Optional sibling check — ACCEPTED_MAIN evidence when sibling matches pin."""
     contract = load_contract(Path(device_os_root or ROOT) / CONTRACT_PATH.relative_to(ROOT))
     pinned = contract["gunnchai"]["accepted_main_sha"]
-    sibling = Path(gunnchai_root) if gunnchai_root else discover_gunnchai_sibling(device_os_root)
+    if gunnchai_root is None:
+        sibling = discover_gunnchai_sibling(device_os_root)
+    else:
+        sibling = _gunnchai_checkout(gunnchai_root)
     out: dict[str, Any] = {
         "schema": "gunnchos.gunnchai_compat_sibling_verify.v1",
         "evidence_class": "ACCEPTED_MAIN",
